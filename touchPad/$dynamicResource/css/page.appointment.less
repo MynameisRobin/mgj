@@ -1,0 +1,1013 @@
+@charset "utf-8"; 
+@import "var.less";
+@path: "../images/";
+@import "../images/icons_sprite.less";
+.page_appointment {
+    *,
+    &:after,
+    &:before {
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+    }
+    .clearfix:after {
+        content: ".";
+        display: block;
+        height: 0;
+        visibility: hidden;
+        clear: both;
+    }
+    input {
+        border: none;
+        background-color: transparent;
+    }
+    &.empty {
+        background: #fff url(../images/search_tips.png) no-repeat center center;
+        background-size: 212px 247px;
+    }
+    .search-wrap {
+        position: absolute;
+        width: 100%;
+        top: 50px;
+        height: 85px;
+        border-bottom: 1px solid #ececec;
+        padding: 20px 45px;
+
+        .depart {
+            height: 44px;
+            float: left;
+            li {
+                width: 62px;
+                height: 44px;
+                float: left;
+                font-size: 14px;
+                color: #222;
+                text-align: center;
+                line-height: 42px;
+                border: 1px solid #dddddd;
+                &:first-child {
+                    border-radius: 3px 0 0 3px;
+                    border-right: none;
+                }
+                &:last-child {
+                    border-radius: 0 3px 3px 0;
+                    border-left: none;
+                }
+                &.active {
+                    background-color: #555;
+                    color: #fff;
+                    border-color: #555;
+                }
+            }
+        }
+        .method {
+            height: 44px;
+            float: left;
+            margin-left: 30px;
+            li {
+                height: 44px;
+                font-size: 14px;
+                color: #222;
+                line-height: 44px;
+                float: left;
+                margin-right: 20px;
+                span {
+                    display: inline-block;
+                    width: 20px;
+                    height: 20px;
+                    border-radius: 50%;
+                    border: 1px solid #555;
+                    vertical-align: top;
+                    margin: 12px 12px 12px 0;
+                    padding: 4px;
+                    b {
+                        display: block;
+                        width: 100%;
+                        height: 100%;
+                        border-radius: 50%;
+                    }
+                }
+                &.active span b {
+                    background-color: #555;
+                }
+            }
+        }
+        .form-wrap {
+            width: 290px;
+            height: 44px;
+            border: 1px solid #222;
+            border-radius: 3px;
+            float: left;
+            // margin-left: 10px;
+            position: relative;
+            margin-left: 0;
+            .condition {
+                height: 42px;
+                width: 246px;
+                padding: 0 16px;
+                font-size: 14px;
+                line-height: 42px;
+            }
+            .input-mask {
+                position: absolute;
+                width: 246px;
+                height: 42px;
+                left: 0;
+                top: 0;
+            }
+            .search {
+                position: absolute;
+                height: 42px;
+                width: 42px;
+                right: 0;
+                top: 0;
+                background: url(../images/appointment/appointment-search.png) no-repeat center center;
+                background-size: 27px 27px;
+            }
+        }
+        .new {
+            height: 44px;
+            float: right;
+            font-size: 14px;
+            color: #222;
+            line-height: 44px;
+            span {
+                display: inline-block;
+                width: 20px;
+                height: 20px;
+                border: 1px solid #555;
+                vertical-align: top;
+                margin: 12px 12px 12px 0;
+                border-radius: 3px;
+            }
+            &.active span {
+                background: #555 url(../images/appointment/appointment-select.png) no-repeat center center;
+                background-size: 12px 9px;
+            }
+        }
+    }
+    .create {
+        position: absolute;
+        width: 100%;
+        height: 50px;
+        background-color: #e82742;
+        font-size: 16px;
+        color: #fff;
+        text-align: center;
+        line-height: 50px;
+        bottom: 0;
+        display: none;
+    }
+    .content {
+        position: absolute;
+        width: 100%;
+        top: 135px;
+        bottom: 50px;
+        background-color: #f7f7f7;
+        display: none;
+        .content-wrapper {
+            width: 800px;
+            height: 100%;
+            margin: 0 auto;
+            .left {
+                width: 300px;
+                height: 100%;
+                float: left;
+                position: relative;
+                .left-wrapper {
+                    position: absolute;
+                    width: 100%;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    -webkit-transform: translateY(-50%);
+                    .find {
+                        display: none;
+                        .header {
+                            width: 90px;
+                            height: 90px;
+                            border: 4px solid #e9e9e9;
+                            border-radius: 50%;
+                            margin: 0 auto 15px;
+                            overflow: hidden;
+                            background: #dcdcdc url(../images/appointment/appointment-noheadimg.png) no-repeat center center;
+                            background-size: 80px 80px;
+                            img {
+                                width: 100%;
+                                height: 100%;
+                            }
+                        }
+                        .name-wrapper,
+                        .tel,
+                        .level {
+                            font-size: 16px;
+                            color: #222;
+                            text-align: center;
+                            line-height: 24px;
+                            .name {
+                                display: inline-block;
+                                vertical-align: top;
+                            }
+                            .sex {
+                                display: inline-block;
+                                vertical-align: top;
+                                margin-left: 10px;
+                                &.m {
+                                    width: 18px;
+                                    height: 18px;
+                                    margin-top: 3px;
+                                    background: url(../images/icons_sprite.png) no-repeat -82px -975px;
+                                    background-size: 105px 1443.5px;
+                                }
+                                &.f {
+                                    width: 14px;
+                                    height: 20px;
+                                    margin-top: 2px;
+                                    background: url(../images/icons_sprite.png) no-repeat -85px -504.5px;
+                                    background-size: 105px 1443.5px;
+                                }
+                            }
+                        }
+                        .level {
+                            font-size: 14px;
+                            color: #999;
+                        }
+                        .wrap {
+                            border-top: 1px solid #ececec;
+                            border-bottom: 1px solid #ececec;
+                            padding: 20px 30px;
+                            margin: 20px 0;
+                            div {
+                                font-size: 14px;
+                                color: #999;
+                                line-height: 24px;
+                                height: 24px;
+                                overflow: hidden;
+                                white-space: nowrap;
+                                text-overflow: ellipsis;
+                                span {
+                                    color: #222;
+                                }
+                                b {
+                                    visibility: hidden;
+                                }
+                            }
+                        }
+                        .remark {
+                            padding: 0 30px;
+                            font-size: 14px;
+                            color: #222;
+                            line-height: 24px;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            display: -webkit-box;
+                            -webkit-line-clamp: 2;
+                            -webkit-box-orient: vertical;
+                        }
+                    }
+                    .add {
+                        display: none;
+                        .title {
+                            font-size: 18px;
+                            color: #999;
+                            text-align: center;
+                            line-height: 40px;
+                        }
+                        .header {
+                            width: 90px;
+                            height: 90px;
+                            border: 4px solid #e9e9e9;
+                            border-radius: 50%;
+                            margin: 35px auto;
+                            overflow: hidden;
+                            background: #dcdcdc url(../images/appointment/appointment-noheadimg.png) no-repeat center center;
+                            background-size: 80px 80px;
+                            img {
+                                width: 100%;
+                                height: 100%;
+                            }
+                        }
+                        .form {
+                            height: 44px;
+                            margin-bottom: 20px;
+                            span {
+                                display: inline-block;
+                                width: 75px;
+                                height: 44px;
+                                line-height: 44px;
+                                float: left;
+                                font-size: 14px;
+                                color: #666;
+                            }
+                            .right-part {
+                                margin-left: 75px;
+                                height: 44px;
+                                .addname,
+                                .addtel {
+                                    display: block;
+                                    width: 100%;
+                                    height: 44px;
+                                    border: 1px solid #ddd;
+                                    border-radius: 3px;
+                                    font-size: 14px;
+                                    color: #222;
+                                    padding: 0 16px;
+                                    line-height: 42px;
+                                }
+                                .selectSex {
+                                    li {
+                                        width: 44px;
+                                        height: 44px;
+                                        background-color: #eee;
+                                        border-radius: 50%;
+                                        margin-right: 14px;
+                                        font-size: 14px;
+                                        color: #222;
+                                        text-align: center;
+                                        line-height: 44px;
+                                        float: left;
+                                        &.active {
+                                            background-color: #555;
+                                            color: #fff;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            .right {
+                width: 370px;
+                height: 100%;
+                float: right;
+                position: relative;
+                .right-wrapper {
+                    position: absolute;
+                    width: 100%;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    -webkit-transform: translateY(-50%);
+                    .title {
+                        font-size: 16px;
+                        color: #fff;
+                        padding-left: 160px;
+                        line-height: 50px;
+                        height: 50px;
+                        background: #555 url(../images/storage/storage-edit-barcode.png) no-repeat 140px center;
+                        background-size: 12px 15px;
+                        position: relative;
+                        &::after {
+                            content: "";
+                            width: 0;
+                            height: 0;
+                            border-top: 6px solid transparent;
+                            border-bottom: 6px solid transparent;
+                            border-right: 6px solid #555;
+                            position: absolute;
+                            left: -6px;
+                            top: 10px;
+                        }
+                    }
+                    .form-group {
+                        padding: 30px 0 20px;
+                        background-color: #fff;
+                        .form {
+                            height: 44px;
+                            width: 310px;
+                            margin: 0 auto 16px;
+                            font-size: 0;
+                            span {
+                                display: inline-block;
+                                vertical-align: top;
+                                width: 84px;
+                                height: 44px;
+                                line-height: 44px;
+                                font-size: 14px;
+                                color: #858585;
+                            }
+                            .right-part {
+                                display: inline-block;
+                                vertical-align: top;
+                                width: 226px;
+                                height: 44px;
+                                border: 1px solid #ddd;
+                                border-radius: 3px;
+                                padding-left: 14px;
+                                background: url(../images/storage/storage-arrow.png) no-repeat 204px center;
+                                background-size: 6px 6px;
+                                font-size: 14px;
+                                color: #222;
+                                line-height: 42px;
+                                padding-right: 34px;
+                                overflow: hidden;
+                                white-space: nowrap;
+                                text-overflow: ellipsis;
+                                .item-span {
+                                    height: 22px;
+                                    line-height: 22px;
+                                    text-align: center;
+                                    vertical-align: middle;
+                                    font-size: 14px;
+                                    width: auto;
+                                    margin-right: 10px;
+                                    color: #222;
+                                    // height: 22px;
+                                    // line-height: 22px;
+                                    // background: #e82742e0;
+                                    // text-align: center;
+                                    // vertical-align: middle;
+                                    // color: #fff;
+                                    // border-radius: 2px;
+                                    // font-size: 12px;
+                                    // width: auto;
+                                    // margin-right: 10px;
+                                    // padding: 0 10px;
+                                }
+                                .date {
+                                    width: 128px;
+                                    height: 44px;
+                                    border: 1px solid #ddd;
+                                    border-radius: 3px;
+                                    float: left;
+                                    padding-left: 14px;
+                                    padding-right: 36px;
+                                    overflow: hidden;
+                                    background: url(../images/appointment/appointment-date.png) no-repeat 100px center;
+                                    background-size: 16px 16px;
+                                    white-space: nowrap;
+                                    text-overflow: ellipsis;
+                                }
+                                .time {
+                                    width: 85px;
+                                    height: 44px;
+                                    border: 1px solid #ddd;
+                                    border-radius: 3px;
+                                    float: right;
+                                    padding-left: 14px;
+                                    padding-right: 32px;
+                                    overflow: hidden;
+                                    background: url(../images/appointment/appointment-time.png) no-repeat 60px center;
+                                    background-size: 16px 16px;
+                                    white-space: nowrap;
+                                    text-overflow: ellipsis;
+                                }
+                            }
+                            &:first-child {
+                                .right-part {
+                                    border: none;
+                                    padding: 0;
+                                    background: none;
+                                }
+                            }
+                            &:last-child {
+                                height: 106px;
+                                .right-part {
+                                    height: 106px;
+                                    padding: 0;
+                                    background: none;
+                                    textarea {
+                                        width: 100%;
+                                        height: 100%;
+                                        border: none;
+                                        padding: 4px 14px;
+                                        font-size: 14px;
+                                        color: #222;
+                                        line-height: 24px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .searchresult {
+        .abs(@top:135px,0,0,0);
+        overflow: hidden;
+        padding: 20px 30px;
+        display: none;
+        padding-top: 0;
+        padding-bottom:50px;
+        .title{
+            height:49px;
+            line-height: 49px;
+        }
+        .customerResult{
+            .tip{
+                display: none;
+                line-height: 40px;
+                text-align: center;
+                font-size: 14px;
+                color: #222222;
+                span{
+                    display: inline-block;
+                    vertical-align: middle;
+                }
+            }
+            .tip1{
+                line-height: 80px;
+                border-bottom:  1px solid #f2f2f2;
+                border-top: 1px solid #f2f2f2;
+            }
+            .tip2{
+                border-top: 1px solid #f2f2f2;
+                padding-top: 23px;
+                line-height: 24px;
+                font-size: 13px;
+            }
+            .tip3{
+                line-height: 24px;
+                padding-bottom: 23px;
+                border-bottom:  1px solid #f2f2f2;
+                color:#e82742;
+                font-size: 13px;
+                .iconfont{
+                    font-size: 16px;
+                    margin-right: 3px;
+                }
+            }
+            &.empty{
+                .tip2{
+                    display: block;
+                }
+                .tip3{
+                    display: block;
+                }
+                &.active{
+                    .tip1{
+                        display: block;
+                    } 
+                    .tip2{
+                        display: none;
+                    }
+                    .tip3{
+                        display: none;
+                    }
+                }
+                
+            }
+            
+        }
+        &.active{
+            .searchMoreShop{
+                &::after{
+                    content: "在本店搜索"
+                }
+            }
+            .searchTip{
+                display: none
+            }
+        }
+        .searchMoreShop{
+            &::after{
+                content:"在分店搜索"
+            }
+        }
+        .searchTip{
+            display: block
+        }
+        
+        .searchRightBtn {
+            position: absolute;
+            right: 20px;
+            top: 5px;
+            .searchLastCard {
+                height: 40px;
+                line-height: 40px;
+                font-size: 12px;
+                .iconfont {
+                    vertical-align: -3px;
+                    font-size: 20px;
+                    display: inline-block;
+                }
+            }
+        }
+    }
+    .searchMoreShop {
+        position: relative;
+        display: inline-block;
+        height: 40px;
+        
+        border-top-left-radius: 3px;
+        border-top-right-radius: 3px;
+        border-bottom-left-radius: 3px;
+        border-bottom-right-radius: 3px;
+        border-radius: 3px;
+        -webkit-border-radius: 3px;
+        background-color: #595959;
+        color: #fff;
+        line-height: 40px;
+        padding: 0 10px 0 10px;
+        margin-left: 10px;
+        background-position: 12px center;
+        background-size: 15px 15px;
+        cursor: pointer;
+        &.am-clickable-active {
+            opacity: 0.8;
+        }
+    }
+    .searchMoreShop {
+        margin: 0;
+        float: left;
+        padding: 0 10px 0 35px;
+        margin-top: 15px;
+        margin-left:10px;
+        &::before {
+            content: "";
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            height: 20px;
+            width: 20px;
+            background: url(../images/search_btn_icon.png) no-repeat;
+            background-size: cover;
+        }
+    }
+    .searchTip {
+        color: #999;
+        margin-top: 25px;
+        margin-left: 14px;
+        float: left;
+        font-size: 12px;
+        .tip_icon {
+            width: 16px;
+            height: 16px;
+            margin-right: 5px;
+            background: url(../images/tip_icon.png) no-repeat;
+            display: inline-block;
+            background-size: cover;
+            vertical-align: -18%;
+        }
+    }
+    .serviceTable {
+        z-index: 10;
+        background: @bg04;
+        background: @bg04;
+        .fixedHead {
+            position: absolute;
+            z-index: 10;
+            background-color: @bg04;
+        }
+        .scroller {
+            overflow: hidden;
+            max-height: 400px;
+            box-shadow: rgba(0, 0, 0, 0.2) 1px 1px 5px;
+            thead {
+                opacity: 0;
+            }
+        }
+        table {
+            table-layout: fixed;
+            width: 100%;
+        }
+        tr {
+            &:nth-child(even) {
+                background: @bg06;
+            }
+            &.am-clickable-active {
+                background: @bg05;
+            }
+        }
+        td {
+            padding: 5px;
+            height: 34px;
+            line-height: 24px;
+            color: #333333;
+            border-bottom: @bd01 1px solid;
+            border-right: @bd01 1px solid;
+            text-align: left;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            position: relative;
+            text-align: center;
+        }
+        th {
+            padding: 5px;
+            height: 34px;
+            line-height: 24px;
+            color: #333333;
+            border-bottom: @bd01 1px solid;
+            border-right: @bd01 1px solid;
+            text-align: left;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            position: relative;
+            text-align: center;
+            &.sortable {
+                padding-right: 7px;
+                &.am-clickable-active {
+                    background: @bg05;
+                }
+            }
+            &.sortable {
+                &.desc {
+                    background: @bg05;
+                }
+                &.asc {
+                    background: @bg05;
+                }
+            }
+        }
+        .comment {
+            line-height: 17px;
+            text-align: center;
+            overflow: hidden;
+            color: @c03;
+        }
+        span {
+            &.red {
+                color: @c11;
+            }
+        }
+    }
+}
+.serviceItem {
+    position: absolute;
+    .abs(@left:0;@right:0;@top:0;@bottom:0;);
+    display: none;
+    // -webkit-box-align: center;
+    // -webkit-box-pack: center;
+    background: rgba(0, 0, 0, 0.3);
+    .serviceItemBox {
+        position: absolute;
+        background: @bg04;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        .title {
+            font-weight: bold;
+            line-height: 40px;
+            height: 40px;
+            border-bottom: 1px solid @bd03;
+            .checkBox {
+                padding-right: 10px;
+                padding-left: 18px;
+                &::before {
+                    content: "";
+                    width: 25px;
+                    height: 25px;
+                    float: left;
+                    margin: 8px 5px 0 0;
+                    background: @checkbox_png no-repeat @checkbox_png_pos;
+                    background-size: @checkbox_png_size;
+                }
+                &.checked {
+                    color: @bg32;
+                    &::before {
+                        background: @checkbox_checked_black_png no-repeat @checkbox_checked_png_pos;
+                        background-size: @checkbox_checked_png_size;
+                    }
+                }
+                &.halfchecked {
+                    color: @bg32;
+                    opacity: 0.5;
+                    &::before {
+                        background: @checkbox_checked_black_png no-repeat @checkbox_checked_png_pos;
+                        background-size: @checkbox_checked_png_size;
+                    }
+                }
+            }
+        }
+        // .close{
+        //     .abs(@right:5px;@top:0;);
+        //     padding: 2px;
+        //     &::before{
+        //         content: "";
+        //         display: block;
+        //         width: 36px;
+        //         height: 36px;
+        //         background: @close_png no-repeat @close_png_pos;
+        //         background-size:@close_png_size;
+        //     }
+        //     &.am-clickable-active::before{
+        //         background: @close_active_png no-repeat @close_active_png_pos;
+        //         background-size:@close_active_png_size;
+        //     }
+        // }
+        .serviceItemWrap {
+            width: 100%;
+            height: 310px;
+            overflow: hidden;
+        }
+        .serviceItems {
+            .classItems {
+                &:last-child .items {
+                    border-bottom: none;
+                }
+                .itemClass {
+                    font-size: 15px;
+                    color: #858585;
+                    padding-left: 18px;
+                    height: 36px;
+                    line-height: 56px;
+                    width: 100px;
+                    vertical-align: top;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    float: left;
+                }
+                span::before {
+                    content: "";
+                    float: left;
+                    width: 25px;
+                    height: 25px;
+                    background: @checkbox_png no-repeat @checkbox_png_pos;
+                    background-size: @checkbox_png_size;
+                    padding-right: 10px;
+                    margin: 6px 10px;
+                }
+                span.selected {
+                    font-weight: bold;
+                    &::before {
+                        background: @checkbox_checked_black_png no-repeat @checkbox_checked_png_pos;
+                        background-size: @checkbox_checked_png_size;
+                    }
+                }
+                .items {
+                    font-size: 15px;
+                    color: #222;
+                    margin-left: 118px;
+                    margin-right: 20px;
+                    padding: 10px 0;
+                    border-bottom: 1px solid #ebebeb;
+                    &.clearfix:after {
+                        content: ".";
+                        display: block;
+                        height: 0;
+                        visibility: hidden;
+                        clear: both;
+                    }
+                    .item {
+                        line-height: 36px;
+                        width: 100%;
+                        span {
+                            display: block;
+                            float: left;
+                            width: 20%;
+                            height: 36px;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+                        }
+                    }
+                }
+            }
+        }
+        .foot {
+            height: 40px;
+            padding-right: 20px;
+            div {
+                width: 70px;
+                height: 40px;
+                font-size: 15px;
+                text-align: center;
+                line-height: 40px;
+                float: right;
+                &.close {
+                    color: #999;
+                }
+                &.button {
+                    color: #e82742;
+                }
+            }
+        }
+        // .button{
+        //     background: @bg03;
+        //     line-height: 40px;
+        //     text-align: center;
+        //     color: @c01;
+        //     &.am-clickable-active{
+        //         background: @bg01;
+        //     }
+        // }
+    }
+}
+.page_appointment .serviceTable{
+    overflow: hidden;
+    max-height: 430px;
+  }
+
+.page_appointment .list-warp{
+    overflow: hidden;
+    width: 100%;
+    border-top: 1px solid #f2f2f2;
+  }
+  
+  
+  .page_appointment .list-warp .list-left{
+    float: left;
+    width: 50px;
+  }
+  .page_appointment .list-warp .list-right{
+    margin-left: 50px;
+  }
+  .page_appointment .list-warp .list-left .list-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background:url("../images/icons_sprite/default_custmerIcon.png") no-repeat center center;
+    background-color: #e1e1e1;
+    margin-top: 10px;
+    background-size: 100% 100%;
+    img{
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+    }
+  }
+  .page_appointment .list-warp .list-right .list-title-warp{
+    overflow: hidden;
+    padding: 0 25px;
+    height: 44px;
+    line-height: 44px;
+    font-weight: bold;
+    i{
+        color: #b7b7b7;
+        vertical-align: middle;
+        font-size: 16px;
+        &.score,&.mark{
+            font-size: 12px;
+        }
+    }
+  }
+  .page_appointment .list-warp .list-right .list-title-warp>div {
+    float: left;
+    padding-right: 8px;
+    font-size: 12px;
+    color: #222;
+  }
+  .page_appointment .list-warp .list-right .list-body{
+    overflow: hidden;
+    height: 43px;
+    line-height: 40px;
+    margin:0 25px  ;
+    background-color: #f7f7f7;
+    border-bottom: 1px solid #fff;
+    width: 100%;
+    cursor: pointer;
+    &:hover{
+        background-color: #ececec;
+    }
+    div{
+        font-size: 14px;
+    }
+    
+  }
+  .page_appointment .list-warp .list-right .list-body>div{
+    float: left;
+    padding-right: 15px; 
+    padding-left: 15px;
+    font-size: 14px;
+    border-left:1px solid #fff;
+  }
+  .page_appointment .list-warp .list-right .list-body>div.card{
+    width: 306px;
+    .cardImg{
+        display: inline-block;
+        width: 26px;
+        height: 16px;
+        vertical-align: -6.5%;
+        margin-right: 10px;
+        &.type_two {
+            background: url("../images/card1.png") no-repeat;
+            background-size: 100% 100%;
+        }
+        &.type_one {
+            background: url("../images/card2.png") no-repeat;
+            background-size: 100% 100%;
+        }
+        &.type_zero {
+            background: url("../images/card3.png") no-repeat;
+            background-size: 100% 100%;
+        }
+    }
+  }
+  .page_appointment .list-warp .list-right .list-body>div{
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+  }
+  .page_appointment .list-warp .list-right .list-body>div.money{
+    width: 110px;
+  }
+  .page_appointment .list-warp .list-right .list-body>div.rest-money{
+    width: 230px;
+  }
+  .page_appointment .list-warp .list-right .list-body>div.mark{
+    max-width: 230px;
+  }
+  @media only screen and (max-width: 1100px) {
+      .page_appointment .list-warp .list-right .list-body>div.rest-money{
+        width: 180px;
+      }
+      .page_appointment .list-warp .list-right .list-body>div.card{
+        width: 230px;
+      }
+  }
+
+  
+  .page_appointment .list-warp .list-right .list-body>div>b{
+    color: #e82742;
+  }
+  

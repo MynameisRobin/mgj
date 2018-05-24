@@ -1,0 +1,11 @@
+.page-reportStandard td span {
+    display: block;
+    margin: auto;
+    text-align: center;
+    color: #213f83;
+    text-decoration: underline;
+}
+
+.page-reportStandard .class-fullcenter {
+    bottom: 46px;
+}

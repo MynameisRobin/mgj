@@ -1,0 +1,141 @@
+@url: '../css/img/education';
+.page-educationHAC {
+	.clearfix:after {
+		content: ".";
+	    display: block;
+	    height: 0;
+	    visibility: hidden;
+	    clear: both;
+	}
+	.am-header .title .nav {
+		height: 36px;
+		margin: 4px auto;
+		font-size: 0;
+		text-align: center;
+		li {
+			display: inline-block;
+			vertical-align: top;
+			margin: 0 15px;
+			font-size: 14px;
+			color: #fff;
+			opacity: 0.5;
+			height: 36px;
+			line-height: 36px;
+			font-weight: normal;
+			&.active {
+				opacity: 1;
+				border-bottom: 2px solid #fff;
+			}
+		}
+	}
+	.am-body-wrap {
+		*,
+		&:after,
+		&:before {
+			box-sizing: border-box;
+			-webkit-box-sizing: border-box;
+		}
+		.list {
+			padding: 0 10px;
+			background-color: #fff;
+			li {
+				padding: 15px 0;
+				height: 106px;
+				overflow: hidden;
+				border-bottom: 1px solid #e5e5e5;
+				&:last-child {
+					border-bottom: none;
+				}
+				.left {
+					width: 135px;
+					float: left;
+					.img-wrap {
+						height: 76px;
+						position: relative;
+						background: #f4f4f4 url('@{url}/default.png') no-repeat center center;
+						background-size: 48px 21px;
+						img {
+							width: 100%;
+							height: 100%;
+							display: none;
+						}
+					}
+					.count-wrap {
+						position: absolute;
+						max-width: 100%;
+						font-size: 10px;
+						color: #aaa;
+						height: 14px;
+						line-height: 14px;
+						overflow: hidden;
+					    white-space: nowrap;
+					    text-overflow: ellipsis;
+					    left: 0;
+					    bottom: 0;
+					    background-color: rgba(0,0,0,.6);
+					    padding: 0 3px;
+					    border-radius: 2px;
+					}
+				}
+				.right {
+					margin-left: 150px;
+					.title {
+						font-size: 16px;
+						color: #222;
+						line-height: 18px;
+						overflow: hidden;
+						text-overflow: ellipsis;
+					    display: -webkit-box;
+					    -webkit-line-clamp: 2;
+					    -webkit-box-orient: vertical;
+					    margin-bottom: 2px;
+
+					}
+					.college {
+						font-size: 12px;
+						color: #999;
+						line-height: 20px;
+						max-height: 20px;
+					 	overflow: hidden;
+					    white-space: nowrap;
+					    text-overflow: ellipsis;
+
+					}
+					.keywords {
+						height: 16px;
+						overflow: hidden;
+						font-size: 0;
+					 	overflow: hidden;
+					    white-space: nowrap;
+					    text-overflow: ellipsis;
+					    margin-top: 2px;
+
+						span {
+							display: inline-block;
+							vertical-align: top;
+							font-size: 11px;
+							color: #999;
+							height: 16px;
+							line-height: 14px;
+							padding: 0 3px;
+							margin-right: 3px;
+							border: 1px solid #dedede;
+							border-radius: 3px;
+						}
+					}
+				}
+			}
+		}
+		.error {
+			position: absolute;
+			width: 100%;
+			font-size: 12px;
+			color: #aaa;
+			text-align: center;
+			top: 50%;
+			transform: translateY(-50%);
+			-webkit-transform: translateY(-50%);
+			display: none;
+		}
+	}
+}

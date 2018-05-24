@@ -1,0 +1,282 @@
+@import "var.less";
+@path:"../images/";
+@import "../images/tab_sprite.less";
+@import "../images/icons_sprite.less";
+.page_service,.page_product{
+	left:135px;
+	bottom: 43px;
+	border-radius: 0 4px 0 0;
+	.cashierMain .head,.cashierMain .foot{
+		display: none;
+	}
+	.cashierMain .body{
+		top:0;
+		bottom:0;
+	}
+}
+
+.cashierTotalPanel{
+	display: none;
+	background-color: #FFF;
+	border-top:1px solid #DDD;
+	height: 42px;
+	position: absolute;
+	left:135px;
+	bottom: 0;
+	right: 0;
+	z-index: 1;
+	line-height: 42px;
+	.billNo{
+		padding-left: 10px;
+		float: left;
+		&::before{
+			content: "单号:";
+			display: inline-block;
+			font-size: @fs2;
+			color: @c07;
+		}
+		input{
+			border: 1px solid @bd01;
+			height: 26px;
+			width: 100px;
+			padding-left: 10px;
+			border-radius: 14px;
+			&.error{
+				border-color: @bd02;
+				-webkit-animation: animation_shake 1 ease-in 0.2s;
+			}
+		}
+	}
+	.hangup{
+		float: right;
+		margin-top: -1px;
+		height: 43px;
+		text-align: center;
+		color: @c01;
+		background: @bg03;
+		width: 80px;
+		&.am-clickable-active{
+			background: @bg01;
+		}
+	}
+	.submit{
+		float: right;
+		margin-top: -1px;
+		height: 43px;
+		text-align: center;
+		color: @c01;
+		background: @bg02;
+		width: 180px;
+		&.am-clickable-active{
+			background: @bg07;
+		}
+	}
+	.totalPrice{
+		float: right;
+		color: @c11;
+		padding: 0 15px;
+		font-size: @fs7;
+		line-height: 44px;
+		&::before{
+			font-size: @fs1;
+			content: "总计:";
+			color: @c02;
+		}
+	}
+}
+.tab_cash{
+	display: none;
+	position: absolute;
+	left:75px;
+	top:0;
+	bottom: 0;
+	width:60px;
+	background-color: #333;
+	z-index: 1;
+	color: @c05;
+	li{
+		padding: 2px 0 0 0;
+		height: 56px;
+		text-align: center;
+		
+		line-height: 20px;
+		position: relative;
+		p{
+			display: block;
+			height: 30px;
+			width: 30px;
+			margin: 0 auto;
+			background-color: #CCC;
+			&.a{
+				background: @icon_a_png no-repeat @icon_a_png_pos;
+				background-size:@icon_a_png_size;
+			}
+			&.b{
+				background: @icon_b_png no-repeat @icon_b_png_pos;
+				background-size:@icon_b_png_size;
+			}
+			&.c{
+				background: @icon_c_png no-repeat @icon_c_png_pos;
+				background-size:@icon_c_png_size;
+			}
+			&.d{
+				background: @icon_d_png no-repeat @icon_d_png_pos;
+				background-size:@icon_d_png_size;
+			}
+			&.e{
+				background: @icon_e_png no-repeat @icon_e_png_pos;
+				background-size:@icon_e_png_size;
+			}
+			&.f{
+				background: @icon_f_png no-repeat @icon_f_png_pos;
+				background-size:@icon_f_png_size;
+			}
+			&.g{
+				background: @icon_g_png no-repeat @icon_g_png_pos;
+				background-size:@icon_g_png_size;
+			}
+			&.h{
+				background: @icon_h_png no-repeat @icon_h_png_pos;
+				background-size:@icon_h_png_size;
+			}
+			&.i{
+				background: @icon_i_png no-repeat @icon_i_png_pos;
+				background-size:@icon_i_png_size;
+			}
+			&.j{
+				background: @icon_j_png no-repeat @icon_j_png_pos;
+				background-size:@icon_j_png_size;
+			}
+		}
+		&.selected{
+			border-top: 1px solid #666;
+			background-color: #444;
+			//border-top: 1px solid #111;
+			//background-color: #111;
+			color: @c01;
+			opacity: 1;
+			&::before{
+				content: "";
+				position: absolute;
+				right:-7px;
+				top:50%;
+				margin-top: -7px;
+				border-left: 7px solid #444;
+				border-top:7px solid transparent;
+				border-bottom:7px solid transparent;
+			}
+			p.a{
+				background: @icon_a_s_png no-repeat @icon_a_s_png_pos;
+				background-size:@icon_a_s_png_size;
+			}
+			p.b{
+				background: @icon_b_s_png no-repeat @icon_b_s_png_pos;
+				background-size:@icon_b_s_png_size;
+			}
+			p.c{
+				background: @icon_c_s_png no-repeat @icon_c_s_png_pos;
+				background-size:@icon_c_s_png_size;
+			}
+			p.d{
+				background: @icon_d_s_png no-repeat @icon_d_s_png_pos;
+				background-size:@icon_d_s_png_size;
+			}
+			p.e{
+				background: @icon_e_s_png no-repeat @icon_e_s_png_pos;
+				background-size:@icon_e_s_png_size;
+			}
+			p.f{
+				background: @icon_f_s_png no-repeat @icon_f_s_png_pos;
+				background-size:@icon_f_s_png_size;
+			}
+			p.g{
+				background: @icon_g_s_png no-repeat @icon_g_s_png_pos;
+				background-size:@icon_g_s_png_size;
+			}
+			p.h{
+				background: @icon_h_s_png no-repeat @icon_h_s_png_pos;
+				background-size:@icon_h_s_png_size;
+			}
+			p.i{
+				background: @icon_i_s_png no-repeat @icon_i_s_png_pos;
+				background-size:@icon_i_s_png_size;
+			}
+			p.j{
+				background: @icon_j_s_png no-repeat @icon_j_s_png_pos;
+				background-size:@icon_j_s_png_size;
+			}
+		}
+		> .num {
+			position: absolute;
+			//width: 18px;
+			//height: 18px;
+			line-height: 14px;
+			padding: 0 2px 0 1px;
+			color: #FFF;
+			background: @bg02;
+			border-radius: 2px;
+			right: 2px;
+			top: 2px;
+			font-size: 12px;
+		}
+	}
+	.line{
+		height: 10px;
+		border-top:1px solid #222;
+		background-color: #282828;
+		margin-top: -1px;
+		box-shadow: rgba(0,0,0,0.05) 0 2px inset;
+	}
+	.tabItem{
+		border-top: 1px solid #444;
+		border-bottom: 1px solid #282828;
+		background-color: #383838;
+	}
+	.user{
+		padding-bottom: 2px;
+		.img{
+			height: 40px;
+			background:#555 url("../images/defultbg.png") no-repeat center center;
+			background-size: 40px 40px;
+			margin: 5px 10px 0 10px;
+		}
+		.name{
+			line-height: 20px;
+			color: #AAA;
+			font-size: 12px;
+			text-align: center;
+		}
+	}
+	.card{
+		white-space: nowrap;
+		font-size: 12px;
+		.name{
+			color: #999;
+			padding-top: 10px;
+			padding-left: 5px;
+			height: 16px;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+		.balance{
+			color: #DDD;
+			padding-bottom: 10px;
+			padding-left: 5px;
+			line-height: 20px;
+		}
+		text-align: left;
+	}
+	.hangupBtn,.settingBtn,.genderBtn,.searchBtn {
+		text-align: center;
+		line-height: 14px;
+		font-size: 12px;
+		color: #AAA;
+		height: 55px;
+		.icon{
+			&::before{
+				font-size: 18px;
+				line-height: 32px;
+			}
+		}
+	}
+}

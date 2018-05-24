@@ -1,0 +1,304 @@
+.page_outinRecord .recordHead .icon1 {
+    background-image: url(../images/storageRecord/record11.png);
+    width: 50px;
+    height: 50px;
+    background-position: 11px 9px;
+    background-size: 30px 30px;
+    background-repeat: no-repeat;
+}
+
+.page_outinRecord .recordHead {
+    overflow: hidden;
+    height: 50px;
+    line-height: 50px;
+    border-bottom: 1px solid #BCBCBC;
+}
+
+.page_outinRecord .recordHead div {
+    // float:left;
+}
+
+.page_outinRecord .recordHead p.dateSelect {
+    position: absolute;
+    width: 204px;
+    top: 10px;
+    right: 10px;
+    border: 1px solid #888;
+    border-radius: 20px;
+    display: none;
+}
+
+.page_outinRecord .recordHead p.dateSelect span {
+    display: inline-block;
+    text-align: center;
+    height: 30px;
+    float: left;
+    line-height: 30px;
+}
+
+.page_outinRecord .recordHead p.dateSelect span:not(.date) {
+    width: 31px;
+}
+
+.page_outinRecord .recordHead p.dateSelect span:left {
+    // background-image: url(../images/reservation/datePicker-left.png);
+    // background-position: 2px 2px;
+    // background-repeat:no-repeat;
+    // background-size:7px 10px;
+}
+
+.page_outinRecord .recordHead p.dateSelect span.date {
+    border-right: 1px solid #666;
+    border-left: 1px solid #666;
+    width: 120px;
+    padding-left: 20px;
+    background-image: url(../images/storageRecord/date1.png);
+    background-repeat: no-repeat;
+    background-position: 16px 5px;
+    background-size: 20px 20px;
+    // -webkit-appearance:none;
+}
+
+.page_outinRecord .md p {
+    font-size: 20px;
+    // width:965px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.page_outinRecord .recordList {
+    margin-top: 15px;
+}
+
+.page_outinRecord .recordList .aside {
+    width: 290px;
+    text-align: center;
+    height: 325px;
+    float: left;
+}
+
+.page_outinRecord .recordList .aside div.img {
+    width: 188px;
+    height: 188px;
+    border: 1px solid #F5F5F5;
+    text-align: center;
+    vertical-align: middle;
+    margin: 0 auto 30px;
+    background-image: url(../images/defultbg.png);
+    background-repeat: no-repeat;
+    background-size: 78px 79px;
+    background-position: center center;
+    overflow: hidden;
+    position: relative;
+}
+
+.page_outinRecord .recordList .aside div.img img {
+    max-width: 100%;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+}
+
+.page_outinRecord .discrip {
+    // width:178px;
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.page_outinRecord .num {
+    // width:165px;
+    // margin-left:75px;
+    font-size: 12px;
+    color: #787878;
+}
+
+.page_outinRecord .rtContent {
+    margin-left: 290px;
+    margin-right: 50px;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+.page_outinRecord .listHeader {
+    overflow: hidden;
+}
+
+.page_outinRecord .rtContent .listContent {
+    position: absolute;
+    width: 100%;
+    top: 32px;
+    bottom: 0;
+    overflow: hidden;
+}
+
+.page_outinRecord .rtContent .listHeader>div {
+    border-top: 1px solid #F5F5F5;
+    border-left: 1px solid #F5F5F5;
+    float: left;
+    padding: 0 5px;
+    height: 32px;
+    line-height: 32px;
+    color: #999;
+    font-size: 12px;
+    border-bottom: 1px solid #F5F5F5;
+}
+.page_outinRecord .rtContent .listHeader div,
+.page_outinRecord .rtContent .listContent div {
+	box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+.page_outinRecord .rtContent .listHeader>div:nth-child(1),
+.page_outinRecord .rtContent .listContent li>div:nth-child(1) {
+    width: 86px;
+    width: 12%;
+}
+
+.page_outinRecord .rtContent .listContent li>div:nth-child(1) {
+    color: #000;
+}
+
+.page_outinRecord .rtContent .listHeader>div:nth-child(2),
+.page_outinRecord .rtContent .listContent li>div:nth-child(2) {
+    width: 110px;
+    width: 18%;
+}
+
+.page_outinRecord .rtContent .listHeader>div:nth-child(3),
+.page_outinRecord .rtContent .listContent li>div:nth-child(3) {
+    width: 75px;
+    width: 8%;
+}
+
+.page_outinRecord .rtContent .listContent li>div:nth-child(3).outway,
+.page_outinRecord .rtContent .listContent li>div:nth-child(4).outway {
+    color: #e82742;
+}
+
+.page_outinRecord .rtContent .listContent li>div:nth-child(3).intoway,
+.page_outinRecord .rtContent .listContent li>div:nth-child(4).intoway {
+    color: #3bb372;
+}
+
+.page_outinRecord .rtContent .listHeader>div:nth-child(4),
+.page_outinRecord .rtContent .listContent li>div:nth-child(4) {
+    width: 65px;
+    width: 8%;
+}
+
+.page_outinRecord .rtContent .listHeader>div:nth-child(5),
+.page_outinRecord .rtContent .listContent li>div:nth-child(5) {
+    width: 105px;
+    width: 8%;
+}
+
+.page_outinRecord .rtContent .listContent li>div:nth-child(5) {
+    color: #000;
+}
+
+.page_outinRecord .rtContent .listHeader>div:nth-child(6),
+.page_outinRecord .rtContent .listContent li>div:nth-child(6) {
+    width: 140px;
+    width: 10%;
+}
+
+.page_outinRecord .rtContent .listHeader>div:nth-child(7),
+.page_outinRecord .rtContent .listContent li>div:nth-child(7) {
+    width: 80px;
+    width: 14%;
+}
+
+.page_outinRecord .rtContent .listHeader>div:nth-child(8),
+.page_outinRecord .rtContent .listContent li>div:nth-child(8) {
+    width: 80px;
+    width: 12%;
+}
+
+.page_outinRecord .rtContent .listHeader>div:nth-child(9),
+.page_outinRecord .rtContent .listContent li>div:nth-child(9) {
+    width: 80px;
+    border-right: 1px solid #F5F5F5;
+    width: 10%;
+}
+
+.page_outinRecord .rtContent .listContent li:last-child>div {
+    border-bottom: 1px solid #F5F5F5;
+}
+
+.page_outinRecord .rtContent .listContent li div {
+    color: #999;
+    height: 41px;
+    line-height: 41px;
+    border-left: 1px solid #F5F5F5;
+    float: left;
+    padding: 0 5px;
+    font-size: 12px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.page_outinRecord .rtContent .listContent li {
+    height: 41px;
+}
+
+.page_outinRecord .rtContent .listContent li:nth-child(2n+1) {
+    background: #F7F7F7;
+}
+
+#outinPage div.leftbox {}
+
+.page_outinRecord .recordList {
+    position: absolute;
+    width: 100%;
+    top: 66px;
+    bottom: 54px;
+}
+
+#outinPage div.list {}
+
+#outinPage div.list li {
+    width: 32px;
+    height: 32px;
+    line-height: 32px;
+}
+
+.page_outinRecord .recordList {
+    overflow: hidden;
+}
+
+.page_outinRecord .rtContent .listContent li>div:nth-child(6) {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+#outinPage {
+    position: absolute;
+    width: 100%;
+    bottom: 9px;
+    height: 36px;
+}
+
+#outinPage .pagerBox .leftbox {
+    line-height: 32px;
+    left: 15px;
+}
+
+#outinPage .pagerBox .centerBox ul {
+    padding: 0;
+}
+
+#outinPage .pagerBox .centerBox ul li {
+    width: 36px;
+    height: 36px;
+    line-height: 36px;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}

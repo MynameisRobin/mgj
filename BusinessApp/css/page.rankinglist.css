@@ -1,0 +1,458 @@
+.page-rankinglist .c-storeSelectBtn > .logo{
+	display: none;
+}
+html.ios .monthwrap{
+	top: 28px;
+}
+html.iosX .monthwrap{
+	top: 48px;
+}
+.page-rankinglist .am-header .title{
+	text-align: left;
+}
+.page-rankinglist .c-storeSelectBtn{
+	display: inline-block;
+	vertical-align: middle;
+}
+.page-rankinglist .am-header .title.hideEmp{
+	text-align: center;
+}
+.page-rankinglist .am-header .title.hideEmp .roles{
+	display: none;
+}
+.page-rankinglist .am-header .title.hideRole .roles{
+	display:none;
+}
+.page-rankinglist .am-header .title.hideRole{
+	text-align:center;
+}
+.page-rankinglist .am-header .title .roles{
+	display: inline-block;
+	height: 44px;
+	max-width: 180px;
+	line-height: 44px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	padding-right: 20px;
+	background: url("img/c_storeSelect_arrow-s.png") no-repeat right center;
+	background-size: 10px 6px;
+	margin-left: 5px;
+	vertical-align: middle;
+}
+.page-rankinglist .c-storeSelectBtn{
+	text-align: left;
+}
+.page-rankinglist .am-header>p,.page-rankinglist .am-header>div.title{
+	font-size: 14px;
+	line-height: 40px;
+}
+#page-rankinglist .c-storeSelectBtn>.text{
+	height:44px;
+	line-height:44px;
+}
+.page-rankinglist .monthwrap{
+	position: absolute;
+	right: 10px;
+    top: 8px;
+	height: 27px;
+	border: 1px solid #fff;
+	-webkit-border-radius: 2px;
+	-o-border-radius: 2px;
+	border-radius: 2px;
+}
+.page-rankinglist .monthwrap li.thismonth,
+.page-rankinglist .monthwrap li.lastmonth,
+.page-rankinglist .monthwrap li.today{
+	float: left;
+	width: 45px;
+	height: 27px;
+	line-height: 28px;
+	text-align: center;
+	font-size: 12px;
+	color: #fff;
+}
+.page-rankinglist .monthwrap li.today{
+	border-top-left-radius: 1px;
+    border-bottom-left-radius: 1px;
+}
+.page-rankinglist .monthwrap li.lastmonth{
+	border-top-right-radius: 1px;
+    border-bottom-right-radius: 1px;
+}
+.page-rankinglist .monthwrap li.onmonth{
+	background: #ffffff;
+}
+.page-rankinglist .header-achievement .monthwrap{
+	background: #2dbd84;
+}
+.page-rankinglist .header-achievement .monthwrap li.onmonth{
+	color: #2dbd84;
+}
+.page-rankinglist .header-appointment .monthwrap{
+	background: #8f9ddf;
+}
+.page-rankinglist .header-appointment .monthwrap li.onmonth{
+	color: #8f9ddf;
+}
+.page-rankinglist .header-praise .monthwrap{
+	background: #f076b3;
+}
+.page-rankinglist .header-praise .monthwrap li.onmonth{
+	color: #f076b3;
+}
+.page-rankinglist .header-works .monthwrap{
+	background: #4ccaab;
+}
+.page-rankinglist .header-works .monthwrap li.onmonth{
+	color: #4ccaab;
+}
+.page-rankinglist .header-reward .monthwrap{
+	background: #f67b7b;
+}
+.page-rankinglist .header-reward .monthwrap li.onmonth{
+	color: #f67b7b;
+}
+.page-rankinglist .am-body-wrap{
+    background: #f6f6f6;
+}
+.page-rankinglist .inner-top{
+	position: relative;
+	height: 222px;
+}
+.page-rankinglist .inner-top .thismonth,
+.page-rankinglist .inner-top .lastmonth{
+	position: absolute;
+	top: 10px;
+	width: 45px;
+	height: 25px;
+	line-height: 26px;
+	text-align: center;
+	font-size: 12px;
+	color: #fff;
+	border: 1px solid #fff;
+	-webkit-border-radius: 2px;
+	-o-border-radius: 2px;
+	border-radius: 2px;
+}
+.page-rankinglist .inner-top .thismonth{
+	left: 15px;
+}
+.page-rankinglist .inner-top .lastmonth{
+	right: 15px;
+}
+.page-rankinglist .inner-top .onmonth{
+	background: #ffffff;
+}
+.page-rankinglist .active-achievement .onmonth{
+	color: #2dbd84;
+}
+.page-rankinglist .active-appointment .onmonth{
+	color: #8f9ddf;
+}
+.page-rankinglist .active-praise .onmonth{
+	color: #f076b3;
+}
+.page-rankinglist .active-works .onmonth{
+	color: #4ccaab;
+}
+.page-rankinglist .active-reward .onmonth{
+	color: #f67b7b;
+}
+.page-rankinglist .inner-top .thefirst-wrap{
+	margin: 0 auto;
+	padding-top: 50px;
+	text-align: center;
+}
+.page-rankinglist .inner-top .thefirst-wrap .thefirstheader{
+	position: relative;
+	display: inline-block;
+	width: 90px;
+	height: 90px;
+	border: 4px solid #e9e9e9;
+	-webkit-border-radius: 50%;
+	-o-border-radius: 50%;
+	border-radius: 50%;
+}
+.page-rankinglist .inner-top .thefirst-wrap .thefirstheader .goldmedal{
+	width: 40px;
+    height: 30px;
+    position: absolute;
+    left: 28px;
+    top: -28px;
+    background: url(img/medalsprite.png) no-repeat 0px 0px;
+    background-size: 38px 160px;
+}
+.page-rankinglist .inner-top .thefirst-wrap .thefirstheader .imgBox{
+	width: 90px;
+	height: 90px;
+	-webkit-border-radius: 50%;
+	-o-border-radius: 50%;
+	border-radius: 50%;
+}
+.page-rankinglist .inner-top .thefirst-wrap .thefirstheader img{
+	width: 90px;
+	height: 90px;
+	-webkit-border-radius: 50%;
+	-o-border-radius: 50%;
+	border-radius: 50%;
+}
+.page-rankinglist .inner-top .thefirst-wrap .thefirstname{
+	color: #fff;
+    font-size: 17px;
+    margin-top: 8px;
+}
+.page-rankinglist .inner-top .thefirst-wrap .thefirstbottom{
+	margin-top: 4px;
+	text-align: center;
+}
+.page-rankinglist .inner-top .thefirst-wrap .thefirstbottom span{
+	font-size: 15px;
+	color: #ffe87f;
+}
+.page-rankinglist .inner-top .thefirst-wrap .thefirstbottom span.arrow{
+	display: inline-block;
+    width: 12px;
+    height: 15px;
+    vertical-align: text-top;
+    margin-left: 5px;
+    background: url(img/arrowsprite.png) no-repeat 0px -86px;
+    background-size: 13px 100px;
+}
+.page-rankinglist .inner-top .thefirst-wrap .thefirstbottom span.arrowdown{
+    background-position: 0px -87px;
+	-webkit-transform: rotate(180deg);
+	-o-transform: rotate(180deg);
+	transform: rotate(180deg);
+}
+.page-rankinglist .active-achievement{
+	background: url(img/activeachievement.jpg) no-repeat center center;
+	background-size: cover;
+}
+.page-rankinglist .active-appointment{
+	background: url(img/activeappointment.jpg) no-repeat center center;
+	background-size: cover;
+}
+.page-rankinglist .active-praise{
+	background: url(img/activepraise.jpg) no-repeat center center;
+	background-size: cover;
+}
+.page-rankinglist .active-works{
+	background: url(img/activeworks.jpg) no-repeat center center;
+	background-size: cover;
+}
+.page-rankinglist .active-reward{
+	background: url(img/activereward.jpg) no-repeat center center;
+	background-size: cover;
+}
+.page-rankinglist .header-achievement{
+	background: #2dbd84;
+}
+.page-rankinglist .header-appointment{
+	background: #8f9ddf;
+}
+.page-rankinglist .header-praise{
+	background: #f076b3;
+}
+.page-rankinglist .header-works{
+	background: #4ccaab;
+}
+.page-rankinglist .header-reward{
+	background: #f67b7b;
+}
+.page-rankinglist .inner-cont{
+	
+}
+.page-rankinglist .inner-cont ul{
+	background: #fff;
+}
+.page-rankinglist .inner-cont ul li{
+	position: relative;
+	height: 60px;
+	padding-left: 60px;
+}
+.page-rankinglist .inner-cont ul li.emptyli{
+	position: static;
+	height: auto;
+	margin-top: 40px;
+    padding-top: 55px;
+    padding-left: 0px;
+    text-align: center;
+    font-size: 12px;
+    color: #ccc;
+	background: #f6f6f6 url(img/marketingempty.png) no-repeat center 4px;
+	background-size: 53px 42px;
+}
+.page-rankinglist .inner-cont ul li .rank{
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 60px;
+	height: 60px;
+	text-align: center;
+	line-height: 60px;
+}
+.page-rankinglist .inner-cont ul li:nth-child(1) .rank{
+	text-indent: -9999px;
+	background: url(img/medalsprite.png) no-repeat 10px -51px;
+    background-size: 38px 160px;
+}
+.page-rankinglist .inner-cont ul li:nth-child(2) .rank{
+	text-indent: -9999px;
+	background: url(img/medalsprite.png) no-repeat 10px -117px;
+    background-size: 38px 160px;
+}
+.page-rankinglist .inner-cont ul li .licont{
+	height: 60px;
+	border-bottom: 1px solid #eeeeee;
+	overflow: hidden;
+}
+.page-rankinglist .inner-cont ul li .licont .count{
+	float: right;
+	line-height: 60px;
+	padding-right: 8px;
+	/*color: #222222;*/
+	color: #000000;
+	font-size: 20px;
+}
+.page-rankinglist .inner-cont ul li.isme .licont .count{
+	color: #2dbd84;
+}
+.page-rankinglist .inner-cont ul li .licont .count i{
+	font-style: normal;
+    font-size: 12px;
+    color: #999;
+}
+.page-rankinglist .inner-cont ul li.isme .licont .count i{
+	color: #2dbd84;
+}
+.page-rankinglist .inner-cont ul li .licont .count i.arrowright{
+	content: "";
+    display: inline-block;
+    width: 7px;
+    height: 10px;
+    margin-left: 4px;
+    background: url(img/report_arrowRight.png) center center;
+    background-size: contain;
+}
+.page-rankinglist .inner-cont ul li .licont .count span{
+	display: inline-block;
+    width: 12px;
+    height: 15px;
+    vertical-align: text-bottom;
+    margin-left: 5px;
+}
+.page-rankinglist .inner-cont ul li .licont .count .arrowgreen,
+.page-rankinglist .inner-cont ul li .licont .count .arrowred{
+	display: inline-block;
+    width: 12px;
+    height: 15px;
+    vertical-align: text-bottom;
+    margin-left: 5px;
+}
+.page-rankinglist .inner-cont ul li .licont .count .arrowgreen{
+	background: url(img/arrowsprite.png) no-repeat 1px 1px;
+    background-size: 10px 86px;
+}
+.page-rankinglist .inner-cont ul li .licont .count .arrowred{
+	background: url(img/arrowsprite.png) no-repeat 1px -37px;
+    background-size: 10px 86px;
+}
+.page-rankinglist .inner-cont ul li .licont .imgwrap{
+	float: left;
+	width: 40px;
+	height: 40px;
+	margin-top: 8px;
+	border: 2px solid #e9e9e9;
+	-webkit-border-radius: 50%;
+	border-radius: 50%;
+}
+.page-rankinglist .inner-cont ul li .licont .imgwrap img{
+	width: 100%;
+	height: 100%;
+	-webkit-border-radius: 50%;
+	border-radius: 50%;
+}
+.page-rankinglist .inner-cont ul li .licont .licontcenter{
+	float: left;
+	width: 100px;
+	height: 100%;
+	padding-left: 8px;
+}
+.page-rankinglist .inner-cont ul li .licont .licontcenter h2{
+	color: #222222;
+	font-size: 14px;
+	line-height: 60px;
+}
+.page-rankinglist .inner-cont ul li.isme .licont .licontcenter h2{
+	color: #2dbd84;
+}
+.page-rankinglist .inner-cont ul li .licont .licontcenter-achievement{
+
+}
+.page-rankinglist .inner-cont ul li .licont .licontcenter-achievement h2{
+    height: 24px;
+	line-height: 24px;
+    margin-top: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.page-rankinglist .inner-cont ul li .licont .licontcenter-achievement .percentwrap{
+	position: relative;
+	width: 100%;
+    height: 8px;
+    margin-top: 5px;
+}
+.page-rankinglist .inner-cont ul li .licont .licontcenter-achievement .percentwrap .percentwd{
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 0%;
+	height: 8px;
+	background: #d8d8d8;
+	-webkit-border-radius: 12px;
+	-o-border-radius: 12px;
+	border-radius: 12px;
+	-webkit-transition: .6s all ease-in-out;
+	-o-transition: .6s all ease-in-out;
+	transition: .6s all ease-in-out;
+}
+.page-rankinglist .footTab{
+	position: absolute;
+    z-index: 2;
+    bottom: 0;
+    height: 45px;
+    width: 100%;
+    text-align: center;
+}
+.page-rankinglist .footTab span{
+	display: block;
+    float: left;
+    width: 20%;
+    line-height: 46px;
+    color: #fff;
+    font-size: 12px;
+}
+.page-rankinglist .footTab .achievement{
+	background: #727888;
+}
+.page-rankinglist .footTab .appointment{
+	background: #727888;
+}
+.page-rankinglist .footTab .praise{
+	background: #606778;
+}
+.page-rankinglist .footTab .works{
+	background: #586075;
+}
+.page-rankinglist .footTab .reward{
+	background: #485268;
+}
+.page-rankinglist .footTab span.selected{
+	background: #2dbd84;
+}
+.page-rankinglist .footTab .disabled{
+	background: #f6f6f6;
+	color: #ccc;
+}

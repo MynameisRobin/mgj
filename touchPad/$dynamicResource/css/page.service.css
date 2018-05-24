@@ -1,0 +1,1589 @@
+/* 文字颜色 ***********************/
+/* c0* 为黑白灰色系 */
+.page_service.am-full {
+  left: 60px;
+}
+.page_service.openBill {
+  left: 60px;
+}
+.cashierTab {
+  height: 44px;
+  border-bottom: 1px solid #ececec;
+  text-align: center;
+  background-color: #FFF;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.cashierTab ul {
+  margin: 0 auto;
+  overflow: hidden;
+}
+.cashierTab li {
+  display: inline-block;
+  line-height: 44px;
+  height: 44px;
+  padding: 0 10px;
+}
+.cashierTab li span {
+  display: inline-block;
+  padding: 0 5px;
+}
+.cashierTab li.selected span {
+  color: #e82742;
+  border-bottom: 4px solid #e82742;
+  height: 40px;
+}
+.cashierHangupBtnContainer {
+  width: 105px;
+  height: 44px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  display: -webkit-flex;
+  -webkit-align-items: center;
+  background: #FFF;
+  border-bottom: 1px solid #ececec;
+  display: none;
+}
+.cashierHangupBtnContainer .cashierHangupBtn {
+  width: 80px;
+  height: 28px;
+  line-height: 28px;
+  border-radius: 15px;
+  text-align: left;
+  background: #595959;
+  color: #FFF;
+  margin: 0 auto;
+  position: relative;
+}
+.cashierHangupBtnContainer .cashierHangupBtn .icon {
+  width: 26px;
+  height: 26px;
+  margin: 1px 2px 1px 10px;
+  float: left;
+  background-image: url("../images/hangup/icon_hangup_btn.png");
+  background-repeat: no-repeat;
+  background-size: 60%;
+  background-position: center;
+}
+.cashierHangupBtnContainer .cashierHangupBtn .badge {
+  position: absolute;
+  display: block;
+  top: -5px;
+  right: -7px;
+  background: #f39800;
+  height: 20px;
+  line-height: 20px;
+  padding: 0 6px;
+  border-radius: 10px;
+  color: #222;
+}
+.cashierHangupBtnContainer .cashierHangupBtn.am-clickable-active {
+  background: #282828;
+}
+.tabshow .cashierTab {
+  border-radius: 4px 4px 0 0;
+}
+.cashierFilter {
+  padding: 0 30px;
+  height: 40px;
+  background-color: #FFF;
+  position: relative;
+}
+.cashierFilter li {
+  display: inline-block;
+  padding: 5px 0;
+  width: 30px;
+}
+.cashierFilter li span {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  color: #999;
+}
+.cashierFilter li.selected span {
+  color: #FFF;
+  background-color: #595959;
+  border-radius: 15px;
+}
+.cashierFilter li.all span {
+  font-size: 12px;
+}
+.cashierFilter .modelType {
+  padding: 4px;
+  position: absolute;
+  left: auto;
+  right: 2px;
+  top: 0;
+  bottom: auto;
+  opacity: 0.3;
+}
+.cashierFilter .modelType::before {
+  content: "";
+  display: block;
+  height: 32px;
+  width: 32px;
+  background: url("../images/icons_sprite/model_img.png") no-repeat 0px 0px;
+  background-size: 32px 32px;
+}
+.cashierFilter .modelType.onlyText::before {
+  background: url("../images/icons_sprite/model_text.png") no-repeat 0px 0px;
+  background-size: 32px 32px;
+}
+.cashierFilter .modelType.am-clickable-active {
+  opacity: 1;
+}
+.cashierItems {
+  background-color: #FFF;
+  padding: 0 18px;
+  position: relative;
+}
+.cashierItems .arrowLeft {
+  width: 16px;
+  height: 30px;
+  background: url("../images/icons_sprite/arrow1.png") no-repeat 0px 0px;
+  background-size: 16px 30px;
+  position: absolute;
+  left: 3px;
+  right: auto;
+  top: 50%;
+  bottom: auto;
+  margin-top: -45px;
+}
+.cashierItems .arrowRight {
+  width: 16px;
+  height: 30px;
+  background: url("../images/icons_sprite/arrow2.png") no-repeat 0px 0px;
+  background-size: 16px 30px;
+  position: absolute;
+  left: auto;
+  right: 3px;
+  top: 50%;
+  bottom: auto;
+  margin-top: -45px;
+}
+.cashierItems .cashierItemScroll {
+  height: 380px;
+  overflow-x: hidden;
+}
+.cashierItems .cashierItemScroll ul {
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+.cashierItems .cashierItemScroll ul li {
+  margin: 0 9px;
+  float: left;
+  width: 134px;
+  position: relative;
+  height: 190px;
+  line-height: 20px;
+  background: #FFF;
+}
+.cashierItems .cashierItemScroll ul li.groupingBorder {
+  border: 2px solid #c90e28;
+  margin: -2px 7px;
+  z-index: 1;
+}
+.cashierItems .cashierItemScroll ul li.group .img {
+  background: none;
+}
+.cashierItems .cashierItemScroll ul li.group .img .imgItem {
+  background: #ececec url("../images/defultbg.png") no-repeat center center;
+  background-size: 50px 50px;
+  width: 50px;
+  height: 50px;
+  float: left;
+  margin: 1px;
+}
+.cashierItems .cashierItemScroll ul li.group .img .imgItem img {
+  display: block;
+}
+.cashierItems .cashierItemScroll ul li.group .img .tip {
+  display: none;
+}
+.cashierItems .cashierItemScroll ul li .groupActionWrap {
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #FFF;
+  text-align: center;
+  line-height: 28px;
+}
+.cashierItems .cashierItemScroll ul li .groupActionWrap .groupAction {
+  float: left;
+  width: 28px;
+  height: 28px;
+  border-radius: 2px;
+  font-size: 20px;
+  background: #c90e28;
+  margin: 3px 0 0 3px;
+}
+.cashierItems .cashierItemScroll ul li .groupActionWrap .groupAction.am-clickable-active {
+  background: #e82742;
+}
+.cashierItems .cashierItemScroll ul li .name {
+  padding-top: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cashierItems .cashierItemScroll ul li .price {
+  color: #e82742;
+}
+.cashierItems .cashierItemScroll ul li .price::before {
+  content: "￥";
+}
+.cashierItems .cashierItemScroll ul li .img {
+  background: #ececec url("../images/defultbg.png") no-repeat center center;
+  background-size: 100px 100px;
+  height: 134px;
+  overflow: hidden;
+  position: relative;
+}
+.cashierItems .cashierItemScroll ul li .img .tip {
+  position: absolute;
+  bottom: 5px;
+  width: 100%;
+  color: #d1d1d1;
+  font-size: 12px;
+  text-align: center;
+}
+.cashierItems .cashierItemScroll ul li .img img {
+  max-width: 100%;
+  max-height: 100%;
+}
+.cashierItems .cashierItemScroll ul li.am-clickable-active {
+  transform: scale(1.1);
+}
+.cashierItems .cashierItemScroll.onlyText {
+  height: 298px;
+  overflow-x: hidden;
+}
+.cashierItems .cashierItemScroll.onlyText ul {
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+.cashierItems .cashierItemScroll.onlyText ul li {
+  margin: 0 9px;
+  float: left;
+  width: 210px;
+  height: 76px;
+  line-height: 20px;
+  background: none;
+  position: relative;
+  padding: 10px 0;
+}
+.cashierItems .cashierItemScroll.onlyText ul li.groupingBorder {
+  border: none;
+  margin: 0 9px;
+  z-index: 1;
+}
+.cashierItems .cashierItemScroll.onlyText ul li.groupingBorder .img {
+  border: 2px solid #c90e28;
+}
+.cashierItems .cashierItemScroll.onlyText ul li .groupActionWrap {
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #FFF;
+  text-align: center;
+  line-height: 28px;
+}
+.cashierItems .cashierItemScroll.onlyText ul li .groupActionWrap .groupAction {
+  float: left;
+  width: 28px;
+  height: 28px;
+  border-radius: 2px;
+  font-size: 20px;
+  background: #c90e28;
+  margin: 3px 0 0 3px;
+}
+.cashierItems .cashierItemScroll.onlyText ul li .groupActionWrap .groupAction.am-clickable-active {
+  background: #e82742;
+}
+.cashierItems .cashierItemScroll.onlyText ul li .name {
+  padding-top: 5px;
+  height: 20px;
+  position: absolute;
+  left: 80px;
+  right: 0px;
+  top: 22px;
+  bottom: auto;
+}
+.cashierItems .cashierItemScroll.onlyText ul li .price {
+  height: 20px;
+  position: absolute;
+  left: 78px;
+  right: 0px;
+  top: 48px;
+  bottom: auto;
+}
+.cashierItems .cashierItemScroll.onlyText ul li .img {
+  background: #ececec;
+  height: 76px;
+  border-radius: 40px;
+}
+.cashierItems .cashierItemScroll.onlyText ul li .img span {
+  background: #FFF;
+  color: #999;
+  font-size: 20px;
+  width: 56px;
+  height: 56px;
+  line-height: 56px;
+  text-align: center;
+  display: block;
+  border-radius: 30px;
+  float: left;
+  margin: 10px;
+}
+.cashierItems .cashierItemScroll.onlyText ul li.am-clickable-active {
+  transform: scale(1.1);
+}
+.cashierBox {
+  height: 282px;
+  margin: 13px 10px 10px 10px;
+  position: relative;
+}
+.cashierBox .slideArrow {
+  position: absolute;
+  left: 50%;
+  right: auto;
+  top: -20px;
+  bottom: auto;
+  width: 60px;
+  padding: 10px;
+  height: 10px;
+  margin: 0 0 0 -40px;
+}
+.cashierBox .slideArrow::before {
+  content: "";
+  display: block;
+  height: 10px;
+  background: #c2c2c2;
+  border-radius: 4px 4px 0 0;
+}
+.cashierBox .slideArrow::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  right: auto;
+  top: 10px;
+  bottom: auto;
+  margin: 0 0 0 -8px;
+  width: 16px;
+  height: 10px;
+  background: url("../images/icons_sprite/arrow.png") no-repeat 0px 0px;
+  background-size: 16px 10px;
+}
+.cashierBox .slideArrow.am-clickable-active::before {
+  background: #595959;
+}
+.cashierBox .slideArrow.down::after {
+  transform: rotateX(180deg);
+}
+.isios .cashierBox {
+  height: 262px;
+}
+.cashierMain {
+  position: absolute;
+  left: 0px;
+  right: auto;
+  top: auto;
+  bottom: 0px;
+  -webkit-transition: height 0.3s ease-in;
+  width: 558px;
+  height: 100%;
+  background: #FFF;
+  border-radius: 4px;
+  box-shadow: rgba(0, 0, 0, 0.15) 0 0 5px;
+}
+.cashierMain .memberInfo {
+  position: absolute;
+  left: -5px;
+  right: auto;
+  top: auto;
+  bottom: 0px;
+  width: 300px;
+  height: 0;
+  padding: 5px;
+  overflow: hidden;
+  display: none;
+}
+.cashierMain .memberInfo.show .content {
+  -webkit-animation: animation_memberInfoShow 1 linear 0.2s;
+}
+.cashierMain .memberInfo.hide .content {
+  -webkit-animation: animation_memberInfoHide 1 linear 0.2s;
+}
+.cashierMain .memberInfo .highlight {
+  color: #e82742;
+}
+.cashierMain .memberInfo .infoclose {
+  position: absolute;
+  left: auto;
+  right: 5px;
+  top: 7px;
+  bottom: auto;
+  width: 32px;
+  height: 32px;
+}
+.cashierMain .memberInfo .infoclose::before {
+  content: "";
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  width: 16px;
+  height: 16px;
+  background: url("../images/icons_sprite/input_clear_icon.png") no-repeat 0px 0px;
+  background-size: 16px 16px;
+}
+.cashierMain .memberInfo .content {
+  padding: 10px 10px 10px 10px;
+  border-radius: 4px;
+  line-height: 24px;
+  background: #FFF;
+  box-shadow: rgba(0, 0, 0, 0.5) 0 0 5px;
+}
+.cashierMain .memberInfo .content::before {
+  position: absolute;
+  left: 53px;
+  right: auto;
+  top: auto;
+  bottom: 0;
+  content: "";
+  border-top: 5px solid #FFF;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: none;
+}
+.cashierMain .memberInfo .content .membername {
+  padding-left: 5px;
+  font-weight: bold;
+}
+.cashierMain .memberInfo .content .gender {
+  float: left;
+  height: 24px;
+  font-size: 12px;
+}
+.cashierMain .memberInfo .content .gender::before {
+  float: left;
+  content: "";
+  width: 16px;
+  height: 16px;
+  background: url("../images/icons_sprite/female.png") no-repeat 0px 0px;
+  background-size: 16px 16px;
+  margin: 4px;
+}
+.cashierMain .memberInfo .content .gender.male::before {
+  background: url("../images/icons_sprite/male.png") no-repeat 0px 0px;
+  background-size: 16px 16px;
+}
+.cashierMain .memberInfo .content .tel {
+  float: right;
+  text-align: right;
+}
+.cashierMain .memberInfo .content .tel::before {
+  content: "";
+  width: 16px;
+  height: 16px;
+  float: left;
+  margin: 4px 0 4px 4px;
+  display: inline-block;
+  background: url("../images/icons_sprite/cellphone.png") no-repeat 0px 0px;
+  background-size: 16px 16px;
+}
+.cashierMain .memberInfo .content .comment {
+  font-size: 12px;
+  color: #999;
+  clear: both;
+  padding: 0 0 3px 5px;
+}
+.cashierMain .memberInfo .content .card {
+  border-top: 1px solid #ececec;
+  padding: 8px 5px;
+}
+.cashierMain .memberInfo .content .card .left {
+  width: 50%;
+}
+.cashierMain .memberInfo .content .card .right {
+  float: right;
+  width: 50%;
+  text-align: right;
+}
+.cashierMain .memberInfo .content .card .name {
+  font-weight: bold;
+}
+.cashierMain .memberInfo .content .card .cardNo {
+  font-size: 12px;
+  color: #999;
+  line-height: 20px;
+}
+.cashierMain .memberInfo .content .card .discount {
+  font-size: 12px;
+  line-height: 20px;
+}
+.cashierMain .memberInfo .content .card .price {
+  color: #e82742;
+  font-size: 16px;
+}
+.cashierMain .memberInfo .content .card .price::before {
+  content: "余额:￥";
+  font-size: 12px;
+}
+.cashierMain .memberInfo .content .card .bonus {
+  font-size: 12px;
+  color: #999;
+  line-height: 20px;
+}
+.cashierMain .memberInfo .content .recharge {
+  margin: 5px -5px 0 -5px;
+  line-height: 40px;
+  text-align: center;
+  color: #FFF;
+  background: #595959;
+}
+.cashierMain .memberInfo .content .recharge.am-clickable-active {
+  background: #282828;
+}
+.cashierMain .memberInfo .content .close {
+  margin: 5px 0 0 0;
+  line-height: 30px;
+  text-align: center;
+  background: #f7f7f7;
+}
+.cashierMain .memberInfo .content .close.am-clickable-active {
+  background: #c2c2c2;
+}
+.cashierMain .memberInfo .content .items {
+  border-top: 1px solid #ececec;
+  padding: 10px 0 0 0;
+  line-height: 20px;
+  max-height: 200px;
+  overflow: hidden;
+}
+.cashierMain .memberInfo .content .items li {
+  padding: 5px 10px;
+  background: #f7f7f7;
+  margin-bottom: 1px;
+}
+.cashierMain .memberInfo .content .items li.am-clickable-active {
+  background: #c2c2c2;
+}
+.cashierMain .memberInfo .content .items .times {
+  float: right;
+}
+.cashierMain .memberInfo .content .items .times span {
+  display: block;
+  line-height: 14px;
+  font-size: 12px;
+  color: #bdbdbd;
+}
+.cashierMain .memberInfo .content .items .invalidDate {
+  line-height: 14px;
+  font-size: 12px;
+  color: #bdbdbd;
+}
+.cashierMain .memberInfo .content .items .invalidDate.highlight {
+  color: #e82742;
+}
+.cashierMain .head {
+  height: 38px;
+  line-height: 38px;
+  border-bottom: 1px solid #ececec;
+  padding: 0 20px 0 0;
+}
+.cashierMain .head .setting {
+  float: right;
+  line-height: 38px;
+  color: #666;
+  font-size: 12px;
+}
+.cashierMain .head .setting::before {
+  content: "";
+  float: left;
+  width: 20px;
+  height: 20px;
+  background: url("../images/icons_sprite/setting.png") no-repeat 0px 0px;
+  background-size: 20px 20px;
+  margin: 8px 2px;
+}
+.cashierMain .head .setting.am-clickable-active {
+  color: #222;
+}
+.cashierMain .head .setting.am-clickable-active::before {
+  background: url("../images/icons_sprite/setting_active.png") no-repeat 0px 0px;
+  background-size: 20px 20px;
+}
+.cashierMain .head .member {
+  height: 38px;
+  text-align: center;
+  float: left;
+  color: #e82742;
+  padding: 0 10px 0 0;
+}
+.cashierMain .head .member .tag {
+  color: #222;
+  padding-left: 10px;
+}
+.cashierMain .head .member .name {
+  text-align: left;
+  height: 15px;
+  line-height: 15px;
+  padding-top: 5px;
+  margin-left: 38px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 14px;
+  font-weight: bold;
+  max-width: 150px;
+}
+.cashierMain .head .member .cardname {
+  white-space: nowrap;
+  text-align: left;
+  font-size: 12px;
+  line-height: 15px;
+  height: 15px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
+  margin-left: 38px;
+}
+.cashierMain .head .member .img {
+  width: 30px;
+  height: 30px;
+  margin: 4px 2px 2px 4px;
+  border-radius: 4px;
+  background: #ececec url("../images/defultbg.png") no-repeat center center;
+  background-size: contain;
+  float: left;
+}
+.cashierMain .head .member .img img {
+  display: block;
+  width: 30px;
+  height: 30px;
+  border-radius: 4px;
+}
+.cashierMain .head .memberInfoBtn {
+  padding: 4px 0 4px 4px;
+  width: 30px;
+  height: 30px;
+  float: left;
+  position: relative;
+  display: none;
+}
+.cashierMain .head .memberInfoBtn::after {
+  content: "";
+  display: block;
+  height: 30px;
+  width: 30px;
+  background: #ececec;
+  border-radius: 2px;
+}
+.cashierMain .head .memberInfoBtn::before {
+  opacity: 0.7;
+  content: "";
+  position: absolute;
+  left: 7px;
+  right: auto;
+  top: 7px;
+  bottom: auto;
+  width: 24px;
+  height: 24px;
+  background: url("../images/icons_sprite/user.png") no-repeat 0px 0px;
+  background-size: 24px 24px;
+}
+.cashierMain .head .memberInfoBtn.am-clickable-active::before {
+  opacity: 1;
+}
+.cashierMain .head .selectMember {
+  float: left;
+  width: 75px;
+  text-align: center;
+  height: 28px;
+  background: #595959;
+  color: #FFF;
+  font-size: 12px;
+  border-radius: 15px;
+  line-height: 28px;
+  margin: 5px 10px 5px 0;
+}
+.cashierMain .head .selectMember.am-clickable-active {
+  background: #282828;
+}
+.cashierMain .body {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 39px;
+  bottom: 43px;
+  overflow: hidden;
+}
+.cashierMain table {
+  width: 100%;
+}
+.cashierMain table th {
+  text-align: left;
+  font-size: 12px;
+  color: #999;
+  font-weight: normal;
+  height: 32px;
+}
+.cashierMain table td {
+  height: 40px;
+}
+.cashierMain table td.comboitem .serviceItemName {
+  display: inline-block;
+}
+.cashierMain table td.comboitem .serviceItemName::before {
+  content: "";
+  float: right;
+  border-top: 5px solid #6D6D6D;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: none;
+  margin: 9px 0 0 5px;
+}
+.cashierMain table td.comboitem .serviceItemName::after {
+  content: "(套餐)";
+  font-size: 12px;
+  padding-left: 5px;
+  color: #999;
+}
+.cashierMain table .serviceItemChangeName {
+  font-size: 10px;
+  display: block;
+  color: #888;
+  line-height: 12px;
+}
+.cashierMain table tbody tr {
+  background: #FFF;
+}
+.cashierMain table tbody tr.show {
+  -webkit-animation: animation_addItem 1 ease-in 1s;
+}
+.cashierMain table tbody tr.show1 {
+  -webkit-animation: animation_addItem1 1 ease-in 1s;
+}
+.cashierMain table tbody tr:nth-child(2n + 1) {
+  background: #f7f7f7;
+}
+.cashierMain table tbody tr td:nth-child(1) {
+  text-align: right;
+}
+.cashierMain table tbody tr .price::before,
+.cashierMain table tbody tr .cost::before {
+  content: "￥";
+}
+.cashierMain table tbody tr.selected {
+  background: #ececec;
+}
+.cashierMain table tbody tr.selected[data-showdel="1"] .delPrice {
+  display: none;
+}
+.cashierMain table tbody tr.selected .price {
+  border: 1px solid #BBBBBB;
+  background: #FFF;
+  border-radius: 2px;
+  display: inline-block;
+  width: 70px;
+  height: 25px;
+  line-height: 25px;
+  text-align: center;
+}
+.cashierMain table tbody tr.selected .price.modifyed {
+  border-color: #6D6D6D;
+}
+.cashierMain table tbody tr.selected .number {
+  border: 1px solid #BBBBBB;
+  background: #FFF;
+  display: inline-block;
+  width: 75px;
+  height: 25px;
+  line-height: 25px;
+  text-align: center;
+  border-radius: 2px;
+  margin-top: 4px;
+  font-size: 18px;
+}
+.cashierMain table tbody tr.selected .number .reduce {
+  width: 24px;
+  float: left;
+  height: 25px;
+}
+.cashierMain table tbody tr.selected .number .reduce::before {
+  content: "";
+  display: block;
+  margin: 5px auto;
+  width: 15px;
+  height: 15px;
+  background: url("../images/icons_sprite/reduce.png") no-repeat 0px 0px;
+  background-size: 15px 15px;
+}
+.cashierMain table tbody tr.selected .number .reduce.am-disabled::before {
+  opacity: 0.2;
+}
+.cashierMain table tbody tr.selected .number .value {
+  font-size: 12px;
+  width: 25px;
+  float: left;
+  height: 25px;
+  border-left: 1px solid #BBBBBB;
+  border-right: 1px solid #BBBBBB;
+}
+.cashierMain table tbody tr.selected .number .plus {
+  width: 24px;
+  float: left;
+  height: 25px;
+}
+.cashierMain table tbody tr.selected .number .plus::before {
+  content: "";
+  display: block;
+  margin: 5px auto;
+  width: 15px;
+  height: 15px;
+  background: url("../images/icons_sprite/add.png") no-repeat 0px 0px;
+  background-size: 15px 15px;
+}
+.cashierMain table tbody tr.selected .number .plus.am-disabled::before {
+  opacity: 0.2;
+}
+.cashierMain table tbody tr.selected .number .am-clickable-active {
+  background: #f7f7f7;
+  border-radius: 2px;
+}
+.cashierMain table tbody tr .number.date {
+  font-size: 14px;
+  width: 84px;
+  display: inline-block;
+  margin: 0;
+}
+.cashierMain table tbody tr .price.error {
+  border-color: #e82742;
+  -webkit-animation: animation_shake 1 ease-in 0.2s;
+  color: #e82742;
+}
+.cashierMain table tbody tr .price.am-disabled {
+  border: none;
+  background: none;
+  color: #999;
+}
+.cashierMain table tbody tr .checkbox {
+  display: inline-block;
+  height: 42px;
+  line-height: 42px;
+  padding-left: 10px;
+  color: #666;
+}
+.cashierMain table tbody tr .checkbox::before {
+  content: "";
+  float: right;
+  width: 25px;
+  height: 25px;
+  margin: 8px 0 0 5px;
+  background: url("../images/icons_sprite/checkbox.png") no-repeat 0px 0px;
+  background-size: 25px 25px;
+}
+.cashierMain table tbody tr .checkbox.checked {
+  color: #e82742;
+}
+.cashierMain table tbody tr .checkbox.checked::before {
+  background: url("../images/icons_sprite/checkbox_checked.png") no-repeat 0px 0px;
+  background-size: 25px 25px;
+}
+.cashierMain table .sum {
+  color: #e82742;
+}
+.cashierMain table .sum::before {
+  content: "￥";
+}
+.cashierMain table .center {
+  text-align: center;
+}
+.cashierMain table .server {
+  width: 100px;
+  height: 40px;
+  line-height: 40px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  position: relative;
+}
+.cashierMain table .server.checked {
+  line-height: 30px;
+}
+.cashierMain table .server.checked::before {
+  content: "指定";
+  position: absolute;
+  left: 2px;
+  right: auto;
+  top: auto;
+  bottom: 5px;
+  line-height: 12px;
+  background: #58d56d;
+  color: #FFF;
+  font-size: 8px;
+  padding: 0 3px;
+  border-radius: 2px;
+}
+.cashierMain table .server.muti {
+  line-height: 30px;
+}
+.cashierMain table .server.muti .after {
+  position: absolute;
+  left: 2px;
+  right: auto;
+  top: auto;
+  bottom: 5px;
+  line-height: 12px;
+  background: #48bbee;
+  color: #FFF;
+  font-size: 10px;
+  padding: 0 3px;
+  border-radius: 2px;
+}
+.cashierMain table .server.muti.checked .after {
+  position: absolute;
+  left: 26px;
+  right: auto;
+  top: auto;
+  bottom: 5px;
+}
+.cashierMain table .server.show {
+  -webkit-animation: animation_serverShow 1 ease-in 0.2s;
+}
+.cashierMain table .delete {
+  display: inline-block;
+  padding: 10px 5px 10px 10px;
+}
+.cashierMain table .delete::before {
+  content: "";
+  width: 20px;
+  height: 20px;
+  display: block;
+  background: url("../images/icons_sprite/delete.png") no-repeat 0px 0px;
+  background-size: 20px 20px;
+}
+.cashierMain table .delete.am-clickable-active::before {
+  background: url("../images/icons_sprite/delete_active.png") no-repeat 0px 0px;
+  background-size: 20px 20px;
+}
+.cashierMain .foot {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: auto;
+  bottom: 0;
+  height: 42px;
+  line-height: 42px;
+  border-top: 1px solid #ddd;
+}
+.cashierMain .foot .hangup {
+  float: right;
+  margin-top: -1px;
+  height: 43px;
+  text-align: center;
+  color: #FFF;
+  background: #595959;
+  width: 80px;
+}
+.cashierMain .foot .hangup.am-clickable-active {
+  background: #282828;
+}
+.cashierMain .foot .submit {
+  float: right;
+  margin-top: -1px;
+  height: 43px;
+  text-align: center;
+  color: #FFF;
+  background: #e82742;
+  width: 180px;
+}
+.cashierMain .foot .submit.am-clickable-active {
+  background: #c90e28;
+}
+.cashierMain .foot .totalPrice {
+  float: right;
+  color: #e82742;
+  padding: 0 15px;
+  font-size: 20px;
+  line-height: 44px;
+  height: 44px;
+  max-width: 330px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.cashierMain .foot .totalPrice::before {
+  font-size: 14px;
+  content: "总计:";
+  color: #222;
+}
+.cashierMain .foot .cost-edit-wrapper {
+  position: absolute;
+  width: 128px;
+  height: 42px;
+  padding-left: 10px;
+  left: 0;
+  top: 0;
+  overflow: hidden;
+}
+.cashierMain .foot .cost-edit-wrapper .label {
+  display: inline-block;
+  vertical-align: top;
+  height: 42px;
+  font-size: 12px;
+  color: #666;
+  line-height: 42px;
+}
+.cashierMain .foot .cost-edit-wrapper .cost-edit-wrap {
+  display: inline-block;
+  vertical-align: top;
+  width: 50px;
+  height: 26px;
+  border: 1px solid #ececec;
+  border-radius: 26px;
+  margin-top: 7px;
+  padding: 0 10px 0 20px;
+  overflow: hidden;
+  position: relative;
+}
+.cashierMain .foot .cost-edit-wrapper .cost-edit-wrap span {
+  position: absolute;
+  width: 20px;
+  height: 100%;
+  font-size: 16px;
+  color: #e82742;
+  text-align: center;
+  line-height: 26px;
+  left: 0;
+}
+.cashierMain .foot .cost-edit-wrapper .cost-edit-wrap .cost-edit {
+  font-size: 16px;
+  color: #e82742;
+  line-height: 26px;
+  height: 26px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+@-webkit-keyframes animation_memberInfoShow {
+  0% {
+    -webkit-transform: translateY(100%);
+  }
+  100% {
+    -webkit-transform: translateY(0);
+  }
+}
+@-webkit-keyframes animation_memberInfoHide {
+  0% {
+    -webkit-transform: translateY(0);
+  }
+  100% {
+    -webkit-transform: translateY(100%);
+  }
+}
+@-webkit-keyframes animation_serverShow {
+  0% {
+    -webkit-transform: matrix3d(0.5, 0, 0, 0, 0, 0.5, 0, 0, 0, 0, 0.5, 0, 0, 0, 0, 1);
+  }
+  70% {
+    -webkit-transform: matrix3d(1.3, 0, 0, 0, 0, 1.3, 0, 0, 0, 0, 1.3, 0, 0, 0, 0, 1);
+  }
+  100% {
+    -webkit-transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+  }
+}
+@-webkit-keyframes animation_addItem {
+  0% {
+    background: #FFF;
+    opacity: 0;
+  }
+  40% {
+    background: #e82742;
+    color: #FFF;
+    opacity: 0;
+  }
+  70% {
+    opacity: 1;
+    color: #FFF;
+    background: #e82742;
+  }
+  100% {
+    background: #ececec;
+  }
+}
+@-webkit-keyframes animation_addItem1 {
+  40% {
+    background: #ececec;
+    color: #222;
+  }
+  70% {
+    color: #FFF;
+    background: #e82742;
+  }
+  100% {
+    background: #ececec;
+  }
+}
+.cashierServers {
+  -webkit-transition: height 0.3s ease-in;
+  position: absolute;
+  left: auto;
+  right: 0px;
+  top: auto;
+  bottom: 0px;
+  width: 360px;
+  height: 100%;
+  background: #FFF;
+  border-radius: 4px;
+  box-shadow: rgba(0, 0, 0, 0.15) 0 0 5px;
+}
+.cashierServers .head {
+  height: 38px;
+  line-height: 38px;
+  display: -webkit-box;
+  -webkit-box-orient: horizontal;
+  border-bottom: 1px solid #ececec;
+}
+.cashierServers .head div.headLi {
+  text-align: left;
+  -webkit-box-flex: 1;
+  font-size: 12px;
+  padding-left: 10px;
+  color: #b0b0b0;
+  position: relative;
+  border-right: 1px solid #ececec;
+}
+.cashierServers .head div.headLi:last-child {
+  border-right: none;
+}
+.cashierServers .body {
+  position: absolute;
+  left: 0;
+  right: 0px;
+  top: 39px;
+  bottom: 0px;
+  display: -webkit-box;
+  -webkit-box-orient: horizontal;
+}
+.cashierServers .serverList {
+  -webkit-box-flex: 1;
+  border-right: 1px solid #ececec;
+  overflow: hidden;
+  width: 100%;
+}
+.cashierServers .serverList:last-child {
+  border-right: none;
+}
+.cashierServers .serverList li {
+  height: 38px;
+  line-height: 38px;
+  position: relative;
+}
+.cashierServers .serverList li.selected {
+  background: #ececec;
+}
+.cashierServers .serverList li.selected::before {
+  content: "";
+  position: absolute;
+  left: auto;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: #595959;
+}
+.cashierServers .serverList li.selected .delserver {
+  visibility: visible;
+}
+.cashierServers .serverList li.selected .perfVal {
+  display: block;
+}
+.cashierServers .serverList li.checked {
+  line-height: 26px;
+}
+.cashierServers .serverList li.checked::after {
+  content: "指定";
+  position: absolute;
+  left: 15px;
+  right: auto;
+  top: auto;
+  bottom: 5px;
+  line-height: 12px;
+  background: #58d56d;
+  color: #FFF;
+  font-size: 10px;
+  padding: 0 3px;
+  border-radius: 2px;
+  white-space: nowrap;
+}
+.cashierServers .serverList li:nth-child(3n + 1) .perfVal {
+  color: #e82742;
+  border-right: 2px solid #e82742;
+  background-color: rgba(232, 39, 66, 0.3);
+}
+.cashierServers .serverList li:nth-child(3n + 2) .perfVal {
+  color: #f39800;
+  border-right: 2px solid #f39800;
+  background-color: rgba(243, 152, 0, 0.3);
+}
+.cashierServers .serverList li:nth-child(3n + 3) .perfVal {
+  color: #58d56d;
+  border-right: 2px solid #58d56d;
+  background-color: rgba(88, 213, 109, 0.3);
+}
+.cashierServers .serverList li.modified .perfVal {
+  opacity: 1;
+}
+.cashierServers .serverList li.modified .perfVal::before {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 50%;
+  margin-top: -12px;
+  width: 20px;
+  height: 20px;
+  background-image: url("../images/icons_sprite/icon_selected.png");
+  background-position: 0px 0px;
+  background-size: 20px 20px;
+}
+.cashierServers .serverList .perfVal {
+  display: none;
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 38px;
+  box-sizing: border-box;
+  width: 0;
+  font-size: 8px;
+  line-height: 10px;
+  text-align: right;
+  white-space: nowrap;
+  opacity: 0.5;
+}
+.cashierServers .serverList .perfVal .perfNum::after {
+  content: "%";
+}
+.cashierServers .serverList .perfVal.active .perfNum {
+  position: relative;
+  font-size: 30px;
+  line-height: 38px;
+  right: 0;
+  top: -38px;
+}
+.cashierServers .serverList .code {
+  float: left;
+  width: 30%;
+  text-align: right;
+  font-size: 12px;
+}
+.cashierServers .serverList .name {
+  float: right;
+  width: 45%;
+  overflow: hidden;
+  height: 38px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.cashierServers .serverList .delserver {
+  float: right;
+  width: 20%;
+  height: 38px;
+  background: url(../images/delselector.png) no-repeat center center;
+  visibility: hidden;
+  position: relative;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+.cashierSetting {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: none;
+  -webkit-box-align: center;
+  -webkit-box-pack: center;
+  background: rgba(0, 0, 0, 0.3);
+}
+.cashierSetting .cashierSettingBox {
+  position: relative;
+  width: 387px;
+  background: #FFF;
+  border-radius: 4px;
+  padding: 0 20px;
+}
+.cashierSetting .cashierSettingBox .title {
+  font-size: 16px;
+  color: #222;
+  font-weight: bold;
+  line-height: 60px;
+  height: 60px;
+}
+.cashierSetting .cashierSettingBox .close {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  right: 20px;
+  top: 15px;
+  background: url(../images/icons_sprite/close_employee.png) no-repeat center center;
+  background-size: 15px 15px;
+}
+.cashierSetting .cashierSettingBox .settingsWrap {
+  width: 100%;
+  max-height: 400px;
+  overflow: hidden;
+  background-color: #f7f7f7;
+}
+.cashierSetting .cashierSettingBox .settingsWrap .settingsWrapper {
+  padding: 10px 25px;
+}
+.cashierSetting .cashierSettingBox .checkBox {
+  height: 40px;
+  font-size: 14px;
+  color: #222;
+  line-height: 40px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding-left: 36px;
+  position: relative;
+  font-weight: bold;
+}
+.cashierSetting .cashierSettingBox .checkBox::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 10px;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+}
+.cashierSetting .cashierSettingBox .checkBox.checked::before {
+  background: #555555 url(../images/selectReason.png) no-repeat center center;
+  background-size: 12px 8px;
+  border: none;
+}
+.cashierSetting .cashierSettingBox .checkBox.halfchecked {
+  opacity: 0.5;
+}
+.cashierSetting .cashierSettingBox .checkBox.halfchecked::before {
+  background: #555555 url(../images/selectReason.png) no-repeat center center;
+  background-size: 12px 8px;
+  border: none;
+}
+.cashierSetting .cashierSettingBox .settings li {
+  height: 40px;
+  font-size: 14px;
+  color: #222;
+  line-height: 40px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding-left: 36px;
+  position: relative;
+}
+.cashierSetting .cashierSettingBox .settings li.disabled {
+  opacity: 0.5;
+}
+.cashierSetting .cashierSettingBox .settings li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 10px;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+}
+.cashierSetting .cashierSettingBox .settings li.selected::before {
+  background: #555555 url(../images/selectReason.png) no-repeat center center;
+  background-size: 12px 8px;
+  border: none;
+}
+.cashierSetting .cashierSettingBox .button {
+  background: #595959;
+  border-radius: 4px;
+  line-height: 40px;
+  text-align: center;
+  color: #FFF;
+  width: 165px;
+  margin: 30px auto;
+}
+.cashierSetting .cashierSettingBox .button.am-clickable-active {
+  background: #282828;
+}
+.cashierSetting.cashierComboItemSelect .cashierSettingBox .settings {
+  padding-left: 0;
+}
+.cashierSetting.cashierComboItemSelect .cashierSettingBox .settings .itemName {
+  padding-top: 3px;
+  line-height: 20px;
+  margin-right: 80px;
+}
+.cashierSetting.cashierComboItemSelect .cashierSettingBox .settings li {
+  min-height: 40px;
+}
+.cashierSetting.cashierComboItemSelect .cashierSettingBox .settings li::before {
+  left: 7px;
+}
+.cashierSetting.cashierComboItemSelect .cashierSettingBox .settings .times {
+  float: right;
+  line-height: 20px;
+  margin-right: 5px;
+}
+.cashierSetting.cashierComboItemSelect .cashierSettingBox .settings .times span {
+  display: block;
+  line-height: 14px;
+  font-size: 12px;
+  color: #bdbdbd;
+}
+.cashierSetting.cashierComboItemSelect .cashierSettingBox .settings .invalidDate {
+  /*margin-left: 35px;*/
+  line-height: 14px;
+  font-size: 12px;
+  color: #bdbdbd;
+}
+.cashierSetting.cashierComboItemSelect .cashierSettingBox .settings .invalidDate.highlight {
+  color: #e82742;
+}
+.modalDialog.debtBox .inner {
+  width: 600px;
+  margin-left: -300px;
+}
+.modalDialog.debtBox .inner table {
+  width: 100%;
+  text-align: center;
+  border-left: 1px solid #ddd;
+  border-top: 1px solid #ddd;
+}
+.modalDialog.debtBox .inner table th,
+.modalDialog.debtBox .inner table td {
+  border-right: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  line-height: 36px;
+}
+.modalDialog.debtBox .inner table th {
+  font-size: 12px;
+  color: #999;
+  font-weight: normal;
+  background-color: #ececec;
+  line-height: 28px;
+}
+.modalDialog.debtBox .inner table .highlight {
+  color: #e82742;
+}
+.modalDialog.debtBox .inner table .btn {
+  line-height: 30px;
+  height: 30px;
+  width: auto;
+  padding: 0 15px;
+}
+.modalDialog.checkPassword input {
+  border-radius: 2px;
+  padding-left: 10px;
+  box-sizing: border-box;
+  width: 100%;
+  border: 1px solid #BBBBBB;
+  height: 40px;
+  margin: 0 -1px;
+}
+#itemSelect .inner {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+#itemSelect .inner .content {
+  margin: 10px 15px 80px 15px;
+  padding: 0;
+  background-color: #f7f7f7;
+  min-height: 120px;
+  padding: 20px 25px 20px 25px;
+  max-height: 250px;
+  overflow: hidden;
+}
+#itemSelect .inner .content .scroller ul li {
+  height: 25px;
+  line-height: 23px;
+  margin-bottom: 20px;
+  padding-left: 35px;
+  position: relative;
+}
+#itemSelect .inner .content .scroller ul li.selected::after {
+  content: "";
+  width: 20px;
+  height: 20px;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -o-border-radius: 50%;
+  border-radius: 50%;
+  position: absolute;
+  left: 0;
+  display: block;
+  top: 0;
+  border: none;
+  background: url("../images/hangup/ok.png") no-repeat center center;
+  background-size: 20px 20px;
+}
+#itemSelect .inner .content .scroller ul li::after {
+  content: "";
+  width: 20px;
+  height: 20px;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -o-border-radius: 50%;
+  border-radius: 50%;
+  border: 1px solid #dddddd;
+  position: absolute;
+  left: 0;
+  display: block;
+  top: 0;
+}
+#itemSelect .inner .content .scroller ul li .c-left {
+  float: left;
+  font-size: 14px;
+  color: #222222;
+  max-width: 70%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#itemSelect .inner .content .scroller ul li .c-right {
+  float: right;
+  font-size: 14px;
+  color: #e82742;
+}
+#itemSelect .inner .content .scroller ul li .c-right::before {
+  content: "￥";
+}
+#itemSelect .title {
+  margin: 0 15px;
+  padding: 0;
+  padding-left: 30px;
+  background: url(../images/hangup/selectItem.png) no-repeat left center;
+  background-size: 19px 19px;
+}
+#itemSelect .title .closees {
+  content: "";
+  background: url(../images/hangup/close.png) no-repeat left center;
+  background-size: 36px 36px;
+  position: absolute;
+  right: 10px;
+  width: 36px;
+  height: 36px;
+  top: 10px;
+  display: block;
+}
+#itemSelect .title .closees.am-clickable-active {
+  -webkit-transform: scale(0.9);
+  -moz-transform: scale(0.9);
+  transform: scale(0.9);
+}

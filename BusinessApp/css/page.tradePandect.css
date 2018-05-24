@@ -1,0 +1,547 @@
+.page-tradePandect .tab {
+    height: 40px;
+    background: #f6f6f6;
+    border-bottom: #eeeeee 1px solid;
+    border-top: #eeeeee 1px solid;
+    display: -webkit-box;
+}
+.page-tradePandect .commoncashTab{
+    display: none;
+}
+.page-tradePandect .tab > li {
+    -webkit-box-flex: 1;
+    padding: 3px 10px 0 10px;
+    line-height: 35px;
+    height: 35px;
+    color: #222222;
+    font-size: 14px;
+    border-bottom: rgba(255, 255, 255, 0) 2px solid;
+    text-align: center;
+}
+.page-tradePandect .tab > li.selected {
+    color: #2dbd84;
+    border-bottom: #2dbd84 2px solid;
+}
+.page-tradePandect .blockItem {
+    display: none;
+}
+.page-tradePandect .blockTitle {
+    background: #f6f6f6;
+    border-top: #eee 1px solid;
+    border-bottom: #eee 1px solid;
+    color: #333333;
+    font-size: 11px;
+    line-height: 25px;
+    padding-left: 12px;
+}
+.page-tradePandect .keyvalue {
+    padding: 5px 12px;
+    font-size: 12px;
+}
+.page-tradePandect .keyvalue > li {
+    float: left;
+    width: 40%;
+    line-height: 25px;
+    margin-right: 10%;
+}
+.page-tradePandect .keyvalue > li .key {
+    color: #666666;
+}
+.page-tradePandect .keyvalue > li .value {
+    float: right;
+    color: #222;
+}
+.page-tradePandect table.tableview {
+    /* table-layout: fixed; */
+    border-top: 1px solid #e5e5e5;
+    border-left: 1px solid #e5e5e5;
+    line-height: 20px;
+    width: 100%;
+    font-size: 12px;
+}
+.page-tradePandect table.tableview > thead > tr {
+    background: #f2f2f2;
+}
+.page-tradePandect table.tableview > tbody > tr:nth-child(odd) {
+    background: #fff;
+}
+.page-tradePandect table.tableview > tbody > tr:nth-child(even) {
+    background: #f2f2f2;
+}
+.page-tradePandect td, .page-tradePandect th {
+    padding: 3px;
+    height: 20px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    position: relative;
+}
+.page-tradePandect td>div, .page-tradePandect th>div {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    height: 20px;
+}
+.page-tradePandect th {
+    font-weight: normal;
+    color: #000;
+    border-right: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
+}
+.page-tradePandect td {
+    color: #333;
+    border-right: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
+    text-align: center;
+}
+
+.page-tradePandect .commoncashTab .circleBox{
+    display: block;
+    padding:10px;
+}
+.page-tradePandect .commoncashTab{
+    min-height: 100%;
+}
+.page-tradePandect .commoncashTab .circleBig{
+    width: 180px;
+    height:180px;
+    display: block;
+    margin: 0 auto;
+    background-color: #2dbd84;
+    margin-top:15px;
+    border-radius:50%;
+    -webkit-border-radius:50%;
+    text-align: center;
+    margin-bottom: 15px;
+}
+.page-tradePandect .commoncashTab .circlemall{
+    width: 125px;
+    height: 125px;
+    margin: 0 auto;
+    margin-top: 27.5px;
+    background-color: #fff;
+    border-radius:50%;
+    -webkit-border-radius:50%;
+    display: inline-block;
+    vertical-align:middle;
+    text-align: center;
+}
+.page-tradePandect .commoncashTab .circleCon{
+    display: block;
+    height:42px;
+    margin-top:40px;
+}
+.page-tradePandect .commoncashTab .circleCon span{
+    display: block;
+}
+.page-tradePandect .commoncashTab .totalMoney{
+    font-size: 20px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.page-tradePandect .commoncashTab .totalWords{
+    color:#d6d6d6;
+}
+.page-tradePandect .commoncashTab .listBox{
+    width: 100%;
+}
+.page-tradePandect .commoncashTab .listBox ul{
+    overflow: hidden;
+}
+.page-tradePandect .commoncashTab .listBox ul li{
+    display: block;
+    border-bottom: 1px solid #eeeeee;
+    height:27px;
+    padding:11px 18px;
+}
+.page-tradePandect .commoncashTab .listBox ul li>span{
+    display: inline-block;
+    height:100%;
+    line-height: 27px;
+}
+.page-tradePandect .commoncashTab .listBox ul li:first-child{
+    border-top: 1px solid #eeeeee;
+}
+.page-tradePandect .commoncashTab .listBox ul li .ico{
+    display: inline-block;
+    float: left;
+    height:100%;
+    width: 27px;
+}
+.page-tradePandect .commoncashTab .listBox ul li .ico1{
+    background: url(img/totalMoney_ico1.png) no-repeat left center;
+    background-size: 100% 100%;
+}
+.page-tradePandect .commoncashTab .listBox ul li .ico2{
+    background: url(img/totalMoney_ico2.png) no-repeat left center;
+    background-size: 100% 100%;
+}
+.page-tradePandect .commoncashTab .listBox ul li .ico3{
+    background: url(img/totalMoney_ico3.png) no-repeat left center;
+    background-size: 100% 100%;
+}
+.page-tradePandect .commoncashTab .listBox ul li .ico4{
+    background: url(img/totalPerformance_ico3.png) no-repeat left center;
+    background-size: 100% 100%;
+}
+.page-tradePandect .commoncashTab .listBox ul li .ico9{
+    background: url(img/totalMoney_ico5.png) no-repeat left center;
+    background-size: 100% 100%;
+}
+.page-tradePandect .commoncashTab .listBox ul li .ico10{
+    background: url(img/totalMoney_ico6.png) no-repeat left center;
+    background-size: 100% 100%;
+}
+.page-tradePandect .commoncashTab .listBox ul li .ico5{
+    background: url(img/totalPerformance_ico1.png) no-repeat left center;
+    background-size: 100% 100%;
+}
+.page-tradePandect .commoncashTab .listBox ul li .ico6{
+    background: url(img/totalPerformance_ico2.png) no-repeat left center;
+    background-size: 100% 100%;
+}
+.page-tradePandect .commoncashTab .listBox ul li .ico7{
+    background: url(img/totalPerformance_ico3.png) no-repeat left center;
+    background-size: 100% 100%;
+}
+.page-tradePandect .commoncashTab .listBox ul li .ico8{
+    background: url(img/totalPerformance_ico4.png) no-repeat left center;
+    background-size: 100% 100%;
+}
+.page-tradePandect .commoncashTab .listBox ul li .key{
+    display: inline-block;
+    float: left;
+    padding-left: 10px;
+}
+.page-tradePandect .commoncashTab .listBox ul li .value{
+    display: inline-block;
+    float: right;
+    max-width: 80%;
+    /* overflow: hidden; */
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.page-tradePandect .workTab .header{
+    height:110px;
+    background: url(img/total_header.jpg) no-repeat;
+    background-size: 100% 100%;
+}
+.page-tradePandect .workTab .header_left{
+    width: 50%;
+    float: left;
+    height:100%;
+    text-align: center;
+    overflow: hidden;
+}
+.page-tradePandect .workTab .header_right{
+    width: 50%;
+    float: right;
+    height:100%;
+    text-align: center;
+    overflow: hidden;
+}
+.page-tradePandect .workTab .header .headerBox{
+    display: inline-block;
+    vertical-align: middle;
+    height: 50px;
+    margin-top: 30px;
+    width: 100%;
+    overflow: hidden;
+}
+.page-tradePandect .workTab .header .value{
+    display: inline-block;
+    width: 100%;
+    font-size: 25px;
+    color: #e3e765;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.page-tradePandect .workTab .header .key{
+    display: inline-block;
+    width: 100%;
+    color: #A3E6CB;
+    font-size: 14px;
+}
+.page-tradePandect .workTab .lineImg{
+    padding:15px;
+    border-bottom: 2px solid #eeeeee;
+    /* background-color: #fff; */
+}
+.page-tradePandect .workTab .lineImg .lineImg_block{
+    display: inline-block;
+    font-size: 12px;
+    text-align: right;
+}
+.page-tradePandect .workTab .lineImg .lineImg_words{
+    width: 19%;
+    text-align: left;
+    margin-right: 1%;
+    overflow: hidden;
+}
+.page-tradePandect .workTab .lineImg .lineImg_pre{
+    width: 10%;
+    text-align: right;
+    margin-left: 1%;
+    overflow: hidden;
+}
+.page-tradePandect .workTab .lineImg .lineImg_img{
+    width: 65%;
+    height: 8px;
+    vertical-align: middle;
+    background-color: #f6f6f6;
+    -webkit-border-radius: 30px;
+}
+.page-tradePandect .workTab .lineImg .lineImg_img>span{
+    display: block;
+    width: 70%;
+    height:100%;
+    background-color: #2dbd84;
+    border-radius: 30px;
+    transition:width .5s ease-out;
+    -webkit-transition:width .5s ease-out;
+    -webkit-border-radius: 30px;
+}
+.page-tradePandect .workTab .totalList{
+    width:70%;
+    margin: 0 auto;
+    padding-top:6px;
+}
+.page-tradePandect .workTab .totalList ul{
+    overflow: hidden;
+}
+.page-tradePandect .workTab .totalList ul li{
+    width: 45%;
+    display: block;
+    float: left;
+    margin-top:15px; 
+    position: relative;
+}
+.page-tradePandect .workTab .totalList ul li .totalListSrc{
+    width: 100%;
+    overflow: hidden;
+}
+.page-tradePandect .workTab .totalList ul li .totalListSrc img{
+    width: 100%;
+    border:0;
+}
+.page-tradePandect .workTab .totalList ul li:nth-child(2n+1){
+    margin-right:5%; 
+}
+.page-tradePandect .workTab .totalList ul li:nth-child(2n){
+    margin-left:5%; 
+}
+.page-tradePandect .workTab .totaltext{
+    position: absolute;
+    width: 100%;
+    height:50px;
+    margin-top:-25px;
+    top:50%;
+    text-align: center;
+    overflow: hidden;
+}
+.page-tradePandect .workTab .totaltext .value{
+    color:#2dbd84;
+    font-size: 25px;
+    overflow: hidden;
+    /* white-space: nowrap; */
+    /* text-overflow: ellipsis; */
+}
+.page-tradePandect .workTab .totaltext .key{
+    color:#a0a0a0;
+    font-size: 14px;
+}
+.page-tradePandect .workTab .totalListBox{
+    width: 100%;
+}
+.page-tradePandect .workTab .totalListBox ul{
+    overflow: hidden;
+}
+.page-tradePandect .workTab .totalListBox ul li{
+    display: block;
+    width: 50%;
+    padding:20px 0;
+    float: left;
+    height: 78px;
+    padding-left: 55px;
+    padding-right: 10px;
+    border-bottom:2px solid #eee;
+    box-sizing:border-box;
+    -webkit-box-sizing:border-box;
+}
+.page-tradePandect .workTab .totalListBox ul li.ico1{
+    background: url(img/passengerflow_ico1.png) no-repeat 10px center;
+    background-size: 35px 35px;
+}
+.page-tradePandect .workTab .totalListBox ul li.ico2{
+    background: url(img/passengerflow_ico2.png) no-repeat 10px center;
+    background-size: 35px 35px;
+}
+.page-tradePandect .workTab .totalListBox ul li.ico3{
+    background: url(img/passengerflow_ico3.png) no-repeat 10px center;
+    background-size: 35px 35px;
+}
+.page-tradePandect .workTab .totalListBox ul li.ico4{
+    background: url(img/passengerflow_ico4.png) no-repeat 10px center;
+    background-size: 35px 35px;
+}
+.page-tradePandect .workTab .totalListBox ul li.ico5{
+    background: url(img/passengerflow_ico5.png) no-repeat 10px center;
+    background-size: 35px 35px;
+}
+.page-tradePandect .workTab .totalListBox ul li.ico6{
+    background: url(img/passengerflow_ico6.png) no-repeat 10px center;
+    background-size: 35px 35px;
+}
+.page-tradePandect .workTab .listText{
+    display: block;
+    height:100%;
+    /* vertical-align: top; */
+    float: left;
+    /* text-align: center; */
+}
+.page-tradePandect .workTab .listText_left{
+    width: 65%;
+}
+.page-tradePandect .workTab .listText_right{
+    width: 35%;
+}
+.page-tradePandect .workTab .listText .listText_name{
+    height:20px;
+    overflow: hidden;
+    /* white-space:nowrap; */
+    /* text-align: center; */
+    /* text-overflow:ellipsis; */
+    /* margin-top: 1px; */
+    /* font-size: 14px; */
+}
+.page-tradePandect .workTab .listText .listText_name.value{
+
+    text-align: center;
+
+}
+.page-tradePandect .workTab .listText .listText_value{
+    height:15px;
+    text-align: center;
+}
+.page-tradePandect .workTab .listText .listText_line{
+    width: 85%;
+    height: 8px;
+    vertical-align: middle;
+    background-color: #f6f6f6;
+    border-radius: 30px;
+    -webkit-border-radius: 30px;
+    margin-top: 5px;
+}
+.page-tradePandect .workTab .listText .listText_line>span{
+    display: block;
+    width: 70%;
+    height: 100%;
+    background-color: #2dbd84;
+    border-radius: 30px;
+    transition: width .5s ease-out;
+    -webkit-transition: width .5s ease-out;
+    -webkit-border-radius: 30px;
+}
+.page-tradePandect .workTab .listText_color{
+    color: #999999;
+    font-size: 14px;
+}
+.page-tradePandect .workTab .listText_bigSize{
+    font-size: 14px;
+}
+.page-tradePandect .cardTab{
+    
+    
+    
+}
+.page-tradePandect .cardTab .header{
+    height:110px;
+    position: relative;
+    background: url(img/total_header.jpg) no-repeat;
+    background-size: 100% 100%;
+    text-align: center;
+}
+.page-tradePandect .cardTab .header_con{
+    display: block;
+    height:60px;
+    width: 100%;
+    margin: 0 auto;
+    position: absolute;
+    top:50%;
+    margin-top:-30px; 
+}
+.page-tradePandect .cardTab .header_con .total{
+    font-size: 20px;
+    color: #ffee60;
+
+}
+.page-tradePandect .cardTab .header_con .words{
+    font-size: 14px;
+    color: #cbf3e3;
+}
+.page-tradePandect .cardTab .header_con .tips{
+    margin-top:5px; 
+    font-size: 12px;
+    color: #0c8958;
+}
+.page-tradePandect .cardTab .listKayValue{
+    display: block;
+    width: 100%;
+    /* padding:0 22px; */
+    box-sizing:border-box;
+    -webkit-box-sizing:border-box;
+}
+.page-tradePandect .cardTab .listKayValue *{
+     box-sizing:border-box;
+    -webkit-box-sizing:border-box;
+}
+.page-tradePandect .cardTab .listKayValue li{
+    display: block;
+    width: 50%;
+    float: left;
+    padding:10px;
+    text-align: left;
+    padding-left: 18%;
+    border-bottom:1px solid #eeeeee;
+}
+.page-tradePandect .cardTab .listKayValue li.left{
+    background: url(img/addkey_ico1.png) no-repeat 20% center;
+    background-size:20px 20px;
+}
+.page-tradePandect .cardTab .listKayValue li.right{
+    background: url(img/addkey_ico2.png) no-repeat 23% center;
+    background-size:20px 20px;
+    padding-left: 20%;
+}
+.page-tradePandect .cardTab .listKayValue li .key{
+    height:16px;
+    width: 100%;
+    line-height: 16px;
+    font-size: 14px;
+    display: inline-block;
+    color: #a0a0a0;
+    overflow: hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+}
+.page-tradePandect .cardTab .listKayValue li .value{
+    height:18px;
+    width: 100%;
+    font-size: 16px;
+    line-height: 18px;
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.page-tradePandect .cardTab .listKayValue li.left .value{
+    color: #37c18b;
+}
+.page-tradePandect .cardTab .listKayValue li.right .value{
+    color: #f48787;
+}
+

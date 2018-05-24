@@ -1,0 +1,79 @@
+@oPath:"../images/";
+
+@fs1:14px;
+@fs2:12px;
+@fs3:16px;
+@fs4:18px;
+@fs5:30px;
+@fs6:13px;
+@fs7:20px;
+@fs8:15px;
+@fs9:10px;
+/* 文字颜色 ***********************/
+
+/* c0* 为黑白灰色系 */
+@c01:#FFF;
+@c02:#222;
+@c03:#999;
+@c04:#bdbdbd;
+@c05:#878787;
+@c06:#b0b0b0;
+@c07:#666;
+@c08:#000;
+@c11:#e82742;
+@c20:#1fb2f3;
+@c21:#00b7ee;
+@c23:#c1c1c1;
+@c24:#58d56d;
+@c30:#e62641;
+@c31:#ac3a3a;
+@c32:#777777;
+@c33:#333333;
+@c41:#c7b08b;
+
+@bg01:#282828;
+@bg02:#e82742;
+@bg03:#595959;
+@bg04:#FFF;
+@bg05:#ececec;
+@bg06:#f7f7f7;
+@bg07:#c90e28;
+@bg08:#58d56d;
+@bg09:#48bbee;
+@bg15:#c2c2c2;
+@bg16:#f2f2f2;
+
+@bg21:#ECECEC;
+@bg22:#805018;
+@bg23:#e1e1e1;
+@bg24:#f39800;
+@bg32:#555555;
+
+@bg30:#8e8e8e;
+@bg31:#f9f9f9;
+@bd01:#ececec;
+@bd02:#e82742;
+@bd03:#ddd;
+@bd04:#555;
+@bd05:#222;
+@bd06:#6D6D6D;
+@bd07:#BBBBBB;
+@bd10:#ffb5be;
+@bd11:#fdfdfd;
+@bd12:#dfdfdf;
+.abs(@top:auto;@right:auto;@bottom:auto;@left:auto;){
+    position: absolute;
+    left: @left;
+    right: @right;
+    top: @top;
+    bottom: @bottom;
+}
+
+
+.borderRadius(@radius:20px) {
+  border-radius: @radius;
+  border-top-left-radius: @radius;
+  border-top-right-radius: @radius;
+  border-bottom-left-radius:@radius;
+  border-bottom-right-radius: @radius;
+}

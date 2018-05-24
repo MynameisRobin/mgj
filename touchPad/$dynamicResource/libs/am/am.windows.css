@@ -1,0 +1,71 @@
+body.windows .am-clickable{
+	cursor: pointer;
+}
+/*body.windows .am-clickable:hover{
+	-webkit-animation: animation-hover-scale 1 linear 0.1s;
+	-webkit-animation: animation-hover-scale 2 linear 0.2s;
+	opacity: 0.8;
+}
+body.windows .am-clickable.searchmask:hover,
+body.windows .am-clickable.am-page:hover,
+body.windows tr.am-clickable:hover,
+body.windows .payDetail.am-clickable:hover,
+body.windows .onlinePay.am-clickable:hover,
+body.windows .am-clickable.am-disabled:hover,
+body.windows .payInfo dd.am-clickable:hover,
+body.windows .mask.am-clickable:hover,
+body.windows .slip.am-clickable:hover,
+body.windows .billrecordmask.am-clickable:hover,
+body.windows ul.datalist li.am-clickable:hover,
+body.windows canvas.am-clickable:hover{
+	-webkit-animation:none;
+}
+
+@-webkit-keyframes animation-hover-shake {
+	0% {
+		-webkit-transform: rotate(0);
+	}
+	25% {
+		-webkit-transform: rotate(-2deg);
+	}
+	75% {
+		-webkit-transform: rotate(2deg);
+	}
+	100% {
+		-webkit-transform: rotate(0);
+	}
+	
+}
+@-webkit-keyframes animation-hover-scale{
+	0% {
+		-webkit-transform: scale(1);
+	}
+	50% {
+		-webkit-transform: scale(1.05);
+	}
+	100% {
+		-webkit-transform: scale(1);
+	}
+}*/
+body.windows .am-disabled,body.windows input:disabled{
+	cursor: not-allowed;
+}
+
+body.windows .windowsInput:focus{
+	border-color: #e82742!important;
+}
+body.windows .windowsInnerInput{
+	width:100%;
+	height:100%;
+	border:none;
+	position: absolute;
+	left:0;
+	top:0;
+	text-align: inherit;
+	border-radius: inherit
+}
+body.windows .windowsInnerInput:focus{
+	border:1px solid #e82742!important;
+	left:-1px;
+	top:-1px
+}

@@ -1,0 +1,377 @@
+.sys_reportBarNumText{
+    position: relative;
+    margin: 0 20px;
+}
+.sys_reportBarNumText .val{
+    line-height: 20px;
+    font-size: 14px;
+    text-align: left;
+}
+.sys_reportBarNumText .per{
+    color: #999999;
+    font-size: 12px;
+    line-height: 20px;
+    position: absolute;
+    right: 0;
+    top:50%;
+    margin-top: -10px;
+}
+.sys_reportBarNumText .bar{
+    height: 5px;
+    background-color: #f6f6f6;
+    border-radius: 3px;
+}
+.sys_reportBarNumText .barInner{
+    height: 5px;
+    background-color: #35c089;
+    width: 0%;
+    border-radius: 2px;
+    transition: width 0.4s ease-out;
+}
+
+
+.page_reportStorePerf table{
+    width:100%;
+    min-height: 62px;
+}
+.page_reportStorePerf tbody.empty{
+    position: relative;
+}
+.page_reportStorePerf tbody.empty::after{
+    content:"暂无数据";
+    display: block;
+    line-height: 40px;
+    color:#CCC;
+    text-align: center;
+    position: absolute;
+    left: 0;
+    right: 0;
+    border-bottom: 1px solid #f2f2f2;
+}
+.storePerfContainer{
+    display: none;
+}
+.storePerf_overview{
+    font-size: 12px;
+    white-space: nowrap;
+}
+.storePerf_overview{
+    color: #333;
+}
+.storePerf_overview .tag{
+    color:#666;
+}
+.storePerf_overview table{
+    padding: 0 10px;
+}
+.storePerf_overview th{
+    height: 36px;
+    font-size: 12px;
+    line-height: 36px;
+    font-weight: normal;
+    border-bottom: 1px solid #f2f2f2;
+}
+.storePerf_overview th:nth-child(1){
+    width:20%;
+}
+.storePerf_overview th:nth-child(2){
+    width:40%;
+}
+.storePerf_overview th:nth-child(3){
+    width:40%;
+}
+.storePerf_overview th.icon_th::before{
+    content: "";
+    width:20px;
+    height:20px;
+    line-height: 36px;
+    display: inline-block;
+    background: url("img/report/member.png") no-repeat center center;
+    background-size:20px 20px;
+    position: relative;
+    top:5px;
+    left:-3px;
+}
+.storePerf_overview th.icon_th_2::before{
+    background-image: url("img/report/cash.png");
+}
+.storePerf_overview td{
+    height: 48px;
+}
+.storePerf_overview td.icon{
+    line-height: 48px;
+}
+.storePerf_overview td.icon::before{
+    content: "";
+    display: inline-block;
+    width:32px;
+    height:32px;
+    border-radius: 16px;
+    background: url("img/report/guest.png") no-repeat center center;
+    background-size: 32px 32px;
+    float: left;
+    margin: 8px 8px 0 0;
+}
+.storePerf_overview td.icon_1::before{
+    background-color: #f37e7e;
+    background-image: url("img/passengerflow_ico1.png");
+}
+.storePerf_overview td.icon_2::before{
+    background-color: #5ea9e9;
+    background-image: url("img/passengerflow_ico2.png");
+}
+.storePerf_overview td.icon_3::before{
+    /* background-color: #13b5b1; */
+    background-image: url("img/passengerflow_ico3.png");
+    background-position: center center;
+}
+.storePerf_overview td.icon_4::before{
+    background-color: #f0a0a0;
+    background-image: url("img/passengerflow_ico4.png");
+}
+.storePerf_overview td.icon_5::before{
+    background-color: #88abda;
+    background-image: url("img/passengerflow_ico5.png");
+}
+.storePerf_overview td.icon_6::before{
+    background-color: #f8b551;
+    background-image: url("img/passengerflow_ico6.png");
+}
+
+
+
+.reportKeyValueDl::after{
+    content: "";
+    display: block;
+    clear:both;
+}
+.reportKeyValueDl ul.empty::after{
+    content: "暂无数据";
+    display: block;
+    line-height: 40px;
+    text-align: center;
+    color:#CCC;
+    clear: both;
+}
+.reportKeyValueDl .dt{
+    line-height: 25px;
+    border-top: 1px solid #eeeeee;
+    border-bottom: 1px solid #eeeeee;
+    background-color: #f2f2f2;
+    padding-left: 10px;
+    clear: both;
+    min-height: 10px;
+}
+.reportKeyValueDl li.cell{
+    float: left;
+    width: 40%;
+    height: 38px;
+    line-height: 38px;
+    font-size: 14px;
+    margin: 0 6% 0 4%;
+    position: relative;
+}
+.reportKeyValueDl li.cell:nth-child(2n+1){
+    margin: 0 4% 0 6%;
+}
+.reportKeyValueDl li.cell .tag{
+    float: left;
+    position: relative;
+    margin-left: 10px;
+}
+.reportKeyValueDl li.cell .tag::after{
+    content: "";
+    position: absolute;
+    left: 0;
+    top:50%;
+    width:6px;
+    height: 6px;
+    border-radius: 5px;
+    border: 2px solid #13b5b1;
+    margin: -5px 0 0 -15px;
+}
+.reportKeyValueDl li.cell:nth-child(6n+1) .tag::after{
+    border-color: #13b5b1;
+}
+.reportKeyValueDl li.cell:nth-child(6n+2) .tag::after{
+    border-color: #d9b57f;
+}
+.reportKeyValueDl li.cell:nth-child(6n+3) .tag::after{
+    border-color: #59d8a6;
+}
+.reportKeyValueDl li.cell:nth-child(6n+4) .tag::after{
+    border-color: #89c997;
+}
+.reportKeyValueDl li.cell:nth-child(6n+5) .tag::after{
+    border-color: #00b7ee;
+}
+.reportKeyValueDl li.cell:nth-child(6n+6) .tag::after{
+    border-color: #b6a0c3;
+}
+.reportKeyValueDl li.cell .val{
+    position: absolute;
+    right: 0;
+    top: 0;
+    background-color: #FFF;
+}
+.reportKeyValueDl li.block{
+    float: none;
+    line-height: 44px;
+    height: 44px;
+    padding: 0 10px 0 40px;
+    border-bottom: 1px solid #f2f2f2;
+    margin:0 10px;
+    background: url("img/report/cashTotal.png") no-repeat left center;
+    background-size:40px 40px;
+    font-size: 14px;
+}
+.reportKeyValueDl li.block:nth-child(3n+2){
+    background-image: url("img/report/cashBag.png");
+}
+.reportKeyValueDl li.block:nth-child(3n+3){
+    background-image: url("img/report/cashDolar.png");
+}
+.reportKeyValueDl li.block .tag{
+    float: left;
+    margin-right: 15px;
+}
+.reportKeyValueDl li.block .val{
+    float: right;
+}
+.reportKeyValueDl li.block .desc{
+    color: #999999;
+    font-size: 12px;
+}
+
+
+
+.storePerf_standard .total{
+    display: -webkit-box;
+    -webkit-box-orient:horizontal;
+    height:75px;
+    background: #2dbd84 url("img/report/bg.png") no-repeat center top;
+    background-size: 120px 90px;
+}
+.storePerf_standard .total li{
+    -webkit-box-flex: 1;
+    text-align: center;
+}
+.storePerf_standard .total .val{
+    padding-top: 16px;
+    font-size: 22px;
+    color:#ffee60;
+    line-height: 26px;
+}
+.storePerf_standard .total .tag{
+    color:#cbf3e3;
+    font-size: 14px;
+    line-height: 18px;
+}
+
+.storePerf_standard .payType li{
+    float: left;
+    width:40%;
+    margin: 0 4% 0 5%;
+    line-height: 36px;
+    position: relative;
+}
+.storePerf_standard .payType li:nth-child(2n){
+    margin: 0 5% 0 4%;
+}
+.storePerf_standard .payType::after{
+    content: "";
+    display: block;
+    clear: both;
+}
+.storePerf_standard .payType.empty::after{
+    content: "暂无数据";
+    display: block;
+    line-height: 40px;
+    text-align: center;
+    color:#CCC;
+    clear: both;
+}
+.storePerf_standard .payType .tag{
+    float: left;
+    color: #666666;
+}
+.storePerf_standard .payType .val{
+    position: absolute;
+    right: 0;
+    top:0;
+    font-size: 14px;
+    color: #333333;
+    text-align: right;
+    background-color: #FFF;
+}
+.storePerf_standard .payType .tag::before{
+    content:"";
+    width: 18px;
+    height: 18px;
+    border-radius: 9px;
+    display: inline-block;
+    margin:0 5px 0 0;
+    background-repeat:no-repeat;
+    background-position:center center;
+    background-size: 20px 20px;
+    position: relative;
+    top:4px;
+}
+.storePerf_standard .payType li:nth-child(6n+1) .tag::before{
+    background-color: #00b2ba;
+    background-image: url("img/report/icon_2.png");
+}
+.storePerf_standard .payType li:nth-child(6n+2) .tag::before{
+    background-color: #f0a0a0;
+    background-image: url("img/report/icon_1.png");
+}
+.storePerf_standard .payType li:nth-child(6n+3) .tag::before{
+    background-color: #88abda;
+    background-image: url("img/report/icon_3.png");
+}
+.storePerf_standard .payType li:nth-child(6n+4) .tag::before{
+    background-color: #24b399;
+    background-image: url("img/report/icon_2.png");
+}
+.storePerf_standard .payType li:nth-child(6n+5) .tag::before{
+    background-color: #ffb178;
+    background-image: url("img/report/icon_1.png");
+}
+.storePerf_standard .payType li:nth-child(6n+6) .tag::before{
+    background-color: #47b9d2;
+    background-image: url("img/report/icon_3.png");
+}
+.storePerf_standard .caption{
+    margin-top: 5px;
+    line-height: 25px;
+    font-weight: bold;
+    border-top: 1px solid #EEE;
+    border-bottom: 1px solid #EEE;
+    text-align: center;
+}
+.storePerf_standard caption{
+    margin-top: 5px;
+    line-height: 25px;
+    font-weight: bold;
+    border-top: 1px solid #EEE;
+}
+.storePerf_standard th{
+    line-height: 25px;
+    border-top: 1px solid #eeeeee;
+    border-bottom: 1px solid #eeeeee;
+    background-color: #f6f6f6;
+    font-weight: normal;
+    font-size: 12px;
+}
+.storePerf_standard tr>th:first-child,.storePerf_standard tr>td:first-child{
+    text-align: left;
+    padding-left: 10px;
+}
+.storePerf_standard td{
+    line-height: 36px;
+    text-align: center;
+    font-size: 14px;
+}
+.storePerf_standard tbody tr:nth-child(2n) td{
+    background-color: #f2f2f2;
+}

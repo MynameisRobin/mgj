@@ -1,0 +1,397 @@
+@charset "utf-8";
+
+/* CSS Document */
+.page-addBeautyDoc .am-body-wrap {
+	background: #f5f5f5;
+}
+.page-addBeautyDoc .am-body-inner {
+	/* border-bottom: #b8b8b8 1px solid; */
+}
+.page-addBeautyDoc .uploadPhotoTip{
+	padding:10px 0 0 10px;
+	line-height: 15px;
+	font-size: 11px;
+	color: #BBB;
+	background-color: #FFF;
+}
+.page-addBeautyDoc .tips {
+	font-size: 11px;
+	color: #757575;
+	padding: 25px;
+	line-height: 18px;
+}
+.page-addBeautyDoc .tips .download {
+	color: #2c99ff;
+	font-size: 14px;
+	line-height: 40px;
+	text-align: center;
+}
+
+.page-addBeautyDoc .page-input {
+	border-bottom: 1px solid #c6c6c6;
+	padding: 0 0 5px 0;
+}
+.page-addBeautyDoc .page-input input {
+	border: none;
+	width: 100%;
+	height:30px;
+}
+.page-addBeautyDoc .page-textarea {
+	padding: 0 5px;
+	height: 90px;
+	padding-top: 5px;
+	margin-top: 10px;
+	background-color: #FFF;
+	display: block;
+	border-bottom: 1px solid #f2f2f2;
+}
+.page-addBeautyDoc .page-textarea textarea {
+	border: none;
+	width: 100%;
+	height: 90px;
+	line-height: 20px;
+}
+.page-addBeautyDoc .page-select{
+    margin-top:5px;
+    height:30px;
+    line-height:30px;
+    font-size:12px;
+    color:#AAA;
+    background:url("img/arrow_down1.png") no-repeat left center;
+    background-size:10px 10px;
+    padding-left:15px;
+}
+.page-addBeautyDoc .page-select span{
+    color:#333;
+}
+
+.page-addBeautyDoc .photos {
+	padding: 10px;
+	background-color: #FFF;
+}
+.page-addBeautyDoc .photos::after{
+	content: "";
+	display: block;
+	clear: both;
+}
+.page-addBeautyDoc .photos li {
+	float:left;
+	height: 64px;
+	width: 64px;
+    border: 1px dashed #dcdcdc;
+	background-size: contain;
+    overflow:hidden;
+    position:relative;
+}
+.page-addBeautyDoc .photos li.add {
+	background: url("img/headerBg1.png") no-repeat center center;
+	background-size: 32px 32px;
+}
+
+.page-addBeautyDoc .photos li img {
+	width: 100%;
+	height: 100%;
+}
+
+.page-addBeautyDoc .hairStyle_superTab{
+    padding:0 0 0 8px;
+	min-height: 40px;
+	line-height: 40px;
+	border-bottom: 1px solid #eeeeee;
+}
+.page-addBeautyDoc .hairStyle_superTab li{
+	padding:0 9px;
+	float: left;
+}
+.page-addBeautyDoc .hairStyle_superTab::after{
+	content: "";
+	display: block;
+	clear: both;
+}
+.page-addBeautyDoc .hairStyle_superTab .selected{
+	height: 37px;
+	border-bottom: 3px solid #2dbd84;
+}
+
+.page-addBeautyDoc .page_tab ul{
+    min-height:30px;
+	padding-bottom: 3px;
+	border-bottom: 1px solid #f2f2f2;
+}
+.page-addBeautyDoc .page_tab ul::after{
+	content: "";
+	display: block;
+	clear: both;
+}
+.page-addBeautyDoc .page_tab li,.page-addBeautyDoc .box-conttabinner li{
+    float:left;
+    border:none;
+    margin:0 5px 5px 0;
+    line-height:30px;
+    font-size:12px;
+    padding:0 10px;
+    border-radius:2px;
+	background-color: #f5f5f5;
+	text-align: center;
+	min-width: 50px;
+}
+.page-addBeautyDoc .page_tab li.selected,.page-addBeautyDoc .box-conttabinner li.selected{
+    background:#2dbd84;
+    color:#FFF;
+}
+
+.page-addBeautyDoc .hairStyle_tab{
+    padding:10px 3px 0 10px;
+	background-color: #FFF;
+}
+.page-addBeautyDoc .hairStyle_tab li,.page-addBeautyDoc .box-conttabinner li{
+    margin:0 5px 5px 0;
+    padding:0 8px;
+}
+.page-addBeautyDoc .box-conttabinner li{
+	display: inline-block;
+	float: none;
+	margin: 0 10px 6px 0;
+}
+.page-addBeautyDoc .hairStyle_tab p.moretype{
+	float: left;
+	margin: 0 5px 5px 0;
+    padding: 0 8px;
+    border: 1px solid #f5f5f5;
+    border-radius: 2px;
+    text-align: center;
+    line-height: 30px;
+    font-size: 12px;
+}
+.page-addBeautyDoc .hairStyle_tab p.moretype span{
+	display: inline-block;
+    width: 14px;
+    height: 14px;
+    vertical-align: sub;
+    margin-left: 5px;
+	background: url("img/moretype.png") no-repeat center center;
+	background-size: 14px 14px;
+}
+
+.page-addBeautyDoc .price{
+    height:36px;
+    line-height:36px;
+    padding:5px 0;
+	background-color: #FFF;
+}
+
+.page-addBeautyDoc .label{
+    float:left;
+    line-height:36px;
+    font-size:12px;
+}
+.page-addBeautyDoc .price .page-input{
+    float:left;
+    margin:0 5px;
+    padding:3px 0 0 0;
+    height:31px;
+    line-height:30px;
+
+}
+.page-addBeautyDoc .price .page-input input{
+    width:100px;
+    height:30px;
+    line-height:30px;
+    font-size:14px;
+}
+.page-addBeautyDoc .showInMYK{
+	height:36px;
+    line-height:36px;
+    padding:5px 0;
+	background-color: #FFF;
+	display: none;
+	float: right;
+	width: 45%;
+}
+.page-addBeautyDoc .showInMYK .page_checkBox{
+	float: left;
+	width:50px;
+	padding:3px;
+	height:22px;
+	border-radius: 2px;
+	background-color: #909090;
+	color:#FFF;
+	font-size: 12px;
+	line-height: 22px;
+	text-align: center;
+	margin: 5px 0 0 5px;
+}
+.page-addBeautyDoc .showInMYK .page_checkBox::before{
+	content: "是";
+	display: block;
+	background-color: #f5f5f5;
+	border-radius: 2px;
+	float: left;
+	width: 22px;
+	color: #f5f5f5;
+}
+.page-addBeautyDoc .showInMYK .page_checkBox::after{
+	content: "否";
+	display: block;
+	border-radius: 2px;
+	float: right;
+	width: 22px;
+}
+.page-addBeautyDoc .showInMYK .page_checkBox.checked{
+	background-color: #35c089;
+}
+.page-addBeautyDoc .showInMYK .page_checkBox.checked::before{
+	color: #FFF;
+	background: none;
+}
+.page-addBeautyDoc .showInMYK .page_checkBox.checked::after{
+	background-color: #f5f5f5;
+	color: #f5f5f5;
+}
+
+.hairstyleOption{
+	padding: 0 10px;
+	background-color: #FFF;
+}
+.hairstyleOption.visible{
+	height: 80px;
+}
+.hairstyleOption.visible .showInMYK{
+	display: block;
+}
+.hairstyleOption.visible .price{
+	float: left;
+	width: 50%;
+	min-height: 60px;
+}
+.hairstyleOption.visible .label{
+	float: none;
+	display: block;
+	line-height: 20px;
+	padding: 5px 0 0 5px;
+}
+
+
+.page-addBeautyDoc .isVisible{
+    padding:10px 0;
+    font-size:12px;
+}
+.page-addBeautyDoc .isVisible .label{
+    padding-right:5px;
+}
+
+
+.clearfix:before {
+  content: " ";
+  display: table;
+}
+.clearfix:after {
+  content: " ";
+  display: table;
+  clear: both;
+}
+.page-addBeautyDoc .box-hairstyle{
+	display: none;
+	position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+.page-addBeautyDoc .box-hairstyle .box-mask{
+	position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: #000;
+    opacity: .7;
+}
+.page-addBeautyDoc .box-hairstyle .box-cont{
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	height: 220px;
+	background: #fff;
+}
+.page-addBeautyDoc .box-hairstyle .box-cont .box-conttit{
+	line-height: 40px;
+    padding: 0 10px;
+    font-size: 13px;
+}
+.page-addBeautyDoc .box-hairstyle .box-cont .box-conttab{
+	/*overflow: hidden;*/
+}
+.page-addBeautyDoc .box-hairstyle .box-cont .box-conttabinner{
+	height: 170px;
+	overflow: hidden;
+	padding: 5px 0 0 10px;
+}
+.page-addBeautyDoc .box-hairstyle .box-cont .box-conttabinner ul{
+	
+}
+
+.page-addBeautyDoc .relation{
+	padding: 0 10px;
+	background: #fff;
+}
+.page-addBeautyDoc .relation a.btn{
+	display: inline-block;
+	width: 75px;
+	height: 36px;
+	line-height: 36px;
+	text-align: center;
+	border-radius: 3px;
+	background-color: #485268;
+	color: #fff;
+	font-size: 12px;
+}
+.page-addBeautyDoc .relation .relatedmerchandise{
+	border-bottom: 1px solid #f2f2f2;
+	padding: 10px 0;
+}
+.page-addBeautyDoc .relation .relatedmerchandise a.btn{
+	margin-right: 5px;
+}
+.page-addBeautyDoc .relation .relatedmerchandise span{
+	font-size: 12px;
+	color: #ccc;
+}
+.page-addBeautyDoc .relation .reassociation{
+	display: none;
+	border-bottom: 1px solid #f2f2f2;
+	padding: 10px 0;
+}
+.page-addBeautyDoc .relation .reassociation .relationset{
+	float: left;
+}
+.page-addBeautyDoc .relation .reassociation .relationset p{
+	padding-bottom: 2px;
+}
+.page-addBeautyDoc .relation .reassociation .relationset p span{
+	color: green;
+	margin-right: 10px;
+}
+.page-addBeautyDoc .relation .reassociation .relationset .canclerelation{
+	font-size: 12px;
+	color: #ccc;
+}
+.page-addBeautyDoc .relation .reassociation .relationset .relationname{
+	width: 120px;
+    display: inline-block;
+    height: 18px;
+    line-height: 18px;
+    overflow: hidden;
+    vertical-align: bottom;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.page-addBeautyDoc .relation .reassociation a.btn{
+	float: right;
+}
+.page-addBeautyDoc .relation.on .relatedmerchandise{
+	display: none;
+}
+.page-addBeautyDoc .relation.on .reassociation{
+	display: block;
+}

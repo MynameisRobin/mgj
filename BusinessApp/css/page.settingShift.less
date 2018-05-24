@@ -1,0 +1,188 @@
+.page-settingShift{
+    background-color: #f6f6f6;
+    
+    .timebox{
+        position: relative;
+        border-radius:4px;
+        -webkit-border-radius:4px;
+        background-color: #fff;
+        border: 1px solid #CBCBCB;
+        padding-right:25px;
+        width: 26.7%;
+        height:40px;
+        line-height: 42px;
+        padding-left:8px;
+        font-size: 15px;
+        &.am-clickable-active{
+            background-color: #f3f3f3;
+            input{
+                background-color: #f3f3f3;
+            }
+        }
+        &::after{
+            position: absolute;
+            right:8px;
+            content:"";
+            display: block;
+            width: 15px;
+            height:14px;
+            top:13px;
+            background: url(img/c_reportFilter_frequent.png) no-repeat center center;
+            background-size: 15px 14px;
+        }
+    }
+    .setting-top{
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        *{
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+        }
+        background-color: #fff;
+        padding-bottom: 19px;
+        .setting-box{
+            padding:16px 3%;
+            border-bottom:1px solid #f3f3f3;
+            .setting-tit{
+                width: 100%;
+                height:13px;
+                div{
+                    font-size: 13px;
+                    line-height: 13px;
+                    color:#939393;
+                    float: left;
+                    &:nth-child(1){
+                        width: 21.3%;
+                        margin-right:2.7%; 
+                    }
+                    &:nth-child(2){
+                        width:26.7%; 
+                        margin-right:7.3%; 
+                    }
+                    &:nth-child(3){
+                        width: 26.7%;
+                    }
+                }
+            }
+            .setting-content{
+                margin-top: 14px;
+                .setting-item{
+                    margin-bottom: 11px;
+                    &.hide{
+                        display: none;
+                    }
+                    .selectTime_times{
+                        width: 21.3%;
+                        height:40px;
+                        border-radius:4px;
+                        -webkit-border-radius:4px;
+                        background-color: #fff;
+                        border: 1px solid #CBCBCB;
+                        padding:0 8px;
+                        line-height: 40px;
+                        font-size: 15px;
+                        float: left;
+                        margin-right: 2.7%;
+                        input{
+                            border:none;
+                            width: 100%;
+                            height:100%;
+                            display: block;
+                        }
+                    }
+                    .selectTime_startTime,.selectTime_endTime{
+                        float: left;
+                        input{
+                            display: block;
+                            width: 100%;
+                            height:100%;
+                            border:none;
+                        }
+                        
+                    }
+                    .selectTime_close{
+                        float: left;
+                        width: 40px;
+                        height:40px;
+                        color: #ccc;
+                        font-size: 16px;
+                        line-height: 40px;
+                        text-align: center;
+                        margin-left: 5px;
+                        &.am-clickable-active{
+                            transform: scale(1.1);
+                            -webkit-transform: scale(1.1);
+                        }
+                    }
+                    .line{
+                        float: left;
+                        width: 2.5%;
+                        height:1px;
+                        background-color: #222;
+                        margin: 0 2.1%;
+                        margin-top: 19px;
+                    }
+                }
+            }
+            .setting-add{
+                color:#2DBD84;
+                i{
+                    font-size: 16px;
+                    vertical-align: middle;
+                }
+                span{
+                    font-size: 12px;
+                    line-height: 16px;
+                    display: inline-block;
+                    vertical-align: middle;
+                    margin-left: 2px;
+                }
+                &.am-clickable-active{
+                    opacity: 0.8;
+                }
+            }
+        }
+        .setting-time-box{
+            padding:0 3%;
+            p{
+                color:13px;
+                color:#999;
+                margin: 17px 0 14px 0;
+            }
+            .setting-time{
+                width: 191px;
+            }
+            .setting-tips{
+                font-size: 11px;
+                line-height: 15px;
+                color:#939393;
+                margin-top: 11px;
+                i{
+                    font-size: 16px;
+                    vertical-align: middle;
+                }
+                span{
+                    display: inline-block;
+                    vertical-align: middle;
+                }
+            }
+        }
+    }
+    .setting-bottom-btn{
+        
+        width: 90%;
+        height:47px;
+        color:#fff;
+        background-color: #2DBD84;
+        text-align: center;
+        line-height: 47px;
+        font-size: 16px;
+        margin: 0 auto;
+        border-radius: 4px;
+        -webkit-border-radius:4px;
+        margin-top: 23px;
+        &.am-clickable-active{
+            background-color: #17A96F;
+        }
+    }
+}

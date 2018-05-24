@@ -1,0 +1,101 @@
+/* 文字颜色 ***********************/
+/* c0* 为黑白灰色系 */
+.createService .bg {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+.createService .inner {
+  z-index: 1;
+  width: 750px;
+  margin-left: -375px;
+  color: #222;
+}
+.createService .inner .title {
+  padding: 0 20px;
+  font-weight: bold;
+  font-size: 14px;
+}
+.createService .inner .content {
+  padding-top: 0;
+  padding-bottom: 15px;
+}
+.createService .inner .content li {
+  background-color: #F1F1F1;
+  border: none;
+  color: #222;
+  font-size: 14px;
+}
+.createService .inner .manual {
+  margin: 0 20px 25px;
+}
+.createService .inner .manual .manual_tit {
+  line-height: 40px;
+  padding: 0 15px;
+  font-size: 16px;
+  display: inline-block;
+  vertical-align: middle;
+}
+.createService .inner .manual .isWin .input_no {
+  width: 280px;
+  height: 40px;
+  color: #222;
+  border: 1px solid #dddddd;
+}
+.createService .inner .manual .isWin ::-webkit-input-placeholder {
+  /* WebKit browsers */
+  color: #222;
+}
+.createService .inner .manual .isWin :-moz-placeholder {
+  /* Mozilla Firefox 4 to 18 */
+  color: #222;
+  opacity: 1;
+}
+.createService .inner .manual .isWin ::-moz-placeholder {
+  /* Mozilla Firefox 19+ */
+  color: #222;
+  opacity: 1;
+}
+.createService .inner .manual .isWin :-ms-input-placeholder {
+  /* Internet Explorer 10+ */
+  color: #222;
+}
+.createService .inner .manual .isWin .sure_btn {
+  background-color: #555;
+  cursor: pointer;
+}
+.createService .inner .manual .noWin .no_box {
+  border: 1px solid #dddddd;
+  display: inline-block;
+  width: 280px;
+  height: 40px;
+  line-height: 40px;
+  color: #222;
+}
+.createService .inner ul::after {
+  content: "";
+  display: block;
+  height: 0px;
+  clear: both;
+}
+.createService .inner li {
+  float: left;
+  width: 60px;
+  background: #FFF;
+  color: #e82742;
+  line-height: 32px;
+  text-align: center;
+  font-size: 16px;
+  border: 1px solid #ffb5be;
+  border-radius: 2px;
+  margin: 5px 5px;
+  cursor: pointer;
+}
+.createService .inner li.am-disabled {
+  border-color: #ddd;
+  background-color: #f7f7f7;
+  color: #bdbdbd;
+  cursor: not-allowed;
+}

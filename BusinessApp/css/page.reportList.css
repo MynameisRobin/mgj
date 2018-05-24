@@ -1,0 +1,110 @@
+.page-reportList .banner > img {
+    display: block;
+    width: 100%;
+}
+.page-reportList .listTitle {
+    height: 25px;
+    line-height: 25px;
+    font-size: 11px;
+    color: #333333;
+    background: #f6f6f6;
+    padding-left: 16px;
+    border-bottom: #eeeeee 1px solid;
+}
+.page-reportList .subList {
+    /* padding-left: 16px; */
+    border-bottom: #eeeeee 1px solid;
+}
+.page-reportList .subList > li {
+    height: 44px;
+    line-height: 44px;
+    overflow: hidden;
+    font-size: 15px;
+    color: #222222;
+    padding-left: 45px;
+    background-repeat: no-repeat;
+    background-position: 16px center;
+    background-size: 16px 16px;
+    border-bottom: #eeeeee 1px solid;
+    position: relative;
+}
+.page-reportList .subList > li.disabled {
+    color: #CCC;
+    -webkit-filter: grayscale(100%);
+}
+.page-reportList .subList > li:last-child {
+    border-bottom: none;
+}
+.page-reportList .subList > li.r11 {
+    background-image: url("img/report_icon11.png");
+}
+.page-reportList .subList > li.r12 {
+    background-image: url("img/report_icon12.png");
+}
+.page-reportList .subList > li.r13 {
+    background-image: url("img/report_icon13.png");
+}
+.page-reportList .subList > li.r21 {
+    background-image: url("img/report_icon21.png");
+}
+.page-reportList .subList > li.r22 {
+    background-image: url("img/report_icon22.png");
+}
+.page-reportList .subList > li.r23 {
+    background-image: url("img/report_icon23.png");
+}
+.page-reportList .subList > li.r31 {
+    background-image: url("img/report_icon31.png");
+}
+.page-reportList .subList > li.r32 {
+    background-image: url("img/report_icon32.png");
+}
+.page-reportList .subList > li.r33 {
+    background-image: url("img/report_icon33.png");
+}
+.page-reportList .subList > li.r41 {
+    background-image: url("img/report_icon41.png");
+}
+.page-reportList .subList > li.r42 {
+    background-image: url("img/report_icon42.png");
+}
+.page-reportList .subList > li.r43 {
+    background-image: url("img/report_icon43.png");
+}
+.page-reportList .subList > li.r53 {
+    background-image: url("img/report_icon53.png");
+}
+.page-reportList .subList > li.r54 {
+    background-image: url("img/report_icon54.png");
+}
+.page-reportList .subList > li.r55 {
+    background-image: url("img/report_icon55.png");
+}
+.page-reportList .subList > li.r56 {
+    background-image: url("img/report_icon56.png");
+}
+.page-reportList .subList > li.r57 {
+    background-image: url("img/report_icon23.png");
+}
+.page-reportList .subList > li.r58 {
+    background-image: url("img/report_icon21.png");
+}
+.page-reportList .subList > li.r59 {
+    background-image: url("img/report_icon59.png");
+}
+.page-reportList .subList > li.r60 {
+    background-image: url("img/report_icon60.png");
+}
+.page-reportList .subList > li:after {
+    content: "";
+    position: absolute;
+    width: 7px;
+    height: 10px;
+    right: 16px;
+    top: 17px;
+    background: url("img/report_arrowRight.png") center center;
+    background-size: contain;
+}
+.page-reportList .subList > li.am-clickable-active {
+    background-color: #f6f6f6;
+}

@@ -1,0 +1,250 @@
+// 点击评价
+#page_evaluate {
+    text-align: center;
+    .close {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        width: 35px;
+        height: 35px;
+        &::before {
+            content: "";
+            display: block;
+            width: 15px;
+            height: 15px;
+            margin: 10px;
+            background: url(../images/icons_sprite/close_employee.png) no-repeat 0px 0px;
+            background-size: 15px 15px;
+        }
+    }
+    h2 {
+        margin-top: 50px;
+        font-size: 27px;
+        color: #333;
+    }
+    p {
+        margin-top: 16px;
+        color: #999;
+        font-size: 13px;
+    }
+    .warp {
+        margin-top: 75px;
+        ul {
+            margin-right: -116px;
+            li {
+                width: 120px;
+                display: inline-block;
+                margin-right: 116px;
+                .face {
+                    width: 119px;
+                    height: 119px;
+                    background: rgba(242, 242, 242, 0.66);
+                    color: #ffbd3e;
+                    border-radius: 50%;
+                    line-height: 125px;
+                    .iconfont {
+                        font-size: 84px;
+                    }
+                }
+                p {
+                    color: #333;
+                    font-size: 16px;
+                }
+                &.active .face {
+                    color: #fff;
+                    background: #ffbd3e;
+                }
+            }
+        }
+    }
+    .btn {
+        width: 194px;
+        height: 49px;
+        font-size: 18px;
+        line-height: 49px;
+        color: #999999;
+        border-radius: 3px;
+        border: solid 1px #f2f2f2;
+        margin: 12% auto;
+    }
+    .yawp {
+        display: none;
+        margin-top: 30px;
+        text-align: left;
+        .yawp-info {
+            background: #f7f7f7;
+            height: 165px;
+            padding-top: 30px;
+            display: flex;
+            overflow: hidden;
+            .inner {
+                margin: 0 auto;
+            }
+            .label {
+                width: 100px;
+                height: 100%;
+                color: #999;
+                font-size: 14px;
+                float: left;
+            }
+            ul {
+                &:last-child {
+                    margin-right: 0;
+                }
+                width: 233px;
+                float: left;
+                li {
+                    float: left;
+                    font-size: 14px;
+                    color: #222;
+                    margin-top: 16px;
+                    .radius {
+                        width: 21px;
+                        height: 21px;
+                        border-radius: 50%;
+                        margin-right: 15px;
+                        vertical-align: middle;
+                        border: solid 1px #dddddd;
+                    }
+                    span {
+                        display: inline-block;
+                    }
+                    &.active {
+                        .radius {
+                            background: url(../images/hangup/ok.png) no-repeat;
+                            background-size: cover;
+                            border: 1px solid #000;
+                        }
+                    }
+                }
+                li:first-child {
+                    margin-top: 0;
+                }
+                textarea {
+                    width: 233px;
+                    height: 58px;
+                    margin-left: 40px;
+                    resize: none;
+                }
+            }
+        }
+        .confirmBtn {
+            width: 194px;
+            height: 49px;
+            font-size: 18px;
+            line-height: 49px;
+            color: #999999;
+            border-radius: 3px;
+            border: solid 1px #f2f2f2;
+            background: #555;
+            color: #ffffff;
+            margin: 39px auto;
+            text-align: center;
+        }
+    }
+}
+
+.page_hangup .hangup-foot-show{
+    position: absolute;
+    bottom: 0;
+    left: 0px;
+    right: 75px;
+    height: 74px;
+    overflow: hidden;
+  }
+  .page_hangup .hangup-right-arrow{
+    position: absolute;
+    right: 18px;
+    bottom:10px;
+    width: 50px;
+    height: 50px;
+    border: 2px solid #fff;
+    background-color: #5e5e5e;
+    line-height: 50px;
+    border-radius: 50px;
+    text-align: center;
+    cursor: pointer;
+    overflow: hidden;
+  }
+  .page_hangup .hangup-right-arrow img{
+    width: 10px;
+    height: 15px;
+    line-height: 60px;
+    margin-top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  
+  .page_hangup  .hangup-foot-list{
+    height: 74px;
+    text-align: right;
+  }
+  .page_hangup  .hangup-foot-list li{
+    width: 50px;
+    height: 50px;
+    margin:12px 3px;
+    border-radius: 50%;
+    background-color: #5e5e5e;
+    display: inline-block;
+    text-align: center;
+    position: relative;
+    cursor: pointer;
+    border: 2px solid #fff;
+  }
+  .page_hangup  .hangup-foot-list li img{
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    vertical-align: top;
+    position: absolute;
+    z-index: 10;
+    left: 0;
+  }
+  .page_hangup  .hangup-foot-list li img.hangup-img-none{
+    display: none;
+  
+  }
+  .page_hangup  .hangup-foot-list>li .hangup-foot-target{
+    position: absolute;
+    right: -3px;
+    top: -3px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background-color: #f39800;
+    text-align: center;
+    line-height: 18px;
+    z-index: 20;
+  }
+  .page_hangup  .hangup-foot-list>li .hangup-foot-content{
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+  
+  .page_hangup  .hangup-foot-list>li .hangup-foot-title{
+    font-size: 18px;
+    color: #fff;
+    font-weight: bold;
+    margin-top: 10px;
+    white-space:nowrap;
+    overflow:hidden;
+    line-height: 15px;
+  }
+  .page_hangup  .hangup-foot-list>li .hangup-foot-name{
+    font-size: 10px;
+    transform: scale(0.8);
+    line-height: 14px;
+    color: #fff;
+    white-space:nowrap;
+    overflow:hidden;
+  }
+  
+  .page_hangup  .hangup-foot-list .selected{
+    transform: scale(1.2);
+    background-color: #e82742;
+    border: 2px solid #fff; 
+    /* outline: #fff solid 4px; */
+    box-shadow: 0px 0px 4px #888;
+  }
+  

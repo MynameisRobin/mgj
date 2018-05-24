@@ -1,0 +1,157 @@
+.page-login .top {
+    height: 174px;
+    background: url("img/login-headBg.jpg") no-repeat center center;
+    background-size: cover;
+    position: relative;
+}
+.page-login .top > .left {
+    height: 44px;
+    width: 44px;
+    position: absolute;
+    text-align: center;
+    display: inline-block;
+    line-height: 44px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-image: url(img/am-header-back.png);
+    background-size: 12px 22px;
+}
+.ios .page-login .top > .left {
+    top: 20px;
+}
+.page-login .top > .bottom {
+    width: 100%;
+    height: 90px;
+    position: absolute;
+    bottom: -45px;
+}
+.page-login .top > .bottom > .photo {
+    margin: auto;
+    width: 84px;
+    height: 84px;
+    border: #fff 3px solid;
+    background: url("img/login-logo.gif") no-repeat center center;
+    background-size: contain;
+    border-radius: 100%;
+    overflow: hidden;
+}
+.page-login .top > .bottom > .photo > img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    border-radius: 100%;
+}
+.page-login .top > .bottom > .slogan {
+    margin: 7px auto;
+    width: 148px;
+    height: 19px;
+    background: url("img/login-slogan.png") no-repeat center center;
+    background-size: contain;
+}
+.page-login .loginForm {
+    padding: 80px 30px 30px 30px;
+}
+.page-login .loginFormLine {
+    height: 14px;
+    padding: 14px 0;
+    border-bottom: #e5e5e5 1px solid;
+    position: relative;
+    margin-top: 14px;
+}
+.page-login .loginFormLine > .left {
+    height: 42px;
+    width: 30px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-size: 24px 24px;
+}
+.page-login .loginFormLine > .left.user {
+    background-image: url("img/login-formIcon-user.png");
+}
+.page-login .loginFormLine > .left.pwd {
+    background-image: url("img/login-formIcon-pwd.png");
+}
+.page-login .loginFormLine > .right {
+    margin-left: 50px;
+    padding: 0 14px;
+    height: 14px;
+    line-height: 14px;
+    border-left: #e5e5e5 1px solid;
+}
+.page-login .loginFormLine > .right > input {
+    width: 100%;
+    border: none;
+    background: none;
+    font-size: 14px;
+    margin: -22px 0;
+    height: 58px;
+}
+.page-login .loginFormLine > .right > .clear {
+    background: url("img/login-clear.png") no-repeat center center;
+    background-size: 20px 20px;
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    right: 0px;
+    top: 1px;
+    opacity: 0.2;
+}
+.page-login .loginFormLine > .right > .clear.am-clickable-active {
+    opacity: 0.8
+}
+.page-login .loginBtn {
+    background: #2dbd84;
+    height: 44px;
+    line-height: 44px;
+    border-radius: 4px;
+    font-size: 16px;
+    text-align: center;
+    margin: 0px 30px;
+    color: #fff;
+}
+.page-login .loginBtn.am-clickable-active {
+    background: #37A579;
+}
+.page-login .loginOpt {
+    margin: 10px 30px 0 30px;
+    height: 20px;
+    line-height: 20px;
+    font-size: 14px;
+}
+.page-login .loginOpt > .savePwd {
+    float: left;
+    display: inline-block;
+    padding-left: 24px;
+    background: url("img/login-checkbox.png") no-repeat left center;
+    background-size: 17px 17px;
+    color: #333333;
+}
+.page-login .loginOpt > .savePwd.checked {
+    background-image: url("img/login-checkbox-s.png");
+}
+.page-login .loginOpt > .forgotPwd {
+    float: right;
+    color: #2dbd84;
+}
+.page-login .footerBtns {
+    margin: 30px 30px 0 30px;
+    color: #a9a9a9;
+    font-size: 14px;
+    line-height: 20px;
+}
+.page-login .footerBtns > span {
+    display: inline-block;
+    /* padding: 10px; */
+}
+.page-login .footerBtns > span.am-clickable-active {
+    background: #eee;
+}
+.page-login .footerBtns > .left {
+    float: left;
+}
+.page-login .footerBtns > .right {
+    float: right;
+}

@@ -1,0 +1,289 @@
+.page-dashboard {
+    /* background: url("img/login-headBg.jpg") no-repeat center top; */
+    background-color: #f6f6f6;
+    background-size: contain;
+}
+.page-dashboard.am-page .am-header{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+}
+.page-dashboard.am-page .header_box{
+    height: 44px;
+}
+html.ios .page-dashboard.am-page .header_box{
+    height: 64px;
+}
+
+html.iosX .page-dashboard.am-page .header_box{
+    height: 84px;
+}
+.dashboard-headBg{
+    position: absolute;
+    top: 0;
+}
+.dashboard-headBg img{
+    width: 100%;
+    height: auto;
+}
+.page-dashboard .am-header {
+    background: none;
+}
+
+.page-dashboard .am-backbutton {
+    background: none;
+}
+
+.page-dashboard .tenantLogo {
+    height: 32px;
+    width: 32px;
+    border: #102d70 2px solid;
+    border-radius: 100%;
+    vertical-align: middle;
+    margin-right: 10px
+}
+
+.page-dashboard .top {
+    height: 100px;
+    position: relative;
+}
+
+.page-dashboard .userinfo {
+    height: 96px;
+    background: #ffffff;
+    position: relative;
+    border-radius: 8px;
+    width: 90%;
+    margin-left: 5%;
+    -moz-box-shadow: 0px 1px 1px #EEEEEE;
+    -webkit-box-shadow: 0px 1px 1px #EEEEEE;
+    box-shadow: 0px 1px 1px #EEEEEE;
+}
+
+.page-dashboard .userinfo>.photo {
+    position: absolute;
+    left: 13px;
+    top: 16px;
+    width: 64px;
+    height: 64px;
+    border: #fff 3px solid;
+    background: url("img/barberBg-man.gif") no-repeat center center;
+    background-size: contain;
+    border-radius: 100%;
+}
+
+.page-dashboard .userinfo>.photo.female {
+    background-image: url("img/barberBg-women.gif");
+}
+
+.page-dashboard .userinfo>.photo.am-clickable-active {
+    opacity: 0.9;
+}
+
+.page-dashboard .userinfo>.photo>img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    border-radius: 100%;
+}
+
+.page-dashboard .userinfo>.yuyue {
+    position: absolute;
+    height: 55.5px;
+    width: 58.5px;
+    background: url(img/dashboard/today_reservation.png) no-repeat;
+    background-size: cover;
+    right: 15px;
+    top: 20.25px;
+}
+.page-dashboard .userinfo>.yuyue>span {
+    position: absolute;
+    font-size: 24px;
+    font-weight: bold;
+    color: #f0184b;
+    top: 8px;
+    left: 50%;
+    transform: translate(-55%,0);
+}
+.page-dashboard .am-header .right.message{
+    right: 5%;
+    margin-right: -10.75px;
+}
+.page-dashboard .userinfo>.right {
+    margin-left: 90px;
+    margin-right: 73px;
+    padding: 27px 0;
+}
+.page-dashboard .userinfo>.right .account{
+    position: relative;
+    display: inline-block;
+    padding-right: 5px;
+}
+.page-dashboard .userinfo>.right .account.disabled .switch_btn{
+    display: none;
+}
+.page-dashboard .userinfo>.right .switch_btn{
+    margin-left: 8px;
+    display: inline-block;
+    vertical-align: middle;
+    width: 10px;
+    height: 10px;
+    background: url("img/dashboard/swich_account_icon.png") no-repeat center top; 
+    background-size: 10px 10px;
+}
+.page-dashboard .userinfo>.right .line1 {
+    font-size: 17px;
+    color: #222222;
+    font-weight: bold;
+    margin-bottom: 3px;
+}
+.page-dashboard .userinfo>.right .line1 .t-name{
+    max-width: 75px;
+    white-space: nowrap;  
+    text-overflow:ellipsis; 
+    overflow:hidden;
+    vertical-align: middle;
+}
+.page-dashboard .userinfo>.right .line2 {
+    font-size: 12px;
+    color: #999;
+    display: inline-block;
+    white-space: nowrap;  
+    text-overflow:ellipsis; 
+    overflow:hidden;
+}
+
+.page-dashboard .moduleList {
+    width: 100%;
+    table-layout: fixed;
+    background: #fff;
+    background-color: #f6f6f6;
+    min-height: 100px;
+    box-sizing: border-box;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+.page-dashboard .moduleList>thead>tr>td{
+    height: 34px;
+    line-height: 34px;
+    color: #999;
+    font-size: 13px;
+    padding-left: 5%;
+}
+.page-dashboard .moduleList>tbody{
+    background-color: #fff;
+}
+.page-dashboard .moduleList>tbody>tr{
+    border-top: 1px solid #f9f9f9;
+}
+.page-dashboard .moduleList>tbody>tr:last-child{
+    border-bottom: 1px solid #f9f9f9;
+}
+.page-dashboard .moduleList>tbody>tr>td{
+    padding: 10px 0;
+    height: 70px;
+    text-align: center;
+    font-size: 12px;
+    position: relative;
+    color: #222;
+    border:0;
+    box-sizing: border-box;
+}
+.page-dashboard .moduleList>tbody>tr>td.disabled img{
+    -webkit-filter: grayscale(100%);
+}
+.page-dashboard .moduleList>tbody>tr>td>img{
+    height: 44px;
+    width: auto;
+}
+
+.page-dashboard .moduleList>tbody>tr>td>.num {
+    display: block;
+    height: 15px;
+    /* width: 12px; */
+    padding: 0 5px;
+    background: #f1194b;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    border-radius: 15px;
+    font-size: 9px;
+    color: #fff;
+    text-align: center;
+    line-height: 15px;
+}
+.page-dashboard .moduleList>tbody>tr>td>.num.dot {
+    width: 8px;
+    height: 8px;
+    font-size: 0;
+    padding: 0;
+    right: 20px;
+}
+.page-dashboard .moduleList td.am-clickable-active {
+    background: #eee;
+}
+
+.page-dashboard .moduleList .icon {
+    height: 27px;
+    width: 27px;
+    line-height: 27px;
+    margin: 0 auto 5px auto;
+}
+
+ .page-dashboard .moduleList .icon>img {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    height: auto;
+    width: auto;
+} 
+
+.page-dashboard .userinfo .line1 .t-name{
+    float: left;
+
+}
+.page-dashboard .userinfo .line1 .icons{
+    float: right; 
+    width: 19px;
+    height:19px;
+    overflow: hidden;
+    margin-top: 2px;
+    margin-left: 5px;
+    background-color: #F4BB17;
+    border-radius:50%;
+    -webkit-border-radius:50%;
+}
+.page-dashboard .userinfo .line1 .icons.rest{
+    background-color: #6973A5;
+}
+.page-dashboard .userinfo .line1 .icons.rest .icons-body{
+    transform: translate(0,-19px);
+    -webkit-transform: translate(0,-19px);
+}
+.page-dashboard .userinfo .line1 .icons .icons-body{
+    height:19px;
+    transition: all .3s ease-in;
+    -webkit-transition: all .3s ease-in;
+    transform: translate(0,0);
+    -webkit-transform: translate(0,0);
+    width: 100%;
+}
+.page-dashboard .userinfo .line1 .icons .icons-body .status{
+    float: left;
+    width: 19px;
+    height:19px;
+    border-radius:50%;
+    -webkit-border-radius:50%;
+    color:#fff;
+    font-size: 11px;
+    line-height: 19px;
+    text-align: center;
+}
+.page-dashboard .userinfo .line1 .icons .icons-body .status1{
+    background-color:#F4BB17; 
+}
+.page-dashboard .userinfo .line1 .icons .icons-body .status2{
+    background-color:#6973A5; 
+}

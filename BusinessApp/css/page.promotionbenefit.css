@@ -1,0 +1,300 @@
+/*推广*/
+.page-promotionbenefit .header-profit{
+	background: #2dbd84;
+}
+.page-promotionbenefit .am-body-inner{
+	display: none;
+}
+.page-promotionbenefit .am-body-wrap{
+	background: #f4f4f4;
+}
+.page-promotionbenefit .extensionWrap{
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+.page-promotionbenefit .tip-extension{
+	color: #999999;
+    padding-left: 30px;
+    background: #fbfbfb url(img/extensionsprite.png) no-repeat 3px 12px;
+    background-size: 20px 92px;
+    font-size: 12px;
+    line-height: 40px;
+}
+.page-promotionbenefit .extension-empty{
+	display: none;
+	position: absolute;
+    left: 0px;
+    top: 40px;
+    right: 0px;
+    bottom: 0px;
+    z-index: 99;
+    background: #f4f4f4;
+}
+.page-promotionbenefit .extension-empty .extension-pic{
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin-left: -90px;
+	margin-top: -45px;
+	width: 180px;
+    background: url(img/no_benefit.png) no-repeat center 14px;
+    background-size: 30% 60%;
+    padding-top: 74px;
+    font-size: 12px;
+    color: #cfcfcf;
+    text-align: center;
+}
+.page-promotionbenefit .menuListWrap{
+	position: absolute;
+	left: 0px;
+	top: 40px;
+	bottom: 0px;
+	width: 90px;
+	overflow: hidden;
+	border-top: 1px solid #ebebeb;
+}
+.page-promotionbenefit .menuListWrap .menuListWrapInner ul li{
+	width: 100%;
+	line-height: 50px;
+    text-indent: 10px;
+    color: #666666;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.page-promotionbenefit .menuListWrap .menuListWrapInner ul li.on{
+	color: #2dbd84;
+	background: #fff;
+}
+.page-promotionbenefit .contentListWrap{
+	position: absolute;
+	left: 90px;
+	top: 40px;
+	right: 0px;
+	bottom: 0px;
+	overflow: hidden;
+	background: #fff;
+}
+.page-promotionbenefit .contentListWrap .contentListWrapInner ul{
+	padding-left: 10px;
+}
+.page-promotionbenefit .contentListWrap .contentListWrapInner ul li{
+	position: relative;
+	padding: 10px 10px 10px 60px;
+	border-bottom: 1px solid #eeeeee;
+}
+.page-promotionbenefit .contentListWrap .contentListWrapInner ul li:active{
+	background: #f4f4f4;
+}
+.page-promotionbenefit .contentListWrap .contentListWrapInner ul li .imgwrap{
+	position: absolute;
+	left: 0px;
+	top: 10px;
+	width: 50px;
+    height: 50px;
+}
+.page-promotionbenefit .contentListWrap .contentListWrapInner ul li .imgwrap img{
+	width: 100%;
+	height: 100%;
+}
+.page-promotionbenefit .contentListWrap .contentListWrapInner ul li h2.tith2{
+	line-height: 24px;
+	color: #222222;
+	font-size: 14px;
+	overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.page-promotionbenefit .contentListWrap .contentListWrapInner ul li p.pricep{
+	color: #999999;
+	font-size: 12px;
+}
+.page-promotionbenefit .contentListWrap .contentListWrapInner ul li .promotionbenefit{
+	position: relative;
+	padding: 10px 0;
+	color: #999999;
+	font-size: 12px;
+	margin-top: 10px;
+}
+.page-promotionbenefit .contentListWrap .contentListWrapInner ul li .promotionbenefit span{
+	color: #2dbd84;
+	font-size: 15px;
+}
+.page-promotionbenefit .contentListWrap .contentListWrapInner ul li .promotionbenefit a{
+	display: block;
+	position: absolute;
+	right: 0px;
+	top: 5px;
+	width: 60px;
+	height: 30px;
+	text-align: center;
+	line-height: 30px;
+	-webkit-border-radius: 4px;
+	-ms-border-radius: 4px;
+	-o-border-radius: 4px;
+	border-radius: 4px;
+	background: #2dbd84;
+	color: #fff;
+	text-decoration: none;
+}
+.page-promotionbenefit .contentListWrap .contentListWrapInner ul li .promotionbenefit a:active{
+	background: #26e69b;
+}
+.page-promotionbenefit .footTab{
+	position: absolute;
+    z-index: 2;
+    bottom: 0;
+    height: 45px;
+    width: 100%;
+    text-align: center;
+}
+.page-promotionbenefit .footTab span.tab-extension,
+.page-promotionbenefit .footTab span.tab-profit{
+	display: block;
+    float: left;
+    width: 50%;
+    line-height: 46px;
+    color: #fff;
+    font-size: 14px;
+    background: #586075;
+}
+.page-promotionbenefit .footTab span.selected{
+	background: #2dbd84;
+}
+.page-promotionbenefit .footTab span.tab-extension i,
+.page-promotionbenefit .footTab span.tab-profit i{
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	background: url(img/extensionsprite.png) no-repeat;
+	background-size: 20px 92px;
+	vertical-align: text-bottom;
+    margin-right: 5px;
+}
+.page-promotionbenefit .footTab span.tab-extension i{
+	background-position: 0px -36px;
+}
+.page-promotionbenefit .footTab span.tab-profit i{
+	background-position: 0px -72px;
+}
+
+/*收益*/
+.page-promotionbenefit .am-body-inner{
+	position:relative;
+}
+.page-promotionbenefit .am-body-inner .am-drag.top.up,.page-promotionbenefit .am-body-inner .am-drag.top.down{
+	
+}
+.page-promotionbenefit .am-body-inner .inner_header{
+	background-color:#2dbd84;
+	background: url(img/topbg.png) no-repeat center center;
+	background-size: cover;
+	height: 158px;
+	position:relative;
+}
+.page-promotionbenefit .am-body-inner .inner_header .benefit{
+	position:absolute;
+	width:100%;
+	margin:0 auto;
+	margin-top:28px;
+}
+.page-promotionbenefit .am-body-inner .inner_header .this_benefit{
+	font-size:10px;
+	color:#b4f7dd;
+	text-align: center;
+}
+.page-promotionbenefit .am-body-inner .inner_header .money_content{
+	text-align:center;
+	font-size:49px;
+	color:#fefefe;
+	text-align: center;
+	height:64px;
+	line-height:64px;
+}
+.page-promotionbenefit .am-body-inner .inner_header .run_ico{
+	width:21px;
+	height:21px;
+	background:url(img/right_direct.png) no-repeat left top;
+	background-size:100% 100%;
+	position:absolute;
+	top:50%;
+	right:10px;
+}
+.page-promotionbenefit .am-body-inner .benefit_tip{
+	background:#f5f5f5;
+	color:#999999;
+	font-size:10px;
+	height:35px;
+	width:100%;
+	line-height:35px;
+}
+.page-promotionbenefit .am-body-inner .benefit_tip span:first-child{
+	display:inline-block;
+	width:14px;
+	height:14px;
+	background:url(img/prompt_circle.png) no-repeat center center;
+	background-size:100% 100%;
+	vertical-align: middle;
+	margin-left:20px;
+}
+.page-promotionbenefit .am-body-inner .benefit_list{
+	background:#fff;
+}
+.page-promotionbenefit .am-body-inner .benefit_list li{
+	height:57px;
+	border-bottom:1px solid #efefef;
+}
+.benefit_list li .left,.benefit_list li .right{
+	padding:8px 0;
+	line-height:20px;
+}
+.benefit_list li .left{
+	float:left;
+	padding-left:15px;
+}
+.benefit_list li p:first-child{
+	font-size:14px;
+	color:#222222;
+}
+.benefit_list li p:last-child{
+	font-size:11px;
+	color:#999999;
+}
+.benefit_list li .right{
+	float:right;
+	padding-right:15px;
+	text-align: right;
+}
+/*没有收益时样式*/
+.page-promotionbenefit .am-body-inner .emptydiv{
+	position:absolute;
+	top:50%;
+	width:100%;
+	margin-top:-80px;
+	text-align: center;
+}
+.page-promotionbenefit .am-body-inner .emptydiv .pic{
+	width:51px;
+	height:55px;
+	background:url(img/no_benefit.png) no-repeat center center;
+	background-size:100% 100%;
+	margin:0 auto;
+	margin-bottom:10px;
+}
+.page-promotionbenefit .am-body-inner .emptydiv p{
+	font-size:12px;
+	color:#cfcfcf;
+}
+/*显示没有更多时的样式*/
+.benefit_list .emptyli{
+	font-size:10px;
+	color:#cfcfcf;	
+	text-align: center;
+	padding-top:20px;
+	border-bottom:none;
+	background-color:#f5f5f5;
+}

@@ -1,0 +1,307 @@
+.page_employeePandect .dd li.block{
+    float: none;
+    line-height: 44px;
+    height: 44px;
+    padding: 0 10px 0 40px;
+    border-bottom: 1px solid #f2f2f2;
+    margin:0 10px;
+    background: url("img/employee/coin_ico1.png") no-repeat left center;
+    background-size:25px 25px;
+    font-size: 14px;
+}
+.page_employeePandect .storePerf_overview .dd li.block:nth-child(3){
+    background-image: url("img/totalPerformance_ico1.png");
+}
+.page_employeePandect .storePerf_overview .dd li.block:nth-child(4){
+    background-image: url("img/totalPerformance_ico2.png");
+}
+.page_employeePandect .storePerf_overview .dd li.block:nth-child(5){
+    background-image: url("img/totalPerformance_ico3.png");
+
+}
+.page_employeePandect .storePerf_overview .dd li.block:nth-child(6){
+    background-image: url("img/totalPerformance_ico4.png");
+}
+
+.page_employeePandect .storePerf_overview .dd li.block:nth-child(7){
+    background-image: url("img/employee/total_ico4.png");
+}
+.page_employeePandect .dd li.block .tag{
+    float: left;
+    margin-right: 15px;
+}
+.page_employeePandect .dd li.block .val{
+    float: right;
+}
+.page_employeePandect .dd li.block .desc{
+    color: #999999;
+    font-size: 12px;
+}
+
+.page_employeePandect .total{
+    display: -webkit-box;
+    -webkit-box-orient:horizontal;
+    height: 115px;
+    background: #2dbd84 url("img/report/bg.png") no-repeat center top;
+    background-size: 120px 90px;
+}
+.page_employeePandect .total li{
+    -webkit-box-flex: 1;
+    text-align: center;
+}
+.page_employeePandect .total .val{
+    padding-top: 26.5px;
+    font-size: 22px;
+    color:#ffee60;
+    line-height: 26px;
+}
+.page_employeePandect .total .tag{
+    color:#cbf3e3;
+    font-size: 14px;
+    line-height: 18px;
+}
+.page_employeePandect .storePerf_standard table{
+    width: 100%;
+    position: relative;
+}
+.page_employeePandect .storePerf_standard caption{
+    margin-top: 5px;
+    line-height: 25px;
+    font-weight: bold;
+    border-top: 1px solid #EEE;
+}
+.page_employeePandect .storePerf_standard th{
+    line-height: 27px;
+    border-top: 1px solid #eeeeee;
+    border-bottom: 1px solid #eeeeee;
+    background-color: #f6f6f6;
+    font-weight: normal;
+    font-size: 12px;
+}
+.page_employeePandect .storePerf_standard tr>th:first-child,.storePerf_standard tr>td:first-child{
+    text-align: left;
+    padding-left: 10px;
+}
+.page_employeePandect .storePerf_standard td{
+    line-height: 36px;
+    text-align: center;
+    font-size: 14px;
+}
+.page_employeePandect .storePerf_standard tbody tr:nth-child(2n) td{
+    background-color: #f2f2f2;
+}
+.page_employeePandect .sexTotal{
+    padding:5px 0;
+    padding: 5px 35px;
+    border-bottom: 1px solid #eee;
+}
+.page_employeePandect .sexTotal li{
+    display: block;
+    float: left;
+    width: 50%;
+    box-sizing:border-box;
+    -webkit-box-sizing:border-box;
+    text-align: center;
+    height:50px;
+    background: url(img/passengerflow_ico1.png) no-repeat 18% center;
+    background-size: 40px 40px;
+    padding-left: 20%;
+}
+.page_employeePandect .sexTotal li:nth-child(2){
+    background: url(img/passengerflow_ico2.png) no-repeat 18% center;
+    background-size:40px 40px; 
+}
+.page_employeePandect .sexTotal li span{
+    display: block;
+    line-height: 25px;
+    height:20px;
+    width: 60px;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+.page_employeePandect .sexTotal .tag{
+    color: #c2c2c2;
+    font-size: 12px;
+}
+.page_employeePandect .sexTotal .val{
+    color: #2fbe85;
+    font-size: 18px;
+}
+
+.page_employeePandect .workTab .lineImg{
+    padding: 15px 0;
+    margin: 0 15px;
+    border-bottom: 1px solid #eeeeee;
+    /* border-top:2px solid #eeeeee; */
+    margin-bottom: 5px;
+    /* background-color: #fff; */
+}
+.page_employeePandect .workTab .lineImg .lineImg_block{
+    display: inline-block;
+    font-size: 12px;
+    text-align: right;
+}
+.page_employeePandect .workTab .lineImg .lineImg_words{
+    width: 19%;
+    text-align: left;
+    margin-right: 1%;
+}
+.page_employeePandect .workTab .lineImg .lineImg_pre{
+    width: 10%;
+    text-align: right;
+    margin-left: 1%;
+}
+.page_employeePandect .workTab .lineImg .lineImg_img{
+    width: 65%;
+    height: 8px;
+    vertical-align: middle;
+    background-color: #f6f6f6;
+    -webkit-border-radius: 30px;
+}
+.page_employeePandect .workTab .lineImg .lineImg_img>span{
+    display: block;
+    width: 70%;
+    height:100%;
+    background-color: #2dbd84;
+    border-radius: 30px;
+    transition:width .5s ease-out;
+    -webkit-transition:width .5s ease-out;
+    -webkit-border-radius: 30px;
+}
+.page_employeePandect .workTab .people li{
+    display: list-item;
+    line-height: 35px;
+    height: 35px;
+    padding: 0 10px 0 30px;
+    margin: 0 10px;
+    background: url(img/passengerflow_ico3.png) no-repeat left center;
+    background-size:25px 25px; 
+}
+.page_employeePandect .workTab .people li:nth-child(2){
+    background: url(img/passengerflow_ico4.png) no-repeat left center;
+    background-size:25px 25px; 
+}
+.page_employeePandect .workTab .people .tag{
+    float: left;
+    margin-right: 15px;
+    font-size: 12px;
+    line-height: 35px;
+    color: #666666;
+}
+.page_employeePandect .workTab .people .val{
+    float: right;
+}
+
+.page_employeePandect .workTab .totalListBox{
+    width: 100%;
+}
+.page_employeePandect .workTab .totalListBox ul{
+    overflow: hidden;
+}
+.page_employeePandect .workTab .totalListBox ul li{
+    display: block;
+    width: 50%;
+    padding:20px 0;
+    float: left;
+    height: 78px;
+    padding-left: 55px;
+    padding-right: 10px;
+    border-bottom: 1px solid #eee;
+    box-sizing:border-box;
+    -webkit-box-sizing:border-box;
+}
+.page_employeePandect .workTab .totalListBox ul li.ico1{
+    background: url(img/passengerflow_ico1.png) no-repeat 10px center;
+    background-size: 35px 35px;
+}
+.page_employeePandect .workTab .totalListBox ul li.ico2{
+    background: url(img/passengerflow_ico2.png) no-repeat 10px center;
+    background-size: 35px 35px;
+}
+.page_employeePandect .workTab .totalListBox ul li.ico3{
+    background: url(img/passengerflow_ico3.png) no-repeat 10px center;
+    background-size: 35px 35px;
+}
+.page_employeePandect .workTab .totalListBox ul li.ico4{
+    background: url(img/passengerflow_ico4.png) no-repeat 10px center;
+    background-size: 35px 35px;
+}
+.page_employeePandect .workTab .totalListBox ul li.ico5{
+    background: url(img/passengerflow_ico5.png) no-repeat 10px center;
+    background-size: 35px 35px;
+}
+.page_employeePandect .workTab .totalListBox ul li.ico6{
+    background: url(img/passengerflow_ico6.png) no-repeat 10px center;
+    background-size: 35px 35px;
+}
+.page_employeePandect .workTab .listText{
+    display: block;
+    height:100%;
+    /* vertical-align: top; */
+    float: left;
+    /* text-align: center; */
+}
+.page_employeePandect .workTab .listText_left{
+    width: 65%;
+}
+.page_employeePandect .workTab .listText_right{
+    width: 35%;
+}
+.page_employeePandect .workTab .listText .listText_name{
+    height:20px;
+    overflow: hidden;
+    /* white-space:nowrap; */
+    /* text-align: center; */
+    /* text-overflow:ellipsis; */
+    /* margin-top: 1px; */
+}
+.page_employeePandect .workTab .listText .listText_name.value{
+
+    text-align: center;
+
+}
+.page_employeePandect .workTab .listText .listText_value{
+    height:15px;
+    text-align: center;
+}
+.page_employeePandect .workTab .listText .listText_line{
+    width: 85%;
+    height: 8px;
+    vertical-align: middle;
+    background-color: #f6f6f6;
+    border-radius: 30px;
+    -webkit-border-radius: 30px;
+    margin-top: 5px;
+}
+.page_employeePandect .workTab .listText .listText_line>span{
+    display: block;
+    width: 70%;
+    height: 100%;
+    background-color: #2dbd84;
+    border-radius: 30px;
+    transition: width .5s ease-out;
+    -webkit-transition: width .5s ease-out;
+    -webkit-border-radius: 30px;
+}
+.page_employeePandect .workTab .listText_color{
+    color: #999999;
+}
+.page_employeePandect .workTab .listText_bigSize{
+    font-size: 16px;
+}
+.workTab table tbody.empty:after{
+    content:"暂无数据";
+    position: absolute;
+    text-align:center;
+    left: 0;
+    right: 0;
+    display: block;
+    line-height: 40px;
+    color: #ccc;
+    border-bottom: 1px solid #f2f2f2;
+}
+
+
+
+

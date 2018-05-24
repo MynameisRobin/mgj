@@ -1,0 +1,283 @@
+/* 文字颜色 ***********************/
+/* c0* 为黑白灰色系 */
+.page_service,
+.page_product {
+  left: 135px;
+  bottom: 43px;
+  border-radius: 0 4px 0 0;
+}
+.page_service .cashierMain .head,
+.page_product .cashierMain .head,
+.page_service .cashierMain .foot,
+.page_product .cashierMain .foot {
+  display: none;
+}
+.page_service .cashierMain .body,
+.page_product .cashierMain .body {
+  top: 0;
+  bottom: 0;
+}
+.cashierTotalPanel {
+  display: none;
+  background-color: #FFF;
+  border-top: 1px solid #DDD;
+  height: 42px;
+  position: absolute;
+  left: 135px;
+  bottom: 0;
+  right: 0;
+  z-index: 1;
+  line-height: 42px;
+}
+.cashierTotalPanel .billNo {
+  padding-left: 10px;
+  float: left;
+}
+.cashierTotalPanel .billNo::before {
+  content: "单号:";
+  display: inline-block;
+  font-size: 12px;
+  color: #666666;
+}
+.cashierTotalPanel .billNo input {
+  border: 1px solid #ececec;
+  height: 26px;
+  width: 100px;
+  padding-left: 10px;
+  border-radius: 14px;
+}
+.cashierTotalPanel .billNo input.error {
+  border-color: #e82742;
+  -webkit-animation: animation_shake 1 ease-in 0.2s;
+}
+.cashierTotalPanel .hangup {
+  float: right;
+  margin-top: -1px;
+  height: 43px;
+  text-align: center;
+  color: #ffffff;
+  background: #595959;
+  width: 80px;
+}
+.cashierTotalPanel .hangup.am-clickable-active {
+  background: #282828;
+}
+.cashierTotalPanel .submit {
+  float: right;
+  margin-top: -1px;
+  height: 43px;
+  text-align: center;
+  color: #ffffff;
+  background: #e82742;
+  width: 180px;
+}
+.cashierTotalPanel .submit.am-clickable-active {
+  background: #c90e28;
+}
+.cashierTotalPanel .totalPrice {
+  float: right;
+  color: #e82742;
+  padding: 0 15px;
+  font-size: 20px;
+  line-height: 44px;
+}
+.cashierTotalPanel .totalPrice::before {
+  font-size: 14px;
+  content: "总计:";
+  color: #222222;
+}
+.tab_cash {
+  display: none;
+  position: absolute;
+  left: 75px;
+  top: 0;
+  bottom: 0;
+  width: 60px;
+  background-color: #333;
+  z-index: 1;
+  color: #878787;
+}
+.tab_cash li {
+  padding: 2px 0 0 0;
+  height: 56px;
+  text-align: center;
+  line-height: 20px;
+  position: relative;
+}
+.tab_cash li p {
+  display: block;
+  height: 30px;
+  width: 30px;
+  margin: 0 auto;
+  background-color: #CCC;
+}
+.tab_cash li p.a {
+  background: url("../images/tab_sprite.png") no-repeat 0px -35px;
+  background-size: 35px 700px;
+}
+.tab_cash li p.b {
+  background: url("../images/tab_sprite.png") no-repeat 0px -70px;
+  background-size: 35px 700px;
+}
+.tab_cash li p.c {
+  background: url("../images/tab_sprite.png") no-repeat 0px -140px;
+  background-size: 35px 700px;
+}
+.tab_cash li p.d {
+  background: url("../images/tab_sprite.png") no-repeat 0px -210px;
+  background-size: 35px 700px;
+}
+.tab_cash li p.e {
+  background: url("../images/tab_sprite.png") no-repeat 0px -280px;
+  background-size: 35px 700px;
+}
+.tab_cash li p.f {
+  background: url("../images/tab_sprite.png") no-repeat 0px 0px;
+  background-size: 35px 700px;
+}
+.tab_cash li p.g {
+  background: url("../images/tab_sprite.png") no-repeat 0px -420px;
+  background-size: 35px 700px;
+}
+.tab_cash li p.h {
+  background: url("../images/tab_sprite.png") no-repeat 0px -490px;
+  background-size: 35px 700px;
+}
+.tab_cash li p.i {
+  background: url("../images/tab_sprite.png") no-repeat 0px -560px;
+  background-size: 35px 700px;
+}
+.tab_cash li p.j {
+  background: url("../images/tab_sprite.png") no-repeat 0px -630px;
+  background-size: 35px 700px;
+}
+.tab_cash li.selected {
+  border-top: 1px solid #666;
+  background-color: #444;
+  color: #ffffff;
+  opacity: 1;
+}
+.tab_cash li.selected::before {
+  content: "";
+  position: absolute;
+  right: -7px;
+  top: 50%;
+  margin-top: -7px;
+  border-left: 7px solid #444;
+  border-top: 7px solid transparent;
+  border-bottom: 7px solid transparent;
+}
+.tab_cash li.selected p.a {
+  background: url("../images/tab_sprite.png") no-repeat 0px -350px;
+  background-size: 35px 700px;
+}
+.tab_cash li.selected p.b {
+  background: url("../images/tab_sprite.png") no-repeat 0px -105px;
+  background-size: 35px 700px;
+}
+.tab_cash li.selected p.c {
+  background: url("../images/tab_sprite.png") no-repeat 0px -175px;
+  background-size: 35px 700px;
+}
+.tab_cash li.selected p.d {
+  background: url("../images/tab_sprite.png") no-repeat 0px -245px;
+  background-size: 35px 700px;
+}
+.tab_cash li.selected p.e {
+  background: url("../images/tab_sprite.png") no-repeat 0px -315px;
+  background-size: 35px 700px;
+}
+.tab_cash li.selected p.f {
+  background: url("../images/tab_sprite.png") no-repeat 0px -385px;
+  background-size: 35px 700px;
+}
+.tab_cash li.selected p.g {
+  background: url("../images/tab_sprite.png") no-repeat 0px -455px;
+  background-size: 35px 700px;
+}
+.tab_cash li.selected p.h {
+  background: url("../images/tab_sprite.png") no-repeat 0px -525px;
+  background-size: 35px 700px;
+}
+.tab_cash li.selected p.i {
+  background: url("../images/tab_sprite.png") no-repeat 0px -595px;
+  background-size: 35px 700px;
+}
+.tab_cash li.selected p.j {
+  background: url("../images/tab_sprite.png") no-repeat 0px -665px;
+  background-size: 35px 700px;
+}
+.tab_cash li > .num {
+  position: absolute;
+  line-height: 14px;
+  padding: 0 2px 0 1px;
+  color: #FFF;
+  background: #e82742;
+  border-radius: 2px;
+  right: 2px;
+  top: 2px;
+  font-size: 12px;
+}
+.tab_cash .line {
+  height: 10px;
+  border-top: 1px solid #222;
+  background-color: #282828;
+  margin-top: -1px;
+  box-shadow: rgba(0, 0, 0, 0.05) 0 2px inset;
+}
+.tab_cash .tabItem {
+  border-top: 1px solid #444;
+  border-bottom: 1px solid #282828;
+  background-color: #383838;
+}
+.tab_cash .user {
+  padding-bottom: 2px;
+}
+.tab_cash .user .img {
+  height: 40px;
+  background: #555555 url("../images/defultbg.png") no-repeat center center;
+  background-size: 40px 40px;
+  margin: 5px 10px 0 10px;
+}
+.tab_cash .user .name {
+  line-height: 20px;
+  color: #AAA;
+  font-size: 12px;
+  text-align: center;
+}
+.tab_cash .card {
+  white-space: nowrap;
+  font-size: 12px;
+  text-align: left;
+}
+.tab_cash .card .name {
+  color: #999;
+  padding-top: 10px;
+  padding-left: 5px;
+  height: 16px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tab_cash .card .balance {
+  color: #DDD;
+  padding-bottom: 10px;
+  padding-left: 5px;
+  line-height: 20px;
+}
+.tab_cash .hangupBtn,
+.tab_cash .settingBtn,
+.tab_cash .genderBtn,
+.tab_cash .searchBtn {
+  text-align: center;
+  line-height: 14px;
+  font-size: 12px;
+  color: #AAA;
+  height: 55px;
+}
+.tab_cash .hangupBtn .icon::before,
+.tab_cash .settingBtn .icon::before,
+.tab_cash .genderBtn .icon::before,
+.tab_cash .searchBtn .icon::before {
+  font-size: 18px;
+  line-height: 32px;
+}

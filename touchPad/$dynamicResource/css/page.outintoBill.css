@@ -1,0 +1,681 @@
+.page_storage .outbill .outbillHead div, .outbillContent ul li > div, .intobill .intobillHead div, .intobillContent ul li > div {
+	float: left;
+	border-left: 1px solid #F1F1F1;
+	line-height: 30px;
+	padding: 0 12px;
+	font-size: 12px;
+	color: #999;
+}
+
+.page_storage .outbillHead,.page_storage .intobillHead {
+	height: 32px;
+}
+
+.page_storage .outbillContent ul li > div, .page_storage .intobillContent ul li > div {
+	height: 41px;
+	line-height: 41px;
+	font-size: 14px;
+	color: #474747;
+}
+.page_storage .outbillContent ul li > div.canUpdate, .page_storage .intobillContent ul li > div.canUpdate {
+	color: #00b7ee;
+}
+
+.page_storage .outbillContent ul li, .page_storage .intobillContent ul li {
+	height: 41px;
+}
+
+.page_storage .outbillContent, .page_storage .intobillContent {
+	overflow: hidden;
+	position: absolute;
+	left: 20px;
+	right: 20px;
+	top: 102px;
+	bottom: 54px;
+	overflow: hidden;
+}
+
+.page_storage .outbillContent ul li:nth-child(2n+1), .page_storage .intobillContent ul li:nth-child(2n+1) {
+	background: #F7F7F7;
+}
+
+.page_storage .outbillContent ul li.am-clickable-active, .page_storage .intobillContent ul li.am-clickable-active {
+	background-color: #ccc;
+}
+
+.page_storage .outbillContent ul li:last-child div, .page_storage .intobillContent ul li:last-child div {
+	border-bottom: 1px solid #F1F1F1;
+}
+
+.page_storage .outbill .outbillHead div, .page_storage .intobill .intobillHead div {
+	border-top: 1px solid #F1F1F1;
+	border-bottom: 1px solid #F1F1F1;
+}
+
+.page_storage .outbill .outbillContent li div, .page_storage .intobill .intobillContent li div {
+	height: 41px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	
+}
+
+.page_storage .outbill .outbillHead div:nth-child(1),
+.page_storage .outbillContent ul li > div:nth-child(1),
+.page_storage .intobill .intobillHead div:nth-child(1),
+.page_storage .intobillContent ul li > div:nth-child(1) {
+	width: 17%;
+}
+
+.page_storage .outbill .outbillHead div:nth-child(2),
+.page_storage .outbillContent ul li > div:nth-child(2),
+.page_storage .intobill .intobillHead div:nth-child(2),
+.page_storage .intobillContent ul li > div:nth-child(2) {
+	width: 12%;
+}
+
+.page_storage .outbill .outbillHead div:nth-child(3),
+.page_storage .outbillContent ul li > div:nth-child(3),
+.page_storage .intobill .intobillHead div:nth-child(3),
+.page_storage .intobillContent ul li > div:nth-child(3) {
+	width: 10%;
+}
+.page_storage .intobillContent ul li > div:nth-child(3).red {
+	color: #e82b45;
+}
+.page_storage .intobillContent ul li > div:nth-child(3).green {
+	color: #3bb372;
+}
+.page_storage .outbillContent ul li > div:nth-child(3).red {
+	color: #e82b45;
+}
+.page_storage .outbillContent ul li > div:nth-child(3).blue {
+	color: #F39800;
+}
+
+.page_storage .outbill .outbillHead div:nth-child(4),
+.page_storage .outbillContent ul li > div:nth-child(4),
+.page_storage .intobill .intobillHead div:nth-child(4),
+.page_storage .intobillContent ul li > div:nth-child(4){
+	width: 10%;
+}
+
+.page_storage .outbill .outbillHead div:nth-child(5),
+.page_storage .outbillContent ul li > div:nth-child(5),
+.page_storage .intobill .intobillHead div:nth-child(5),
+.page_storage .intobillContent ul li > div:nth-child(5){
+	width: 8%;
+}
+
+.page_storage .outbill .outbillHead div:nth-child(6),
+.page_storage .outbillContent ul li > div:nth-child(6),
+.page_storage .intobill .intobillHead div:nth-child(6),
+.page_storage .intobillContent ul li > div:nth-child(6){
+	width: 25%;
+}
+
+.page_storage .outbill .outbillHead div:nth-child(7),
+.page_storage .outbillContent ul li > div:nth-child(7),
+.page_storage .intobill .intobillHead div:nth-child(7),
+.page_storage .intobillContent ul li > div:nth-child(7){
+	width: 18%;
+	border-right: 1px solid #F1F1F1;
+}
+.page_storage .outbill .outbillHead div:nth-child(7) {
+	position: relative;
+}
+
+.page_storage .outbill .outbillHead div:nth-child(7) p:last-child {
+	position: absolute;
+	width: 10px;
+	height: 10px;
+	background: #00B3EA;
+	
+}
+
+.page_storage .outbillContent ul li > div:nth-child(6) div.serviceType p.backStyle, .page_storage .intobillContent ul li > div:nth-child(6) div.serviceType p.backStyle {
+	
+	color: #E7E7E7;
+	display: inline-block;
+	padding: 0 10px 0 10px;
+	margin-left: 3px;
+	background: #979797;
+	height: 30px;
+	line-height: 30px;
+	border-radius: 20px;
+	margin-top: 5px;
+}
+
+.page_storage .outbillContent ul li > div:nth-child(6) div.serviceType, .page_storage .intobillContent ul li > div:nth-child(6) div.serviceType {
+	float: left;
+	text-align: left;
+	max-width: 100%;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.page_storage .outbillContent ul li > div:nth-child(6) > p, .page_storage .intobillContent ul li > div:nth-child(6) > p {
+	float: right;
+	margin-right: 10px;
+	color: #33C8ED;
+	cursor: pointer;
+	font-size: 10px;
+}
+
+// .page_storage .outbillContent ul li > div:nth-child(7) p, .page_storage .intobillContent ul li > div:nth-child(7) p {
+// 	float: left;
+// 	color: black;
+// 	margin-left: 7px;
+// }
+
+// .page_storage .outbillContent ul li > div:nth-child(7) p.billColor, .page_storage .intobillContent ul li > div:nth-child(7) p.billColor {
+// 	color: #33C8ED;
+// }
+
+// .page_storage .outbillContent ul li > div:nth-child(7) p.printIcon, .outbillContent ul li > div:nth-child(7) p.abortIcon, .page_storage .intobillContent ul li > div:nth-child(7) p.printIcon, .intobillContent ul li > div:nth-child(7) p.abortIcon {
+// 	width: 25px;
+// 	height: 40px;
+// 	background-image: url(../images/storageRecord/printIcon.png);
+// 	background-size: 18px 18px;
+// 	background-repeat: no-repeat;
+// 	background-position: 0 11px;
+// }
+
+// .page_storage .outbillContent ul li > div:nth-child(7) p.abortIcon, .page_storage .intobillContent ul li > div:nth-child(7) p.abortIcon {
+	
+// 	background-image: url(../images/storageRecord/abort.png);
+	
+// }
+
+.page_storage .outbillFoot, .page_storage .intobillFoot {
+	overflow: hidden;
+	margin-top: 20px;
+}
+
+.page_storage .outbillFoot div, .page_storage .intobillFoot div {
+	float: left;
+	color: #ABABAB;
+}
+
+.page_storage .billFootLt {
+	width: 230px;
+	height: 35px;
+	line-height: 35px;
+}
+
+.page_storage .billFootRt ul, .billFootRt div {
+	float: left;
+	
+}
+
+.page_storage .billFootRt ul li {
+	float: left;
+	margin-left: 10px;
+	height: 35px;
+	width: 35px;
+	line-height: 35px;
+	border: 1px solid #DCDCDC;
+	border-radius: 24px;
+	text-align: center;
+}
+
+.page_storage .billFootRt div.billSearchNum {
+	float: left;
+	margin-left: 20px;
+	
+}
+
+.page_storage .billFootRt div.billSearchNum input {
+	text-align: center;
+	width: 60px;
+	height: 35px;
+	border: 1px solid #DCDCDC;
+	display: inline-block;
+	border-radius: 24px;
+	margin: 0 12px;
+	
+}
+
+.page_storage .billFootRt li.numActive {
+	border: 2px solid #545454;
+	font-weight: bold;
+	color: black;
+}
+
+/*.page_storage div.outbillPop,.page_storage div.intobillPop{
+	position:fixed;
+	top:200px;
+	left:300px;
+	width:320px;
+	height:130px;
+	background:#fff;
+	border:1px solid #F3F3F3;
+	border-radius:5px;
+}*/
+.page_storage div.outDisplay, .page_storage div.intoDisplay {
+	display: none;
+	opacity: 1;
+	
+}
+
+.page_storage div.outbillPop .popHead, .page_storage div.intobillPop .popHead {
+	border-bottom: 1px solid black;
+	padding-bottom: 10px;
+	text-align: center;
+	font-size: 20px;
+	margin: 15px 0 40px 0;
+	
+}
+
+.page_storage div.outbillPop .popSelect span, .page_storage div.intobillPop .popSelect span {
+	
+	display: inline-block;
+	padding: 6px;
+	border: 1px;
+	border-radius: 5px;
+	font-size: 15px;
+	margin-left: 70px;
+	background: #22CC77;
+	
+}
+
+#outgf div.leftbox, #intogf div.leftbox {
+}
+
+#outgf div.list, #intogf div.list {
+}
+
+.page_storage .outbillPop {
+	width: 468px;
+	top: 0;
+	bottom: 0;
+	position: absolute;
+	left: auto;
+	right: -468px;
+	top: 0;
+	background: #FFF;
+	-webkit-transition: 0.3s linear;
+	transition: 0.3s linear;
+}
+
+.page_storage .outbillPop.active {
+	right: 0;
+}
+
+.page_storage .outbillPop .outbillPopHead {
+	position: absolute;
+	width: 385px;
+	top: 24px;
+	left: 50%;
+	transform: translateX(-50%);
+	-webkit-transform: translateX(-50%);
+	bottom: 104px;
+	background-image: url(../images/storage/storage-bill.png);
+	background-size: 100% 100%;
+}
+
+.page_storage .outbillPop .outbillPopHead .PopHead {
+	height: 95px;
+}
+
+.page_storage .outbillPop .outbillPopHead .PopHead span {
+	font-size: 25px;
+	text-align: center;
+	position: relative;
+	display: block;
+	width: 100%;
+	top: 48px;
+	overflow: hidden;
+}
+
+.page_storage .outbillPop .outbillPopHead .PopHead .PopDate {
+	width: 112px;
+	height: 25px;
+	position: absolute;
+	top: 62px;
+	left: 15px;
+	color: #666666;
+	font-size: 12px;
+}
+
+.page_storage .outbillPop .outbillPopHead .PopContent .PopContentH {
+	overflow: hidden;
+	line-height: 30px;
+	margin-bottom: -1px;
+	width: 347px;
+	margin: 0 auto;
+	border: 1px solid #D1D1D1;
+}
+
+.page_storage .outbillPop .outbillPopHead .PopContent .PopContentH div {
+	border-right: 1px solid #D1D1D1;
+}
+
+.page_storage .outbillPop .outbillPopHead .PopContent .PopContentH div:last-child {
+	border-right: none;
+}
+
+.page_storage .outbillPop .outbillPopHead .PopContent .PopContentH div, .page_storage .outbillPop .outbillPopHead .PopContent .PopContentD div {
+	height: 30px;
+	font-size: 12px;
+	float: left;
+	padding: 0 12px;
+	text-align: left;
+	color: #A4A4A4;
+	background: #FFF;
+}
+
+.page_storage .outbillPop .outbillPopHead .PopContent .PopContentD ul li div {
+	height: 40px;
+	line-height: 40px;
+	color: #303030;
+	font-size: 12px;
+}
+
+.page_storage .outbillPop .outbillPopHead .PopContent .PopContentD ul {
+}
+
+.page_storage .outbillPop .outbillPopHead .PopContent .PopContentD {
+	overflow: hidden;
+	position: absolute;
+	width: 347px;
+	left: 50%;
+	transform: translateX(-50%);
+	-webkit-transform: translateX(-50%);
+	top: 32px;
+	bottom: 145px;
+	border: 1px solid #D1D1D1;
+	border-top: none;
+}
+
+.page_storage .outbillPop .outbillPopHead .PopContent {
+	position: absolute;
+	top: 95px;
+	bottom: 0;
+	width: 100%;
+}
+
+.page_storage .outbillPop .outbillPopHead .PopContent .PopContentD ul li {
+	border-bottom: 1px solid #D1D1D1;
+}
+
+.page_storage .outbillPop .outbillPopHead .PopContent .PopContentD ul li div {
+	border-right: 1px solid #D1D1D1;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+
+.page_storage .outbillPop .outbillPopHead .PopContent .PopContentH div:first-child, .page_storage .outbillPop .outbillPopHead .PopContent .PopContentD ul li div:first-child {
+	width: 145px;
+}
+
+.page_storage .outbillPop .outbillPopHead .PopContent .PopContentH div:nth-child(2), .page_storage .outbillPop .outbillPopHead .PopContent .PopContentD ul li div:nth-child(2) {
+	width: 90px;
+}
+
+.page_storage .outbillPop .outbillPopHead .PopContent .PopContentH div:nth-child(3), .page_storage .outbillPop .outbillPopHead .PopContent .PopContentD ul li div:nth-child(3) {
+	width: 55px;
+	border-right: 1px solid #D1D1D1;
+}
+
+.page_storage .outbillPop .outbillPopHead .PopContent .PopContentH.hidePrice div:nth-child(3), .page_storage .outbillPop .outbillPopHead .PopContent .PopContentD ul li.hidePrice div:nth-child(3) {
+	width: 110px;
+	border-right: none;
+}
+
+.page_storage .outbillPop .outbillPopHead .PopContent .PopContentH div:nth-child(4), .page_storage .outbillPop .outbillPopHead .PopContent .PopContentD ul li div:nth-child(4) {
+	width: 55px;
+	border-right: none;
+}
+.page_storage .outbillPop .outbillPopHead .PopContent .PopContentH.hidePrice div:nth-child(4), .page_storage .outbillPop .outbillPopHead .PopContent .PopContentD ul li.hidePrice div:nth-child(4) {
+	display: none;
+}
+
+.page_storage .outbillPop .outbillPopHead .PopContent .PopContentD ul li div:nth-child(3) {
+	color: #F23047;
+}
+
+.page_storage .outbillPop .outbillPopHead .PopContent .PopContentF {
+	position: absolute;
+	width: 347px;
+	height: 120px;
+	bottom: 15px;
+	left: 50%;
+	transform: translateX(-50%);
+	-webkit-transform: translateX(-50%);
+}
+
+.page_storage .outbillPop .outbillPopHead .PopContent .PopContentF div {
+	height: 30px;
+	font-size: 0;
+	margin-bottom: 10px;
+}
+
+.page_storage .outbillPop .outbillPopHead .PopContent .PopContentF .popNum span:last-child, .page_storage .outbillPop .outbillPopHead .PopContent .PopContentF .popType p span:last-child, .page_storage .outbillPop .outbillPopHead .PopContent .PopContentF .PopComment span:last-child {
+	border-bottom: 1px solid #C8C8C8;
+	color: #F23047;
+	text-align: center;
+	display: inline-block;
+	font-size: 12px;
+	line-height: 30px;
+	height: 30px;
+	text-align: left;
+	padding: 0 5px;
+	
+}
+
+.page_storage .outbillPop .outbillPopHead .PopContent .PopContentF .popNum span:first-child, .page_storage .outbillPop .outbillPopHead .PopContent .PopContentF .popType p span:first-child, .page_storage .outbillPop .outbillPopHead .PopContent .PopContentF .PopComment span:first-child {
+	display: block;
+	font-size: 12px;
+	line-height: 30px;
+	height: 30px;
+	width: 60px;
+	float: left;
+	
+}
+
+.page_storage .outbillPop .outbillPopHead .PopContent .PopContentF .popType p:last-child {
+	// margin-left: 10px;
+}
+
+.page_storage .outbillPop .PopContentF p.popType2 span:last-child {
+	width: 70px;
+	display: inline-block;
+	height: 30px;
+	overflow: hidden;
+	
+}
+
+.page_storage .outbillPop .outbillPopHead .PopContent .PopContentF .PopComment span:last-child {
+	display: block;
+	float: left;
+	width: 287px;
+	height: 30px;
+	text-align: left;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.page_storage .outbillPop .outbillPopHead .PopContent .PopContentF .popType {
+	height: 30px;
+	overflow: hidden;
+}
+.page_storage .outbillPop .outbillPopHead .PopContent .PopContentF .popType1 {
+	width: 188px;
+	float: left;
+	height: 30px;
+	overflow: hidden;
+}
+.page_storage .outbillPop .outbillPopHead .PopContent .PopContentF .popType2 {
+	width: 148px;
+	float: right;
+	height: 30px;
+	overflow: hidden;
+}
+
+.page_storage .outbillPop .outbillPopHead .PopContent .PopContentF div span:last-child {
+	display: block;
+	width: 128px;
+	height: 30px;
+	float: left;
+	overflow: hidden;
+}
+.page_storage .outbillPop .outbillPopHead .PopContent .PopContentF div p:last-child span:last-child {
+	width: 88px;
+}
+
+.page_storage .outbillPop .outbillPopHead .PopContent .PopContentF div span:first-child {
+	display: block;
+	width: 60px;
+	float: left;
+	height: 30px;
+}
+
+.page_storage .outbillPop .outbillPopFoot .popPrint p.outsure {
+	width: 45px;
+	height: 45px;
+	background-image: url(../images/storageRecord/popSure.png);
+	background-size: 45px 45px;
+	background-repeat: no-repeat;
+	margin: 0 auto;
+}
+
+.page_storage .outbillPop .outbillPopFoot .popPrint p:last-child, .page_storage .outbillPop .outbillPopFoot .popAbort p:last-child {
+	margin-top: 12px;
+/ / margin-left: - 22 px;
+	text-align: center;
+}
+
+.page_storage .outbillPop .outbillPopFoot .popAbort p.outabort {
+	width: 45px;
+	height: 45px;
+	background-image: url(../images/storageRecord/popAbort.png);
+	background-size: 45px 45px;
+	
+	background-repeat: no-repeat;
+	margin: 0 auto;
+}
+
+.page_storage .outbillPop .outbillPopFoot .popAbort p.outdelete {
+	width: 45px;
+	height: 45px;
+	background-image: url(../images/storageRecord/popDelete.png);
+	background-size: 45px 45px;
+	background-repeat: no-repeat;
+	margin: 0 auto;
+}
+
+
+.page_storage .outbillPop .outbillPopFoot {
+	position: absolute;
+	width: 100%;
+	bottom: 10px;
+	padding-top: 20px;
+	text-align: center;
+}
+
+.page_storage .outbillPop .outbillPopFoot div {
+	display: inline-block;
+	height: 80px;
+	width: 70px;
+}
+
+.page_storage .outbillContent ul li div:last-child p {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	width: 0;
+	height: 0;
+	border: 8px solid #00B3EA;
+	border-top-color: transparent;
+	border-left-color: transparent;
+	display: none;
+	
+}
+
+.page_storage .outbillContent ul li div:last-child {
+	position: relative;
+	height: 40px;
+	overflow: hidden;
+	
+}
+
+.page_storage .outOpacity {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(0, 0, 0, .5);
+	display: none;
+}
+
+.page_storage .outOpacityPop {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(0, 0, 0, 0);
+	display: none;
+}
+
+#outgf, #intogf {
+	position: absolute;
+	width: 100%;
+	bottom: 9px;
+	height: 36px;
+}
+
+#outgf .pagerBox .leftbox, #intogf .pagerBox .leftbox {
+	line-height: 32px;
+}
+
+#outgf .pagerBox .centerBox ul, #intogf .pagerBox .centerBox ul {
+	padding: 0;
+}
+
+#outgf .pagerBox .centerBox ul li, #intogf .pagerBox .centerBox ul li {
+	width: 36px;
+	height: 36px;
+	line-height: 36px;
+}
+
+.page_storage .outbill .billSearchCondition,.page_storage .intobill .billSearchCondition {
+	height: 38px;
+	overflow: hidden;
+	margin-bottom: 16px;
+}
+.page_storage .outbill .billSearchCondition .form-wrapper,.page_storage .intobill .billSearchCondition .form-wrapper {
+    height: 38px;
+    float: left;
+    margin-right: 20px;
+}
+.page_storage .outbill .billSearchCondition .form-wrapper span,.page_storage .intobill .billSearchCondition .form-wrapper span {
+	float: left;
+    height: 38px;
+    line-height: 38px;
+    font-size: 12px;
+    color: #000;
+    width: 60px;
+    vertical-align: top;
+}
+.page_storage .outbill .billSearchCondition .form-wrapper .form-select,.page_storage .intobill .billSearchCondition .form-wrapper .form-select {
+    float: left;
+    width: 100px;
+    height: 38px;
+    border: 1px solid #bfbfbf;
+    border-radius: 3px;
+    padding: 0 12px 0 10px;
+    background: url(../images/storage/storage-arrow.png) no-repeat 85px center;
+    background-size: 6px 6px;
+    font-size: 12px;
+    line-height: 38px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}

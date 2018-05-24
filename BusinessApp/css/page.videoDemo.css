@@ -1,0 +1,10 @@
+.page-videoDemo #videoBox{
+	width: 100%;
+	padding: 0;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+.page-videoDemo video{
+	width: 100%;
+}

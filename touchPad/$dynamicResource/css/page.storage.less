@@ -1,0 +1,1086 @@
+.page_storage {
+	*,
+	&:after,
+	&:before {
+		box-sizing: border-box;
+		-webkit-box-sizing: border-box;
+	}
+	.clearfix:after {
+		content: ".";
+	    display: block;
+	    height: 0;
+	    visibility: hidden;
+	    clear: both;
+	}
+	input {
+		border: none;
+		background-color: transparent;
+	}
+	.nav {
+		height: 45px;
+		text-align: center;
+		border-bottom: 1px solid #ececec;
+		.item {
+			display: inline-block;
+			font-size: 14px;
+			color: #000;
+			height: 45px;
+			line-height: 45px;
+			padding: 0 28px;
+			text-align: center;
+			span {
+				display: inline-block;
+				height: 100%;
+			}
+			&.active {
+				span {
+					color: #e82742;
+					border-bottom: 4px solid #e82742;
+				}
+			}
+		}
+	}
+	.content {
+		position: absolute;
+		left: 0;
+		top: 45px;
+		right: 0;
+		bottom: 0;
+		.item {
+			position: absolute;
+			left: 0;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			padding: 16px 20px;
+			display: none;
+		}
+		.stock {
+			&.empty {
+				background: url(../images/search_tips.png) no-repeat center center;
+				background-size: 212px 247px;
+			}
+			.search-wrap {
+				height: 38px;
+				.search-wrapper {
+					width: 380px;
+					height: 38px;
+					border: 1px solid #ddd;
+					border-radius: 3px;
+					position: relative;
+					overflow: hidden;
+					float: left;
+					.scan {
+						position: absolute;
+						width: 28px;
+						height: 28px;
+						background: url(../images/storage/storage-scan.png);
+						background-size: 100% 100%;
+						left: 4px;
+						top: 4px;
+						&.am-clickable-active {
+							background-color: #f0f0f0;
+						}
+					}
+					.condition {
+						position: absolute;
+						height: 36px;
+						left: 36px;
+						width: 342px;
+						padding: 0 5px;
+						font-size: 14px;
+						outline: none;
+					}
+				}
+				.search {
+					display: block;
+					padding: 0 12px;
+					height: 38px;
+					background-color: #555;
+					font-size: 14px;
+					color: #fff;
+					text-align: center;
+					line-height: 38px;
+					float: left;
+					margin-left: 12px;
+					border-radius: 3px;
+					&.am-clickable-active {
+						background-color: #333;
+					}
+				}
+			}
+			.container-wrap {
+				margin-top: 16px;
+				position: absolute;
+				left: 20px;
+				right: 20px;
+				top: 54px;
+				bottom: 54px;
+				font-size: 0;
+				display: none;
+				overflow: hidden;
+				.tab {
+					vertical-align: top;
+				    width: 28px;
+				    height: 100%;
+				    overflow: hidden;
+				    float: left;
+				    li {
+				    	padding: 14px 8px;
+					    font-size: 12px;
+					    color: #fff;
+					    background-color: #555;
+					    border-radius: 3px 0 0 3px;
+					    margin-top: 3px;
+					    text-align: center;
+					    &.active {
+					    	background-color: #e82742;
+					    }
+				    }
+				}
+				.container {
+					height: 100%;
+					border-top: 1px solid #ececec;
+					border-radius: 3px;
+					margin-left: 28px;
+					position: relative;
+					.slip {
+						height: 41px;
+						font-size: 0;
+						overflow: hidden;
+						&>div {
+							display: inline-block;
+							border-right: 1px solid #ececec;
+							font-size: 14px;
+							color: #000;
+							padding: 0 5px;
+							line-height: 41px;
+							height: 41px;
+							overflow: hidden;
+						    white-space: nowrap;
+						    text-overflow: ellipsis;
+						    vertical-align: top;
+						    &:nth-child(1) {
+								width: 8%;
+							}
+							&:nth-child(2) {
+								width: 12%;
+							}
+							&:nth-child(3) {
+								width: 5%;
+							}
+							&:nth-child(4) {
+								width: 5%;
+							}
+							&:nth-child(5) {
+								width: 6%;
+							}
+							&:nth-child(6) {
+								width: 6%;
+								color: #f39800;
+							}
+							&:nth-child(7) {
+								width: 6%;
+								color: #f39800;
+							}
+							&:nth-child(8) {
+								width: 6%;
+								color: #e82742;
+							}
+							&:nth-child(9) {
+								width: 8%;
+							}
+							&:nth-child(10) {
+								width: 6%;
+								color: #7aca9e;
+							}
+							&:nth-child(11) {
+								width: 12%;
+							}
+							&:nth-child(12) {
+								width: 20%;
+								position: relative;
+								p {
+									max-width: 50%;
+									height: 100%;
+									float: left;
+									position: relative;
+									overflow: hidden;
+									span {
+										font-size: 12px;
+										color: #00b7ee;
+										display: block;
+										height: 16px;
+										line-height: 16px;
+										position: relative;
+										top: 50%;
+										margin-top: -8px;
+										padding-left: 20px;
+									}
+									&:first-child span {
+										background: url(../images/storage/storage-record.png) no-repeat left center;
+										background-size: 16px 16px;
+										// padding-right: 12px;
+									}
+									&:last-child span {
+										border-left: 1px solid #00b7ee;
+										background: url(../images/storage/storage-other.png) no-repeat 5px center;
+										background-size: 16px 16px;
+										padding-left: 25px;
+									}
+									&:first-child {
+										margin-right: 5px;
+									}
+								}
+								&.single {
+									p {
+										&:first-child span {
+											border-right: none;
+										}
+										&:last-child {
+											display: none;
+										}
+									}
+								}
+							}
+						}
+						&.header {
+							height: 32px;
+						}
+						&.header>div {
+							color: #999;
+							font-size: 12px;
+							height: 32px;
+							line-height: 32px;
+						}
+						&.hidePrice {
+							&>div {
+								&:nth-child(2) {
+									width: 18%;
+								}
+								&:nth-child(6) {
+									display: none;
+								}
+								&:nth-child(7) {
+									display: none;
+								}
+								&:nth-child(11) {
+									width: 18%;
+								}
+						 	}
+						}
+					}
+					.slip.header {
+						border-bottom: 1px solid #ececec;
+					}
+					.listScroll {
+						position: absolute;
+						width: 100%;
+						top: 32px;
+						bottom: 0;
+						overflow: hidden;
+					}
+					.list {
+						.slip:nth-child(2n+1) {
+							background-color: #f7f7f7;
+						}
+						.slip:last-child {
+							border-bottom: 1px solid #ececec;
+							border-radius: 0 0 3px 3px;
+						}
+						.slip.am-clickable-active {
+							background-color: #f0f0f0;
+						}
+					}
+				}
+			}
+			.page-wrap {
+				position: absolute;
+				width: 100%;
+				bottom: 9px;
+				height: 36px;
+				.pagerBox {
+					.leftbox {
+						line-height: 36px;
+					}
+					.centerBox {
+						ul {
+							padding: 0;
+							li {
+								width: 36px;
+								height: 36px;
+								line-height: 32px;
+							}
+						}
+						.inputBox {
+							color: #999;
+							input {
+								width: 62px;
+								height: 36px;
+								border: 1px solid #ddd;
+								margin: 0 5px;
+								border-radius: 36px;
+								padding: 0 16px;
+							}
+						}
+					}
+				}
+			}
+		}
+		.action {
+			.left {
+				//width: 490px;
+				//height: 100%;
+				float: left;
+				font-size: 0;
+				//display: none;
+			 
+			  	position: absolute;
+			  	left: 20px;
+			  	top:16px;
+			  	bottom: 16px;
+			  	right: 420px;
+				.tab {
+				  	position: absolute;
+					top: 0;
+					vertical-align: top;
+					width: 28px;
+					bottom: 0;
+					overflow: hidden;
+					ul {
+						li {
+							padding: 14px 8px;
+							font-size: 12px;
+							color: #fff;
+							background-color: #555;
+							border-radius: 3px 0 0 3px;
+							margin-top: 3px;
+							text-align: center;
+							&.active {
+								background-color: #e82742;
+							}
+						}
+					}
+				}
+				.container {
+				  	position: absolute;
+				  	left: 28px;
+				  	right: 0;
+				  	top: 0;
+				  	bottom: 0;
+					vertical-align: top;
+					overflow: hidden;
+					border-top: 1px solid #ececec;
+					border-radius: 3px;
+					.wrapper {
+						position: absolute;
+						left: 0;
+						right: 0;
+						top: 32px;
+						bottom: 0;
+						overflow: hidden;
+					}
+					.slip {
+						height: 41px;
+						font-size: 0;
+						border-left: 1px solid #ececec;
+						border-right: 1px solid #ececec;
+						&>div {
+							display: inline-block;
+							border-right: 1px solid #ececec;
+							font-size: 14px;
+							color: #000;
+							line-height: 41px;
+							height: 41px;
+							overflow: hidden;
+						    white-space: nowrap;
+						    text-overflow: ellipsis;
+						    padding: 0 12px;
+						    &:last-child {
+						    	border-right: 0;
+						    }
+						    &:nth-child(1) {
+								width: 15%;
+							}
+							&:nth-child(2) {
+							  	width: 40%;
+							}
+							&:nth-child(3) {
+							  	width: 15%;
+							}
+							&:nth-child(4) {
+							  	width: 15%;
+							}
+							&:nth-child(5) {
+							  	width: 15%;
+								color: #3bb372;
+							}
+						}
+						&.header {
+							height: 32px;
+							& > div {
+								color: #999;
+								border-bottom: 1px solid #ececec;
+								font-size: 12px;
+								height: 32px;
+								line-height: 32px;
+							}
+						}
+					}
+					.list {
+						.slip:nth-child(2n+1) {
+							background-color: #f7f7f7;
+						}
+						.slip:last-child {
+							border-bottom: 1px solid #ececec;
+							border-radius: 0 0 3px 3px;
+						}
+						.slip.am-clickable-active {
+							background-color: #f0f0f0;
+						}
+					}
+				}
+			}
+			.right {
+				display: none;
+				width: 385px;
+				height: 100%;
+				float: right;
+				position: relative;
+				.container {
+					position: absolute;
+					left: 0;
+					right: 0;
+					bottom: 60px;
+					top: 0;
+					background: url(../images/storage/storage-bill.png);
+					background-size: 100% 100%;
+					padding-top: 50px;
+					.title {
+						font-size: 20px;
+						color: #000;
+						text-align: center;
+						line-height: 24px;
+					}
+					.wrap {
+						position: absolute;
+						width: 348px;
+						top: 87px;
+						bottom: 140px;
+						left: 50%;
+						margin-left: -174px;
+						border: 1px solid #ececec;
+						overflow: hidden;
+						border-radius: 3px;
+						.wrapper {
+							position: absolute;
+							width: 100%;
+							top: 32px;
+							bottom: 41px;
+							overflow: hidden;
+						}
+						.slip {
+							height: 41px;
+							font-size: 0;
+							border-bottom: 1px solid #ececec;
+							&>div {
+								display: inline-block;
+								border-right: 1px solid #ececec;
+								font-size: 14px;
+								color: #000;
+								padding: 0 5px;
+								line-height: 40px;
+								height: 40px;
+								overflow: hidden;
+							    white-space: nowrap;
+							    text-overflow: ellipsis;
+							    vertical-align: top;
+							    &:nth-child(1) {
+									width: 116px;
+									padding: 0;
+									.del {
+										width: 30px;
+										height: 40px;
+										float: left;
+										text-align: center;
+										&::before {
+										    content: "";
+										    width: 20px;
+										    height: 20px;
+										    display: inline-block;
+										    background: url(../images/icons_sprite.png) no-repeat -25px -1187px;
+										    background-size: 105px 1443.5px;
+										    vertical-align: top;
+										    margin-top: 12px;
+										}
+									}
+									.name {
+										margin-left: 30px;
+										height: 40px;
+										overflow: hidden;
+									    white-space: nowrap;
+									    text-overflow: ellipsis;
+									    padding: 0 5px;
+									}
+								}
+								&:nth-child(2) {
+									width: 60px;
+								}
+								&:nth-child(3) {
+									width: 60px;
+								}
+								&:nth-child(4) {
+									width: 60px;
+									.actNumber {
+										display: inline-block;
+										width: 40px;
+										height: 34px;
+										line-height: 34px;
+										border-bottom: 1px solid #000;
+										vertical-align: top;
+										margin-top: 3px;
+										color: #e82742;
+										font-size: 14px;
+										overflow: hidden;
+										white-space: nowrap;
+										text-overflow: ellipsis;
+									}
+								}
+								&:nth-child(5){
+									width: 50px;
+									border-right: 0;
+									.actPrice {
+										display: inline-block;
+										width: 40px;
+										height: 34px;
+										line-height: 34px;
+										border-bottom: 1px solid #000;
+										vertical-align: top;
+										margin-top: 3px;
+										color: #e82742;
+										font-size: 14px;
+										color: #000;
+										overflow: hidden;
+										white-space: nowrap;
+										text-overflow: ellipsis;
+									}
+								}
+								&:last-child {
+									border-right: 0;
+								}
+							}
+							&.header {
+								height: 32px;
+							}
+							&.header>div {
+								height: 31px;
+								line-height: 31px;
+								color: #999;
+								font-size: 12px;
+								&:first-child {
+									padding: 0 5px;
+								}
+							}
+							&.hidePrice > div,&.hidePrice > li {
+								&:nth-child(1) {
+									width: 166px;
+								}
+								&:nth-child(4) {
+									border-right: 0;
+								}
+								&:nth-child(5) {
+									display: none;
+								}
+							}
+						}
+						.scan {
+							position: absolute;
+							left: 1px;
+							bottom: 0;
+							width: 100%;
+							.slip {
+								border-top: 1px solid #ececec;
+								border-bottom: none;
+								&>div {
+									width: 0;
+									&:nth-child(1) {
+										width: 100%;
+										color: #999;
+										text-align: left;
+										padding-left: 8px;
+										span {
+											display: inline-block;
+											width: 28px;
+											height: 28px;
+											background: url(../images/storage/storage-scan2.png);
+											background-size: 100% 100%;
+											vertical-align: top;
+											margin: 8px 10px 0 0;
+										}
+									}
+								}
+							}
+							&.am-clickable-active {
+								background-color: #f0f0f0;
+							}
+						}
+					}
+					.info {
+						position: absolute;
+						width: 336px;
+						bottom: 5px;
+						left: 50%;
+						margin-left: -168px;
+						font-size: 0;
+						span {
+							display: inline-block;
+							height: 24px;
+							line-height: 24px;
+							font-size: 12px;
+							color: #000;
+							width: 60px;
+							vertical-align: top;
+								b {
+									visibility: hidden;
+								}
+						}
+						.order-wrap {
+							width: 162px;
+							height: 24px;
+							margin-bottom: 16px;
+							.order {
+								display: inline-block;
+								width: 96px;
+								height: 24px;
+								border-bottom: 1px solid #bfbfbf;
+								font-size: 12px;
+								color: #e82742;
+								line-height: 24px;
+								padding: 0 5px;
+								border-radius: 0;
+							}
+						}
+						.form-wrap {
+							height: 24px;
+							margin-bottom: 16px;
+							.form-wrapper {
+								width: 156px;
+								height: 24px;
+								float: right;
+								display: none;
+								&:first-child {
+									float: left;
+									display: block;
+								}
+							 	.form-select {
+									display: inline-block;
+									width: 96px;
+									height: 24px;
+									border-bottom: 1px solid #bfbfbf;
+									padding: 0 5px;
+									background: url(../images/storage/storage-arrow.png) no-repeat 90px center;
+									background-size: 6px 6px;
+									font-size: 12px;
+									color: #e82742;
+									line-height: 24px;
+									overflow: hidden;
+									white-space: nowrap;
+								    text-overflow: ellipsis
+								}
+							}
+						}
+						.note-wrap {
+							height: 24px;
+							margin-bottom: 16px;
+							input {
+								display: inline-block;
+								width: 276px;
+								height: 24px;
+								border-bottom: 1px solid #bfbfbf;
+								font-size: 12px;
+								color: #e82742;
+								line-height: 24px;
+								padding: 0 10px;
+								border-radius: 0;
+							}
+						}
+					}
+				}
+				.smt {
+					position: absolute;
+					width: 100%;
+					bottom: 0;
+					left: 0;
+					height: 44px;
+					background-color: #e82742;
+					font-size: 16px;
+					color: #fff;
+					text-align: center;
+					line-height: 44px;
+					border-radius: 3px;
+					&.am-clickable-active {
+						background-color: #f00;
+					}
+				}
+			}
+			&.inventory {
+				.left {
+					right:535px;
+					.search-wrap {
+						height: 38px;
+						margin-bottom: 12px;
+						position: relative;
+						.search-wrapper {
+							position: absolute;
+							left: 0;
+							right: 64px;
+							height: 38px;
+							border: 1px solid #ddd;
+							border-radius: 3px;
+							overflow: hidden;
+							float: left;
+							.condition {
+								position: absolute;
+								height: 36px;
+								width: 100%;
+								left: 0;
+								top: 0;
+								padding: 0 5px 0 41px;
+								font-size: 14px;
+								outline: none;
+							}
+							.scan {
+								position: absolute;
+								width: 28px;
+								height: 28px;
+								background: url(../images/storage/storage-scan.png);
+								background-size: 100% 100%;
+								left: 4px;
+								top: 4px;
+								z-index: 2;
+								&.am-clickable-active {
+									background-color: #f0f0f0;
+								}
+							}	
+						}
+						.search {
+							display: block;
+							padding: 0 12px;
+							height: 38px;
+							background-color: #555;
+							font-size: 14px;
+							color: #fff;
+							text-align: center;
+							line-height: 38px;
+							float: right;
+							margin-left: 12px;
+							border-radius: 3px;
+							&.am-clickable-active {
+								background-color: #333;
+							}
+						}
+					}
+					.tab {
+						top: 50px;
+					}
+					.container {
+						top:50px;
+						.slip {
+							&>div {
+								padding: 0 5px;
+								&:nth-child(1) {
+									width: 15%;
+								}
+								&:nth-child(2) {
+									width: 40%;
+								}
+								&:nth-child(3) { 
+									width: 15%;
+								}
+								&:nth-child(4) {
+									width: 15%;
+								}
+								&:nth-child(5) {
+									width: 15%;
+									color: #000;
+								}
+							}
+							&.header>div {
+								color: #999;
+								border-bottom: 1px solid #ececec;
+							}
+						}
+					}
+				}
+				.right {
+					width: 500px;
+					.container {
+						.wrap {
+							position: absolute;
+							width: 444px;
+							top: 84px;
+							left: 50%;
+							margin-left: -222px;
+							bottom: 20px;
+							.wrapper {
+								position: absolute;
+								width: 100%;
+								top: 32px;
+								bottom: 0;
+								overflow: hidden;
+							}
+							.slip {
+								&>div {
+								    &:nth-child(1) {
+										width: 87px;
+										.order {
+											width: 56px;
+											float: right;
+											padding: 0 5px;
+										}
+									}
+									&:nth-child(2) {
+										width: 125px;
+									}
+									&:nth-child(3) {
+										width: 65px;
+									}
+									&:nth-child(4) {
+										width: 60px;
+									}
+									&:nth-child(5) {
+										width: 55px;
+										border-right: 1px solid #ececec;
+										.actNumber {
+											height: 34px;
+											line-height: 34px;
+											border-bottom: 1px solid #000;
+											vertical-align: top;
+											margin-top: 3px;
+											color: #e82742;
+											font-size: 14px;
+										}
+									}
+									&:nth-child(6) {
+										width: 50px;
+										&.more {
+											color: #3bb372;
+										}
+										&.less {
+											color: #e82742;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	.deepfresh {
+		position: absolute;
+		width: 32px;
+		height: 32px;
+		top: 6px;
+		right: 6px;
+		background: url(../images/refresh.png) no-repeat center center;
+		background-size: 32px 32px;
+		&.am-clickable-active {
+			background-color: #f0f0f0;
+		}
+	}	
+	.mask {
+		position: absolute;
+		left: 0;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		background-color: rgba(0,0,0,.2);
+		display: none;
+	}
+	.photo-and-barcode {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		right: -350px;
+		width: 350px;
+		background-color: #fff;
+		transition: 0.3s all ease;
+		-webkit-transition: 0.3s all ease;
+		&.active {
+			right: 0;
+		}
+		.wrap {
+			position: absolute;
+			width: 100%;
+			top: 50%;
+			transform: translateY(-50%);
+			-webkit-transform: translateY(-50%);
+			.name {
+				font-size: 16px;
+				color: #000;
+				text-align: center;
+				line-height: 24px;
+				font-weight: bold;
+				padding: 0 10px;
+			}
+			.order-wrap {
+				font-size: 12px;
+				color: #555;
+				text-align: center;
+				line-height: 20px;
+				margin-top: 12px;
+			}
+			.photo-wrap {
+				width: 210px;
+				height: 210px;
+				border: 1px solid #ececec;
+				margin: 40px auto 0;
+				background: url(../images/storage/storage-take-photo.png) no-repeat center center;
+				background-size: 65px 65px;
+				position: relative;
+				.photo {
+					position: absolute;
+					left: 0;
+					top: 0;
+					right: 0;
+					bottom: 0;
+					img {
+						max-width: 100%;
+						position: absolute;
+						left: 50%;
+						top: 50%;
+						transform: translate(-50%,-50%);
+						-webkit-transform: translate(-50%,-50%);
+					}
+				}
+				.take-photo {
+					position: absolute;
+					left: 0;
+					top: 0;
+					right: 0;
+					bottom: 0;
+					.edit-photo {
+						display: none;
+						position: absolute;
+						width: 32px;
+						height: 32px;
+						border-radius: 50%;
+						background: rgba(0, 0, 0, .35) url(../images/storage/storage-edit-barcode.png) no-repeat center center;
+						background-size: 12px 15px;
+						right: 5px;
+						bottom: 5px;
+					}
+				}
+			}
+			.barcode-wrapper {
+				margin-top: 45px;
+				&.no-barcode {
+					display: none;
+					.scan-wrap {
+						width: 244px;
+						height: 38px;
+						border: 1px solid #ececec;
+						border-radius: 3px;
+						margin: 0 auto;
+						position: relative;
+						overflow: hidden;
+						.left {
+							width: 170px;
+							height: 36px;
+							.scan-barcode {
+								position: absolute;
+							    width: 28px;
+							    height: 28px;
+							    background: url(../images/storage/storage-scan2.png);
+							    background-size: 100% 100%;
+							    left: 4px;
+							    top: 4px;
+							    &.am-clickable-active {
+							    	background-color: #f0f0f0;
+							    }
+							}
+							.scan-result {
+								position: absolute;
+								width: 134px;
+								height: 36px;
+								left: 36px;
+								text-align: center;
+							}
+						}
+						.smt-barcode {
+							position: absolute;
+							height: 36px;
+							width: 72px;
+							background-color: #555;
+							right: 0;
+							top: 0;
+						    font-size: 14px;
+						    color: #fff;
+						    text-align: center;
+						    line-height: 36px;
+						    &.am-clickable-active {
+						    	background-color: #333;
+						    }
+						}
+					}
+				}
+				&.has-barcode {
+					display: none;
+					.barcode-wrap {
+						font-size: 16px;
+						color: #000;
+						text-align: center;
+						line-height: 20px;
+						padding: 0 10px;
+					}
+					.edit-bar {
+						display: block;
+						width: 78px;
+						height: 28px;
+						border: 1px solid #bbb;
+						border-radius: 28px;
+						font-size: 12px;
+						color: #666;
+						padding-left: 35px;
+						line-height: 26px;
+						margin: 14px auto 0;
+						background: url(../images/storage/storage-edit-barcode.png) no-repeat 16px center;
+						background-size: 12px 15px;
+						&.am-clickable-active {
+							background-color: #f0f0f0;
+						}
+					}
+				}
+			}
+		}	
+	}
+	.select-wrap {
+		display: none;
+		position: fixed;
+		left: 0;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		z-index: 999;
+		.option-wrap {
+			position: absolute;
+			padding: 5px;
+			max-height: 125px;
+			border: 1px solid #bfbfbf;
+			border-radius: 3px;
+			overflow: hidden;
+			background-color: #fff;
+
+			ul {
+				li {
+					font-size: 12px;
+					line-height: 20px;
+					color: #000;
+					text-align: center;
+				}
+			}
+		}
+	}
+}

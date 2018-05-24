@@ -1,0 +1,115 @@
+#printContent {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  font-size: 16px;
+  color: #000;
+  z-index: 99;
+  padding: 0 30px 0 0;
+  display: none;
+  background-color: #fff;
+}
+#printContent .tenantName {
+  font-size: 32px;
+  text-align: center;
+}
+#printContent .tip {
+  text-align: center;
+}
+#printContent .wrap {
+  min-height: 24px;
+}
+#printContent .wrap .label {
+  width: 85px;
+  float: left;
+  line-height: 24px;
+}
+#printContent .wrap .text {
+  margin-left: 85px;
+  line-height: 24px;
+}
+#printContent .wrap.last {
+  border-bottom: 1px dashed #000;
+}
+#printContent .container .list .item {
+  font-size: 0;
+}
+#printContent .container .list p {
+  line-height: 24px;
+  display: inline-block;
+  vertical-align: top;
+  font-size: 16px;
+  color: #000;
+}
+#printContent .container .list .name {
+  width: 35%;
+  text-align: left;
+}
+#printContent .container .list .num {
+  width: 30%;
+  text-align: center;
+}
+#printContent .container .list .price {
+  width: 35%;
+  text-align: center;
+}
+#printContent .container .list li:last-child,
+#printContent .container .list .head {
+  border-bottom: 1px dashed #000;
+}
+#printContent .paytype {
+  line-height: 24px;
+}
+#printContent .paytype p:first-child {
+  border-top: 1px dashed #000;
+}
+#printContent .paytype p:last-child {
+  border-bottom: 1px dashed #000;
+}
+#printContent .total {
+  text-align: right;
+  height: 40px;
+  line-height: 40px;
+  border-top: 1px dashed #000;
+  border-bottom: 1px dashed #000;
+}
+#printContent .sign {
+  text-align: right;
+  line-height: 24px;
+  height: 24px;
+  padding: 20px 0;
+  border-top: 1px dashed #000;
+}
+#printContent .sign span {
+  display: inline-block;
+  vertical-align: top;
+  width: 100px;
+  border-bottom: 1px solid #000;
+  height: 23px;
+}
+#printContent .qrcode {
+  text-align: center;
+}
+#printContent .qrcode img {
+  width: 200px;
+  height: 200px;
+}
+#printContent .qrcode p {
+  line-height: 24px;
+}
+@media print {
+  @page {
+    size: auto;
+    margin: 0;
+    padding: 0;
+  }
+  .am-app {
+    display: none;
+  }
+  #printContent {
+    display: block;
+    font-size: 4mm;
+  }
+}

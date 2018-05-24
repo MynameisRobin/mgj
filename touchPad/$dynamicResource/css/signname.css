@@ -1,0 +1,224 @@
+/* 文字颜色 ***********************/
+/* c0* 为黑白灰色系 */
+.signname {
+  display: none;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 1;
+  background: #FFF;
+}
+.signname .header {
+  position: absolute;
+  left: auto;
+  right: 0;
+  top: 0;
+  bottom: auto;
+  font-size: 30px;
+  line-height: 80px;
+  padding: 0 20px;
+}
+.signname .container {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 50px;
+}
+.signname canvas {
+  width: 100%;
+  height: 100%;
+}
+.signname .btns {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: auto;
+  bottom: 0;
+  height: 50px;
+}
+.signname .btns .btn {
+  line-height: 50px;
+  text-align: center;
+  float: left;
+  background: #e82742;
+  color: #FFF;
+  font-size: 16px;
+}
+.signname .btns .btn.ok {
+  width: 50%;
+}
+.signname .btns .btn.ok.am-clickable-active {
+  background: #c90e28;
+}
+.signname .btns .btn.clearCanvas {
+  width: 20%;
+  background: #595959;
+}
+.signname .btns .btn.clearCanvas.am-clickable-active {
+  background: #282828;
+}
+.signname .btns .btn.cancel {
+  width: 30%;
+  background: #282828;
+}
+.signname .btns .btn.cancel.am-clickable-active {
+  background: #282828;
+}
+.commentService {
+  display: none;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 1;
+  background: #ffffff;
+}
+.commentService .comment_wrap {
+  width: 700px;
+  height: 600px;
+  background-color: #FFF;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  border-radius: 8px;
+}
+.commentService .comment_wrap .wrap_header {
+  line-height: 50px;
+  text-align: center;
+  font-size: 0px;
+  margin-bottom: 100px;
+}
+.commentService .comment_wrap .wrap_header .header_title {
+  font-size: 33px;
+  color: #333333;
+  width: 100%;
+  text-align: center;
+}
+.commentService .comment_wrap .wrap_header .header_tips {
+  font-size: 16px;
+  color: #999999;
+}
+.commentService .comment_wrap .wrap_body {
+  font-size: 0px;
+  margin: 20px 0;
+}
+.commentService .comment_wrap .wrap_body .label,
+.commentService .comment_wrap .wrap_body .comment_val {
+  line-height: 32px;
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 14px;
+  margin-right: 20px;
+}
+.commentService .comment_wrap .wrap_body .comment_val .val {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 100px;
+}
+.commentService .comment_wrap .wrap_body .comment_val .val.c {
+  margin-right: 0;
+}
+.commentService .comment_wrap .wrap_body .comment_val .val.selected .icon_wrap {
+  background-color: #ffbd3e;
+}
+.commentService .comment_wrap .wrap_body .comment_val .val.selected .icon_wrap i {
+  color: #fff;
+}
+.commentService .comment_wrap .wrap_body .comment_val .val .icon_wrap {
+  width: 140px;
+  height: 140px;
+  line-height: 140px;
+  border-radius: 50%;
+  background-color: #f6f6f6;
+}
+.commentService .comment_wrap .wrap_body .comment_val .val .icon_wrap i {
+  font-size: 90px;
+  width: 96px;
+  height: 96px;
+  color: #ffbd3e;
+}
+.commentService .comment_wrap .wrap_body .comment_val .val p {
+  font-size: 16px;
+  color: #333333;
+  margin-top: 10px;
+}
+.commentService .comment_wrap .wrap_footer {
+  margin-top: 110px;
+  font-size: 0px;
+}
+.commentService .comment_wrap .wrap_footer .cancel_comment {
+  height: 45px;
+  line-height: 45px;
+  text-align: center;
+  color: #999999;
+  background: #FFF;
+  width: 200px;
+  border-radius: 5px;
+  font-size: 18px;
+  border: 1px solid #f2f2f2;
+  margin: 0 auto;
+}
+.commentService .commentConfirm {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: none;
+}
+.commentService .commentConfirm .content {
+  width: 300px;
+  padding-bottom: 30px;
+  background: #ffffff;
+  border-radius: 4px;
+  position: absolute;
+  left: 50%;
+  right: auto;
+  top: 50%;
+  bottom: auto;
+  margin: -100px 0 0 -150px;
+}
+.commentService .commentConfirm .content .commentSuccess {
+  padding-top: 30px;
+}
+.commentService .commentConfirm .content .commentSuccess .icon {
+  width: 50px;
+  height: 50px;
+  position: relative;
+  background: #58d56d;
+  border-radius: 25px;
+  margin: 0 auto;
+}
+.commentService .commentConfirm .content .commentSuccess .icon::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  right: auto;
+  top: 50%;
+  bottom: auto;
+  margin: -10px 0 0 -15px;
+  width: 30px;
+  height: 20px;
+  background: url("../images/icons_sprite.png") no-repeat 0px -1099px;
+  background-size: 105px 1443.5px;
+}
+.commentService .commentConfirm .content .commentSuccess .text {
+  text-align: center;
+  line-height: 30px;
+}
+.commentService .commentConfirm .content .commentSuccess .text strong {
+  font-size: 16px;
+  padding: 0 5px;
+}
+.commentService .commentConfirm .content .commentSuccess .tip {
+  text-align: center;
+  font-size: 12px;
+  color: #999999;
+}

@@ -1,0 +1,405 @@
+/* CSS Document */
+
+.page_archiveList .class-fullcenter {
+	top: 44px;
+	background-color: #FFF;
+	z-index: 1;
+	bottom: 46px;
+}
+.ios .page_archiveList .class-fullcenter{
+	top: 64px;
+	bottom: 46px;
+}
+/*.page_archiveList .class-fullcenter.am-page-loading{
+	top:44px;
+}*/
+
+.page_archiveDetail .class-fullcenter {
+	top: 44px;
+	z-index: 1;
+}
+.ios .page_archiveDetail .class-fullcenter{
+	top: 64px;
+}
+
+.page_archiveList .am-page-empty span {
+	background: url("img/MYK/archive_empty.png") no-repeat center center;
+	background-size: 150px 150px;
+	height: 150px;
+	width:150px;
+	display: block;
+}
+.page_archiveList .am-page-empty.listEmpty,.page_archiveList .am-page-error.listError{
+	top:153px;
+}
+.ios .page_archiveList .am-page-empty.listEmpty,.page_archiveList .am-page-error.listError{
+	top:175px;
+}
+
+.createArchive{
+	background: url("img/icon-camera.png") no-repeat center center;
+	background-size: 32px 32px;
+}
+
+.mainTypeContainer {
+	background: #fff;
+	height: 109px;
+	border-bottom: 1px solid #E5E5E5;
+}
+.mainTypeContainer .arrow_right {
+	float: right;
+	width: 20px;
+	height: 90px;
+	background: url(img/MYK/messageArrow.png) no-repeat center center;
+	background-size: 5px 10px;
+	display: none;
+}
+.mainTypeContainer.arrow .arrow_right {
+	display: block;
+}
+.mainTypeContainer.arrow .mainTypeTab {
+	overflow: hidden;
+}
+.mainTypeContainer  > .subMenuText {
+	height: 18px;
+	line-height: 18px;
+	background: #f5f5f5;
+	font-size: 10px;
+	text-align: center;
+	color: #8c8b8b;
+}
+.mainTypeTab {
+	height: 90px;
+	border-bottom: 1px solid #E5E5E5;
+}
+.mainTypeTab .mainTypeTab_inner {
+	float: left;
+}
+.mainTypeTab ul {
+	display: -webkit-box;
+	-webkit-box-orient: horizontal;
+	height: 90px;
+	font-size: 12px;
+	position: relative;
+}
+.mainTypeTab li {
+	width: 64px;
+	-webkit-box-flex: 1;
+	text-align: center;
+	white-space: nowrap;
+	padding: 0px;
+	margin: 0 3px;
+	color: #222222;
+}
+.mainTypeTab li > .icon {
+	width: 52px;
+	height: 53px;
+	background: url(img/MYK/archive_type_1.png) no-repeat center center;
+	background-size: 52px 53px;
+	margin: 0px auto 0 auto;
+	padding-top: 10px;
+}
+.mainTypeTab li > .icon2 {
+	background-image: url(img/MYK/archive_type_2.png);
+}
+.mainTypeTab li > .icon3 {
+	background-image: url(img/MYK/archive_type_3.png);
+}
+.mainTypeTab li > .icon4 {
+	background-image: url(img/MYK/archive_type_4.png);
+}
+.mainTypeTab li > .icon5 {
+	background-image: url(img/MYK/archive_type_5.png);
+}
+.mainTypeTab li > .icon6 {
+	background-image: url(img/MYK/archive_type_6.png);
+}
+.mainTypeTab li.selected {
+	height: 87px;
+	border-bottom: 3px solid #2dbd84;
+}
+.mainTypeTab li.selected2 {
+	background-color: #F8F8F8;
+}
+
+.secTypeContainer {
+	padding: 0;
+	position: absolute;
+	left: 0;
+	right: 0;
+	z-index: 9;
+	display: none;
+}
+.secTypeContainer > .arrow {
+	position: absolute;
+	top: 7px;
+	left: 30px;
+	width: 7px;
+	height: 4px;
+	background: url(img/MYK/secTypeArrow.png) no-repeat center center;
+	background-size: 7px 4px;
+}
+
+.archiveList_tab {
+	line-height: 40px;
+	padding: 4px 10px;
+	background: rgba(255, 255, 255, 0.95);
+	border-radius: 2px;
+	box-shadow: 0 2px 5px rgba(125,125,125,0.5)
+}
+.archiveList_tab > span {
+	display: inline-block;
+	padding: 0 13px;
+	border-radius: 15px;
+	font-size: 12px;
+	line-height: 30px;
+	margin-right: 10px;
+	background-color: #fce4f1;
+	color: #e768af;
+}
+.archiveList_tab > span .small {
+	font-size: 12px;
+}
+
+.archiveList_tab > span.selected, .archiveList_tab > span.am-clickable-active {
+	background-color: #e768af;
+	color: #fff;
+}
+
+.archiveList {
+	background: #FFF;
+}
+.archiveList > ul > li {
+	padding: 10px 10px;
+	border-bottom: #ededed 1px solid;
+}
+.archiveList > ul > li.empty {
+	text-align: center;
+	line-height: 50px;
+	color: #666;
+	border-bottom: none;
+}
+.archiveList .mykVisible{
+	font-size: 10px;
+	color: #bbbbbb;
+	position: absolute;
+	right:0;
+	top:0;
+}
+.archiveList .userHeader {
+	height: 42px;
+	width: 42px;
+	float: left;
+	background-image: url(img/MYK/head_male.png);
+	background-size: contain;
+	overflow: hidden;
+	border-radius: 42px;
+}
+.archiveList .userHeader img {
+	border-radius: 42px;
+	width:100%;
+}
+.archiveList .userHeader .headText {
+	padding: 7px;
+	font-size: 12px;
+	text-align: center;
+	line-height: 16px;
+	color: #999;
+}
+.archiveList .rightContent {
+	margin: 0 0 0 50px;
+	position: relative
+}
+
+.archiveList .userName {
+	font-size: 14px;
+	color: #222222;
+	line-height: 22px;
+}
+.archiveList .userName > .type {
+	font-size: 12px;
+	color: #999;
+	margin-left: 5px;
+}
+
+.archiveList .line2 {
+	padding-bottom: 10px;
+}
+.archiveList .line2 .postTime {
+	padding-left: 5px;
+	font-size: 10px;
+	color: #bbbbbb;
+}
+.archiveList .line2 .store {
+	background: url(img/MYK/storePos.png) no-repeat center left;
+	background-size: 8px 10px;
+	padding-left: 16px;
+	font-size: 10px;
+	color: #bbbbbb;
+	max-width: 75px;
+	height: 30px;
+	overflow: hidden;
+}
+
+.archiveList .text {
+	font-size: 14px;
+	color: #222222;
+	line-height: 20px;
+	margin-bottom: 10px;
+}
+.archiveList .price {
+	font-size: 10px;
+	color: #fff;
+	background: #2dbd84;
+	line-height: 14px;
+	border-radius: 14px;
+	display: inline-block;
+	padding: 0 7px;
+	float: right;
+}
+
+.archiveList .photos {
+	margin-bottom: 10px;
+	margin-right: -5px;
+}
+.archiveList .photos li {
+	display: inline-block;
+	height: 80px;
+	width: 80px;
+	overflow: hidden;
+	background: #EEE;
+	padding: 0;
+	margin: 0 5px 2px 0;
+}
+.archiveList .photos.onlyOne li {
+	float: none;
+	width: 162px;
+	height: 162px;
+}
+
+.archiveList .photos li img {
+	width: 100%;
+	display: block;
+	/*height: 100%;*/
+}
+.archiveList .actions {
+	font-size: 12px;
+	color: #aaa;
+	line-height: 21px;
+	position: relative;
+	margin-bottom: 10px;
+}
+.archiveList .commentsList {
+	background: #f4f4f4;
+	padding: 5px 10px;
+	color: #999999;
+	font-size: 12px;
+}
+.archiveList .commentsList > p {
+	margin: 5px 0;
+}
+.archiveList .commentsList .name {
+	color: #222;
+}
+.archiveList .commentsList .del {
+	margin-left: 10px;
+	color: #195693;
+}
+.archiveList .actions .left span {
+	line-height: 23px;
+	display: inline-block;
+	padding: 0 8px 0 22px;
+	text-align: center;
+	color: #b3b3b3;
+}
+.archiveList .actions .left span.like {
+	background: url(img/MYK/action3.png) no-repeat 3px center;
+	background-size: 14px 16px;
+}
+.archiveList .actions .left span.share {
+	background: url(img/MYK/action4.png) no-repeat 3px center;
+	background-size: 12px 15px;
+}
+.archiveList .actions .right {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+}
+.archiveList .actions .right span {
+	line-height: 21px;
+	display: inline-block;
+	padding: 0 8px 0 22px;
+	text-align: center;
+	border: #b3b3b3 1px solid;
+	border-radius: 21px;
+	color: #b3b3b3;
+}
+.archiveList .actions .right span.comment {
+	background: url(img/MYK/action1.png) no-repeat 8px center;
+	background-size: 9px 11px;
+}
+.archiveList .actions .right span.complain {
+	padding: 0 8px 0 8px;
+	border: none;
+}
+.archiveList .actions .right span.reseration {
+	background: url(img/MYK/action2.png) no-repeat 8px center;
+	border: #e766ad 1px solid;
+	color: #e766ad;
+	background-size: 12px 12px;
+}
+.archiveList .actions .right span.am-clickable-active {
+	background-color: #eee;
+}
+
+.page_archiveCommentAdd .page_textarea {
+	padding: 10px;
+	background-color: #FFF;
+	border-bottom: #e5e5e5 1px solid;
+	margin-bottom: 10px;
+}
+.archiveList .actions.audit .right{
+    display: none;
+}
+.archiveList .actions.audit .left .share{
+    display: none;
+}
+.page_archiveCommentAdd .page_textarea textarea {
+	height: 150px;
+}
+.page_archiveCommentAdd .page_button {
+	display: block;
+	margin: 0 20px;
+}
+
+.page_archiveList .archiveFilter{
+	height: 46px;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right:0;
+}
+.page_archiveList .archiveFilterUl{
+	height: 46px;
+    background: #3b465f;
+	display: -webkit-box;
+	-webkit-box-orient: horizontal;
+}
+.page_archiveList .archiveFilter li{
+	-webkit-box-flex: 1;
+	text-align: center;
+	color: #FFF;
+	line-height: 46px;
+}
+.page_archiveList .archiveFilter li::before{
+	content: "";
+	display: inline;
+	background: url("img/invention_all.png") no-repeat center center;
+	background-size: 30px 30px;
+	padding: 0 15px;
+	font-size: 18px;
+	line-height: 46px;
+}
+.page_archiveList .archiveFilter li.selected{
+	background-color: #2dbd84;
+}

@@ -1,0 +1,619 @@
+.page-msg .am-body-wrap *,
+.page-msg .am-body-wrap:after,
+.page-msg .am-body-wrap:before {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+.page-msg .am-body-wrap .clearfix:after {
+  content: ".";
+  display: block;
+  height: 0;
+  visibility: hidden;
+  clear: both;
+}
+.page-msg .am-body-wrap input {
+  border: none;
+  background-color: transparent;
+}
+.page-msg.page-msg-detail {
+  background-color: #f6f6f6;
+}
+.page-msg.page-msg-detail .wrap {
+  background-color: #fff;
+  padding: 10px 96px 10px 12px;
+  border-bottom: 1px solid #efefef;
+  position: relative;
+}
+.page-msg.page-msg-detail .wrap:last-child {
+  border-bottom: none;
+}
+.page-msg.page-msg-detail .wrap .content .top,
+.page-msg.page-msg-detail .wrap .content .bottom {
+  height: 20px;
+}
+.page-msg.page-msg-detail .wrap .content .top p {
+  font-size: 15px;
+  color: #222;
+  font-weight: bold;
+}
+.page-msg.page-msg-detail .wrap .content .top p.warn {
+  color: #ef223a;
+}
+.page-msg.page-msg-detail .wrap .content .top p:first-child {
+  height: 40px;
+  line-height: 40px;
+  font-size: 16px;
+}
+.page-msg.page-msg-detail .wrap .content .bottom p {
+  font-size: 12px;
+  color: #999;
+}
+.page-msg.page-msg-detail .wrap .content .bottom p.wran {
+  color: #ef223a;
+}
+.page-msg.page-msg-detail .wrap .content p {
+  line-height: 20px;
+  height: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.page-msg.page-msg-detail .wrap .content p:first-child {
+  width: 70%;
+  float: left;
+}
+.page-msg.page-msg-detail .wrap .content p:last-child {
+  width: 30%;
+  float: right;
+  text-align: right;
+}
+.page-msg.page-msg-detail .wrap .btn,
+.page-msg.page-msg-detail .wrap .toRecharge {
+  position: absolute;
+  width: 36px;
+  height: 28px;
+  border-radius: 3px;
+  font-size: 12px;
+  color: #fff;
+  text-align: center;
+  line-height: 28px;
+  top: 50%;
+  margin-top: -14px;
+  right: 54px;
+}
+.page-msg.page-msg-detail .wrap .btn {
+  border: 1px solid #45c28e;
+  color: #45c28e;
+}
+.page-msg.page-msg-detail .wrap .btn.disabled {
+  border: 1px solid #e5e5e5;
+  color: #e5e5e5;
+}
+.page-msg.page-msg-detail .wrap .toRecharge {
+  background-color: #45c28e;
+  right: 12px;
+}
+.page-msg.page-msg-detail .wrap .toRecharge.disabled {
+  background-color: #e5e5e5;
+}
+.page-msg.page-msg-detail .wrap .parent-shop {
+  position: absolute;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #45c28e url(../css/img/parent.png) no-repeat center center;
+  background-size: 19px 17px;
+  top: 50%;
+  margin-top: -17px;
+  left: 12px;
+}
+.page-msg.page-msg-detail .parent {
+  margin-bottom: 10px;
+}
+.page-msg.page-msg-detail .parent .wrap {
+  padding: 10px 96px 10px 58px;
+}
+.page-msg.page-msg-detail .parent .wrap.single {
+  padding: 10px 60px 10px 58px;
+}
+.page-msg.page-msg-detail .parent .wrap.single .btn {
+  display: none;
+}
+.page-msg.page-msg-charge .am-header .right {
+  width: auto;
+  padding: 0 12px;
+}
+.page-msg.page-msg-charge .wrap {
+  padding: 10px 50px 10px 12px;
+  border-bottom: 1px solid #efefef;
+  position: relative;
+  display: none;
+}
+.page-msg.page-msg-charge .wrap.no-select {
+  padding: 10px 12px;
+}
+.page-msg.page-msg-charge .wrap.no-select .arrow {
+  display: none;
+}
+.page-msg.page-msg-charge .wrap .content .top,
+.page-msg.page-msg-charge .wrap .content .bottom {
+  height: 20px;
+}
+.page-msg.page-msg-charge .wrap .content .top p {
+  font-size: 15px;
+  color: #222;
+  font-weight: bold;
+}
+.page-msg.page-msg-charge .wrap .content .top p.warn {
+  color: #ef223a;
+}
+.page-msg.page-msg-charge .wrap .content .top p:first-child {
+  height: 40px;
+  line-height: 40px;
+  font-size: 16px;
+}
+.page-msg.page-msg-charge .wrap .content .bottom p {
+  font-size: 12px;
+  color: #999;
+}
+.page-msg.page-msg-charge .wrap .content p {
+  line-height: 20px;
+  height: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.page-msg.page-msg-charge .wrap .content p:first-child {
+  width: 70%;
+  float: left;
+}
+.page-msg.page-msg-charge .wrap .content p:last-child {
+  width: 25%;
+  float: right;
+  text-align: right;
+}
+.page-msg.page-msg-charge .wrap .arrow {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border: 1px solid #efefef;
+  border-radius: 50%;
+  background: url(../css/img/msgDown.png) no-repeat center center;
+  background-size: 10px 6px;
+  top: 50%;
+  right: 12px;
+  margin-top: -12px;
+}
+.page-msg.page-msg-charge .charge-title {
+  font-size: 12px;
+  color: #aaa;
+  line-height: 42px;
+  height: 42px;
+  overflow: hidden;
+  padding: 0 12px;
+}
+.page-msg.page-msg-charge .list {
+  padding: 0 6px;
+  display: none;
+}
+.page-msg.page-msg-charge .list li {
+  width: 33.33%;
+  height: 60px;
+  float: left;
+  padding: 6px;
+}
+.page-msg.page-msg-charge .list li .item {
+  height: 100%;
+  border: 1px solid #eaeaea;
+  border-radius: 5px;
+  position: relative;
+}
+.page-msg.page-msg-charge .list li .item .content {
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+}
+.page-msg.page-msg-charge .list li .item .content p {
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.page-msg.page-msg-charge .list li .item .content p:first {
+  font-size: 18px;
+  line-height: 24px;
+  height: 24px;
+  color: #222;
+}
+.page-msg.page-msg-charge .list li .item .content p:last-child {
+  font-size: 12px;
+  color: #666;
+  line-height: 18px;
+  height: 18px;
+}
+.page-msg.page-msg-charge .list li .item .sepcial {
+  position: absolute;
+  width: 60px;
+  height: 20px;
+  font-size: 10px;
+  color: #fff;
+  text-align: center;
+  line-height: 20px;
+  background-color: #ef223a;
+  border-radius: 28px;
+  top: -10px;
+  right: 4px;
+  display: none;
+}
+.page-msg.page-msg-charge .list li .item .sepcial:after {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: #ef223a;
+  left: 18px;
+  top: 12px;
+  transform: skew(-55deg) rotate(-20deg);
+  -webkit-transform: skew(-45deg) rotate(-20deg);
+  z-index: -1;
+}
+.page-msg.page-msg-charge .list li.active .item {
+  border: 1px solid #2dbd84;
+}
+.page-msg.page-msg-charge .list li.active .item .content p {
+  color: #2dbd84;
+}
+.page-msg.page-msg-charge .list li.active .item:after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 15px;
+  border-radius: 50%;
+  background: #2dbd84 url(../css/img/msgSelected.png) no-repeat center center;
+  background-size: 8px 6px;
+  right: 3px;
+  bottom: 3px;
+}
+.page-msg.page-msg-charge .list li.sales .item .sepcial {
+  display: block;
+}
+.page-msg.page-msg-charge .charge {
+  position: absolute;
+  width: 100%;
+  height: 44px;
+  bottom: 0;
+  background-color: #bbb;
+  font-size: 16px;
+  color: #fff;
+  text-align: center;
+  line-height: 44px;
+}
+.page-msg.page-msg-charge .charge .icon {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  top: 7px;
+  left: 12px;
+  background: url(../css/img/msgPay.png);
+  background-size: 100% 100%;
+  opacity: 0.5;
+}
+.page-msg.page-msg-charge .charge.active {
+  background-color: #2dbd84;
+}
+.page-msg.page-msg-charge .charge.active .icon {
+  opacity: 1;
+}
+.page-msg.page-msg-record .am-header .right {
+  width: auto;
+  padding: 0 20px 0 12px;
+  max-width: 30%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  right: 10px;
+  background: url(img/c_storeSelect_arrow-s.png) no-repeat right center;
+  background-size: 10px 6px;
+}
+.page-msg.page-msg-record .am-header .right.up {
+  background-image: url(img/c_storeSelect_arrow.png);
+}
+.page-msg.page-msg-record .list li {
+  padding: 10px 5px;
+  border-bottom: 1px solid #efefef;
+}
+.page-msg.page-msg-record .list li .left {
+  width: 34px;
+  height: 34px;
+  font-size: 10px;
+  color: #fff;
+  text-align: center;
+  line-height: 34px;
+  border-radius: 50%;
+  float: left;
+  margin-top: 3px;
+  background-color: #f00;
+}
+.page-msg.page-msg-record .list li.charge .left,
+.page-msg.page-msg-record .list li.transIn .left {
+  background-color: #45c28e;
+}
+.page-msg.page-msg-record .list li.charge .right .top p:last-child,
+.page-msg.page-msg-record .list li.transIn .right .top p:last-child {
+  color: #45c28e;
+}
+.page-msg.page-msg-record .list li.transOut .left {
+  background-color: #ef223a;
+}
+.page-msg.page-msg-record .list li.transOut .right .top p:last-child {
+  color: #ef223a;
+}
+.page-msg.page-msg-record .list li .right {
+  margin-left: 39px;
+}
+.page-msg.page-msg-record .list li .right .top,
+.page-msg.page-msg-record .list li .right .bottom {
+  height: 20px;
+  overflow: hidden;
+}
+.page-msg.page-msg-record .list li .right .top p {
+  font-size: 15px;
+  color: #222;
+  font-weight: bold;
+}
+.page-msg.page-msg-record .list li .right .top p:first-child {
+  width: 70%;
+}
+.page-msg.page-msg-record .list li .right .top p:last-child {
+  width: 25%;
+}
+.page-msg.page-msg-record .list li .right .bottom p {
+  font-size: 12px;
+  color: #999;
+}
+.page-msg.page-msg-record .list li .right .bottom p:first-child {
+  width: 50%;
+}
+.page-msg.page-msg-record .list li .right .bottom p:last-child {
+  width: 50%;
+}
+.page-msg.page-msg-record .list li .right p {
+  line-height: 20px;
+  height: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.page-msg.page-msg-record .list li .right p:first-child {
+  float: left;
+}
+.page-msg.page-msg-record .list li .right p:last-child {
+  float: right;
+  text-align: right;
+}
+.page-msg.page-msg-record .empty {
+  position: absolute;
+  width: 100%;
+  font-size: 12px;
+  line-height: 20px;
+  text-align: center;
+  top: 50%;
+  transfrom: translateY(-50%);
+  -webkit-transfrom: translateY(-50%);
+  display: none;
+}
+.page-msg.page-msg-trans {
+  background-color: #f6f6f6;
+}
+.page-msg.page-msg-trans .trans-title {
+  font-size: 12px;
+  color: #222;
+  padding: 0 12px;
+  line-height: 30px;
+  height: 30px;
+}
+.page-msg.page-msg-trans .wrap {
+  padding: 10px 50px 10px 12px;
+  position: relative;
+  background-color: #fff;
+}
+.page-msg.page-msg-trans .wrap.no-select {
+  padding: 10px 12px;
+}
+.page-msg.page-msg-trans .wrap.no-select .arrow {
+  display: none;
+}
+.page-msg.page-msg-trans .wrap .content {
+  height: 40px;
+  position: relative;
+}
+.page-msg.page-msg-trans .wrap .content .top,
+.page-msg.page-msg-trans .wrap .content .bottom {
+  height: 20px;
+}
+.page-msg.page-msg-trans .wrap .content .top p {
+  font-size: 15px;
+  color: #222;
+  font-weight: bold;
+}
+.page-msg.page-msg-trans .wrap .content .top p.warn {
+  color: #ef223a;
+}
+.page-msg.page-msg-trans .wrap .content .top p:first-child {
+  height: 40px;
+  line-height: 40px;
+  font-size: 16px;
+}
+.page-msg.page-msg-trans .wrap .content .bottom p {
+  font-size: 12px;
+  color: #999;
+}
+.page-msg.page-msg-trans .wrap .content p {
+  line-height: 20px;
+  height: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.page-msg.page-msg-trans .wrap .content p:first-child {
+  width: 70%;
+  float: left;
+}
+.page-msg.page-msg-trans .wrap .content p:last-child {
+  width: 25%;
+  float: right;
+  text-align: right;
+}
+.page-msg.page-msg-trans .wrap .content .placeholder {
+  position: absolute;
+  width: 100%;
+  height: 40px;
+  font-size: 15px;
+  color: #bbb;
+  line-height: 40px;
+  top: 0;
+  left: 0;
+}
+.page-msg.page-msg-trans .wrap .arrow {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border: 1px solid #efefef;
+  border-radius: 50%;
+  background: url(../css/img/msgDown.png) no-repeat center center;
+  background-size: 10px 6px;
+  top: 50%;
+  right: 12px;
+  margin-top: -12px;
+}
+.page-msg.page-msg-trans .transnum {
+  display: block;
+  width: 224px;
+  height: 52px;
+  border: 1px solid #e5e5e5;
+  border-radius: 3px;
+  font-size: 24px;
+  color: #222;
+  line-height: 50px;
+  text-align: center;
+  margin: 30px auto;
+}
+.page-msg.page-msg-trans .transnum::-webkit-input-placeholder {
+  color: #bbb;
+}
+.page-msg.page-msg-trans .transnum:focus::-webkit-input-placeholder {
+  opacity: 0;
+}
+.page-msg.page-msg-trans .trans {
+  position: absolute;
+  width: 100%;
+  height: 44px;
+  bottom: 0;
+  font-size: 16px;
+  color: #fff;
+  text-align: center;
+  line-height: 44px;
+  background-color: #2dbd84;
+}
+.page-msg .promotion {
+  background-color: #f6f6f6;
+  height: 40px;
+  padding: 0 12px 0 40px;
+  position: relative;
+  display: none;
+}
+.page-msg .promotion span {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background-color: #ef223a;
+  border-radius: 50%;
+  font-size: 10px;
+  color: #fff;
+  text-align: center;
+  line-height: 16px;
+  left: 12px;
+  top: 12px;
+}
+.page-msg .promotion p {
+  font-size: 12px;
+  color: #ef223a;
+  line-height: 40px;
+  height: 40px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#msgSelectShop {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  display: none;
+}
+#msgSelectShop .mask {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+}
+#msgSelectShop .container {
+  position: absolute;
+  width: 100%;
+  overflow: hidden;
+  background-color: #fff;
+  border-top: 1px solid #efefef;
+  border-bottom: 1px solid #efefef;
+  box-shadow: 0 0 24px rgba(0, 0, 0, 0.3);
+}
+#msgSelectShop .container .wrap {
+  padding: 10px 12px 10px 12px;
+  border-bottom: 1px solid #efefef;
+  position: relative;
+  background-color: #fff;
+}
+#msgSelectShop .container .wrap:last-child {
+  border-bottom: none;
+}
+#msgSelectShop .container .wrap .content .top,
+#msgSelectShop .container .wrap .content .bottom {
+  height: 20px;
+}
+#msgSelectShop .container .wrap .content .top p {
+  font-size: 15px;
+  color: #222;
+  font-weight: bold;
+}
+#msgSelectShop .container .wrap .content .top p.warn {
+  color: #ef223a;
+}
+#msgSelectShop .container .wrap .content .top p:first-child {
+  height: 40px;
+  line-height: 40px;
+  font-size: 16px;
+}
+#msgSelectShop .container .wrap .content .bottom p {
+  font-size: 12px;
+  color: #999;
+}
+#msgSelectShop .container .wrap .content p {
+  line-height: 20px;
+  height: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#msgSelectShop .container .wrap .content p:first-child {
+  width: 70%;
+  float: left;
+}
+#msgSelectShop .container .wrap .content p:last-child {
+  width: 25%;
+  float: right;
+  text-align: right;
+}

@@ -1,0 +1,222 @@
+.page-setEmpGoal .am-body-wrap {
+  background: #F7F7F7;
+}
+.page-setEmpGoal .am-body-wrap .goal_owner {
+  height: 60px;
+  background: #FFFFFF;
+  position: relative;
+}
+.page-setEmpGoal .am-body-wrap .goal_owner .owner_left {
+  height: 60px;
+  line-height: 60px;
+  font-size: 0;
+  margin-right: 80px;
+}
+.page-setEmpGoal .am-body-wrap .goal_owner .owner_left .lf_pic,
+.page-setEmpGoal .am-body-wrap .goal_owner .owner_left .lf_info {
+  display: inline-block;
+  vertical-align: middle;
+}
+.page-setEmpGoal .am-body-wrap .goal_owner .owner_left .lf_pic {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background-color: #ccc;
+  margin: 0 13px;
+  background: url(img/barberBg-man.gif) no-repeat center center;
+  background-size: contain;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+}
+.page-setEmpGoal .am-body-wrap .goal_owner .owner_left .lf_pic img {
+  height: 100%;
+  width: 100%;
+  border-radius: 50%;
+}
+.page-setEmpGoal .am-body-wrap .goal_owner .owner_left .lf_info {
+  width: 100%;
+  padding-left: 68px;
+  box-sizing: border-box;
+}
+.page-setEmpGoal .am-body-wrap .goal_owner .owner_left .lf_info .info_name {
+  line-height: 20px;
+  font-size: 14px;
+  color: #222;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  word-break: keep-all;
+}
+.page-setEmpGoal .am-body-wrap .goal_owner .owner_left .lf_info .info_level {
+  line-height: 24px;
+  font-size: 12px;
+  color: #939393;
+}
+.page-setEmpGoal .am-body-wrap .goal_owner .emps_switch {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+  right: 10px;
+  background: #FFFFFF;
+  border: 1px solid #D8D8D8;
+  border-radius: 6px;
+  padding: 0 8px;
+  font-size: 12px;
+  color: #939393;
+  line-height: 26px;
+}
+.page-setEmpGoal .am-body-wrap .goal_owner .emps_switch.am-clickable-active {
+  background-color: #F7F7F7;
+}
+.page-setEmpGoal .am-body-wrap .goal_appraise {
+  display: none;
+}
+.page-setEmpGoal .am-body-wrap .goal_list {
+  position: absolute;
+  top: 60px;
+  bottom: 47px;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+}
+.page-setEmpGoal .am-body-wrap .goal_list ul {
+  width: 100%;
+  padding-bottom: 15px;
+}
+.page-setEmpGoal .am-body-wrap .goal_list ul li {
+  box-sizing: border-box;
+  margin: 10px 0;
+  padding: 10px 16px;
+  width: 100%;
+  background-color: #fff;
+}
+.page-setEmpGoal .am-body-wrap .goal_list ul li .item_tit .tit_icon {
+  color: #657BAC;
+  vertical-align: middle;
+}
+.page-setEmpGoal .am-body-wrap .goal_list ul li .item_tit .tit_icon.icon-meihua {
+  font-size: 20px;
+}
+.page-setEmpGoal .am-body-wrap .goal_list ul li .item_tit .tit_text {
+  vertical-align: middle;
+  font-size: 15px;
+  color: #222222;
+}
+.page-setEmpGoal .am-body-wrap .goal_list ul li .item_status {
+  margin-top: 20px;
+  width: 100%;
+}
+.page-setEmpGoal .am-body-wrap .goal_list ul li .item_status .status_explain {
+  font-size: 11px;
+  color: #939393;
+  line-height: 20px;
+}
+.page-setEmpGoal .am-body-wrap .goal_list ul li .item_status .status_explain .cur_amount {
+  font-size: 15px;
+  color: #101010;
+}
+.page-setEmpGoal .am-body-wrap .goal_list ul li .item_status .status_explain .toal_tip {
+  margin-left: 10px;
+}
+.page-setEmpGoal .am-body-wrap .goal_list ul li .item_status .status_explain .shop_goal {
+  float: right;
+}
+.page-setEmpGoal .am-body-wrap .goal_list ul li .item_status .chart_thick {
+  margin-top: 5px;
+}
+.page-setEmpGoal .am-body-wrap .goal_list ul li .item_input {
+  line-height: 55px;
+  height: 55px;
+  width: 100%;
+  background: #F4F4F4;
+  border-radius: 8px;
+  margin: 17px 0 10px;
+}
+.page-setEmpGoal .am-body-wrap .goal_list ul li .item_input input {
+  border: none;
+  font-size: 29px;
+  color: #222222;
+  line-height: 29px;
+  background-color: #F4F4F4;
+  padding: 0 22px;
+  vertical-align: middle;
+  width: 100%;
+  box-sizing: border-box;
+}
+.page-setEmpGoal .am-body-wrap .goal_list ul li .item_input span.suggestion {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+  right: 10px;
+  vertical-align: middle;
+  font-size: 11px;
+  color: #939393;
+  line-height: 20px;
+}
+.page-setEmpGoal .am-body-wrap .goal_list ul li .cur_comparison {
+  display: block;
+  font-size: 12px;
+  color: #222222;
+  line-height: 22px;
+  margin: 10px 0;
+}
+.page-setEmpGoal .am-body-wrap .goal_list ul li .cur_comparison .compare_mon,
+.page-setEmpGoal .am-body-wrap .goal_list ul li .cur_comparison .compare_year {
+  margin-right: 20px;
+}
+.page-setEmpGoal .am-body-wrap .goal_list ul li .cur_comparison .text {
+  margin-left: 5px;
+}
+.page-setEmpGoal .am-body-wrap .goal_list ul li .cur_comparison .verbal {
+  color: #2BCE76;
+}
+.page-setEmpGoal .am-body-wrap .goal_list ul li .item_refer {
+  margin-top: 30px;
+}
+.page-setEmpGoal .am-body-wrap .goal_list ul li .item_refer .line_tip {
+  font-size: 11px;
+  color: #939393;
+  line-height: 22px;
+}
+.page-setEmpGoal .am-body-wrap .goal_list ul li .item_refer .line_tip::after {
+  content: ".";
+  clear: both;
+  display: block;
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+}
+.page-setEmpGoal .am-body-wrap .goal_list ul li .item_refer .line_tip .tip_lf {
+  float: left;
+}
+.page-setEmpGoal .am-body-wrap .goal_list ul li .item_refer .line_tip .tip_rt {
+  float: right;
+}
+.page-setEmpGoal .am-body-wrap .goal_list ul li.done .target_num {
+  display: inline-block;
+}
+.page-setEmpGoal .am-body-wrap .goal_list ul li.done .item_refer {
+  margin-top: 10px;
+  padding-bottom: 10px;
+}
+.page-setEmpGoal .save_btn {
+  width: 100%;
+  height: 47px;
+  font-size: 16px;
+  color: #FFFFFF;
+  background-color: #2DBD84;
+  position: absolute;
+  bottom: 0;
+  text-align: center;
+  line-height: 47px;
+}
+.page-setEmpGoal .save_btn.disabled {
+  background: #D5D5D5;
+}
+.page-setEmpGoal .save_btn.am-clickable-active {
+  background-color: #17A96F;
+}

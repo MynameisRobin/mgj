@@ -1,0 +1,97 @@
+.setImgModal {
+  font-size: 16px;
+  text-align: center;
+}
+.setImgModal .inner {
+  z-index: 1;
+  width: 850px;
+  margin-left: -445px;
+  margin-top: -316.5px;
+  padding: 20px;
+  padding-top: 0;
+}
+.setImgModal .inner .modal-head {
+  height: 49px;
+}
+.setImgModal .inner .modal-head .close {
+  top: 10px;
+  right: 10px;
+}
+.setImgModal .inner .modal-head ul {
+  height: 100%;
+  padding: 0 25%;
+  text-align: center;
+  border-bottom: 1px solid #ececec;
+}
+.setImgModal .inner .modal-head ul li {
+  padding: 0px;
+  line-height: 50px;
+  display: inline-block;
+  height: 45px;
+  margin-right: 15%;
+}
+.setImgModal .inner .modal-head ul li:last-child {
+  margin-right: 0;
+}
+.setImgModal .inner .modal-head ul li.active {
+  color: #e82742;
+  border-bottom: 4px solid #e82742;
+}
+.setImgModal .inner .modal-content {
+  width: 100%;
+  margin-top: 10px;
+  height: 492px;
+  position: relative;
+}
+.setImgModal .inner .modal-content ul.imgUl {
+  width: 100%;
+  padding: 0 5.5px;
+}
+.setImgModal .inner .modal-content ul.imgUl li {
+  width: 134px;
+  height: 134px;
+  float: left;
+  margin-right: 7px;
+  margin-bottom: 7px;
+}
+.setImgModal .inner .modal-content ul.imgUl li:nth-child(6),
+.setImgModal .inner .modal-content ul.imgUl li:nth-child(12),
+.setImgModal .inner .modal-content ul.imgUl li:nth-child(18) {
+  margin-right: 0;
+}
+.setImgModal .inner .modal-content ul.imgUl li.active {
+  position: relative;
+}
+.setImgModal .inner .modal-content ul.imgUl li.active::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.5) url(../images/card_selected_icon.png) 50% 50% no-repeat;
+  background-size: 35px 35px;
+}
+.setImgModal .inner .modal-content ul.imgUl li img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.setImgModal .inner .modal-content .footcontent {
+  height: 60px;
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  top: auto;
+  bottom: 0;
+  font-size: 12px;
+  line-height: 60px;
+}
+.setImgModal .inner .modal-footer {
+  margin-top: 20px;
+}
+.setImgModal .inner .modal-footer .save {
+  border: 0;
+  color: #fff;
+  background-color: #555555;
+}

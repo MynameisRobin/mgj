@@ -1,0 +1,220 @@
+.page-attendanceRecord{
+    background-color: #f6f6f6;
+    .am-page-loading{
+        background-color: #f6f6f6;
+        z-index: 2;
+    }
+    .am-body-wrap{
+        z-index: 1;
+    }
+    .am-header{
+        .unbundling{
+            width: 60px;
+            text-align: center;
+        }
+    }
+    .recordMain{
+        background-color: #fff;
+        max-width: 720px;
+        margin: 0 auto;
+        .recordTit{
+            height: 27px;
+            width: 100%;
+            font-size: 12px;
+            line-height: 27px;
+            color:#213F83;
+            margin: 0 auto;
+            .times{
+                width: 14.28%;
+                height:100%;
+                line-height: 27px;
+                float: left;
+                text-align: center;
+            }
+        }
+        .recordcontent{
+            overflow: hidden;
+            box-sizing: border-box;
+            -webkit-box-sizing:border-box;
+            *{
+                box-sizing: border-box;
+                -webkit-box-sizing:border-box;  
+            }
+            .item{
+                border-top:1px solid #f6f6f6;
+                border-right:1px solid #f6f6f6;
+                width: 14.28%;
+                height:88px;
+                float: left;
+                position: relative;
+                display: table;
+                &.active{
+                    background-color:#F2F2F2;
+                    &.selected{
+                        opacity: 0.8;
+                    }
+                }
+                &.selected{
+                    background-color: #2DBD84;
+                    color:#fff;
+                    .item-content{
+                        .p1,.p2,.p3,.p4{
+                            color:#fff;
+                            &.red,&.blue,&.orange{
+                                color:#fff;
+                            }
+                        }
+                    }
+                    .item-operate{
+                        color:#fff;
+                        &.selected{
+                            color:#fff;
+                        }
+                    }
+                }
+                &.outwork{
+                    .item-content{
+                        .p2,.p3,.p4{
+                            color:#F2A957;
+                        }
+                    }
+                    &.selected{
+                        background-color: #F2A957;
+                        .item-content{
+                            .p2,.p3,.p4{
+                                color:#fff;
+                            }
+                        }
+                    }
+                }
+                .item-status{
+                    position: absolute;
+                    top:0;
+                    left:0;
+                    .item-status1{
+                        background-color:#213F83;
+                        color:#fff;
+                        line-height: 10px;
+                        font-size: 10px;
+                        padding:2px;
+                        display: none;
+                        &.red{
+                            background-color: #D42A2A;
+                            color:#fff;
+                        }
+                    }
+                    .item-status2{
+                        background-color:#213F83;
+                        color:#fff;
+                        line-height: 10px;
+                        font-size: 10px;
+                        padding:2px;
+                        margin-top: 1px;
+                        display: none;
+                        &.red{
+                            background-color: #D42A2A;
+                            color:#fff;
+                        }
+                    }
+                    
+                    
+                    
+                    
+                }
+                .item-operate{
+                    width: 12px;
+                    height:12px;
+                    font-size: 12px;
+                    position: absolute;
+                    top:0;
+                    right:0;
+                    
+                    color:#2DBD84;
+                    &.selected{
+                        color:#BEBEBE;
+                    }
+                }
+                .item-content{
+                    display: table-cell;
+                    text-align: center;
+                    vertical-align: middle;
+                    .p1{
+                        margin-top:12px;
+                        font-size: 18px;
+                        line-height: 18px;
+                        color:#222; 
+                        text-align: right;
+                        padding-right:6px;
+                        
+                    }
+                    .p2{
+                        font-size: 11.5px;
+                        line-height: 16px;
+                        max-width: 100%;
+                        height:16px;
+                        color:#222;
+                        text-align: right;
+                        padding-right:6px;
+                        overflow:hidden;
+                    }
+                    .p3{
+                        margin-top: 7px;
+                        color:#999;
+                        font-size: 10px;
+                        line-height: 16px;
+                        
+                        i{
+                            vertical-align: middle;
+                            font-size: 10px;
+                        }
+                        span{
+                            font-size: 10px;
+                            display: inline-block;
+                            vertical-align: middle;
+                            line-height:10px;
+                            // margin-left: 2px;
+                            // width: 36px;
+                            text-align: center;
+                        }
+                        &.red{
+                            color:#D42A2A;
+                        }
+                        &.blue{
+                            color:#213F83;
+                        }
+                        &.oranage{
+                            color:#F2A957;
+                        }
+                    }
+                    .p4{
+                        color:#999;
+                        font-size: 10px;
+                        line-height: 16px;
+                        i{
+                            vertical-align: middle;
+                            font-size: 10px;
+                        }
+                        span{
+                            font-size: 10px;
+                            display: inline-block;
+                            vertical-align: middle;
+                            line-height:10px;
+                            // margin-left: 2px;
+                            // width: 36px;
+                            text-align: center;
+                        }
+                        &.red{
+                            color:#D42A2A;
+                        }
+                        &.blue{
+                            color:#213F83;
+                        }
+                        &.oranage{
+                            color:#F2A957;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

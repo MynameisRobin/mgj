@@ -1,0 +1,52 @@
+.page-customerDetailMore .am-body-wrap {
+  background-color: #f6f6f6;
+}
+.page-customerDetailMore .am-body-wrap *,
+.page-customerDetailMore .am-body-wrap:after,
+.page-customerDetailMore .am-body-wrap:before {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+.page-customerDetailMore .am-body-wrap .clearfix:after {
+  content: ".";
+  display: block;
+  height: 0;
+  visibility: hidden;
+  clear: both;
+}
+.page-customerDetailMore .am-body-wrap input {
+  border: none;
+  background-color: transparent;
+}
+.page-customerDetailMore .am-body-wrap .wrapper {
+  background-color: #fff;
+  margin-bottom: 10px;
+}
+.page-customerDetailMore .am-body-wrap .wrapper .wrap {
+  height: 44px;
+  border-bottom: 1px solid #f6f6f6;
+  overflow: hidden;
+  padding: 0 13px;
+}
+.page-customerDetailMore .am-body-wrap .wrapper .wrap:last-child {
+  border-bottom: none;
+}
+.page-customerDetailMore .am-body-wrap .wrapper .wrap .label {
+  width: 110px;
+  height: 44px;
+  float: left;
+  font-size: 15px;
+  color: #222;
+  line-height: 44px;
+}
+.page-customerDetailMore .am-body-wrap .wrapper .wrap .content {
+  height: 44px;
+  line-height: 44px;
+  margin-left: 110px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 15px;
+  color: #999;
+  text-align: right;
+}

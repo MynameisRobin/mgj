@@ -1,0 +1,142 @@
+#page_evaluate {
+  text-align: center;
+}
+#page_evaluate .close {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  width: 35px;
+  height: 35px;
+}
+#page_evaluate .close::before {
+  content: "";
+  display: block;
+  width: 15px;
+  height: 15px;
+  margin: 10px;
+  background: url(../images/icons_sprite/close_employee.png) no-repeat 0px 0px;
+  background-size: 15px 15px;
+}
+#page_evaluate h2 {
+  margin-top: 50px;
+  font-size: 27px;
+  color: #333;
+}
+#page_evaluate p {
+  margin-top: 16px;
+  color: #999;
+  font-size: 13px;
+}
+#page_evaluate .warp {
+  margin-top: 75px;
+}
+#page_evaluate .warp ul {
+  margin-right: -116px;
+}
+#page_evaluate .warp ul li {
+  width: 120px;
+  display: inline-block;
+  margin-right: 116px;
+}
+#page_evaluate .warp ul li .face {
+  width: 119px;
+  height: 119px;
+  background: rgba(242, 242, 242, 0.66);
+  color: #ffbd3e;
+  border-radius: 50%;
+  line-height: 125px;
+}
+#page_evaluate .warp ul li .face .iconfont {
+  font-size: 84px;
+}
+#page_evaluate .warp ul li p {
+  color: #333;
+  font-size: 16px;
+}
+#page_evaluate .warp ul li.active .face {
+  color: #fff;
+  background: #ffbd3e;
+}
+#page_evaluate .btn {
+  width: 194px;
+  height: 49px;
+  font-size: 18px;
+  line-height: 49px;
+  color: #999999;
+  border-radius: 3px;
+  border: solid 1px #f2f2f2;
+  margin: 12% auto;
+}
+#page_evaluate .yawp {
+  display: none;
+  margin-top: 30px;
+  text-align: left;
+}
+#page_evaluate .yawp .yawp-info {
+  background: #f7f7f7;
+  height: 165px;
+  padding-top: 30px;
+  display: flex;
+  overflow: hidden;
+}
+#page_evaluate .yawp .yawp-info .inner {
+  margin: 0 auto;
+}
+#page_evaluate .yawp .yawp-info .label {
+  width: 100px;
+  height: 100%;
+  color: #999;
+  font-size: 14px;
+  float: left;
+}
+#page_evaluate .yawp .yawp-info ul {
+  width: 233px;
+  float: left;
+}
+#page_evaluate .yawp .yawp-info ul:last-child {
+  margin-right: 0;
+}
+#page_evaluate .yawp .yawp-info ul li {
+  float: left;
+  font-size: 14px;
+  color: #222;
+  margin-top: 16px;
+}
+#page_evaluate .yawp .yawp-info ul li .radius {
+  width: 21px;
+  height: 21px;
+  border-radius: 50%;
+  margin-right: 15px;
+  vertical-align: middle;
+  border: solid 1px #dddddd;
+}
+#page_evaluate .yawp .yawp-info ul li span {
+  display: inline-block;
+}
+#page_evaluate .yawp .yawp-info ul li.active .radius {
+  background: url(../images/hangup/ok.png) no-repeat;
+  background-size: cover;
+  border: 1px solid #000;
+}
+#page_evaluate .yawp .yawp-info ul li:first-child {
+  margin-top: 0;
+}
+#page_evaluate .yawp .yawp-info ul textarea {
+  width: 233px;
+  height: 58px;
+  margin-left: 40px;
+  resize: none;
+}
+#page_evaluate .yawp .confirmBtn {
+  width: 194px;
+  height: 49px;
+  font-size: 18px;
+  line-height: 49px;
+  color: #999999;
+  border-radius: 3px;
+  border: solid 1px #f2f2f2;
+  background: #555;
+  color: #ffffff;
+  margin: 39px auto;
+  text-align: center;
+}

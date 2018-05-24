@@ -1,0 +1,89 @@
+@import "var.less";
+@path:"../images/";
+@import "../images/icons_sprite.less";
+#page_prepay{
+	.prepayContent{
+		position: absolute;
+	    left: 0;
+	    right: 0;
+	    top: 51px;
+	    bottom: 0;
+	    .prepay_wrap{
+	    	position: absolute;
+	    	width:480px;
+	    	height:500px;
+	    	margin:auto;
+	    	top:0;
+	    	left:0;
+	    	right:0;
+	    	bottom:0;
+	    	text-align: center;
+	    	.input_box{
+	    		.money_input{
+	    			display: inline-block;
+	                vertical-align: top;
+	                width: 400px;
+	                height: 45px;
+	                border: 1px solid @bd05;
+	                .borderRadius(3px);
+	                line-height: 45px;
+	                text-align: left;
+	                font-size: @fs3;
+	                color: @bd05;
+	                padding: 0 17px;
+	    		}
+	    	}
+	    	.prepay_btns{
+	    		margin: 0 auto;
+	    		margin-top:20px;
+	    		width:360px;
+	    		height: 45px;
+	    		font-size: 0px;
+	    		.alipay_prepay,.wechat_prepay{
+	    			display: inline-block;
+	    			vertical-align: middle;
+	    			width:170px;
+	    			height:45px;
+	    			line-height: 45px;
+	    			text-align: center;
+	    			font-size: 0;
+	    			border:1px solid #dddddd;
+	    			border-radius: 25px;
+	    			box-sizing: border-box;
+	    		}
+	    		.alipay_text,.wechat_text{
+	    			margin-left:20px;
+	    		}
+	    		.alipay_prepay{
+	    			.alipay_icon{
+	    				display: inline-block;
+	    				vertical-align: middle;
+	    				line-height: 45px;
+	    				width:40px;
+	    				height:40px;
+	    				background:url(../images/icon_prepay_alipay.png) no-repeat center center;
+	    				background-size:40px 40px;
+	    			}
+	    			
+	    		}
+	    		.wechat_prepay{
+	    			margin-left:20px;
+	    			.wechat_icon{
+	    				display: inline-block;
+	    				vertical-align: middle;
+	    				line-height: 45px;
+	    				width:40px;
+	    				height:40px;
+	    				background:url(../images/icon_prepay_wechat.png) no-repeat left center;
+	    				background-size:40px 33px;
+	    			}
+	    		}
+	    		.alipay_text,.wechat_text{
+	    			display: inline-block;
+	    			vertical-align: middle;
+					font-size: 14px;
+	    		}
+	    	}
+	    }
+	}
+}

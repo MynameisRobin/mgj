@@ -1,0 +1,235 @@
+/* 文字颜色 ***********************/
+/* c0* 为黑白灰色系 */
+.page_about_verifyrecord .dateWrap {
+  position: absolute;
+  top: 6px;
+  right: 28px;
+}
+.page_about_verifyrecord .dateWrap .tit {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 5px;
+  font-size: 12px;
+  color: #222;
+}
+.page_about_verifyrecord .dateWrap .dateSelect {
+  width: 120px;
+  height: 36px;
+  border: 1px solid #dddddd;
+  border-radius: 3px;
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 0px;
+}
+.page_about_verifyrecord .dateWrap .dateSelect .date {
+  display: inline-block;
+  vertical-align: top;
+  text-align: left;
+  line-height: 38px;
+  width: 110px;
+  height: 38px;
+  padding-left: 10px;
+  font-size: 14px;
+  color: #222;
+  background-image: url(../images/storageRecord/date1.png);
+  background-repeat: no-repeat;
+  background-position: 93px 7px;
+  background-size: 20px 20px;
+}
+.page_about_verifyrecord .recordList {
+  position: absolute;
+  top: 59px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+.page_about_verifyrecord .recordList .contentbox {
+  position: absolute;
+  left: 28px;
+  right: 28px;
+  top: 0;
+  bottom: 72px;
+  border: 1px solid #ececec;
+}
+.page_about_verifyrecord .recordList .contentbox table {
+  table-layout: fixed;
+}
+.page_about_verifyrecord .recordList .contentbox td.td-no {
+  width: 120px;
+}
+.page_about_verifyrecord .recordList .contentbox td.td-name {
+  width: 120px;
+}
+.page_about_verifyrecord .recordList .contentbox td.td-price {
+  width: 60px;
+}
+.page_about_verifyrecord .recordList .contentbox .table-content-head {
+  line-height: 36px;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  color: #999999;
+}
+.page_about_verifyrecord .recordList .contentbox .table-content-head td {
+  height: 36px;
+  font-size: 12px;
+  border-left: 1px solid #ececec;
+}
+.page_about_verifyrecord .recordList .contentbox .table-content-head td .tdwrap {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+  text-align: center;
+}
+.page_about_verifyrecord .recordList .contentbox .table-content-list {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  overflow: hidden;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 36px;
+  bottom: 0;
+  font-size: 14px;
+  color: #222222;
+}
+.page_about_verifyrecord .recordList .contentbox .table-content-list tr td {
+  border-left: 1px solid #ececec;
+  height: 43px;
+}
+.page_about_verifyrecord .recordList .contentbox .table-content-list tr td .tdwrap {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+  text-align: center;
+}
+.page_about_verifyrecord .recordList .contentbox .table-content-list tr:nth-child(2n+1) {
+  background-color: #f7f7f7;
+}
+.page_about_verifyrecord .recordList .footcontent {
+  height: 72px;
+  position: absolute;
+  left: 28px;
+  right: 28px;
+  top: auto;
+  bottom: 0;
+  line-height: 72px;
+}
+.page_about_verifyrecord .recordList .footcontent .pagerBox {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+}
+.page_about_verifyrecord .recordList .footcontent .pagerBox .leftbox {
+  position: absolute;
+  height: 100%;
+  width: 200px;
+  left: 0;
+  color: #999999;
+  text-align: left;
+}
+.page_about_verifyrecord .recordList .footcontent .pagerBox .centerBox {
+  display: inline-block;
+  height: 100%;
+}
+.page_about_verifyrecord .recordList .footcontent .pagerBox .centerBox .list {
+  display: block;
+  height: 100%;
+  float: left;
+}
+.page_about_verifyrecord .recordList .footcontent .pagerBox .centerBox .list ul {
+  box-sizing: border-box;
+  list-style: none;
+  padding: 24px 0;
+  height: 100%;
+}
+.page_about_verifyrecord .recordList .footcontent .pagerBox .centerBox .list ul li {
+  display: block;
+  float: left;
+  width: 25px;
+  height: 25px;
+  border: 1px solid #dddddd;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 25px;
+  margin: 0 5px;
+  cursor: pointer;
+  color: #999999;
+}
+.page_about_verifyrecord .recordList .footcontent .pagerBox .centerBox .list ul li.active {
+  border: 1px solid #000;
+}
+.page_about_verifyrecord .cm_emptyBox,
+.page_about_verifyrecord .cm_cutting {
+  display: none;
+}
+.recordList .cm_emptyBox,
+.recordList .cm_cutting {
+  display: none;
+}
+.recordList.empty {
+  padding: 5% 0;
+}
+.recordList.empty .contentbox,
+.recordList.empty .footcontent {
+  display: none;
+}
+.recordList.empty .cm_emptyBox {
+  padding: 10% 0;
+  display: block;
+  width: 175px;
+  height: 192px;
+  margin: 0 auto;
+}
+.recordList.empty .cm_emptyBox:after {
+  content: "";
+  width: 100%;
+  display: block;
+  height: 100%;
+  background: url(../images/empty.png) no-repeat;
+  background-size: 100% 100%;
+}
+.recordList.cutting {
+  padding: 5% 0;
+}
+.recordList.cutting .contentbox,
+.recordList.cutting .footcontent {
+  display: none;
+}
+.recordList.cutting .cm_cutting {
+  padding: 10% 0;
+  width: 191px;
+  display: block;
+  margin: 0 auto;
+}
+.recordList.cutting .cm_cutting .icon {
+  width: 100%;
+  height: 175px;
+  display: block;
+  background: url(../images/cutting.png) no-repeat;
+  background-size: 100% 100%;
+}
+.recordList.cutting .cm_cutting .refreshBtn {
+  width: 150px;
+  height: 38px;
+  margin: 0 auto;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border: 1px solid #ddd;
+  line-height: 38px;
+  font-size: 13px;
+  color: #666;
+  display: block;
+  text-align: center;
+  margin-top: 25px;
+}

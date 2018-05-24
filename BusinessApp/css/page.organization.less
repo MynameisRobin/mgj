@@ -1,0 +1,254 @@
+@url: '../css/img/education';
+.page-organization {
+	.top {
+		height: 130px;
+		position: relative;
+		.background {
+			position: absolute;
+			left: 0;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			overflow: hidden;
+			z-index: -1;
+			filter: blur(20px);
+			-webkit-filter: blur(20px);
+			img {
+				width: 200%;
+				position: absolute;
+				left: 50%;
+				top: 50%;
+				transform: translate(-50%,-50%);
+				-webkit-transform: translate(-50%,-50%);
+			}
+			.backmask {
+				position: absolute;
+				left: 0;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				overflow: hidden;
+				background: rgba(0,0,0,0.1);
+			}
+		}
+		.header {
+			height: 44px;
+			.left {
+				height: 44px;
+			    width: 44px;
+			    position: absolute;
+			    text-align: center;
+			    display: inline-block;
+			    line-height: 44px;
+			    background-repeat: no-repeat;
+			    background-position: center center;
+			    background-image: url(../css/img/education/back.png);
+			    background-size: 35px 35px;
+			}
+			.title {
+				font-size: 18px;
+				color: #fff;
+			    line-height: 44px;
+			    height: 44px;
+			    margin: 0 44px;
+			    overflow: hidden;
+			    text-overflow: ellipsis;
+			    white-space: nowrap;
+			    text-align: center;
+			    font-weight: bold;
+			}
+		}
+		.intro {
+			height: 60px;
+			padding: 8px 20px;
+			position: relative;
+			.logo {
+				width: 60px;
+				height: 60px;
+				overflow: hidden;
+				float: left;
+				img {
+					width: 100%;
+					height: 100%;
+				}
+			}
+			.text {
+				margin-left: 80px;
+				font-size: 12px;
+				color: #fff;
+				line-height: 20px;
+				overflow: hidden;
+			    text-overflow: ellipsis;
+			    display: -webkit-box;
+			    -webkit-line-clamp: 3;
+			    -webkit-box-orient: vertical;
+			}
+			.more {
+				position: absolute;
+				width: 20px;
+				height: 20px;
+				background: url(../css/img/withDraw-arrow.png) no-repeat center center;
+				background-size: 12px 20px;
+				top: 50%;
+				margin-top: -10px;
+				right: 0;
+				display: none;
+			}
+		}
+	}
+	.tab {
+		height: 42px;
+		border-bottom: 1px solid #e5e5e5;
+		li {
+			width: 50%;
+			height: 40px;
+			float: left;
+			text-align: center;
+			p {
+				display: inline-block;
+				font-size: 14px;
+				color: #666;
+				padding: 0 20px;
+				height: 40px;
+				line-height: 40px;
+			}
+			&.active p {
+				border-bottom: 2px solid #2dbd84;
+				color: #2dbd84;
+			}
+		}
+	}
+	.container {
+		position: relative;
+		.error {
+			width: 100%;
+			font-size: 12px;
+			color: #aaa;
+			text-align: center;
+			margin-top: 25px;
+			display: none;
+		}
+		.organization {
+			padding: 10px;
+			img {
+				width: 100%;
+				vertical-align: top;
+				margin-bottom: 10px;
+			}
+			.introduction {
+				font-size: 14px;
+				color: #666;
+				line-height: 24px;
+				margin-bottom: 10px;
+			}
+		}
+		.list {
+			display: none;
+			*,
+			&:after,
+			&:before {
+				box-sizing: border-box;
+				-webkit-box-sizing: border-box;
+			}
+			padding: 0 10px;
+			background-color: #fff;
+			li {
+				padding: 15px 0;
+				height: 106px;
+				overflow: hidden;
+				border-bottom: 1px solid #e5e5e5;
+				&:last-child {
+					border-bottom: none;
+				}
+				.left {
+					width: 135px;
+					float: left;
+					.img-wrap {
+						height: 76px;
+						position: relative;
+						background: #f4f4f4 url('@{url}/default.png') no-repeat center center;
+						background-size: 48px 21px;
+						img {
+							width: 100%;
+							height: 100%;
+							display: none;
+						}
+					}
+					.count-wrap {
+						position: absolute;
+						max-width: 100%;
+						font-size: 10px;
+						color: #aaa;
+						height: 14px;
+						line-height: 14px;
+						overflow: hidden;
+					    white-space: nowrap;
+					    text-overflow: ellipsis;
+					    left: 0;
+					    bottom: 0;
+					    background-color: rgba(0,0,0,.6);
+					    padding: 0 3px;
+					    border-radius: 2px;
+					}
+				}
+				.right {
+					margin-left: 150px;
+					.title {
+						font-size: 16px;
+						color: #222;
+						line-height: 18px;
+						overflow: hidden;
+						text-overflow: ellipsis;
+					    display: -webkit-box;
+					    -webkit-line-clamp: 2;
+					    -webkit-box-orient: vertical;
+					    margin-bottom: 2px;
+
+					}
+					.college {
+						font-size: 12px;
+						color: #999;
+						line-height: 20px;
+						max-height: 20px;
+					 	overflow: hidden;
+					    white-space: nowrap;
+					    text-overflow: ellipsis;
+
+					}
+					.keywords {
+						height: 16px;
+						overflow: hidden;
+						font-size: 0;
+					 	overflow: hidden;
+					    white-space: nowrap;
+					    text-overflow: ellipsis;
+					    margin-top: 2px;
+
+						span {
+							display: inline-block;
+							vertical-align: top;
+							font-size: 11px;
+							color: #999;
+							height: 16px;
+							line-height: 14px;
+							padding: 0 3px;
+							margin-right: 3px;
+							border: 1px solid #dedede;
+							border-radius: 3px;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+.ios .page-organization .top {
+	padding-top: 20px;
+  }
+  .ios .page-organization .top {
+	padding-top: 40px;
+  }
+  .ios .page-organization .am-body-wrap,.iosX .page-organization .am-body-wrap,
+  .page-organization .am-body-wrap {
+	top: 0;
+  }

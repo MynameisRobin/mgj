@@ -1,0 +1,273 @@
+/* 文字颜色 ***********************/
+/* c0* 为黑白灰色系 */
+.boxSinzig {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+.ws {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#page_workOrder .workOrder {
+  text-align: center;
+  position: absolute;
+  overflow: hidden;
+  top: 51px;
+  left: 0;
+  width: 100%;
+  right: 0;
+  bottom: 0;
+}
+#page_workOrder .workOrder .qq-btn {
+  width: 250px;
+  height: 49px;
+  line-height: 49px;
+  background: #555;
+  color: #fff;
+  border-radius: 4px;
+  margin: 25px auto 0;
+}
+#page_workOrder .workOrder .qq-btn input {
+  width: 90px;
+  color: #fff;
+  border: 0;
+  font-size: 17px;
+  background: #555;
+}
+#page_workOrder .workOrder .qq-btn input::selection {
+  background: #555;
+}
+#page_workOrder .workOrder .qq-btn:active {
+  background: #282828;
+}
+#page_workOrder .workOrder .qq-btn:active input {
+  background: #282828;
+}
+#page_workOrder .workOrder .qq-btn .icon-qq {
+  font-size: 26px;
+  vertical-align: -2px;
+}
+#page_workOrder .workOrder .qq-btn span {
+  font-size: 17px;
+}
+#page_workOrder .workOrder .complain-btn {
+  position: absolute;
+  right: 22px;
+  top: 24px;
+  color: #999;
+  font-size: 12px;
+  text-align: right;
+}
+#page_workOrder .workOrder .complain-btn .icon-tousu {
+  font-size: 20px;
+  vertical-align: -3px;
+}
+#page_workOrder .workOrder .qq-info {
+  margin-top: 13px;
+  color: #999;
+  font-size: 12px;
+}
+#page_workOrder .workOrder .content {
+  margin-top: 20px;
+  border-top: 1px solid #e9e9e9;
+  text-align: left;
+  position: absolute;
+  top: 98px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+#page_workOrder .workOrder .content .sub_workOrder {
+  width: 300px;
+  float: left;
+}
+#page_workOrder .workOrder .content .sub_workOrder h3 {
+  margin-top: 30px;
+  position: relative;
+  font-size: 14px;
+  height: 15px;
+  line-height: 15px;
+  color: #222;
+  padding-left: 29px;
+}
+#page_workOrder .workOrder .content .sub_workOrder h3::before {
+  content: "";
+  width: 5px;
+  height: 15px;
+  background: red;
+  position: absolute;
+  left: 0;
+}
+#page_workOrder .workOrder .content .sub_workOrder .sub_content {
+  padding: 29px;
+}
+#page_workOrder .workOrder .content .sub_workOrder .sub_content .label {
+  margin: 10px 0;
+}
+#page_workOrder .workOrder .content .sub_workOrder .sub_content textarea {
+  font-size: 14px;
+  width: calc(100% - 30px);
+  height: 76px;
+  background: #f7f7f7;
+  padding: 15px;
+  resize: none;
+  border: 0;
+}
+#page_workOrder .workOrder .content .sub_workOrder .sub_content input {
+  font-size: 14px;
+  width: calc(100% - 30px);
+  background: #f7f7f7;
+  border: 0;
+  padding: 15px;
+}
+#page_workOrder .workOrder .content .sub_workOrder .sub_content .btn {
+  width: 100%;
+  background: #cdcdcd;
+  border-radius: 3px;
+  height: 44px;
+  text-align: center;
+  line-height: 44px;
+  color: #fff;
+  font-size: 15px;
+  margin-top: 24px;
+}
+#page_workOrder .workOrder .content .sub_workOrder .sub_content .btn.active {
+  background: #555;
+}
+#page_workOrder .workOrder .content .sub_workOrder .sub_content .btn.active:active {
+  background: #282828;
+}
+#page_workOrder .workOrder .content .sub_workOrder .sub_content .tip {
+  display: flex;
+  margin-top: 10px;
+  color: #999;
+}
+#page_workOrder .workOrder .content .sub_workOrder .sub_content .tip i {
+  margin-right: 5px;
+}
+#page_workOrder .workOrder .content .sub_workOrder .sub_content .tip span {
+  color: #999;
+  font-size: 12px;
+}
+#page_workOrder .workOrder .content .table {
+  overflow: hidden;
+  border-left: 1px solid #e9e9e9;
+  float: right;
+  position: absolute;
+  top: 0px;
+  right: 0;
+  bottom: 0;
+  left: 307px;
+}
+#page_workOrder .workOrder .content .table table {
+  table-layout: fixed;
+}
+#page_workOrder .workOrder .content .table table thead.hide {
+  display: none;
+}
+#page_workOrder .workOrder .content .table .table-head {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 42px;
+}
+#page_workOrder .workOrder .content .table .table-content,
+#page_workOrder .workOrder .content .table .table-empty {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  position: absolute;
+  top: 42px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+}
+#page_workOrder .workOrder .content .table .table-empty {
+  display: none;
+  background: url(../images/empty.png) center center no-repeat;
+  background-size: 180px 180px;
+}
+#page_workOrder .workOrder .content .table .table-content-list {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  top: 0;
+}
+#page_workOrder .workOrder .content .table .table-content-list tr:nth-child(2n + 1) {
+  background-color: #f7f7f7;
+}
+#page_workOrder .workOrder .content .table .table-content-list thead tr th {
+  background: #fff;
+  color: #999;
+  font-size: 12px;
+  font-weight: 400;
+}
+#page_workOrder .workOrder .content .table .table-content-list th,
+#page_workOrder .workOrder .content .table .table-content-list td {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+  text-align: left;
+  padding: 0 9px;
+  height: 41px;
+  border-right: 1px solid #ececec;
+  border-bottom: 1px solid #ececec;
+}
+#page_workOrder .workOrder .content .table .table-content-list tr:active {
+  background: #e8faff;
+}
+#page_workOrder .workOrder .content .table .table-content-list tr td:nth-child(1) input {
+  width: 55px;
+  display: inline-block;
+  cursor: pointer;
+  font-size: 14px;
+  border: 0;
+  background: none;
+  text-overflow: ellipsis;
+}
+#page_workOrder .workOrder .content .table .table-content-list tr td:nth-child(1) i {
+  color: #ccc;
+  cursor: pointer;
+}
+#page_workOrder .workOrder .content .table .table-content-list tr td:nth-child(1) i:active {
+  color: #222;
+}
+#page_workOrder .workOrder .content .table .table-content-list tr th:nth-child(1),
+#page_workOrder .workOrder .content .table .table-content-list tr td:nth-child(1) {
+  width: 7%;
+}
+#page_workOrder .workOrder .content .table .table-content-list tr th:nth-child(2),
+#page_workOrder .workOrder .content .table .table-content-list tr td:nth-child(2) {
+  width: 12%;
+}
+#page_workOrder .workOrder .content .table .table-content-list tr th:nth-child(3),
+#page_workOrder .workOrder .content .table .table-content-list tr td:nth-child(3) {
+  width: 5%;
+}
+#page_workOrder .workOrder .content .table .table-content-list tr th:nth-child(4),
+#page_workOrder .workOrder .content .table .table-content-list tr td:nth-child(4) {
+  width: 7%;
+}
+#page_workOrder .workOrder .content .table .table-content-list tr th:nth-child(5),
+#page_workOrder .workOrder .content .table .table-content-list tr td:nth-child(5) {
+  width: 5%;
+}
+#page_workOrder .workOrder .content .table .table-content-list tr th:nth-child(6),
+#page_workOrder .workOrder .content .table .table-content-list tr td:nth-child(6) {
+  width: 5%;
+}
+#page_workOrder .workOrder .content .table .table-content-list tr th:nth-child(7),
+#page_workOrder .workOrder .content .table .table-content-list tr td:nth-child(7) {
+  width: 5%;
+}
+#page_workOrder .workOrder .content .table .table-content-list tr th:nth-child(8),
+#page_workOrder .workOrder .content .table .table-content-list tr td:nth-child(8) {
+  width: 5%;
+}

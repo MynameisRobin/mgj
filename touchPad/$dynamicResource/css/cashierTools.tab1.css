@@ -1,0 +1,811 @@
+@charset "utf-8";
+/* 文字颜色 ***********************/
+/* c0* 为黑白灰色系 */
+.page_service,
+.page_product {
+  left: 136px;
+  bottom: 43px;
+  border-radius: 0 4px 0 0;
+}
+.page_service .cashierMain .head,
+.page_product .cashierMain .head,
+.page_service .cashierMain .foot,
+.page_product .cashierMain .foot {
+  display: none;
+}
+.page_service .cashierMain .body,
+.page_product .cashierMain .body {
+  top: 0;
+  bottom: 0;
+}
+.page_service.openBill,
+.page_product.openBill {
+  left: 60px;
+}
+.page_service.openBill .displayId,
+.page_product.openBill .displayId {
+  display: none !important;
+}
+.cashierTotalPanel {
+  display: none;
+  background-color: #FFF;
+  border-top: 1px solid #DDD;
+  height: 42px;
+  position: absolute;
+  left: 136px;
+  bottom: 0;
+  right: 0;
+  line-height: 42px;
+}
+.cashierTotalPanel.fullTab {
+  left: 60px;
+}
+.cashierTotalPanel .setting {
+  float: left;
+  font-size: 12px;
+  line-height: 16px;
+  width: 43px;
+  padding-top: 3px;
+  text-align: center;
+  border-right: 1px solid #f2f2f2;
+  height: 39px;
+  color: #888;
+}
+.cashierTotalPanel .setting::before {
+  font-size: 20px;
+  display: block;
+  line-height: 20px;
+}
+.cashierTotalPanel .genderRadio {
+  width: 58px;
+  margin: 7px 0px 5px 10px;
+  float: left;
+  font-size: 12px;
+}
+.cashierTotalPanel .genderRadio::before {
+  content: "女";
+  float: left;
+  width: 28px;
+  line-height: 28px;
+  text-align: center;
+  border-radius: 14px;
+  background: #595959;
+  color: #FFF;
+}
+.cashierTotalPanel .genderRadio::after {
+  content: "男";
+  float: right;
+  width: 28px;
+  line-height: 28px;
+  text-align: center;
+  border-radius: 14px;
+  background: #ececec;
+  color: #666;
+}
+.cashierTotalPanel .genderRadio.male::before {
+  background: #ececec;
+  color: #666;
+}
+.cashierTotalPanel .genderRadio.male::after {
+  background: #595959;
+  color: #FFF;
+}
+.cashierTotalPanel .billNo {
+  padding-left: 10px;
+  float: left;
+}
+.cashierTotalPanel .billNo::before {
+  content: "单号:";
+  display: inline-block;
+  font-size: 12px;
+  color: #666;
+}
+.cashierTotalPanel .billNo input {
+  border: 1px solid #ececec;
+  height: 26px;
+  width: 100px;
+  padding-left: 10px;
+  border-radius: 14px;
+}
+.cashierTotalPanel .billNo input.error {
+  border-color: #e82742;
+  -webkit-animation: animation_shake 1 ease-in 0.2s;
+}
+.cashierTotalPanel .hangup {
+  float: right;
+  margin-top: -1px;
+  height: 43px;
+  text-align: center;
+  color: #FFF;
+  background: #595959;
+  width: 80px;
+}
+.cashierTotalPanel .hangup.am-clickable-active {
+  background: #282828;
+}
+.cashierTotalPanel .hangup.bigBtn {
+  width: 160px;
+}
+.cashierTotalPanel .submit {
+  float: right;
+  margin-top: -1px;
+  height: 43px;
+  text-align: center;
+  color: #FFF;
+  background: #e82742;
+  width: 180px;
+}
+.cashierTotalPanel .submit.am-clickable-active {
+  background: #c90e28;
+}
+.cashierTotalPanel .totalPrice {
+  float: right;
+  color: #e82742;
+  padding: 0 15px;
+  font-size: 20px;
+  line-height: 44px;
+}
+.cashierTotalPanel .totalPrice::before {
+  font-size: 14px;
+  content: "总计:";
+  color: #222;
+}
+.cashierTotalPanel.show {
+  z-index: 1;
+}
+.tab_cash {
+  display: none;
+  position: absolute;
+  left: 75px;
+  top: 0;
+  bottom: 0;
+  width: 60px;
+  background-color: #EEEEEE;
+  border-right: 1px solid #DDD;
+  color: #666;
+}
+.tab_cash.openBill .setting,
+.tab_cash.openBill .hangup {
+  display: none;
+}
+.tab_cash.openBill .hangupList,
+.tab_cash.openBill .roundCards {
+  display: block;
+}
+.tab_cash.openBill .tab_memList {
+  display: block;
+}
+.tab_cash.openBill .tabUl li:nth-child(3) {
+  display: none !important;
+}
+.tab_cash.fullTab {
+  left: 0;
+}
+.tab_cash .tab_memList ul li {
+  overflow: hidden;
+  position: relative;
+}
+.tab_cash .tab_memList ul li.tabItem .text {
+  font-size: 10px;
+  line-height: 14px;
+  color: #e59b37;
+}
+.tab_cash .tab_memList ul li.tabItem .text.selected {
+  color: #42a2de;
+}
+.tab_cash .tab_memList ul li:nth-child(1)::before {
+  content: "";
+  width: 28px;
+  height: 28px;
+  display: block;
+  position: absolute;
+  bottom: -15px;
+  right: -15px;
+  background-color: #555;
+  color: #fff;
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+}
+.tab_cash .tab_memList ul li:nth-child(1)::after {
+  content: "1";
+  color: #fff;
+  position: absolute;
+  bottom: -1px;
+  right: 2px;
+  font-size: 10px;
+}
+.tab_cash .tab_memList ul li:nth-child(2)::before {
+  content: "";
+  width: 28px;
+  height: 28px;
+  display: block;
+  position: absolute;
+  bottom: -15px;
+  right: -15px;
+  background-color: #555;
+  color: #fff;
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+}
+.tab_cash .tab_memList ul li:nth-child(2)::after {
+  content: "2";
+  color: #fff;
+  position: absolute;
+  bottom: -1px;
+  right: 2px;
+  font-size: 10px;
+}
+.tab_cash .tab_memList ul li:nth-child(3)::before {
+  content: "";
+  width: 28px;
+  height: 28px;
+  display: block;
+  position: absolute;
+  bottom: -15px;
+  right: -15px;
+  background-color: #555;
+  color: #fff;
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+}
+.tab_cash .tab_memList ul li:nth-child(3)::after {
+  content: "3";
+  color: #fff;
+  position: absolute;
+  bottom: -1px;
+  right: 2px;
+  font-size: 10px;
+}
+.tab_cash .tab_memList .tabItem {
+  position: relative;
+  text-align: center;
+  line-height: 14px;
+  font-size: 12px;
+  padding: 10px 0;
+}
+.tab_cash .tab_memList .tabItem .operatehair {
+  display: none;
+  height: 20px;
+  line-height: 22px;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  color: #222;
+  border: 1px solid #777;
+  margin: 0 3px;
+  margin-top: 10px;
+  font-size: 10px;
+  text-align: center;
+}
+.tab_cash .tab_memList .tabItem .operatehair.disabled {
+  display: block;
+  color: #adadad;
+  border: 0;
+  line-height: 16px;
+  height: auto;
+  margin: 0 8px;
+  margin-top: 10px;
+}
+.tab_cash .tab_memList .tabItem .operatehair.disabled::before {
+  content: "已结束洗发";
+}
+.tab_cash .tab_memList .tabItem .operatehair.start {
+  display: block;
+}
+.tab_cash .tab_memList .tabItem .operatehair.start::before {
+  content: "开始洗发";
+}
+.tab_cash .tab_memList .tabItem .operatehair.start.am-clickable-active {
+  background-color: #e9e9e9;
+}
+.tab_cash .tab_memList .tabItem .operatehair.finish {
+  display: block;
+}
+.tab_cash .tab_memList .tabItem .operatehair.finish::before {
+  content: "结束洗发";
+}
+.tab_cash .tab_memList .tabItem .operatehair.finish.am-clickable-active {
+  background-color: #e9e9e9;
+}
+.tab_cash .tab_memList .tabItem .waiterNum {
+  color: #e82742;
+  font-size: 24px;
+  line-height: 26px;
+}
+.tab_cash .tab_memList .tabItem .user_name {
+  color: #222222;
+  font-size: 12px;
+  line-height: 16px;
+}
+.tab_cash .tab_memList .tabItem .text {
+  font-size: 10px;
+  line-height: 14px;
+  color: #999;
+}
+.tab_cash .tab_memList .tabItem .icon {
+  display: none;
+}
+.tab_cash .tab_memList .tabItem.append {
+  display: table;
+  width: 100%;
+  height: 30px;
+}
+.tab_cash .tab_memList .tabItem.append .user_name,
+.tab_cash .tab_memList .tabItem.append .text {
+  display: none;
+}
+.tab_cash .tab_memList .tabItem.append .icon {
+  width: 20px;
+  height: 20px;
+  display: table-cell;
+  background: url("../images/hangup/add_waiter.png") no-repeat center center;
+  background-size: 20px 20px;
+}
+.tab_cash .tab_memList.show {
+  display: block;
+}
+.tab_cash .hangupList,
+.tab_cash .roundCards,
+.tab_cash .tab_memList {
+  display: none;
+}
+.tab_cash.show {
+  z-index: 1;
+}
+.tab_cash .bottom {
+  border-top: 1px solid #DDD;
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  width: 60px;
+}
+.tab_cash .memberInfo {
+  position: absolute;
+  left: 60px;
+  right: auto;
+  top: auto;
+  bottom: 57px;
+  width: 300px;
+  display: none;
+}
+.tab_cash .memberInfo .highlight {
+  color: #e82742;
+}
+.tab_cash .memberInfo .infoclose {
+  position: absolute;
+  left: auto;
+  right: 0px;
+  top: 0px;
+  bottom: auto;
+  width: 32px;
+  height: 32px;
+}
+.tab_cash .memberInfo .infoclose::before {
+  content: "";
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  width: 15px;
+  height: 15px;
+  background: url("../images/icons_sprite/close_employee.png") no-repeat 0px 0px;
+  background-size: 15px 15px;
+}
+.tab_cash .memberInfo .content {
+  padding: 10px 10px 10px 10px;
+  border-radius: 0 4px 4px 0;
+  line-height: 24px;
+  background: #FFF;
+  border: 1px solid #DDD;
+  /*box-shadow: rgba(0, 0, 0, 0.5) 0 0 5px;*/
+  /*&::before{
+				.abs(@left:-5px;@top:20px);
+				content: "";
+				border-right: 5px solid @bg04;
+				border-top: 5px solid transparent;
+				border-bottom: 5px solid transparent;
+				border-left: none;
+			}*/
+}
+.tab_cash .memberInfo .content .membername {
+  padding-left: 5px;
+  font-weight: bold;
+}
+.tab_cash .memberInfo .content .gender {
+  float: left;
+  height: 24px;
+  font-size: 12px;
+}
+.tab_cash .memberInfo .content .gender::before {
+  float: left;
+  content: "";
+  width: 16px;
+  height: 16px;
+  background: url("../images/icons_sprite/female.png") no-repeat 0px 0px;
+  background-size: 16px 16px;
+  margin: 4px;
+}
+.tab_cash .memberInfo .content .gender.male::before {
+  background: url("../images/icons_sprite/male.png") no-repeat 0px 0px;
+  background-size: 16px 16px;
+}
+.tab_cash .memberInfo .content .tel {
+  float: right;
+  text-align: right;
+  padding-right: 30px;
+}
+.tab_cash .memberInfo .content .tel::before {
+  content: "";
+  width: 16px;
+  height: 16px;
+  float: left;
+  margin: 4px 0 4px 4px;
+  display: inline-block;
+  background: url("../images/icons_sprite/cellphone.png") no-repeat 0px 0px;
+  background-size: 16px 16px;
+}
+.tab_cash .memberInfo .content .comment {
+  font-size: 12px;
+  color: #999;
+  clear: both;
+  padding: 0 0 3px 5px;
+}
+.tab_cash .memberInfo .content .card {
+  border-top: 1px solid #ececec;
+  padding: 8px 5px;
+}
+.tab_cash .memberInfo .content .card .left {
+  width: 50%;
+}
+.tab_cash .memberInfo .content .card .right {
+  float: right;
+  width: 50%;
+  text-align: right;
+}
+.tab_cash .memberInfo .content .card .name {
+  font-weight: bold;
+}
+.tab_cash .memberInfo .content .card .cardNo {
+  font-size: 12px;
+  color: #999;
+  line-height: 20px;
+}
+.tab_cash .memberInfo .content .card .discount {
+  font-size: 12px;
+  line-height: 20px;
+}
+.tab_cash .memberInfo .content .card .price {
+  color: #e82742;
+  font-size: 16px;
+}
+.tab_cash .memberInfo .content .card .price::before {
+  content: "余额:￥";
+  font-size: 12px;
+}
+.tab_cash .memberInfo .content .card .bonus {
+  font-size: 12px;
+  color: #999;
+  line-height: 20px;
+}
+.tab_cash .memberInfo .content .recharge,
+.tab_cash .memberInfo .content .renewal {
+  margin: 5px -5px 0 -5px;
+  line-height: 40px;
+  text-align: center;
+  color: #FFF;
+  background: #595959;
+}
+.tab_cash .memberInfo .content .recharge.am-clickable-active,
+.tab_cash .memberInfo .content .renewal.am-clickable-active {
+  background: #282828;
+}
+.tab_cash .memberInfo .content .close {
+  margin: 5px 0 0 0;
+  line-height: 30px;
+  text-align: center;
+  background: #f7f7f7;
+}
+.tab_cash .memberInfo .content .close.am-clickable-active {
+  background: #c2c2c2;
+}
+.tab_cash .memberInfo .content .items {
+  border-top: 1px solid #ececec;
+  padding: 10px 0 0 0;
+  line-height: 20px;
+  max-height: 200px;
+  overflow: hidden;
+}
+.tab_cash .memberInfo .content .items li {
+  padding: 5px 10px;
+  background: #f7f7f7;
+  margin-bottom: 1px;
+}
+.tab_cash .memberInfo .content .items li.am-clickable-active {
+  background: #c2c2c2;
+}
+.tab_cash .memberInfo .content .items .times {
+  float: right;
+}
+.tab_cash .memberInfo .content .items .times span {
+  display: block;
+  line-height: 14px;
+  font-size: 12px;
+  color: #bdbdbd;
+}
+.tab_cash .memberInfo .content .items .invalidDate {
+  line-height: 14px;
+  font-size: 12px;
+  color: #bdbdbd;
+}
+.tab_cash .memberInfo .content .items .invalidDate.highlight {
+  color: #e82742;
+}
+.tab_cash .tabUl li {
+  padding: 2px 0 0 0;
+  height: 52px;
+  text-align: center;
+  line-height: 20px;
+  position: relative;
+}
+.tab_cash .tabUl li p {
+  display: block;
+  height: 30px;
+  width: 30px;
+  margin: 0 auto;
+  background-color: #CCC;
+}
+.tab_cash .tabUl li p.a {
+  background: url("../images/tab_sprite.png") no-repeat 0px -35px;
+  background-size: 35px 700px;
+}
+.tab_cash .tabUl li p.b {
+  background: url("../images/tab_sprite.png") no-repeat 0px -70px;
+  background-size: 35px 700px;
+}
+.tab_cash .tabUl li p.c {
+  background: url("../images/tab_sprite.png") no-repeat 0px -140px;
+  background-size: 35px 700px;
+}
+.tab_cash .tabUl li p.d {
+  background: url("../images/tab_sprite.png") no-repeat 0px -210px;
+  background-size: 35px 700px;
+}
+.tab_cash .tabUl li p.e {
+  background: url("../images/tab_sprite.png") no-repeat 0px -280px;
+  background-size: 35px 700px;
+}
+.tab_cash .tabUl li p.f {
+  background: url("../images/tab_sprite.png") no-repeat 0px 0px;
+  background-size: 35px 700px;
+}
+.tab_cash .tabUl li p.g {
+  background: url("../images/tab_sprite.png") no-repeat 0px -420px;
+  background-size: 35px 700px;
+}
+.tab_cash .tabUl li p.h {
+  background: url("../images/tab_sprite.png") no-repeat 0px -490px;
+  background-size: 35px 700px;
+}
+.tab_cash .tabUl li p.i {
+  background: url("../images/tab_sprite.png") no-repeat 0px -560px;
+  background-size: 35px 700px;
+}
+.tab_cash .tabUl li p.j {
+  background: url("../images/tab_sprite.png") no-repeat 0px -630px;
+  background-size: 35px 700px;
+}
+.tab_cash .tabUl li p.k {
+  background: url(../images/queue.png) no-repeat center center;
+  background-size: 20px 21px;
+}
+.tab_cash .tabUl li.selected {
+  border-top: 1px solid #444;
+  border-bottom: 1px solid #444;
+  background-color: #444;
+  color: #FFF;
+  opacity: 1;
+}
+.tab_cash .tabUl li.selected::before {
+  content: "";
+  position: absolute;
+  right: -7px;
+  top: 50%;
+  margin-top: -7px;
+  border-left: 7px solid #444;
+  border-top: 7px solid transparent;
+  border-bottom: 7px solid transparent;
+}
+.tab_cash .tabUl li.selected p.a {
+  background: url("../images/tab_sprite.png") no-repeat 0px -350px;
+  background-size: 35px 700px;
+}
+.tab_cash .tabUl li.selected p.b {
+  background: url("../images/tab_sprite.png") no-repeat 0px -105px;
+  background-size: 35px 700px;
+}
+.tab_cash .tabUl li.selected p.c {
+  background: url("../images/tab_sprite.png") no-repeat 0px -175px;
+  background-size: 35px 700px;
+}
+.tab_cash .tabUl li.selected p.d {
+  background: url("../images/tab_sprite.png") no-repeat 0px -245px;
+  background-size: 35px 700px;
+}
+.tab_cash .tabUl li.selected p.e {
+  background: url("../images/tab_sprite.png") no-repeat 0px -315px;
+  background-size: 35px 700px;
+}
+.tab_cash .tabUl li.selected p.f {
+  background: url("../images/tab_sprite.png") no-repeat 0px -385px;
+  background-size: 35px 700px;
+}
+.tab_cash .tabUl li.selected p.g {
+  background: url("../images/tab_sprite.png") no-repeat 0px -455px;
+  background-size: 35px 700px;
+}
+.tab_cash .tabUl li.selected p.h {
+  background: url("../images/tab_sprite.png") no-repeat 0px -525px;
+  background-size: 35px 700px;
+}
+.tab_cash .tabUl li.selected p.i {
+  background: url("../images/tab_sprite.png") no-repeat 0px -595px;
+  background-size: 35px 700px;
+}
+.tab_cash .tabUl li.selected p.j {
+  background: url("../images/tab_sprite.png") no-repeat 0px -665px;
+  background-size: 35px 700px;
+}
+.tab_cash .tabUl li.selected p.k {
+  background: url(../images/queue-selected.png) no-repeat center center;
+  background-size: 20px 21px;
+}
+.tab_cash .tabUl li > .num {
+  display: none;
+  position: absolute;
+  line-height: 14px;
+  padding: 0 2px 0 1px;
+  color: #FFF;
+  background: #e82742;
+  border-radius: 2px;
+  right: 2px;
+  top: 2px;
+  font-size: 12px;
+}
+.tab_cash .line {
+  height: 6px;
+  box-shadow: rgba(0, 0, 0, 0.15) 0 0 3px inset;
+}
+.tab_cash .tabItem {
+  border-top: 1px solid #FFF;
+  border-bottom: 1px solid #DDD;
+  background-color: #f7f7f7;
+}
+.tab_cash .tabItem.search {
+  border-bottom: none;
+}
+.tab_cash .user {
+  padding-bottom: 2px;
+}
+.tab_cash .user .img {
+  height: 40px;
+  background: #E7E7E7 url("../images/defultbg.png") no-repeat center center;
+  background-size: 40px 40px;
+  margin: 5px 10px 0 10px;
+  overflow: hidden;
+}
+.tab_cash .user .img img {
+  width: 100%;
+}
+.tab_cash .user .name {
+  line-height: 20px;
+  font-size: 12px;
+  text-align: center;
+}
+.tab_cash .user.am-clickable-active {
+  background: #E7E7E7;
+  color: #222;
+}
+.tab_cash .cardli {
+  white-space: nowrap;
+  font-size: 12px;
+  text-align: left;
+}
+.tab_cash .cardli .name {
+  height: 16px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tab_cash .cardli .balance {
+  color: #e82742;
+  padding-left: 5px;
+}
+.tab_cash .hangupBtn,
+.tab_cash .settingBtn,
+.tab_cash .genderBtn,
+.tab_cash .searchBtn,
+.tab_cash .cardBtn,
+.tab_cash .hangupListBtn,
+.tab_cash .roundCardsBtn {
+  position: relative;
+  text-align: center;
+  line-height: 14px;
+  font-size: 12px;
+  padding-bottom: 6px;
+  padding-top: 3px;
+  /* .icon-roundCards{
+			&::before{
+				content:"";
+				display: block;
+				background:url("../images/hangup/roundCards.png") no-repeat center center;
+				background-size: 20px 21px;
+				width: 100%;
+				height:32px;
+			}
+		} */
+}
+.tab_cash .hangupBtn.am-clickable-active,
+.tab_cash .settingBtn.am-clickable-active,
+.tab_cash .genderBtn.am-clickable-active,
+.tab_cash .searchBtn.am-clickable-active,
+.tab_cash .cardBtn.am-clickable-active,
+.tab_cash .hangupListBtn.am-clickable-active,
+.tab_cash .roundCardsBtn.am-clickable-active {
+  background: #E7E7E7;
+  color: #222;
+}
+.tab_cash .hangupBtn.selected,
+.tab_cash .settingBtn.selected,
+.tab_cash .genderBtn.selected,
+.tab_cash .searchBtn.selected,
+.tab_cash .cardBtn.selected,
+.tab_cash .hangupListBtn.selected,
+.tab_cash .roundCardsBtn.selected {
+  background: #FFF;
+}
+.tab_cash .hangupBtn .icon::before,
+.tab_cash .settingBtn .icon::before,
+.tab_cash .genderBtn .icon::before,
+.tab_cash .searchBtn .icon::before,
+.tab_cash .cardBtn .icon::before,
+.tab_cash .hangupListBtn .icon::before,
+.tab_cash .roundCardsBtn .icon::before {
+  font-size: 24px;
+  line-height: 32px;
+}
+.tab_cash .hangupBtn .search_vip,
+.tab_cash .settingBtn .search_vip,
+.tab_cash .genderBtn .search_vip,
+.tab_cash .searchBtn .search_vip,
+.tab_cash .cardBtn .search_vip,
+.tab_cash .hangupListBtn .search_vip,
+.tab_cash .roundCardsBtn .search_vip {
+  margin-bottom: 5px;
+  height: 26px;
+  background: url("../images/search_vip.gif") no-repeat center center;
+  background-size: 26px 26px;
+}
+.tab_cash .hangupBtn .num,
+.tab_cash .settingBtn .num,
+.tab_cash .genderBtn .num,
+.tab_cash .searchBtn .num,
+.tab_cash .cardBtn .num,
+.tab_cash .hangupListBtn .num,
+.tab_cash .roundCardsBtn .num {
+  /*position: absolute;
+			right: 2px;
+			top:2px;
+			padding: 0 4px;
+			line-height: 14px;
+			font-size: 12px;
+			background: #f39800;
+			color: #FFF;
+			border-radius: 20px;*/
+  display: none;
+  position: absolute;
+  line-height: 14px;
+  padding: 0 4px;
+  color: #FFF;
+  background: #e82742;
+  border-radius: 2px;
+  right: 2px;
+  top: 2px;
+  font-size: 12px;
+}

@@ -1,0 +1,58 @@
+@charset "utf-8";
+html.ios .page-customerSearch .class-fullcenter{
+	top: 107px;
+}
+.page-customerSearch .class-fullcenter {
+	top: 87px;
+}
+
+
+
+.page-customerSearch  .searchBox {
+	height: 30px;
+	/* border-bottom: #dbdbdb 1px solid; */
+	padding: 10px;
+	position: relative;
+	background: #f5f5f5;
+}
+.page-customerSearch .searchBox .input {
+	height: 20px;
+	/* line-height: 20px; */
+	position: relative;
+	/* border: #adacac 1px solid; */
+	padding: 5px;
+	/* margin-right: 68px; */
+	border-radius: 3px;
+	font-size: 20px;
+	background: #dcdcdc;
+}
+.page-customerSearch .searchBox .input input {
+	height: 50px;
+	/* line-height: 16px; */
+	font-size: 14px;
+	width: 100%;
+	border: none;
+	display: block;
+	background: none;
+	margin: -15px 0;
+}
+
+.page-customerSearch .searchBox .searchBtn {
+	height: 50px;
+	width: 58px;
+	background: url("img/cust-search.png") no-repeat center center;
+	background-size: 17px 17px;
+	text-align: center;
+	border-radius: 3px;
+	position: absolute;
+	right: 0;
+	top: 0;
+	line-height: 50px;
+	color: #fff;
+}
+
+.page-customerSearch .searchBox .searchBtn.gray {
+	background: url("img/login-clear.png") no-repeat center center;
+	background-size: 24px 24px;
+	opacity: 0.6;
+}

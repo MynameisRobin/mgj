@@ -1,0 +1,209 @@
+.page-empGoalsList .am-header .right.button {
+  font-size: 22px;
+}
+.page-empGoalsList .am-header .right.button.am-clickable-active {
+  opacity: .5;
+}
+.page-empGoalsList .am-body-wrap .chart-container {
+  height: 30px;
+  margin-top: 5px;
+}
+.page-empGoalsList .am-body-wrap .chart-container .chart-wrapper {
+  overflow: hidden;
+}
+.page-empGoalsList .am-body-wrap .chart-container .chart-wrapper .text {
+  color: #8e8e8e;
+}
+.page-empGoalsList .am-body-wrap .hide {
+  display: none;
+}
+.page-empGoalsList .am-body-wrap .goal_notset {
+  position: absolute;
+  top: 0;
+  bottom: 0px;
+  left: 0;
+  right: 0;
+  background-color: #fff;
+  text-align: center;
+}
+.page-empGoalsList .am-body-wrap .goal_notset label.icon-write {
+  font-size: 75px;
+  color: #DFDFDF;
+  margin-top: 103.5px;
+  margin-bottom: 25.3px;
+  display: inline-block;
+}
+.page-empGoalsList .am-body-wrap .goal_notset p {
+  font-family: PingFangSC-Regular;
+  font-size: 17px;
+  color: #939393;
+  margin-bottom: 88px;
+}
+.page-empGoalsList .am-body-wrap .goal_notset a.set_goalbtn {
+  background: #2DBD84;
+  border-radius: 8px;
+  width: 260px;
+  height: 47px;
+  line-height: 47px;
+  font-family: PingFang-SC-Medium;
+  font-size: 16px;
+  color: #FFFFFF;
+  display: inline-block;
+}
+.page-empGoalsList .am-body-wrap .packup_btn {
+  width: 100%;
+  background-color: #fff;
+  text-align: center;
+  line-height: 45px;
+  height: 45px;
+  color: #222;
+  font-size: 15px;
+  font-weight: normal;
+}
+.page-empGoalsList .am-body-wrap .packup_btn .packup_text,
+.page-empGoalsList .am-body-wrap .packup_btn .packup_mark {
+  display: inline-block;
+  vertical-align: middle;
+}
+.page-empGoalsList .am-body-wrap .packup_btn .packup_mark {
+  color: #c7c7cc;
+  margin-left: 5px;
+}
+.page-empGoalsList .am-body-wrap .list_content {
+  position: absolute;
+  top: 45px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.page-empGoalsList .am-body-wrap .list_content .roleWrap {
+  height: 35px;
+  overflow: hidden;
+}
+.page-empGoalsList .am-body-wrap .list_content .roleWrap .filter_list {
+  height: 35px;
+  line-height: 34px;
+  font-size: 0;
+  white-space: nowrap;
+  display: inline-block;
+}
+.page-empGoalsList .am-body-wrap .list_content .roleWrap .filter_list li {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 20px;
+  padding: 0 6px;
+  line-height: 33px;
+  height: 33px;
+  border-bottom: 2px solid transparent;
+}
+.page-empGoalsList .am-body-wrap .list_content .roleWrap .filter_list li.am-clickable-active {
+  opacity: .5;
+}
+.page-empGoalsList .am-body-wrap .list_content .roleWrap .filter_list li.selected {
+  border-bottom: 2px solid #2dbd84;
+}
+.page-empGoalsList .am-body-wrap .list_content .roleWrap .filter_list li.selected span {
+  color: #2DBD84;
+}
+.page-empGoalsList .am-body-wrap .list_content .roleWrap .filter_list li span {
+  font-size: 12px;
+  color: #939393;
+}
+.page-empGoalsList .am-body-wrap .list_content .item_wrap {
+  overflow: hidden;
+  position: absolute;
+  top: 35px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-top: 1px solid #cfcfd3;
+}
+.page-empGoalsList .am-body-wrap .list_content .item_wrap .content_items p {
+  text-align: center;
+  color: #999;
+  font-size: 12px;
+  padding-top: 30px;
+}
+.page-empGoalsList .am-body-wrap .list_content .item_wrap .content_items li {
+  position: relative;
+  height: 60px;
+  background-color: #fff;
+  box-sizing: border-box;
+}
+.page-empGoalsList .am-body-wrap .list_content .item_wrap .content_items li.am-clickable-active {
+  background-color: #f5f5f5;
+}
+.page-empGoalsList .am-body-wrap .list_content .item_wrap .content_items li::after {
+  content: '';
+  background-color: #EDEDED;
+  position: absolute;
+  height: 1px;
+  left: 68px;
+  right: 0;
+  bottom: 0;
+}
+.page-empGoalsList .am-body-wrap .list_content .item_wrap .content_items li .item_left {
+  width: 150px;
+  height: 60px;
+  line-height: 60px;
+  position: absolute;
+}
+.page-empGoalsList .am-body-wrap .list_content .item_wrap .content_items li .item_left .lf_pic,
+.page-empGoalsList .am-body-wrap .list_content .item_wrap .content_items li .item_left .lf_info {
+  display: inline-block;
+  vertical-align: middle;
+}
+.page-empGoalsList .am-body-wrap .list_content .item_wrap .content_items li .item_left .lf_pic {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background-color: #ccc;
+  margin: 0 13px;
+  background: url(img/bg-woman.gif) no-repeat center center;
+  background-size: contain;
+}
+.page-empGoalsList .am-body-wrap .list_content .item_wrap .content_items li .item_left .lf_pic.male {
+  background-image: url(img/bg-man.gif);
+}
+.page-empGoalsList .am-body-wrap .list_content .item_wrap .content_items li .item_left .lf_pic img {
+  height: 100%;
+  width: 100%;
+  border-radius: 50%;
+}
+.page-empGoalsList .am-body-wrap .list_content .item_wrap .content_items li .item_left .lf_info {
+  width: 75px;
+}
+.page-empGoalsList .am-body-wrap .list_content .item_wrap .content_items li .item_left .lf_info .info_name {
+  line-height: 20px;
+  font-size: 14px;
+  color: #222;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.page-empGoalsList .am-body-wrap .list_content .item_wrap .content_items li .item_left .lf_info .info_level {
+  line-height: 20px;
+  font-size: 12px;
+  color: #939393;
+}
+.page-empGoalsList .am-body-wrap .list_content .item_wrap .content_items li .item_middle {
+  overflow: hidden;
+  margin-left: 150px;
+  margin-right: 35px;
+  height: 50px;
+  padding: 10px 0;
+  text-align: right;
+  font-size: 12px;
+  line-height: 40px;
+  color: #222;
+}
+.page-empGoalsList .am-body-wrap .list_content .item_wrap .content_items li .item_right {
+  top: 50%;
+  color: #c7c7cc;
+  opacity: 0.5;
+  position: absolute;
+  transform: translateY(-50%) rotate(-90deg);
+  -webkit-transform: translateY(-50%) rotate(-90deg);
+  right: 13px;
+  font-size: 13px;
+}

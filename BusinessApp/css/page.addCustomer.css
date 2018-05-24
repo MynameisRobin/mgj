@@ -1,0 +1,118 @@
+@charset "utf-8";
+html.ios .page-addCustomer .class-fullcenter {
+    top: 106px;
+}
+.am-header .right.save_btn{
+    right: 20px;
+}
+.page-page-addCustomer .class-fullcenter {
+    top: 131px;
+}
+.page-addCustomer .am-body-wrap{
+  background: #f5f5f5;
+}
+.page-addCustomer .choise_sex-box{
+    height: 130px;
+    text-align: center;
+}
+.choise_sex-box .sex_box-btn{
+    text-align: center;
+    height: 70px;
+    width: 70px;
+    margin-top:20px;
+    position: relative;
+}
+.choise_sex-box .sex_label{
+    height: 40px;
+    line-height: 40px;
+}
+.sex_label label{
+    display: inline-block;
+    font-size: 14px;
+    font-weight: bold;
+}
+.sex_label label:first-child{
+    margin-right: 80px;
+}
+.choise_sex-box .sex_box-btn:checked:after{
+      background: url("img/drawCashSuccess_tips.png");
+      height: 24px;
+      width: 24px;
+      position: absolute;
+      content: ' ';
+      right: 5px;
+      bottom: -5px;
+      background-size: contain;
+}
+.sex_box-btn.man:before{
+    background: url("img/bg-man.gif");
+    height: 72px;
+    width: 72px;
+    position: absolute;
+    content: ' ';
+    left: -1px;
+    top: -1px;
+    background-size: contain;
+    border-radius: 50%;
+}
+.sex_box-btn.man{
+    margin-left: 20px;
+}
+.sex_box-btn.woman:before{
+  background: url("img/bg-woman.gif");
+  height: 72px;
+  width: 72px;
+  position: absolute;
+  content: ' ';
+  left: -1px;
+  top: -1px;
+  background-size: contain;
+  border-radius: 50%;
+}
+.member_info-box{
+    background: #fff;
+    min-height: 200px;
+    box-sizing: border-box;
+    margin-left: 15px;
+    margin-right: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.member_info-box .box_row{
+    display: flex;
+    display: -webkit-flex;
+    min-height: 60px;
+}
+
+.member_info-box .box_row>div.left{
+      width: 25%;
+      position: relative;
+}
+.member_info-box .box_row>div.left>label{
+      position: absolute;
+      bottom: 15px;
+      display: block;
+      text-align: center;
+      width: 100%;
+      box-sizing: border-box;
+      color: #999999;
+      border: 500;
+}
+.member_info-box .box_row>div.right{
+      flex:1;
+     -webkit-flex:1;
+      position: relative;
+      border-bottom: 1px solid #e5e5e5;
+}
+.member_info-box input,.member_info-box textarea{
+      flex:1;
+     -webkit-flex:1;
+     border: 0;
+     width: 100%;
+     position: absolute;
+     bottom: 15px;
+}
+.member_info-box textarea{
+      bottom: 0px;
+      min-height: 35px;
+}

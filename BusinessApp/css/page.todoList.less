@@ -1,0 +1,139 @@
+.page-todoList {
+	.am-body-wrap {
+		background: #f6f6f6;
+	}
+
+	.todoList li {
+		background: #fff;
+		margin-bottom: 10px;
+		padding-top: 10px;
+		position: relative;
+		.top {
+			padding-bottom: 10px;
+		}
+		.photo {
+			width: 54px;
+			height: 54px;
+			border: #e9e9e9 2px solid;
+			border-radius: 54px;
+			position: absolute;
+			left: 13px;
+			top: 10px;
+			background: url("img/bg-woman.gif") no-repeat center center;
+			background-size: contain;
+
+			&.male {
+				background-image: url("img/bg-man.gif");
+			}
+
+			> img {
+				width: 100%;
+				height: 100%;
+				border-radius: 100%;
+			}
+		}
+
+		.right {
+			margin-left: 82px;
+
+			> .title {
+				font-size: 15px;
+				color: #222222;
+				font-weight: bold;
+				line-height: 25px;
+			}
+
+			> .type {
+				font-size: 11px;
+				color: #999999;
+				line-height: 12px;
+			}
+
+			> .text {
+				background: #f6f6f6;
+				padding: 12px;
+				color: #222222;
+				font-size: 12px;
+				margin: 10px 10px 0 0;
+				border-radius: 2px;
+			}
+
+			> .processText {
+				font-size: 12px;
+				color: #2dbd84;
+				margin: 10px 10px 0 0;
+				line-height: 20px;
+				display: none;
+
+				&::before {
+					content: "";
+					display: inline-block;
+					width: 12px;
+					height: 12px;
+					background: url("img/todolist/processText.png") no-repeat center center;
+					background-size: contain;
+					vertical-align: middle;
+					margin-right: 5px;
+					margin-bottom: 3px;
+				}
+			}
+		}
+
+		.action {
+			display: -webkit-box;
+			padding-bottom: 16px;
+			padding-top: 6px;
+
+			> .am-clickable {
+				-webkit-box-flex: 1;
+				display: block;
+				text-align: center;
+				border-right: #eeeeee 1px solid;
+				color: #666666;
+
+				&.am-clickable-active{
+					color: #2dbd84;
+				}
+
+				&:last-child {
+					border-right: none;
+				}
+
+				&::before {
+					content: "";
+					width: 12px;
+					height: 12px;
+					display: inline-block;
+					background-repeat: no-repeat;
+					background-position: center center;
+					background-size: contain;
+					vertical-align: middle;
+					margin-right: 5px;
+				}
+
+				&.icon1::before {
+					background-image: url("img/todolist/action1.png");
+				}
+
+				&.icon2::before {
+					background-image: url("img/todolist/action2.png");
+				}
+
+				&.icon3::before {
+					background-image: url("img/todolist/action3.png");
+				}
+
+				&.icon4{
+					color: #2dbd84;
+				}
+				&.icon4::before {
+					// background-image: url("img/todolist/action4.png");
+					background-image: url("img/todolist/processText.png");
+				}
+				// &.am-clickable-active{
+				// 	background: #eee;
+				// }
+			}
+		}
+	}
+}

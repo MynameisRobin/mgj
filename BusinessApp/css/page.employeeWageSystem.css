@@ -1,0 +1,105 @@
+.page_employeeWageSystem .total{
+    display: -webkit-box;
+    -webkit-box-orient:horizontal;
+    height:75px;
+    background: #2dbd84 url("img/report/bg.png") no-repeat center top;
+    background-size: 120px 90px;
+}
+.page_employeeWageSystem .total li{
+    -webkit-box-flex: 1;
+    text-align: center;
+}
+.page_employeeWageSystem .total .val{
+    padding-top: 16px;
+    font-size: 22px;
+    color:#ffee60;
+    line-height: 26px;
+}
+.page_employeeWageSystem .total .tag{
+    color:#cbf3e3;
+    font-size: 14px;
+    line-height: 18px;
+}
+
+.page_employeeWageSystem .dd li.block{
+    float: none;
+    line-height: 44px;
+    height: 44px;
+    padding: 0 10px 0 40px;
+    border-bottom: 1px solid #f2f2f2;
+    margin:0 10px;
+    background: url("img/employee/coin_ico1.png") no-repeat left center;
+    background-size:25px 25px;
+    font-size: 14px;
+}
+.page_employeeWageSystem .storePerf_overview .dd li.block:nth-child(2){
+    background-image: url("img/totalPerformance_ico1.png");
+
+}
+.page_employeeWageSystem .storePerf_overview .dd li.block:nth-child(3){
+    background-image: url("img/totalPerformance_ico2.png");
+}
+.page_employeeWageSystem .storePerf_overview .dd li.block:nth-child(4){
+    background-image: url("img/totalPerformance_ico3.png");
+
+}
+.page_employeeWageSystem .storePerf_overview .dd li.block:nth-child(5){
+    background-image: url("img/totalPerformance_ico4.png");
+}
+.page_employeeWageSystem .storePerf_overview .dd li.block:nth-child(6){
+    background-image: url("img/employee/total_ico4.png");
+}
+.page_employeeWageSystem .storePerf_overview .dd li.block:nth-child(6){
+    background-image: url("img/employee/total_ico4.png");
+}
+.page_employeeWageSystem .storePerf_overview .dd li.block:nth-child(6){
+    background-image: url("img/employee/total_ico4.png");
+}
+.page_employeeWageSystem .storePerf_overview .dd li.block:nth-child(6){
+    background-image: url("img/employee/total_ico4.png");
+}
+.page_employeeWageSystem .storePerf_overview .dd li.block:nth-child(8){
+    background-image: url("img/employee/coin_ico2.png");
+}
+.page_employeeWageSystem .storePerf_overview .dd li.block:nth-child(9){
+    background-image: url("img/employee/total_ico5.png");
+}
+.page_employeeWageSystem .dd li.block .tag{
+    float: left;
+    margin-right: 15px;
+}
+.page_employeeWageSystem .dd li.block .val{
+    float: right;
+}
+.page_employeeWageSystem .dd li.block .desc{
+    color: #999999;
+    font-size: 12px;
+}
+.page_employeeWageSystem .totalRank table{
+    width: 100%;
+}
+.page_employeeWageSystem .totalRank .dd{
+    margin-top: 5px;
+}
+.page_employeeWageSystem .totalRank .dd li{
+    line-height: 50px;
+    height: 50px;
+    padding-left: 50px;
+}
+.page_employeeWageSystem .totalRank .dd li:nth-child(2){
+    background: url(img/employee/total_ico2.png) no-repeat left center;
+    background-size:36px 36px; 
+}
+.page_employeeWageSystem .totalRank .dd li:nth-child(3){
+    background: url(img/employee/total_ico1.png) no-repeat left center;
+    background-size:36px 36px; 
+}
+.page_employeeWageSystem .totalRank .dd li:nth-child(4){
+    background: url(img/employee/total_ico3.png) no-repeat left center;
+    background-size:36px 36px; 
+}
+
+.page_employeeWageSystem .storePerf_single table{
+    width: 100%;
+}
+

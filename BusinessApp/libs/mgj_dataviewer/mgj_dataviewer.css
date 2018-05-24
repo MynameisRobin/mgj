@@ -1,0 +1,346 @@
+.mgj_dataviewer {
+    font-size: 12px;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+}
+.mgj_dataviewer_header {
+    height: 12px;
+    line-height: 12px;
+    padding: 9px;
+    border-bottom: #6a7387 1px solid;
+    background: #818a9b;
+    border-radius: 1px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    color: #fff;
+    text-align: center;
+}
+.mgj_dataviewer_header .left {
+    float: left;
+}
+.mgj_dataviewer_header .middle {
+    display: inline-block;
+    color: #BBC2D0;
+}
+.mgj_dataviewer_header .right {
+    float: right;
+}
+.mgj_dataviewer_header .button {
+    display: block;
+    float: left;
+    padding: 0 10px 0 27px;
+    border-right: #6e7684 1px solid;
+    border-left: #a2aaba 1px solid;
+    background-repeat: no-repeat;
+    background-position: 7px center;
+    cursor: pointer;
+}
+.mgj_dataviewer_header a {
+    color: #fff;
+    position: relative;
+}
+.mgj_dataviewer_header .button:hover {
+    text-decoration: underline;
+}
+.mgj_dataviewer_header .button:first-child {
+    border-left: none;
+}
+.mgj_dataviewer_header .button:last-child {
+    border-right: none;
+}
+.mgj_dataviewer_header .button.icon1 {
+    background-image: url("images/mgj_dataviewer_header_icon1.png");
+}
+.mgj_dataviewer_header .button.icon2 {
+    background-image: url("images/mgj_dataviewer_header_icon2.png");
+}
+.mgj_dataviewer_header .button.icon3 {
+    background-image: url("images/mgj_dataviewer_header_icon3.png");
+}
+.mgj_dataviewer_header .button.icon4 {
+    background-image: url("images/mgj_dataviewer_header_icon4.png");
+}
+.mgj_dataviewer_header .button.icon5 {
+    background-image: url("images/mgj_dataviewer_header_icon5.png");
+}
+.mgj_dataviewer_columsSelector {
+    position: absolute;
+    right: 40px;
+    top: 40px;
+    background: #fff;
+    box-shadow: 1px 0px 4px rgba(125, 132, 147, 0.55);
+    width: 172px;
+    padding: 10px;
+    border-radius: 5px;
+    z-index: 10;
+    display: none;
+}
+.mgj_dataviewer_columsSelector > .title {
+    background: #556583;
+    line-height: 36px;
+    color: #fff;
+    margin: -10px -10px 0 -10px;
+    border-radius: 5px 5px 0 0;
+    padding: 0 10px;
+}
+.mgj_dataviewer_columsSelector > .arrow {
+    background: url("images/mgj_dataviewer_columsSelector_arrow.png") no-repeat center center;
+    width: 10px;
+    height: 6px;
+    position: absolute;
+    top: -6px;
+    left: 10px;
+}
+.mgj_dataviewer_columsSelector > .list {
+    margin: 0 -10px;
+    padding: 10px 10px 0 10px;
+    cursor: pointer;
+    max-height: 300px;
+    overflow-y: auto;
+}
+.mgj_dataviewer_columsSelector .subList {
+    margin-left: 10px;
+}
+.mgj_dataviewer_columsSelector .item {
+    height: 30px;
+    line-height: 30px;
+    color: #222222;
+    padding: 0 9px;
+    background: url("images/mgj_dataviewer_checkbox.png") no-repeat right 10px center;
+    background-color: #eeeeee;
+    margin-bottom: 5px;
+    border-radius: 2px;
+    position: relative;
+    text-align: left;
+}
+.mgj_dataviewer_columsSelector .subList .item {
+    padding-left: 20px
+}
+.mgj_dataviewer_columsSelector .subList .item::before {
+    content: "";
+    position: absolute;
+    display: block;
+    width: 0;
+    height: 0;
+    border-left: #a3aab7 5px solid;
+    border-right: none;
+    border-bottom: transparent 5px solid;
+    border-top: transparent 5px solid;
+    top: 10px;
+    left: 8px;
+}
+.mgj_dataviewer_columsSelector .item.checked {
+    background-image: url("images/mgj_dataviewer_checkbox_s.png");
+    background-color: #a3aab7;
+    color: #fff;
+}
+.mgj_dataviewer_columsSelector .subList .item.checked {
+    background-image: url("images/mgj_dataviewer_checkbox_s2.png");
+    background-color: #eeeeee;
+    color: #222222;
+}
+.mgj_dataviewer_columsSelector .buttonGroup {
+    text-align: center;
+    margin-top: 10px;
+}
+.mgj_dataviewer_columsSelector .buttonGroup>span {
+    background: #53c2b4;
+    border-bottom: #00837c 2px solid;
+    border-radius: 2px;
+    display: inline-block;
+    line-height: 30px;
+    width: 75px;
+    color: #fff;
+    margin: 0px 3px;
+    cursor: pointer;
+}
+.mgj_dataviewer_columsSelector .buttonGroup>span:hover {
+    background-color: #00837c;
+}
+.mgj_dataviewer_columsSelector .buttonGroup>span.gray {
+    background-color: #e8ebed;
+    color: #333333;
+    border-bottom: #d1d3d7 2px solid;
+}
+.mgj_dataviewer_columsSelector .buttonGroup>span.gray:hover {
+    background-color: #d1d3d7;
+}
+.mgj_dataviewer_table {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 31px;
+    overflow: hidden;
+}
+.mgj_dataviewer_table.moving {
+    -webkit-user-select: none;
+    cursor: move;
+}
+.mgj_dataviewer.noPager >.mgj_dataviewer_table {
+    bottom: 0px;
+}
+.mgj_dataviewer_table > table {
+    /* table-layout: fixed; */
+    position: absolute;
+    border-top: 1px solid #e5e5e5;
+    border-left: 1px solid #e5e5e5;
+    line-height: 20px;
+}
+.mgj_dataviewer_table > table tr{
+    background: #fff;
+}
+.mgj_dataviewer_table > table > tbody > tr:nth-child(odd) {
+    background: #f2f2f2;
+}
+.mgj_dataviewer_table > table > tbody > tr:nth-child(even) {
+    background: #fff;
+}
+.mgj_dataviewer_table td, .mgj_dataviewer_table th {
+    padding: 3px;
+    height: 20px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    position: relative;
+}
+.mgj_dataviewer_table td>div, .mgj_dataviewer_table th>div {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    height: 20px;
+}
+.mgj_dataviewer_table th {
+    font-weight: normal;
+    color: #000;
+    border-right: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
+}
+.mgj_dataviewer_table td {
+    color: #333;
+    border-right: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
+    text-align: right;
+}
+.mgj_dataviewer_tbody > tbody > tr:nth-child(odd) {
+    background: #f7f7f7;
+}
+table.mgj_dataviewer_tbody {
+    position: static;
+    /* min-width: 100%; */
+}
+table.mgj_dataviewer_fixedTop {
+    top: 0px;
+    left: 0px;
+    /* min-width: 100%; */
+}
+table.mgj_dataviewer_fixedBottom {
+    bottom: 0px;
+    left: 0px;
+    /* min-width: 100%; */
+}
+table.mgj_dataviewer_fixedLeft {
+    top: 0px;
+    left: 0px;
+}
+table.mgj_dataviewer_fixedRight {
+    top: 0px;
+    right: 0px;
+}
+table.mgj_dataviewer_fixedTopLeft {
+    top: 0px;
+    left: 0px;
+    z-index: 1;
+}
+table.mgj_dataviewer_fixedTopRight {
+    top: 0px;
+    right: 0px;
+    z-index: 1;
+}
+table.mgj_dataviewer_fixedBottomLeft {
+    bottom: 0px;
+    left: 0px;
+    z-index: 1;
+}
+table.mgj_dataviewer_fixedBottomRight {
+    bottom: 0px;
+    right: 0px;
+    z-index: 1;
+}
+
+.mgj_dataviewer_pager {
+    padding: 5px;
+    height: 20px;
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    text-align: center;
+}
+.mgj_dataviewer_pager > span {
+    display: inline-block;
+    height: 18px;
+    width: 18px;
+    border: #e1e4e5 1px solid;
+    margin: 0 4px;
+    color: #919fa8;
+}
+.mgj_dataviewer_pager > span.selected {
+    background: #818a9b;
+    color: #fff;
+}
+.mgj_dataviewer.noPager > .mgj_dataviewer_pager {
+    display: none;
+}
+.mgj_dataviewer_table th.sortable {
+    /* padding-right: 15px; */
+    cursor: pointer;
+}
+.mgj_dataviewer_table th.sortable.am-clickable-active {
+    background: #ccc
+}
+.mgj_dataviewer_table th.sortable:before {
+    content: "";
+    position: absolute;
+    display: block;
+    width: 0;
+    height: 0;
+    border-left: transparent 3px solid;
+    border-right: transparent 3px solid;
+    border-bottom: #000 3px solid;
+    border-top: none;
+    top: 10px;
+    right: 5px;
+}
+.mgj_dataviewer_table th.sortable:after {
+    content: "";
+    position: absolute;
+    display: block;
+    width: 0;
+    height: 0;
+    border-left: transparent 3px solid;
+    border-right: transparent 3px solid;
+    border-top: #000 3px solid;
+    border-bottom: none;
+    top: 15px;
+    right: 5px;
+}
+.mgj_dataviewer_table th.sortable.desc, .mgj_dataviewer_table th.sortable.asc {
+    background: #ccc;
+}
+.mgj_dataviewer_table th.sortable.desc:before {
+    display: none;
+}
+.mgj_dataviewer_table th.sortable.desc:after {
+    top: 12px;
+}
+.mgj_dataviewer_table th.sortable.asc:before {
+    top: 12px;
+}
+.mgj_dataviewer_table th.sortable.asc:after {
+    display: none;
+}

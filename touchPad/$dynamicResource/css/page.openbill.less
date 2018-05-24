@@ -1,0 +1,593 @@
+@import "var.less";
+@path:"../images/";
+@import "../images/icons_sprite.less";
+.page_openbill {
+	*,
+	&:after,
+	&:before {
+		box-sizing: border-box;
+		-webkit-box-sizing: border-box;
+	}
+	.clearfix:after {
+		content: ".";
+	    display: block;
+	    height: 0;
+	    visibility: hidden;
+	    clear: both;
+	}
+	input {
+		border: none;
+		background-color: transparent;
+	}
+	.head {
+		position: absolute;
+		width: 100%;
+		height: 55px;
+		top: 0;
+		background-color: #f5f5f5;
+		border-bottom: 1px solid #ececec;
+		.back {
+			position: absolute;
+			width: 54px;
+			height: 100%;
+			top: 0;
+			left: 0;
+			background: url(../images/openbill-back.png) no-repeat center center;
+			background-size: 27px 27px;
+		}
+		.mid {
+			position: absolute;
+			height: 100%;
+			left: 54px;
+			right: 150px;
+			border-left: 1px solid #ececec;
+			border-right: 1px solid #ececec;
+			&.edit {
+				right: 0;
+				border-right: none;
+			}
+			.num {
+				position: absolute;
+				width: 70px;
+				height: 40px;
+				left: 0;
+				top: 7px;
+				p {
+					text-align: center;
+				    overflow: hidden;
+				    white-space: nowrap;
+				    text-overflow: ellipsis;
+				    &:first-child {
+						font-size: 24px;
+						color: #e82742;
+						line-height: 24px;
+						height: 24px;
+				    }
+				    &:last-child {
+						font-size: 12px;
+						color: #999;
+						line-height: 16px;
+						height: 16px;
+				    }
+				}
+			}
+			.billInfo {
+				position: absolute;
+				left: 70px;
+				right: 230px;
+				height: 40px;
+				top: 7px;
+				border-left: 1px solid #ececec;
+				border-right: 1px solid #ececec;
+				.billno_box {
+					width: 30%;
+					height: 40px;
+					float: left;
+					padding: 0 18px;
+					border-right: 1px solid #ececec;
+					.label,.wrapper {
+						display: block;
+						height: 16px;
+						line-height: 16px;
+						color: #999;
+						font-size: 12px;
+						overflow: hidden;
+				    	white-space: nowrap;
+				    	text-overflow: ellipsis;
+					}
+					.wrapper {
+						height: 24px;
+						line-height: 24px;
+						font-size: 14px;
+						color: #222;
+						font-weight: bold;
+					}
+				}
+				.remarkboxwrap {
+					width: 100%;
+					height: 40px;
+					float: left;
+					overflow: hidden;
+					&.edit {
+						width: 70%;
+					}
+				}
+				.remark_box {
+					display: inline-block;
+					max-width: 100%;
+					max-height: 40px;
+					float: left;
+					padding-left: 18px;
+					font-size: 12px;
+					color: #999;
+					line-height: 20px;
+					overflow: hidden;
+				    text-overflow: ellipsis;
+				    display: -webkit-box;
+				    -webkit-box-orient: vertical;
+				    -webkit-line-clamp: 2;
+				    position: relative;
+				    padding-right: 20px;
+				    &::after {
+				    	content: '';
+				    	position: absolute;
+				    	width: 20px;
+						height: 20px;
+						right: 0;
+						bottom: 0;
+						background: url(../images/card_edit_white_icon.png) no-repeat center center;
+						background-size: 11px 14px;
+				    }
+				}
+				// .wrap {
+				// 	.label {
+				// 		display: block;
+				// 		width: 50px;
+				// 		float: left;
+				// 		overflow: hidden;
+				// 	    white-space: nowrap;
+				// 	    text-overflow: ellipsis;
+				// 	    font-size: 14px;
+				// 	}
+				// 	.wrapper {
+				// 		margin-left: 50px;
+				// 	}
+				// 	&:first-child {
+				// 		margin: 2px 0;
+				// 		height: 14px;
+				// 		.label,.billno {
+				// 			height: 14px;
+				// 			line-height: 14px;
+				// 			color: #555;
+				// 			font-size: 14px;
+				// 		}
+				// 		.wrapper {
+				// 			overflow: hidden;
+				// 	    	white-space: nowrap;
+				// 	    	text-overflow: ellipsis;
+				// 		}
+				// 	}
+				// 	&:last-child {
+				// 		height: 22px;
+				// 		.label {
+				// 			height: 22px;
+				// 			line-height: 22px;
+				// 			color: #555;
+				// 		}
+				// 		.wrapper {
+				// 			height: 22px;
+				// 			border-bottom: 1px solid #dadada;
+				// 			border-radius: 3px;
+				// 			.input-wrap {
+				// 				position: relative;
+				// 				height: 100%;
+				// 				padding-left: 25px;
+				// 				span {
+				// 					position: absolute;
+				// 					width: 25px;
+				// 					height: 100%;
+				// 					left: 0;
+				// 					top: 0;
+				// 					background: url(../images/card_edit_white_icon.png) no-repeat center center;
+				// 					background-size: 11px 14px;
+				// 				}
+				// 				input {
+				// 					display: block;
+				// 					width: 100%;
+				// 					height: 100%;
+				// 					padding-right: 10px;
+				// 					font-size: 14px;
+				// 				}
+				// 			}
+				// 		}
+				// 	}
+				// }
+			}
+			.memberInfo {
+				position: absolute;
+				width: 230px;
+				height: 40px;
+				top: 7px;
+				right: 0;
+				padding: 0 20px;
+				.member {
+					width: 110px;
+					float: left;
+					.header {
+						width: 40px;
+						height: 40px;
+						background: #e6e6e6 url(../images/openbill-customer.png) no-repeat;
+						background-size: 100% 100%;
+						border-radius: 50%;
+						overflow: hidden;
+						float: left;
+					}
+					.name {
+						margin-left: 46px;
+						height: 40px;
+						font-size: 16px;
+						color: #e82742;
+						line-height: 40px;
+						overflow: hidden;
+						white-space: nowrap;
+				    	text-overflow: ellipsis;
+					}
+				}
+				.sex {
+					width: 80px;
+					float: left;
+					li {
+						width: 28px;
+						height: 28px;
+						background-color: #eee;
+						border-radius: 50%;
+						float: left;
+						margin: 6px;
+						font-size: 12px;
+						color: #555;
+						text-align: center;
+						line-height: 28px;
+						&.active {
+							color: #fff;
+							background-color: #555;
+						}
+					}
+				}
+			}
+		}
+		.right {
+			position: absolute;
+			width: 150px;
+			height: 100%;
+			top: 0;
+			right: 0;
+			background-color: #fff;
+			&.disabled {
+				opacity: 0.5;
+			}
+			.wrap {
+				width: 50%;
+				height: 100%;
+				float: left;
+				padding-top: 8px;
+				&:first-child {
+					border-right: 1px solid #ececec;
+				}
+				.icon {
+					width: 22px;
+					height: 22px;
+					margin: 0 auto;
+				}
+				p {
+					font-size: 12px;
+					color: #666;
+					text-align: center;
+					line-height: 24px;
+					height: 24px;
+					overflow: hidden;
+				}
+				&.memberOpen .icon {
+					background: url(../images/openbill-member.png) no-repeat center center;
+					background-size: 22px 22px;
+				}
+				&.orderOpen .icon {
+					background: url(../images/openbill-order.png) no-repeat center center;
+					background-size: 22px 21px;
+				}
+				&.orderOpen .num{
+					position: absolute;
+					width: 18px;
+					height: 18px;
+					background: #f39800;
+					border-radius: 18px;
+					right: 13px;
+					top: 7px;
+					color: #282828;
+					font-size: 12px;
+					text-align: center;
+					line-height: 21px;
+				}
+			}
+		}
+	}
+	.content {
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 55px;
+		bottom: 44px;
+		overflow: hidden;
+		.tip {
+			position: absolute;
+			width: 100%;
+			text-align: center;
+			top: 10px;
+			z-index: 9;
+			p {
+				font-size: 12px;
+				color: #e82742;
+				display: inline-block;
+				vertical-align: top;
+				height: 32px;
+				line-height: 32px;
+				overflow: hidden;
+			}
+			.closeTip {
+				display: inline-block;
+				vertical-align: top;
+				width: 16px;
+				height: 16px;
+				margin: 8px;
+				background-image: @input_clear_icon_png;
+				background-position: @input_clear_icon_png_pos;
+				background-size: @input_clear_icon_png_size;
+			}
+		}
+		.list {
+			padding: 6px 10px;
+			.wrapper {
+				margin-top: 14px;
+			}
+			.type {
+				font-size: 12px;
+				color: #999;
+				line-height: 25px;
+				height: 25px;
+				overflow: hidden;
+				padding-left: 4px;
+			}
+			li {
+				width: 75px;
+				height: 104px;
+				margin: 4px;
+				float: left;
+				border-radius: 5px;
+				position: relative;
+				background-color: #5dae72;
+				color: #fff;
+				&.disabled {
+					opacity: 0.5;
+				}
+				&.status4 {
+					background-color: #e59b37;
+					.time {
+						background: url(../images/openbill-time.png) no-repeat 52px center;
+						background-size: 11px 12px;
+					}
+				}
+				&.status2 {
+					background-color: #e82742;
+				}
+				&.status1 {
+					background-color: #5dae72;
+				}
+				&.status3 {
+					background-color: #555;
+				}
+				.outside {
+					position: absolute;
+					left: 0;
+					top: 0;
+					right: 0;
+					bottom: 0;
+					padding: 6px;
+				}
+				.no {
+					font-size: 24px;
+					font-weight: bold;
+					height: 24px;
+					line-height: 24px;
+				}
+				.name {
+					font-size: 12px;
+					height: 20px;
+					line-height: 20px;
+				}
+				.time {
+					font-size: 12px;
+					height: 20px;
+					line-height: 20px;
+				}
+				.header {
+					position: absolute;
+					width: 22px;
+					height: 22px;
+					left: 6px;
+					bottom: 6px;
+					border-radius: 50%;
+					overflow: hidden;
+					background: #e2e2e2 url(../images/openbill-emp.png) no-repeat bottom center;
+					background-size: 20px 32px;
+					img {
+						width: 100%;
+						height: 100%;
+					}
+				}
+				.status {
+					position: absolute;
+					width: 50px;
+					height: 14px;
+					right: 10px;
+					bottom: 10px;
+					font-size: 12px;
+					line-height: 14px;
+					text-align: right;
+				}
+				.no,.name,.time,.status {
+				 	overflow: hidden;
+				    white-space: nowrap;
+				    text-overflow: ellipsis;
+				}
+				.inside {
+					position: absolute;
+					left: 0;
+					top: 0;
+					right: 0;
+					bottom: 0;
+					display: none;
+					&::after {
+						content: '';
+						position: absolute;
+						width: 30px;
+						height: 30px;
+						right: 8px;
+						top: -10px;
+						border-radius: 50%;
+						background: #e82742 url(../images/openbill-selected.png);
+						background-size: 100% 100%;
+					}
+					.top {
+						content: '';
+						position: absolute;
+						width: 100%;
+						height: 38px;
+						top: 0;
+						background-color: rgba(0,0,0,.4);
+						border-radius: 5px 5px 0 0;
+					}
+					.inside-content {
+						position: absolute;
+						width: 100%;
+						top: 38px;
+						bottom: 0;
+						background-color: rgba(0,0,0,.8);
+						border-radius: 0 0 5px 5px;
+						.inside-content-wrap {
+							position: absolute;
+							width: 100%;
+							bottom: 18px;
+						}
+						.role {
+							font-size: 10px;
+							color: #fff;
+							text-align: center;
+							line-height: 24px;
+							height: 24px;
+							overflow: hidden;
+						}
+						.option {
+							font-size: 0;
+							text-align: center;
+							.appoint {
+								display: inline-block;
+								width: 40px;
+								height: 24px;
+								border-radius: 24px;
+								background-color: #7d7d7d; 
+								position: relative;
+								.icon {
+									// width: 24px;
+									// height: 24px;
+									// margin: 0 auto;
+									position: absolute;
+									width: 20px;
+									height: 20px;
+									border-radius: 50%;
+									background-color: #f8f8f9;
+									left: 2px;
+									right: auto;
+									top: 2px;
+								}
+								p {
+									position: absolute;
+									width: 100%;
+									top: 100%;
+									font-size: 10px;
+									color: #fff;
+									text-align: center;
+									line-height: 18px;
+									height: 18px;
+									overflow: hidden;
+								}
+							}
+							.wash {
+								display: inline-block;
+								width: 30px;
+								height: 24px;
+								position: relative;
+								.icon {
+									position: absolute;
+									width: 20px;
+									height: 20px;
+									left: 5px;
+									top: 2px;
+									background-color: #7d7d7d;
+									background-image: url(../images/selectReason.png);
+									background-repeat: no-repeat;
+									background-size: 12px 8px;
+									background-position: center center;
+									border-radius: 50%;
+								}
+								p {
+									position: absolute;
+									width: 100%;
+									top: 100%;
+									font-size: 10px;
+									color: #fff;
+									text-align: center;
+									line-height: 18px;
+									height: 18px;
+									overflow: hidden;
+								}
+							}
+							.appoint.yes {
+								background-color: #42a2de;
+								.icon {
+									left: auto;
+									right: 2px;
+								}
+							}
+							.wash.washing {
+								.icon {
+									background-color: #42a2de;
+								}
+							}
+						}
+					}
+				}
+				&.active .inside {
+					display: block;
+				}
+				&.notWash .inside .inside-content .option {
+					.appoint {
+						width: 50px;
+					}
+					.wash {
+						display: none;
+					}
+				}
+			}
+		}
+	}
+	.submit {
+		position: absolute;
+		width: 100%;
+		height: 44px;
+		bottom: 0;
+		background-color: #555;
+		font-size: 16px;
+		color: #fff;
+		text-align: center;
+		line-height: 44px;
+	}
+}

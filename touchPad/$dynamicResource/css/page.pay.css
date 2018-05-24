@@ -1,0 +1,826 @@
+/* 文字颜色 ***********************/
+/* c0* 为黑白灰色系 */
+.page_pay {
+  /* .print{
+        height: 50px;
+        text-align: center;
+        line-height: 50px;
+        .abs(@top: 0;@right: 0;);
+        font-size: @fs2;
+        padding-right:10px;
+        opacity: 0.7;
+        &::before{
+            content: "";
+            float: left;
+            width: 24px;
+            height: 24px;
+            margin: 12px 3px 0 13px;
+            background: @print_png no-repeat @print_png_pos;
+            background-size: @print_png_size;
+        }
+        &.am-clickable-active{
+            opacity: 1;
+        }
+    } */
+}
+.page_pay .payContent {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 51px;
+  bottom: 0;
+}
+.page_pay .am-header .billno {
+  height: 32px;
+  background-color: #eeeeee;
+  border-radius: 30px;
+  padding: 3px;
+  width: 160px;
+  float: right;
+  margin-top: 10px;
+  margin-right: 10px;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+.page_pay .am-header .billno input {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  display: block;
+  border: none;
+  width: 100%;
+  height: 100%;
+  background: none;
+  border-radius: 30px;
+  padding: 0 10px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.page_pay .am-header .billno input::-webkit-placeholder {
+  color: #999;
+}
+.page_pay .left {
+  height: 100%;
+  float: left;
+  width: 60%;
+}
+.page_pay .left .checkboxes {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: auto;
+  bottom: 50px;
+  height: 36px;
+}
+.page_pay .left .checkboxes .checkbox {
+  float: left;
+  line-height: 30px;
+  padding: 0 10px;
+  color: #bdbdbd;
+}
+.page_pay .left .checkboxes .checkbox::before {
+  content: "";
+  float: left;
+  width: 15px;
+  height: 15px;
+  border: 1px solid #dfdfdf;
+  border-radius: 4px;
+  margin: 6px;
+}
+.page_pay .left .checkboxes .checkbox.checked {
+  color: #666;
+}
+.page_pay .left .checkboxes .checkbox.checked::before {
+  border-color: #6D6D6D;
+  background: url("../images/icons_sprite/selected.png") no-repeat 0px 0px;
+  background-size: 15px 15px;
+}
+.page_pay .left .comment {
+  position: absolute;
+  left: 0;
+  right: auto;
+  top: auto;
+  bottom: 86px;
+  width: 60%;
+  box-sizing: border-box;
+  line-height: 20px;
+  min-height: 26px;
+  padding: 3px 15px 3px 65px;
+  font-size: 12px;
+  color: #888;
+}
+.page_pay .left .comment::before {
+  content: "备注:";
+  position: absolute;
+  left: 16px;
+  right: auto;
+  top: 3px;
+  bottom: auto;
+}
+.page_pay .left .comment::after {
+  position: absolute;
+  left: 48px;
+  right: auto;
+  top: 5px;
+  bottom: auto;
+  content: "";
+  width: 11px;
+  height: 14px;
+  background: url("../images/card_edit_white_icon.png") no-repeat center center;
+  background-size: 11px 14px;
+}
+.page_pay .left dt {
+  height: 62px;
+  line-height: 62px;
+  border-top: 1px solid #ececec;
+  border-bottom: 1px solid #ececec;
+  padding: 0 20px;
+}
+.page_pay .left dt:first-child {
+  border-top: none;
+}
+.page_pay .left dt.rechargeItem {
+  border-top: none;
+}
+.page_pay .left dt.comboitemItem {
+  border-bottom: none;
+}
+.page_pay .left dt .val {
+  height: 62px;
+}
+.page_pay .left dd {
+  padding: 0 20px 0 50px;
+  height: 44px;
+  line-height: 44px;
+}
+.page_pay .left .val {
+  float: right;
+  color: #222;
+  height: 44px;
+  max-width: 80%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.page_pay .left .val.add {
+  padding-right: 50px;
+  position: relative;
+  left: 12px;
+  min-width: 50%;
+}
+.page_pay .left .val.add::before {
+  content: "";
+  display: block;
+  width: 15px;
+  height: 15px;
+  margin: -7px -7px 0 0;
+  background: url("../images/icons_sprite/add.png") no-repeat 0px 0px;
+  background-size: 15px 15px;
+  position: absolute;
+  left: auto;
+  right: 22px;
+  top: 50%;
+  bottom: auto;
+}
+.page_pay .left .val.add::after {
+  content: "";
+  display: block;
+  width: 24px;
+  height: 24px;
+  border: 1px solid #222;
+  border-radius: 15px;
+  position: absolute;
+  left: auto;
+  right: 22px;
+  top: 50%;
+  bottom: auto;
+  margin: -13px -13px 0 0;
+}
+.page_pay .left .val.edit {
+  padding-right: 50px;
+  position: relative;
+  left: 12px;
+}
+.page_pay .left .val.edit::before {
+  content: "";
+  display: block;
+  width: 15px;
+  height: 15px;
+  margin: -7px -7px 0 0;
+  background: url("../images/icons_sprite/edit.png") no-repeat 0px 0px;
+  background-size: 15px 15px;
+  position: absolute;
+  left: auto;
+  right: 22px;
+  top: 50%;
+  bottom: auto;
+}
+.page_pay .left .val.edit::after {
+  content: "";
+  display: block;
+  width: 24px;
+  height: 24px;
+  border: 1px solid #222;
+  border-radius: 15px;
+  position: absolute;
+  left: auto;
+  right: 22px;
+  top: 50%;
+  bottom: auto;
+  margin: -13px -13px 0 0;
+}
+.page_pay .left .val.am-disabled {
+  opacity: 0.3;
+}
+.page_pay .left .val.total,
+.page_pay .left .val.rechargePrice,
+.page_pay .left .val.rechargeBonus,
+.page_pay .left .val.combocost {
+  font-size: 18px;
+}
+.page_pay .left .val.payTotal {
+  font-size: 30px;
+  color: #e82742;
+}
+.page_pay .left .val .name {
+  padding-right: 5px;
+}
+.page_pay .left dd.luckymoney .val .price::before {
+  content: "";
+  width: 20px;
+  height: 20px;
+  float: right;
+  background: url("../images/icons_sprite/icon_lcMoney.png") no-repeat 0px 0px;
+  background-size: 20px 20px;
+  margin: 12px 0 0 10px;
+}
+.page_pay .left dd.mallOrder .val .price::before {
+  content: "";
+  width: 20px;
+  height: 20px;
+  float: right;
+  background: url("../images/icons_sprite/icon_mallOrder.png") no-repeat 0px 0px;
+  background-size: 20px 20px;
+  margin: 12px 0 0 10px;
+}
+.page_pay .left .am-disabled .val::before {
+  opacity: 0.2;
+}
+.page_pay .left .am-disabled .val::after {
+  opacity: 0.2;
+}
+.page_pay .left dd.am-clickable-active {
+  background-color: #ececec;
+}
+.page_pay .left .label {
+  color: #666;
+}
+.page_pay .left .payTypes .title {
+  line-height: 48px;
+  padding: 0 20px;
+  color: #666;
+}
+.page_pay .left .payTypes ul {
+  padding: 0 10px;
+}
+.page_pay .left .payTypes ul::after {
+  content: "";
+  display: block;
+  clear: both;
+}
+.page_pay .left .payTypes li {
+  line-height: 15px;
+  width: 90px;
+  height: 110px;
+  font-size: 12px;
+  text-align: center;
+  float: left;
+  position: relative;
+}
+.page_pay .left .payTypes li p {
+  font-size: 10px;
+}
+.page_pay .left .payTypes li::before {
+  content: "";
+  display: block;
+  margin: 0 auto;
+  width: 80px;
+  height: 80px;
+}
+.page_pay .left .payTypes li.pay_memberCard::before {
+  background: url("../images/icons_sprite/pay_card.png") no-repeat 0px 0px;
+  background-size: 80px 80px;
+}
+.page_pay .left .payTypes li.pay_cash::before {
+  background: url("../images/icons_sprite/pay_cash.png") no-repeat 0px 0px;
+  background-size: 80px 80px;
+}
+.page_pay .left .payTypes li.pay_pos::before {
+  background: url("../images/icons_sprite/pay_pos.png") no-repeat 0px 0px;
+  background-size: 80px 80px;
+}
+.page_pay .left .payTypes li.pay_wechat::before {
+  background: url("../images/icons_sprite/pay_wechat.png") no-repeat 0px 0px;
+  background-size: 80px 80px;
+}
+.page_pay .left .payTypes li.pay_alipay::before {
+  background: url("../images/icons_sprite/pay_alipay.png") no-repeat 0px 0px;
+  background-size: 80px 80px;
+}
+.page_pay .left .payTypes li.pay_dp::before {
+  background: url("../images/icons_sprite/pay_dp.png") no-repeat 0px 0px;
+  background-size: 80px 80px;
+}
+.page_pay .left .payTypes li.pay_mix::before {
+  background: url("../images/icons_sprite/pay_mix.png") no-repeat 0px 0px;
+  background-size: 80px 80px;
+}
+.page_pay .left .payTypes li.pay_bonus::before {
+  background: url("../images/icons_sprite/pay_bonus.png") no-repeat 0px 0px;
+  background-size: 80px 80px;
+}
+.page_pay .left .payTypes li .tip {
+  display: none;
+  position: absolute;
+  bottom: -18px;
+  z-index: -1;
+  left: 0;
+  border: 1px solid #AAA;
+  background-color: #AAA;
+  border-radius: 2px;
+  line-height: 20px;
+  padding: 0 5px;
+  font-size: 12px;
+  white-space: nowrap;
+  color: #FFF;
+}
+.page_pay .left .payTypes li .tip::before {
+  content: "";
+  position: absolute;
+  left: 45px;
+  top: -5px;
+  margin: 0 0 0 -8px;
+  border-bottom: 7px solid #AAA;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+}
+.page_pay .left .payTypes li.pay_dp.am-disabled.mixProdPay .tip {
+  display: block;
+}
+.page_pay .left .payTypes li span {
+  display: none;
+  width: 66px;
+  height: 66px;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 40px;
+  position: absolute;
+  left: 50%;
+  right: auto;
+  top: 7px;
+  bottom: auto;
+  margin: 0 0 0 -33px;
+}
+.page_pay .left .payTypes li span::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  right: auto;
+  top: 50%;
+  bottom: auto;
+  background: #ececec;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border-radius: 10px;
+}
+.page_pay .left .payTypes li span::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  right: auto;
+  top: 50%;
+  bottom: auto;
+  background: url("../images/icons_sprite/selected.png") no-repeat 0px 0px;
+  background-size: 15px 15px;
+  width: 15px;
+  height: 15px;
+  margin: -8px 0 0 -7px;
+}
+.page_pay .left .payTypes li.selected span {
+  display: block;
+}
+.page_pay .left .payTypes li.payed span::before {
+  background: #58d56d;
+}
+.page_pay .left .payTypes li.am-disabled {
+  opacity: 0.3;
+}
+.page_pay .left .depPerfVal {
+  /*float: right;
+            height: 44px;*/
+  /*.depPerfItem{
+                padding-top: 7px;
+                line-height: 20px;
+                height: 20px;
+                .depName{
+                    padding: 0 5px;
+                    float: left;
+                    font-size: 12px;
+                }
+                .depPerText{
+                    padding: 0 5px;
+                }
+            }
+            .depPer{
+                height: 4px;
+                .depVal{
+                    float:left;
+                    height:4px;
+                    &:nth-child(3n+1){
+                        background-color: @bg02;
+                    }
+                    &:nth-child(3n+2){
+                        background-color: @bg08;
+                    }
+                    &:nth-child(3n+3){
+                        background-color: @bg09;
+                    }
+                }
+            }*/
+}
+.page_pay .right {
+  height: 100%;
+  float: right;
+  width: 40%;
+  position: relative;
+  border-left: 1px solid #ececec;
+  margin-left: -1px;
+}
+.page_pay .right .payTip {
+  display: none;
+  text-align: center;
+}
+.page_pay .right .payTip .lineGray {
+  color: #999;
+  line-height: 30px;
+  padding-bottom: 5px;
+}
+.page_pay .right .payTip .lineMain {
+  font-size: 20px;
+}
+.page_pay .right .payTip .lineMain .highlight {
+  color: #e82742;
+}
+.page_pay .right .payTip .lineSmall {
+  line-height: 30px;
+}
+.page_pay .right .payTip::before {
+  content: "";
+  display: block;
+  margin: 150px auto 0 auto;
+  width: 120px;
+  height: 120px;
+}
+.page_pay .right .payTip.cash::before {
+  background: url("../images/tipbg_sprite.png") no-repeat 0px -930px;
+  background-size: 255px 1055px;
+}
+.page_pay .right .payTip.pos::before {
+  background: url("../images/tipbg_sprite.png") no-repeat -125px -930px;
+  background-size: 255px 1055px;
+}
+.page_pay .right .payTip.card::before {
+  margin-top: 50px;
+}
+.page_pay .right .payTip.card .cardBg {
+  color: #FFF;
+  height: 103px;
+  width: 260px;
+  margin: 20px auto 0 auto;
+  padding: 10px;
+  background: url("../images//card_bg2.png") no-repeat center center;
+  background-size: 280px 103px;
+  text-align: left;
+}
+.page_pay .right .payTip.card .cardBg.combo {
+  background: url("../images//card_bg3.png") no-repeat center center;
+  background-size: 280px 103px;
+}
+.page_pay .right .payTip.card .cardBg.combo .line2 {
+  color: #FFF;
+}
+.page_pay .right .payTip.card .cardBg .line1 {
+  padding-top: 17px;
+  font-weight: bold;
+  line-height: 22px;
+}
+.page_pay .right .payTip.card .cardBg .line1 .price {
+  float: right;
+}
+.page_pay .right .payTip.card .cardBg .line2 {
+  color: #666;
+  line-height: 20px;
+  padding-bottom: 14px;
+}
+.page_pay .right .payTip.card .cardBg .line2 .label {
+  float: right;
+}
+.page_pay .right .payTip.card .cardBg .line3 {
+  margin: 0 -10px;
+  padding: 0 10px;
+  line-height: 30px;
+  color: #b0b0b0;
+  background: rgba(255, 255, 255, 0.1);
+}
+.page_pay .right::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  right: auto;
+  top: 50%;
+  bottom: auto;
+  width: 250px;
+  height: 150px;
+  margin: -125px 0 0 -125px;
+  display: none;
+}
+.page_pay .right.pay_memberCard .card {
+  display: block;
+}
+.page_pay .right.pay_cash .cash {
+  display: block;
+}
+.page_pay .right.pay_pos .pos {
+  display: block;
+}
+.page_pay .right.pay_cash1::before {
+  display: block;
+  background: url("../images/tipbg_sprite.png") no-repeat 0px -310px;
+  background-size: 255px 1055px;
+}
+.page_pay .right.pay_alipay::before {
+  display: block;
+  background: url("../images/tipbg_sprite.png") no-repeat 0px 0px;
+  background-size: 255px 1055px;
+}
+.page_pay .right.pay_wechat::before {
+  display: block;
+  background: url("../images/tipbg_sprite.png") no-repeat 0px -775px;
+  background-size: 255px 1055px;
+}
+.page_pay .right.pay_dp::before {
+  display: block;
+  background: url("../images/tipbg_sprite.png") no-repeat 0px -465px;
+  background-size: 255px 1055px;
+}
+.page_pay .submit {
+  height: 50px;
+  background: #e82742;
+  color: #FFF;
+  text-align: center;
+  line-height: 50px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: auto;
+  bottom: 0;
+  font-size: 16px;
+}
+.page_pay .userPrintType {
+  height: 32px;
+  background-color: #eeeeee;
+  border-radius: 30px;
+  padding: 3px;
+  width: 221px;
+  float: right;
+  margin-top: 10px;
+  margin-right: 10px;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+.page_pay .userPrintType.web {
+  width: 41px;
+}
+.page_pay .userPrintType .printType {
+  height: 100%;
+  float: left;
+}
+.page_pay .userPrintType .printType ul {
+  width: 100%;
+  overflow: hidden;
+}
+.page_pay .userPrintType .printType ul li {
+  float: left;
+  width: 60px;
+  padding-left: 27px;
+  line-height: 26px;
+  font-size: 11px;
+  color: #888888;
+  position: relative;
+  cursor: pointer;
+}
+.page_pay .userPrintType .printType ul li::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  display: block;
+  width: 16px;
+  height: 16px;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  border: 1px solid #d6d6d6;
+  top: 3px;
+}
+.page_pay .userPrintType .printType ul li.selected::after {
+  border: 1px solid #999999;
+}
+.page_pay .userPrintType .printType ul li.selected::before {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 8px;
+  top: 6px;
+  width: 12px;
+  height: 12px;
+  background-color: #999999;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+}
+.page_pay .userPrintType .icon {
+  float: right;
+  width: 27px;
+  height: 27px;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  background: #fff url(../images/hangup/print_icon.png) no-repeat center center;
+  background-size: 16px 15px;
+  margin-right: 4px;
+  opacity: 0.7;
+}
+.page_pay .userPrintType .icon.am-clickable-active {
+  opacity: 1;
+}
+.page_pay .payConfirm {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: none;
+}
+.page_pay .payConfirm .content {
+  width: 300px;
+  padding-bottom: 30px;
+  background: #FFF;
+  border-radius: 4px;
+  position: absolute;
+  left: 50%;
+  right: auto;
+  top: 50%;
+  bottom: auto;
+  margin: -100px 0 0 -150px;
+}
+.page_pay .payConfirm .content .paySuccess {
+  padding-top: 30px;
+}
+.page_pay .payConfirm .content .paySuccess .icon {
+  width: 50px;
+  height: 50px;
+  position: relative;
+  background: #58d56d;
+  border-radius: 25px;
+  margin: 0 auto;
+}
+.page_pay .payConfirm .content .paySuccess .icon::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  right: auto;
+  top: 50%;
+  bottom: auto;
+  margin: -10px 0 0 -15px;
+  width: 30px;
+  height: 20px;
+  background: url("../images/icons_sprite/searchMember_success.png") no-repeat 0px 0px;
+  background-size: 30px 20px;
+}
+.page_pay .payConfirm .content .paySuccess .text {
+  text-align: center;
+  line-height: 30px;
+}
+.page_pay .payConfirm .content .paySuccess .text strong {
+  font-size: 16px;
+  padding: 0 5px;
+}
+.page_pay .payConfirm .content .paySuccess .tip {
+  text-align: center;
+  font-size: 12px;
+  color: #999;
+}
+.print_error_box {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2);
+  z-index: 100;
+  display: none;
+}
+.print_error_box.usb .print_error .print_error_content {
+  display: none;
+}
+.print_error_box.usb .print_error .usb_print_error_content {
+  display: block;
+  height: 388px;
+}
+.print_error_box .print_error {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin: -270px 0 0 -370px;
+  width: 680px;
+  height: 480px;
+  background-color: #FFF;
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.4) 1px 1px 10px;
+  padding: 30px;
+}
+.print_error_box .print_error .print_error_header {
+  font-size: 16px;
+  color: #333333;
+  line-height: 30px;
+}
+.print_error_box .print_error .print_error_header .print_error_header strong {
+  font-size: 20px;
+  color: #777777;
+  padding-left: 28px;
+  background: url("../images/tip_icon.png") no-repeat left center;
+  background-size: 30px 30px;
+  margin-right: 5px;
+}
+.print_error_box .print_error .print_error_content {
+  line-height: 24px;
+  padding-left: 5px;
+}
+.print_error_box .print_error .print_error_content dt {
+  font-size: 15px;
+  font-weight: bold;
+  color: #333333;
+  padding-top: 12px;
+}
+.print_error_box .print_error .print_error_content dd {
+  font-size: 15px;
+  color: #777777;
+}
+.print_error_box .print_error .print_error_content dd span {
+  color: #ac3a3a;
+}
+.print_error_box .print_error .print_error_content .img {
+  height: 220px;
+  background: #f9f9f9 url("../images/iPad_bluetooth.jpg") no-repeat 20px 20px;
+  background-size: 576px 180px;
+}
+.print_error_box .print_error .usb_print_error_content {
+  display: none;
+}
+.print_error_box .print_error .buttons {
+  text-align: center;
+  padding-top: 20px;
+}
+.print_error_box .print_error .buttons .button {
+  width: 160px;
+  height: 45px;
+  background-color: #8e8e8e;
+  color: #FFF;
+  font-size: 16px;
+  display: inline-block;
+  line-height: 45px;
+  text-align: center;
+  margin: 0 30px;
+  border-radius: 4px;
+}
+.print_error_box .print_error .buttons .button.am-clickable-active {
+  background-color: #666;
+}
+@-webkit-keyframes animation_slideleft {
+  0% {
+    -webkit-transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 500, 0, 0, 1);
+  }
+  100% {
+    -webkit-transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+  }
+}
+.mixPayScrollInner {
+  position: relative;
+  top: 0;
+  bottom: auto;
+  left: 0;
+  right: 0;
+  width: 100%;
+  display: block;
+  height: auto;
+}

@@ -1,0 +1,15 @@
+﻿{
+	"version" : "4.173",
+	"label" : "触屏版",
+	"description" : "n_touchPad",
+	"id" : "n_touchPad",
+	"systemBar" : "true",
+	"category" : "default",
+	"index" : "index.html",
+	"icon" : "src/icon.png",
+	"ui" : "ui.xml",
+	"minVersion" : "1.0",
+	"containerVer" : "1.0",
+	"minContainerVer" : "1.00",
+	"droidContainerUrl" : ""
+}

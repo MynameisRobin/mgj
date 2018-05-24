@@ -1,0 +1,94 @@
+.page-reportKeyvalue .tab,.sys_reportKeyvalue .tab {
+    height: 40px;
+    background: #f6f6f6;
+    border-bottom: #eeeeee 1px solid;
+    border-top: #eeeeee 1px solid;
+    display: -webkit-box;
+}
+.page-reportKeyvalue .tab > li,.sys_reportKeyvalue .tab > li {
+    -webkit-box-flex: 1;
+    padding: 3px 10px 0 10px;
+    line-height: 35px;
+    height: 35px;
+    color: #222222;
+    font-size: 14px;
+    border-bottom: rgba(255, 255, 255, 0) 2px solid;
+    text-align: center;
+}
+.page-reportKeyvalue .tab > li.selected,.sys_reportKeyvalue .tab > li.selected {
+    color: #2dbd84;
+    border-bottom: #2dbd84 2px solid;
+}
+.page-reportKeyvalue .blockItem {
+    display: none;
+}
+.page-reportKeyvalue .blockTitle {
+    background: #f6f6f6;
+    border-top: #eee 1px solid;
+    border-bottom: #eee 1px solid;
+    color: #333333;
+    font-size: 11px;
+    line-height: 25px;
+    padding-left: 12px;
+}
+.page-reportKeyvalue .keyvalue {
+    padding: 5px 12px;
+    font-size: 12px;
+}
+.page-reportKeyvalue .keyvalue > li {
+    float: left;
+    width: 40%;
+    line-height: 25px;
+    margin-right: 10%;
+}
+.page-reportKeyvalue .keyvalue > li .key {
+    color: #666666;
+}
+.page-reportKeyvalue .keyvalue > li .value {
+    float: right;
+    color: #222;
+}
+.page-reportKeyvalue table.tableview {
+    /* table-layout: fixed; */
+    border-top: 1px solid #e5e5e5;
+    border-left: 1px solid #e5e5e5;
+    line-height: 20px;
+    width: 100%;
+    font-size: 12px;
+}
+.page-reportKeyvalue table.tableview > thead > tr {
+    background: #f2f2f2;
+}
+.page-reportKeyvalue table.tableview > tbody > tr:nth-child(odd) {
+    background: #fff;
+}
+.page-reportKeyvalue table.tableview > tbody > tr:nth-child(even) {
+    background: #f2f2f2;
+}
+.page-reportKeyvalue td, .page-reportKeyvalue th {
+    padding: 3px;
+    height: 20px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    position: relative;
+}
+.page-reportKeyvalue td>div, .page-reportKeyvalue th>div {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    height: 20px;
+}
+.page-reportKeyvalue th {
+    font-weight: normal;
+    color: #000;
+    border-right: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
+}
+.page-reportKeyvalue td {
+    color: #333;
+    border-right: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
+    text-align: center;
+}

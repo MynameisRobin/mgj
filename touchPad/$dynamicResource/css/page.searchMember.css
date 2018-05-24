@@ -1,0 +1,647 @@
+@charset "utf-8";
+/* 文字颜色 ***********************/
+/* c0* 为黑白灰色系 */
+.boxSinzig {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+.page_searchMember .pagecontent {
+  width: 800px;
+  margin: 0 auto;
+  margin-top: 8%;
+  position: relative;
+}
+.page_searchMember .pagecontent .lastMember {
+  position: absolute;
+  left: 0%;
+  right: auto;
+  top: -60px;
+  bottom: auto;
+  height: 40px;
+  width: 100%;
+  text-align: center;
+}
+.page_searchMember .pagecontent .lastMember .lastMemberInfo {
+  display: inline-block;
+  height: 60px;
+  line-height: 20px;
+  white-space: nowrap;
+  padding-right: 20px;
+}
+.page_searchMember .pagecontent .lastMember .lastMemberInfo:first-child::before {
+  content: "最近选择：";
+  float: left;
+  line-height: 40px;
+  margin-right: 5px;
+  color: #b0b0b0;
+  font-size: 12px;
+  height: 60px;
+}
+.page_searchMember .pagecontent .lastMember .lastMemberInfo .img {
+  background: #ececec;
+  border-radius: 3px;
+  float: left;
+  width: 40px;
+  height: 40px;
+  margin: 0 10px 0 0;
+  background: #ececec url("../images/defultbg.png") no-repeat center center;
+  background-size: 40px 40px;
+}
+.page_searchMember .pagecontent .lastMember .lastMemberInfo .img img {
+  border-radius: 2px;
+  width: 40px;
+  height: 40px;
+}
+.page_searchMember .pagecontent .lastMember .lastMemberInfo .text {
+  float: left;
+  text-align: left;
+}
+.page_searchMember .pagecontent .lastMember .lastMemberInfo .name {
+  max-width: 110px;
+  white-space: nowrap;
+  height: 20px;
+  line-height: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.page_searchMember .pagecontent .lastMember .lastMemberInfo .mobile {
+  font-size: 12px;
+  color: #878787;
+}
+.page_searchMember .pagecontent .searchTit {
+  width: 100%;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+.page_searchMember .pagecontent .searchTit * {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+.page_searchMember .pagecontent .searchTit.hideCrosShop .tabIndex {
+  display: none;
+}
+.page_searchMember .pagecontent .searchTit.hideCrosShop .searchinput {
+  width: 390px;
+  clear: both;
+  margin: 0 auto;
+}
+.page_searchMember .pagecontent .searchTit .tabIndex {
+  width: 126px;
+  display: block;
+  float: left;
+  height: 42px;
+  line-height: 42px;
+  color: #222;
+  font-size: 14px;
+  margin-right: 10px;
+}
+.page_searchMember .pagecontent .searchTit .tabIndex ul {
+  overflow: hidden;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
+.page_searchMember .pagecontent .searchTit .tabIndex ul li {
+  width: 50%;
+  display: block;
+  float: left;
+  height: 42px;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+.page_searchMember .pagecontent .searchTit .tabIndex ul li.selected {
+  background-color: #595959;
+  color: #FFF;
+  border: 0;
+}
+.page_searchMember .pagecontent .searchTit .tabIndex ul li:first-child {
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+.page_searchMember .pagecontent .searchTit .tabIndex ul li:last-child {
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+.page_searchMember .pagecontent .searchTit .searchinput {
+  height: 42px;
+  width: 290px;
+  margin: 0 auto;
+  border: 1px solid #222;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
+.page_searchMember .pagecontent .searchTit .searchinput .ty_inputbox {
+  width: 240px;
+  display: block;
+  float: left;
+  height: 100%;
+}
+.page_searchMember .pagecontent .searchTit .searchinput .ty_inputbox input {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  border: 0;
+  width: 100%;
+  height: 100%;
+  padding-left: 14px;
+  font-size: 14px;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
+.page_searchMember .pagecontent .searchTit .searchinput .ty_inputbox_icon {
+  display: block;
+  float: right;
+  width: 42px;
+  height: 42px;
+}
+.page_searchMember .pagecontent .searchTit .searchinput .ty_inputbox_icon:after {
+  content: "";
+  width: 29px;
+  height: 29px;
+  margin-left: 7px;
+  margin-top: 7px;
+  vertical-align: middle;
+  display: inline-block;
+  background: url("../images/icons_sprite/searchMember_serch.png") no-repeat 0px 0px;
+  background-size: 29px 29px;
+}
+.page_searchMember .pagecontent .searchTit .searchinput .ty_inputbox_icon.am-clickable-active {
+  opacity: 0.7;
+}
+.page_searchMember .pagecontent .foot {
+  margin: 0 auto;
+  margin-top: 10%;
+  text-align: center;
+  width: 295px;
+}
+.page_searchMember .pagecontent .foot .foot_text {
+  color: #999;
+  font-size: 12px;
+  padding: 10px;
+}
+.page_searchMember .pagecontent .foot .footbutton {
+  color: #222;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  border-radius: 20px;
+  -webkit-border-radius: 20px;
+  padding: 10px 0;
+  height: 22px;
+  line-height: 22px;
+}
+.page_searchMember .pagecontent .foot .footbutton span {
+  display: inline-block;
+  vertical-align: middle;
+}
+.page_searchMember .pagecontent .foot .footbutton span.foot_icon {
+  width: 15px;
+  height: 15px;
+  display: inline-block;
+  background: url("../images/icons_sprite/searchMember_add.png") no-repeat 0px 0px;
+  background-size: 15px 15px;
+  vertical-align: middle;
+}
+.page_searchMember .pagecontent .foot .footbutton.am-clickable-active {
+  background-color: #ececec;
+}
+.page_searchMember .searchresult {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50px;
+  bottom: 0;
+  overflow: hidden;
+  padding: 20px 30px;
+  padding-top: 0;
+  padding-bottom: 50px;
+}
+.page_searchMember .searchresult .title {
+  height: 49px;
+  line-height: 49px;
+}
+.page_searchMember .searchresult .customerResult .tip {
+  display: none;
+  line-height: 40px;
+  text-align: center;
+  font-size: 14px;
+  color: #222222;
+}
+.page_searchMember .searchresult .customerResult .tip span {
+  display: inline-block;
+  vertical-align: middle;
+}
+.page_searchMember .searchresult .customerResult .tip1 {
+  line-height: 80px;
+  border-bottom: 1px solid #f2f2f2;
+  border-top: 1px solid #f2f2f2;
+}
+.page_searchMember .searchresult .customerResult .tip2 {
+  border-top: 1px solid #f2f2f2;
+  padding-top: 23px;
+  line-height: 24px;
+  font-size: 13px;
+}
+.page_searchMember .searchresult .customerResult .tip3 {
+  line-height: 24px;
+  padding-bottom: 23px;
+  color: #e82742;
+  font-size: 13px;
+  border-bottom: 1px solid #f2f2f2;
+}
+.page_searchMember .searchresult .customerResult .tip3 .iconfont {
+  font-size: 16px;
+  margin-right: 3px;
+}
+.page_searchMember .searchresult .customerResult.empty .tip2 {
+  display: block;
+}
+.page_searchMember .searchresult .customerResult.empty .tip3 {
+  display: block;
+}
+.page_searchMember .searchresult .customerResult.empty.active .tip1 {
+  display: block;
+}
+.page_searchMember .searchresult .customerResult.empty.active .tip2 {
+  display: none;
+}
+.page_searchMember .searchresult .customerResult.empty.active .tip3 {
+  display: none;
+}
+.page_searchMember .searchresult .customerResult.active .searchMoreShop::after {
+  content: "在本店搜索";
+}
+.page_searchMember .searchresult .customerResult.active .searchTip {
+  display: block;
+}
+.page_searchMember .searchresult .customerResult .searchMoreShop::after {
+  content: "在分店搜索";
+}
+.page_searchMember .searchresult .customerResult .searchTip {
+  display: none;
+}
+.page_searchMember .searchresult.active .searchMoreShop::after {
+  content: "在本店搜索";
+}
+.page_searchMember .searchresult.active .searchTip {
+  display: none;
+}
+.page_searchMember .searchresult .searchMoreShop::after {
+  content: "在分店搜索";
+}
+.page_searchMember .searchresult .searchTip {
+  display: block;
+}
+.page_searchMember .searchresult .searchMoreShop {
+  margin: 0;
+  float: left;
+  padding: 0 10px 0 35px;
+  margin-top: 15px;
+}
+.page_searchMember .searchresult .searchMoreShop::before {
+  content: "";
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  height: 20px;
+  width: 20px;
+  background: url(../images/search_btn_icon.png) no-repeat;
+  background-size: cover;
+}
+.page_searchMember .searchresult .searchTip {
+  color: #999;
+  margin-top: 25px;
+  margin-left: 14px;
+  float: left;
+  font-size: 12px;
+}
+.page_searchMember .searchresult .searchTip .tip_icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 5px;
+  background: url(../images/tip_icon.png) no-repeat;
+  display: inline-block;
+  background-size: cover;
+  vertical-align: -18%;
+}
+.page_searchMember .searchresult .searchRightBtn {
+  position: absolute;
+  right: 20px;
+  top: 5px;
+  z-index: 10;
+}
+.page_searchMember .searchresult .searchRightBtn .searchLastCard {
+  height: 40px;
+  line-height: 40px;
+  font-size: 12px;
+}
+.page_searchMember .searchresult .searchRightBtn .searchLastCard .iconfont {
+  vertical-align: -3px;
+  font-size: 20px;
+  display: inline-block;
+}
+.page_searchMember .searchMoreShop {
+  position: relative;
+  display: inline-block;
+  height: 40px;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  background-color: #595959;
+  color: #fff;
+  line-height: 40px;
+  padding: 0 10px 0 10px;
+  margin-left: 10px;
+  background-position: 12px center;
+  background-size: 15px 15px;
+  cursor: pointer;
+}
+.page_searchMember .searchMoreShop.am-clickable-active {
+  opacity: 0.8;
+}
+.page_searchMember .serviceTable {
+  z-index: 10;
+  padding: 20px 0;
+  padding-top: 0;
+  background: #FFF;
+}
+.page_searchMember .serviceTable .fixedHead {
+  position: absolute;
+  z-index: 10;
+  background-color: #FFF;
+}
+.page_searchMember .serviceTable .scroller {
+  overflow: hidden;
+  max-height: 430px;
+  box-shadow: rgba(0, 0, 0, 0.2) 1px 1px 5px;
+}
+.page_searchMember .serviceTable .scroller thead {
+  opacity: 0;
+}
+.page_searchMember .serviceTable table {
+  table-layout: fixed;
+  width: 100%;
+}
+.page_searchMember .serviceTable tr:nth-child(even) {
+  background: #f7f7f7;
+}
+.page_searchMember .serviceTable tr.am-clickable-active {
+  background: #ececec;
+}
+.page_searchMember .serviceTable td {
+  padding: 5px;
+  height: 34px;
+  line-height: 24px;
+  color: #333333;
+  border-bottom: #ececec 1px solid;
+  border-right: #ececec 1px solid;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  position: relative;
+}
+.page_searchMember .serviceTable th {
+  padding: 5px;
+  height: 34px;
+  line-height: 24px;
+  color: #333333;
+  border-bottom: #ececec 1px solid;
+  border-right: #ececec 1px solid;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  position: relative;
+}
+.page_searchMember .serviceTable th.sortable {
+  padding-right: 7px;
+}
+.page_searchMember .serviceTable th.sortable.am-clickable-active {
+  background: #ececec;
+}
+.page_searchMember .serviceTable th.sortable.desc {
+  background: #ececec;
+}
+.page_searchMember .serviceTable th.sortable.asc {
+  background: #ececec;
+}
+.page_searchMember .serviceTable .comment {
+  line-height: 17px;
+  overflow: hidden;
+  color: #999;
+}
+.page_searchMember .serviceTable span.red {
+  color: #e82742;
+}
+.searchnumber {
+  width: 290px;
+  margin: 0 auto;
+  margin-top: 45px;
+}
+.searchnumber .board td {
+  text-align: center;
+  vertical-align: middle;
+  height: 75px;
+}
+.searchnumber .board .key {
+  width: 55px;
+  height: 55px;
+  border-top-left-radius: 50%;
+  border-top-right-radius: 50%;
+  border-bottom-left-radius: 50%;
+  border-bottom-right-radius: 50%;
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
+  font-size: 22px;
+  color: #222;
+  border: 1px solid #222;
+  line-height: 55px;
+  margin: auto;
+}
+.searchnumber .board .key.am-clickable-active {
+  opacity: 0.7;
+}
+.searchnumber .board .rect {
+  width: 55px;
+  height: 55px;
+  border-top-left-radius: 50%;
+  border-top-right-radius: 50%;
+  border-bottom-left-radius: 50%;
+  border-bottom-right-radius: 50%;
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
+  font-size: 22px;
+  background-color: #595959;
+  line-height: 55px;
+  margin: auto;
+}
+.searchnumber .board .rect.am-clickable-active {
+  opacity: 0.7;
+}
+.searchnumber .board .clean:after {
+  content: "";
+  display: inline-block;
+  vertical-align: middle;
+  width: 21px;
+  height: 21px;
+  background: url("../images/icons_sprite/searchMember_close.png") no-repeat 0px 0px;
+  background-size: 20.5px 21px;
+}
+.searchnumber .board .delete:after {
+  content: "";
+  display: inline-block;
+  vertical-align: middle;
+  width: 29px;
+  height: 25px;
+  background: url("../images/icons_sprite/searchMember_del.png") no-repeat 0px 0px;
+  background-size: 28.5px 25px;
+}
+.searchnumber .board .confirm:after {
+  content: "";
+  display: inline-block;
+  vertical-align: middle;
+  width: 29px;
+  height: 20px;
+  background: url("../images/icons_sprite/searchMember_success.png") no-repeat 0px 0px;
+  background-size: 30px 20px;
+}
+.page_searchMember .serviceTable {
+  overflow: hidden;
+  max-height: 430px;
+}
+.page_searchMember .list-warp {
+  overflow: hidden;
+  width: 100%;
+  border-top: 1px solid #f2f2f2;
+}
+.page_searchMember .list-warp .list-left {
+  float: left;
+  width: 50px;
+}
+.page_searchMember .list-warp .list-right {
+  margin-left: 50px;
+}
+.page_searchMember .list-warp .list-left .list-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: url("../images/icons_sprite/default_custmerIcon.png") no-repeat center center;
+  background-color: #e1e1e1;
+  background-size: 100% 100%;
+  margin-top: 10px;
+}
+.page_searchMember .list-warp .list-left .list-avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+.page_searchMember .list-warp .list-right .list-title-warp {
+  overflow: hidden;
+  padding: 0 25px;
+  height: 44px;
+  line-height: 44px;
+  font-weight: bold;
+}
+.page_searchMember .list-warp .list-right .list-title-warp i {
+  color: #b7b7b7;
+  vertical-align: middle;
+  font-size: 16px;
+}
+.page_searchMember .list-warp .list-right .list-title-warp i.score,
+.page_searchMember .list-warp .list-right .list-title-warp i.mark {
+  font-size: 12px;
+}
+.page_searchMember .list-warp .list-right .list-title-warp > div {
+  float: left;
+  padding-right: 8px;
+  font-size: 12px;
+  color: #222;
+}
+.page_searchMember .list-warp .list-right .list-body {
+  overflow: hidden;
+  height: 43px;
+  line-height: 43px;
+  margin: 0 25px  ;
+  background-color: #f7f7f7;
+  border-bottom: 1px solid #fff;
+  width: 100%;
+  cursor: pointer;
+}
+.page_searchMember .list-warp .list-right .list-body:hover {
+  background-color: #ececec;
+}
+.page_searchMember .list-warp .list-right .list-body div {
+  font-size: 14px;
+  color: #555;
+}
+.page_searchMember .list-warp .list-right .list-body > div {
+  float: left;
+  padding-right: 15px;
+  padding-left: 15px;
+  font-size: 14px;
+  border-left: 1px solid #fff;
+}
+.page_searchMember .list-warp .list-right .list-body > div.card {
+  width: 275px;
+}
+.page_searchMember .list-warp .list-right .list-body > div.card .cardImg {
+  display: inline-block;
+  width: 26px;
+  height: 16px;
+  vertical-align: -6.5%;
+  margin-right: 10px;
+}
+.page_searchMember .list-warp .list-right .list-body > div.card .cardImg.type_two {
+  background: url("../images/card1.png") no-repeat;
+  background-size: 100% 100%;
+}
+.page_searchMember .list-warp .list-right .list-body > div.card .cardImg.type_one {
+  background: url("../images/card2.png") no-repeat;
+  background-size: 100% 100%;
+}
+.page_searchMember .list-warp .list-right .list-body > div.card .cardImg.type_zero {
+  background: url("../images/card3.png") no-repeat;
+  background-size: 100% 100%;
+}
+.page_searchMember .list-warp .list-right .list-body > div {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.page_searchMember .list-warp .list-right .list-body > div.money {
+  width: 70px;
+}
+.page_searchMember .list-warp .list-right .list-body > div.rest-money {
+  width: 200px;
+}
+.page_searchMember .list-warp .list-right .list-body > div.mark {
+  max-width: 200px;
+}
+.page_searchMember .list-warp .list-right .list-body > div > b {
+  color: #e82742;
+}
+@media only screen and (max-width: 1100px) {
+  .page_searchMember .list-warp .list-right .list-body > div.rest-money {
+    width: 150px;
+  }
+  .page_searchMember .list-warp .list-right .list-body > div.card {
+    width: 200px;
+  }
+}

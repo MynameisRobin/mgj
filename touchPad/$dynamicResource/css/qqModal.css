@@ -1,0 +1,66 @@
+#qqModal {
+  text-align: center;
+  z-index: 2;
+}
+#qqModal .inner {
+  z-index: 1;
+  width: 610px;
+  margin-left: -325px;
+  margin-top: -213px;
+  padding: 20px;
+}
+#qqModal .close {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  width: 35px;
+  height: 35px;
+}
+#qqModal .close::before {
+  content: "";
+  display: block;
+  width: 15px;
+  height: 15px;
+  margin: 10px;
+  background: url(../images/icons_sprite/close_employee.png) no-repeat 0px 0px;
+  background-size: 15px 15px;
+}
+#qqModal .title {
+  margin-top: 40px;
+  line-height: 19px;
+}
+#qqModal .title h2 {
+  color: #222;
+  font-size: 19px;
+  height: 19px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+#qqModal .title h3 {
+  margin-top: 10px;
+  color: #999;
+  font-size: 13px;
+}
+#qqModal .content {
+  height: 208px;
+  text-align: center;
+}
+#qqModal .content img {
+  width: 100%;
+  margin-top: 35px;
+}
+#qqModal .footer {
+  bottom: 40px;
+  height: 44px;
+}
+#qqModal .footer .btn {
+  width: 165px;
+  height: 44px;
+  border: 0;
+  background: #555;
+  color: #fff;
+}
+#qqModal .footer .btn:active {
+  background: #282828;
+}

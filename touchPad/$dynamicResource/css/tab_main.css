@@ -1,0 +1,224 @@
+/* 文字颜色 ***********************/
+/* c0* 为黑白灰色系 */
+.tab_main {
+  width: 75px;
+  background: #282828;
+  display: none;
+  position: absolute;
+  left: 0px;
+  right: auto;
+  top: 0px;
+  bottom: 0px;
+}
+.tab_main .tab_box {
+  position: absolute;
+  top: 75px;
+  bottom: 80px;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+}
+.tab_main.show {
+  display: block;
+}
+.tab_main .logo {
+  position: relative;
+  height: 70px;
+  margin: 5px auto 10px;
+  text-align: center;
+}
+.tab_main .logo::before {
+  content: "";
+  display: block;
+  height: 54px;
+  background: #595959;
+  border-radius: 27px;
+}
+.tab_main .logo img {
+  width: 54px;
+  height: 54px;
+  border-radius: 30px;
+}
+.tab_main .logo.loaded::before {
+  display: none;
+}
+.tab_main .logo.mgj {
+  background: url('../images/logo.png') no-repeat center center;
+  background-size: contain;
+}
+.tab_main .logo.mgj::before {
+  display: none;
+}
+.tab_main .logo .num {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  line-height: 18px;
+  background: #f39800;
+  border-radius: 50%;
+  right: 8px;
+  top: 0;
+  color: #282828;
+  font-size: 12px;
+}
+.tab_main .logo .num.act {
+  width: 8px;
+  height: 8px;
+  right: 10px;
+  line-height: 8px;
+}
+.tab_main li {
+  padding: 6px 0 0 0;
+  height: 53px;
+  text-align: center;
+  color: #878787;
+  line-height: 20px;
+  position: relative;
+}
+.tab_main li p {
+  display: block;
+  height: 30px;
+  width: 30px;
+  margin: 0 auto;
+  background-color: #CCC;
+}
+.tab_main li p.a {
+  background: url("../images/tab_sprite.png") no-repeat 0px -35px;
+  background-size: 35px 700px;
+}
+.tab_main li p.b {
+  background: url("../images/tab_sprite.png") no-repeat 0px -70px;
+  background-size: 35px 700px;
+}
+.tab_main li p.c {
+  background: url("../images/tab_sprite.png") no-repeat 0px -140px;
+  background-size: 35px 700px;
+}
+.tab_main li p.d {
+  background: url("../images/tab_sprite.png") no-repeat 0px -210px;
+  background-size: 35px 700px;
+}
+.tab_main li p.e {
+  background: url("../images/tab_sprite.png") no-repeat 0px -280px;
+  background-size: 35px 700px;
+}
+.tab_main li p.f {
+  background: url("../images/tab_sprite.png") no-repeat 0px 0px;
+  background-size: 35px 700px;
+}
+.tab_main li p.g {
+  background: url("../images/tab_sprite.png") no-repeat 0px -420px;
+  background-size: 35px 700px;
+}
+.tab_main li p.h {
+  background: url("../images/tab_sprite.png") no-repeat 0px -490px;
+  background-size: 35px 700px;
+}
+.tab_main li p.i {
+  background: url("../images/tab_sprite.png") no-repeat 0px -560px;
+  background-size: 35px 700px;
+}
+.tab_main li p.j {
+  background: url("../images/tab_sprite.png") no-repeat 0px -630px;
+  background-size: 35px 700px;
+}
+.tab_main li.selected {
+  background-color: #e82742;
+  color: #FFF;
+}
+.tab_main li.selected p.a {
+  background: url("../images/tab_sprite.png") no-repeat 0px -350px;
+  background-size: 35px 700px;
+}
+.tab_main li.selected p.b {
+  background: url("../images/tab_sprite.png") no-repeat 0px -105px;
+  background-size: 35px 700px;
+}
+.tab_main li.selected p.c {
+  background: url("../images/tab_sprite.png") no-repeat 0px -175px;
+  background-size: 35px 700px;
+}
+.tab_main li.selected p.d {
+  background: url("../images/tab_sprite.png") no-repeat 0px -245px;
+  background-size: 35px 700px;
+}
+.tab_main li.selected p.e {
+  background: url("../images/tab_sprite.png") no-repeat 0px -315px;
+  background-size: 35px 700px;
+}
+.tab_main li.selected p.f {
+  background: url("../images/tab_sprite.png") no-repeat 0px -385px;
+  background-size: 35px 700px;
+}
+.tab_main li.selected p.g {
+  background: url("../images/tab_sprite.png") no-repeat 0px -455px;
+  background-size: 35px 700px;
+}
+.tab_main li.selected p.h {
+  background: url("../images/tab_sprite.png") no-repeat 0px -525px;
+  background-size: 35px 700px;
+}
+.tab_main li.selected p.i {
+  background: url("../images/tab_sprite.png") no-repeat 0px -595px;
+  background-size: 35px 700px;
+}
+.tab_main li.selected p.j {
+  background: url("../images/tab_sprite.png") no-repeat 0px -665px;
+  background-size: 35px 700px;
+}
+.tab_main li > .num {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  background: #f39800;
+  border-radius: 18px;
+  right: 10px;
+  top: 10px;
+  color: #282828;
+  font-size: 12px;
+}
+.tab_main .loginout {
+  position: absolute;
+  bottom: 0;
+  height: 80px;
+  line-height: 80px;
+  width: 100%;
+  text-align: center;
+}
+.tab_main .loginout:after {
+  content: "";
+  display: inline-block;
+  vertical-align: middle;
+  width: 33px;
+  height: 33px;
+  background: url("../images/icons_sprite/login_icon.png") no-repeat 0px 0px;
+  background-size: 33px 33px;
+}
+.tab_main .bounceIn {
+  animation-name: bounceIn;
+  transform-origin: center bottom;
+  animation-duration: 1.5s;
+  animation-fill-mode: both;
+}
+@keyframes bounceIn {
+  0%,
+  20%,
+  53%,
+  80%,
+  to {
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    transform: translateZ(0);
+  }
+  40%,
+  43% {
+    animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+    transform: translate3d(0, -8px, 0);
+  }
+  70% {
+    animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+    transform: translate3d(0, -4px, 0);
+  }
+  90% {
+    transform: translate3d(0, -2px, 0);
+  }
+}

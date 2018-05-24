@@ -1,0 +1,378 @@
+@charset "utf-8";
+/* CSS Document */
+.reservation_tab {
+	height: 45px;
+	background: #fff;
+	border-bottom: 1px solid #d0d0d0;
+	box-shadow: 0 0 4px rgba(0,0,0,0.2);
+	z-index: 99;
+	position: relative;
+}
+.reservation_tab ul {
+	display: -webkit-box;
+	-webkit-box-orient: horizontal;
+}
+.reservation_tab li {
+	-webkit-box-flex: 1;
+	/*min-width: 90px;*/
+}
+.reservation_tab li#timePicker_custom .text{
+	line-height: 30px;
+}
+.reservation_tab .btn {
+	margin: 0 10px;
+	text-align: center;
+	color: #5c5c5c;
+	padding: 5px 7px 3px 7px;
+	height: 35px;
+	white-space: nowrap;
+}
+.reservation_tab .text {
+	font-size: 14px;
+	line-height: 20px;
+}
+.reservation_tab .num {
+	font-size: 12px;
+	line-height: 15px;
+}
+.reservation_tab .selected .text {
+	color: #2dbd84;
+}
+.reservation_tab .selected .btn {
+	border-bottom: 3px solid #2dbd84;
+}
+.reservation_tab .selected .num {
+	background: #2dbd84;
+	color: #FFF;
+	display: inline-block;
+	padding: 0 6px;
+	border-radius: 8px;
+}
+#timePicker_custom .text {
+
+	background: url("img/rv_date.png") no-repeat right bottom;
+	background-size: 7px 7px;
+}
+
+.reservationContainer {
+	position: relative;
+}
+.reservationContainer .timeline {
+	position: absolute;
+	width: 100%;
+	height: 1px;
+	background: #f00;
+}
+.reservationContainer .arrow {
+	position: absolute;
+	background: url("img/rv_timeline.png") no-repeat center center;
+	background-size: contain;
+	width: 5px;
+	height: 8px;
+	top: -4px;
+	left: 0px;
+}
+
+.reservationTable {
+	width: 100%;
+	background: #fff;
+}
+.reservationTable tr {
+	font-weight: bold;
+	color: #000;
+}
+.reservationTable tr.small {
+	font-weight: normal;
+	color: #888;
+}
+.reservationTable tr.passed {
+	background: #f6f6f8;
+}
+.reservationTable tr.passed .nocontent {
+	display: none;
+}
+.reservationTable td {
+	height: 56px;
+	border-bottom: #fff 1px solid;
+	text-align: center;
+}
+.reservationTable .time {
+	width: 60px;
+	border-right: #e2e2e2 1px solid;
+}
+.reservationTable tr.current .time {
+	color: #f00;
+}
+.reservationTable .content {
+	position: relative;
+}
+
+.reservationTable .block {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+}
+.reservationTable .block.red {
+	background: #FFDDDE;
+}
+.reservationTable .block.green {
+	background: #CBFFB7;
+}
+
+.reservationTable .nocontent {
+	line-height: 56px;
+	color: #757575;
+	font-size: 14px;
+	font-weight: bold;
+}
+.reservationTable .nocontent span {
+	padding: 10px;
+}
+.reservationTable .nocontent span.am-clickable-active {
+	background: #eee;
+}
+
+.reservationTable .leave {
+	background: #f6f6f8;
+}
+.reservationTable .leave .text {
+	display: inline-block;
+	line-height: 56px;
+	height: 56px;
+	color: #2a2a2a;
+	font-size: 14px;
+	background: url("img/rv_leave.png") no-repeat left center;
+	background-size: 22px 22px;
+	padding-left: 30px;
+	font-weight: bold;
+}
+.reservationTable .cancel {
+	position: absolute;
+	right: 0px;
+	top: 50%;
+	color: #53a9ff;
+	font-size: 11px;
+	line-height: 24px;
+	padding: 8px 8px 8px 16px;
+	margin-top: -20px;
+	background: url("img/rv_cancel.png") no-repeat left 14px;
+	background-size: 11px 11px;
+}
+
+.reservationTable .placehold {
+	background: #f6f6f8;
+}
+.reservationTable .placehold .text {
+	display: inline-block;
+	line-height: 56px;
+	height: 56px;
+	color: #2a2a2a;
+	font-size: 14px;
+	background: url("img/rv_placehold.png") no-repeat left center;
+	background-size: 25px 25px;
+	padding-left: 30px;
+	font-weight: bold;
+}
+
+.reservationTable .reservationPlaceHold {
+	/* 预约占用 chali*/
+	background: #f6f6f8;
+}
+.reservationTable .reservationPlaceHold .text {
+	/* 预约占用 chali*/
+	display: inline-block;
+	line-height: 56px;
+	height: 56px;
+	color: #2a2a2a;
+	font-size: 14px;
+	background: url("img/rv_placehold.png") no-repeat left center;
+	background-size: 25px 25px;
+	padding-left: 30px;
+	font-weight: bold;
+}
+
+.reservationTable .reservation {
+	background: #C4E7FF;
+	text-align: left;
+	padding: 5px 10px;
+	height: 46px;
+}
+
+
+.reservationTable .header {
+	position: absolute;
+	top: 5px;
+	left: 5px;
+	width: 42px;
+	height: 42px;
+	border: #ededed 2px solid;
+	border-radius: 42px;
+	/* box-shadow: 0px 0px 3px rgba(0,0,0,0.2); */
+	margin: auto;
+	background: url("img/MYK/head_male.png") no-repeat center center;
+	background-size: contain;
+	background-color: #fff;
+	overflow: hidden;
+}
+.reservationTable .header.male {
+	background-image: url("img/bg-man.gif");
+}
+
+.reservationTable .header img {
+	width: 100%;
+	height: 100%;
+	border-radius: 59px;
+}
+
+
+.reservationTable .reservation .name {
+	display: inline-block;
+	line-height: 18px;
+	height: 18px;
+	color: #222222;
+	font-size: 13px;
+	/* font-weight: bold; */
+	max-width: 100px;
+	vertical-align: middle;
+	white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.reservationTable .reservation .num {
+    color: #fff;
+    font-size: 12px;
+    background: #e29952;
+    padding: 0 4px;
+    line-height: 16px;
+    border-radius: 1px;
+    display: inline-block;
+    vertical-align: middle;
+}
+.reservationTable .reservation .cati {
+	color: #fff;
+	font-size: 12px;
+	background: #53a9ff;
+	padding: 0 4px;
+	line-height: 16px;
+	border-radius: 1px;
+	display: inline-block;
+	vertical-align: middle;
+	height: 16px;
+	max-width: 100px;
+    vertical-align: middle;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.reservationTable .reservation .showItem {
+	/*chali 查看项目*/
+	color: #3b98da;
+	font-size: 12px;
+	/* background: #53a9ff; */
+	padding: 1px 4px;
+	line-height: 14px;
+	border-radius: 1px;
+	border: 1px solid #3b98da;
+	display: inline-block;
+	vertical-align: middle;
+}
+.reservationTable .reservation.noPhoto .header {
+	display: none;
+}
+.reservationTable .reservation.noPhoto .line1 {
+	margin-left: 0px;
+}
+.reservationTable .reservation.noPhoto .line2 {
+	margin-left: 0px;
+}
+
+.reservationTable .reservation .line1 {
+	margin-left: 50px;
+	margin-top: 6px;
+}
+.reservationTable .reservation .line2 {
+	margin-left: 50px;
+	line-height: 18px;
+	height: 18px;
+	color: #888888;
+	font-size: 10px;
+	background: url("img/rv_comment.png") no-repeat left 3px;
+	background-size: 10px 11px;
+	padding-left: 15px;
+	padding-right: 39px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	font-weight: normal;
+}
+.showItemConfirm{
+	position: absolute;
+	left: 0;
+	top:0;
+	right:0;
+	bottom: 0;
+	background: rgba(0,0,0,0.4);
+	display: none;
+	z-index: 999;
+}
+.showItemConfirm .content{
+	position: absolute;
+	left: 7.5%;
+	top:30%;
+	width: 85%;
+	background: #FFF;
+	padding: 30px 20px;
+	box-sizing: border-box;
+	border-radius: 10px;
+	font-size: 16px;
+	font-weight: 500;
+	text-align: center;
+	
+} 
+.showItemConfirm .content .reservationItemLogo{
+	position: absolute;
+    left: calc((100% - 150px) / 2);
+    top: -30px;
+    background: url(img/reservationItemLogo.png);
+    width: 150px;
+    height: 60px;
+    background-size: 150px 60px;
+    z-index: 998;
+    background-color: #fff;
+    border-radius: 30px;
+	
+}
+.showItemConfirm .content .contentItems{
+	max-height: 300px;
+	overflow: hidden;
+}
+.showItemConfirm .content .reservationItems{
+	background: #FFF;
+	padding: 20px 20px 0px 20px;
+	box-sizing: border-box;
+	border-radius: 10px;
+	font-size: 16px;
+	font-weight: 500;
+	min-height: 100px;
+	text-align: center;
+	overflow-y: scroll;
+}
+.showItemConfirm .content .reservationItems::-webkit-scrollbar {display:none}
+
+.showItemConfirm .content .reservationItems .item{
+	background: #FFF;
+	padding: 5px 25px;
+	font-size: 16px;
+	font-weight: 500;
+	overflow: hidden;
+}
+
+.showItemConfirm .content .reservationItems .item .icon{
+	background: #FFF;
+	padding: 10px 12px;
+	background: url(img/item_icon.png) no-repeat 1px;
+	background-size: 20px 20px;
+}

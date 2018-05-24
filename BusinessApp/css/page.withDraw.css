@@ -1,0 +1,525 @@
+.page-withDraw .am-body-inner{
+	background: #f3f3f3;
+}
+.page-withDraw .inner_header{
+	background: url(img/withDraw_bg.png) no-repeat left top;
+	background-size: 100% 100%;
+	height: 222px;
+}
+.page-withDraw .inner_header .am-header{
+	background: none;
+}
+.page-withDraw .inner_header .moneyTit{
+	position: relative;
+	margin: 0 auto;
+	margin-top: 33px;
+	/* bottom: 0; */
+}
+html.android .page-withDraw .inner_header .moneyTit{
+	margin-top:44px
+}
+.page-withDraw .inner_header .money_tit{
+	font-size: 12px;
+	overflow: hidden;
+	text-align: center;
+	color: #a5decc;
+	padding: 5px 0;
+}
+.page-withDraw .inner_header .money_content{
+	overflow: hidden;
+	text-align: center;
+	font-size: 28px;
+	color: #fff;
+	line-height: 45px;
+	height: 45px;
+}
+.page-withDraw .inner_header .money_content .coin{
+	font-size: 12px;
+}
+.page-withDraw .inner_header .money_content .value{
+	font-size: 45px;
+	/* line-height: 45px; */
+	/* vertical-align: middle; */
+	/* display: inline-block; */
+}
+.page-withDraw .inner_header .moneyTit .run_ico{
+	width: 30px;
+	height:30px;
+	position: absolute;
+	/* margin-top:-15px; */
+	bottom: 7px;
+	right:10px;
+}
+.page-withDraw .inner_header .moneyTit.show .run_ico{
+	background: url(img/widthDraw_run.png) no-repeat left top;
+	background-size:100% 100%;  
+}
+.page-withDraw .confirmMoney{
+	background-color:#fff;
+	padding-bottom: 20px;
+}
+.page-withDraw .confirmMoney .confirmMoney_tip{
+	font-size: 12px;
+	padding: 14px 0 23px 12px;
+	text-align: left;
+	color: #c4c4c4;
+}
+.page-withDraw .confirmMoney .confirmMoney_con{
+	margin: 0 auto;
+	/* width:321px; */
+	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+}
+.page-withDraw .confirmMoney .confirmMoney_con *{
+	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+}
+.page-withDraw .confirmMoney .confirmMoney_text{
+	display: block;
+	width: 50%;
+	float: left;
+	text-align: center;
+	overflow: hidden;
+	padding-left: 12px;
+	text-align: left;
+	
+}
+.page-withDraw .confirmMoney .confirmMoney_text.left{
+	border-right: 1px solid #efefef;
+}
+.page-withDraw .confirmMoney_line{
+	float: left;
+	width: 1px;
+	height:auto;
+}
+
+.page-withDraw .confirmMoney .confirmMoney_text .name{
+	font-size: 14px;
+	color: #8c8c8c;
+	line-height: 25px;
+	height: 25px;
+	/* padding-left: 10px; */
+	position: relative;
+}
+.page-withDraw .confirmMoney .confirmMoney_text>.value{
+	font-size: 22px;
+	color: #2dbd84;
+	line-height: 25px;
+	height: 25px;
+}
+.page-withDraw .confirmMoney .confirmMoney_text .name .value{
+	height:25px;
+	line-height: 25px;
+	display: inline-block;
+	vertical-align: middle;
+	font-size: 14px;
+	color: #999999;
+}
+.page-withDraw .confirmMoney .confirmMoney_con .coin{
+	font-size:12px
+}
+.page-withDraw .confirmMoney .confirmMoney_text .name .ico{
+	line-height: 25px;
+	width: 16px;
+	height: 16px;
+	margin-left: 5px;
+	background: url(img/withDraw_help.png) no-repeat center center;
+	background-size:100% 100%;
+	display: inline-block;
+	vertical-align: middle;
+	position: absolute;
+	margin-top: -8px;
+	top: 50%;
+	right: 10%;
+}
+
+.page-withDraw .statueBox{
+	margin-top:40px;
+	padding: 12px;
+	background-color:#fff;
+}
+.page-withDraw .statueBox .statue{
+	overflow: hidden;
+	font-size: 14px;
+}	
+.page-withDraw .statueBox .statue .left{
+	float: left;
+	max-width: 130px;
+	overflow: hidden;
+	height: 23px;
+	line-height: 23px;
+	color: #000;
+	font-size: 14px;
+}
+.page-withDraw .statueBox .statue .left .value{
+	/* font-weight:600 */
+}
+.page-withDraw .statueBox .statue .left .value.c1{
+	color: #e41919;
+}
+.page-withDraw .statueBox .statue .left .value.c2{
+	color: #f58a00;
+}
+.page-withDraw .statueBox .statue .left .value.c3{
+	color: #bbedd0;
+}
+.page-withDraw .statueBox .statue .left .value.c4{
+	color: #e41919;
+}
+.page-withDraw .statueBox .statue .right{
+	float: right;
+	text-align: right;
+	max-width: 190px;
+	overflow: hidden;
+	height: 23px;
+	line-height: 23px;
+	font-size: 12px;
+}
+.page-withDraw .statueBox .statue .right span{
+	display: inline-block;
+	vertical-align: middle;
+	line-height: 23px;
+	color: #a7a7a7;
+}
+.page-withDraw .statueBox .statue .right{
+	padding-right: 20px;
+}
+.page-withDraw .statueBox.show .statue .right{
+	padding-right: 20px;
+	background: url(img/withDraw-arrow.png) no-repeat right center;
+	background-size: 6px 10px;
+}
+
+/* 提现 */
+.page-userinfoResetPwd.page-drawCash .tip{
+	margin-left:10px;
+	text-align: center;
+	padding-bottom: 0;
+	line-height: 25px;
+	padding-top: 14px;
+	color: #999;
+}
+.page-userinfoResetPwd.page-drawCash .white{
+	padding-top: 5px;
+	padding-bottom: 30px;
+}
+.page-userinfoResetPwd.page-drawCash .white .line>p{
+	padding:5px 0;
+	color: #000;
+	font-size: 12px;
+}
+.page-drawCash .btnOk{
+	width: 80%;
+	margin:0 auto;
+	margin-top:30px; 
+	height:47px;
+	line-height:47px;
+	font-size: 16px;
+	margin-bottom:40px; 
+}
+.page-drawCash .white .line.tips{
+	height: auto;
+	margin-bottom: 10px;
+}
+.page-drawCash .white .line .showTips{
+	/* height:15px; */
+	padding:5px 0;
+	color: #666;
+	font-size: 12px;
+	overflow: hidden;
+}
+.page-drawCash .white .line .showTips span{
+	vertical-align: middle;
+}
+.page-drawCash .white .line .showTips span .red{
+	color: red;
+}
+.page-drawCash .white .line .showTips .ico{
+	background: url(img/withdraw_tips.png) no-repeat center center;
+	background-size: 15px 15px;
+	width: 15px;
+	height:15px;
+	display: inline-block;
+	margin-right:3px; 
+}
+.page-drawCash .white .line .showTips .green{
+	color: #999999;
+}
+.page-drawCash .white .line .showTips .audio{
+	background: url(img/withDraw_audio.png) no-repeat center center;
+	background-size: 15px 15px;
+	width: 15px;
+	height:15px;
+	display: inline-block;
+	margin-right:3px; 
+}
+.page-drawCash .white .redTips{
+	color: #999999;
+	font-size: 12px;
+	/* font-weight: 600; */
+	padding: 10px 0;
+}
+
+/* 提现成功 */
+.page-drawCashSuccess .am-body-inner{
+	background-color: #f5f5f5;
+}
+.page-drawCashSuccess .header{
+	padding:30px 0;
+}
+.page-drawCashSuccess .header .ico{
+	background: url(img/drawCashSuccess_tips.png) no-repeat center center;
+	background-size: 42px 42px;
+	height:42px;
+}
+.page-drawCashSuccess .header .text{
+	height:25px;
+	line-height: 25px;
+	text-align: center;
+	color: #222222;
+	font-size: 18px;
+	padding:10px 0;
+}
+.page-drawCashSuccess .listBox{
+	
+}
+.page-drawCashSuccess .listBox .list{
+	height:25px;
+	line-height:25px;
+	padding:10px 15px;  
+	background-color: #fff;
+	margin-top:2px; 
+	color: #888888;
+	font-size: 14px;
+}
+.page-drawCashSuccess .listBox .list span{
+	display: inline-block;
+	line-height: 25px;
+	vertical-align: middle;
+	overflow: hidden;
+}
+.page-drawCashSuccess .listBox .list span.left{
+	text-align: left;
+	float: left;
+	max-width: 120px;
+}
+.page-drawCashSuccess .listBox .list span.right{
+	text-align: right;
+	float: right;
+	max-width:200px;
+}
+.page-drawCashSuccess .showTips{
+	padding:30px;
+	color: #e92323;
+	font-size: 12px;
+	font-weight: 600;
+	line-height: 18px;
+}
+.page-drawCashSuccess .btnOk{
+	width: 80%;
+	margin:0 auto;
+	margin-top:10px; 
+	height:47px;
+	line-height:47px;
+	font-size: 16px;
+	margin-bottom:40px; 
+}
+/* 签约 */
+.page-withDrawSign .am-body-inner{
+	background-color: #f5f5f5;
+}
+.page-withDrawSign .title{
+	background-color: #fff;
+	padding:12px;
+}
+.page-withDrawSign .title .left{
+	display: inline-block;
+	float: left;
+	max-width: 140px;
+	font-size: 14px;
+	height:25px;
+	line-height: 25px;
+	overflow: hidden;
+}	
+.page-withDrawSign .title .left span.c1{
+	color: red;
+}
+.page-withDrawSign .title .right{
+	display: inline-block;
+	float: right;
+	max-width: 180px;
+	padding-right:15px;
+	background: url(img/withDraw-arrow.png) no-repeat right center;
+	background-size: 8px 15px;
+	color: #999;
+	font-size: 12px;
+	vertical-align: middle;
+	height:25px;
+	line-height: 25px;
+	overflow: hidden;
+}	
+.page-withDrawSign .title .right a{
+	display:block;
+	width:100%;
+	height:100%;
+}
+.page-withDrawSign .title .right a{
+	color: #999;
+	font-size: 12px;
+}
+.page-withDrawSign .photoBox{
+	padding: 0 12px;
+}
+.page-withDrawSign .photoBox .listBox{
+	height:auto;
+}
+.page-withDrawSign .photoBox .listBox .tit{
+	padding: 10px 0;
+	height:20px;
+	line-height: 20px;
+}
+.page-withDrawSign .photoBox .listBox .tit span{
+	display: inline-block;
+	vertical-align: middle;
+	color: #222;
+	font-size: 12px;
+}
+.page-withDrawSign .photoBox .listBox .tit span.disabled{
+	color: #888888;
+}
+.page-withDrawSign .photoBox .listBox .img{
+	height:auto;
+}
+.page-withDrawSign .photoBox .listBox .img ul{
+	padding:0;
+	background-color:#f5f5f5;
+}
+.page-withDrawSign .photoBox .listBox .img ul li{
+	background: #efefef url(img/withDraw_photo.png) no-repeat center center;
+	background-size: 31px 23px;
+	overflow: visible;
+	width: 100px;
+	height: 100px;
+	margin-right: 8px;
+}
+.page-withDrawSign .photoBox .listBox .img ul li.del::before{
+	content:"";
+	background: url(img/img_close.png) no-repeat;
+	background-size: 100% 100%;
+	width: 15px;
+	height: 15px;
+	display: block;
+	position: absolute;
+	right: -7px;
+	top: -7px;
+	z-index: 2;
+}
+.page-withDrawSign .listInputBox{
+	margin-top:12px; 
+}
+.page-withDrawSign .listInputBox .list{
+	height:45px;
+	line-height:45px;
+	background-color: #fff;
+	margin-top:2px;
+	color: #888888;
+	font-size: 14px;
+	padding:0 12px;
+	position: relative;
+}
+.page-withDrawSign .listInputBox .list .name{
+	display: inline-block;
+	/* margin-right:10px; */
+	width: 85px;
+	position: absolute;
+	left: 12px;
+	font-size: 14px;
+	color: #222222;
+}
+.page-withDrawSign .listInputBox .list .name.type1{
+	width: 85px;
+}
+.page-withDrawSign .listInputBox .list .input.type1{
+	padding-left: 85px;
+}
+.page-withDrawSign .listInputBox .list .name.type2{
+	width: 110px;
+}
+.page-withDrawSign .listInputBox .list .input.type2{
+	padding-left: 110px;
+}
+.page-withDrawSign .listInputBox .list .input{
+	display: inline-block;
+	width: 100%;
+	box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	background-color: #fff;
+
+}
+.page-withDrawSign .listInputBox .list.disabled .name{
+	color: #888888;
+}
+.page-withDrawSign .listInputBox .list.disabled .input>input{
+	background-color: #fff;
+	color: #888888;
+}
+
+.page-withDrawSign .listInputBox .list .input>input{
+	display:inline-block;
+	border: 0;
+	/* height: 45px; */
+	/* line-height: 45px; */
+	width: 100%;
+	font-size: 14px;
+	color: #000;
+	text-align: right;
+}
+.page-withDrawSign .listInputBox .tips{
+	padding:12px;
+	color: #e81616;
+	text-align: left;
+	font-weight: 600;
+}
+.page-withDrawSign .listInputBox .list .input>input[type="text"]:disabled {color: #888888;}
+// .page-withDrawSign .btnOk{
+// 	width: 80%;
+// 	margin:0 auto;
+// 	margin-top:10px; 
+// 	height:47px;
+// 	line-height:47px;
+// 	font-size: 16px;
+// 	margin-bottom:40px; 
+// }
+.page-withDrawSign .btnGroup{
+	width: 300px;
+	margin:0 auto;
+	height:47px;
+	line-height: 47px;
+	font-size: 16px;
+	margin-bottom: 40px;
+	margin-top:10px; 
+}
+.page-withDrawSign .btnGroup span{
+	display:block;
+	float: left;
+	width: 140px;
+	margin:0 5px;
+}
+.page-withDrawSign .withDrawHelp{
+	background: url(img/withDraw_helps.png) no-repeat center center;
+	background-size: 20px 20px;
+}
+.page-withDrawSign .withDrawHelp a{
+	display:block;
+	width:100%;
+	height:100%;
+}
+.page-withDrawSign .reason{
+	padding:12px 12px 0 12px;
+	color: #e41919;
+	font-size: 12px;
+	font-weight: 600;
+}
+.page-withDraw .right.record{
+	width: 70px;
+}	

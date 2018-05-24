@@ -1,0 +1,35 @@
+﻿
+/* CSS Document */
+/**
+* reset:
+*/
+.am-input-checkbox-wrap input[type="checkbox"],.am-input-radio-wrap input[type="radio"]{opacity:0;}
+.am-input-checkbox-wrap{
+	position:relative;width:30px;height:30px;
+	background:url(../images/checkbox.png) no-repeat left top;
+	background-size:contain;
+}
+.am-input-checkbox-wrap.checked{
+	background:url(../images/checkbox-checked.png) no-repeat left bottom;
+	background-size:contain;
+}
+.am-input-checkbox-wrap .am-input-inner,.am-input-radio-wrap .am-input-inner{
+	position:absolute;
+	width:38px;height:38px;
+	left:-4px;top:-4px;
+}
+.am-input-checkbox-wrap input[type="checkbox"]{
+	position:absolute;left:5px;top:5px;z-index:-1;
+}
+
+.am-input-radio-wrap{
+	position:relative;width:30px;height:30px;
+	background:url(../images/radio.png) no-repeat left top;
+	background-size:contain;
+}
+.am-input-radio-wrap.checked{
+	background:url(../images/radio-checked.png) no-repeat left bottom;
+	background-size:contain;
+}
+.am-input-checkbox-wrap.disabled,.am-input-radio-wrap.disabled{opacity:0.5;}
+

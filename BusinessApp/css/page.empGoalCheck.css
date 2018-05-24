@@ -1,0 +1,180 @@
+.page-empGoalCheck .am-header .set_icon {
+  height: 44px;
+  width: 44px;
+  position: absolute;
+  text-align: center;
+  display: inline-block;
+  line-height: 44px;
+  bottom: 0px;
+  right: 0px;
+  font-size: 22px;
+}
+.page-empGoalCheck .am-header .set_icon.hide {
+  display: none;
+}
+.page-empGoalCheck .am-body-wrap {
+  background-color: #213F83;
+  bottom: 40px;
+}
+.page-empGoalCheck .am-body-wrap .am-body-inner .content_wrap .chart_wrap {
+  position: relative;
+  padding: 40px 15px 10px;
+}
+.page-empGoalCheck .am-body-wrap .am-body-inner .content_wrap .chart_wrap .goal-chart-wrapper {
+  min-height: 300px;
+  font-size: 0;
+  text-align: center;
+}
+.page-empGoalCheck .am-body-wrap .am-body-inner .content_wrap .chart_wrap .goal-chart-wrapper .goal-chart-container {
+  display: inline-block;
+  position: relative;
+  width: 50%;
+}
+.page-empGoalCheck .am-body-wrap .am-body-inner .content_wrap .chart_wrap .goal-chart-wrapper .goal-chart-container .goal_tit {
+  margin: 0 0 15px 26px;
+}
+.page-empGoalCheck .am-body-wrap .am-body-inner .content_wrap .chart_wrap .goal-chart-wrapper .goal-chart-container .goal_tit .icon,
+.page-empGoalCheck .am-body-wrap .am-body-inner .content_wrap .chart_wrap .goal-chart-wrapper .goal-chart-container .goal_tit .text {
+  vertical-align: middle;
+}
+.page-empGoalCheck .am-body-wrap .am-body-inner .content_wrap .chart_wrap .goal-chart-wrapper .goal-chart-container .goal_tit .icon {
+  font-size: 22px;
+  color: #6E85BE;
+}
+.page-empGoalCheck .am-body-wrap .am-body-inner .content_wrap .chart_wrap .goal-chart-wrapper .goal-chart-container .goal_tit .icon.icon-zhanghuyue {
+  font-size: 18px;
+  margin-right: 3px;
+}
+.page-empGoalCheck .am-body-wrap .am-body-inner .content_wrap .chart_wrap .goal-chart-wrapper .goal-chart-container .goal_tit .text {
+  font-size: 11px;
+  color: #BBCDF6;
+}
+.page-empGoalCheck .am-body-wrap .am-body-inner .content_wrap .chart_wrap .goal-chart-wrapper .goal-chart-container .goal_tit .text .num {
+  margin-left: 5px;
+}
+.page-empGoalCheck .am-body-wrap .am-body-inner .content_wrap .chart_wrap .goal-chart-wrapper .goal-chart-container .goal-chart {
+  height: 260px;
+  width: 100%;
+  text-align: center;
+}
+.page-empGoalCheck .am-body-wrap .am-body-inner .content_wrap .chart_wrap .goal-chart-wrapper .goal-chart-container .goal-chart .chart-container.vertical {
+  width: 35%;
+  margin: 0 auto;
+}
+.page-empGoalCheck .am-body-wrap .am-body-inner .content_wrap .chart_wrap .goal-chart-wrapper .goal-chart-container .goal-chart .chart-wrapper .text.right {
+  font-size: 12px;
+  text-align: left;
+}
+.page-empGoalCheck .am-body-wrap .am-body-inner .content_wrap .chart_wrap .goal-chart-wrapper .goal-chart-container .goal-chart .chart-wrapper .text.right span {
+  font-size: 18px;
+}
+.page-empGoalCheck .am-body-wrap .am-body-inner .content_wrap .chart_wrap .goal-chart-wrapper .goal-chart-container .goal-chart .chart-wrapper .text.right.slash {
+  font-size: 10px;
+  color: #91ABE6;
+  line-height: 14px;
+  transform: scale(0.8);
+  -webkit-transform: scale(0.8);
+}
+.page-empGoalCheck .am-body-wrap .am-body-inner .content_wrap .chart_wrap .box_separate {
+  width: 100%;
+  height: 1px;
+  background: #89A1D8;
+  box-shadow: 0 2px 4px 0 #0C204E;
+}
+.page-empGoalCheck .am-body-wrap .am-body-inner .content_wrap .chart_wrap .goal_tip {
+  width: 30px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  opacity: 0.1;
+  font-family: PingFang-SC-Medium;
+  font-size: 24px;
+  color: #FFFFFF;
+  line-height: 30px;
+  display: none;
+}
+.page-empGoalCheck .am-body-wrap .am-body-inner .content_wrap .circle_wrapper {
+  margin: 10px auto;
+  text-align: center;
+  display: none;
+}
+.page-empGoalCheck .am-body-wrap .am-body-inner .content_wrap .circle_wrapper .circle_tit {
+  font-size: 12px;
+  color: #C3CFEA;
+  padding: 10px 0;
+}
+.page-empGoalCheck .am-body-wrap .am-body-inner .content_wrap .circle_wrapper .icon_triangle {
+  width: 0;
+  height: 0;
+  border: 5px solid transparent;
+  border-top: 5px solid #708BC6;
+  position: absolute;
+  margin-top: 5px;
+}
+.page-empGoalCheck .am-body-wrap .am-body-inner .content_wrap .circle_wrapper .circle_charts {
+  margin-top: 20px;
+  text-align: center;
+}
+.page-empGoalCheck .am-body-wrap .am-body-inner .content_wrap .circle_wrapper .circle_charts .circle_chart {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 10px 20px;
+}
+.page-empGoalCheck .am-body-wrap .am-body-inner .content_wrap .shop_bar-point {
+  padding: 0 20px;
+  display: flex;
+  display: -webkit-flex;
+  margin: 10px 0 ;
+}
+.page-empGoalCheck .am-body-wrap .am-body-inner .content_wrap .shop_bar-point .item {
+  -webkit-flex: 1;
+  flex: 1;
+  font-size: 10px;
+  color: #8099D3;
+  text-align: center;
+  position: relative;
+}
+.page-empGoalCheck .am-body-wrap .am-body-inner .content_wrap .shop_bar-point .item::before {
+  content: '';
+  width: 14px;
+  height: 8px;
+  margin-right: 5px;
+  border-radius: 100px ;
+  display: inline-block;
+}
+.page-empGoalCheck .am-body-wrap .am-body-inner .content_wrap .shop_bar-point .item.not_standard::before {
+  background: #FFCA44;
+}
+.page-empGoalCheck .am-body-wrap .am-body-inner .content_wrap .shop_bar-point .item.success::before {
+  background: #34D57E;
+}
+.page-empGoalCheck .am-body-wrap .am-body-inner .content_wrap .shop_bar-point .item.warn::before {
+  background: #F6673F;
+}
+.page-empGoalCheck .am-body-wrap .am-body-inner .content_wrap .switch_btn {
+  height: 49px;
+  line-height: 49px;
+  text-align: center;
+  background-color: #213F83;
+  font-size: 14px;
+  color: #98ABD5;
+  border-top: 1px solid #3C5DA6;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  display: block;
+}
+.page-empGoalCheck .am-body-wrap .am-body-inner .content_wrap .switch_btn.am-clickable-active {
+  background-color: #193472;
+}
+.page-empGoalCheck .am-body-wrap.noSet .am-body-inner .content_wrap .switch_btn {
+  display: none;
+}
+.page-empGoalCheck .am-body-wrap.noSet .am-body-inner .content_wrap .chart_wrap .goal_tip {
+  display: block;
+}
+.page-empGoalCheck .am-body-wrap.noSet .circle_wrapper {
+  display: none;
+}

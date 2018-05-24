@@ -1,0 +1,46 @@
+﻿@charset "utf-8";
+/* CSS Document */
+.page-uploadHeader .am-body-wrap {
+	background: #efeff4;
+}
+.page-uploadHeader .am-body-inner {
+	background: #fff;
+	border-bottom: #b8b8b8 1px solid;
+}
+.page-uploadHeader .title {
+	line-height: 30px;
+	font-weight: bold;
+	font-size: 16px;
+	text-align: center;
+	padding: 30px 0 30px 0;
+}
+.page-uploadHeader .header {
+	height: 124px;
+	width: 124px;
+	background: url(../images/headerBg.png) no-repeat center center;
+	background-size: contain;
+	margin: auto;
+    overflow:hidden;
+}
+.page-uploadHeader .header img {
+	height: 100%;
+	width: 100%;
+}
+.page-uploadHeader .headertips {
+	font-size: 12px;
+	color: #666;
+	text-align: center;
+	padding: 10px 0 60px 0;
+}
+.page-uploadHeader .tips {
+	font-size: 11px;
+	color: #757575;
+	padding: 25px;
+	text-align: center;
+	line-height: 18px;
+}
+.page-uploadHeader .tips .download {
+	color: #2c99ff;
+	font-size: 14px;
+	line-height: 40px;
+}

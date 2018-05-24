@@ -1,0 +1,798 @@
+@charset "utf-8"; 
+@import "var.less";
+@path:"../images/";
+@import "../images/tab_sprite.less";
+@import "../images/icons_sprite.less";
+.page_service,.page_product{
+	left:136px;
+	bottom: 43px;
+	border-radius: 0 4px 0 0;
+	.cashierMain .head,.cashierMain .foot{
+		display: none;
+	}
+	.cashierMain .body{
+		top:0;
+		bottom:0;
+	}
+	&.openBill{
+		left:60px;
+		.displayId{
+			display: none !important;
+		}
+	}
+}
+
+.cashierTotalPanel{
+	&.fullTab{
+		left:60px;
+	}
+	display: none;
+	background-color: #FFF;
+	border-top:1px solid #DDD;
+	height: 42px;
+	position: absolute;
+	left:136px;
+	bottom: 0; 
+	right: 0;
+	//z-index: -1;
+	line-height: 42px;
+	.setting{
+		float: left;
+		font-size: 12px;
+		line-height: 16px;
+		width: 43px;
+		padding-top: 3px;
+		text-align: center;
+		border-right: 1px solid #f2f2f2;
+		height: 39px;
+		color: #888;
+		&::before{
+			font-size: 20px;
+			display: block;
+			line-height: 20px;
+		}
+	}
+	.genderRadio{
+		width: 58px;
+		margin:7px 0px 5px 10px;
+		float: left;
+		font-size: @fs2;
+		&::before{
+			content: "女";
+			float: left;
+			width: 28px;
+			line-height: 28px;
+			text-align: center;
+			border-radius: 14px;
+			background: @bg03;
+			color: @c01;
+		}
+		&::after{
+			content: "男";
+			float: right;
+			width: 28px;
+			line-height: 28px;
+			text-align: center;
+			border-radius: 14px;
+			background: @bg05;
+			color: @c07;
+		}
+	}
+	.genderRadio.male{
+		&::before{
+			background: @bg05;
+			color: @c07;
+		}
+		&::after{
+			background: @bg03;
+			color: @c01;
+		}
+	}
+	.billNo{
+		padding-left: 10px;
+		float: left;
+		&::before{
+			content: "单号:";
+			display: inline-block;
+			font-size: @fs2;
+			color: @c07;
+		}
+		input{
+			border: 1px solid @bd01;
+			height: 26px;
+			width: 100px;
+			padding-left: 10px;
+			border-radius: 14px;
+			&.error{
+				border-color: @bd02;
+				-webkit-animation: animation_shake 1 ease-in 0.2s;
+			}
+		}
+	}
+	.hangup{
+		float: right;
+		margin-top: -1px;
+		height: 43px;
+		text-align: center;
+		color: @c01;
+		background: @bg03;
+		width: 80px;
+		&.am-clickable-active{
+			background: @bg01;
+		}
+		&.bigBtn{
+			width: 160px;
+		}
+	}
+	.submit{
+		float: right;
+		margin-top: -1px;
+		height: 43px;
+		text-align: center;
+		color: @c01;
+		background: @bg02;
+		width: 180px;
+		&.am-clickable-active{
+			background: @bg07;
+		}
+	}
+	.totalPrice{
+		float: right;
+		color: @c11;
+		padding: 0 15px;
+		font-size: @fs7;
+		line-height: 44px;
+		&::before{
+			font-size: @fs1;
+			content: "总计:";
+			color: @c02;
+		}
+	}
+	&.show{
+		z-index: 1;
+	}
+}
+.tab_cash{
+	display: none;
+	position: absolute;
+	left:75px;
+	top:0;
+	bottom: 0;
+	width:60px;
+	background-color: #EEEEEE;
+	border-right: 1px solid #DDD;
+	//z-index: -1;
+	color: @c07;
+	&.openBill{
+		.setting,.hangup{
+			display: none;
+		}
+		.hangupList,.roundCards{
+			display: block;
+		}
+		.tab_memList{
+			display: block;
+		}
+		.tabUl li:nth-child(3){
+			display: none !important;
+		}
+		// .search{
+		// 	display: none;
+		// }
+	}
+	&.fullTab{
+		left:0;
+	}
+	.tab_memList{
+		ul{
+			li{
+				overflow: hidden;
+				position: relative;
+				&.tabItem{
+					.text{
+						font-size: 10px;
+						line-height: 14px;
+						color:#e59b37;
+						&.selected{
+							color:#42a2de;
+						}
+					}
+				}
+				
+				&:nth-child(1){
+					&::before{
+						content: "";
+					    width: 28px;
+					    height: 28px;
+					    display: block;
+					    position: absolute;
+					    bottom: -15px;
+					    right: -15px;
+					    background-color: #555;
+					    color: #fff;
+					    transform: rotate(45deg);
+					    -webkit-transform: rotate(45deg);
+					}
+					&::after{
+						content: "1";
+					    color: #fff;
+					    position: absolute;
+					    bottom: -1px;
+					    right: 2px;
+					    font-size: 10px;
+					}
+				}	
+				&:nth-child(2){
+					&::before{
+						content: "";
+					    width: 28px;
+					    height: 28px;
+					    display: block;
+					    position: absolute;
+					    bottom: -15px;
+					    right: -15px;
+					    background-color: #555;
+					    color: #fff;
+					    transform: rotate(45deg);
+					    -webkit-transform: rotate(45deg);
+					}
+					&::after{
+						content: "2";
+					    color: #fff;
+					    position: absolute;
+					    bottom: -1px;
+					    right: 2px;
+					    font-size: 10px;
+					}
+				}	
+				&:nth-child(3){
+					&::before{
+						content: "";
+					    width: 28px;
+					    height: 28px;
+					    display: block;
+					    position: absolute;
+					    bottom: -15px;
+					    right: -15px;
+					    background-color: #555;
+					    color: #fff;
+					    transform: rotate(45deg);
+					    -webkit-transform: rotate(45deg);
+					}
+					&::after{
+						content: "3";
+					    color: #fff;
+					    position: absolute;
+					    bottom: -1px;
+					    right: 2px;
+					    font-size: 10px;
+					}
+				}	
+			}
+		}
+		.tabItem{
+			position: relative;
+		    text-align: center;
+		    line-height: 14px;
+		    font-size: 12px;
+		    padding: 10px 0;
+			.operatehair{
+				display: none;
+				height:20px;
+				line-height: 22px;
+				border-radius:10px;
+				-webkit-border-radius:10px;
+				color:#222;
+				border:1px solid #777;
+				margin: 0 3px;
+				margin-top: 10px;
+				font-size: 10px;
+				text-align: center;
+				&.disabled{
+					display: block;
+					color:#adadad;
+					border:0;
+					line-height: 16px;
+					height: auto;
+					margin: 0 8px;
+					margin-top: 10px;
+					&::before{
+						content:"已结束洗发"
+					}
+				}
+				&.start{
+					display: block;
+					&::before{
+						content:"开始洗发"
+					}
+					&.am-clickable-active{
+						background-color: #e9e9e9;
+					}
+				}
+				&.finish{
+					display: block;
+					&::before{
+						content:"结束洗发"
+					}
+					&.am-clickable-active{
+						background-color: #e9e9e9;
+					}
+				}
+				
+			}
+		    .waiterNum{
+		    	color: #e82742;
+		    	font-size: 24px;
+		    	line-height: 26px;
+		    }
+		    .user_name{
+		    	color:#222222;
+		    	font-size: 12px;
+		    	line-height: 16px;
+		    }
+		    .text{
+		    	font-size: 10px;
+				line-height: 14px;
+				color:#999;
+		    }
+		    .icon{
+		    	display: none;
+		    }
+		    &.append{
+		    	display: table;
+		    	width: 100%;
+		    	height:30px;
+		    	.user_name,.text{
+		    		display: none;
+		    	}
+		    	.icon{
+		    		width: 20px;
+		    		height:20px;
+		    		display: table-cell;
+		    		background: url("../images/hangup/add_waiter.png") no-repeat center center;
+		    		background-size: 20px 20px;
+		    	}
+		    }
+		}
+		&.show{
+			display: block;
+		}
+	}
+	.hangupList,.roundCards,.tab_memList{
+		display: none;
+	}
+	&.show{
+		z-index: 1;
+	}
+	.bottom{
+		border-top: 1px solid #DDD;
+		bottom: 0;
+		left: 0;
+		position: absolute;
+		width: 60px;
+	}
+	.memberInfo{
+		.abs(@left:60px;@bottom:57px);
+		width: 300px;
+		//height: 0;
+		//padding: 5px;
+		//overflow: hidden;
+		display: none;
+		.highlight{
+			color: @c11;
+		}
+		.infoclose{
+			.abs(@right:0px;@top:0px);
+			width: 32px;
+			height: 32px;
+			&::before{
+				content: "";
+				position: absolute;
+				left: 8px;
+				top: 8px;
+				width: 15px;
+				height: 15px;
+				background: @close_employee_png no-repeat @close_employee_png_pos;
+				background-size: @close_employee_png_size;
+			}
+		}
+		.content{
+			padding: 10px 10px 10px 10px;
+			border-radius: 0 4px 4px 0;
+			line-height: 24px;
+			background: @bg04;
+			border: 1px solid #DDD;
+			/*box-shadow: rgba(0, 0, 0, 0.5) 0 0 5px;*/
+			/*&::before{
+				.abs(@left:-5px;@top:20px);
+				content: "";
+				border-right: 5px solid @bg04;
+				border-top: 5px solid transparent;
+				border-bottom: 5px solid transparent;
+				border-left: none;
+			}*/
+			.membername{
+				padding-left: 5px;
+				font-weight: bold;
+			}
+			.gender{
+				float: left;
+				height: 24px;
+				font-size: @fs2;
+				&::before{
+					float: left;
+					content: "";
+					width: 16px;
+					height: 16px;
+					background: @female_png no-repeat @female_png_pos;
+					background-size:@female_png_size;
+					margin: 4px;
+				}
+				&.male::before{
+					background: @male_png no-repeat @male_png_pos;
+					background-size:@male_png_size;
+				}
+			}
+			.tel{
+				float: right;
+				text-align: right;
+				padding-right: 30px;
+				&::before{
+					content: "";
+					width: 16px;
+					height: 16px;
+					float: left;
+					margin: 4px 0 4px 4px;
+					display: inline-block;
+					background: @cellphone_png no-repeat @cellphone_png_pos;
+					background-size:@cellphone_png_size;
+				}
+			}
+			.comment{
+				font-size: @fs2;
+				color: @c03;
+				clear: both;
+				padding:0 0 3px 5px;
+			}
+			.card{
+				border-top: 1px solid @bd01;
+				padding:8px 5px;
+				.left{
+					width: 50%;
+				}
+				.right{
+					float: right;
+					width: 50%;
+					text-align: right;
+				}
+				.name{
+					font-weight: bold;
+				}
+				.cardNo{
+					font-size: @fs2;
+					color: @c03;
+					line-height: 20px;
+				}
+				.discount{
+					font-size: @fs2;
+					line-height: 20px;
+				}
+				.price{
+					color: @c11;
+					font-size: @fs3;
+					&::before{
+						content: "余额:￥";
+						font-size: @fs2;
+					}
+				}
+				.bonus{
+					font-size: @fs2;
+					color: @c03;
+					line-height: 20px;
+				}
+			}
+			.recharge,.renewal{
+				margin: 5px -5px 0 -5px;
+				line-height: 40px;
+				text-align: center;
+				color: @c01;
+				background: @bg03;
+				&.am-clickable-active{
+					background: @bg01;
+				}
+			}
+			.close{
+				margin: 5px 0 0 0;
+				line-height: 30px;
+				text-align: center;
+				background: @bg06;
+				&.am-clickable-active{
+					background: @bg15;
+				}
+			}
+			.items{
+				border-top: 1px solid @bd01;
+				padding: 10px 0 0 0;
+				line-height: 20px;
+				max-height: 200px;
+				overflow: hidden;
+				li{
+					padding:5px 10px;
+					background: @bg06;
+					margin-bottom: 1px;
+					&.am-clickable-active{
+						background: @bg15;
+					}
+				}
+				.times{
+					float: right;
+					span{
+						display: block;
+						color: @c04;
+						line-height: 14px;
+						font-size: @fs2;
+						color: @c04;
+					}
+				}
+				.invalidDate{
+					line-height: 14px;
+					font-size: @fs2;
+					color: @c04;
+					&.highlight{
+						color: @c11;
+					}
+				}
+			}
+		}
+	}
+	.tabUl li{
+		padding: 2px 0 0 0;
+		height: 52px;
+		text-align: center;
+		line-height: 20px;
+		position: relative;
+		p{
+			display: block;
+			height: 30px;
+			width: 30px;
+			margin: 0 auto;
+			background-color: #CCC;
+			&.a{
+				background: @icon_a_png no-repeat @icon_a_png_pos;
+				background-size:@icon_a_png_size;
+			}
+			&.b{
+				background: @icon_b_png no-repeat @icon_b_png_pos;
+				background-size:@icon_b_png_size;
+			}
+			&.c{
+				background: @icon_c_png no-repeat @icon_c_png_pos;
+				background-size:@icon_c_png_size;
+			}
+			&.d{
+				background: @icon_d_png no-repeat @icon_d_png_pos;
+				background-size:@icon_d_png_size;
+			}
+			&.e{
+				background: @icon_e_png no-repeat @icon_e_png_pos;
+				background-size:@icon_e_png_size;
+			}
+			&.f{
+				background: @icon_f_png no-repeat @icon_f_png_pos;
+				background-size:@icon_f_png_size;
+			}
+			&.g{
+				background: @icon_g_png no-repeat @icon_g_png_pos;
+				background-size:@icon_g_png_size;
+			}
+			&.h{
+				background: @icon_h_png no-repeat @icon_h_png_pos;
+				background-size:@icon_h_png_size;
+			}
+			&.i{
+				background: @icon_i_png no-repeat @icon_i_png_pos;
+				background-size:@icon_i_png_size;
+			}
+			&.j{
+				background: @icon_j_png no-repeat @icon_j_png_pos;
+				background-size:@icon_j_png_size;
+			}
+			&.k {
+				background: url(../images/queue.png) no-repeat center center;
+				background-size: 20px 21px;
+			}
+		}
+		&.selected{
+			border-top: 1px solid #444;
+			border-bottom: 1px solid #444;
+			background-color: #444;
+			//border-top: 1px solid #111;
+			//background-color: #111;
+			color: @c01;
+			opacity: 1;
+			&::before{
+				content: "";
+				position: absolute;
+				right:-7px;
+				top:50%;
+				margin-top: -7px;
+				border-left: 7px solid #444;
+				border-top:7px solid transparent;
+				border-bottom:7px solid transparent;
+			}
+			p.a{
+				background: @icon_a_s_png no-repeat @icon_a_s_png_pos;
+				background-size:@icon_a_s_png_size;
+			}
+			p.b{
+				background: @icon_b_s_png no-repeat @icon_b_s_png_pos;
+				background-size:@icon_b_s_png_size;
+			}
+			p.c{
+				background: @icon_c_s_png no-repeat @icon_c_s_png_pos;
+				background-size:@icon_c_s_png_size;
+			}
+			p.d{
+				background: @icon_d_s_png no-repeat @icon_d_s_png_pos;
+				background-size:@icon_d_s_png_size;
+			}
+			p.e{
+				background: @icon_e_s_png no-repeat @icon_e_s_png_pos;
+				background-size:@icon_e_s_png_size;
+			}
+			p.f{
+				background: @icon_f_s_png no-repeat @icon_f_s_png_pos;
+				background-size:@icon_f_s_png_size;
+			}
+			p.g{
+				background: @icon_g_s_png no-repeat @icon_g_s_png_pos;
+				background-size:@icon_g_s_png_size;
+			}
+			p.h{
+				background: @icon_h_s_png no-repeat @icon_h_s_png_pos;
+				background-size:@icon_h_s_png_size;
+			}
+			p.i{
+				background: @icon_i_s_png no-repeat @icon_i_s_png_pos;
+				background-size:@icon_i_s_png_size;
+			}
+			p.j{
+				background: @icon_j_s_png no-repeat @icon_j_s_png_pos;
+				background-size:@icon_j_s_png_size;
+			}
+			p.k {
+				background: url(../images/queue-selected.png) no-repeat center center;
+				background-size: 20px 21px;
+			}
+		}
+		> .num {
+			display: none;
+			position: absolute;
+			//width: 18px;
+			//height: 18px;
+			line-height: 14px;
+			padding: 0 2px 0 1px;
+			color: #FFF;
+			background: @bg02;
+			border-radius: 2px;
+			right: 2px;
+			top: 2px;
+			font-size: 12px;
+		}
+	}
+	.line{
+		height: 6px;
+		//border-top:1px solid #FFF;
+		//background-color: #EEE;
+		//margin-top: -1px;
+		box-shadow: rgba(0,0,0,0.15) 0 0 3px inset;
+	}
+	.tabItem{
+		border-top: 1px solid #FFF;
+		border-bottom: 1px solid #DDD;
+		background-color: #f7f7f7;
+		&.search{
+			border-bottom: none;
+		}
+	}
+	.user{
+		padding-bottom: 2px;
+		.img{
+			height: 40px;
+			background:#E7E7E7 url("../images/defultbg.png") no-repeat center center;
+			background-size: 40px 40px;
+			margin: 5px 10px 0 10px;
+			overflow: hidden;
+			img{
+				width: 100%;
+			}
+		}
+		.name{
+			line-height: 20px;
+			//color: #AAA;
+			font-size: 12px;
+			text-align: center;
+		}
+		&.am-clickable-active{
+			background: #E7E7E7;
+			color: #222;
+		}
+	}
+	.cardli{
+		white-space: nowrap;
+		font-size: 12px;
+		.name{
+			//color: #999;
+			height: 16px;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+		.balance{
+			color: @c11;
+			padding-left: 5px;
+		}
+		text-align: left;
+	}
+	.hangupBtn,.settingBtn,.genderBtn,.searchBtn,.cardBtn,.hangupListBtn,.roundCardsBtn{
+		&.am-clickable-active{
+			background: #E7E7E7;
+			color: #222;
+		}
+		&.selected{
+			background: #FFF;
+		}
+		position: relative;
+		text-align: center;
+		line-height: 14px;
+		font-size: 12px;
+		//color: #AAA;
+		//height: 52px;
+		padding-bottom: 6px;
+		padding-top: 3px;
+		.icon{
+			&::before{
+				font-size: 24px;
+				line-height: 32px;
+			}
+		}
+		.search_vip {
+			margin-bottom: 5px;
+			height: 26px;
+			background: url("../images/search_vip.gif") no-repeat center center;
+			background-size: 26px 26px;
+		}
+		.num{
+			/*position: absolute;
+			right: 2px;
+			top:2px;
+			padding: 0 4px;
+			line-height: 14px;
+			font-size: 12px;
+			background: #f39800;
+			color: #FFF;
+			border-radius: 20px;*/
+			display: none;
+			position: absolute;
+			//width: 18px;
+			//height: 18px;
+			line-height: 14px;
+			padding: 0 4px;
+			color: #FFF;
+			background: @bg02;
+			border-radius: 2px;
+			right: 2px;
+			top: 2px;
+			font-size: 12px;
+		}
+		/* .icon-roundCards{
+			&::before{
+				content:"";
+				display: block;
+				background:url("../images/hangup/roundCards.png") no-repeat center center;
+				background-size: 20px 21px;
+				width: 100%;
+				height:32px;
+			}
+		} */
+	}
+}

@@ -1,0 +1,157 @@
+.page-marketing .am-body-inner{
+	background: #f6f6f6;
+}
+.page-marketing .listBox{
+	padding: 0 10px 20px;
+}
+.page-marketing .listBox li{
+	width: 100%;
+	margin-top: 10px;
+	background: #fff;
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+}
+.page-marketing .listBox li .imgwrap{
+	position: relative;
+	width: 100%;
+}
+.page-marketing .listBox li .imgwrap img{
+	width: 100%;
+	border-top-left-radius: 5px;
+	-webkit-border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    -webkit-border-top-right-radius: 5px;
+}
+.page-marketing .listBox li .imgwrap .imgmask{
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	background: #000;
+	opacity: .8;
+	-webkit-border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    -webkit-border-top-right-radius: 5px;
+}
+.page-marketing .listBox li .imgwrap .pmask{
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%,-50%);
+	text-align: center;
+	color: #fff;
+    font-size: 15px;
+}
+.page-marketing .listBox li .imgwrap .stopmask{
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%,-50%);
+	width: 230px;
+	padding-top: 60px;
+	text-align: center;
+	color: #fff;
+    font-size: 12px;
+    background: url(img/marketingstop.png) no-repeat center 10px;
+    background-size: 45px 45px;
+}
+.page-marketing .listBox li .marketintro{
+	position: relative;
+	padding: 6px 15px;
+}
+.page-marketing .listBox li .marketintro h2{
+	font-size: 16px;
+	color: #000;
+}
+.page-marketing .listBox li .marketintro h2.pd80{
+	padding: 8px 0;
+}
+.page-marketing .listBox li .marketintro h2.redpacket{
+	padding-left: 30px;
+	background: url(img/marketingredpacket.png) no-repeat 1px 6px;
+    background-size: 24px 24px;
+}
+.page-marketing .listBox li .marketintro p{
+	font-size: 12px;
+	color: #999999;
+	margin-top: 4px;
+}
+.page-marketing .listBox li .marketintro span{
+	position: absolute;
+    bottom: 18px;
+    right: 10px;
+    font-size: 12px;
+    color: #CCC;
+    padding-right: 10px;
+    background: url("img/report_arrowRight.png") no-repeat right 4px;
+    background-size: 7px 10px;
+	line-height: 18px;
+}
+.page-marketing .listBox li .marketintro span.lookintro{
+	top: 16px;
+}
+.page-marketing .listBox li.emptyli{
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%,-50%);
+	-webkit-transform: translate(-50%,-50%);
+	margin-top: 0;
+    padding-top: 55px;
+    text-align: center;
+    font-size: 12px;
+    color: #ccc;
+	background: url(img/marketingempty.png) no-repeat center 4px;
+	background-size: 53px 42px;
+}
+.page-marketing .footTab {
+    position: absolute;
+    z-index: 2;
+    bottom: 0;
+    height: 45px;
+    width: 100%;
+    line-height: 45px;
+    text-align: center;
+}
+.page-marketing .footTab span {
+    display: block;
+    float: left;
+    width: 25%;
+    color: #fff;
+    font-size: 12px;
+}
+.page-marketing .footTab span.selected {
+    color: #fff;
+    background: #2dbd84;
+}
+.page-marketing .footTab span i{
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  background: url(img/marketingtabicon.png) no-repeat;
+  background-size: 18px 99px;
+  margin-right: 4px;
+}
+.page-marketing .footTab span.carriedout i{
+	  background-position: 1px 0px;
+}
+.page-marketing .footTab span.available i{
+	  background-position: 1px -81px;
+}
+.page-marketing .footTab span.fasended i{
+	  background-position: 1px -39px;
+}
+.page-marketing .footTab .carriedout {
+    background-color: #727888;
+}
+.page-marketing .footTab .available {
+    background-color: #485268;
+}
+.page-marketing .footTab .fasended {
+    background-color: #586075;
+}
+.page-marketing .footTab .selfmarketing {
+    background-color: #3C4350;
+}

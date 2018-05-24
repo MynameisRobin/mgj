@@ -1,0 +1,156 @@
+.page-sendMessage {
+  background-color: #f6f6f6;
+}
+.page-sendMessage .am-header p {
+  font-size: 0;
+}
+.page-sendMessage .am-header p span {
+  font-size: 18px;
+}
+.page-sendMessage .am-body-wrap *,
+.page-sendMessage .am-body-wrap:after,
+.page-sendMessage .am-body-wrap:before {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+.page-sendMessage .am-body-wrap .clearfix:after {
+  content: ".";
+  display: block;
+  height: 0;
+  visibility: hidden;
+  clear: both;
+}
+.page-sendMessage .am-body-wrap input {
+  border: none;
+  background-color: transparent;
+}
+.page-sendMessage .am-body-wrap .wrap {
+  padding: 10px 15px;
+  background-color: #fff;
+}
+.page-sendMessage .am-body-wrap .wrap .title {
+  font-size: 0;
+  color: #999;
+  line-height: 20px;
+  height: 20px;
+  overflow: hidden;
+  padding-left: 22px;
+  background-size: 17px 17px;
+  background-repeat: no-repeat;
+  background-position: left center;
+}
+.page-sendMessage .am-body-wrap .wrap .title span {
+  font-size: 12px;
+}
+.page-sendMessage .am-body-wrap .wrap .title.title1 {
+  background-image: url(img/tpl/title1.png);
+}
+.page-sendMessage .am-body-wrap .wrap .title.title2 {
+  background-image: url(img/tpl/title2.png);
+}
+.page-sendMessage .am-body-wrap .wrap .title.title3 {
+  background-image: url(img/tpl/title3.png);
+}
+.page-sendMessage .am-body-wrap .wrap .title.title4 {
+  background-image: url(img/tpl/title4.png);
+}
+.page-sendMessage .am-body-wrap .wrap .title.title5 {
+  background-image: url(img/tpl/title5.png);
+}
+.page-sendMessage .am-body-wrap .wrap .title.title6 {
+  background-image: url(img/tpl/title6.png);
+}
+.page-sendMessage .am-body-wrap .wrap .text-wrap {
+  margin-top: 5px;
+  height: 120px;
+  padding: 10px 10px 30px 10px;
+  border: 1px solid #e3e3e3;
+  border-radius: 10px;
+  position: relative;
+}
+.page-sendMessage .am-body-wrap .wrap .text {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: none;
+  font-size: 15px;
+  color: #222;
+  line-height: 20px;
+}
+.page-sendMessage .am-body-wrap .wrap .words {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  height: 20px;
+  bottom: 5px;
+  text-align: right;
+  font-size: 0;
+}
+.page-sendMessage .am-body-wrap .wrap .words span {
+  display: inline-block;
+  font-size: 10px;
+  color: #c5c5c5;
+}
+.page-sendMessage .btns {
+  position: absolute;
+  width: 100%;
+  height: 44px;
+  bottom: 0;
+}
+.page-sendMessage .btns div {
+  width: 50%;
+  height: 44px;
+  float: left;
+  font-size: 16px;
+  color: #999;
+  text-align: center;
+  line-height: 44px;
+  background-color: #fff;
+}
+.page-sendMessage .btns div:last-child {
+  color: #fff;
+  background-color: #00bc86;
+}
+.page-sendMessage .btns div.am-clickable-active {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+.page-sendMessage .tip {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 44px;
+  height: 32px;
+  overflow: hidden;
+  text-align: center;
+}
+.page-sendMessage .tip span,
+.page-sendMessage .tip p {
+  display: inline-block;
+  vertical-align: top;
+}
+.page-sendMessage .tip span {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1px solid #999;
+  font-size: 12px;
+  color: #999;
+  text-align: center;
+  line-height: 14px;
+  margin: 7px 3px 7px 0;
+}
+.page-sendMessage .tip p {
+  height: 32px;
+  font-size: 12px;
+  color: #999;
+  line-height: 32px;
+}
+.page-sendMessage .mask {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9;
+  display: none;
+}

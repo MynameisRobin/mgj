@@ -1,0 +1,58 @@
+
+.page_engineering .info {
+	padding: 10px;
+	background:#fff;
+	margin: 10px 10px 0 10px;
+}
+
+.page_engineering_list {
+	padding: 10px;
+}
+.page_engineering_list > li {
+	background: #fff;
+	/* height: 40px; */
+	line-height: 40px;
+	border-bottom: #eee 1px solid;
+	padding: 10px;
+}
+
+.page_engineering_list .text {
+	float: left;
+	display: inline-block;
+	width: 80px;
+	font-weight: bold;
+}
+.page_engineering_list .right {
+	margin-left: 80px;
+}
+.page_engineering_list > li  select {
+	/* border: #eee 1px solid; */
+	height: 30px;
+	width: 100%;
+}
+.page_engineering_list > li  input {
+	/* border: #eee 1px solid; */
+	height: 30px;
+	width: 100%;
+}
+
+.page_engineering .btnGroup {
+	text-align: center;
+	padding: 10px;
+}
+
+.page_engineering .btnGroup > .button {
+	display: inline-block;
+	height: 40px;
+	line-height: 40px;
+	padding: 0 12px;
+	background: #213f83;
+	border-radius: 2px;
+	color: #fff;
+	margin-right: 10px;
+	font-size: 14px;
+}
+.page_engineering .btnGroup > .button.light {
+	background: #738bc1;
+	color: #fff;
+}

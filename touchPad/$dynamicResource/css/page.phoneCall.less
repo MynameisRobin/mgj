@@ -1,0 +1,914 @@
+// out: ./page.phoneCall.css, compress: false, sourceMap: false
+@import "var.less";
+@path: "../images/";
+@import "../images/icons_sprite.less";
+
+.bs {
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+.br(@num) {
+    border-radius: @num;
+    -webkit-border-radius: @num;
+}
+
+.ws {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#itemMember .inner {
+    padding: 10px 0;
+    .title {
+        margin: 0 15px;
+        padding: 0;
+        padding-left: 30px;
+    }
+    .content {
+        margin: 10px 15px 80px 15px;
+        padding: 0;
+        background-color: #f7f7f7;
+        min-height: 120px;
+        padding: 20px 25px 20px 25px;
+        max-height: 250px;
+        overflow: hidden;
+    }
+}
+
+// 电话宝
+#page_phoneCall {
+    width: 100%;
+    height: 100%;
+    display: none;
+    position: absolute;
+    z-index: 2;
+    .am-backbutton {
+        width: 50px;
+        height: 50px;
+        position: absolute;
+        right: 0;
+        top: 0;
+        z-index: 9;
+    }
+    .am-left {
+        width: 28.3%;
+        height: 100%;
+        color: #fff;
+        float: left;
+        overflow: hidden;
+        text-align: center;
+        background: @bg32;
+        position: relative;
+        .icon-phone {
+            width: 51.5px;
+            height: 113px;
+            position: absolute;
+            left: 22px;
+            top: 0;
+            background: url(../images/phone_call/phone.png) no-repeat;
+            background-size: cover;
+        }
+        .info-phone {
+            height: 16.5px;
+            position: absolute;
+            left: 106px;
+            top: 88.5px;
+            font-size: 12px;
+        }
+        .info-vip {
+            margin-top: 203px;
+            .header {
+                width: 104px;
+                height: 104px;
+                margin: 0 auto;
+                border-radius: 50%;
+                border: 5px solid #6b6b6b;
+                background: #e1e1e1 url(../images/openbill-customer.png) no-repeat;
+                background-size: cover;
+                img {
+                    width: 100%;
+                    height: 100%;
+                    border-radius: 50%;
+                    display: block;
+                    margin: 0 auto;
+                }
+            }
+            .header-info {
+                margin-top: 24px;
+                font-size: 14px;
+                .phone {
+                    margin-top: 11.5px;
+                    font-size: 25px;
+                }
+                .phone-description {
+                    height: 25px;
+                    font-size: 12px;
+                    padding: 9px 40.5px;
+                    color: #8e8e8e;
+                    // overflow: hidden;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
+                }
+            }
+        }
+        .btn {
+            height: 49px;
+            line-height: 50px;
+            margin: 0 13%;
+            background: @bg02;
+            box-shadow: 0 7px 12px 0 rgba(211, 24, 50, 0.5);
+            border-radius: 25px;
+            position: absolute;
+            width: 74%;
+            top: 75%;
+            img {
+                width: 20px;
+                height: 18px;
+                vertical-align: middle;
+            }
+            .btn-icon {
+                margin-left: 77px;
+            }
+        }
+        .info-foot {
+            width: 100%;
+            position: absolute;
+            color: #8e8e8e;
+            font-size: 11px;
+            bottom: 28.5px;
+        }
+    }
+    .am-right {
+        width: 71.7%;
+        height: 100%;
+        float: left;
+        color: #222;
+        background: #fff;
+        text-align: center;
+        position: relative;
+        &::before {
+            content: "";
+            width: 22px;
+            height: 46px;
+            position: absolute;
+            top: 13px;
+            left: -10px;
+            background: url(../images/phone_call/s_sanjiao.png) no-repeat;
+        }
+        .am-backbutton::before {
+            content: "";
+            width: 36px;
+            height: 36px;
+            display: block;
+            margin: 7px;
+            background: url(../images/icons_sprite/close.png) no-repeat 0px 0px;
+            background-size: 36px 36px;
+        }
+        .default {
+            width: 178.5px;
+            height: 212.5px;
+            position: absolute;
+            top: 50%;
+            margin-top: -106px;
+            margin-left: -89.25px;
+            left: 50%;
+            background: url(../images/phone_call/default.png) no-repeat;
+            background-size: cover;
+        }
+        .vip-select {
+            display: none;
+            h2 {
+                font-size: 14px;
+                margin-top: 25px;
+                margin-left: 20px;
+                text-align: left;
+            }
+            .select {
+                margin-top: 20%;
+                padding: 0 10%;
+                padding-bottom: 20%;
+                p {
+                    color: #999;
+                    font-size: 14px;
+                }
+                ul {
+                    height: 400px;
+                    overflow: auto;
+                    margin-top: 32px;
+                    padding-top: 1px;
+                    li {
+                        padding: 12px 0;
+                        margin-top: -1px;
+                        border-top: 1px solid #ececec;
+                        border-bottom: 1px solid #ececec;
+                    }
+                }
+            }
+        }
+        .vip-info {
+            display: none;
+            text-align: left;
+            height: 100%;
+            position: relative;
+            // overflow: hidden;
+            h2 {
+                font-size: 14px;
+                margin-top: 25px;
+                margin-left: 20px;
+            }
+            .comboBox {
+                width: 100%;
+                height: 100%;
+                padding: 0 20px;
+                overflow: hidden;
+                position: absolute;
+                top: 20px;
+                box-sizing: border-box;
+                -webkit-box-sizing: border-box;
+                .leftCard {
+                    width: 50%;
+                    height: 100%;
+                    float: left;
+                    border-right: 1px solid @bd01;
+                    position: relative;
+
+                    .cardTit {
+                        height: 25px;
+                        margin: 10px 0;
+                        background-color: @bg04;
+
+                        span {
+                            vertical-align: middle;
+                            display: inline-block;
+                            line-height: 25px;
+                            font-size: @fs2;
+                            color: @c03;
+                        }
+
+                        .icon {
+                            width: 15px;
+                            height: 12px;
+                            background: @card_icon_png no-repeat @card_icon_png_pos;
+                            background-size: @card_icon_png_size;
+                            margin-right: 5px;
+                        }
+
+                        .tips {
+                            color: @c11;
+                            padding: 0 5px;
+                            border: 1px solid @bd10;
+                            .br(3px);
+                            position: relative;
+                            margin-left: 10px;
+
+                            &:after {
+                                content: "";
+                                width: 0;
+                                height: 0;
+                                border-top: 2px solid transparent;
+                                border-right: 4px solid @bd10;
+                                border-bottom: 2px solid transparent;
+                                position: absolute;
+                                top: 9px;
+                                left: -5px;
+                            }
+
+                            &:before {
+                                content: "";
+                                width: 0;
+                                height: 0;
+                                border-top: 1px solid transparent;
+                                border-right: 3px solid @bg04;
+                                border-bottom: 1px solid transparent;
+                                position: absolute;
+                                z-index: 2;
+                                top: 10px;
+                                left: -3px;
+                            }
+                        }
+                    }
+
+                    .cardBox {
+                        position: absolute;
+                        top: 45px;
+                        bottom: 10px;
+                        left: 0;
+                        right: 30px;
+                        overflow: hidden;
+                        .list {
+                            width: 100%;
+                            padding-bottom: 30px;
+                            ul {
+                                width: 100%;
+                                li {
+                                    width: 100%;
+                                    height: 100px;
+                                    border: 1px solid @bd07;
+                                    .br(10px);
+                                    margin-bottom: 25px;
+                                    border-bottom: 0;
+                                    padding-bottom: 0;
+                                    border-bottom-left-radius: 0;
+                                    border-bottom-right-radius: 0;
+                                    position: relative;
+                                    &.active {
+                                        &::before {
+                                            content: "";
+                                            width: 40px;
+                                            height: 40px;
+                                            position: absolute;
+                                            top: 35%;
+                                            left: 60%;
+                                            background: url("../images/card_selected_icon.png") no-repeat;
+                                            background-size: cover;
+                                        }
+                                    }
+
+                                    &.type_two {
+                                        background: url("../images/card_bg1.png") no-repeat;
+                                        background-size: 100% 100%;
+                                        .free .value.pay .payBtn {
+                                            background-color: #805018;
+                                            border: 1px solid #a37a49;
+                                        }
+                                    }
+
+                                    &.type_one {
+                                        background: url("../images/card_bg2.png") no-repeat;
+                                        background-size: 100% 100%;
+
+                                        .free .value.pay .payBtn {
+                                            background-color: #181818;
+                                            border: 1px solid #4b4b4b;
+                                        }
+                                    }
+
+                                    &.type_zero {
+                                        /* Ì×²Í¿¨ */
+                                        background: url("../images/card_bg3.png") no-repeat;
+                                        background-size: 100% 100%;
+
+                                        .free .value.pay .payBtn {
+                                            background-color: #48397e;
+                                            border: 1px solid #7b6eac;
+                                        }
+                                    }
+
+                                    &.am-clickable-active {
+                                        opacity: 0.9;
+                                    }
+
+                                    &.addcard {
+                                        background-color: #fff;
+
+                                        &:before {
+                                            content: "";
+                                            position: absolute;
+                                            z-index: 2;
+                                            width: 49px;
+                                            height: 49px;
+                                            background: @addCard_icon_png no-repeat @addCard_icon_png_pos;
+                                            background-size: @addCard_icon_png_size;
+                                            left: 50%;
+                                            top: 50%;
+                                            margin-left: -25px;
+                                            margin-top: -20px;
+                                        }
+
+                                        .line {
+                                            background-color: @bg21;
+                                        }
+
+                                        &:after {
+                                            z-index: 0;
+                                        }
+                                    }
+
+                                    &.selected {
+                                        /* // background-color: @bg03; */
+                                        &:after {
+                                            z-index: -1;
+                                        }
+
+                                        .name {
+                                            /* // color: @c01; */
+                                        }
+
+                                        &:before {
+                                            content: "";
+                                            position: absolute;
+                                            z-index: 2;
+                                            width: 37px;
+                                            height: 37px;
+                                            background: @changeCard_png no-repeat @changeCard_png_pos;
+                                            background-size: @changeCard_png_size;
+                                            left: 60%;
+                                            top: 50%;
+                                        }
+                                    }
+                                    &:after {
+                                        content: "";
+                                        width: 110%;
+                                        position: absolute;
+                                        bottom: 0;
+                                        height: 5px;
+                                        left: -5%;
+                                        z-index: -1;
+                                        background: -webkit-linear-gradient(0deg, #f0f0f0, #fff);
+                                        background: -o-linear-gradient(0deg, #f0f0f0, #fff);
+                                        background: linear-gradient(0deg, #f0f0f0, #fff);
+                                        opacity: 0.7;
+                                    }
+                                    .num {
+                                        font-size: @fs2;
+                                        color: @c03;
+                                        padding: 0 0 0 18px;
+
+                                        .key {
+                                            display: inline-block;
+                                            vertical-align: middle;
+                                            width: 100px;
+                                            height: 20px;
+                                            line-height: 20px;
+                                            overflow: hidden;
+                                        }
+
+                                        .value {
+                                            margin-left: 22px;
+                                            display: none;
+                                            vertical-align: middle;
+                                            width: 70px;
+                                            text-align: center;
+                                            height: 20px;
+                                            line-height: 20px;
+                                            overflow: hidden;
+                                            &.show {
+                                                display: inline-block;
+                                            }
+                                        }
+                                        .otherValue {
+                                            width: 60px;
+                                            text-align: center;
+                                            display: none;
+                                            vertical-align: middle;
+                                            &.show {
+                                                display: inline-block;
+                                            }
+                                        }
+                                    }
+
+                                    .card_base_info {
+                                        padding: 8px 10px 0 18px;
+                                        height: 48px;
+                                        box-sizing: border-box;
+                                        -webkit-box-sizing: border-box;
+                                        .info_left,
+                                        .info_right {
+                                            display: inline-block;
+                                            vertical-align: middle;
+                                        }
+                                        .info_left {
+                                            .card_name {
+                                                font-size: 14px;
+                                                color: #fff;
+                                                width: 100px;
+                                                height: 20px;
+                                                line-height: 20px;
+                                                white-space: nowrap;
+                                                overflow: hidden;
+                                                text-overflow: ellipsis;
+                                            }
+                                            .card_no {
+                                                font-size: 12px;
+                                                color: #7e7e7e;
+                                                width: 100px;
+                                                height: 20px;
+                                                line-height: 20px;
+                                                overflow: hidden;
+                                            }
+                                        }
+                                        .info_right {
+                                            float: right;
+                                            font-size: 14px;
+                                            max-width: 146px;
+                                            max-height: 40px;
+                                            overflow: hidden;
+                                            .card_fee,
+                                            .card_present {
+                                                display: inline-block;
+                                                vertical-align: middle;
+                                            }
+                                            &.hasnofee {
+                                                .card_fee,
+                                                .card_present {
+                                                    display: none;
+                                                }
+                                                .nofee {
+                                                    font-size: 14px;
+                                                    color: #fff;
+                                                    display: inline-block;
+                                                    vertical-align: top;
+                                                }
+                                            }
+                                            .nofee {
+                                                display: none;
+                                            }
+                                            .fee_num,
+                                            .fee_name {
+                                                height: 20px;
+                                                line-height: 20px;
+                                            }
+                                            .card_fee {
+                                                margin-right: 5px;
+                                                .fee_num {
+                                                    font-size: 14px;
+                                                    color: #fff;
+                                                    text-align: center;
+                                                }
+                                                .fee_name {
+                                                    font-size: 12px;
+                                                    color: #7e7e7e;
+                                                    text-align: center;
+                                                }
+                                            }
+                                            .card_present {
+                                                margin-left: 0px;
+                                                .fee_num {
+                                                    font-size: 14px;
+                                                    color: #fff;
+                                                    text-align: center;
+                                                }
+                                                .fee_name {
+                                                    font-size: 12px;
+                                                    color: #7e7e7e;
+                                                    text-align: center;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    .duedatewrap {
+                                        position: relative;
+                                        font-size: @fs2;
+                                        color: @c03;
+                                        padding: 0 18px;
+
+                                        .duedate {
+                                            float: left;
+                                        }
+                                        .duedateedit {
+                                            margin-left: 10px;
+                                            display: inline-block;
+                                            vertical-align: middle;
+                                            width: 16px;
+                                            height: 16px;
+                                            background: url("../images/card_edit_icon.png") no-repeat center center;
+                                            background-size: 11px 14px;
+                                            position: relative;
+                                            &::before {
+                                                content: "";
+                                                width: 32px;
+                                                height: 32px;
+                                                position: absolute;
+                                                left: -8px;
+                                                top: -8px;
+                                            }
+                                        }
+                                    }
+
+                                    .line {
+                                        width: 100%;
+                                        height: 1px;
+                                        /* background-color: @bg21; */
+                                        margin-top: 6px;
+                                    }
+
+                                    .free {
+                                        height: 30px;
+                                        width: 100%;
+                                        padding: 0 0 0 18px;
+                                        color: @c03;
+                                        font-size: 0px;
+                                        font-size: @fs2;
+                                        background-color: rgba(255, 255, 255, 0.1);
+                                        .remarkWrap {
+                                            display: inline-block;
+                                            vertical-align: middle;
+                                            width: 156px;
+                                            height: 30px;
+                                            .remarkCon {
+                                                display: inline-block;
+                                                vertical-align: middle;
+                                                max-width: 130px;
+                                                min-width: 30px;
+                                                height: 30px;
+                                                line-height: 30px;
+                                                overflow: hidden;
+                                                font-size: 12px;
+                                                color: #a6a6a6;
+                                                text-overflow: ellipsis;
+                                                white-space: nowrap;
+                                            }
+                                            .remarkIcon {
+                                                display: inline-block;
+                                                vertical-align: middle;
+                                                width: 20px;
+                                                height: 20px;
+                                                background: url("../images/card_edit_icon.png") no-repeat center center;
+                                                background-size: 11px 14px;
+                                                position: relative;
+                                                &::before {
+                                                    content: "";
+                                                    width: 32px;
+                                                    height: 32px;
+                                                    position: absolute;
+                                                    left: -6px;
+                                                    top: -6px;
+                                                }
+                                            }
+                                        }
+                                        .value {
+                                            display: inline-block;
+                                            vertical-align: middle;
+                                            width: 100px;
+                                            height: 30px;
+                                            line-height: 30px;
+                                            float: right;
+                                            text-align: right;
+                                            overflow: hidden;
+                                            .payBtn {
+                                                display: none;
+                                            }
+
+                                            &.pay {
+                                                .payBtn {
+                                                    display: inline-block;
+                                                    vertical-align: middle;
+                                                    text-align: center;
+                                                    height: 20px;
+                                                    line-height: 20px;
+                                                    margin-top: 3px;
+                                                    margin-right: 5px;
+                                                    width: 40px;
+                                                    color: @c23;
+                                                    font-size: @fs2;
+                                                    .br(30px);
+                                                    text-align: center;
+
+                                                    &.am-clickable-active {
+                                                        opacity: 0.7;
+                                                    }
+                                                }
+
+                                                &:after {
+                                                    display: none;
+                                                }
+                                            }
+                                            .otherAction {
+                                                display: inline-block;
+                                                margin-top: 3px;
+                                                margin-right: 6px;
+                                                width: 35px;
+                                                height: 22px;
+                                                background: url("../images/card_other_action.png") no-repeat center center;
+                                                background-size: 35px 22px;
+                                                position: relative;
+                                                &::before {
+                                                    content: "";
+                                                    width: 45px;
+                                                    height: 45px;
+                                                    position: absolute;
+                                                    left: -6px;
+                                                    top: -11px;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .rightcombo {
+                    width: calc(~"50%" - 1px);
+                    height: 100%;
+                    float: left;
+                    position: relative;
+
+                    .emptyIcon {
+                        display: none;
+                    }
+
+                    &.empty {
+                        .comboTit,
+                        .combobox {
+                            display: none;
+                        }
+
+                        .emptyIcon {
+                            position: absolute;
+                            z-index: 1;
+                            left: 50%;
+                            top: 40%;
+                            margin-top: -108px;
+                            margin-left: -88px;
+                            display: block;
+                            width: 176px;
+                            height: 216px;
+                            background: url("../images/cardempty.png") no-repeat;
+                            background-size: 100% 100%;
+                        }
+                    }
+
+                    .comboTit {
+                        height: 25px;
+                        margin: 10px 0;
+                        /* padding-left: 30px; */
+                        background-color: @bg04;
+
+                        span {
+                            vertical-align: middle;
+                            display: inline-block;
+                            line-height: 25px;
+                            font-size: @fs2;
+                            color: #514287;
+                        }
+                        /* .icon{
+              width: 15px;
+              height:15px;
+              background: @combo_icon_png no-repeat @combo_icon_png_pos;
+              background-size: @combo_icon_png_size;
+              margin-right: 5px;
+
+            } */
+                    }
+
+                    .combobox {
+                        position: absolute;
+                        top: 0;
+                        bottom: 10px;
+                        left: 30px;
+                        right: 0;
+                        overflow: hidden;
+
+                        .list {
+                            width: 100%;
+                            height: 100%;
+                            padding-bottom: 50px;
+                            ul {
+                                width: 100%;
+                                height: 100%;
+                                li {
+                                    height: 50px;
+                                    display: block;
+                                    margin-bottom: 20px;
+                                    border: 1px solid @bd07;
+                                    .br(10px);
+                                    padding: 14px 15px;
+                                    position: relative;
+
+                                    &.selected {
+                                        background-color: @bg06;
+                                    }
+
+                                    .left {
+                                        max-width: 200px;
+                                        display: inline-block;
+                                        height: 40px;
+
+                                        span {
+                                            width: 100%;
+                                            display: inline-block;
+                                            vertical-align: middle;
+                                            line-height: 20px;
+
+                                            &.key {
+                                                font-size: @fs1;
+                                                color: @c02;
+                                                margin-bottom: 10px;
+                                                strong {
+                                                    vertical-align: middle;
+                                                    &.highlight {
+                                                        color: red;
+                                                    }
+                                                }
+                                                // .combo_tit {
+                                                //     width: 140px;
+                                                //     vertical-align: middle;
+                                                .combo_tit {
+                                                    width: 88px;
+                                                    overflow: hidden;
+                                                    text-overflow: ellipsis;
+                                                    white-space: nowrap;
+                                                }
+                                                // }
+                                                .back_combo {
+                                                    display: inline-block;
+                                                    vertical-align: middle;
+                                                    margin-left: 10px;
+                                                    text-align: center;
+                                                    line-height: 19px;
+                                                    width: 19px;
+                                                    height: 19px;
+                                                    border-radius: 3px;
+                                                    border: 1px solid #eeeeee;
+                                                    -webkit-border-radius: 3px;
+                                                    color: #00b7ee;
+                                                    font-size: 12px;
+                                                    position: relative;
+                                                    z-index: 2;
+                                                    &::before {
+                                                        content: "";
+                                                        display: inline-block;
+                                                        width: 32px;
+                                                        height: 32px;
+                                                        position: absolute;
+                                                        left: -8px;
+                                                        top: -8px;
+                                                    }
+                                                }
+                                            }
+
+                                            &.value {
+                                                font-size: @fs2;
+                                                color: @c03;
+                                                .duedate {
+                                                    width: auto;
+                                                }
+                                                .treatmentdateedit {
+                                                    margin-left: 10px;
+                                                    display: inline-block;
+                                                    vertical-align: middle;
+                                                    width: 16px;
+                                                    height: 16px;
+                                                    background: url("../images/card_edit_white_icon.png") no-repeat center center;
+                                                    background-size: 11px 14px;
+                                                    position: relative;
+                                                    &::before {
+                                                        content: "";
+                                                        width: 32px;
+                                                        height: 32px;
+                                                        position: absolute;
+                                                        left: -8px;
+                                                        top: -8px;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    .right {
+                                        position: absolute;
+                                        width: 224px;
+                                        height: 224px;
+                                        right: -56px;
+                                        top: -77px;
+                                        transform: scale(0.5, 0.5);
+                                    }
+                                    .comboRemark {
+                                        margin-top: 10px;
+                                        border-top: 1px solid #ececec;
+                                        height: 30px;
+                                        .remarkCon {
+                                            display: inline-block;
+                                            vertical-align: middle;
+                                            max-width: 130px;
+                                            min-width: 30px;
+                                            height: 30px;
+                                            font-size: 12px;
+                                            color: #999;
+                                            line-height: 30px;
+                                            overflow: hidden;
+                                            text-overflow: ellipsis;
+                                            white-space: nowrap;
+                                        }
+                                        .comboRemarkIcon {
+                                            display: inline-block;
+                                            vertical-align: middle;
+                                            width: 20px;
+                                            height: 20px;
+                                            background: url("../images/card_edit_white_icon.png") no-repeat center center;
+                                            background-size: 11px 14px;
+                                            position: relative;
+                                            &::before {
+                                                content: "";
+                                                width: 32px;
+                                                height: 32px;
+                                                position: absolute;
+                                                left: -6px;
+                                                top: -6px;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

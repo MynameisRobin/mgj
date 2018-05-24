@@ -1,0 +1,269 @@
+.page-audit {
+    .am-body-wrap {
+        *,
+        &:after,
+        &:before {
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+        }
+        .clearfix:after {
+            content: ".";
+            display: block;
+            height: 0;
+            visibility: hidden;
+            clear: both;
+        }
+        input {
+            border: none;
+            background-color: transparent;
+        }
+        background-color: #f7f7f7;
+        .am-body-inner {
+            padding-top: 44px;
+        }
+        .tab {
+            position: absolute;
+            width: 100%;
+            top: 0;
+            height: 42px;
+            background-color: #fff;
+            overflow: hidden;
+            z-index: 99;
+            ul {
+                height: 42px;
+                font-size: 0;
+                overflow: hidden;
+                position: relative;
+                li {
+                    position: absolute;
+                    top: 0;
+                    height: 42px;
+                    display: inline-block;
+                    vertical-align: top;
+                    padding: 0 14px;
+                    text-align: center;
+                    span {
+                        display: inline-block;
+                        height: 42px;
+                        font-size: 14px;
+                        color: #101010;
+                        text-align: center;
+                        line-height: 42px;
+                        }
+                    &.selected span {
+                        color: #00C17F;
+                        border-bottom: 3px solid #00C17F;
+                    }
+                }
+            }
+        }
+        .error {
+			position: absolute;
+            width: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+            -webkit-transform: translateY(-50%);
+			width: 100%;
+			font-size: 12px;
+			color: #aaa;
+			text-align: center;
+			display: none;
+		}
+		.loadingContent {
+            position: absolute;
+            width: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+            -webkit-transform: translateY(-50%);
+			display: none;
+			span {
+			    display: block;
+			    margin: 0 auto;
+			    width: 30px;
+			    height: 30px;
+			    background: url(../libs/am/images/blueloading-small.png) no-repeat center center;
+			    background-size: 30px 30px;
+			    -webkit-animation: animation-loading infinite linear 1s;
+			    left: 0;
+			    top: 0;
+			}
+			p {
+				line-height: 50px;
+			    font-size: 12px;
+			    padding: 0 50px;
+			    text-align: center;
+			    color: #888;
+			}
+		}
+		.reload {
+			display: none;
+			position: absolute;
+            width: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+            -webkit-transform: translateY(-50%);
+			p {
+				line-height: 20px;
+			    font-size: 15px;
+			    padding: 0 0 15px 0;
+			    text-align: center;
+			    color: #aaa;
+			}
+			span {
+			    background: #2dbd84;
+			    color: #fff;
+			    width: 100px;
+			    line-height: 35px;
+			    font-size: 14px;
+			    display: block;
+			    margin: auto;
+			    text-align: center;
+			}
+		}   
+        .summary {
+            background-color: #fff;
+            margin-bottom: 10px;
+            .wrap {
+                width: 33.33%;
+                float: left;
+                border-right: 1px solid #f7f7f7;
+                border-bottom: 1px solid #f7f7f7;
+                &:nth-child(3n){
+                    border-right: none;
+                }
+                padding: 18px 0;
+                .top {
+                    height: 16px;
+                    padding: 0 14px;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    .icon {
+                        display: inline-block;
+                        vertical-align: top;
+                        width: 16px;
+                        height: 16px;
+                        border-radius: 50%;
+                        background-size: 100% 100%;
+                        overflow: hidden;
+                        &.archives_CST {
+                            background-image: url(img/audit/archives_CST.png);
+                        } 
+                        &.archives_ACS {
+                            background-image: url(img/audit/archives_ACS.png);
+                        } 
+                        &.todolist_CNT {
+                            background-image: url(img/audit/todolist_CNT.png);
+                        } 
+                        &.todolist_ED_CNT {
+                            background-image: url(img/audit/todolist_ED_CNT.png);
+                        } 
+                        &.todolist_UN_CNT {
+                            background-image: url(img/audit/todolist_UN_CNT.png);
+                        } 
+                        &.reservation_CNT {
+                            background-image: url(img/audit/reservation_CNT.png);
+                        } 
+                        &.reservation_AVR {
+                            background-image: url(img/audit/reservation_AVR.png);
+                        } 
+                        &.reservation_RATE {
+                            background-image: url(img/audit/reservation_RATE.png);
+                        } 
+                        &.invention_CNT {
+                            background-image: url(img/audit/invention_CNT.png);
+                        } 
+                        &.invention_LIKES {
+                            background-image: url(img/audit/invention_LIKES.png);
+                        } 
+                        &.invention_CMT {
+                            background-image: url(img/audit/invention_CMT.png);
+                        } 
+                        &.topic_CNT {
+                            background-image: url(img/audit/topic_CNT.png);
+                        } 
+                        &.topic_ELITE {
+                            background-image: url(img/audit/topic_ELITE.png);
+                        } 
+                        &.topic_SUPPORTNUM {
+                            background-image: url(img/audit/topic_SUPPORTNUM.png);
+                        } 
+                        &.topic_COMMENTNUM {
+                            background-image: url(img/audit/topic_COMMENTNUM.png);
+                        }
+                    }
+                    .num {
+                        display: inline-block;
+                        vertical-align: top;
+                        font-size: 15px;
+                        color: #222;
+                        line-height: 16px;
+                    }
+                }
+                .tip {
+                    font-size: 11px;
+                    color: #999;
+                    line-height: 16px;
+                    height: 16px;
+                    padding: 0 14px;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    margin-top: 2px;
+                }
+            }
+        }
+        .form {
+            .item {
+                height: 37px;
+                overflow: hidden;
+                background-color: #fff;
+                &:nth-child(2n){
+                    background-color: #f7f7f7;
+                }
+                &.header {
+                    height: 28px;
+                    div {
+                        line-height: 28px;
+                        font-size: 10px;
+                        color: #999;
+                        &:first-child {
+                            color: #999;
+                        }
+                    }
+                }
+                div {
+                    display: inline-block;
+                    vertical-align: top;
+                    padding: 0 10px;
+                    font-size: 13px;
+                    color: #222;
+                    line-height: 37px;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    &:first-child {
+                        color: #4e6290;
+                    }
+                }
+                &.col5 div {
+                    width: 20%;
+                }
+                &.col4 div {
+                    width: 25%;
+                }
+                &.col3 div {
+                    width: 33.33%;
+                }
+            }
+            .item.am-clickable-active {
+                background-color: #f6f6f6;
+                &:nth-child(2n){
+                    background-color: #fff;
+                }
+            }
+        }
+    }
+    
+    
+}

@@ -1,0 +1,518 @@
+.page-attendanceManage .menu-list-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 100;
+  display: none;
+}
+.page-attendanceManage .menu-list {
+  position: absolute;
+  top: 50px;
+  right: 15px;
+  z-index: 101;
+  border-radius: 5px;
+  display: none;
+  background-image: url("img/menu-list_bg.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding-top: 6px;
+}
+html.ios .page-attendanceManage .menu-list {
+  top: 60px;
+}
+.page-attendanceManage .menu-list > i {
+  content: '';
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 6px solid #fff;
+  position: absolute;
+  right: 10px;
+  top: -5.5px;
+  width: 105px;
+}
+.page-attendanceManage .menu-list ul {
+  position: relative;
+  padding: 0 20px;
+}
+.page-attendanceManage .menu-list ul li:active {
+  background-color: #f0f0f0;
+}
+.page-attendanceManage .menu-list ul li {
+  height: 44px;
+  line-height: 44px;
+  border-bottom: 1px solid #eeeeee;
+  position: relative;
+  font-size: 15px;
+  color: #222;
+}
+.page-attendanceManage .menu-list ul li:last-child {
+  border-bottom-width: 0;
+}
+.page-attendanceManage .menu-list ul li i.serch::before {
+  background-image: url("img/menu-list-search.png");
+}
+.page-attendanceManage .menu-list ul li i.add::before {
+  background-image: url("img/menu-list-add.png");
+}
+.page-attendanceManage .menu-list ul li i.assign::before {
+  background-image: url("img/menu-list-assign.png");
+}
+.page-attendanceManage .menu-list ul li i.craftsmans::before {
+  background-image: url("img/menu-list-craftsman.png");
+}
+.page-attendanceManage .menu-list ul li i::before {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  background-size: cover;
+  left: 5px;
+  top: 50%;
+  margin-top: -9px;
+}
+.ws {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.attendance_common .operate_mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none;
+}
+.attendance_common .operate_wrapper {
+  min-height: 270px;
+  max-height: 500px;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  position: absolute;
+  z-index: 1001;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  -webkit-transform: translate(0, 100%);
+  transform: translate(0, 100%);
+  background-color: #fff;
+  transition: all 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
+  -webkit-transition: all 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+.attendance_common .operate_wrapper.active {
+  -webkit-transform: translate(0, 0);
+  transform: translate(0, 0);
+}
+.attendance_common .operate_wrapper * {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+.attendance_common .operate_wrapper .operate_tit {
+  height: 70px;
+  border-bottom: 1px solid #f2f2f2;
+  display: table;
+  padding: 0 15px;
+  width: 100%;
+}
+.attendance_common .operate_wrapper .operate_tit .operate_tit_body {
+  display: table-cell;
+  vertical-align: middle;
+}
+.attendance_common .operate_wrapper .operate_tit .operate_tit_body .c-left {
+  height: 30px;
+  float: left;
+  line-height: 30px;
+}
+.attendance_common .operate_wrapper .operate_tit .operate_tit_body .c-left span {
+  padding: 0 5px;
+  display: inline-block;
+  text-align: center;
+  height: 24px;
+  width: 100%;
+  background-color: #D42A2A;
+  color: #fff;
+  font-size: 14px;
+  line-height: 24px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+}
+.attendance_common .operate_wrapper .operate_tit .operate_tit_body .c-right {
+  float: left;
+  width: 100%;
+  margin-left: -47px;
+}
+.attendance_common .operate_wrapper .operate_tit .operate_tit_body .c-right .c-right-body {
+  margin-left: 57px;
+  font-size: 12px;
+  line-height: 15px;
+  color: #939393;
+}
+.attendance_common .operate_wrapper .operate_selectTime {
+  padding: 10px 15px;
+  font-size: 15px;
+  color: #222;
+}
+.attendance_common .operate_wrapper .operate_selectTime .selectTime_times {
+  width: 27.3%;
+  height: 40px;
+  line-height: 40px;
+  padding-right: 5.3%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border: 1px solid #CBCBCB;
+  float: left;
+  margin-right: 20px;
+  padding-left: 8px;
+  position: relative;
+}
+.attendance_common .operate_wrapper .operate_selectTime .selectTime_times::after {
+  content: "";
+  position: absolute;
+  width: 0px;
+  height: 0px;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid #CBCBCB;
+  font-size: 0px;
+  line-height: 0px;
+  top: 16px;
+  right: 13px;
+}
+.attendance_common .operate_wrapper .operate_selectTime .selectTime_times.am-clickable-active {
+  background-color: #f3f3f3;
+}
+.attendance_common .operate_wrapper .operate_selectTime .selectTime_startTime,
+.attendance_common .operate_wrapper .operate_selectTime .selectTime_endTime {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border: 1px solid #CBCBCB;
+  padding-right: 30px;
+  height: 40px;
+  line-height: 40px;
+  width: 29%;
+  float: left;
+  padding-left: 8px;
+  position: relative;
+}
+.attendance_common .operate_wrapper .operate_selectTime .selectTime_startTime.am-clickable-active,
+.attendance_common .operate_wrapper .operate_selectTime .selectTime_endTime.am-clickable-active {
+  background-color: #f3f3f3;
+}
+.attendance_common .operate_wrapper .operate_selectTime .selectTime_startTime.am-clickable-active input,
+.attendance_common .operate_wrapper .operate_selectTime .selectTime_endTime.am-clickable-active input {
+  background-color: #f3f3f3;
+}
+.attendance_common .operate_wrapper .operate_selectTime .selectTime_startTime input,
+.attendance_common .operate_wrapper .operate_selectTime .selectTime_endTime input {
+  display: block;
+  border: 0;
+  width: 100%;
+  height: 100%;
+}
+.attendance_common .operate_wrapper .operate_selectTime .selectTime_startTime::after,
+.attendance_common .operate_wrapper .operate_selectTime .selectTime_endTime::after {
+  position: absolute;
+  right: 8px;
+  content: "";
+  display: block;
+  width: 15px;
+  height: 14px;
+  top: 13px;
+  background: url(img/c_reportFilter_frequent.png) no-repeat center center;
+  background-size: 15px 14px;
+}
+.attendance_common .operate_wrapper .operate_selectTime .line {
+  width: 9.5px;
+  font-size: 15px;
+  line-height: 40px;
+  color: #222;
+  margin: 0 5px;
+  float: left;
+}
+.attendance_common .operate_wrapper .operate_remark {
+  margin-top: 8px;
+  padding: 0 15px;
+  margin-bottom: 130px;
+}
+.attendance_common .operate_wrapper .operate_remark .c-tit {
+  font-size: 12px;
+  color: #939393;
+  letter-spacing: 0;
+  line-height: 13px;
+}
+.attendance_common .operate_wrapper .operate_remark .c-content {
+  background-color: #f4f4f4;
+  margin-top: 11px;
+  padding: 6px 10px;
+}
+.attendance_common .operate_wrapper .operate_remark .c-content p {
+  font-size: 14px;
+  line-height: 20px;
+  color: #939393;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  word-break: break-all;
+  -o-text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.attendance_common .operate_wrapper .btn_group {
+  margin-top: 17px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.attendance_common .operate_wrapper .btn_group .btns {
+  height: 46px;
+  line-height: 46px;
+  text-align: center;
+  font-size: 16px;
+  border-top: 1px solid #E0E0E1;
+  color: #222;
+}
+.attendance_common .operate_wrapper .btn_group .btns.am-clickable-active {
+  background-color: #f3f3f3;
+}
+.page-attendanceManage {
+  background-color: #f6f6f6;
+}
+.page-attendanceManage .am-header .ellipsis {
+  background-size: 20px 20px;
+}
+.page-attendanceManage .am-header .ellips {
+  font-size: 18px;
+}
+.page-attendanceManage .am-header .setTime {
+  right: 44px;
+  bottom: 0;
+  font-size: 20px;
+}
+.page-attendanceManage .am-header .setTime.am-clickable-active {
+  transform: scale(1.1);
+  -webkit-transform: scale(1.1);
+}
+.page-attendanceManage .am-header .icon-shijian {
+  text-align: right;
+}
+.page-attendanceManage .recordList {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-top: 15px;
+}
+.page-attendanceManage .recordList * {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.page-attendanceManage .recordList .item {
+  height: 70px;
+  padding: 10px 13px;
+  width: 100%;
+  border-bottom: 1px solid #f2f2f2;
+  background-color: #fff;
+  position: relative;
+}
+.page-attendanceManage .recordList .item.am-clickable-active {
+  background-color: #f3f3f3;
+}
+.page-attendanceManage .recordList .item .c-left {
+  float: left;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.page-attendanceManage .recordList .item .c-left .c-left-body {
+  margin-right: 160px;
+}
+.page-attendanceManage .recordList .item .c-left .c-logo {
+  width: 50px;
+  height: 50px;
+  float: left;
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
+  background: url(img/bg-woman.gif) no-repeat center center;
+  background-size: 100% 100%;
+}
+.page-attendanceManage .recordList .item .c-left .c-logo img {
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
+  width: 100%;
+  height: 100%;
+}
+.page-attendanceManage .recordList .item .c-left .c-logo.man {
+  background: url(img/bg-man.gif) no-repeat center center;
+  background-size: 100% 100%;
+}
+.page-attendanceManage .recordList .item .c-left .c-logo.nobg {
+  background: none;
+}
+.page-attendanceManage .recordList .item .c-left .c-users {
+  margin-top: 6.5px;
+  height: 100%;
+  width: 100%;
+  margin-left: -50px;
+  float: left;
+}
+.page-attendanceManage .recordList .item .c-left .c-users .c-user-body {
+  margin-left: 70px;
+}
+.page-attendanceManage .recordList .item .c-left .c-users .p1 {
+  font-size: 16px;
+  line-height: 18px;
+  color: #222;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.page-attendanceManage .recordList .item .c-left .c-users .p2 {
+  font-size: 12px;
+  line-height: 13px;
+  margin-top: 7px;
+  color: #939393;
+}
+.page-attendanceManage .recordList .item .c-right {
+  float: left;
+  width: 170px;
+  height: 100%;
+  overflow: hidden;
+  margin-left: -170px;
+  text-align: right;
+}
+.page-attendanceManage .recordList .item .c-right .c-operate .icon-icon-bainji {
+  color: #2DBD84;
+  display: none;
+}
+.page-attendanceManage .recordList .item .c-right .c-operate .icon-gengduo {
+  color: #C7C7CC;
+}
+.page-attendanceManage .recordList .item .c-right .c-operate .icon-gengduo {
+  font-size: 18px;
+}
+.page-attendanceManage .recordList .item .c-right .c-operate .icon.am-clickable-active {
+  color: #ccc;
+}
+.page-attendanceManage .recordList .item .c-right .c-timers {
+  float: right;
+  margin-top: 6.5px;
+}
+.page-attendanceManage .recordList .item .c-right .c-timers i {
+  display: none;
+}
+.page-attendanceManage .recordList .item .c-right .c-timers .p3,
+.page-attendanceManage .recordList .item .c-right .c-timers .p4 {
+  font-size: 14px;
+  line-height: 18px;
+  color: #222;
+  text-align: right;
+}
+.page-attendanceManage .recordList .item .c-right .c-timers .p3.status1,
+.page-attendanceManage .recordList .item .c-right .c-timers .p4.status1 {
+  color: #213F83;
+}
+.page-attendanceManage .recordList .item .c-right .c-timers .p3.status2,
+.page-attendanceManage .recordList .item .c-right .c-timers .p4.status2 {
+  color: #D42A2A;
+}
+.page-attendanceManage .recordList .item .c-right .c-timers .p3 span,
+.page-attendanceManage .recordList .item .c-right .c-timers .p4 span,
+.page-attendanceManage .recordList .item .c-right .c-timers .p3 i,
+.page-attendanceManage .recordList .item .c-right .c-timers .p4 i {
+  vertical-align: middle;
+}
+.page-attendanceManage .recordList .item .c-right .c-timers .p3 i {
+  display: none;
+  font-size: 10px;
+  line-height: 14px;
+  font-style: normal;
+  padding: 2px 2px;
+  color: #fff;
+  border-radius: 2px;
+  margin-right: 2px;
+  -webkit-border-radius: 2px;
+  background-color: #213F83;
+}
+.page-attendanceManage .recordList .item .c-right .c-timers .p3 i.show {
+  display: inline-block;
+}
+.page-attendanceManage .recordList .item .c-right .c-timers .p3 span {
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 75px;
+}
+.page-attendanceManage .recordList .item .c-right .c-timers .p5 {
+  display: none;
+  font-size: 14px;
+  line-height: 18px;
+  margin-top: 15px;
+  color: #F2A957;
+}
+.page-attendanceManage .recordList .item .c-right.status1 .c-timers .p3 i {
+  display: inline-block;
+  font-size: 10px;
+  line-height: 12px;
+  font-style: normal;
+  padding: 2px 3px;
+  color: #fff;
+  border-radius: 2px;
+  margin-right: 2px;
+  -webkit-border-radius: 2px;
+  background-color: #213F83;
+}
+.page-attendanceManage .recordList .item .c-right.status2 .c-operate .icon-icon-bainji {
+  display: inline-block;
+}
+.page-attendanceManage .recordList .item .c-right.status2 .c-operate .icon-gengduo {
+  display: none;
+}
+.page-attendanceManage .recordList .item .c-right.status3 .c-timers {
+  margin-top: 0;
+}
+.page-attendanceManage .recordList .item .c-right.status3 .c-timers .p3,
+.page-attendanceManage .recordList .item .c-right.status3 .c-timers .p4 {
+  display: none;
+}
+.page-attendanceManage .recordList .item .c-right.status3 .c-timers .p5 {
+  display: block;
+}
+.page-attendanceManage .recordList .item .c-right .c-operate {
+  float: right;
+  width: 30px;
+  height: 30px;
+  margin-top: 9px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+  line-height: 30px;
+  text-align: center;
+  margin-left: 3px;
+}
+.page-attendanceManage .recordList .item .c-right .c-operate.am-clickable-active {
+  transform: scale(1.2);
+  -webkit-transform: scale(1.2);
+}
+.page-attendanceManage .recordList .item .c-line {
+  position: absolute;
+  bottom: 0px;
+  height: 1px;
+  background-color: red;
+  width: 50%;
+  left: 0;
+  -webkit-transition: all 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
+  transition: all 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
+}

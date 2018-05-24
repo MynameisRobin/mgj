@@ -1,0 +1,77 @@
+@import "var.less";
+@path:"../images/";
+@import "../images/icons_sprite.less";
+#auth {
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9;
+    display: none;
+    .mask {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+    }
+    .content {
+        position: absolute;
+        width: 430px;
+        height: 306px;
+        left: 50%;
+        top: 50%;
+        margin-left: -230px;
+        margin-top: -158px;
+        background-color: #fff;
+        padding: 5px 15px;
+        border-radius: 5px;
+        box-shadow: -10px 0 10px rgba(0, 0, 0, 0.2), 10px 0 10px rgba(0, 0, 0, 0.2), 0 10px 10px rgba(0, 0, 0, 0.2);
+        .title {
+            font-size: 19px;
+            color: #222;
+            text-align: center;
+            line-height: 100px;
+            height: 100px;
+            overflow: hidden;
+        }
+        .tip {
+            width: 350px;
+            height: 152px;
+            background: url(../images/auth_tip.png);
+            background-size: 100% 100%;
+            margin: 0 auto;
+        }
+        .manual {
+            font-size: 14px;
+            color: #999;
+            line-height: 52px;
+            height: 52px;
+            text-align: center;
+            overflow: hidden;
+            cursor: pointer;
+            &.am-clickable-active {
+                transform: scale(1.2);
+                -webkit-transform: scale(1.2);
+            }
+        }
+        .close {
+            width: 15px;
+            height: 15px;
+            padding: 10px;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 3;
+            .icon {
+                width: 15px;
+                height:15px;                
+                background: @close_employee_png no-repeat @close_employee_png_pos;
+                background-size: @close_employee_png_size;  
+            }
+            &.am-clickable-active {
+                transform: scale(1.2);
+                -webkit-transform: scale(1.2);
+            }
+        }
+    }
+}

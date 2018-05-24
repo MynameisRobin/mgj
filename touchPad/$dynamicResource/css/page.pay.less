@@ -1,0 +1,791 @@
+@import "var.less";
+@path:"../images/";
+@import "../images/icons_sprite.less";
+@import "../images/tipbg_sprite.less";
+@import "../images/tab_sprite.less";
+@import "../images/payIcon_sprite.less";
+
+.page_pay{
+    .payContent{
+        .abs(@left:0;@top:51px;@bottom: 0;@right:0;);
+    }
+    .am-header{
+        .billno{
+            height: 32px;
+            background-color: #eeeeee;
+            border-radius: 30px;
+            padding: 3px;
+            width: 160px;
+            float: right;
+            margin-top: 10px;
+            margin-right: 10px;
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            input{
+                box-sizing: border-box;
+                -webkit-box-sizing: border-box;
+                display: block;
+                border:none;
+                width: 100%;
+                height:100%;
+                background: none;
+                border-radius: 30px;
+                padding: 0 10px;
+                font-size: 13px;
+                cursor: pointer;
+                &::-webkit-placeholder{
+                    color:#999;
+                }
+            }
+        }
+    }
+    .left{
+        height: 100%;
+        float: left;
+        width: 60%;
+        .checkboxes{
+            .abs(@left:0;@bottom: 50px;@right:0;);
+            height: 36px;
+            .checkbox{
+                float: left;
+                line-height: 30px;
+                padding: 0 10px;
+                color: @c04;
+                &::before{
+                    content: "";
+                    float: left;
+                    width: 15px;
+                    height: 15px;
+                    border: 1px solid @bd12;
+                    border-radius: 4px;
+                    margin: 6px;
+                }
+                &.checked{
+                    color: @c07;
+                    &::before{
+                        border-color: @bd06;
+                        background: @selected_png no-repeat @selected_png_pos;
+                        background-size: @selected_png_size;
+                    }
+                }
+            }
+        }
+        .comment{
+            .abs(@left:0;@bottom: 86px;);
+            width: 60%;
+            box-sizing: border-box;
+            line-height: 20px;
+            min-height: 26px;
+            padding: 3px 15px 3px 65px;
+            font-size: 12px;
+            color: #888;
+            &::before{
+                content: "备注:";
+                .abs(@left:16px;@top:3px;);
+            }
+            &::after{
+                .abs(@left:48px;@top:5px;);
+                content: "";
+                width: 11px;
+                height: 14px;
+                background: url("../images/card_edit_white_icon.png") no-repeat center center;
+                background-size: 11px 14px;
+            }
+        }
+        dl{
+
+        }
+        dt{
+            height: 62px;
+            line-height: 62px;
+            border-top: 1px solid @bd01;
+            border-bottom: 1px solid @bd01;
+            padding:0 20px;
+            &:first-child{
+                border-top: none;
+            }
+            &.rechargeItem{
+                border-top: none;
+            }
+            &.comboitemItem{
+                border-bottom: none;
+            }
+            .val{
+                height: 62px;
+            }
+        }
+        dd{
+            padding:0 20px 0 50px;
+            height: 44px;
+            line-height: 44px;
+        }
+        .val{
+            float: right;
+            color: @c02;
+            height: 44px;
+            max-width: 80%;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            &.add{
+                padding-right: 50px;
+                position: relative;
+                left: 12px;
+                min-width: 50%;
+                &::before{
+                    content: "";
+                    display: block;
+                    width: 15px;
+                    height: 15px;
+                    margin: -7px -7px 0 0;
+                    background: @add_png no-repeat @add_png_pos;
+                    background-size: @add_png_size;
+                    .abs(@right:22px;@top:50%;);
+                }
+                &::after{
+                    content: "";
+                    display: block;
+                    width: 24px;
+                    height: 24px;
+                    border:1px solid @bd05;
+                    border-radius: 15px;
+                    .abs(@right:22px;@top:50%;);
+                    margin: -13px -13px 0 0;
+                }
+            }
+            &.edit{
+                padding-right: 50px;
+                position: relative;
+                left: 12px;
+                &::before{
+                    content: "";
+                    display: block;
+                    width: 15px;
+                    height: 15px;
+                    margin: -7px -7px 0 0;
+                    background: @edit_png no-repeat @edit_png_pos;
+                    background-size: @edit_png_size;
+                    .abs(@right:22px;@top:50%;);
+                }
+                &::after{
+                    content: "";
+                    display: block;
+                    width: 24px;
+                    height: 24px;
+                    border:1px solid @bd05;
+                    border-radius: 15px;
+                    .abs(@right:22px;@top:50%;);
+                    margin: -13px -13px 0 0;
+                }
+            }
+            &.am-disabled{
+                opacity: 0.3;
+            }
+            &.total,&.rechargePrice,&.rechargeBonus,&.combocost{
+                font-size: @fs4;
+            }
+            &.payTotal{
+                font-size: @fs5;
+                color: @c11;
+            }
+            .name{
+                padding-right: 5px;
+            }
+            .price{
+
+            }
+        }
+        dd.luckymoney .val .price::before{
+            content: "";
+            width: 20px;
+            height: 20px;
+            float: right;
+            background: @icon_lcMoney_png no-repeat @icon_lcMoney_png_pos;
+            background-size: @icon_lcMoney_png_size;
+            margin: 12px 0 0 10px;
+        }
+        dd.mallOrder .val .price::before{
+            content: "";
+            width: 20px;
+            height: 20px;
+            float: right;
+            background: @icon_mallOrder_png no-repeat @icon_mallOrder_png_pos;
+            background-size: @icon_mallOrder_png_size;
+            margin: 12px 0 0 10px;
+        }
+        .am-disabled .val{
+            &::before{
+                opacity: 0.2;
+            }
+            &::after{
+                opacity: 0.2;
+            }
+        }
+        dd.am-clickable-active{
+            background-color: @bg05;
+        }
+        .label{
+            color: @c07;
+        }
+        .payTypes{
+            .title{
+                line-height: 48px;
+                padding: 0 20px;
+                color: @c07;
+            }
+            ul{
+                padding: 0 10px;
+                &::after{
+                    content: "";
+                    display: block;
+                    clear: both;
+                }
+            }
+            li{
+                line-height: 15px;
+                width: 90px;
+                height: 110px;
+                font-size:12px;
+                text-align: center;
+                float: left;
+                position: relative;
+                p{
+                    font-size: 10px;
+                }
+                &::before{
+                    content: "";
+                    display: block;
+                    margin: 0 auto;
+                    width: 80px;
+                    height: 80px;
+                }
+                &.pay_memberCard::before{
+                    background: @pay_card_png no-repeat @pay_card_png_pos;
+                    background-size: @pay_card_png_size;
+                }
+                &.pay_cash::before{
+                    background: @pay_cash_png no-repeat @pay_cash_png_pos;
+                    background-size: @pay_cash_png_size;
+                }
+                &.pay_pos::before{
+                    background: @pay_pos_png no-repeat @pay_pos_png_pos;
+                    background-size: @pay_pos_png_size;
+                }
+                &.pay_wechat::before{
+                    background: @pay_wechat_png no-repeat @pay_wechat_png_pos;
+                    background-size: @pay_wechat_png_size;
+                }
+                &.pay_alipay::before{
+                    background: @pay_alipay_png no-repeat @pay_alipay_png_pos;
+                    background-size: @pay_alipay_png_size;
+                }
+                &.pay_dp::before{
+                    background: @pay_dp_png no-repeat @pay_dp_png_pos;
+                    background-size: @pay_dp_png_size;
+                }
+                &.pay_mix::before{
+                    background: @pay_mix_png no-repeat @pay_mix_png_pos;
+                    background-size: @pay_mix_png_size;
+                }
+                &.pay_bonus::before{
+                    background: @pay_bonus_png no-repeat @pay_bonus_png_pos;
+                    background-size: @pay_bonus_png_size;
+                }
+                .tip{
+                    display: none;
+                    position: absolute;
+                    bottom:-18px;
+                    z-index: -1;
+                    left: 0;
+                    border:1px solid #AAA;
+                    background-color: #AAA;
+                    border-radius: 2px;
+                    line-height: 20px;
+                    padding: 0 5px;
+                    font-size: 12px;
+                    white-space: nowrap;
+                    color: #FFF;
+                    &::before{
+                        content: "";
+                        position: absolute;
+                        left: 45px;
+                        top:-5px;
+                        margin:0 0 0 -8px;
+                        border-bottom: 7px solid #AAA;
+                        border-left: 7px solid transparent;
+                        border-right: 7px solid transparent;
+                    }
+                }
+                &.pay_dp.am-disabled.mixProdPay .tip{
+                    display: block;
+                }
+                span{
+                    display: none;
+                    width: 66px;
+                    height: 66px;
+                    background: rgba(0,0,0,0.7);
+                    border-radius: 40px;
+                    .abs(@left:50%;@top:7px);
+                    margin:0 0 0 -33px;
+                    &::before{
+                        content: "";
+                        .abs(@left:50%;@top:50%;);
+                        background: @bg05;
+                        width: 20px;
+                        height: 20px;
+                        margin: -10px 0 0 -10px;
+                        border-radius: 10px;
+                    }
+                    &::after{
+                        content: "";
+                        .abs(@left:50%;@top:50%;);
+                        background: @selected_png no-repeat @selected_png_pos;
+                        background-size: @selected_png_size;
+                        width: 15px;
+                        height: 15px;
+                        margin: -8px 0 0 -7px;
+                    }
+                }
+                &.selected span{
+                    display: block;
+                }
+                &.payed span::before{
+                    background: @bg08;
+                }
+                &.am-disabled{
+                    opacity: 0.3;
+                }
+            }
+        }
+        .depPerfVal{
+            /*float: right;
+            height: 44px;*/
+            /*.depPerfItem{
+                padding-top: 7px;
+                line-height: 20px;
+                height: 20px;
+                .depName{
+                    padding: 0 5px;
+                    float: left;
+                    font-size: 12px;
+                }
+                .depPerText{
+                    padding: 0 5px;
+                }
+            }
+            .depPer{
+                height: 4px;
+                .depVal{
+                    float:left;
+                    height:4px;
+                    &:nth-child(3n+1){
+                        background-color: @bg02;
+                    }
+                    &:nth-child(3n+2){
+                        background-color: @bg08;
+                    }
+                    &:nth-child(3n+3){
+                        background-color: @bg09;
+                    }
+                }
+            }*/
+        }
+    }
+    .right{
+        height: 100%;
+        float: right;
+        width: 40%;
+        position: relative;
+        border-left: 1px solid @bd01;
+        margin-left: -1px;
+        .payTip{
+            display: none;
+            text-align: center;
+            .lineGray{
+                color: @c03;
+                line-height: 30px;
+                padding-bottom: 5px;
+            }
+            .lineMain{
+                font-size: @fs7;
+                .highlight{
+                    color: @c11;
+                }
+            }
+            .lineSmall{
+                line-height: 30px;
+            }
+            &::before{
+                content: "";
+                display: block;
+                margin:150px auto 0 auto;
+                width: 120px;
+                height: 120px;
+            }
+            &.cash{
+                &::before{
+                    background: @tipbg_pay_cash1_png no-repeat @tipbg_pay_cash1_png_pos;
+                    background-size: @tipbg_pay_cash1_png_size;
+                }
+            }
+            &.pos{
+                &::before{
+                    background: @tipbg_pay_pos1_png no-repeat @tipbg_pay_pos1_png_pos;
+                    background-size: @tipbg_pay_pos1_png_size;
+                }
+            }
+            &.card{
+                &::before{
+                    margin-top: 50px;
+                }
+                .cardBg{
+                    color: @c01;
+                    height: 103px;
+                    width: 260px;
+                    margin: 20px auto 0 auto;
+                    padding: 10px;
+                    background: url("@{path}/card_bg2.png") no-repeat center center;
+                    background-size: 280px 103px;
+                    text-align: left;
+                    &.combo{
+                        background: url("@{path}/card_bg3.png") no-repeat center center;
+                        background-size: 280px 103px;
+                        .line2{
+                            color: @c01;
+                        }
+                    }
+                    .line1{
+                        padding-top: 17px;
+                        font-weight: bold;
+                        line-height: 22px;
+                        .price{
+                            float: right;
+                        }
+                    }
+                    .line2{
+                        color: @c07;
+                        line-height: 20px;
+                        padding-bottom: 14px;
+                        .label{
+                            float: right;
+                        }
+                    }
+                    .line3{
+                        margin: 0 -10px;
+                        padding: 0 10px;
+                        line-height: 30px;
+                        color: @c06;
+                        background: rgba(255,255,255,0.1);
+                    }
+                }
+            }
+        }
+        &::before{
+            content: "";
+            .abs(@left:50%;@top:50%);
+            width: 250px;
+            height: 150px;
+            margin: -125px 0 0 -125px;
+            display: none;
+        }
+        &.pay_memberCard .card{
+            display: block;
+        }
+        &.pay_cash .cash{
+            display: block;
+        }
+        &.pay_pos .pos{
+            display: block;
+        }
+        &.pay_cash1::before{
+            display: block;
+            background: @tipbg_pay_cash_png no-repeat @tipbg_pay_cash_png_pos;
+            background-size: @tipbg_pay_cash_png_size;
+        }
+        &.pay_alipay::before{
+            display: block;
+            background: @tipbg_pay_alipay_png no-repeat @tipbg_pay_alipay_png_pos;
+            background-size: @tipbg_pay_alipay_png_size;
+        }
+        &.pay_wechat::before{
+            display: block;
+            background: @tipbg_pay_wechat_png no-repeat @tipbg_pay_wechat_png_pos;
+            background-size: @tipbg_pay_wechat_png_size;
+        }
+        &.pay_dp::before{
+            display: block;
+            background: @tipbg_pay_dp_png no-repeat @tipbg_pay_dp_png_pos;
+            background-size: @tipbg_pay_dp_png_size;
+        }
+    }
+    .submit{
+        height: 50px;
+        background: @bg02;
+        color: @c01;
+        text-align: center;
+        line-height: 50px;
+        .abs(@bottom: 0;@left:0;@right: 0;);
+        font-size: @fs3;
+    }
+    /* .print{
+        height: 50px;
+        text-align: center;
+        line-height: 50px;
+        .abs(@top: 0;@right: 0;);
+        font-size: @fs2;
+        padding-right:10px;
+        opacity: 0.7;
+        &::before{
+            content: "";
+            float: left;
+            width: 24px;
+            height: 24px;
+            margin: 12px 3px 0 13px;
+            background: @print_png no-repeat @print_png_pos;
+            background-size: @print_png_size;
+        }
+        &.am-clickable-active{
+            opacity: 1;
+        }
+    } */
+
+    .userPrintType{
+        height:32px;
+        background-color: #eeeeee;
+        border-radius:30px;
+        padding:3px;
+        width: 221px;
+        float: right;
+        margin-top:10px;
+        margin-right:10px;
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        &.web {
+            width: 41px;
+        }
+        .printType{
+            height:100%;
+            float: left;
+            ul{
+                width: 100%;
+                overflow: hidden;
+                // padding: 5px;
+                li{
+                    float: left;
+                    width: 60px;
+                    padding-left:27px;
+                    line-height: 26px;
+                    font-size: 11px;
+                    color:#888888;
+                    position: relative;
+                    cursor: pointer;
+                    &::after{
+                        content:"";
+                        position: absolute;
+                        left:5px;
+                        display: block;
+                        width: 16px;
+                        height:16px;
+                        -webkit-border-radius: 50%;
+                        -moz-border-radius: 50%;
+                        border-radius: 50%;
+                        border:1px solid #d6d6d6;
+                        top:3px;
+                    }
+                    &.selected{
+                        &::after{
+                            border:1px solid #999999;
+                        }
+                        &::before{
+                            content: "";
+                            display: block;
+                            position: absolute;
+                            left: 8px;
+                            top: 6px;
+                            width: 12px;
+                            height: 12px;
+                            background-color: #999999;
+                            -webkit-border-radius: 50%;
+                            -moz-border-radius: 50%;
+                            border-radius: 50%;
+                        }
+                    }
+                }
+            }
+            .icon{
+
+            }
+        }
+        .icon{
+            float: right;
+            width: 27px;
+            height:27px;
+            -webkit-border-radius: 50%;
+            -moz-border-radius: 50%;
+            border-radius: 50%;
+            background:#fff url(../images/hangup/print_icon.png) no-repeat center center;
+            background-size: 16px 15px;
+            margin-right:4px;
+            opacity: 0.7;
+            &.am-clickable-active{
+                opacity: 1;
+            }
+
+        }
+    }
+
+    .payConfirm{
+        .abs(@bottom: 0;@left:0;@right: 0;@top:0;);
+        background: rgba(0,0,0,0.4);
+        display: none;
+        .content{
+            width: 300px;
+            padding-bottom: 30px;
+            background: @bg04;
+            border-radius: 4px;
+            .abs(@left:50%;@top:50%;);
+            margin: -100px 0 0 -150px;
+            .paySuccess{
+                padding-top: 30px;
+                .icon{
+                    width: 50px;
+                    height: 50px;
+                    position: relative;
+                    background: @bg08;
+                    border-radius: 25px;
+                    margin: 0 auto;
+                    &::after{
+                        content: "";
+                        .abs(@left:50%;@top:50%;);
+                        margin: -10px 0 0 -15px;
+                        width: 30px;
+                        height: 20px;
+                        background: @searchMember_success_png no-repeat @searchMember_success_png_pos;
+                        background-size: @searchMember_success_png_size;
+                    }
+                }
+                .text{
+                    text-align: center;
+                    line-height: 30px;
+                    strong{
+                        font-size: @fs3;
+                        padding: 0 5px;
+                    }
+                }
+                .tip{
+                    text-align: center;
+                    font-size: @fs2;
+                    color: @c03;
+                }
+            }
+        }
+    }
+}
+.print_error_box {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.2);
+    z-index: 100;
+    display: none;
+    &.usb .print_error {
+        .print_error_content{
+            display: none;
+        }
+        .usb_print_error_content{
+            display: block;
+            height: 388px;
+        }
+    }
+    .print_error {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        margin: -270px 0 0 -370px;
+        width: 680px;
+        height: 480px;
+        background-color: @c01;
+        border-radius: 10px;
+        box-shadow: rgba(0, 0, 0, 0.4) 1px 1px 10px;
+        padding: 30px;
+        .print_error_header {
+            font-size: @fs3;
+            color: @c33;
+            line-height: 30px;
+            .print_error_header strong {
+                font-size: @fs7;
+                color: @c32;
+                padding-left: 28px;
+                background: url("../images/tip_icon.png") no-repeat left center;
+                background-size: 30px 30px;
+                margin-right: 5px;
+            }
+        }
+        .print_error_content {
+            line-height: 24px;
+            padding-left: 5px;
+            dt {
+                font-size: @fs8;
+                font-weight: bold;
+                color: @c33;
+                padding-top: 12px;
+            }
+            dd {
+                font-size: 15px;
+                color: @c32;
+                span {
+                    color: @c31;
+                }
+            }
+            .img {
+                height: 220px;
+                background: @bg31 url("../images/iPad_bluetooth.jpg") no-repeat 20px 20px;
+                background-size: 576px 180px;
+            }
+        }
+        .usb_print_error_content{
+            display: none;
+        }
+        
+        .buttons {
+            text-align: center;
+            padding-top: 20px;
+            .button {
+                width: 160px;
+                height: 45px;
+                background-color: @bg30;
+                color: @c01;
+                font-size: @fs3;
+                display: inline-block;
+                line-height: 45px;
+                text-align: center;
+                margin: 0 30px;
+                border-radius: 4px;
+                &.am-clickable-active {
+                    background-color: @c07;
+                }
+            }
+        }
+    }
+}
+@-webkit-keyframes animation_slideleft {
+    0% {
+        -webkit-transform: matrix3d(1, 0, 0, 0, 0,1, 0, 0, 0, 0,1, 0, 500, 0, 0, 1);
+    }
+    100% {
+        -webkit-transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+    }
+}
+
+.mixPayScrollInner{
+    position: relative;
+    top:0;
+    bottom: auto;
+    left: 0;
+    right: 0;
+    width: 100%;
+    display: block;
+    height: auto;
+}

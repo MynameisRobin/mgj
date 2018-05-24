@@ -1,0 +1,126 @@
+﻿@charset "utf-8";
+/* CSS Document */
+.cordova-popup {
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 100%;
+	z-index: 99;
+	display: none;
+}
+
+.cordova-popup-wrap {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 100%;
+	background: rgba(0,0,0,0.5);
+	display: -webkit-box;
+	-webkit-box-pack: center;
+	-webkit-box-align: center;
+}
+.cordova-actionsheet {
+	border-radius: 5px;
+	background: #fff;
+	width: 250px;
+}
+.cordova-actionsheet .title {
+	border-radius: 5px 5px 0 0;
+	height: 35px;
+	line-height: 35px;
+	text-align: center;
+	background: #8b4f90;
+	font-size: 13px;
+	color: #fff;
+	position: relative;
+}
+.cordova-actionsheet .content {
+	line-height: 20px;
+	font-size: 13px;
+	color: #7a7a7a;
+	padding: 15px;
+}
+
+
+.cordova-actionsheet .sheetWrap{
+	max-height: 400px;
+	overflow: hidden;
+}
+.cordova-actionsheet .sheet {
+	text-align: center;
+	padding: 10px;
+}
+
+.cordova-actionsheet .sheet > li {
+	line-height: 27px;
+	border-radius: 27px;
+	border: #dc8dbc 1px solid;
+	color: #dc8dbc;
+	font-size: 13px;
+	text-align: center;
+	margin-bottom: 10px;
+}
+
+.cordova-actionsheet .sheet > li.dark {
+	color: #fff;
+	background: #dc8dbc;
+	margin-bottom: 0px;
+}
+.cordova-actionsheet .sheet > li.am-clickable-active {
+	color: #fff;
+	background: #b8769d
+}
+
+.cordova-imagePicker{
+	width: 250px;
+	background: #fff;
+	border-radius: 3px;
+}
+.cordova-imagePicker .input{
+	background: #213f83;
+	margin: 10px 20px;
+	height: 30px;
+	line-height: 30px;
+	position: relative;
+	text-align: center;
+	color: #fff;
+	border-radius: 3px;
+}
+.cordova-imagePicker .input > input{
+	position: absolute;
+	top:0;
+	left: 0;
+	width: 100%;
+	bottom: 0;
+	display: block;
+	opacity: 0;
+}
+
+.cordova-imagePicker .photo {
+	margin: 10px 20px;
+	min-height: 100px;
+}
+
+.cordova-imagePicker .photo > img {
+	width: 100%;
+	display: block;
+}
+.cordova-imagePicker .buttonGroup {
+	margin: 10px 20px;
+	text-align: center;
+}
+.cordova-imagePicker .button {
+	background: #213f83;
+	width: 60px;
+	height: 30px;
+	line-height: 30px;
+	text-align: center;
+	color: #fff;
+	border-radius: 3px;
+	display: inline-block;
+}
+.cordova-imagePicker .button.light {
+	background: #859BCE;
+}

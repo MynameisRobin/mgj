@@ -1,0 +1,78 @@
+.cf:before, .cf:after {
+    content: " ";
+    display: table;
+}
+.cf:after {
+    clear: both;
+}
+.bggrey{
+    background-color: #e5e5e5;
+}
+.grade-optimization{
+    padding: 10px 10px 0;
+}
+.grade-tit{
+    height: 45px;
+    line-height: 45px;
+    font-size: 15px;
+    padding-left: 55px;
+    color: #ffffff;
+    background: #2dbd84 url("img/treasuretitbg.jpg") no-repeat 8px 5px;
+    background-size: 35px 35px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+.grade-cont{
+    padding-bottom: 20px;
+    background: url("img/treasurebg.jpg") no-repeat center center;
+    background-size: cover;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+.optimization-tips{
+    color: #666666;
+    text-align: center;
+    font-size: 15px;
+    padding: 25px 0;
+}
+.grade-cont li{
+    position: relative;
+    float: left;
+    width: 33%;
+    text-align: center;
+    margin-bottom: 20px;
+}
+.grade-cont li img{
+    width: 85%;
+}
+.grade-cont li img.onimg{
+    display: none;
+}
+.grade-cont li.on img.defaultimg{
+    display: none;
+}
+.grade-cont li.on img.onimg{
+    display: inline-block;
+}
+.grade-cont li p.nooptimization{
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 100%;
+    line-height: 20px;
+    margin-top: -10px;
+    text-align: center;
+}
+.grade-cont li p.choosep{
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 100%;
+    margin-top: -13px;
+    line-height: 26px;
+    font-size: 26px;
+    text-align: center;
+}
+.grade-cont li p.choosep span{
+    font-size: 15px;
+}

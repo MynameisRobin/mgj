@@ -1,0 +1,83 @@
+.page-customerClockAdd .am-body-wrap {
+  background: #f6f6f6;
+}
+.page-customerClockAdd form .title {
+  line-height: 30px;
+  font-weight: bold;
+  font-size: 11px;
+  padding: 0 10px;
+}
+.page-customerClockAdd form .page-select {
+  margin-top: 10px;
+  line-height: 30px;
+  border: 1px solid #BBB;
+  background: #FFF;
+  padding: 0 0 0 10px;
+}
+.page-customerClockAdd form .page-select .arrow {
+  float: right;
+  width: 30px;
+  height: 30px;
+  border-left: 1px solid #BBB;
+  background: #DDD url("../images/arrow_select.png") no-repeat center center;
+  background-size: 20px 20px;
+}
+.page-customerClockAdd form .page-textarea {
+  padding: 20px 10px 10px 10px;
+  background: #FFF;
+}
+.page-customerClockAdd form .page-textarea textarea {
+  border: none;
+  width: 100%;
+  height: 100px;
+  line-height: 20px;
+}
+.page-customerClockAdd form .page-button {
+  margin: 20px;
+  line-height: 40px;
+  background: #2dbd84;
+  border-radius: 4px;
+  text-align: center;
+  font-size: 16px;
+  color: #FFF;
+  /* font-weight:bold; */
+}
+.page-customerClockAdd form .setTime {
+  text-align: center;
+  padding: 28px 0;
+  font-size: 14px;
+  color: #222222;
+}
+.page-customerClockAdd form .setTime::before {
+  content: "";
+  display: inline-block;
+  width: 19px;
+  height: 19px;
+  background: url("img/cust-clockAddIcon.png") no-repeat center center;
+  background-size: 19px 19px;
+  vertical-align: middle;
+}
+.page-customerClockAdd form .page-input {
+  margin: 0 5px;
+  display: inline-block;
+  padding: 10px;
+  height: 22px;
+  line-height: 22px;
+  border: #2dbd84 1px solid;
+  border-radius: 3px;
+  vertical-align: middle;
+}
+.page-customerClockAdd form .page-input > input {
+  display: block;
+  text-align: center;
+  font-size: 20px;
+  color: #2dbd84;
+  width: 50px;
+  border: none;
+  background: none;
+}
+.page-customerClockAdd form .tips {
+  text-align: center;
+  font-size: 11px;
+  color: #999999;
+}

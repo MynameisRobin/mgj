@@ -1,0 +1,101 @@
+@import "var.less";
+@path:"../images/";
+@import "../images/icons_sprite.less";
+
+.createService{
+    .bg{
+        .abs(@top:0;@left:0;@bottom:0;@right:0;);
+    }
+    .inner{
+        z-index: 1;
+        width: 750px;
+        margin-left: -375px;
+        color:#222;
+        .title{
+            padding:0 20px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .content{
+            padding-top: 0;
+            padding-bottom: 15px;
+            li{
+                background-color:#F1F1F1;
+                border:none;
+                color:#222;
+                font-size: 14px;
+            }
+        }
+        .manual{
+            margin:0 20px 25px;
+            .manual_tit{
+                line-height: 40px;
+                padding: 0 15px;
+                font-size: 16px;
+                display: inline-block;
+                vertical-align: middle;
+            }
+            .isWin{
+                .input_no{
+                    width:280px;
+                    height:40px;
+                    color:#222;
+                    border:1px solid #dddddd;
+                }
+                ::-webkit-input-placeholder { /* WebKit browsers */  
+                    color:    #222;  
+                }  
+                :-moz-placeholder { /* Mozilla Firefox 4 to 18 */  
+                   color:    #222;  
+                   opacity:  1;  
+                }  
+                ::-moz-placeholder { /* Mozilla Firefox 19+ */  
+                   color:    #222;  
+                   opacity:  1;  
+                }  
+                :-ms-input-placeholder { /* Internet Explorer 10+ */  
+                   color:    #222;  
+                }  
+                .sure_btn {
+                    background-color:#555;
+                    cursor: pointer;
+                }
+            }
+            .noWin{
+                .no_box{
+                    border:1px solid #dddddd;
+                    display: inline-block;
+                    width:280px;
+                    height:40px;
+                    line-height: 40px;
+                    color:#222;
+                }
+            }
+        }
+        ul::after{
+            content: "";
+            display: block;
+            height: 0px;
+            clear: both;
+        }
+        li{
+            float: left;
+            width: 60px;
+            background: @bg04;
+            color: @c11;
+            line-height: 32px;
+            text-align: center;
+            font-size: 16px;
+            border: 1px solid @bd10;
+            border-radius: 2px;
+            margin: 5px 5px;
+            cursor: pointer;
+            &.am-disabled{
+                border-color: @bd03;
+                background-color: @bg06;
+                color: @c04;
+                cursor: not-allowed;
+            }
+        }
+    }
+}

@@ -1,0 +1,136 @@
+.MGJ_rvPush {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.4);
+	z-index: 2;
+	display: none;
+	.MGJ_rvPushContent {
+		width: 480px;
+		border-radius: 4px;
+		border-top: 4px solid #832688;
+		background: #FFF;
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		margin: -240px 0 0 -240px;
+		padding-bottom: 10px;
+	}
+	.MGJ_pushTitle {
+		line-height: 44px;
+		height: 44px;
+		font-weight: bold;
+		color: #222222;
+		padding: 0 20px 0 45px;
+		font-size: 14px;
+		background: url("../images/rvPush/bell.png") no-repeat 15px center;
+	}
+	.MGJ_status {
+		padding: 0 50px;
+		margin-bottom: 10px;
+		height: 66px;
+		.MGJ_head {
+			height: 66px;
+			width: 66px;
+			overflow: hidden;
+			border: 4px solid #f0f0f0;
+			background-color: #FFF;
+			background-repeat: no-repeat;
+			background-position: center center;
+			background-size: cover;
+			border-radius: 36px;
+			img {
+				width: 100%;
+			}
+		}
+		.MGJ_member {
+			float: left;
+			&.male {
+				background-image: url("../images/rvPush/bg-man.gif");
+			}
+			&.female {
+				background-image: url("../images/rvPush/bg-woman.gif");
+			}
+		}
+		.MGJ_employee {
+			float: right;
+			background-image: url("../images/rvPush/barberBg-man.gif");
+		}
+		&.status1 {
+			background: url("../images/rvPush/status1.png") no-repeat center center;
+		}
+		&.status2 {
+			background: url("../images/rvPush/status2.png") no-repeat center center;
+		}
+		&.status3 {
+			background: url("../images/rvPush/status3.png") no-repeat center center;
+		}
+	}
+	.MGJ_close {
+		width: 30px;
+		height: 30px;
+		background: #832688 url("../images/rvPush/close.png") no-repeat center center;
+		border-radius: 5px;
+		position: absolute;
+		top: -4px;
+		right: 0;
+		&:hover,&.am-clickable-active {
+			background-color: #5a225e;
+		}
+	}
+	.MGJ_mute {
+		width: 30px;
+		height: 30px;
+		background: url("../images/rvPush/mute1.png") no-repeat center center;
+		background-size: 24px 24px;
+		position: absolute;
+		bottom: 5px;
+		right: 18px;
+		opacity: 0.5;
+		&:hover {
+			opacity: 0.7;
+		}
+		&:active {
+			opacity: 1;
+		}
+		&.mute {
+			background-image: url("../images/rvPush/mute.png");
+		}
+	}
+	.MGJ_info {
+		background: #eeeeee;
+		margin: 0 20px;
+		padding: 10px 20px;
+		border-radius: 4px;
+		table {
+			width: 100%;
+			td {
+				height: 30px;
+				line-height: 30px;
+				&.hightLight {
+					color: #f83051;
+					font-weight: bold;
+				}
+			}
+			tr td:nth-child(1) {
+				width: 130px;
+				color: #666666;
+				padding-left: 30px;
+			}
+			&.cancel {
+				text-decoration: line-through;
+			}
+		}
+	}
+	.MGJ_pinkBtn {
+		color: #FFF;
+		margin: 0 auto;
+		cursor: pointer;
+		display: block;
+		width: 180px;
+		text-align: center;
+		margin-top: 10px;
+	}
+}

@@ -1,0 +1,476 @@
+.page-education .carouselImg {
+  width: 100%;
+}
+.page-education .carouselImg img {
+  width: 100%;
+  display: block;
+}
+.page-education .main_banner .am-carrousel {
+  height: 200px;
+  overflow: hidden;
+  position: relative;
+}
+.page-education .main_banner .am-carrousel li {
+  float: left;
+  height: 200px;
+  width: 100%;
+}
+.page-education .main_banner .am-carrousel img {
+  width: 100%;
+  display: block;
+}
+.page-education .main_banner .am-carrousel .count {
+  position: absolute;
+  bottom: 5px;
+  left: 50%;
+}
+.page-education .main_banner .am-carrousel .count p {
+  float: left;
+  width: 8px;
+  height: 8px;
+  background: #333333;
+  opacity: 0.8;
+  margin-right: 5px;
+  border-radius: 4px;
+  position: relative;
+  left: -50%;
+}
+.page-education .main_banner .am-carrousel .count p.selected {
+  background: #ca54b6;
+}
+.page-education .clearfix:after {
+  content: ".";
+  display: block;
+  height: 0;
+  visibility: hidden;
+  clear: both;
+}
+.page-education .am-header .logo {
+  width: 58px;
+  height: 44px;
+  background: url('../css/img/education/logo.png') no-repeat 10px center;
+  background-size: 48px 20px;
+  position: absolute;
+  left: 0;
+  transition: all 0.3s;
+  -webkit-transition: all 0.3s;
+}
+.page-education .am-header .logo.active {
+  left: -58px;
+}
+.page-education .am-header .search-wrap {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  position: relative;
+  width: 100%;
+  height: 44px;
+  left: 58px;
+  padding: 8px 68px 8px 10px;
+  transition: all 0.3s;
+  -webkit-transition: all 0.3s;
+}
+.page-education .am-header .search-wrap .search-wrapper {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  display: block;
+  width: 100%;
+  height: 28px;
+  background-color: #102c6c;
+  border-radius: 5px;
+  overflow: hidden;
+  position: relative;
+}
+.page-education .am-header .search-wrap .search-wrapper .search {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  display: block;
+  width: 100%;
+  height: 28px;
+  border: none;
+  padding-left: 30px;
+  font-size: 14px;
+  color: #fff;
+  line-height: 28px;
+  background: #102c6c url('../css/img/education/search.png') no-repeat 10px center;
+  background-size: 14px 14px;
+}
+.page-education .am-header .search-wrap .search-wrapper .search::-webkit-input-placeholder {
+  color: #aab6d3;
+}
+.page-education .am-header .search-wrap .search-wrapper .search:focus::-webkit-input-placeholder {
+  opacity: 0;
+}
+.page-education .am-header .search-wrap .search-wrapper input[type=search]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+}
+.page-education .am-header .search-wrap .search-wrapper .del-words {
+  position: absolute;
+  width: 30px;
+  height: 28px;
+  top: 0;
+  right: 0;
+  background: url('../css/img/education/del.png') no-repeat center center;
+  background-size: 15px 15px;
+  display: none;
+}
+.page-education .am-header .search-wrap .search-mask {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background-color: rgba(255, 255, 255, 0);
+}
+.page-education .am-header .search-wrap.active {
+  left: 0;
+}
+.page-education .am-header .search-wrap.active .search-wrapper {
+  padding-right: 30px;
+}
+.page-education .am-header .search-wrap.active .search-wrapper .del-words {
+  display: block;
+}
+.page-education .am-header .search-wrap .cancle {
+  position: absolute;
+  width: 58px;
+  height: 44px;
+  font-size: 16px;
+  color: #fff;
+  text-align: center;
+  line-height: 44px;
+  top: 0;
+  right: 0;
+}
+.page-education .history-and-collection {
+  height: 38px;
+  background-color: #fff;
+}
+.page-education .history-and-collection *,
+.page-education .history-and-collection:after,
+.page-education .history-and-collection:before {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+.page-education .history-and-collection li {
+  width: 50%;
+  height: 38px;
+  padding: 10px 0;
+  float: left;
+  text-align: center;
+}
+.page-education .history-and-collection li p {
+  display: inline-block;
+  vertical-align: top;
+  font-size: 12px;
+  color: #999;
+  height: 18px;
+  line-height: 18px;
+}
+.page-education .history-and-collection li b {
+  display: inline-block;
+  vertical-align: top;
+  width: 18px;
+  height: 18px;
+  background-size: 100% 100%;
+  margin-right: 6px;
+}
+.page-education .history-and-collection li:first-child div {
+  border-right: 1px solid #dadada;
+}
+.page-education .history-and-collection li:first-child b {
+  background-image: url('../css/img/education/history.png');
+}
+.page-education .history-and-collection li:last-child b {
+  background-image: url('../css/img/education/collection.png');
+}
+.page-education .continue {
+  height: 32px;
+  color: #aaa;
+  overflow: hidden;
+  position: relative;
+  text-align: center;
+  font-size: 0;
+  background-color: #f6f6f6;
+  display: none;
+}
+.page-education .continue .continue-wrap {
+  display: inline-block;
+  max-width: 80%;
+  padding-right: 32px;
+  position: relative;
+}
+.page-education .continue .continue-course {
+  display: block;
+  font-size: 12px;
+  color: #999;
+  height: 32px;
+  line-height: 32px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.page-education .continue .close-continue {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 32px;
+  height: 32px;
+  background: url('../css/img/education/del-recent.png') no-repeat center center;
+  background-size: 14px 14px;
+}
+.page-education .nav {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  width: 100%;
+  height: 44px;
+  border-bottom: 1px solid #e5e5e5;
+  border-top: 1px solid #e5e5e5;
+  overflow: hidden;
+  padding: 0 10px;
+  background-color: #fff;
+  padding-top: 1px;
+}
+.page-education .nav *,
+.page-education .nav:after,
+.page-education .nav:before {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+.page-education .nav .nav-wrap {
+  font-size: 0;
+}
+.page-education .nav .nav-wrap .item {
+  display: inline-block;
+  vertical-align: top;
+  font-size: 15px;
+  color: #000;
+  height: 42px;
+  line-height: 42px;
+  padding: 0 8px;
+  margin-right: 12px;
+}
+.page-education .nav .nav-wrap .item:last-child {
+  margin-right: 0;
+}
+.page-education .nav .nav-wrap .item.active {
+  border-bottom: 2px solid #2dbd84;
+  color: #2dbd84;
+}
+.page-education .am-body-wrap {
+  background-color: #f6f6f6;
+}
+.page-education .am-body-wrap *,
+.page-education .am-body-wrap:after,
+.page-education .am-body-wrap:before {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+.page-education .am-body-wrap .error {
+  padding-top: 25px;
+  width: 100%;
+  font-size: 12px;
+  color: #aaa;
+  text-align: center;
+  display: none;
+}
+.page-education .am-body-wrap .loadingContent {
+  padding-top: 25px;
+  display: none;
+}
+.page-education .am-body-wrap .loadingContent span {
+  display: block;
+  margin: 0 auto;
+  width: 30px;
+  height: 30px;
+  background: url(../libs/am/images/blueloading-small.png) no-repeat center center;
+  background-size: 30px 30px;
+  -webkit-animation: animation-loading infinite linear 1s;
+  left: 0;
+  top: 0;
+}
+.page-education .am-body-wrap .loadingContent p {
+  line-height: 50px;
+  font-size: 12px;
+  padding: 0 50px;
+  text-align: center;
+  color: #888;
+}
+.page-education .am-body-wrap .reload {
+  display: none;
+  padding-top: 25px;
+}
+.page-education .am-body-wrap .reload p {
+  line-height: 20px;
+  font-size: 15px;
+  padding: 0 0 15px 0;
+  text-align: center;
+  color: #aaa;
+}
+.page-education .am-body-wrap .reload span {
+  background: #2dbd84;
+  color: #fff;
+  width: 100px;
+  line-height: 35px;
+  font-size: 14px;
+  display: block;
+  margin: auto;
+  text-align: center;
+}
+.page-education .search-container {
+  position: absolute;
+  width: 100%;
+  bottom: 50px;
+  top: 44px;
+  background-color: #fff;
+  display: none;
+  overflow: hidden;
+}
+.page-education .search-container *,
+.page-education .search-container:after,
+.page-education .search-container:before {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+.page-education .search-container .search-container-wrapper {
+  min-height: 100%;
+}
+.page-education .search-container .search-history .title {
+  font-size: 12px;
+  color: #aaa;
+  line-height: 40px;
+  padding: 0 10px;
+}
+.page-education .search-container .search-history .search-history-list {
+  padding: 0 10px;
+}
+.page-education .search-container .search-history .search-history-list li {
+  height: 45px;
+  border-bottom: 1px solid #e5e5e5;
+  padding-right: 30px;
+  position: relative;
+}
+.page-education .search-container .search-history .search-history-list li p {
+  font-size: 14px;
+  color: #222;
+  height: 44px;
+  line-height: 44px;
+  padding-left: 22px;
+  background: url('../css/img/education/recent.png') no-repeat left center;
+  background-size: 14px 14px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.page-education .search-container .search-history .search-history-list li span {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  top: 7px;
+  right: 0;
+  background: url('../css/img/education/del-recent.png') no-repeat center center;
+  background-size: 11px 11px;
+}
+.page-education .search-container .search-result {
+  display: none;
+}
+.page-education .search-container .search-result .search-error {
+  position: absolute;
+  width: 100%;
+  font-size: 12px;
+  color: #aaa;
+  text-align: center;
+  top: 50%;
+  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+  display: none;
+}
+.page-education .list {
+  padding: 0 10px;
+  background-color: #fff;
+}
+.page-education .list li {
+  padding: 15px 0;
+  height: 106px;
+  overflow: hidden;
+  border-bottom: 1px solid #e5e5e5;
+}
+.page-education .list li:last-child {
+  border-bottom: none;
+}
+.page-education .list li .left {
+  width: 135px;
+  float: left;
+}
+.page-education .list li .left .img-wrap {
+  height: 76px;
+  position: relative;
+  background: #f4f4f4 url('../css/img/education/default.png') no-repeat center center;
+  background-size: 48px 21px;
+}
+.page-education .list li .left .img-wrap img {
+  width: 100%;
+  height: 100%;
+  display: none;
+}
+.page-education .list li .left .count-wrap {
+  position: absolute;
+  max-width: 100%;
+  font-size: 10px;
+  color: #aaa;
+  height: 14px;
+  line-height: 14px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  left: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 0 3px;
+  border-radius: 2px;
+}
+.page-education .list li .right {
+  margin-left: 150px;
+}
+.page-education .list li .right .title {
+  font-size: 16px;
+  color: #222;
+  line-height: 18px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  margin-bottom: 2px;
+}
+.page-education .list li .right .college {
+  font-size: 12px;
+  color: #999;
+  line-height: 20px;
+  max-height: 20px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.page-education .list li .right .keywords {
+  height: 16px;
+  font-size: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin-top: 2px;
+}
+.page-education .list li .right .keywords span {
+  display: inline-block;
+  vertical-align: top;
+  font-size: 11px;
+  color: #999;
+  height: 16px;
+  line-height: 14px;
+  padding: 0 3px;
+  margin-right: 3px;
+  border: 1px solid #dedede;
+  border-radius: 3px;
+}
+.ios .page-education .search-container {
+  top: 64px;
+}

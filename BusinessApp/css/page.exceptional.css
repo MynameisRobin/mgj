@@ -1,0 +1,177 @@
+.page-exceptional .am-body-inner {
+  background: #f3f3f3;
+}
+.page-exceptional .inner_header {
+  background: url(img/exceptional_bg.png) no-repeat left top;
+  background-size: 100% 100%;
+  height: 222px;
+}
+.page-exceptional .inner_header .am-header {
+  background: none;
+}
+.page-exceptional .inner_header .moneyTit {
+  position: relative;
+  margin: 0 auto;
+  margin-top: 33px;
+}
+.page-exceptional .inner_header .money_tit {
+  font-size: 12px;
+  overflow: hidden;
+  text-align: center;
+  color: #a5decc;
+  padding: 5px 0;
+}
+html.android .page-exceptional .inner_header .moneyTit{
+	margin-top:44px
+}
+.page-exceptional .inner_header .money_content {
+  overflow: hidden;
+  text-align: center;
+  color: #fff;
+  line-height: 45px;
+}
+.page-exceptional .inner_header .money_content .coin {
+  font-size: 12px;
+}
+.page-exceptional .inner_header .money_content .value {
+  font-size: 45px;
+  line-height: 45px;
+  height: 45px;
+}
+.page-exceptional .inner_header .moneyTit .run_ico {
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  margin-top: -9px;
+  top: 50%;
+  right: 10px;
+}
+.page-exceptional .inner_header .moneyTit.show .run_ico {
+  background: url(img/widthDraw_run.png) no-repeat left top;
+  background-size: 100% 100%;
+}
+.page-exceptional .moneywrap{
+	padding: 22px 0;
+	background-color: #fff;
+	/* text-align: left; */
+}
+.page-exceptional .moneywrap ul{
+	text-align: center;
+}
+.page-exceptional .moneywrap li{
+	position: relative;
+	width: 48%;
+	display: inline-block;
+}
+.page-exceptional .moneywrap li.brgrey{
+	border-right: 1px solid #E5E5E5;
+}
+.page-exceptional .moneywrap li p.titp{
+	text-align: left;
+	color: #a5a5a5;
+	font-size: 14px;
+	padding-left: 12px;
+}
+.page-exceptional .moneywrap li p.moneyp{
+	text-align: left;
+	color: #2dbd84;
+	font-size: 22px;
+	padding-top: 6px;
+	padding-left: 12px;
+}
+.page-exceptional .moneywrap li .look_icon{
+	width: 25px;
+    height: 25px;
+    position: absolute;
+    top: 9px;
+    right: 5px;
+    background: url(img/look_iconbg.png) no-repeat left top;
+    background-size: cover;
+    border-radius: 50%;
+}
+.page-exceptional .listtit{
+	color: #999999;
+    font-size: 12px;
+    line-height: 30px;
+    padding: 0 15px;
+}
+.page-exceptional ul.recordlist{
+	background-color: #fff;
+}
+.page-exceptional ul.recordlist li{
+	position: relative;
+	min-height: 40px;
+	padding: 10px 0;
+	border-bottom: 1px solid #F0EFEF;
+}
+.page-exceptional ul.recordlist li::after{
+    content: "";
+    display: block;
+    clear: both;
+}
+.page-exceptional ul.recordlist li .left{
+	width: 45px;
+	height: 45px;
+	float: left;
+	display: inline-block;
+	margin-left: 10px;
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
+}
+.page-exceptional ul.recordlist li .left img{
+	width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+}
+.page-exceptional ul.recordlist li .middle{
+	margin-left: 75px;
+}
+.page-exceptional ul.recordlist li .middle span{
+	display: inline-block;
+    vertical-align: middle;
+}
+.page-exceptional ul.recordlist li .middle .custname{
+	font-size: 15px;
+}
+.page-exceptional ul.recordlist li .middle .gender,
+.page-exceptional ul.recordlist li .middle .male{
+	width: 15px;
+	height: 15px;
+}
+.page-exceptional ul.recordlist li .middle .gender{
+	background: url("img/cust-gender-f.png") no-repeat center center;
+	background-size: 11px 14px;
+}
+.page-exceptional ul.recordlist li .middle .male{
+	background: url("img/cust-gender-m.png") no-repeat center center;
+	background-size: 11px 14px;
+}
+.page-exceptional ul.recordlist li .middle .timep{
+	font-size: 12px;
+    color: #999999;
+    margin-top: 2px;
+}
+.page-exceptional ul.recordlist li .right{
+    float: right;
+    padding-right: 10px;
+}
+.page-exceptional ul.recordlist li .right .r_money{
+	font-size: 16px;
+  text-align: right;
+}
+.page-exceptional ul.recordlist li .r_intro{
+    font-size: 14px;
+    color: #999999;
+}
+.page-exceptional ul.recordlist li.emptyli{
+  text-align: center;
+  font-size: 12px;
+  color: #ccc;
+  background: #f3f3f3 url(img/norewardbg.png) no-repeat center 4px;
+  background-size: 50px 50px;
+  padding: 60px 0 0;
+  height: auto;
+  margin-top: 60px;
+  border-bottom:none;
+}

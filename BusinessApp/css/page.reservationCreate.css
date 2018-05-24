@@ -1,0 +1,305 @@
+@charset "utf-8";
+
+.page-reservationCreate {
+	background: #fff;
+}
+
+.page-reservationCreate .searchBox {
+	height: 30px;
+	padding: 12px 18px 5px 18px;
+	position: relative;
+	background: #f5f5f5;
+}
+.page-reservationCreate .searchBox .input {
+	height: 20px;
+	position: relative;
+	padding: 5px;
+	border-radius: 5px;
+	font-size: 20px;
+	background: #dcdcdc;
+}
+.page-reservationCreate .searchBox .input input {
+	height: 50px;
+	font-size: 14px;
+	width: 100%;
+	border: none;
+	display: block;
+	background: none;
+	margin: -15px 0;
+	padding-left: 10px;
+}
+
+.page-reservationCreate .searchBox .searchBtn {
+	height: 54px;
+	width: 80px;
+	background: url("img/cust-search.png") no-repeat center center;
+	background-size: 17px 17px;
+	text-align: center;
+	border-radius: 3px;
+	position: absolute;
+	right: 0;
+	top: 0;
+	line-height: 50px;
+	color: #fff;
+}
+
+.page-reservationCreate .searchBox .searchBtn.gray {
+	background: url("img/login-clear.png") no-repeat center center;
+	background-size: 24px 24px;
+	opacity: 0.6;
+}
+
+.page-reservationCreate .am-header .cancel{
+	padding: 12px 2.5% 0 6.5%;
+    font-size: 15px;
+    float: left;
+    color: #fff;
+    line-height: 32px;
+    font-weight: bold;
+    width: 12%;
+    height: 32px;
+}
+.page-reservationCreate .am-header .p{
+	width: 58%;
+	text-align: center;
+	font-size: 18px;
+	float: left;
+	color: #fff;
+	line-height: 44px;
+	height: 44px;
+    text-align: center;
+	font-weight: bold;
+}
+.page-reservationCreate .am-header .confirm{
+	padding:12px 6.5% 0 2.5%;
+	font-size: 15px;
+	float: left;
+	color: #fff;
+	line-height: 32px;
+	font-weight: bold;
+	text-align: right;
+	width: 12%;
+    height: 32px;
+}
+.page-reservationCreate .am-body-wrap {
+	background: #fff;
+}
+
+.page-reservationCreate .toptip {
+	line-height: 28px;
+	color: #2dbd84;
+	font-size: 11px;
+	text-align: center;
+	background: #f5f5f5;
+	padding-bottom: 5px;
+}
+.page-reservationCreate .toptip .text{
+	height: 14px;
+	line-height: 14px;
+	color: #2dbd84;
+	font-size: 11px;
+	padding-left: 5px;
+}
+.page-reservationCreate .toptip .tip_icon{
+	background: url("img/tip_icon.png") no-repeat 0px 8px;
+	background-size:30px 20px;
+	display: inline-block;
+	width: 30px;
+	height: 26px;
+}
+.page-reservationCreate .rv_creatFrom .rowLine{
+	margin-left: 18px;
+	border-bottom: 1px solid #f2f2f2;
+}
+
+.page-reservationCreate .rv_creatFrom .label {
+	float: left;
+	line-height: 47px;
+	width: 50px;
+	text-align: left;
+	font-size: 11px;
+	color: #333333;
+}
+.page-reservationCreate .rv_creatFrom .content {
+	margin: 0 40px 0 50px;
+	min-height: 37px;
+	line-height: 37px;
+	font-size: 14px;
+	color: #757575;
+	padding: 5px 0;
+}
+.page-reservationCreate .rv_creatFrom .content#cr_time {
+	color: #f00;
+}
+.page-reservationCreate .rv_creatFrom .select {
+	border:none;
+	height: 35px;
+	width: 100%;
+	line-height: 35px;
+	display: inline-block;
+	background-color: #fbfbfb;
+	background: url("img/report_arrowRight.png") no-repeat right center;
+	background-size:6px 12px;
+	min-width: 50px;
+	vertical-align: middle;
+	border-radius: 5px;
+	color: #333333;
+}
+#cr_selectCati{
+	overflow: hidden;
+	text-overflow:ellipsis;
+	white-space: nowrap;
+}
+.page-reservationCreate .rv_creatFrom .textarea {
+	line-height: 24px;
+	border:none;
+	padding: 10px 0px;
+}
+#cr_comments{
+	color:#333333 !important;
+}
+.page-reservationCreate .rv_creatFrom textarea {
+	width: 100%;
+	height: 72px;
+	border: none;
+	display: block;
+}
+.page-reservationCreate .rv_creatFrom .footer{
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+}
+.page-reservationCreate .rv_creatFrom .footer .page_button {
+	line-height: 45px;
+	font-size: 18px;
+	font-weight: bold;
+	text-align: center;
+	color: #FFF;
+	background:#d1d1d1;
+	width: 100%;
+}
+.page-reservationCreate .rv_creatFrom .footer .isOk{
+	background: #2dbd84;
+}
+.page-reservationCreate .itemsConfirm{
+	display: none;
+	position: absolute;
+	left: 0;
+	right:0;
+	bottom: 0;
+	background:  #FFF;
+	display: none;
+	z-index: 999;
+	height: 100%;
+	overflow: hidden;
+}
+.page-reservationCreate .itemsConfirm::-webkit-scrollbar {display:none}
+.page-reservationCreate .itemsConfirm .content{
+	/* overflow: hidden; */
+	margin-bottom: 20px;
+}
+.page-reservationCreate .itemsConfirm .content .itemType{
+	margin: 15px 0 0 25px;
+	width: calc(100% - 25px);
+	color:#a9a9a9;
+	font-size: 14px;
+	line-height: 20px;
+}
+.page-reservationCreate .itemsConfirm .content .bottomBoder{
+	border-bottom: 1px solid rgb(238, 238, 238);
+}
+.page-reservationCreate .itemsConfirm .content .itemType .type{
+	color:#a9a9a9;
+	font-size: 14px;
+}
+.page-reservationCreate .itemsConfirm .content .itemType .items{
+	color:#a9a9a9;
+	font-size: 14px;
+	line-height: 25px;
+	padding-bottom: 10px;
+}
+.page-reservationCreate .itemsConfirm .content .itemType .items .item{
+	color:#222222;
+	font-size: 14px;
+	border: 1px solid #a9a9a9;
+	padding: 10px 15px;
+	line-height: 20px;
+	margin:10px 10px 0px 0;
+	display: inline-block;
+	border-radius: 4px;
+}
+.page-reservationCreate .itemsConfirm .content .itemType .items .bgcolor{
+	color:#fff !important;
+	background-color: #2dbd84 !important;
+	border: 1px solid #2dbd84 !important
+}
+.page-reservationCreate .searchResult {
+	position: absolute;
+	top: 50px;
+	bottom: 0px;
+	width: 100%;
+	background: #fff;
+	display: none;
+	overflow: hidden;
+}
+
+.page-reservationCreate .rv_custInfo {
+	background: #f6f6f8;
+	position: relative;
+	padding: 10px;
+	font-size: 13px;
+	line-height: 22px;
+	color: #2a2a2a;
+}
+
+.page-reservationCreate .rv_custInfo .header {
+	position: absolute;
+	top: 0px;
+	left: 10px;
+	width: 50px;
+	height: 50px;
+	border: #fff 3px solid;
+	border-radius: 42px;
+	box-shadow: 0px 0px 3px rgba(0,0,0,0.2);
+	margin: auto;
+	background: url("img/bg-woman.gif") no-repeat center center;
+	background-size: contain;
+	overflow: hidden;
+}
+.page-reservationCreate .rv_custInfo .header.male {
+	background-image: url("img/bg-man.gif");
+}
+.page-reservationCreate .rv_custInfo .header img {
+	width: 100%;
+	height: 100%;
+	border-radius: 59px;
+}
+.page-reservationCreate .rv_custInfo .right {
+	margin-left: 70px;
+	min-height: 44px;
+}
+.page-reservationCreate .rv_custInfo .card {
+	background: url("img/rv_vip.png") no-repeat left center;
+	background-size: 15px 11px;
+	padding-left: 20px;
+}
+.page-reservationCreate .rv_custInfo .tel {
+	background: url("img/rv_tel.png") no-repeat left center;
+	background-size: 15px 11px;
+	padding-left: 20px;
+	float: left;
+}
+.page-reservationCreate .rv_custInfo .score {
+	float: right;
+	padding-right: 30px;
+}
+.page-reservationCreate .rv_custInfo .score .red{
+	color: #f00;
+}
+.page-reservationCreate .rv_custInfo .comment {
+	border-top: #dfdfdf 1px solid;
+	color: #757575;
+	margin-top: 5px;
+	padding-top: 3px;
+}

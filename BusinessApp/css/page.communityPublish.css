@@ -1,0 +1,166 @@
+.page-communityPublish .am-body-wrap {
+  background-color: #f7f7f7;
+}
+.page-communityPublish .am-body-wrap *,
+.page-communityPublish .am-body-wrap:after,
+.page-communityPublish .am-body-wrap:before {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+.page-communityPublish .am-body-wrap .clearfix:after {
+  content: ".";
+  display: block;
+  height: 0;
+  visibility: hidden;
+  clear: both;
+}
+.page-communityPublish .am-body-wrap input {
+  border: none;
+  background-color: transparent;
+}
+.page-communityPublish .am-body-wrap .container {
+  background-color: #fff;
+}
+.page-communityPublish .am-body-wrap .container .top {
+  height: 44px;
+  padding: 0 13px;
+  border-bottom: 1px solid #f7f7f7;
+  position: relative;
+}
+.page-communityPublish .am-body-wrap .container .top.am-clickable-active {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+.page-communityPublish .am-body-wrap .container .top .label {
+  font-size: 14px;
+  color: #222;
+  line-height: 44px;
+  width: 60px;
+  height: 44px;
+  overflow: hidden;
+  float: left;
+}
+.page-communityPublish .am-body-wrap .container .top .arrow {
+  position: absolute;
+  width: 36px;
+  height: 44px;
+  top: 0;
+  right: 0;
+  background: url(img/withDraw-arrow.png) no-repeat center center;
+  background-size: 9px 15px;
+}
+.page-communityPublish .am-body-wrap .container .top .tip,
+.page-communityPublish .am-body-wrap .container .top .tags {
+  position: absolute;
+  height: 44px;
+  left: 60px;
+  right: 36px;
+  top: 0;
+  overflow: hidden;
+}
+.page-communityPublish .am-body-wrap .container .top .tip {
+  font-size: 13px;
+  color: #939393;
+  text-align: right;
+  line-height: 44px;
+}
+.page-communityPublish .am-body-wrap .container .top .tags {
+  font-size: 0;
+  text-align: right;
+}
+.page-communityPublish .am-body-wrap .container .top .tags p {
+  display: inline-block;
+  vertical-align: top;
+  font-size: 12px;
+  background-color: #2dbd84;
+  color: #fff;
+  height: 24px;
+  line-height: 24px;
+  border-radius: 3px;
+  margin-left: 5px;
+  margin-top: 10px;
+  padding: 0 3px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.page-communityPublish .am-body-wrap .container .bottom {
+  padding: 0 13px;
+}
+.page-communityPublish .am-body-wrap .container .bottom .title {
+  display: block;
+  width: 100%;
+  height: 44px;
+  font-size: 17px;
+  color: #222;
+  line-height: 44px;
+  padding: 10px 0;
+  font-weight: bold;
+  border-bottom: 1px solid #f7f7f7;
+}
+.page-communityPublish .am-body-wrap .container .bottom .title::-webkit-input-placeholder {
+  color: #999;
+}
+.page-communityPublish .am-body-wrap .container .bottom .title:focus::-webkit-input-placeholder {
+  opacity: 0;
+}
+.page-communityPublish .am-body-wrap .container .bottom .textarea {
+  margin-top: 13px;
+  border: none;
+  width: 100%;
+  height: 220px;
+  line-height: 20px;
+  padding-bottom: 13px;
+  font-size: 14px;
+  color: #222;
+}
+.page-communityPublish .am-body-wrap .container .bottom .textarea::-webkit-input-placeholder {
+  color: #cecece;
+}
+.page-communityPublish .am-body-wrap .container .bottom .textarea:focus::-webkit-input-placeholder {
+  opacity: 0;
+}
+.page-communityPublish .am-body-wrap .container .bottom .photos {
+  padding-bottom: 13px;
+  font-size: 0;
+}
+.page-communityPublish .am-body-wrap .container .bottom .photos .photo {
+  width: 62px;
+  height: 62px;
+  border: 1px dashed #dcdcdc;
+  display: inline-block;
+  text-align: center;
+  line-height: 65px;
+  font-size: 24px;
+  margin: 13px 13px 0 0;
+  position: relative;
+}
+.page-communityPublish .am-body-wrap .container .bottom .photos .photo img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+}
+.page-communityPublish .am-body-wrap .container .bottom .photos .photo .del {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+  color: #d1d1d1;
+  text-align: center;
+  line-height: 16px;
+  top: -6px;
+  right: -6px;
+  background-color: #fff;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.page-communityPublish .mask {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9;
+  display: none;
+}

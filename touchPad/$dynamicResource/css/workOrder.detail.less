@@ -1,0 +1,146 @@
+//工单详情
+#workOrderDetail {
+    text-align: center;
+    z-index: 2;
+    .mr20 {
+        margin-right: 20px;
+    }
+    .inner {
+        z-index: 1;
+        width: 700px;
+        margin-left: -360px;
+        margin-top: -277px;
+        padding: 20px;
+        .close {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            width: 35px;
+            height: 35px;
+            &::before {
+                content: "";
+                display: block;
+                width: 15px;
+                height: 15px;
+                margin: 10px;
+                background: url(../images/icons_sprite/close_employee.png) no-repeat 0px 0px;
+                background-size: 15px 15px;
+            }
+        }
+        .title {
+            line-height: 19px;
+            h2 {
+                color: #222;
+                font-size: 16px;
+                width: 625px;
+                text-align: center;
+                margin: 0 auto;
+                line-height: 22px;
+                word-break: break-all;
+                word-wrap: break-word;
+                overflow: hidden;
+            }
+            .info {
+                height: 12px;
+                margin-top: 12px;
+                span {
+                    font-size: 12px;
+                    color: #999;
+                }
+            }
+        }
+        .content {
+            height: 340px;
+            position: relative;
+            top: 20px;
+            padding: 0;
+            overflow: hidden;
+            border-top: 1px solid #ececec;
+            .listBox {
+                width: 100%;
+                // height: 100%;
+                position: absolute;
+                top: 0;
+                left: 0;
+                bottom: 0;
+            }
+            ul.list {
+                & > li {
+                    display: block;
+                    padding: 16px 0;
+                    overflow: hidden;
+                    text-align: left;
+                    border-bottom: 1px solid #ececec;
+                    .img {
+                        width: 35px;
+                        height: 35px;
+                        float: left;
+                        color: #fff;
+                        font-size: 12px;
+                        background: #555;
+                        border-radius: 50%;
+                        line-height: 35px;
+                        margin-right: 18px;
+                        text-align: center;
+                        vertical-align: middle;
+                        &.red {
+                            background: #e82742;
+                        }
+                    }
+                    .info {
+                        float: left;
+                        width: calc(~"100%" - 60px);
+                        .title-info {
+                            color: #999;
+                            font-size: 12px;
+                        }
+                        .content-info {
+                            color: #222;
+                            font-size: 15px;
+                            margin-top: 5px;
+                        }
+                        .imgs {
+                            margin-top: 14px;
+                            ul {
+                                li {
+                                    width: 85px;
+                                    height: 85px;
+                                    background: #ececec;
+                                    margin-right: 10px;
+                                    margin-bottom: 10px;
+                                    float: left;
+                                    img {
+                                        display: block;
+                                        width: 100%;
+                                        height: 100%;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .footer {
+            background: #fff;
+            height: 110px;
+            bottom: -110px;
+            &.footer-solve {
+                .btn {
+                    background: #555;
+                    border-radius: 3px;
+                    width: 221px;
+                    height: 44px;
+                    color: #fff;
+                    font-size: 15px;
+                    border: 0;
+                }
+                .foot-info {
+                    margin-top: 16px;
+                    color: #999;
+                    font-size: 12px;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,324 @@
+@import "var.less";
+@path:"../images/";
+@import "../images/login_sprite.less";
+.boxSinzig{
+	box-sizing: border-box;
+	-webkit-box-sizing:border-box;
+}
+.borderRadius(@num){
+	border-radius:@num;
+	-webkit-border-radius:@num;
+}
+.page_login{
+	.login_bg{
+		.abs(0,0,0,0);
+		z-index: -1;
+	}
+	.login_box{
+		width: 406px;
+		padding-top: 20px;
+		/*margin-left: -203px;
+		.abs(@top:50px,@left:50%);*/
+		margin: 0 auto;
+		.logo{
+			width: 98px;
+			height:98px;
+			margin:0 auto;
+			// background: @login_logo_png no-repeat @login_logo_png_pos;
+			// background-size: @login_logo_png_size;
+			border-radius: 50px;
+			img{
+				width: 100%;
+				border-radius: 50px;
+				display: none;
+			}
+			&.mgj{
+				background:#FFF url('@{path}logo1.png') no-repeat center center;
+				background-size: 90px 90px;
+			}
+		}
+		.words{
+			width: 213px;
+			height:50px;
+			margin:0 auto;
+			background: @login_words_png no-repeat @login_words_png_pos;
+			background-size: @login_words_png_size;
+			margin-top:5px;
+		}
+		.formbox{
+			width: 100%;
+			height:354px;
+			.boxSinzig;
+			background: @c01;
+			.borderRadius(10px);
+			margin-top: 25px;
+			padding: 28px;
+			&.changeLogin{
+				.inputList{
+					display: none;
+				}
+				.codeLogin{
+					display: block;
+				}
+			}
+			.title{
+				text-align: right;
+				span{
+					display:inline-block;
+
+					&.title_icon{
+						width:50px;
+						height:50px;
+						background: @right_icon2_png no-repeat @right_icon2_png_pos;
+						background-size: @right_icon2_png_size;
+						&.codeIcon{
+							width:50px;
+							height:50px;
+							background: @right_icon1_png no-repeat @right_icon1_png_pos;
+							background-size: @right_icon1_png_size;
+						}
+					}
+					&.title_words{
+						width: 125px;
+						height:30px;
+						line-height: 30px;
+						text-align: center;
+						cursor: pointer;
+						background-color: @bg06;
+						padding: 0 2px;
+						vertical-align: middle;
+						margin-top:15px;
+						vertical-align: top;
+						position: relative;
+						color:@c03;
+						font-size: @fs2;
+						&:after{
+							content:"";
+							position: absolute;
+							width:0;
+						    height:0;
+						    border-width:4px 0 5px 5px;
+						    border-style:solid;
+						    border-color:transparent transparent transparent @bg06;/*透明 透明 透明 灰*/
+						    top:12px;
+						    right:-4px;
+						}
+					}
+				}
+			}
+			.inputList{
+				.boxSinzig;
+				padding:0 14px;
+				width: 100%;
+				margin-top: 14px;
+				*{
+					.boxSinzig;
+				}
+				.ty_inputbox{
+					height:50px;
+					width: 100%;
+					margin:14px 0;
+					border:1px solid @bd03;
+					.borderRadius(3px);
+					.ty_input_ico{
+						width: 50px;
+						height:50px;
+						display: block;
+						float: left;
+						&.username_ico{
+							i{
+								margin:0 auto;
+								width: 29px;
+								height:20px;
+								margin-top: 10px;
+								background: @user_icon_png no-repeat @user_icon_png_pos;
+								background-size: @user_icon_png_size;
+								display: block;
+							}
+						}
+						&.password_ico{
+							i{
+								margin:0 auto;
+								width: 16px;
+								height:16px;
+								margin-top: 16px;
+								background: @password_ico_png no-repeat @password_ico_png_pos;
+								background-size: @password_ico_png_size;
+								display: block;
+							}
+						}
+					}
+					input{
+						width: 270px;
+						height:100%;
+						border:0;
+						display: block;
+						float: right;
+						color: @c02;
+						font-size: @fs1;
+					}
+				}
+				.tybutton{
+					.borderRadius(3px);
+					height:50px;
+					width: 100%;
+					margin-top: 14px;
+					text-align: center;
+					background-color:@bg03;
+					color: @c01;
+					line-height: 50px;
+					font-size: @fs4;
+					cursor: pointer;
+				}
+				.remind{
+					height:30px;
+					line-height: 30px;
+					text-align: center;
+					color:@c03;
+					font-size: @fs2;
+					margin-top: 26px;
+				}
+			}
+			.codeLogin{
+				display: none;
+				margin-top:20px;
+				.code{
+					width: 180px;
+					height:180px;
+					margin: 0 auto;
+
+					img{
+						border: 0;
+						width: 100%;
+						height:100%;
+					}
+				}
+				.word{
+					text-align: center;
+					margin-top:15px;
+					font-size: @fs1;
+					color: @c02;
+				}
+			}
+		}
+	}
+	.foot{
+		/*.abs(@bottom:45px;@left: 0;@right: 0);*/
+		padding-top: 20px;
+		text-align: center;
+		color: @c06;
+	}
+}
+body{
+	&.loginBg{
+		background: url("@{path}login_bg.jpg") no-repeat;
+		background-size: cover;
+	}
+	.page_login{
+		background: none;
+	}
+}
+#loading_out{
+	display: none;
+	.wrapper{
+		position: fixed;
+		display: -webkit-box;
+		-webkit-box-pack: center;
+		-webkit-box-align: center;
+		top: 0;
+		left: 75px;
+		right: 0;
+		bottom: 0;
+		background: rgba(255,255,255,1);
+		z-index: 999;
+		.loginout-inner{
+			display: -webkit-box;
+			-webkit-box-pack: center;
+			-webkit-box-align: center;
+			position: relative;
+			color: #fff;
+			min-width: 100px;
+			padding-top: 55px;
+			.loading{
+				width: 82px;
+				height:47px;
+				background: url(../images/login_out.png) no-repeat;
+				background-size:100% 100%;
+				position: absolute;
+				left:50%;
+				margin-left:-41px;
+				top:0
+
+			}
+			.text{
+				ul{
+					margin:0 auto;
+					li{
+						display: block;
+						width: 8px;
+						height:8px;
+						float: left;
+						margin:0 6px;
+						background-color: #ddd;
+						.borderRadius(50%);
+						&:nth-child(1){
+							-webkit-animation:animation-loginout 1.2s ease-out 0s infinite;
+						}
+						&:nth-child(2){
+
+							-webkit-animation:animation-loginout 1.2s ease-out 0.3s infinite;
+						}
+						&:nth-child(3){
+
+							-webkit-animation:animation-loginout 1.2s ease-out 0.6s infinite;
+						}
+					}
+				}
+			}
+		}
+	}
+
+}
+.isios{
+	#loading_out{
+		top:20px;
+	}
+}
+
+@-webkit-keyframes animation-loginout {
+    0% {
+    	background-color: #dedede;
+    }
+    50%{
+		background-color: #bebebe;
+    }
+    100% {
+    	background-color: #787878;
+    }
+}
+@-webkit-keyframes animation-loginout1 {
+    0% {
+
+    	background-color: #bebebe;
+    }
+    50%{
+
+		background-color: #787878;
+    }
+    100% {
+    	background-color: #dedede;
+    }
+}
+@-webkit-keyframes animation-loginout2 {
+    0% {
+    	background-color: #dedede;
+
+    }
+    50%{
+		background-color: #bebebe;
+
+    }
+    100% {
+    	background-color: #787878;
+    }
+}

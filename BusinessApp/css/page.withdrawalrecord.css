@@ -1,0 +1,66 @@
+.page-withdrawalrecord .am-body-inner {
+  background: #f3f3f3;
+}
+.page-withdrawalrecord li{
+  height: 40px;
+  padding: 10px;
+  border-bottom: 1px solid #F0EFEF;
+  background-color: #fff;
+}
+.page-withdrawalrecord li .left{
+  float: right;
+}
+.page-withdrawalrecord li .left .custname,
+.page-withdrawalrecord li .left .wechatbg{
+  display: inline-block;
+  vertical-align: middle;
+}
+.page-withdrawalrecord li .left .custname{
+    font-size: 16px;
+    color: #000;
+}
+.page-withdrawalrecord li .left .wechatbg{
+  width: 17px;
+  height: 17px;
+  background: url(img/wechatbg.png) no-repeat 2px 3px;
+  background-size: 80% 80%;
+  margin-left: 4px;
+}
+.page-withdrawalrecord li .left .timep{
+  font-size: 12px;
+  color: #999999;
+  line-height: 40px;
+}
+.page-withdrawalrecord li .right{
+  float: left;
+}
+.page-withdrawalrecord li .right .r_money{
+    font-size: 17px;
+}
+.page-withdrawalrecord li .right .r_intro{
+    font-size: 12px;
+}
+.page-withdrawalrecord li .right .r_intro.red{
+    color: red;
+}
+.page-withdrawalrecord li .right .r_intro.green{
+    color: #3bc55f;
+}
+.page-withdrawalrecord li .right .r_intro.grey{
+  color: #999999;
+}
+
+.page-withdrawalrecord li.emptyli{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    margin-top: 0;
+    padding-top: 55px;
+    text-align: center;
+    font-size: 12px;
+    color: #ccc;
+    background: url(img/marketingempty.png) no-repeat center 4px;
+    background-size: 53px 42px;
+    border-bottom:none;
+}
