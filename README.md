@@ -1,39 +1,16 @@
-# touchpad
+# APP
 
 #### 项目介绍
-{**以下是码云平台说明，您可以替换为您的项目简介**
-码云是开源中国推出的基于 Git 的代码托管平台（同时支持 SVN）。专为开发者提供稳定、高效、安全的云端软件开发协作平台
-无论是个人、团队、或是企业，都能够用码云实现代码托管、项目管理、协作开发。企业项目请看 [https://gitee.com/enterprises](https://gitee.com/enterprises)}
+小掌柜APP和生意宝APP，此项目使用chrome跨域请求
 
 #### 软件架构
-软件架构说明
-
-
-#### 安装教程
-
-1. xxxx
-2. xxxx
-3. xxxx
+基于jq的am.js框架，封装单页应用生命周期，组件化开发，
+所有组件全部获取封装到全局对象am内,比如:am.page代表页面,am.isNull代表方法，am.metadata代表数据对象等
 
 #### 使用说明
-
-1. xxxx
-2. xxxx
-3. xxxx
-
-#### 参与贡献
-
-1. Fork 本项目
-2. 新建 Feat_xxx 分支
-3. 提交代码
-4. 新建 Pull Request
-
-
-#### 码云特技
-
-1. 使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2. 码云官方博客 [blog.gitee.com](https://blog.gitee.com)
-3. 你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解码云上的优秀开源项目
-4. [GVP](https://gitee.com/gvp) 全称是码云最有价值开源项目，是码云综合评定出的优秀开源项目
-5. 码云官方提供的使用手册 [http://git.mydoc.io/](http://git.mydoc.io/)
-6. 码云封面人物是一档用来展示码云会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+5大钩子函数：
+1.init() 同步方法，在浏览器reload之后第一个钩子
+2.beforeShow() 异步加载，在页面刚进入时响应数据
+3.afterShow() 页面全部载入完毕，更新数据
+4.beforeHide() 页面点击退出跳转时响应
+5.afterHide() 页面完全退出后最后响应 
