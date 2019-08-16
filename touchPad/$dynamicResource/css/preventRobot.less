@@ -1,0 +1,79 @@
+@import "var.less";
+@path: "../images/";
+@import "../images/icons_sprite.less";
+#preventRobot{
+    z-index: 9999;
+    .wrapper {
+        background: #ffffff;
+        width:400px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        background: #ffffff;
+        border-radius: 5px;
+        transform: translate(-50%, -50%);
+        .title {
+            font-size: 16px;
+            line-height: 48px;
+            height: 48px;
+            padding: 0px 1rem;
+            color: rgb(85, 85, 85);
+            font-weight: normal;
+        }
+        .close {
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 35px;
+            height: 35px;
+            &::before {
+                content: "";
+                display: block;
+                width: 15px;
+                height: 15px;
+                margin: 10px;
+                background: @close_employee_png no-repeat @close_employee_png_pos;
+                background-size: @close_employee_png_size;
+            }
+        }
+        .content{
+            border-top: 1px solid rgb(238, 238, 238);
+            border-bottom: 1px solid rgb(238, 238, 238);
+            padding: 16px;
+            .tip {
+                font-size: 16px;
+                line-height: 24px;
+            }
+            .code{
+                width: 205px;
+                height: 36px;
+                border-radius: 2px;
+                border: solid 1px #dedede;
+                font-size :16px;
+                padding: 0 10px;
+            }
+            .codeImg{
+                position:relative;
+                top: 14px;
+                left: 24px;
+                height: 38px;
+                width: 88px;
+            }
+        }
+        .footer {
+            height: 48px;
+            .btn {
+                line-height: 48px;
+                text-align: center;
+                font-size: 18px;
+                width: 50%;
+                float: left;
+                box-sizing: border-box;
+                -webkit-box-sizing: border-box;
+                &:first-child{
+                    border-right: 1px solid rgb(238, 238, 238);
+                }
+            }
+        }
+    }
+}

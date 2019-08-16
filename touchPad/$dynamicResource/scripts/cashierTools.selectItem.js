@@ -50,7 +50,7 @@ am.selectItem = {
 					isNeedAdd = false;
 				}
 			}
-			if(isNeedAdd){
+			if(isNeedAdd && data.price!=null){
 				list.unshift({
 					name:"默认",
 					price:data.price

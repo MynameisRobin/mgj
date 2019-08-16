@@ -79,7 +79,7 @@
             line-height: 50px;
             text-align: center;
             font-size: 0px;
-            margin-bottom: 100px;
+            margin-bottom: 50px;
             .header_title{
                 font-size: 33px;
                 color:#333333;
@@ -113,22 +113,27 @@
                     &.selected{
                         .icon_wrap{
                             background-color: #ffbd3e;
-                            i{
-                                color:#fff;
+                            .corner{
+                                fill: #fff;
                             }
                         }
                     }
                     .icon_wrap{
                         width:140px;
                         height:140px;
-                        line-height: 140px;
+                        position: relative;
                         border-radius: 50%;
                         background-color: #f6f6f6;
-                        i{
+                        .corner{
                             font-size: 90px;
                             width:96px;
                             height:96px;
-                            color:#ffbd3e;
+                            fill:#ffbd3e;
+                            position: absolute;
+                            top:50%;
+                            left:50%;
+                            margin-top: -48px;
+                            margin-left: -48px;
                         }
                     }
                     p{
@@ -138,9 +143,37 @@
                     }
                 }
             }
+            .settlementComment {
+                display: none;
+                text-align: center;
+                h2 {
+                    margin-top: 50px;
+                    margin-bottom: 30px;
+                    color: #999;
+                    font-size: 16px;
+                }
+                .commentP {
+                    color: #222;
+                    font-size: 16px;
+                    margin-bottom: 30px;
+                }
+                .labelS {
+                    span {
+                        display: inline-block;
+                        width: 136px;
+                        height: 42px;
+                        line-height: 42px;
+                        color: #999;
+                        font-size: 16px;
+                        text-align: center;
+                        background:rgb(245,245,245);
+                        border-radius: 21px;
+                    }
+                }
+            }
         }
         .wrap_footer{
-            margin-top:110px;
+            margin-top:50px;
             font-size: 0px;
             .cancel_comment{
                 height: 45px;

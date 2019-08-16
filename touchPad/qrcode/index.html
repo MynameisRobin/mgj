@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>小程序二维码</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+        }
+        .clearfix:after {
+            content: ".";
+            display: block;
+            height: 0;
+            visibility: hidden;
+            clear: both;
+        }
+        html, body {
+            width: 100%;
+            height: 100%;
+        }
+        .container {
+            position: relative;
+            font-size: 0;
+            width: 100%;
+            padding-bottom: 141.51%;
+            background: #fff;
+        }
+        .wrap {
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+        }
+        .item {
+            width: 50%;
+            height: 50%;
+            display: inline-block;
+            position: relative;
+        }
+        .item.small {
+            width: 33.33%;
+            height: 33.33%;
+        }
+        .bg {
+            width: 100%;
+            transform: scale(0.9);
+            border: 1px solid #ccc;
+        }
+        .preview {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+            display: none;
+        }
+        .border {
+            border: 1px solid #ccc;
+        }
+        .border:last-child {
+            border: none;
+        }
+        .info {
+            position: absolute;
+            width: 100%;
+            font-size: 14px;
+            color: #fff;
+            text-align: center;
+            z-index: 9;
+        }
+        .small .info {
+            font-size: 12px;
+        }
+        .info.d {
+            top: 11%;
+            color: #222;
+        }
+        .info.e {
+            top: 80%;
+        }
+        .info.f {
+            top: 10%;
+            color: #683987;
+        }
+        .code {
+            position: absolute;
+            width: 240%;
+            z-index: 9;
+            left: 50%;
+            margin-left: -120%;
+            border-radius: 50%;
+            overflow: hidden;
+            top: 0;
+        }
+        canvas {
+            background: #fff;
+        }
+        .code.d {
+            top: 24.5%;
+        }
+        .code.e {
+            top: 39.5%;
+        }
+        .code.f {
+            top: 29%;
+        }
+        .loading {
+            position: fixed;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            background: #fff;
+            z-index: 99;
+        }
+        .loading-inner {
+            position: absolute;
+            width: 80%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            -webkit-transform: translate(-50%,-50%);
+            padding-top: 10px;
+            border-radius: 5px;
+        }
+        .loadingImg {
+            width: 64px;
+            height: 64px;
+            background: url(../qrcode/images/loadingnew.gif);
+            background-size: 100% 100%;
+            margin: 0 auto;
+        }
+        .loadingText {
+            font-size: 12px;
+            color: #222;
+            text-align: center;
+            line-height: 30px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="wrap">
+            <div class="item"><img class="bg"><p class="info"></p><div class="code"></div></div>
+        </div>
+    </div>
+    <div class="border"></div>
+
+    <div class="loading">
+        <div class="loading-inner">
+            <div class="loadingImg"></div>
+            <div class="loadingText">二维码生成中......</div>
+        </div>   
+    </div>
+    
+    <script src="../qrcode/js/jquery-2.1.4.min.js"></script>
+    <script src="../qrcode/js/html2canvas.min.js"></script>
+
+    <script>
+
+        $(document).ready(function () {
+            function GetQueryString(name) {
+                var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+                var r = decodeURIComponent(window.location.search).substr(1).match(reg);//search,查询？后面的参数，并匹配正则
+                if(r!=null)return  unescape(r[2]); return null;
+            }
+
+            var opt = GetQueryString('opt').split('_');
+            window.config = {
+                gateway: opt[9]
+            }
+        
+            function getQrCode (areaid,id) {
+                var url = window.config.gateway+"mgj-cashier/comment/qrCode?" + $.param({
+                    parentShopId: opt[6],
+                    token: opt[8],
+                    tenantId: opt[6],
+                    page: 'pages/mine/index',
+                    scene: 'settlement@'+opt[7]+'_'+areaid+'_'+id
+                });
+                return url;
+            }
+
+            var pageSize = 4;
+            var $container = $('.container');
+            if(opt[10]==1){
+                pageSize = 9;
+                $container.find('.item').addClass('small');
+            }
+            var $item = $container.find('.item');
+            var WIDTH = $item.find('.code').outerWidth();
+            $item.remove();
+            $container.remove();
+            var $border = $('.border').remove();
+
+            code();
+
+            function code(){    
+                var isAll = opt[1];
+                var setting = [];
+                if(isAll=='false'){
+                    setting.push({
+                        areaid: opt[2],
+                        spaceName: opt[3],
+                        id: opt[4],
+                        seatName: opt[5]
+                    });
+                    render(setting);
+                }else {
+                    var option = {
+                        parentShopId: opt[6],
+                        shopId: opt[7],
+                        token: opt[8]
+                    }
+                    $.ajax({
+                        url: window.config.gateway+'mgj-cashier/setting/getTables?parentShopId='+opt[6],
+                        type: "post",
+                        data: JSON.stringify(option),
+                        dataType: "json",
+                        contentType: "application/json",
+                        success: function(ret) {
+                            if(ret && ret.code==0){
+                                if(ret.content && ret.content.length){
+                                    for(var i=0;i<ret.content.length;i++){
+                                        ret.content[i].seats.sort(function(a,b){
+                                            return a.sort - b.sort;
+                                        })
+                                        for(var j=0;j<ret.content[i].seats.length;j++){
+                                            var seat = ret.content[i].seats[j];
+                                            if(seat.status){
+                                                setting.push({
+                                                    areaid: seat.areaid,
+                                                    spaceName: ret.content[i].name,
+                                                    id: seat.id,
+                                                    seatName: seat.tablename
+                                                });
+                                            }
+                                        }
+                                    }
+                                    render(setting);
+                                }
+                            }else {
+
+                            }
+                        },
+                        error: function() {
+                            
+                        }
+                    });
+                }
+            }
+
+            function render(setting){
+                var result = []; 
+                fn(0);
+                function fn(i){
+                    if(i<Math.ceil(setting.length/pageSize)){
+                        var arr = setting.slice(i*pageSize,i*pageSize+pageSize);
+                        if(arr.length){
+                            var container = $container.clone(true,true);
+                            fn2(0);
+                            function fn2(j){
+                                if(j<arr.length){
+                                    var item = $item.clone(true,true);
+                                    var src = getQrCode(arr[j].areaid,arr[j].id);
+                                    var style = getStyle();
+                                    item.find('.bg').attr('src','../qrcode/images/'+ style +'.png');
+                                    item.find('.info').text(arr[j].spaceName+'-'+arr[j].seatName).addClass(style);
+                                    container.find('.wrap').append(item);
+                                    var img = new Image();
+                                    img.src = src;
+                                    img.onload = function(){
+                                        var canvas = document.createElement("canvas");
+                                        var ctx = canvas.getContext("2d");
+                                        ctx.canvas.width = WIDTH;
+                                        ctx.canvas.height = WIDTH;
+                                        ctx.drawImage(img, 10, 10, WIDTH-20, WIDTH-20);
+                                        ctx.restore();
+                                        item.find('.code').append($(canvas));
+                                        item.find('.code').addClass(style);
+                                        item.find('.code').css({
+                                            'width': WIDTH/5 + 'px',
+                                            'height': WIDTH/5 + 'px',
+                                            'margin-left': -WIDTH/10 + 'px'
+                                        });
+                                        item.find('canvas').css({
+                                            'width': WIDTH/5 + 'px',
+                                            'height': WIDTH/5 + 'px',
+                                        });
+                                        j++;
+                                        fn2(j);
+                                    }   
+                                }else {
+                                    $('body').append(container);
+                                    draw(container,function(url){
+                                        result.push(url);
+                                        $('body').find('.container').remove();
+                                        i++;
+                                        fn(i);
+                                    });
+                                } 
+                            }
+                        }
+                    }else {
+                        console.log(result)
+                        for(var i=0;i<result.length;i++){
+                            $('body').append('<img style="width:100%" src="'+result[i]+'">');
+                            $('body').append($border.clone(true,true));
+                        }
+                        $('.loading').hide(function(){
+                            alert('二维码生成完成，请长按图片，打印切割后张贴到镜台适当位置。');
+                        });
+                        
+                    }
+                }
+            }
+            
+            function getStyle(){
+                var style = '';
+                if(opt[0] == '0') {
+                    style = 'd';
+                }else if(opt[0] == '1') {
+                    style = 'e';
+                }else {
+                    style = 'f';
+                }
+                return style;
+            }
+
+            function draw($dom,callback){
+                var content = $dom[0];
+                var width = content.offsetWidth;
+                var height = content.offsetHeight;
+                var canvas = document.createElement("canvas");
+                var scale = 5;
+                canvas.width = width * scale;
+                canvas.height = height * scale;
+                canvas.getContext("2d").scale(scale, scale);
+                html2canvas(content, {
+                    scale: scale,
+                    canvas: canvas,
+                    // logging: true,
+                    width: width,
+                    height: height,
+                    useCORS: true,
+                    onrendered: function(canvas) {
+                        var url = canvas.toDataURL();
+                        callback && callback(url);
+                    }    
+                })
+            }
+        })
+    </script>
+</body>
+</html>

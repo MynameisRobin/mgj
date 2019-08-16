@@ -10,7 +10,7 @@
                 $: this.$,
                 tab: false,
                 filter: false,
-				itemWidth:228,
+				itemWidth:238,
                 onSelect: function(data) {
                     return _this.billMain.addItem(data);
                 },
@@ -71,7 +71,7 @@
                     }
 
 					if(data.cardtype==1){
-						$tr.append('<td class="center"><span class="price bonus am-clickable '+p+'">'+_this.getBonusRule(data,_price)+'</span></td>');
+						$tr.append('<td class="center"><span class="price bonus am-clickable '+p+'">'+_this.getBonusRule(data,_price,1)+'</span></td>');
 					}else{
 						$tr.append('<td class="center">--</td>');
 					}
@@ -111,7 +111,7 @@
 								totalPrice = data.price;
 								$price.eq(0).text(toFloat(data.price));
 							}
-							var bonus = _this.getBonusRule(data,totalPrice);
+							var bonus = _this.getBonusRule(data,totalPrice,1);
 							//改价格
 							$tr.find(".bonus").text(toFloat(bonus));
 						}
@@ -161,7 +161,8 @@
 						$.am.changePage(self, "slidedown",{
 						   member:item
 					   });
-					}
+					},
+					notNeedWaiting: 1
 				});
 			});
 
@@ -203,13 +204,41 @@
             });
 		},
 		beforeShow : function(paras) {
-			this.isCheck=false;
 			var _this=this;
+			if(paras && paras.afterRecharge && this.member){
+				var afterRecharge = paras.afterRecharge;
+				if(afterRecharge.memId){
+					//自动升级
+					am.searchMember.getMemberById(afterRecharge.memId,afterRecharge.cid,function(card){
+						if(card){
+							_this.setMember(card);
+						}
+					});
+				}
+				// else {
+				// 	//手动升级
+				// 	this.member.balance += paras.afterRecharge.cardFee;
+				// 	this.member.gift += paras.afterRecharge.presentFee;
+				// 	if(afterRecharge.upgradeCard){
+				// 		this.member.cardName = afterRecharge.upgradeCard.cardName;
+				// 		this.member.discount = afterRecharge.upgradeCard.discount;
+				// 		this.member.buydiscount = afterRecharge.upgradeCard.buydiscount;
+				// 	}
+				// 	this.setMember(this.member,null);
+				// }
+				return;
+			}
+			this.isCheck=false;
 			am.tab.main.show().select(3);
 			if(!paras) this.billRemark = null;
             if(paras=="back"){
                 return;
-            }else if(paras && paras.member){
+            }else if(paras && paras.hasOwnProperty("member")){
+				if(am.isNull(paras.member)){
+					this.member = null;
+					this.$member.html('<span class="tag">顾客:</span>散客').prev().hide();	
+					return false;
+				}
                 this.setMember(paras.member);
                 setTimeout(function(){
                     am.tips.details( am.page.memberCard.billMain.$.find(".member"), am.page.memberCard.billMain.$.find('.memberInfoBtn') );
@@ -218,12 +247,17 @@
                 //客户详情，重新选卡
                 this.setMember(am.convertMemberDetailToSearch(paras.cardData));
             }else if (am.metadata) {
+				var employeeList = am.metadata.employeeList || [];
+				if(am.metadata.configs && am.metadata.configs['EMP_SORT']){
+					employeeList = JSON.parse(am.metadata.configs['EMP_SORT']);
+					employeeList = am.getConfigEmpSort(employeeList);
+				}
                 this.billItemSelector.dataBind(this.processData(am.metadata.cardTypeList));
-                this.billServerSelector.dataBind(am.metadata.employeeList,["销售"]);
+                this.billServerSelector.dataBind(employeeList,["销售"]);
 
                 this.billItemSelector.reset();
                 this.billServerSelector.reset();
-				this.billMain.defaultSetting = am.page.product.getServerDefultSetting(am.metadata.employeeList);
+				this.billMain.defaultSetting = am.page.product.getServerDefultSetting(employeeList);
                 this.billMain.reset();
 				this.selectedServer = null;
 				this.selectCard = null;
@@ -252,7 +286,7 @@
                         _this.setMember(card);
                     }
                 });
-                //渲染疗程
+                //渲染套餐
                 this.renderFeedRemark(_data);
             }else{
 				if(paras && !paras.member){
@@ -313,15 +347,14 @@
 		},*/
 		setMember:function(member,pass){
 			var _this=this;
-            // if(!pass){
-            //     // am.pw.check(member,function(verifyed){
-            //     //     if(verifyed){
-            //     //         _this.setMember(member,1);
-			// 	// 	}
-            //     // });
-            //     // return;
-            //     _this.setMember(member,1);
-            // }
+			// if(!pass && amGloble.metadata.configs.typePasswordtToSelectMember == 'true'){
+			// 	am.pw.check(member,function(verifyed){
+			// 		if(verifyed){
+			// 			_this.setMember(member,1);
+			// 		}
+			// 	});
+			// 	return;
+			// }
 			this.member = member;
 
 			var cardName = this.member.cardName;
@@ -335,8 +368,17 @@
 			this.$member.find('.img').html(am.photoManager.createImage("customer", {
 				parentShopId: am.metadata.userInfo.parentShopId,
 				updateTs: member.lastphotoupdatetime || ""
-			}, member.id + ".jpg", "s"));
-
+			}, member.id + ".jpg", "s",member.photopath||''));
+            if(member.mgjIsHighQualityCust == 1){
+                this.$member.find('.img').addClass("good");
+            }else{
+                this.$member.find('.img').removeClass("good");
+			}
+			if(am.isMemberLock(member.lastconsumetime || member.lastConsumeTime, member.locking)){
+                this.$member.find('.img').addClass("lock");
+			}else{
+                this.$member.find('.img').removeClass("lock");
+			}
 			cashierDebt.check(member);
 		},
 		processData:function(types){
@@ -355,31 +397,49 @@
 					price:types[i].openmoney,
 					bonusRule:types[i].bonusRule,
 					cardtypeid:types[i].cardtypeid,
-					img:"$dynamicResource/images/card"+(types[i].cardtype==1?(types[i].timeflag==2?3:1):2)+".png",
+					img:"$dynamicResource/images/card"+(types[i].cardtype==1?(types[i].timeflag==2?3:1):2)+".jpg",
 					mgj_minMoney:types[i].mgj_minMoney,
 					mgj_minRecharge:types[i].mgj_minRecharge,
 					mgj_mustPassword:types[i].mgj_mustPassword,
 					khflag:types[i].khflag,
 					costs:types[i].costs,
 					expirydate:types[i].expirydate,
-					allowkd:types[i].allowkd
+					allowkd:types[i].allowkd,
+					combinedUseFlag:types[i].combineduseflag
 				};
+				if(types[i].img){
+					type.img=config.filesMgr+'card/'+am.metadata.userInfo.parentShopId+'/'+types[i].img;
+				}
 				categorys.push(type);
 			}
 			return categorys;
 		},
-		getBonusRule:function(data,price){
+		getBonusRule: function (data, price, feeType) {
+			//开卡 feeType==1，  充值 feeType  == 2
 			var bonus = 0;
-			if(data.bonusRule && data.bonusRule.length){
+			if (data.bonusRule && data.bonusRule.length) {
 				var rules = data.bonusRule;
-				for(var i=0;i<rules.length;i++){
-					if(price>=rules[i].chargefee){
-						if(rules[i].pmodel == 0){
-							bonus = rules[i].pnumber;
-						}else if(rules[i].pmodel == 1){
-							bonus = Math.round(price*rules[i].pnumber)/100;
+				for (var i = 0; i < rules.length; i++) {
+					if (rules[i].feetype && feeType) {
+						// 开卡或充值
+						if (price * 1 >= rules[i].chargefee * 1 && feeType == rules[i].feetype) {
+							if (rules[i].pmodel == 0) {
+								bonus = rules[i].pnumber;
+							} else if (rules[i].pmodel == 1) {
+								bonus = Math.round(price * rules[i].pnumber) / 100;
+							}
+							break;
 						}
-						break;
+					} else {
+						// 老数据
+						if (price * 1 >= rules[i].chargefee * 1) {
+							if (rules[i].pmodel == 0) {
+								bonus = rules[i].pnumber;
+							} else if (rules[i].pmodel == 1) {
+								bonus = Math.round(price * rules[i].pnumber) / 100;
+							}
+							break;
+						}
 					}
 				}
 			}
@@ -389,7 +449,7 @@
 			var $tr = this.billMain.$list.find("tr");
 			var data = $tr.data("data");
 			var cardNo = this.$billNo.val();
-			if(!cardNo && !pass && data.khflag=="0"){//1、确认 后 提交
+			if(!cardNo && !pass && data&&data.khflag=="0"){//1、确认 后 提交
 				atMobile.nativeUIWidget.confirm({
 					caption: "卡号未输入",
 					description: "不输入系统将自动生成会员卡号，确定吗？",
@@ -421,7 +481,7 @@
                 memcardid:item.memcardid,
                 parentShopId:am.metadata.userInfo.parentShopId,
 				shopId:am.metadata.userInfo.shopId,
-				serviceNO:item.serviceNO || ""
+				serviceNO:item.serviceNOBak?item.serviceNOBak:(item.serviceNO?item.serviceNO:'')
             }, function(ret){
                 am.loading.hide();
                 if(ret && ret.code===0){
@@ -479,6 +539,7 @@
 				"invaliddate":invaliddate==="不限期" ? null:invaliddate.replace(/\//g,"-"),
 				"cardtypeid":data.cardtypeid,
 				"servers": [],
+				"combinedUseFlag": data.combinedUseFlag
 			};
 			/*if(this.selectedServer){
 				opt.card.servers.push({
@@ -515,40 +576,46 @@
             }
 
 			if(this.member){
-				if(this.member.shopId == am.metadata.userInfo.shopId){
-					opt.memId = this.member.id;
-	                opt.cardId = this.member.cid;
-					opt.gender = this.member.sex;
-					/*$.am.changePage(am.page.pay, "slideup", {
-		                comboitem: [],
-		                option: opt,
-		                member: this.member
-		            });*/
-					self.goto(opt,this.member,data.mgj_mustPassword,remarkCallback);
-				}else{
-					atMobile.nativeUIWidget.showMessageBox({
-                        title: "非本店会员",
-                        content: '此会员为其它门店会员，将自动为会员创建本店会员档案后继续开卡'
-                    });
-					am.page.addMember.submit="createMember";
-					am.page.addMember.setData({
-						name:this.member.name,
-						mobile:this.member.mobile,
-						sex:this.member.sex,
-						sourceId:3,
-						page:this.member.comment
-					},function(ret){
-						opt.memId = ret.id;
-                        opt.cardId = ret.cid;
-                        opt.gender = ret.sex;
-						/*$.am.changePage(am.page.pay, "slideup", {
-			                comboitem: [],
-			                option: opt,
-			                member: ret
-			            });*/
-						self.goto(opt,ret,data.mgj_mustPassword,remarkCallback);
-					});
-				}
+				// if(this.member.shopId == am.metadata.userInfo.shopId){
+					am.crossOpenCardNote.show({
+						member: this.member,
+						callback: function(){
+							opt.memId = self.member.id;
+							opt.cardId = self.member.cid;
+							opt.gender = self.member.sex;
+							/*$.am.changePage(am.page.pay, "slideup", {
+								comboitem: [],
+								option: opt,
+								member: self.member
+							});*/
+							self.goto(opt,this.member,data.mgj_mustPassword,remarkCallback);
+						}
+					})
+				// }
+				// else{
+				// 	atMobile.nativeUIWidget.showMessageBox({
+                //         title: "非本店会员",
+                //         content: '此会员为其它门店会员，将自动为会员创建本店会员档案后继续开卡'
+                //     });
+				// 	am.page.addMember.submit="createMember";
+				// 	am.page.addMember.setData({
+				// 		name:this.member.name,
+				// 		mobile:this.member.mobile,
+				// 		sex:this.member.sex,
+				// 		sourceId:3,
+				// 		page:this.member.comment
+				// 	},function(ret){
+				// 		opt.memId = ret.id;
+                //         opt.cardId = ret.cid;
+                //         opt.gender = ret.sex;
+				// 		/*$.am.changePage(am.page.pay, "slideup", {
+			    //             comboitem: [],
+			    //             option: opt,
+			    //             member: ret
+			    //         });*/
+				// 		self.goto(opt,ret,data.mgj_mustPassword,remarkCallback);
+				// 	});
+				// }
 			}else{
 				$.am.changePage(am.page.addMember, "slideup", {
 					onSelect:function(member){
@@ -601,6 +668,8 @@
 							am.loading.hide();
 							console.log(res);
 							if (res.code == 0) {
+								member.passwd = opt.passwd;
+								member.passwdNewSet = 1;
 								cb();
 							} else {
 								am.msg(res.message || "密码设置失败!");
@@ -613,4 +682,64 @@
 			}
 		}
 	});
+})();
+
+(function(){
+	var crossOpenCardNote = {
+		init: function(){
+			var _this = this;
+
+			this.$ = $('#crossOpenCardNote');
+
+			this.$.find('.close,.know').vclick(function(){
+				_this.hide();
+				_this.callback && _this.callback();
+			});
+
+			this.$.find('.nomore').vclick(function(){
+				localStorage.setItem('crossOpenCardNoteKnown'+amGloble.metadata.userInfo.userId,'true');
+				_this.hide();
+				_this.callback && _this.callback();
+			});
+
+			this.scrollview = new $.am.ScrollView({
+				$wrap : _this.$.find('.content'),
+				$inner : _this.$.find('.scroller'),
+				direction : [false, true],
+				hasInput: false
+			});
+
+			this.$.find('.tab .item').vclick(function(){
+				var index = $(this).index();
+				_this.changeTab(index);
+			});
+		},
+		show: function(opt){
+			this.member = opt.member;
+			this.callback = opt.callback;
+
+			var crossOpenCardNoteKnown = localStorage.getItem('crossOpenCardNoteKnown'+amGloble.metadata.userInfo.userId);
+			var crossOpenCardNoteTime = localStorage.getItem('crossOpenCardNoteTime'+amGloble.metadata.userInfo.userId);
+			if(this.member.shopId == am.metadata.userInfo.shopId || crossOpenCardNoteTime==new Date().format('yyyy-mm-dd') || crossOpenCardNoteKnown=='true' || new Date().getTime()>new Date('2018-12-25').getTime()){
+				this.callback && this.callback();
+			}else {
+				if(!this.$){
+					this.init();
+				}
+				this.$.show();
+				this.changeTab(0);
+				localStorage.setItem('crossOpenCardNoteTime'+amGloble.metadata.userInfo.userId,new Date().format('yyyy-mm-dd'));
+			}
+		},
+		hide: function(){
+			this.$.hide();
+		},
+		changeTab: function(index){
+			this.$.find('.tab .item').eq(index).addClass('selected').siblings().removeClass('selected');
+			this.$.find('.scroller .wrapper').eq(index).show().siblings().hide();
+			this.scrollview.refresh();
+			this.scrollview.scrollTo('top');
+		}
+	}
+	am.crossOpenCardNote = crossOpenCardNote;
 })();

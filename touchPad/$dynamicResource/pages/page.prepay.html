@@ -1,0 +1,383 @@
+<div class="am-page page_prepay am-full" id="page_prepay">
+    <div class="am-header">
+        <div class="am-backbutton iconfont icon-guanbi"></div>
+        <p>收款</p>
+    </div>
+    <div class="prepayContent">
+        <div class="prepay_wrap">
+            <div class="title">
+                <p class="subtitle"></p>
+                <p class="subtitle">合并收款</p>
+            </div>
+            <div class="input_box">
+                <input class="money_input" maxlength="30" disabled="true" isdisabled="1" placeholder="输入收款金额" type="text" />
+            </div>
+            <div class="remark">
+                <div class="addRemark">添加备注</div>
+                <div class="remarkContent"></div>
+            </div>
+            <div class="searchnumber_box">
+                <!--<div class="searchnumber">
+                    <table class="board" border="0" cellpadding="0" cellspacing="0">
+                        <tbody>
+                            <tr>
+                                <td width="75"><div class="am-clickable key" data-val="1">1</div></td>
+                                <td width="75"><div class="am-clickable key" data-val="2">2</div></td>
+                                <td width="75"><div class="am-clickable key" data-val="3">3</div></td>
+                                <td width="75"><div class="am-clickable rect delete" data-val="backspace"></div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="am-clickable key" data-val="4">4</div></td>
+                                <td><div class="am-clickable key" data-val="5">5</div></td>
+                                <td><div class="am-clickable key" data-val="6">6</div></td>
+                                <td><div class="am-clickable rect clean" data-val="clear"></div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="am-clickable key" data-val="7">7</div></td>
+                                <td><div class="am-clickable key" data-val="8">8</div></td>
+                                <td><div class="am-clickable key" data-val="9">9</div></td>
+                                <td><div class="am-clickable rect confirm" data-val="confirm"></div></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td><div class="am-clickable key" data-val="0">0</div></td>
+                                <td><div class="am-clickable key" data-val=".">.</div></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>  -->
+            </div>
+            <div class="prepay_btns">
+                <div class="alipay_prepay" id="alipayPrepay" class="am-clickable">
+                    <span class="alipay_icon">
+                            <svg class="icon" aria-hidden="true">
+                                    <use xlink:href="#icon-zhifubao1"></use>
+                                </svg>
+                    </span>
+                    <span class="alipay_text">支付宝</span>
+                </div>
+                <div class="wechat_prepay" id="wechatPrepay" class="am-clickable">
+                    <span class="wechat_icon"><svg class="icon" aria-hidden="true">
+                            <use xlink:href="#icon-weixin"></use>
+                        </svg></span>
+                    <span class="wechat_text">微信</span>
+				</div>
+				<div class="pos_prepay" id="posPrepay" class="am-clickable" style="display: none;">
+                    <span class="pos_icon"><svg class="icon" aria-hidden="true">
+                            <use xlink:href="#icon-yinlian1"></use>
+                        </svg></span>
+                    <span class="pos_text">银联</span>
+                </div>
+                <div class="pos_prepay" id="jdPrepay" class="am-clickable" style="display: none;">
+                    <span class="pos_icon"><svg class="icon" aria-hidden="true">
+                            <use xlink:href="#icon-bianzu"></use>
+                        </svg></span>
+                    <span class="pos_text">京东钱包</span>
+                </div>
+            </div>
+        </div>
+        <!-- <button id="alipayPrepay" class="am-clickable">支付宝</button>
+        <button id="wechatPrepay" class="am-clickable">微信</button> -->
+	</div>
+	
+    <div class="payDetail" id="posPrepayDetail" style="display: none;">
+        <div class="mask"></div>
+		<div class="onlinePay pos">
+			<div class="paytitle">
+				<span>银联支付</span>
+				<strong class="price"></strong>
+			</div>
+			<div class="paycode pos">
+				<div class="statusBox">
+					<div class="loading">正在等待支付结果…</div>
+					<div class="success">
+						<span class="icon"></span>
+						<span class="text">支付成功</span>
+					</div>
+					<div class="error">
+						<span class="icon"></span>
+						<p class="text">支付失败</p>
+						<p class="info">支付网关无响应，您可以</p>
+					</div>
+					<div class="complete">完成</div>
+					<!-- <div class="cancel">取消支付</div> -->
+					<div class="refund">退 款</div>
+				</div>
+			</div>
+			<div class="posList">
+				<ul></ul>
+			</div>
+			<div class="posStatus">
+				<ul>
+					<li class="am-clickable refresh">刷新重试</li>
+					<li class="am-clickable reset">重新选择POS机</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+    <div class="payDetail" id="wechatPrepayDetail" style="display: none;">
+        <div class="mask"></div>
+        <div class="onlinePay wechat">
+            <div class="paytitle">
+                <span>微信支付</span>
+                <strong class="price">0.02</strong>
+            </div>
+            <div class="paycode">
+                <input class="debarInput" type="text" name="code" value="" placeholder="请扫码或输入付款码">
+                <div class="button paybutton am-clickable">支付</div>
+                <div class="statusBox" style="display: none;">
+                    <div class="loading">支付中，请稍候</div>
+                    <div class="success">
+                        <span class="icon"></span>
+                        <span class="text">支付成功</span>
+                    </div>
+                    <div class="complete am-clickable">完成</div>
+                    <div class="cancel am-clickable">取消支付</div>
+                    <div class="refund am-clickable">退 款</div>
+                </div>
+                <div class="barcodeScan am-clickable"></div>
+            </div>
+            <div class="payqrcode">
+				<ul class="paySelect">
+					<li class="am-clickable act">
+						<span class="radio"></span>显示付款码
+					</li>
+					<li class="am-clickable" data-type="wechat">
+						<span class="radio"></span>发送到POS机
+					</li>
+				</ul>
+				<div class="paycode pos">
+					<div class="statusBox">
+						<div class="loading">正在等待支付结果…</div>
+						<div class="success">
+							<span class="icon"></span>
+							<span class="text">支付成功</span>
+						</div>
+						<div class="error">
+							<span class="icon"></span>
+							<p class="text">支付失败</p>
+							<p class="info">支付网关无响应，您可以</p>
+						</div>
+						<div class="complete">完成</div>
+						<div class="refund">退 款</div>
+					</div>
+				</div>
+				<ul class="wechatPosList"></ul>
+				<div class="posStatus">
+					<ul>
+						<li class="am-clickable refresh">刷新重试</li>
+						<li class="am-clickable reset">重新选择POS机</li>
+					</ul>
+				</div>
+				<div class="qrSuccess">
+					<span class="icon"></span>
+					<span class="text">支付成功</span>
+					<div class="refund">退 款</div>
+				</div>
+				<div class="qrLoading">加载中，请稍候</div>
+				<div class="qrReload">
+					支付码加载失败，点击重试
+				</div>
+				<div class="qrcodeimg"></div>
+				<div class="paytip">扫码结算更便捷~</div>
+                <div class="clickToShowCode">
+                    <svg class="corner" aria-hidden="true">
+                        <use xlink:href="#icon-ziyuan35"></use>
+                    </svg>								
+                    <div class="tips">
+                        <svg class="iconfont" aria-hidden="true">
+                            <use xlink:href="#icon-erweima"></use>
+                        </svg>
+                        <p>点击显示付款码</p>
+                    </div>
+                </div>
+            </div>
+            <div class="showCode">
+                <span class="icon">
+                    <svg class="iconfont" aria-hidden="true">
+                        <use xlink:href="#icon-checkbox"></use>
+                    </svg>
+                </span>
+                <p class="text">每次自动显示付款码</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="payDetail" id="alipayPrepayDetail" style="display: none;">
+        <div class="mask"></div>
+        <div class="onlinePay alipay">
+            <div class="paytitle">
+                <span>支付宝</span>
+                <strong class="price">0.01</strong>
+            </div>
+            <div class="paycode">
+                <input class="debarInput" type="text" name="code" value="" placeholder="请扫码或输入付款码">
+                <div class="button paybutton am-clickable">支付</div>
+                <div class="statusBox" style="display: none;">
+                    <div class="loading">支付中，请稍候</div>
+                    <div class="success">
+                        <span class="icon"></span>
+                        <span class="text">支付成功</span>
+                    </div>
+                    <div class="complete am-clickable">完成</div>
+                    <div class="cancel am-clickable">取消支付</div>
+                    <div class="refund am-clickable">退 款</div>
+                </div>
+                <div class="barcodeScan am-clickable"></div>
+            </div>
+            <div class="payqrcode">
+				<ul class="paySelect">
+					<li class="am-clickable act">
+						<span class="radio"></span>显示付款码
+					</li>
+					<li class="am-clickable" data-type="alipay">
+						<span class="radio"></span>发送到POS机
+					</li>
+				</ul>
+				<div class="paycode pos">
+					<div class="statusBox">
+						<div class="loading">正在等待支付结果…</div>
+						<div class="success">
+							<span class="icon"></span>
+							<span class="text">支付成功</span>
+						</div>
+						<div class="error">
+							<span class="icon"></span>
+							<p class="text">支付失败</p>
+							<p class="info">支付网关无响应，您可以</p>
+						</div>
+						<div class="complete">完成</div>
+						<div class="refund">退 款</div>
+					</div>
+				</div>
+				<ul class="alipayPosList"></ul>
+				<div class="posStatus">
+					<ul>
+						<li class="am-clickable refresh">刷新重试</li>
+						<li class="am-clickable reset">重新选择POS机</li>
+					</ul>
+				</div>
+				<div class="qrSuccess">
+					<span class="icon"></span>
+					<span class="text">支付成功</span>
+					<div class="refund">退 款</div>
+				</div>
+				<div class="qrLoading">加载中，请稍候</div>
+				<div class="qrReload">
+					支付码加载失败，点击重试
+				</div>
+				<div class="qrcodeimg"></div>
+				<div class="paytip">扫码结算更便捷~</div>
+                <div class="clickToShowCode">
+                    <svg class="corner" aria-hidden="true">
+                        <use xlink:href="#icon-ziyuan35"></use>
+                    </svg>								
+                    <div class="tips">
+                        <svg class="iconfont" aria-hidden="true">
+                            <use xlink:href="#icon-erweima"></use>
+                        </svg>
+                        <p>点击显示付款码</p>
+                    </div>
+                </div>
+            </div>
+            <div class="showCode">
+                <span class="icon">
+                    <svg class="iconfont" aria-hidden="true">
+                        <use xlink:href="#icon-checkbox"></use>
+                    </svg>
+                </span>
+                <p class="text">每次自动显示付款码</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="payDetail" id="jdPrepayDetail" style="display: none;">
+        <div class="mask"></div>
+        <div class="onlinePay jd">
+            <div class="paytitle">
+                <span>京东钱包</span>
+                <strong class="price">0.01</strong>
+            </div>
+            <div class="paycode">
+                <input class="debarInput" type="text" name="code" value="" placeholder="请扫码或输入付款码">
+                <div class="button paybutton am-clickable">支付</div>
+                <div class="statusBox" style="display: none;">
+                    <div class="loading">支付中，请稍候</div>
+                    <div class="success">
+                        <span class="icon"></span>
+                        <span class="text">支付成功</span>
+                    </div>
+                    <div class="complete am-clickable">完成</div>
+                    <div class="cancel am-clickable">取消支付</div>
+                    <div class="refund am-clickable">退 款</div>
+                </div>
+                <div class="barcodeScan am-clickable"></div>
+            </div>
+            <div class="payqrcode">
+				<!-- <ul class="paySelect">
+					<li class="am-clickable act">
+						<span class="radio"></span>显示付款码
+					</li>
+					<li class="am-clickable" data-type="alipay">
+						<span class="radio"></span>发送到POS机
+					</li>
+				</ul>
+				<div class="paycode pos">
+					<div class="statusBox">
+						<div class="loading">正在等待支付结果…</div>
+						<div class="success">
+							<span class="icon"></span>
+							<span class="text">支付成功</span>
+						</div>
+						<div class="error">
+							<span class="icon"></span>
+							<p class="text">支付失败</p>
+							<p class="info">支付网关无响应，您可以</p>
+						</div>
+						<div class="complete">完成</div>
+						<div class="refund">退 款</div>
+					</div>
+				</div>
+				<ul class="alipayPosList"></ul>
+				<div class="posStatus">
+					<ul>
+						<li class="am-clickable refresh">刷新重试</li>
+						<li class="am-clickable reset">重新选择POS机</li>
+					</ul>
+				</div> -->
+				<div class="qrSuccess">
+					<span class="icon"></span>
+					<span class="text">支付成功</span>
+					<div class="refund">退 款</div>
+				</div>
+				<div class="qrLoading">加载中，请稍候</div>
+				<div class="qrReload">
+					支付码加载失败，点击重试
+				</div>
+				<div class="qrcodeimg"></div>
+				<div class="paytip">扫码结算更便捷~</div>
+                <div class="clickToShowCode">
+                    <svg class="corner" aria-hidden="true">
+                        <use xlink:href="#icon-ziyuan35"></use>
+                    </svg>								
+                    <div class="tips">
+                        <svg class="iconfont" aria-hidden="true">
+                            <use xlink:href="#icon-erweima"></use>
+                        </svg>
+                        <p>点击显示付款码</p>
+                    </div>
+                </div>
+            </div>
+            <div class="showCode">
+                <span class="icon">
+                    <svg class="iconfont" aria-hidden="true">
+                        <use xlink:href="#icon-checkbox"></use>
+                    </svg>
+                </span>
+                <p class="text">每次自动显示付款码</p>
+            </div>
+        </div>
+    </div>
+</div>

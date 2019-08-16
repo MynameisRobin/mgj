@@ -1,0 +1,747 @@
+@import "var.less";
+@path: "../images/";
+@import "../images/login_sprite.less";
+#page_orderOverdue {
+    padding-top: 44px;
+    .am-header {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+
+        // overflow: hidden;
+        height: 44px;
+        border: none;
+        .search_wrap {
+            display: inline-block;
+            vertical-align: middle;
+            width: 330px;
+            position: absolute;
+            top: 6px;
+            right: 10px;
+            left: auto;
+            border-radius: 3px;
+            -webkit-border-radius: 3px;
+            border: 1px solid #dddddd;
+            font-size: 0;
+            .input_no {
+                background-color: transparent;
+                -webkit-box-sizing: border-box;
+                box-sizing: border-box;
+                vertical-align: middle;
+                border: 0;
+                width: 298px;
+                height: 32px;
+                padding-left: 14px;
+                font-size: 12px;
+            }
+            .search_icon {
+                display: inline-block;
+                vertical-align: middle;
+                width: 28px;
+                height: 28px;
+                background: url(../images/icons_sprite/searchMember_serch.png) no-repeat 0px 0px;
+                background-size: 29px 29px;
+            }
+        }
+    }
+    .orderOverdue_wrap {
+        overflow: hidden;
+        height: 100%;
+        background: #f4f4f4;
+        .warnWrap {
+            position: relative;
+            .warn {
+                position: absolute;
+                top: 13px;
+                left: 50px;
+                z-index: 0;
+                font-size: 12px;
+                color: #e82742;
+
+                &::before {
+                    content: "";
+                    display: inline-block;
+                    vertical-align: middle;
+                    margin-right: 5px;
+                    width: 16px;
+                    height: 16px;
+                    background: url(../images/icons_sprite/icon_tips.png) no-repeat 0px 0px;
+                    background-size: 16px 16px;
+                }
+            }
+        }
+        .orderOverdue_container {
+            .content_wrap {
+                padding: 38px 55px;
+                &:after {
+                    content: "";
+                    display: table;
+                    clear: both;
+                }
+                .hangup_mask {
+                    display: none;
+                    background: rgba(0, 0, 0, 0.5);
+                    width: 100%;
+                    height: 100%;
+                    min-height: 718px;
+                    position: absolute;
+                    top: 0px;
+                    left: 0px;
+                    transition: 0.4s all ease;
+                    z-index: 1;
+                }
+                .hangup_block {
+                    float: left;
+                    /* width:245px; */
+                    width: 230px;
+                    /* height:396px; */
+                    height: 349px;
+                    position: relative;
+                    border-radius: 4px;
+                    background: transparent;
+                    background-image: url("../images/hangup/bg_hangup_item.jpg");
+                    background-repeat: no-repeat;
+                    background-position: center;
+                    background-size: 100% 100%;
+                    margin-left: -6px;
+                    margin-bottom: 32px;
+                    box-shadow: -7px -2px 15px rgba(0, 0, 0, 0.5);
+                    transition: 0.4s all ease;
+                    color: #222;
+                    .backjiaz {
+                        position: absolute;
+                        top: 5px;
+                        left: 50%;
+                        margin-left: -50px;
+                        width: 100px;
+                        height: 25px;
+                    }
+                    //优质客
+                    &.good {
+                        cursor: pointer;
+                        color: #d9be93;
+                        background-image: url("../images/hangup/backvip.jpg");
+                        .c-right {
+                            background: url(../images/hangup/king-i.png) no-repeat left center;
+                            background-size: 12px 12px;
+                            &.c-right-warring {
+                                color: red;
+                                background: url(../images/hangup/icon_hangup_time2.png) no-repeat left center;
+                                background-size: 12px 12px;
+                            }
+                        }
+                        .billTb {
+                            background-color: #fff8ee;
+                        }
+                        .title {
+                            &::before {
+                                content: "";
+                                width: 21px;
+                                height: 20px;
+                                background: url("../images/good.png") no-repeat;
+                                background-size: cover;
+                                right: 10px;
+                                margin-top: 2px;
+                                position: absolute;
+                            }
+                        }
+                        div.content {
+                            span.name {
+                                &.am-clickable {
+                                    border-bottom: 1px solid #d9be93;
+                                }
+                            }
+                        }
+                        span.hangup_cash_btn {
+                            color: #37302e;
+                            background: #574c42;
+                        }
+                        .icon_delete {
+                            background-image: url(../images/hangup/del-you.png);
+                        }
+                        .delBox {
+                            p {
+                                color: #d9be93;
+                            }
+                            span.iconfont.icon-xiaoxi {
+                                color: #b9a27f;
+                            }
+                        }
+                    }
+                    &.float {
+                        position: relative;
+                        z-index: 22;
+                        height: auto;
+                        .hangup_inner {
+                            height: auto;
+                            padding-bottom: 50px;
+                        }
+
+                        .operation {
+                            bottom: 15px;
+                            .icon_delete {
+                                background-image: url("../images/hangup/icon_hangup_delete_up.png");
+                                background-size: 100%;
+                            }
+                        }
+                    }
+                    &.good.float {
+                        .operation {
+                            .icon_delete {
+                                background-image: url("../images/hangup/del-you.png");
+                            }
+                        }
+                    }
+
+                    .self_mask {
+                        display: none;
+                        position: absolute;
+                        z-index: 1;
+                        /* height:395px;
+                        width:245px; */
+                        width: 230px;
+                        height: 364px;
+                        border-radius: 4px;
+                        background: rgba(0, 0, 0, 0.5);
+                        &::before {
+                            content: "";
+                            position: absolute;
+                            top: 50%;
+                            left: 50%;
+                            transform: translate(-50%);
+                            margin-top: -32px;
+                            width: 42px;
+                            height: 42px;
+                            border-radius: 50%;
+                            background: url(../images/hangup/sure_icon.png) no-repeat center center;
+                            background-size: 24px 17px;
+                            background-color: #ffffff;
+                        }
+                        .tips_wrap {
+                            display: none;
+                            width: 170px;
+                            height: 42px;
+                            position: absolute;
+                            top: 50%;
+                            left: 50%;
+                            color: #eee;
+                            font-size: 12px;
+                            text-align: center;
+                            padding: 10px;
+                            transform: translateX(-50%);
+                            margin-top: 20px;
+                            background-color: #787878;
+                            border-radius: 7px;
+                            z-index: 2;
+                        }
+                        &.firstSelected {
+                            &::before {
+                                background-image: url(../images/hangup/sure_icon_white.png);
+                                background-color: #e82742;
+                            }
+                            .tips_wrap {
+                                display: table;
+                                span {
+                                    vertical-align: middle;
+                                    display: table-cell;
+                                }
+                            }
+                        }
+                        &.selected {
+                            &::before {
+                                background-image: url(../images/hangup/sure_icon_white.png);
+                                background-color: #333333;
+                            }
+                        }
+                    }
+                    .hangup_inner {
+                        padding: 7px;
+                        border-radius: 3px;
+                        /* width: 220px; */
+                        width: 205px;
+                        margin: 24px auto 0;
+                        // background-color: #ffffff;
+                        height: 305px;
+                        position: relative;
+                        .date {
+                            .c-left {
+                                float: left;
+                            }
+                            .c-right {
+                                float: right;
+                                background: url(../images/hangup/icon_hangup_time3.png) no-repeat left center;
+                                background-size: 12px 12px;
+                                padding-left: 14px;
+                            }
+                            .c-right-warring {
+                                color: red;
+                                background: url(../images/hangup/icon_hangup_time2.png) no-repeat left center;
+                                background-size: 12px 12px;
+                            }
+                        }
+
+                        .delBox {
+                            position: relative;
+                            margin-top: 8px;
+                            p {
+                                line-height: 18px;
+                                font-size: 11px;
+                            }
+                            .iconfont.icon-xiaoxi {
+                                position: absolute;
+                                top: 5px;
+                                right: 10px;
+                                font-size: 25px;
+                                color: #999;
+                            }
+                        }
+                    }
+                    .washTime {
+                        height: 332px;
+                    }
+                    .icon {
+                        display: inline-block;
+                        vertical-align: middle;
+                        width: 15px;
+                        height: 15px;
+                        font-size: 12px;
+                        background-repeat: no-repeat;
+                        background-position: center;
+                        background-size: 100%;
+                    }
+                    .info {
+                        font-size: 12px;
+                        display: inline-block;
+                        vertical-align: middle;
+                        .txt_wash {
+                            margin-left: 3px;
+                        }
+                    }
+                    .wash-opt {
+                        font-size: 11px;
+                        display: inline-block;
+                        vertical-align: middle;
+                        width: 64px;
+                        height: 20px;
+                        text-align: center;
+                        line-height: 20px;
+                        background: #eee;
+                        border-radius: 3px;
+                    }
+                    .finished {
+                        color: #999999;
+                    }
+                    .icon_money {
+                        background-image: url("../images/hangup/icon_hangup_money.png");
+                    }
+                    .icon_man {
+                        background-image: url("../images/hangup/icon_hangup_man.png");
+                    }
+                    .icon_remark {
+                        background-image: url("../images/hangup/icon_hangup_remark.png");
+                    }
+                    .icon_delete {
+                        background-image: url("../images/hangup/icon_hangup_delete.png");
+                    }
+                    .time_wash {
+                        background: url("../images/hangup/icon_hangup_time.png") no-repeat left center;
+                        color: #222;
+                        background-size: 12px 12px;
+                        padding-left: 18px;
+                        margin-left: 5px;
+                    }
+                    .title {
+                        margin: 3px auto;
+                        font-size: 0px;
+                        -webkit-justify-content: space-between;
+                        width: 191px;
+                        margin-top: -2px;
+                        .flag {
+                            position: absolute;
+                            width: 16px;
+                            height: 16px;
+                            margin-top: 5px;
+                            background-color: @bg04;
+                            border: 1px solid @bd07;
+                            border-radius: 4px;
+                            background-image: url("../images/hangup/icon_hangup_tit.png");
+                            background-size: 100%;
+                            background-repeat: no-repeat;
+                            vertical-align: middle;
+                        }
+                        div.content {
+                            display: inline-block;
+                            width: 100%;
+                            font-size: 0px;
+                            display: -webkit-box;
+                            display: -ms-flexbox;
+                            display: flex;
+                            flex-direction: row;
+                            justify-content: center;
+                            @keyframes warring {
+                                0% {
+                                    opacity: 0;
+                                }
+                                50% {
+                                    opacity: 1;
+                                }
+                                100% {
+                                    opacity: 0;
+                                }
+                            }
+                            .redWarring {
+                                display: inline-block;
+                                width: 28px;
+                                height: 28px;
+                                position: absolute;
+                                right: 20px;
+                                background: url(../images/hangup/jb.jpg);
+                                background-size: 100%;
+                                animation: warring 0.5s infinite;
+                            }
+
+                            .no {
+                                display: inline-block;
+                                line-height: 28px;
+                                vertical-align: middle;
+                                font-size: 24px;
+                            }
+                            .name {
+                                display: inline-block;
+                                line-height: 28px;
+                                margin-left: 5px;
+                                vertical-align: middle;
+                                font-size: 18px;
+                                &.am-clickable {
+                                    border-bottom: 1px solid #222;
+                                }
+                            }
+                        }
+                    }
+                    .date {
+                        width: 191px;
+                        margin: 3px auto 0;
+                        padding: 0 5px;
+                        font-size: 11px;
+                    }
+                    .servers {
+                        div {
+                            .appoint {
+                                // background: url(../images/hangup/ok.png) no-repeat left center;
+                                background-size: 12px 12px;
+                                padding-right: 5px;
+                                font-size: 11px;
+                                &.icon-gou:before {
+                                    margin-right: 2px;
+                                }
+                            }
+                            .noappoint {
+                                padding-right: 10px;
+                                font-size: 11px;
+                            }
+                            width: 191px;
+                            line-height: 20px;
+                            height: 20px;
+                            word-break: keep-all;
+                            white-space: nowrap;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            display: -webkit-box;
+                            display: -ms-flexbox;
+                            display: flex;
+                            align-items: center;
+                            img {
+                                width: 12px;
+                                margin-right: 6px;
+                            }
+                        }
+
+                        width: 191px;
+                        margin: 0 auto 3px;
+                        padding: 0 5px;
+                        line-height: 20px;
+                        height: 20px;
+                        font-size: 12px;
+                    }
+                    .billTb {
+                        background: #fff;
+                        border-left: 1px solid #d2d2d2;
+                        border-top: 1px solid #d2d2d2;
+                        width: 191px;
+                        margin: 0 auto;
+                        tr {
+                            &.prod td {
+                                color: #f39800;
+                            }
+                            &.wash {
+                                td {
+                                    font-size: 0px;
+                                }
+                            }
+                            &.remark {
+                                height: 65px;
+
+                                td {
+                                    height: 65px;
+                                    padding: 0 3px;
+                                    line-height: 14px;
+                                    font-size: 11px;
+                                    color: #999999;
+                                    &.has {
+                                        color: #999;
+                                    }
+                                    .remarkbox {
+                                        height: 45px;
+                                        overflow: hidden;
+                                        .empty {
+                                            padding: 5px 0;
+                                            text-align: left;
+                                        }
+                                        .remarkComboBox {
+                                            height: 22px;
+                                            line-height: 22px;
+                                            text-align: left;
+                                            white-space: nowrap;
+                                            overflow: hidden;
+                                            text-overflow: ellipsis;
+                                            width: 190px;
+                                            &.selected {
+                                                span {
+                                                    padding-right: 15px;
+                                                    background: #999 url(../images/hangup/remark_success.png) no-repeat right center;
+                                                    background-size: 12px 12px;
+                                                }
+                                            }
+                                            span {
+                                                display: inline;
+                                                vertical-align: middle;
+                                                text-align: center;
+                                                line-height: 20px;
+                                                text-align: center;
+                                                background-color: #999;
+                                                color: #fff;
+                                                padding: 3px 5px;
+                                                cursor: pointer;
+                                                margin-right: 3px;
+                                                &.am-clickable-active {
+                                                    background-color: #ccc;
+                                                }
+                                            }
+                                        }
+                                        .remarkCardBox {
+                                            height: 23px;
+                                            line-height: 23px;
+                                            text-align: left;
+                                            span {
+                                                background-color: #999;
+                                                color: #fff;
+                                                height: 20px;
+                                                line-height: 20px;
+                                                display: inline-block;
+                                                vertical-align: middle;
+                                                padding: 0 5px;
+                                                margin-right: 5px;
+                                                cursor: pointer;
+                                                &.selected {
+                                                    padding-right: 15px;
+                                                    background: #999 url(../images/hangup/remark_success.png) no-repeat right center;
+                                                    background-size: 12px 12px;
+                                                }
+                                                &.am-clickable-active {
+                                                    background-color: #ccc;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    .remarkWrap {
+                                        height: 20px;
+                                        white-space: nowrap;
+                                        overflow: hidden;
+                                        text-overflow: ellipsis;
+                                        line-height: 20px;
+                                        width: 180px;
+                                    }
+                                }
+                            }
+                        }
+                        thead {
+                            line-height: 19px;
+                            th {
+                                &:first-child {
+                                    width: 145px;
+                                }
+                                &:last-child {
+                                    width: 55px;
+                                }
+                            }
+                        }
+                        tbody.restData {
+                            display: none;
+                            transition: 0.4s all ease;
+                        }
+                        tfoot .sumFee td {
+                            text-align: right;
+                            .tips {
+                                position: absolute;
+                                margin-top: -1px;
+                                width: 26px;
+                                height: 39px;
+                                font-size: 12px;
+                                color: #999;
+                                border-top: 1px solid #999;
+                                display: none;
+                            }
+                            .content {
+                                font-size: 0px;
+                                .text {
+                                    font-size: 11px;
+                                    display: inline-block;
+                                    margin-right: 10px;
+                                    line-height: 26px;
+                                    vertical-align: middle;
+                                }
+                                .num {
+                                    font-size: 17px;
+                                    display: inline-block;
+                                    vertical-align: middle;
+                                    line-height: 26px;
+                                    color: #e82742;
+                                    &::before {
+                                        content: "￥";
+                                    }
+                                }
+                            }
+                        }
+                        &.down {
+                            tfoot .sumFee td .tips {
+                                display: block;
+                                &::before {
+                                    content: "";
+                                    position: absolute;
+                                    display: block;
+                                    width: 0px;
+                                    height: 0px;
+                                    border: 5px solid transparent;
+                                    border-top: 5px solid #999;
+                                    margin-left: 8px;
+                                }
+                            }
+                        }
+                        &.up {
+                            tfoot .sumFee td .tips {
+                                display: block;
+                                &::before {
+                                    content: "";
+                                    position: absolute;
+                                    display: block;
+                                    width: 0px;
+                                    height: 0px;
+                                    border: 5px solid transparent;
+                                    border-bottom: 5px solid #999;
+                                    margin-left: 8px;
+                                    margin-top: -11px;
+                                }
+                            }
+                            tbody.restData {
+                                display: table-row-group;
+                            }
+                        }
+                        th {
+                            font-size: 11px;
+                            color: #999999;
+                            line-height: 19px;
+                        }
+                        td {
+                            font-size: 13px;
+                            color: #222222;
+                            line-height: 26px;
+                        }
+                        .iteminNameWrap {
+                            margin-right: -10px;
+                            max-width: 130px;
+                            height: 26px;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+                        }
+                        .remarkWrap {
+                            text-align: left;
+                            background: url("../images/card_edit_white_icon.png") no-repeat right center;
+                            background-size: 11px 14px;
+                            color: #999999;
+                            font-size: 11px;
+                            width: 180px;
+                        }
+                        td,
+                        th {
+                            padding: 0 10px;
+                            font-weight: normal;
+                            text-align: left;
+                            border-right: 1px solid #d2d2d2;
+                            border-bottom: 1px solid #d2d2d2;
+                            &:last-child {
+                                text-align: right;
+                            }
+                        }
+                    }
+                    .operation {
+                        height: 30px;
+                        position: absolute;
+                        left: 8px;
+                        right: 8px;
+                        bottom: 12px;
+                        .icon {
+                            position: absolute;
+                            left: 5px;
+                            top: -3px;
+                            width: 36px;
+                            height: 36px;
+                            background-size: 100%;
+                        }
+                        .icon_delete {
+                            &.am-clickable-active {
+                                opacity: 0.8;
+                            }
+                        }
+                        .hangup_cash_btn {
+                            position: absolute;
+                            right: 5px;
+                            top: 0;
+                            width: 100px;
+                            height: 30px;
+                            line-height: 30px;
+                            color: @c01;
+                            text-align: center;
+                            background: #eee;
+                            border-radius: 5px;
+                            &.am-clickable-active {
+                                background: @bg07;
+                            }
+                        }
+                    }
+                }
+                .washTime {
+                    height: 374px;
+                }
+            }
+        }
+    }
+
+    .empty_wrap {
+        display: none;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 180px;
+        -webkit-transform: translate(-50%, -50%);
+        -moz-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        .icon {
+            width: 100%;
+            background: url(../images/hangup/empty_bg.png) no-repeat center center;
+            background-size: 100% 100%;
+            height: 192px;
+        }
+    }
+}

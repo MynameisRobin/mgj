@@ -266,22 +266,42 @@
             div.incomewrapper{
                 overflow:hidden;
                 height:184px;
-                div.inner{
-                    overflow:hidden;
-                    ul{
-                        span{
-                                width:30%;
-                            }
-                        width:40%;
-                        &:first-child{
-                            float:left;
-                            margin:0 0 0 8%;
-                        }
-                        &:last-child{
-                            float:right;
-                            margin:0 0 0 8%;
-                        }
-                    }
+                .inner{
+					li{
+						height:auto;
+						.cashSum,.cardSum,.otherCashSum{
+							width: auto;
+							margin-left:12px;
+							color: #222;
+						}
+						.title{
+							i{
+								width: 15px;
+								height: 30px;
+								margin-left:5px;
+								display: inline-block;
+								transform: rotate(0);
+								color: #999;
+							}
+							&.active{
+								i{
+									color: #62c2ed;
+									transform: rotate(180deg);
+								}
+							}
+						}
+						.childUl{
+							padding: 0;
+							li{
+								display: none;
+							}
+							&.active{
+								li{
+									display: block;
+								}
+							}
+						}
+					}
                 }  
             }
         }

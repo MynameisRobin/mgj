@@ -74,12 +74,14 @@
 						position: absolute;
 						width: 28px;
 						height: 28px;
-						background: url(../images/storage/storage-scan.png);
-						background-size: 100% 100%;
 						left: 4px;
 						top: 4px;
+						svg{
+							width: 28px;
+							height: 28px;
+						}
 						&.am-clickable-active {
-							background-color: #f0f0f0;
+							opacity: 0.6;
 						}
 					}
 					.condition {
@@ -106,6 +108,50 @@
 					border-radius: 3px;
 					&.am-clickable-active {
 						background-color: #333;
+					}
+				}
+				.includezero {
+					height: 38px;
+					float: left;
+					margin-left: 10px;
+					float: right;
+					.icon {
+						width: 16px;
+						height: 16px;
+						display: inline-block;
+						vertical-align: top;
+						text-align: center;
+						border: 1px solid #a1a1a1;
+						border-radius: 2px;
+						margin-top: 11px;
+						position: relative;
+						.svg {
+							position: absolute;
+							width: 20px;
+							height: 20px;
+							left: 50%;
+							top: 50%;
+							transform: translate(-50%,-50%);
+							-webkit-transform: translate(-50%,-50%);
+							display: none;
+						}
+					}
+					p {
+						display: inline-block;
+						vertical-align: top;
+						height: 38px;
+						font-size: 12px;
+						color: #222;
+						line-height: 38px;
+						overflow: hidden;
+					}
+					&.active {
+						.icon {
+							border: none;
+							.svg {
+								display: block;
+							}
+						}
 					}
 				}
 			}
@@ -208,25 +254,25 @@
 									overflow: hidden;
 									span {
 										font-size: 12px;
-										color: #00b7ee;
+										color: #999;
 										display: block;
 										height: 16px;
 										line-height: 16px;
 										position: relative;
 										top: 50%;
 										margin-top: -8px;
-										padding-left: 20px;
+										padding-left: 5px;
 									}
 									&:first-child span {
-										background: url(../images/storage/storage-record.png) no-repeat left center;
-										background-size: 16px 16px;
+										// background: url(../images/storage/storage-record.png) no-repeat left center;
+										// background-size: 16px 16px;
 										// padding-right: 12px;
 									}
 									&:last-child span {
-										border-left: 1px solid #00b7ee;
-										background: url(../images/storage/storage-other.png) no-repeat 5px center;
-										background-size: 16px 16px;
-										padding-left: 25px;
+										border-left: 1px solid #dedede;
+										// background: url(../images/storage/storage-other.png) no-repeat 5px center;
+										// background-size: 16px 16px;
+										// padding-left: 25px;
 									}
 									&:first-child {
 										margin-right: 5px;
@@ -593,7 +639,7 @@
 								}
 							}
 						}
-						.scan {
+						.scan-wrap {
 							position: absolute;
 							left: 1px;
 							bottom: 0;
@@ -604,7 +650,7 @@
 								&>div {
 									width: 0;
 									&:nth-child(1) {
-										width: 100%;
+										width: 50%;
 										color: #999;
 										text-align: left;
 										padding-left: 8px;
@@ -616,6 +662,18 @@
 											background-size: 100% 100%;
 											vertical-align: top;
 											margin: 8px 10px 0 0;
+										}
+									}
+									&:nth-child(2){
+										width: 50%;
+										padding: 8px;
+										input {
+											display: block;
+											width: 100%;
+											height: 24px;
+											font-size: 14px;
+											color: #999;
+											line-height: 24px;
 										}
 									}
 								}
@@ -704,6 +762,12 @@
 								border-radius: 0;
 							}
 						}
+						&.hidePrice {
+							bottom: 30px;
+							.order-wrap {
+								display: none;
+							}
+						}
 					}
 				}
 				.smt {
@@ -753,13 +817,15 @@
 								position: absolute;
 								width: 28px;
 								height: 28px;
-								background: url(../images/storage/storage-scan.png);
-								background-size: 100% 100%;
 								left: 4px;
 								top: 4px;
-								z-index: 2;
+								z-index: 1;
+								svg{
+									width: 28px;
+									height: 28px;
+								}
 								&.am-clickable-active {
-									background-color: #f0f0f0;
+									opacity: 0.6;
 								}
 							}	
 						}
@@ -1007,6 +1073,7 @@
 								height: 36px;
 								left: 36px;
 								text-align: center;
+								cursor: auto;
 							}
 						}
 						.smt-barcode {
@@ -1083,4 +1150,17 @@
 			}
 		}
 	}
+}
+
+.page_storage .content .stock .container-wrap .container .slip > div:nth-child(12) p:first-child span svg{
+	vertical-align: top;
+	margin-right: 4px;
+	width: 16px;
+	height: 16px;
+}
+.page_storage .content .stock .container-wrap .container .slip > div:nth-child(12) p:last-child span svg{
+	vertical-align: top;
+	margin-right: 4px;
+	width: 16px;
+	height: 16px;
 }

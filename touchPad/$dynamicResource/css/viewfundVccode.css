@@ -1,0 +1,55 @@
+#refundVccode {
+  z-index: 999;
+}
+#refundVccode h1 {
+  font-size: 1rem;
+  line-height: 3rem;
+  padding: 0px 1rem;
+  color: #555555;
+  font-weight: normal;
+  margin: 0;
+}
+#refundVccode .innern {
+  width: 401px;
+  height: 206px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background: #ffffff;
+  border-radius: 5px;
+  transform: translate(-50%, -50%);
+}
+#refundVccode .content {
+  border-top: 1px solid #eeeeee;
+  border-bottom: 1px solid #eeeeee;
+  padding: 1rem;
+}
+#refundVccode #vcCodeIpt {
+  width: 205px;
+  height: 36px;
+  border-radius: 2px;
+  border: solid 1px #dedede;
+  font-size: 17px;
+  padding-left: 11px;
+}
+#refundVccode #vc_code {
+  position: relative;
+  top: 14px;
+  left: 24px;
+  height: 38px;
+  width: 88px;
+}
+#refundVccode .rufundbtn {
+  line-height: 3rem;
+  text-align: center;
+  font-size: 1.1rem;
+  width: 50%;
+  float: left;
+  box-sizing: border-box;
+}
+#refundVccode .rufundbtn:hover {
+  background: #eee;
+}
+#refundVccode .rufundbtn:first-child {
+  border-right: 1px solid #eeeeee;
+}

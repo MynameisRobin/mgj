@@ -73,13 +73,15 @@
   position: absolute;
   width: 28px;
   height: 28px;
-  background: url(../images/storage/storage-scan.png);
-  background-size: 100% 100%;
   left: 4px;
   top: 4px;
 }
+.page_storage .content .stock .search-wrap .search-wrapper .scan svg {
+  width: 28px;
+  height: 28px;
+}
 .page_storage .content .stock .search-wrap .search-wrapper .scan.am-clickable-active {
-  background-color: #f0f0f0;
+  opacity: 0.6;
 }
 .page_storage .content .stock .search-wrap .search-wrapper .condition {
   position: absolute;
@@ -105,6 +107,48 @@
 }
 .page_storage .content .stock .search-wrap .search.am-clickable-active {
   background-color: #333;
+}
+.page_storage .content .stock .search-wrap .includezero {
+  height: 38px;
+  float: left;
+  margin-left: 10px;
+  float: right;
+}
+.page_storage .content .stock .search-wrap .includezero .icon {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  vertical-align: top;
+  text-align: center;
+  border: 1px solid #a1a1a1;
+  border-radius: 2px;
+  margin-top: 11px;
+  position: relative;
+}
+.page_storage .content .stock .search-wrap .includezero .icon .svg {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  display: none;
+}
+.page_storage .content .stock .search-wrap .includezero p {
+  display: inline-block;
+  vertical-align: top;
+  height: 38px;
+  font-size: 12px;
+  color: #222;
+  line-height: 38px;
+  overflow: hidden;
+}
+.page_storage .content .stock .search-wrap .includezero.active .icon {
+  border: none;
+}
+.page_storage .content .stock .search-wrap .includezero.active .icon .svg {
+  display: block;
 }
 .page_storage .content .stock .container-wrap {
   margin-top: 16px;
@@ -211,24 +255,17 @@
 }
 .page_storage .content .stock .container-wrap .container .slip > div:nth-child(12) p span {
   font-size: 12px;
-  color: #00b7ee;
+  color: #999;
   display: block;
   height: 16px;
   line-height: 16px;
   position: relative;
   top: 50%;
   margin-top: -8px;
-  padding-left: 20px;
-}
-.page_storage .content .stock .container-wrap .container .slip > div:nth-child(12) p:first-child span {
-  background: url(../images/storage/storage-record.png) no-repeat left center;
-  background-size: 16px 16px;
+  padding-left: 5px;
 }
 .page_storage .content .stock .container-wrap .container .slip > div:nth-child(12) p:last-child span {
-  border-left: 1px solid #00b7ee;
-  background: url(../images/storage/storage-other.png) no-repeat 5px center;
-  background-size: 16px 16px;
-  padding-left: 25px;
+  border-left: 1px solid #dedede;
 }
 .page_storage .content .stock .container-wrap .container .slip > div:nth-child(12) p:first-child {
   margin-right: 5px;
@@ -569,26 +606,26 @@
 .page_storage .content .action .right .container .wrap .slip.hidePrice > li:nth-child(5) {
   display: none;
 }
-.page_storage .content .action .right .container .wrap .scan {
+.page_storage .content .action .right .container .wrap .scan-wrap {
   position: absolute;
   left: 1px;
   bottom: 0;
   width: 100%;
 }
-.page_storage .content .action .right .container .wrap .scan .slip {
+.page_storage .content .action .right .container .wrap .scan-wrap .slip {
   border-top: 1px solid #ececec;
   border-bottom: none;
 }
-.page_storage .content .action .right .container .wrap .scan .slip > div {
+.page_storage .content .action .right .container .wrap .scan-wrap .slip > div {
   width: 0;
 }
-.page_storage .content .action .right .container .wrap .scan .slip > div:nth-child(1) {
-  width: 100%;
+.page_storage .content .action .right .container .wrap .scan-wrap .slip > div:nth-child(1) {
+  width: 50%;
   color: #999;
   text-align: left;
   padding-left: 8px;
 }
-.page_storage .content .action .right .container .wrap .scan .slip > div:nth-child(1) span {
+.page_storage .content .action .right .container .wrap .scan-wrap .slip > div:nth-child(1) span {
   display: inline-block;
   width: 28px;
   height: 28px;
@@ -597,7 +634,19 @@
   vertical-align: top;
   margin: 8px 10px 0 0;
 }
-.page_storage .content .action .right .container .wrap .scan.am-clickable-active {
+.page_storage .content .action .right .container .wrap .scan-wrap .slip > div:nth-child(2) {
+  width: 50%;
+  padding: 8px;
+}
+.page_storage .content .action .right .container .wrap .scan-wrap .slip > div:nth-child(2) input {
+  display: block;
+  width: 100%;
+  height: 24px;
+  font-size: 14px;
+  color: #999;
+  line-height: 24px;
+}
+.page_storage .content .action .right .container .wrap .scan-wrap.am-clickable-active {
   background-color: #f0f0f0;
 }
 .page_storage .content .action .right .container .info {
@@ -680,6 +729,12 @@
   padding: 0 10px;
   border-radius: 0;
 }
+.page_storage .content .action .right .container .info.hidePrice {
+  bottom: 30px;
+}
+.page_storage .content .action .right .container .info.hidePrice .order-wrap {
+  display: none;
+}
 .page_storage .content .action .right .smt {
   position: absolute;
   width: 100%;
@@ -728,14 +783,16 @@
   position: absolute;
   width: 28px;
   height: 28px;
-  background: url(../images/storage/storage-scan.png);
-  background-size: 100% 100%;
   left: 4px;
   top: 4px;
-  z-index: 2;
+  z-index: 1;
+}
+.page_storage .content .action.inventory .left .search-wrap .search-wrapper .scan svg {
+  width: 28px;
+  height: 28px;
 }
 .page_storage .content .action.inventory .left .search-wrap .search-wrapper .scan.am-clickable-active {
-  background-color: #f0f0f0;
+  opacity: 0.6;
 }
 .page_storage .content .action.inventory .left .search-wrap .search {
   display: block;
@@ -974,6 +1031,7 @@
   height: 36px;
   left: 36px;
   text-align: center;
+  cursor: auto;
 }
 .page_storage .photo-and-barcode .wrap .barcode-wrapper.no-barcode .scan-wrap .smt-barcode {
   position: absolute;
@@ -1040,4 +1098,16 @@
   line-height: 20px;
   color: #000;
   text-align: center;
+}
+.page_storage .content .stock .container-wrap .container .slip > div:nth-child(12) p:first-child span svg {
+  vertical-align: top;
+  margin-right: 4px;
+  width: 16px;
+  height: 16px;
+}
+.page_storage .content .stock .container-wrap .container .slip > div:nth-child(12) p:last-child span svg {
+  vertical-align: top;
+  margin-right: 4px;
+  width: 16px;
+  height: 16px;
 }

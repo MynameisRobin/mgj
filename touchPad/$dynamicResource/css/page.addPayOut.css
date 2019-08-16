@@ -1,0 +1,161 @@
+.page_addPayOut *,
+.page_addPayOut:after,
+.page_addPayOut:before {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+.page_addPayOut .clearfix:after {
+  content: ".";
+  display: block;
+  height: 0;
+  visibility: hidden;
+  clear: both;
+}
+.page_addPayOut input {
+  border: none;
+  background-color: transparent;
+}
+.page_addPayOut .container {
+  position: absolute;
+  left: 30px;
+  right: 30px;
+  top: 65px;
+  bottom: 15px;
+  overflow: hidden;
+}
+.page_addPayOut .form-wrap .label {
+  height: 40px;
+  width: 90px;
+  font-size: 12px;
+  color: #999;
+  line-height: 40px;
+  overflow: hidden;
+  float: left;
+}
+.page_addPayOut .form-wrap .right {
+  margin-left: 90px;
+}
+.page_addPayOut .form-wrap .right ul {
+  height: 40px;
+  font-size: 12px;
+  color: #222;
+  line-height: 40px;
+}
+.page_addPayOut .form-wrap .right ul li {
+  height: 40px;
+  margin-right: 30px;
+  float: left;
+  position: relative;
+}
+.page_addPayOut .form-wrap .right ul li span {
+  display: inline-block;
+  vertical-align: top;
+  width: 16px;
+  height: 16px;
+  border: 1px solid #555;
+  border-radius: 50%;
+  padding: 2px;
+  margin-top: 12px;
+  margin-right: 10px;
+}
+.page_addPayOut .form-wrap .right ul li span b {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-color: #555;
+  border-radius: 50%;
+  display: none;
+}
+.page_addPayOut .form-wrap .right ul li p {
+  display: inline-block;
+  vertical-align: top;
+  height: 40px;
+  font-size: 12px;
+  color: #222;
+  line-height: 40px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.page_addPayOut .form-wrap .right ul li.active span b {
+  display: block;
+}
+.page_addPayOut .form-wrap .right .input-wrap {
+  width: 260px;
+  height: 40px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding-left: 30px;
+  position: relative;
+  overflow: hidden;
+}
+.page_addPayOut .form-wrap .right .input-wrap input {
+  border: none;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding-right: 30px;
+  font-size: 20px;
+  color: #e82742;
+  line-height: 38px;
+}
+.page_addPayOut .form-wrap .right .input-wrap input::-webkit-input-placeholder {
+  color: #f00;
+}
+.page_addPayOut .form-wrap .right .input-wrap input:focus::-webkit-input-placeholder {
+  opacity: 0;
+}
+.page_addPayOut .form-wrap .right .input-wrap span {
+  position: absolute;
+  width: 30px;
+  height: 100%;
+  font-size: 20px;
+  color: #e82742;
+  text-align: center;
+  line-height: 38px;
+  left: 0;
+}
+.page_addPayOut .form-wrap .right .img-wrap {
+  width: 100px;
+  height: 100px;
+  border: 1px dashed #ddd;
+  border-radius: 5px;
+  background: url('../images/payout-upload-bg.png') no-repeat center center;
+  background-size: 27px 27px;
+  position: relative;
+  overflow: hidden;
+}
+.page_addPayOut .form-wrap .right .img-wrap .img,
+.page_addPayOut .form-wrap .right .img-wrap .upload {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+.page_addPayOut .form-wrap .right .img-wrap img {
+  width: 100%;
+  height: 100%;
+}
+.page_addPayOut .form-wrap .right textarea {
+  display: block;
+  width: 500px;
+  height: 100px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 12px;
+  color: #222;
+  line-height: 20px;
+  padding: 10px;
+}
+.page_addPayOut .form-wrap .right .smt {
+  width: 258px;
+  height: 38px;
+  background-color: #555;
+  font-size: 14px;
+  color: #fff;
+  text-align: center;
+  line-height: 38px;
+  border-radius: 5px;
+}
+.page_addPayOut .mt {
+  margin-top: 15px;
+}

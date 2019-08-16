@@ -72,7 +72,7 @@
             }
             navigator.appplugin.imagePicker("All", [
                 opt.size
-            ], "0.6", "jpg", trim, function(result) {
+            ], "1", "jpg", trim, function(result) {
                 delete opt.size;
                 opt.imageBase64 = result;
                 if (insertResolution) {
@@ -128,11 +128,17 @@
                 return config.filesMgr + imageConfig.getImageUrl(type, itemData, filename, suffix);
             }
         },
-        createImage: function(type, itemData, filename, suffix) {
+        createImage: function(type, itemData, filename, suffix,backupPath) {
             var $img = $('<img src="' + this.getPhotoUrl(type, itemData, filename, suffix) + '">').hide();
             $img.load(function() {
                 // console.log("load");
                 $img.show();
+            }).error(function(){
+                if(backupPath){
+                    $img.attr('src',backupPath).load(function(){
+                        $img.show();
+                    });
+                }
             });
             return $img;
         },

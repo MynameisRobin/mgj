@@ -188,13 +188,49 @@
   border: 4px solid #e9e9e9;
   border-radius: 50%;
   margin: 0 auto 15px;
-  overflow: hidden;
   background: #dcdcdc url(../images/appointment/appointment-noheadimg.png) no-repeat center center;
   background-size: 80px 80px;
 }
 .page_appointment .content .content-wrapper .left .left-wrapper .find .header img {
   width: 100%;
   height: 100%;
+  border-radius: 50%;
+}
+.page_appointment .content .content-wrapper .left .left-wrapper .find .header.good {
+  position: relative;
+  border: 2px solid #f7d467;
+}
+.page_appointment .content .content-wrapper .left .left-wrapper .find .header.good::before {
+  content: "";
+  width: 28px;
+  height: 26px;
+  position: absolute;
+  top: -26px;
+  left: 50%;
+  margin-left: -13px;
+  background: url(../images/good.png) no-repeat;
+  background-size: cover;
+  cursor: pointer;
+}
+.page_appointment .content .content-wrapper .left .left-wrapper .find .header.lock {
+  position: relative;
+}
+.page_appointment .content .content-wrapper .left .left-wrapper .find .header.lock::after {
+  content: "\e690";
+  font-family: "iconfont" !important;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  position: absolute;
+  width: 86px;
+  height: 86px;
+  line-height: 86px;
+  top: 0;
+  left: 0;
+  text-align: center;
+  font-size: 24px;
+  color: #fff;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
 }
 .page_appointment .content .content-wrapper .left .left-wrapper .find .name-wrapper,
 .page_appointment .content .content-wrapper .left .left-wrapper .find .tel,
@@ -234,6 +270,25 @@
   margin-top: 2px;
   background: url(../images/icons_sprite.png) no-repeat -85px -504.5px;
   background-size: 105px 1443.5px;
+}
+.page_appointment .content .content-wrapper .left .left-wrapper .find .breakAppointment {
+  font-size: 12px;
+  color: #222;
+  height: 50px;
+  line-height: 30px;
+  padding-top: 20px;
+  overflow: hidden;
+}
+.page_appointment .content .content-wrapper .left .left-wrapper .find .breakAppointment::before {
+  content: '!';
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1px solid #222;
+  text-align: center;
+  line-height: 12px;
+  margin-right: 5px;
 }
 .page_appointment .content .content-wrapper .left .left-wrapper .find .level {
   font-size: 14px;
@@ -383,6 +438,14 @@
   margin: 0 auto 16px;
   font-size: 0;
 }
+.page_appointment .content .content-wrapper .right .right-wrapper .form-group .form:first-child .shift-info {
+  padding-left: 14px;
+  margin-left: 90px;
+  font-size: 12px;
+  background: url(../images/appointment/appointment-time.png) no-repeat 0;
+  background-size: 12px 12px;
+  color: #999999;
+}
 .page_appointment .content .content-wrapper .right .right-wrapper .form-group .form span {
   display: inline-block;
   vertical-align: top;
@@ -448,7 +511,7 @@
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-.page_appointment .content .content-wrapper .right .right-wrapper .form-group .form:first-child .right-part {
+.page_appointment .content .content-wrapper .right .right-wrapper .form-group .form:nth-child(2) .right-part {
   border: none;
   padding: 0;
   background: none;
@@ -854,6 +917,49 @@
   height: 100%;
   border-radius: 50%;
 }
+.page_appointment .list-warp .list-left .list-avatar.good {
+  position: relative;
+  border: 2px solid #f7d467;
+}
+.page_appointment .list-warp .list-left .list-avatar.good::before {
+  content: "";
+  width: 17px;
+  height: 16px;
+  position: absolute;
+  top: -16px;
+  left: 50%;
+  margin-left: -8.5px;
+  background: url(../images/good.png) no-repeat;
+  background-size: cover;
+  cursor: pointer;
+}
+.page_appointment .list-warp .list-left .list-avatar.lock {
+  position: relative;
+  width: 50px;
+  height: 50px;
+}
+.page_appointment .list-warp .list-left .list-avatar.lock.good::after {
+  width: 46px;
+  height: 46px;
+  line-height: 46px;
+}
+.page_appointment .list-warp .list-left .list-avatar.lock::after {
+  content: "\e690";
+  font-family: "iconfont" !important;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  line-height: 50px;
+  top: 0;
+  left: 0;
+  text-align: center;
+  font-size: 16px;
+  color: #fff;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+}
 .page_appointment .list-warp .list-right .list-title-warp {
   overflow: hidden;
   padding: 0 25px;
@@ -880,7 +986,7 @@
   overflow: hidden;
   height: 43px;
   line-height: 40px;
-  margin: 0 25px  ;
+  margin: 0 25px;
   background-color: #f7f7f7;
   border-bottom: 1px solid #fff;
   width: 100%;
@@ -901,25 +1007,40 @@
 }
 .page_appointment .list-warp .list-right .list-body > div.card {
   width: 306px;
+  height: 100%;
+  overflow: hidden;
 }
 .page_appointment .list-warp .list-right .list-body > div.card .cardImg {
-  display: inline-block;
   width: 26px;
   height: 16px;
-  vertical-align: -6.5%;
   margin-right: 10px;
+  float: left;
+  margin-top: 14px;
 }
 .page_appointment .list-warp .list-right .list-body > div.card .cardImg.type_two {
-  background: url("../images/card1.png") no-repeat;
+  background: url("../images/card1.jpg") no-repeat;
   background-size: 100% 100%;
 }
 .page_appointment .list-warp .list-right .list-body > div.card .cardImg.type_one {
-  background: url("../images/card2.png") no-repeat;
+  background: url("../images/card2.jpg") no-repeat;
   background-size: 100% 100%;
 }
 .page_appointment .list-warp .list-right .list-body > div.card .cardImg.type_zero {
-  background: url("../images/card3.png") no-repeat;
+  background: url("../images/card3.jpg") no-repeat;
   background-size: 100% 100%;
+}
+.page_appointment .list-warp .list-right .list-body > div.card .cardinfo {
+  margin-left: 36px;
+  height: 100%;
+}
+.page_appointment .list-warp .list-right .list-body > div.card .cardinfo p:first-child {
+  line-height: 24px;
+  font-size: 14px;
+}
+.page_appointment .list-warp .list-right .list-body > div.card .cardinfo p:last-child {
+  line-height: 16px;
+  font-size: 10px;
+  color: #999;
 }
 .page_appointment .list-warp .list-right .list-body > div {
   overflow: hidden;
@@ -945,4 +1066,37 @@
 }
 .page_appointment .list-warp .list-right .list-body > div > b {
   color: #e82742;
+}
+.am-modalLoading-searchMember {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+.am-modalLoading-searchMember .tip {
+  position: fixed;
+  left: 0;
+  right: 0;
+  text-align: center;
+  bottom: 90px;
+  font-size: 14px;
+  color: #fff;
+  line-height: 28px;
+  height: 28px;
+  overflow: hidden;
+}
+.am-modalLoading-searchMember .abort {
+  position: fixed;
+  width: 120px;
+  height: 36px;
+  left: 50%;
+  margin-left: -60px;
+  bottom: 30px;
+  border: 1px solid #fff;
+  border-radius: 3px;
+  font-size: 16px;
+  color: #fff;
+  text-align: center;
+  line-height: 36px;
 }

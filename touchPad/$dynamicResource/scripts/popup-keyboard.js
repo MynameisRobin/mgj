@@ -40,27 +40,27 @@ am.keyboard.show({
 	'<table class="board" border="0" cellpadding="0" cellspacing="0">'+
 	    '<tbody>'+
 	        '<tr>'+
-	            '<td width="75"><div class="am-touchable key" data-val="1">1</div></td>'+
-	            '<td width="75"><div class="am-touchable key" data-val="2">2</div></td>'+
-	            '<td width="75"><div class="am-touchable key" data-val="3">3</div></td>'+
-	            '<td width="75"><div class="am-touchable rect delete" data-val="backspace"></div></td>'+
+	            '<td width="75"><div class="am-touchable am-clickable key" data-val="1">1</div></td>'+
+	            '<td width="75"><div class="am-touchable am-clickable key" data-val="2">2</div></td>'+
+	            '<td width="75"><div class="am-touchable am-clickable key" data-val="3">3</div></td>'+
+	            '<td width="75"><div class="am-touchable am-clickable rect delete" data-val="backspace"></div></td>'+
 	        '</tr>'+
 	        '<tr>'+
-	            '<td><div class="am-touchable key" data-val="4">4</div></td>'+
-	            '<td><div class="am-touchable key" data-val="5">5</div></td>'+
-	            '<td><div class="am-touchable key" data-val="6">6</div></td>'+
-	            '<td><div class="am-touchable rect clean" data-val="clear"></div></td>'+
+	            '<td><div class="am-touchable am-clickable key" data-val="4">4</div></td>'+
+	            '<td><div class="am-touchable am-clickable key" data-val="5">5</div></td>'+
+	            '<td><div class="am-touchable am-clickable key" data-val="6">6</div></td>'+
+	            '<td><div class="am-touchable am-clickable rect clean" data-val="clear"></div></td>'+
 	        '</tr>'+
 	        '<tr>'+
-	            '<td><div class="am-touchable key" data-val="7">7</div></td>'+
-	            '<td><div class="am-touchable key" data-val="8">8</div></td>'+
-	            '<td><div class="am-touchable key" data-val="9">9</div></td>'+
-	            '<td><div class="am-touchable rect confirm" data-val="confirm"></div></td>'+
+	            '<td><div class="am-touchable am-clickable key" data-val="7">7</div></td>'+
+	            '<td><div class="am-touchable am-clickable key" data-val="8">8</div></td>'+
+	            '<td><div class="am-touchable am-clickable key" data-val="9">9</div></td>'+
+	            '<td><div class="am-touchable am-clickable rect confirm" data-val="confirm"></div></td>'+
 	        '</tr>'+
 	        '<tr>'+
 	            '<td></td>'+
-	            '<td><div class="am-touchable key" data-val="0">0</div></td>'+
-	            '<td><div class="am-touchable key" data-val=".">.</div></td>'+ 
+	            '<td><div class="am-touchable am-clickable key" data-val="0">0</div></td>'+
+	            '<td><div class="am-touchable am-clickable key" data-val=".">.</div></td>'+ 
 	            '<td></td>'+
 	        '</tr>'+
 	    '</tbody>'+
@@ -86,13 +86,19 @@ am.keyboard.show({
 					am.msg("您还没有设置密码");
 				}
 			});
+			$("#maskBoard .toggleBox").vclick(function(){
+				$("#maskBoard").hide();
+				am.phoneCodeModal.show(self.opt);
+			});
 			this.submitHide=false;//点击对勾按钮是否隐藏
 		},
 		buttonpress:function(val){
 			var self = this;
 			switch(val){
 				case "backspace":
-					self.value = self.value.substr(0, self.value.length - 1);
+					if(self.value){
+						self.value = self.value.substr(0, self.value.length - 1);
+					}
 					break;
 				case "clear":
 					self.value = "";
@@ -188,12 +194,13 @@ am.keyboard.show({
 							$(this).blur();
 						});
 						$.am.getActivePage().$.find("[isdisabled=1]").attr("disabled",false).removeAttr("isdisabled");
-
-						_this.opt.hidecb && _this.opt.hidecb();
+						if(_this.opt&&_this.opt.hidecb){//0015757
+							_this.opt.hidecb && _this.opt.hidecb();
+						}
 					},200);
 				},300);
             }
-            if(this.opt.price){
+            if(this.opt && this.opt.price){
                 var $choose = this.$dom.find('.btngroupLeft span.selected'),
                     choose = '';
                 choose = $choose.hasClass('btnDiscount')?'discount':'price';
@@ -211,6 +218,11 @@ am.keyboard.show({
 				$("#maskBoard").find(".input_forget").show();
 			}else{
 				$("#maskBoard").find(".input_forget").hide();
+			}
+			if(self.opt.togglePhoneCode){
+				$("#maskBoard").find(".toggleBox").show();
+			}else{
+				$("#maskBoard").find(".toggleBox").hide();
 			}
 			if(opt.$){//行内键盘
 				opt.$.append($html);
@@ -257,6 +269,7 @@ am.keyboard.show({
 					this.isDiscount = false;
 					this.discountPrice = 0;
 					this.$dom=$("#maskBoard");
+					
                     if(opt.price){//带折扣的键盘逻辑——当show的时候传了price值时
                         var keyboardChoose = this.getLocalChoose();
                         console.log(keyboardChoose);
@@ -343,6 +356,29 @@ am.keyboard.show({
 						this.$dom.find(".input_value").empty().append('<input type="password"/>');
 					}else{
 						this.$dom.find(".input_value").empty();
+					}
+					//添加关闭按钮
+					if(opt.hasOwnProperty('needPsw')){
+						this.$dom.find(".title").append("<span class='close am-clickable'></span>");
+						this.$dom.find(".close").off("vclick").on("vclick",function(){
+							if(opt.needPsw){
+								am.msg("您目前没有权限关闭，如果想关闭请联系管理员！");
+							}
+							else{
+								self.hide();
+								self.opt.cancel && self.opt.cancel();
+							}
+						});
+						this.$dom.find(".mask,.cancel").off("vclick").on("vclick",function(){
+							self.hide();
+							if($.am.getActivePage().id=='page_searchMember'){
+								setTimeout(function(){
+									am.page.searchMember.showkeyboard();
+								},300)
+							}
+						});
+					}else {
+						this.$dom.find(".title .close").remove();
 					}
 					this.$dom.show();
 					this.submitHide=true;

@@ -8,8 +8,11 @@
             name: "新_美一客_STA",
             value: "n_meiyike_staging",
         }, {
-            name: "新_美一客_DEV",
+            name: "新_美一客_TEST",
             value: "n_meiyike_test",
+        }, {
+            name: "新_美一客_DEV",
+            value: "n_meiyike_develop",
         }, {
             name: "新_生意宝_PRD",
             value: "n_shengyibao",
@@ -17,8 +20,11 @@
             name: "新_生意宝_STA",
             value: "n_shengyibao_staging",
         }, {
-            name: "新_生意宝_DEV",
+            name: "新_生意宝_TEST",
             value: "shengyibao_test",
+        }, {
+            name: "新_生意宝_DEV",
+            value: "shengyibao_develop",
         }, {
             name: "新_无纸化_PRD",
             value: "n_paperless",
@@ -35,8 +41,14 @@
             name: "新_触屏版_STA",
             value: "n_touchPad_staging",
         }, {
-            name: "新_触屏版_DEV",
+            name: "新_触屏版_TEST",
             value: "n_touchPad_test",
+        }, {
+            name: "新_触屏版_TEST1",
+            value: "n_touchPad_test1",
+        }, {
+            name: "新_触屏版_DEV",
+            value: "n_touchPad_develop",
         }, {
             name: "老_美一客_PRD",
             value: "MeiyikeApp",
@@ -157,7 +169,6 @@
 
             //给debug按钮赋值
             this.$.debug.text('关');
-            localStorage.removeItem('am.tips.specified');
         },
         afterShow: function() {},
         beforeHide: function() {},

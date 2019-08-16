@@ -1,0 +1,29 @@
+#washTipModal {
+  text-align: center;
+}
+#washTipModal .inner {
+  z-index: 1;
+  width: 400px;
+  height: 286px;
+  margin-left: -200px;
+  margin-top: -143px;
+  overflow: hidden;
+}
+#washTipModal .content {
+  height: 100%;
+  padding: 0;
+  text-align: center;
+}
+#washTipModal .content .iconfont {
+  font-size: 80px;
+  margin-top: 30px;
+}
+#washTipModal .content .black {
+  margin-top: 10px;
+  font-size: 18px;
+  color: #222;
+}
+#washTipModal .content .gray {
+  margin-top: 4px;
+  font-size: 21px;
+}

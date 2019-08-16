@@ -49,15 +49,19 @@
   border-right: #262626 1px solid;
   border-left: #262626 1px solid;
 }
-.page_reservation .rv_btns > span.date::before {
-  content: "";
-  display: inline-block;
-  width: 15px;
-  height: 15px;
-  background: url("../images/reservation/datePicker-icon.png") no-repeat center center;
-  background-size: contain;
-  vertical-align: middle;
-  margin: 0 5px 3px 0;
+.page_reservation .rv_btns > span.date .time,
+.page_reservation .rv_btns > span.date .week {
+  display: block;
+}
+.page_reservation .rv_btns > span.date .time {
+  font-size: 16px;
+  line-height: 18px;
+  margin-top: 5px;
+}
+.page_reservation .rv_btns > span.date .week {
+  line-height: 14px;
+  font-size: 12px;
+  font-weight: normal;
 }
 .page_reservation .rv_btns > span.am-clickable-active {
   background-color: #eee;
@@ -80,6 +84,40 @@
   -webkit-box-sizing: border-box;
   z-index: 100;
 }
+.page_reservation .appointment-btn:hover {
+  background-color: #C90E28;
+}
+.page_reservation .toggleBarber {
+  position: fixed;
+  height: 48px;
+  left: 0;
+  right: 0;
+  background-color: rgba(27, 27, 27, 0.75);
+  overflow: hidden;
+  z-index: 99;
+  top: -48px;
+  transition: all 0.1s;
+  -webkit-transition: all 0.1s;
+}
+.page_reservation .toggleBarber.fadeIn {
+  top: 0;
+}
+.page_reservation .toggleBarber p {
+  font-size: 15px;
+  color: #fff;
+  text-align: center;
+  line-height: 48px;
+}
+.page_reservation .toggleBarber .cancel {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  font-size: 15px;
+  color: #f39800;
+  line-height: 48px;
+  padding: 0 20px;
+}
 .page_reservation .rv_scroll {
   position: absolute;
   overflow: hidden;
@@ -101,7 +139,7 @@
 }
 .page_reservation .rv_table {
   border: 1px solid #bbbbbb;
-  background: #FFF;
+  background: #fff;
   table-layout: fixed;
 }
 .page_reservation .rv_table tr.rest {
@@ -115,6 +153,58 @@
 }
 .page_reservation .rv_table tr.rest .rv_creatMore {
   display: none;
+}
+.page_reservation .rv_table .user {
+  position: relative;
+  /* span.rest_text{
+                float: right;
+                display: block;
+                margin:-13px 3px 0 0;
+                font-size: 2px;
+                font-weight: bold;
+                width:45px;
+                color: #e82742;
+                height: 12px;
+            } */
+}
+.page_reservation .rv_table .user .prefix-shift {
+  position: absolute;
+  top: 8px;
+  right: 27px;
+  font-size: 10px;
+  color: #999999;
+}
+.page_reservation .rv_table .user.red {
+  color: red;
+}
+.page_reservation .rv_table .user span.icon-dian {
+  float: right;
+  display: block;
+  margin: -10px 13px 0 0;
+  width: 13px;
+  height: 3px;
+  color: #bfbfbf;
+}
+.page_reservation .rv_table .user span.icon-dian:hover {
+  color: #555555;
+}
+.page_reservation .rv_table .user span.icon-dian.am-clickable-active {
+  color: #555555;
+}
+.page_reservation .rv_table .user span.icon-xiujia::before {
+  float: right;
+  display: block;
+  margin: -10px 10px 0 0;
+  width: 19px;
+  color: #e82742;
+  height: 11px;
+}
+.page_reservation .rv_table .rest_bg {
+  opacity: 0.3;
+}
+.page_reservation .rv_table .unable-color {
+  color: #555555;
+  opacity: 0.7;
 }
 .page_reservation .rv_table td {
   border-left: 1px solid #ececec;
@@ -222,15 +312,27 @@
 .page_reservation .rv_rest {
   display: none;
   position: absolute;
+  line-height: 110px;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  padding: 33px 0;
   text-align: center;
+  font-size: 55px;
+  color: #555555;
+}
+.page_reservation .rv_remark {
+  width: 90px;
+  height: 90px;
+  padding: 10px;
+  overflow: hidden;
+}
+.page_reservation .rv_remark span {
   font-size: 12px;
-  color: #f00;
-  background: #eee;
+}
+.page_reservation .rv_remark .iconfont {
+  font-size: 18px;
+  margin-right: 7px;
 }
 .page_reservation .rv_holder {
   display: block;
@@ -243,11 +345,22 @@
   line-height: 110px;
   text-align: center;
   color: #fff;
-  background: url("../images/reservation/holder.png") no-repeat center 30px;
-  background-color: #fff;
-  background-size: 34px 34px;
 }
-.page_reservation .rv_holder::after {
+.page_reservation .rv_holder .remark {
+  position: absolute;
+  right: 5px;
+  top: 0;
+  color: #666;
+  font-size: 18px;
+  line-height: 20px;
+  height: 20px;
+}
+.page_reservation .rv_holder .remark.hide {
+  display: none;
+}
+.page_reservation .rv_holder .holded::after {
+  background: url("../images/reservation/holder.png") no-repeat center 30px;
+  background-size: 34px 34px;
   content: "占用";
   padding-top: 20px;
   color: #666666;
@@ -255,19 +368,89 @@
   font-size: 11px;
   display: block;
 }
+.page_reservation .rv_holder .high-holded::after {
+  background: url("../images/reservation/holder_bt.png") no-repeat center 30px;
+  background-size: 34px 34px;
+  content: "占用";
+  padding-top: 20px;
+  color: rgba(255, 255, 255, 0.15);
+  text-align: center;
+  font-size: 11px;
+  display: none;
+}
 .page_reservation .rv_holder.red {
   background-color: #e03850;
+}
+.page_reservation .rv_holder.red .holded::after {
+  background: url("../images/reservation/holder.png") no-repeat center 30px;
+  background-size: 34px 34px;
+  content: "占用";
+  padding-top: 20px;
+  color: #666666;
+  text-align: center;
+  font-size: 11px;
+  display: none;
+}
+.page_reservation .rv_holder.red .high-holded::after {
+  background: url("../images/reservation/holder_bt.png") no-repeat center 30px;
+  background-size: 34px 34px;
+  content: "占用";
+  padding-top: 20px;
+  color: rgba(255, 255, 255, 0.15);
+  text-align: center;
+  font-size: 11px;
+  display: block;
 }
 .page_reservation .rv_holder.green {
   background-color: #009966;
 }
+.page_reservation .rv_holder.green .holded::after {
+  background: url("../images/reservation/holder.png") no-repeat center 30px;
+  background-size: 34px 34px;
+  content: "占用";
+  padding-top: 20px;
+  color: #666666;
+  text-align: center;
+  font-size: 11px;
+  display: none;
+}
+.page_reservation .rv_holder.green .high-holded::after {
+  background: url("../images/reservation/holder_bt.png") no-repeat center 30px;
+  background-size: 34px 34px;
+  content: "占用";
+  padding-top: 20px;
+  color: rgba(255, 255, 255, 0.15);
+  text-align: center;
+  font-size: 11px;
+  display: block;
+}
 .page_reservation .rv_holder.black {
   background-color: #555;
+}
+.page_reservation .rv_holder.black .holded::after {
+  background: url("../images/reservation/holder.png") no-repeat center 30px;
+  background-size: 34px 34px;
+  content: "占用";
+  padding-top: 20px;
+  color: #666666;
+  text-align: center;
+  font-size: 11px;
+  display: none;
+}
+.page_reservation .rv_holder.black .high-holded::after {
+  background: url("../images/reservation/holder_bt.png") no-repeat center 30px;
+  background-size: 34px 34px;
+  content: "占用";
+  padding-top: 20px;
+  color: rgba(255, 255, 255, 0.15);
+  text-align: center;
+  font-size: 11px;
+  display: block;
 }
 .page_reservation .rv_item {
   background: #555;
   padding: 0 5px;
-  color: #FFF;
+  color: #fff;
   height: 110px;
   position: absolute;
   left: 0;
@@ -296,6 +479,16 @@
   font-size: 13px;
   font-weight: bold;
   margin-top: 18px;
+}
+.page_reservation .rv_item .rvname .good {
+  width: 16px;
+  height: 15px;
+  background: url(../images/good.png) no-repeat;
+  background-size: cover;
+  display: inline-block;
+  cursor: pointer;
+  vertical-align: -1px;
+  margin-left: 5px;
 }
 .page_reservation .rv_item .time {
   font-size: 12px;
@@ -343,9 +536,26 @@
   border-radius: 2px;
   line-height: 15px;
   font-size: 11px;
-  padding: 2px 4px;
+  padding: 2px;
   background-color: rgba(250, 235, 215, 0.2);
   z-index: 1;
+}
+.page_reservation .rv_item .promise {
+  position: absolute;
+  height: 15px;
+  bottom: 2px;
+  left: 2px;
+  border-radius: 2px;
+  line-height: 15px;
+  font-size: 11px;
+  padding: 2px;
+  z-index: 1;
+}
+.page_reservation .rv_item .promise .icon {
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  vertical-align: top;
 }
 .page_reservation .rv_item.red {
   background: #e03850;
@@ -355,6 +565,20 @@
 }
 .page_reservation .rv_item.green {
   background: #009966;
+}
+.page_reservation .rv_item.payed::after {
+  content: '';
+  position: absolute;
+  width: 58px;
+  height: 50px;
+  right: 0;
+  bottom: 0;
+  background: url(../images/rv_payed.png);
+  background-size: 100% 100%;
+}
+.page_reservation .rv_item.hilight {
+  box-shadow: -5px 0 5px rgba(255, 156, 0, 0.5), 5px 0 5px rgba(255, 156, 0, 0.5), 0 -5px 5px rgba(255, 156, 0, 0.5), 0 5px 5px rgba(255, 156, 0, 0.5);
+  z-index: 9;
 }
 .popup_reservationDetail {
   display: none;
@@ -464,7 +688,7 @@
   height: 40px;
   line-height: 40px;
   padding-left: 40px;
-  background: url('../images/reservation/itemIcon.png') no-repeat 14px center;
+  background: url("../images/reservation/itemIcon.png") no-repeat 14px center;
   background-size: 11px 12px;
 }
 .popup_reservationDetail > .content > .itemarea .itemComment {
@@ -509,6 +733,20 @@
 .popup_reservationDetail > .content > .timearea > .modifyBtn.am-clickable-active {
   background-color: #eee;
 }
+.popup_reservationDetail > .content > .timearea > .promise {
+  display: block;
+  font-size: 13px;
+  color: #333;
+  height: 20px;
+  line-height: 20px;
+}
+.popup_reservationDetail > .content > .timearea > .promise .icon {
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  vertical-align: top;
+  margin-top: 4px;
+}
 .popup_reservationDetail > .content > .action {
   position: absolute;
   bottom: 0;
@@ -549,4 +787,7 @@
 }
 .popup_reservationDetail > .content.red > .title {
   color: #e82742;
+}
+.popup_reservationDetail > .content.payed .gotoCashier {
+  display: none;
 }

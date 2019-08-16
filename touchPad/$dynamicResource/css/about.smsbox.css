@@ -1,0 +1,139 @@
+#page_about_SMSbox,
+#page_aboutpasswordbox {
+  z-index: 999;
+}
+#page_about_SMSbox .SMS,
+#page_aboutpasswordbox .SMS,
+#page_about_SMSbox .password,
+#page_aboutpasswordbox .password {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background: #ffffff;
+  border-radius: 5px;
+  width: 806px;
+  height: 551px;
+  transform: translate(-50%, -50%);
+}
+#page_about_SMSbox .SMS .title_text,
+#page_aboutpasswordbox .SMS .title_text,
+#page_about_SMSbox .password .title_text,
+#page_aboutpasswordbox .password .title_text,
+#page_about_SMSbox .SMS .pastitle_text,
+#page_aboutpasswordbox .SMS .pastitle_text,
+#page_about_SMSbox .password .pastitle_text,
+#page_aboutpasswordbox .password .pastitle_text {
+  line-height: normal;
+  font-size: 19px;
+  color: #222222;
+  width: 100%;
+  text-align: center;
+  position: absolute;
+  top: 60px;
+  font-weight: bold;
+}
+#page_about_SMSbox .SMS .content_text,
+#page_aboutpasswordbox .SMS .content_text,
+#page_about_SMSbox .password .content_text,
+#page_aboutpasswordbox .password .content_text,
+#page_about_SMSbox .SMS .pascontent_text,
+#page_aboutpasswordbox .SMS .pascontent_text,
+#page_about_SMSbox .password .pascontent_text,
+#page_aboutpasswordbox .password .pascontent_text {
+  font-size: 13px;
+  line-height: 40px;
+  color: #999999;
+  text-align: center;
+  position: absolute;
+  top: 91px;
+  width: 100%;
+}
+#page_about_SMSbox .SMS .SMSimg,
+#page_aboutpasswordbox .SMS .SMSimg,
+#page_about_SMSbox .password .SMSimg,
+#page_aboutpasswordbox .password .SMSimg {
+  background: url("../images/czdx.png") no-repeat;
+  background-size: 100%;
+  height: 450px;
+  position: absolute;
+  top: 154px;
+  left: 67px;
+  right: 67px;
+  bottom: 82px;
+}
+#page_about_SMSbox .SMS .passwordimg,
+#page_aboutpasswordbox .SMS .passwordimg,
+#page_about_SMSbox .password .passwordimg,
+#page_aboutpasswordbox .password .passwordimg {
+  background: url("../images/xgmm.png") no-repeat;
+  background-size: 100%;
+  height: 450px;
+  position: absolute;
+  top: 154px;
+  left: 67px;
+  right: 67px;
+  bottom: 82px;
+}
+#page_about_SMSbox .SMS .exit,
+#page_aboutpasswordbox .SMS .exit,
+#page_about_SMSbox .password .exit,
+#page_aboutpasswordbox .password .exit,
+#page_about_SMSbox .SMS .pasexit,
+#page_aboutpasswordbox .SMS .pasexit,
+#page_about_SMSbox .password .pasexit,
+#page_aboutpasswordbox .password .pasexit {
+  width: 55px;
+  height: 55px;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+}
+#page_about_SMSbox .SMS .exit .exitimg,
+#page_aboutpasswordbox .SMS .exit .exitimg,
+#page_about_SMSbox .password .exit .exitimg,
+#page_aboutpasswordbox .password .exit .exitimg,
+#page_about_SMSbox .SMS .pasexit .exitimg,
+#page_aboutpasswordbox .SMS .pasexit .exitimg,
+#page_about_SMSbox .password .pasexit .exitimg,
+#page_aboutpasswordbox .password .pasexit .exitimg {
+  width: 15px;
+  height: 15px;
+  background: url("../images/icons_sprite/close_employee.png") no-repeat center center;
+  background-size: 100%;
+  position: absolute;
+  top: 20px;
+  right: 21px;
+}
+#page_about_SMSbox .SMS .know,
+#page_aboutpasswordbox .SMS .know,
+#page_about_SMSbox .password .know,
+#page_aboutpasswordbox .password .know,
+#page_about_SMSbox .SMS .pasknow,
+#page_aboutpasswordbox .SMS .pasknow,
+#page_about_SMSbox .password .pasknow,
+#page_aboutpasswordbox .password .pasknow {
+  width: 20.4%;
+  height: 44px;
+  background: #555555;
+  border-radius: 3px;
+  color: white;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 44px;
+  position: absolute;
+  bottom: 44px;
+  left: 50%;
+  transform: translate(-50%, 0);
+  text-align: center;
+  min-width: 165px;
+}
+#page_about_SMSbox .SMS .know:hover,
+#page_aboutpasswordbox .SMS .know:hover,
+#page_about_SMSbox .password .know:hover,
+#page_aboutpasswordbox .password .know:hover,
+#page_about_SMSbox .SMS .pasknow:hover,
+#page_aboutpasswordbox .SMS .pasknow:hover,
+#page_about_SMSbox .password .pasknow:hover,
+#page_aboutpasswordbox .password .pasknow:hover {
+  background: #333;
+}

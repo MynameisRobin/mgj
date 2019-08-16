@@ -28,8 +28,8 @@
 }
 .cashierTotalPanel {
   display: none;
-  background-color: #FFF;
-  border-top: 1px solid #DDD;
+  background-color: #fff;
+  border-top: 1px solid #ddd;
   height: 42px;
   position: absolute;
   left: 136px;
@@ -111,6 +111,121 @@
   border-color: #e82742;
   -webkit-animation: animation_shake 1 ease-in 0.2s;
 }
+.cashierTotalPanel .editRemark {
+  max-width: 230px;
+  min-height: 35px;
+  float: left;
+  position: relative;
+  padding-top: 3px;
+  padding: 5px 20px 0 10px;
+  font-size: 12px;
+  line-height: initial;
+}
+.cashierTotalPanel .editRemark .label {
+  display: none;
+  overflow: hidden;
+}
+.cashierTotalPanel .editRemark .label .remarkCardBox {
+  height: 16px;
+  line-height: 16px;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 190px;
+}
+.cashierTotalPanel .editRemark .label .remarkCardBox span {
+  background-color: #999;
+  color: #fff;
+  height: 16px;
+  line-height: 16px;
+  display: inline-block;
+  vertical-align: middle;
+  padding: 0 5px;
+  margin-right: 5px;
+  cursor: pointer;
+}
+.cashierTotalPanel .editRemark .label .remarkCardBox span.selected {
+  padding-right: 15px;
+  background: #999 url(../images/hangup/remark_success.png) no-repeat right center;
+  background-size: 12px 12px;
+}
+.cashierTotalPanel .editRemark .label .remarkCardBox span.am-clickable-active {
+  background-color: #ccc;
+}
+.cashierTotalPanel .editRemark .info {
+  color: #888;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+  line-height: 35px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  word-break: break-all;
+  -webkit-box-orient: vertical;
+}
+.cashierTotalPanel .editRemark .icon {
+  color: #888;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  margin-top: -8px;
+  font-size: 16px;
+  width: 16px;
+  height: 23px;
+  display: inline-block;
+}
+.cashierTotalPanel .scanToSale {
+  float: left;
+  width: 80px;
+  height: 40px;
+  padding-top: 3px;
+  padding-left: 10px;
+}
+.cashierTotalPanel .scanToSale .toggle {
+  width: 40px;
+  height: 20px;
+  margin: 0 auto;
+  background-color: #595959;
+  border-radius: 20px;
+  position: relative;
+}
+.cashierTotalPanel .scanToSale .toggle .icon {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: #fff;
+  top: 2px;
+  left: 2px;
+  right: auto;
+}
+.cashierTotalPanel .scanToSale .text {
+  font-size: 12px;
+  color: #888;
+  text-align: center;
+  line-height: 16px;
+  height: 16px;
+  position: relative;
+}
+.cashierTotalPanel .scanToSale .text::after {
+  content: "开启扫码录入";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+}
+.cashierTotalPanel .scanToSale.on .toggle {
+  background-color: #42a2de;
+}
+.cashierTotalPanel .scanToSale.on .toggle .icon {
+  left: auto;
+  right: 2px;
+}
+.cashierTotalPanel .scanToSale.on .text::after {
+  content: "关闭扫码录入";
+}
 .cashierTotalPanel .hangup {
   float: right;
   margin-top: -1px;
@@ -138,6 +253,36 @@
 .cashierTotalPanel .submit.am-clickable-active {
   background: #c90e28;
 }
+.cashierTotalPanel .submit.itemPay {
+  width: 58px;
+  position: relative;
+}
+.cashierTotalPanel .submit.itemPay.am-disabled {
+  opacity: 0.5;
+}
+.cashierTotalPanel .submit.itemPay.am-disabled.am-clickable-active {
+  background: #e82742;
+}
+.cashierTotalPanel .submit.itemPay .icon {
+  position: absolute;
+  width: 38px;
+  height: 36px;
+  top: 50%;
+  left: 50%;
+  margin-left: -19px;
+  margin-top: -18px;
+  background-color: #EC4B62;
+  border-radius: 7px;
+}
+.cashierTotalPanel .submit.itemPay .icon .iconfont {
+  position: absolute;
+  width: 20px;
+  height: 16px;
+  top: 50%;
+  left: 50%;
+  margin-left: -10px;
+  margin-top: -8px;
+}
 .cashierTotalPanel .totalPrice {
   float: right;
   color: #e82742;
@@ -153,6 +298,302 @@
 .cashierTotalPanel.show {
   z-index: 1;
 }
+.cashierTotalPanel .qrCodeWrap {
+  position: relative;
+  float: right;
+}
+.cashierTotalPanel .qrCodeWrap .qrCodeBtnDiv .settle {
+  display: none;
+  box-sizing: content-box;
+  position: absolute;
+  top: 0px;
+  left: -24px;
+  width: 64px;
+  height: 21px;
+  padding-top: 3px;
+  line-height: initial;
+  text-align: center;
+  font-size: 11px;
+  transition: 0.2s all ease;
+  color: #FFF;
+  opacity: 0.69;
+  background: #000;
+  border-radius: 13.5px;
+}
+.cashierTotalPanel .qrCodeWrap .qrCodeBtnDiv .qrCodeClick {
+  cursor: pointer;
+  display: inline-block;
+  vertical-align: middle;
+  width: 35px;
+  height: 32px;
+  margin-right: 10px;
+}
+.cashierTotalPanel .qrCodeWrap .qrCodeBtnDiv:hover .settle {
+  display: block;
+  top: -25px;
+}
+.cashierTotalPanel .qrCodeWrap .qrCodeInner {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.5);
+}
+.cashierTotalPanel .qrCodeWrap .qrCodeInner .modelContent {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /*向左向上分别平移自身的一半*/
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  box-sizing: border-box;
+  background: #fff;
+  border-radius: 4px;
+}
+.cashierTotalPanel .qrCodeWrap .qrCodeInner .modelContent h2 {
+  margin-bottom: 6px;
+  font-size: 20px;
+  color: #333;
+  line-height: 28px;
+}
+.cashierTotalPanel .qrCodeWrap .qrCodeInner .modelContent h3 {
+  font-size: 16px;
+  color: #909090;
+  line-height: 22px;
+}
+.cashierTotalPanel .qrCodeWrap .qrCodeInner .modelContent .close {
+  position: absolute;
+  top: -5px;
+  right: 11px;
+  font-size: 24px;
+}
+.cashierTotalPanel .qrCodeWrap .qrCodeInner .modelContent .open {
+  display: inline-block;
+  text-align: center;
+  color: #fff;
+  background: #555;
+  border-radius: 4px;
+}
+.cashierTotalPanel .qrCodeWrap .qrCodeInner .beforeOpen {
+  display: none;
+  width: 774px;
+  padding: 39px 0 28px;
+}
+.cashierTotalPanel .qrCodeWrap .qrCodeInner .beforeOpen .qrx {
+  position: absolute;
+  top: 340px;
+  right: 50px;
+  width: 101px;
+  height: 101px;
+}
+.cashierTotalPanel .qrCodeWrap .qrCodeInner .beforeOpen .experience-span {
+  position: absolute;
+  top: 480px;
+  right: 75px;
+  font-size: 12px;
+  color: #999;
+}
+.cashierTotalPanel .qrCodeWrap .qrCodeInner .beforeOpen img {
+  width: 627px;
+  height: 389px;
+  margin-top: 28px;
+  margin-left: 116px;
+}
+.cashierTotalPanel .qrCodeWrap .qrCodeInner .beforeOpen .open {
+  width: 146px;
+  height: 44px;
+  margin: 18px auto 0;
+  line-height: 44px;
+}
+.cashierTotalPanel .qrCodeWrap .qrCodeInner .afterOpen {
+  display: none;
+  width: 680px;
+  padding: 0 0 71px;
+}
+.cashierTotalPanel .qrCodeWrap .qrCodeInner .afterOpen .navWarp {
+  height: 45px;
+  text-align: center;
+}
+.cashierTotalPanel .qrCodeWrap .qrCodeInner .afterOpen .navWarp .tab {
+  border-bottom: 1px solid #EEEBED;
+}
+.cashierTotalPanel .qrCodeWrap .qrCodeInner .afterOpen .navWarp .tab li {
+  display: inline-block;
+  font-size: 14px;
+  color: #000;
+  height: 45px;
+  line-height: 45px;
+  text-align: center;
+}
+.cashierTotalPanel .qrCodeWrap .qrCodeInner .afterOpen .navWarp .tab li:nth-child(1) {
+  margin-right: 47px;
+}
+.cashierTotalPanel .qrCodeWrap .qrCodeInner .afterOpen .navWarp .tab li.active {
+  color: #e82742;
+  border-bottom: 4px solid #e82742;
+}
+.cashierTotalPanel .qrCodeWrap .qrCodeInner .afterOpen .qrCodeWarp {
+  padding-top: 100px;
+}
+.cashierTotalPanel .qrCodeWrap .qrCodeInner .afterOpen .qrCodeWarp h2 {
+  font-size: 19px;
+  font-weight: 500;
+  color: #000;
+}
+.cashierTotalPanel .qrCodeWrap .qrCodeInner .afterOpen .qrCodeWarp .minCode {
+  padding-top: 36px;
+}
+.cashierTotalPanel .qrCodeWrap .qrCodeInner .afterOpen .qrCodeWarp .minCode img {
+  width: 205px;
+  height: 205px;
+}
+.cashierTotalPanel .qrCodeWrap .qrCodeInner .afterOpen .qrCodeWarp .minCode p {
+  padding-top: 36px;
+  font-size: 14px;
+  color: #999;
+}
+.cashierTotalPanel .qrCodeWrap .qrCodeInner .afterOpen .accountWarp {
+  padding-top: 45px;
+}
+.cashierTotalPanel .qrCodeWrap .qrCodeInner .afterOpen .accountWarp .code {
+  display: block;
+  width: 290px;
+  height: 290px;
+  margin: 0 auto;
+}
+.cashierTotalPanel .qrCodeWrap .qrCodeInner .afterOpen .accountWarp .bgImg {
+  position: absolute;
+  top: 295px;
+  right: 0;
+  width: 136px;
+  height: 150px;
+}
+.cashierTotalPanel .qrCodeWrap .qrCodeInner .afterOpen .accountWarp p {
+  position: absolute;
+  top: 370px;
+  left: 50%;
+  margin-left: -63px;
+  font-size: 14px;
+  color: #333;
+}
+.cashierTotalPanel .qrCodeWrap .qrCodeInner .afterOpen .accountWarp .open {
+  width: 173px;
+  height: 39px;
+  margin: 38px auto 0;
+  line-height: 39px;
+}
+.cashierTotalPanel .qrCodeWrap .qrCodeInner .afterOpenCodeWrap {
+  display: none;
+  height: 100%;
+}
+.cashierTotalPanel .qrCodeWrap .qrCodeInner .afterOpenCodeWrap .swiperWrap {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 539px;
+  transform: translate(0, -64%);
+  /*向左向上分别平移自身的一半*/
+  -webkit-transform: translate(0, -64%);
+  -moz-transform: translate(0, -64%);
+}
+.cashierTotalPanel .qrCodeWrap .qrCodeInner .afterOpenCodeWrap .swiperWrap .am-carrousel ul {
+  margin-left: 28%;
+  height: 539px;
+}
+.cashierTotalPanel .qrCodeWrap .qrCodeInner .afterOpenCodeWrap .swiperWrap .am-carrousel ul li {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  width: 300px;
+  height: 425px;
+  margin-left: 30px;
+  margin-right: 30px;
+  border-radius: 4px;
+  transition: all 0.3s ease-out;
+}
+.cashierTotalPanel .qrCodeWrap .qrCodeInner .afterOpenCodeWrap .swiperWrap .am-carrousel ul li .codeDiv {
+  position: absolute;
+  left: 50%;
+  bottom: 90px;
+  margin-left: -60px;
+  width: 120px;
+  height: 120px;
+}
+.cashierTotalPanel .qrCodeWrap .qrCodeInner .afterOpenCodeWrap .swiperWrap .am-carrousel ul li .codeDiv .code {
+  width: 100%;
+  height: 100%;
+}
+.cashierTotalPanel .qrCodeWrap .qrCodeInner .afterOpenCodeWrap .swiperWrap .am-carrousel ul li .codeDiv .logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 25px;
+  height: 25px;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+}
+.cashierTotalPanel .qrCodeWrap .qrCodeInner .afterOpenCodeWrap .swiperWrap .am-carrousel ul li .shopname {
+  position: absolute;
+  width: 100%;
+  font-size: 14px;
+  color: #fff;
+  text-align: center;
+}
+.cashierTotalPanel .qrCodeWrap .qrCodeInner .afterOpenCodeWrap .swiperWrap .am-carrousel ul .a {
+  background: url("../images/server/a.jpg") no-repeat center center;
+  background-size: cover;
+}
+.cashierTotalPanel .qrCodeWrap .qrCodeInner .afterOpenCodeWrap .swiperWrap .am-carrousel ul .a .shopname {
+  top: 130px;
+}
+.cashierTotalPanel .qrCodeWrap .qrCodeInner .afterOpenCodeWrap .swiperWrap .am-carrousel ul .b {
+  background: url("../images/server/b.jpg") no-repeat center center;
+  background-size: cover;
+}
+.cashierTotalPanel .qrCodeWrap .qrCodeInner .afterOpenCodeWrap .swiperWrap .am-carrousel ul .b .codeDiv {
+  bottom: 192px;
+}
+.cashierTotalPanel .qrCodeWrap .qrCodeInner .afterOpenCodeWrap .swiperWrap .am-carrousel ul .b .shopname {
+  top: 0;
+  color: #222;
+}
+.cashierTotalPanel .qrCodeWrap .qrCodeInner .afterOpenCodeWrap .swiperWrap .am-carrousel ul .c {
+  background: url("../images/server/c.jpg") no-repeat center center;
+  background-size: cover;
+}
+.cashierTotalPanel .qrCodeWrap .qrCodeInner .afterOpenCodeWrap .swiperWrap .am-carrousel ul .c .shopname {
+  top: 120px;
+}
+.cashierTotalPanel .qrCodeWrap .qrCodeInner .afterOpenCodeWrap .swiperWrap .am-carrousel ul .selected {
+  zoom: 1.25;
+}
+.cashierTotalPanel .qrCodeWrap .qrCodeInner .afterOpenCodeWrap .bottomDiv {
+  position: absolute;
+  bottom: 16%;
+  width: 100%;
+  font-size: 14px;
+  color: #FFF;
+}
+.cashierTotalPanel .qrCodeWrap .qrCodeInner .afterOpenCodeWrap .bottomDiv ul li {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 10px;
+  border-radius: 50%;
+  background: #A1A1A1;
+}
+.cashierTotalPanel .qrCodeWrap .qrCodeInner .afterOpenCodeWrap .bottomDiv ul .selected {
+  background: #fff;
+}
+.cashierTotalPanel .qrCodeWrap .qrCodeInner .afterOpenCodeWrap .bottomDiv p {
+  line-height: 20px;
+}
 .tab_cash {
   display: none;
   position: absolute;
@@ -160,8 +601,8 @@
   top: 0;
   bottom: 0;
   width: 60px;
-  background-color: #EEEEEE;
-  border-right: 1px solid #DDD;
+  background-color: #eeeeee;
+  border-right: 1px solid #ddd;
   color: #666;
 }
 .tab_cash.openBill .setting,
@@ -184,6 +625,9 @@
 .tab_cash .tab_memList ul li {
   overflow: hidden;
   position: relative;
+}
+.tab_cash .tab_memList ul li.tabItem:hover {
+  background-color: #e7e7e7;
 }
 .tab_cash .tab_memList ul li.tabItem .text {
   font-size: 10px;
@@ -263,6 +707,28 @@
   font-size: 12px;
   padding: 10px 0;
 }
+.tab_cash .tab_memList .tabItem.workStation {
+  overflow: hidden;
+}
+.tab_cash .tab_memList .tabItem.workStation::before {
+  content: "";
+  width: 28px;
+  height: 28px;
+  display: block;
+  position: absolute;
+  bottom: -15px;
+  right: -15px;
+  background-color: #555;
+  color: #fff;
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+}
+.tab_cash .tab_memList .tabItem .seatName {
+  margin-top: 10px;
+}
+.tab_cash .tab_memList .tabItem .seatName.noSeat {
+  color: #e82742;
+}
 .tab_cash .tab_memList .tabItem .operatehair {
   display: none;
   height: 20px;
@@ -276,32 +742,24 @@
   font-size: 10px;
   text-align: center;
 }
+.tab_cash .tab_memList .tabItem .operatehair:hover {
+  background-color: #e7e7e7;
+}
 .tab_cash .tab_memList .tabItem .operatehair.disabled {
   display: block;
-  color: #adadad;
   border: 0;
   line-height: 16px;
   height: auto;
-  margin: 0 8px;
   margin-top: 10px;
-}
-.tab_cash .tab_memList .tabItem .operatehair.disabled::before {
-  content: "已结束洗发";
 }
 .tab_cash .tab_memList .tabItem .operatehair.start {
   display: block;
-}
-.tab_cash .tab_memList .tabItem .operatehair.start::before {
-  content: "开始洗发";
 }
 .tab_cash .tab_memList .tabItem .operatehair.start.am-clickable-active {
   background-color: #e9e9e9;
 }
 .tab_cash .tab_memList .tabItem .operatehair.finish {
   display: block;
-}
-.tab_cash .tab_memList .tabItem .operatehair.finish::before {
-  content: "结束洗发";
 }
 .tab_cash .tab_memList .tabItem .operatehair.finish.am-clickable-active {
   background-color: #e9e9e9;
@@ -310,6 +768,7 @@
   color: #e82742;
   font-size: 24px;
   line-height: 26px;
+  font-family: 'displayIdFont';
 }
 .tab_cash .tab_memList .tabItem .user_name {
   color: #222222;
@@ -352,7 +811,7 @@
   z-index: 1;
 }
 .tab_cash .bottom {
-  border-top: 1px solid #DDD;
+  border-top: 1px solid #ddd;
   bottom: 0;
   left: 0;
   position: absolute;
@@ -378,6 +837,7 @@
   bottom: auto;
   width: 32px;
   height: 32px;
+  z-index: 1;
 }
 .tab_cash .memberInfo .infoclose::before {
   content: "";
@@ -394,7 +854,7 @@
   border-radius: 0 4px 4px 0;
   line-height: 24px;
   background: #FFF;
-  border: 1px solid #DDD;
+  border: 1px solid #ddd;
   /*box-shadow: rgba(0, 0, 0, 0.5) 0 0 5px;*/
   /*&::before{
 				.abs(@left:-5px;@top:20px);
@@ -403,7 +863,24 @@
 				border-top: 5px solid transparent;
 				border-bottom: 5px solid transparent;
 				border-left: none;
-			}*/
+            }*/
+}
+.tab_cash .memberInfo .content .upperWrap {
+  max-height: 350px;
+  overflow: hidden;
+}
+.tab_cash .memberInfo .content .base {
+  position: relative;
+}
+.tab_cash .memberInfo .content .base .more {
+  position: absolute;
+  right: 2px;
+  bottom: 1px;
+  font-size: 12px;
+  color: #00b7ee;
+}
+.tab_cash .memberInfo .content .base .more:hover {
+  opacity: 0.6;
 }
 .tab_cash .memberInfo .content .membername {
   padding-left: 5px;
@@ -443,12 +920,24 @@
   background-size: 16px 16px;
 }
 .tab_cash .memberInfo .content .comment {
+  width: 100%;
+  line-height: 18px;
+  word-wrap: break-word;
   font-size: 12px;
   color: #999;
   clear: both;
   padding: 0 0 3px 5px;
 }
+.tab_cash .memberInfo .content .comment.lineText {
+  display: inline-block;
+  height: 12px;
+  max-width: 230px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
 .tab_cash .memberInfo .content .card {
+  position: relative;
   border-top: 1px solid #ececec;
   padding: 8px 5px;
 }
@@ -485,9 +974,79 @@
   color: #999;
   line-height: 20px;
 }
+.tab_cash .memberInfo .content .card .more {
+  position: absolute;
+  right: 2px;
+  font-size: 12px;
+  color: #00b7ee;
+}
+.tab_cash .memberInfo .content .card .more:hover {
+  opacity: 0.6;
+}
+.tab_cash .memberInfo .content .checkedItemsBox {
+  margin-top: 8px;
+  padding-top: 8px;
+  line-height: 17px;
+  border-top: 1px solid #ececec;
+  color: #666666;
+  font-size: 12px;
+}
+.tab_cash .memberInfo .content .checkedItemsBox .namesBox {
+  display: -webkit-box;
+  position: relative;
+  margin-bottom: 4px;
+  line-height: 18px;
+  width: 100%;
+}
+.tab_cash .memberInfo .content .checkedItemsBox .namesBox .more {
+  position: absolute;
+  bottom: 1px;
+  right: -4px;
+  font-size: 12px;
+  color: #00b7ee;
+}
+.tab_cash .memberInfo .content .checkedItemsBox .namesBox .more:hover {
+  opacity: 0.6;
+}
+.tab_cash .memberInfo .content .checkedItemsBox .namesBox .more.on {
+  bottom: 0;
+}
+.tab_cash .memberInfo .content .checkedItemsBox .tip {
+  margin-top: 2px;
+  color: #ACACAC;
+}
+.tab_cash .memberInfo .content .checkedItemsBox .tip .icon-yduigantanhaokongxin {
+  vertical-align: sub;
+  width: 11px;
+  height: 11px;
+  color: #BDBDBD;
+}
+.tab_cash .memberInfo .content .checkedItemsBox .tip .tipsText {
+  padding-left: 2px;
+}
+.tab_cash .memberInfo .content .card_remark {
+  line-height: 18px;
+  font-size: 12px;
+  color: #999;
+  width: 266px;
+  background-color: whitesmoke;
+  padding: 2px 6px;
+  margin: 5px -5px -5px -5px;
+  text-align: justify;
+  word-break: break-all;
+}
+.tab_cash .memberInfo .content .card_remark.lineText {
+  display: inline-block;
+  line-height: 18px;
+  max-width: 236px;
+  padding-right: 35px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
 .tab_cash .memberInfo .content .recharge,
 .tab_cash .memberInfo .content .renewal {
-  margin: 5px -5px 0 -5px;
+  margin: 10px -5px 0 -5px;
   line-height: 40px;
   text-align: center;
   color: #FFF;
@@ -513,13 +1072,39 @@
   max-height: 200px;
   overflow: hidden;
 }
+.tab_cash .memberInfo .content .items .title {
+  margin-bottom: 5px;
+}
+.tab_cash .memberInfo .content .items .title .shopname {
+  font-size: 10px;
+  color: #999;
+  line-height: 26px;
+  height: 26px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .tab_cash .memberInfo .content .items li {
+  position: relative;
   padding: 5px 10px;
   background: #f7f7f7;
   margin-bottom: 1px;
 }
 .tab_cash .memberInfo .content .items li.am-clickable-active {
   background: #c2c2c2;
+}
+.tab_cash .memberInfo .content .items li .more {
+  position: absolute;
+  right: 2px;
+  bottom: 8px;
+  font-size: 12px;
+  color: #00b7ee;
+}
+.tab_cash .memberInfo .content .items li .more:hover {
+  opacity: 0.6;
+}
+.tab_cash .memberInfo .content .items li .more.on {
+  bottom: 12px;
 }
 .tab_cash .memberInfo .content .items .times {
   float: right;
@@ -538,6 +1123,141 @@
 .tab_cash .memberInfo .content .items .invalidDate.highlight {
   color: #e82742;
 }
+.tab_cash .memberInfo .content .items .card_detail_remark {
+  line-height: 16px;
+  font-size: 12px;
+  color: #bdbdbd;
+  border-top: 1px solid #ddd;
+  margin: 6px 0;
+  padding: 6px 0 0;
+  text-align: justify;
+}
+.tab_cash .memberInfo .content .items .card_detail_remark.lineText {
+  display: inline-block;
+  padding-right: 40px;
+  max-width: 230px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.tab_cash .selectWorkStation {
+  position: absolute;
+  width: 420px;
+  height: 275px;
+  top: 0;
+  left: 60px;
+  background-color: #fff;
+  border-radius: 0px 4px 4px 0;
+  border: 1px solid #dddddd;
+  box-shadow: 0px 1px 6px 0px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  display: none;
+}
+.tab_cash .selectWorkStation .close {
+  position: absolute;
+  left: auto;
+  right: 0px;
+  top: 0px;
+  bottom: auto;
+  width: 32px;
+  height: 32px;
+  z-index: 1;
+}
+.tab_cash .selectWorkStation .close::before {
+  content: "";
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  width: 15px;
+  height: 15px;
+  background: url("../images/icons_sprite/close_employee.png") no-repeat 0px 0px;
+  background-size: 15px 15px;
+}
+.tab_cash .selectWorkStation .space .intro {
+  height: 40px;
+  overflow: hidden;
+  position: relative;
+}
+.tab_cash .selectWorkStation .space .intro .spaceName {
+  font-size: 13px;
+  color: #898989;
+  line-height: 40px;
+  padding: 0 14px;
+}
+.tab_cash .selectWorkStation .space .list {
+  box-sizing: content-box;
+  -webkit-box-sizing: content-box;
+}
+.tab_cash .selectWorkStation .space .list li {
+  width: 77px;
+  height: 77px;
+  margin: 0 14px 14px;
+  background: #fff;
+  border: 1px solid #E6E6E6;
+  border-radius: 4px;
+  float: left;
+  position: relative;
+}
+.tab_cash .selectWorkStation .space .list li .wrap {
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+}
+.tab_cash .selectWorkStation .space .list li .wrap .name,
+.tab_cash .selectWorkStation .space .list li .wrap .customer {
+  font-size: 12px;
+  color: #898989;
+  text-align: center;
+  line-height: 18px;
+  height: 18px;
+  overflow: hidden;
+}
+.tab_cash .selectWorkStation .space .list li .wrap .iconfont {
+  display: block;
+  width: 26px;
+  height: 23px;
+  position: relative;
+  margin: 5px auto;
+}
+.tab_cash .selectWorkStation .space .list li .wrap .iconfont.used {
+  display: none;
+}
+.tab_cash .selectWorkStation .space .list li.used {
+  background: #E3CAA8;
+  border: 1px solid #B8825F;
+}
+.tab_cash .selectWorkStation .space .list li.used .wrap .name,
+.tab_cash .selectWorkStation .space .list li.used .wrap .customer {
+  color: #996231;
+}
+.tab_cash .selectWorkStation .space .list li.used .wrap .iconfont.empty {
+  display: none;
+}
+.tab_cash .selectWorkStation .space .list li.used .wrap .iconfont.used {
+  display: block;
+}
+.tab_cash .selectWorkStation .space .list li .check {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  top: -16px;
+  right: -16px;
+  display: none;
+}
+.tab_cash .selectWorkStation .space .list li .check .iconfont {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  left: 50%;
+  top: 50%;
+  margin-left: -7px;
+  margin-top: -7px;
+}
+.tab_cash .selectWorkStation .space .list li.selected .check {
+  display: block;
+}
 .tab_cash .tabUl li {
   padding: 2px 0 0 0;
   height: 52px;
@@ -550,7 +1270,6 @@
   height: 30px;
   width: 30px;
   margin: 0 auto;
-  background-color: #CCC;
 }
 .tab_cash .tabUl li p.a {
   background: url("../images/tab_sprite.png") no-repeat 0px -35px;
@@ -591,10 +1310,6 @@
 .tab_cash .tabUl li p.j {
   background: url("../images/tab_sprite.png") no-repeat 0px -630px;
   background-size: 35px 700px;
-}
-.tab_cash .tabUl li p.k {
-  background: url(../images/queue.png) no-repeat center center;
-  background-size: 20px 21px;
 }
 .tab_cash .tabUl li.selected {
   border-top: 1px solid #444;
@@ -653,16 +1368,12 @@
   background: url("../images/tab_sprite.png") no-repeat 0px -665px;
   background-size: 35px 700px;
 }
-.tab_cash .tabUl li.selected p.k {
-  background: url(../images/queue-selected.png) no-repeat center center;
-  background-size: 20px 21px;
-}
 .tab_cash .tabUl li > .num {
   display: none;
   position: absolute;
   line-height: 14px;
   padding: 0 2px 0 1px;
-  color: #FFF;
+  color: #fff;
   background: #e82742;
   border-radius: 2px;
   right: 2px;
@@ -674,8 +1385,8 @@
   box-shadow: rgba(0, 0, 0, 0.15) 0 0 3px inset;
 }
 .tab_cash .tabItem {
-  border-top: 1px solid #FFF;
-  border-bottom: 1px solid #DDD;
+  border-top: 1px solid #fff;
+  border-bottom: 1px solid #ddd;
   background-color: #f7f7f7;
 }
 .tab_cash .tabItem.search {
@@ -684,29 +1395,87 @@
 .tab_cash .user {
   padding-bottom: 2px;
 }
-.tab_cash .user .img {
+.tab_cash .user:hover {
+  background-color: #e7e7e7;
+}
+.tab_cash .user.lock .img {
+  position: relative;
+}
+.tab_cash .user.lock .img::after {
+  content: "\e690";
+  font-family: "iconfont" !important;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  position: absolute;
+  width: 40px;
   height: 40px;
-  background: #E7E7E7 url("../images/defultbg.png") no-repeat center center;
+  line-height: 40px;
+  top: 0;
+  left: 0;
+  text-align: center;
+  font-size: 16px;
+  color: #fff;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+}
+.tab_cash .user.good {
+  color: #d9be93;
+  background-color: #362e2b;
+}
+.tab_cash .user.good.tabItem {
+  border-bottom: 1px solid #000;
+}
+.tab_cash .user.good .img {
+  position: relative;
+  border: 2px solid #f7d467;
+}
+.tab_cash .user.good .img::before {
+  content: "";
+  width: 15px;
+  height: 14px;
+  top: -15px;
+  left: 50%;
+  margin-left: -7px;
+  position: absolute;
+  background: url("../images/good.png") no-repeat center center;
+  background-size: 15px 14px;
+  cursor: pointer;
+}
+.tab_cash .user .img {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  background: #e7e7e7 url(../images/defultbg.png) no-repeat center center;
   background-size: 40px 40px;
-  margin: 5px 10px 0 10px;
-  overflow: hidden;
+  margin: 5px auto;
 }
 .tab_cash .user .img img {
   width: 100%;
+  border-radius: 50%;
 }
 .tab_cash .user .name {
   line-height: 20px;
   font-size: 12px;
   text-align: center;
 }
-.tab_cash .user.am-clickable-active {
-  background: #E7E7E7;
-  color: #222;
-}
 .tab_cash .cardli {
   white-space: nowrap;
   font-size: 12px;
   text-align: left;
+}
+.tab_cash .cardli:hover {
+  background-color: #e7e7e7;
+}
+.tab_cash .cardli.good {
+  cursor: pointer;
+}
+.tab_cash .cardli.good .cardBtn {
+  color: #d9be93;
+  background-color: #362e2b;
+}
+.tab_cash .cardli.good.tabItem {
+  border-top: 1px solid #575556;
+  border-bottom: 0;
 }
 .tab_cash .cardli .name {
   height: 16px;
@@ -748,7 +1517,7 @@
 .tab_cash .cardBtn.am-clickable-active,
 .tab_cash .hangupListBtn.am-clickable-active,
 .tab_cash .roundCardsBtn.am-clickable-active {
-  background: #E7E7E7;
+  background: #e7e7e7;
   color: #222;
 }
 .tab_cash .hangupBtn.selected,
@@ -758,7 +1527,7 @@
 .tab_cash .cardBtn.selected,
 .tab_cash .hangupListBtn.selected,
 .tab_cash .roundCardsBtn.selected {
-  background: #FFF;
+  background: #fff;
 }
 .tab_cash .hangupBtn .icon::before,
 .tab_cash .settingBtn .icon::before,
@@ -802,10 +1571,53 @@
   position: absolute;
   line-height: 14px;
   padding: 0 4px;
-  color: #FFF;
+  color: #fff;
   background: #e82742;
   border-radius: 2px;
   right: 2px;
   top: 2px;
   font-size: 12px;
+}
+.tab_cash .tabUl li p.k.icon-lunpai::before {
+  font-size: 22px;
+  line-height: 22px;
+  color: #777777;
+}
+.tab_cash .tabUl li.selected p.k::before {
+  color: #fff;
+}
+.tab_cash svg {
+  position: absolute;
+  margin-top: -30px;
+  width: 60px;
+  height: 35px;
+}
+.goItemPayConfirm {
+  z-index: 2;
+}
+.goItemPayConfirm .content {
+  padding: 60px 60px 100px 60px;
+  max-width: 650px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 500;
+  color: #666;
+  line-height: 25px;
+}
+.goItemPayConfirm .content .itemNames {
+  display: block;
+  padding-bottom: 6px;
+  font-weight: 600;
+  font-size: 17px;
+  color: #222;
+}
+.goItemPayConfirm .cancel {
+  background: #555555;
+  color: #fff;
+}
+.goItemPayConfirm .cancel.am-clickable-active {
+  opacity: 0.8;
+}
+.goItemPayConfirm .close.am-clickable-active {
+  opacity: 0.8;
 }

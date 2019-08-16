@@ -85,36 +85,49 @@
 			
 		},
 		start:function(){
+			var attendanceCodeSetting = localStorage.getItem(amGloble.metadata.userInfo.userId+'_attendanceCodeSetting');
+			if(!attendanceCodeSetting){
+				this.diff = 8*1000;
+				this.refreshInterval = 4*1000;
+			}else {
+				attendanceCodeSetting = JSON.parse(attendanceCodeSetting);
+				this.diff = attendanceCodeSetting.invailidInterval*1000;
+				this.refreshInterval = attendanceCodeSetting.refreshInterval*1000;
+			}
+
 			var _this  = this;
-			var urls = _this.createCode({
-				createTime:new Date(am.now()).getTime(),
-				type:"attendance",
-				shopId:amGloble.metadata.userInfo.shopId,
-				timeDifference:_this.diff,
-				token:am.metadata.userInfo.mgjtouchtoken
-			});
+			// var urls = _this.createCode({
+			// 	createTime:new Date(am.now()).getTime(),
+			// 	type:"attendance",
+			// 	shopId:amGloble.metadata.userInfo.shopId,
+			// 	timeDifference:_this.diff,
+			// 	token:am.metadata.userInfo.mgjtouchtoken
+			// });
+			var urls = _this.createCode('*_'+new Date(am.now()).getTime()+'_'+amGloble.metadata.userInfo.shopId+'_'+_this.diff);
 			var img = createImage();
 			img.setHref(urls.base,function(){
 				_this.$img.html('<img src="'+urls.base+'" />');
 				_this.createScreen(urls.url);
 			});
-			
+			this.timer && clearInterval(this.timer);
 			this.timer = setInterval(function(){
-				var urls2 = _this.createCode({
-					createTime:new Date(am.now()).getTime(),
-					type:"attendance",
-					timeDifference:_this.diff,
-					shopId:amGloble.metadata.userInfo.shopId,
-					token:am.metadata.userInfo.mgjtouchtoken
-				});
+				// var urls2 = _this.createCode({
+				// 	createTime:new Date(am.now()).getTime(),
+				// 	type:"attendance",
+				// 	timeDifference:_this.diff,
+				// 	shopId:amGloble.metadata.userInfo.shopId,
+				// 	token:am.metadata.userInfo.mgjtouchtoken
+				// });
+				var urls2 = _this.createCode('*_'+new Date(am.now()).getTime()+'_'+amGloble.metadata.userInfo.shopId+'_'+_this.diff);
 				img.setHref(urls2.base,function(){
 					_this.$img.html('<img src="'+urls2.base+'" />');
 					_this.createScreen(urls2.url);
 				});
-			},4000);
+			},this.refreshInterval);
 
 			//时间格式化
 			_this.setTime();
+			this.nowTime && clearInterval(this.nowTime);
 			this.nowTime = setInterval(function(){
 				_this.setTime();
 			},5000);//5秒刷新一次
@@ -175,17 +188,19 @@
 						name:item.name,
 						msName:item.msName
 					} 
-					if(item.employeeGoWorkTime){
-						res.push($.extend({},ret,{
-							status:1,//工作中
-							time:item.employeeGoWorkTime,
-						}));
-					}
-					if(item.employeeOutWorkTime){
-						res.push($.extend({},ret,{
-							status:0,//休息中
-							time:item.employeeOutWorkTime,
-						}));
+					if(item.status!=3){
+						if(item.employeeGoWorkTime){
+							res.push($.extend({},ret,{
+								status:1,//工作中
+								time:item.employeeGoWorkTime,
+							}));
+						}
+						if(item.employeeOutWorkTime){
+							res.push($.extend({},ret,{
+								status:0,//休息中
+								time:item.employeeOutWorkTime,
+							}));
+						}
 					}
 				}
 			}
@@ -237,20 +252,116 @@
 		init : function() {
 			attendance.init();
 			attendanceList.init();
+			//财务优化彩蛋
+			var eggWhiteArr = [],
+			compareTime = function(time1, time2) {
+				return time2 / 1000 - time1 / 1000;
+			};
+            
 			$("#about_tab").on("vclick","li",function(){
 				$(this).addClass('selected').siblings('li').removeClass("selected");
 				var index=$(this).index();
+				console.log(index,'index')
 				$("#about_content > li").eq(index).show().siblings().hide();
-				if(index==5){
+				if(index==8){
+					self.aboutScroll = new $.am.ScrollView({
+						$wrap: self.$.find(".about"),
+						$inner: self.$.find(".about>div"),
+						direction: [false, true],
+						hasInput: false,
+						bubble:false
+					});
 					self.aboutScroll.refresh();
 					self.aboutScroll.scrollTo("top");
 				}
 				if(index==0){
 					self.resetPage();
 					self.refreshData();
+					attendance.start();
 				}
 				if(index==2){//
 					$.am.changePage(am.page.prepay, "slideup");
+				}
+				if(index==9){
+					//账户滑动
+					self.ScrollView_zh = new $.am.ScrollView({
+						$wrap: self.$.find(".account"),
+						$inner: self.$.find(".account .tabdiv"),
+						direction: [false, true],
+						hasInput: false,
+						// bubble:true
+					});
+					self.ScrollView_zh.refresh();
+
+				}
+				if(index==3){
+					if(!self.payOutList){
+						self.payOutList = new $.am.payoutAndIncome({
+							$: $('#about_content li.payout'),
+							type: 2,
+							add: function(){
+								$.am.changePage(am.page.addPayOut,'slideup');
+							}
+						})
+					}
+				}
+
+				if(index==4){
+					if(!self.inComeList){
+						self.inComeList = new $.am.payoutAndIncome({
+							$: $('#about_content li.income'),
+							type: 1,
+							add: function(){
+								$.am.changePage(am.page.addIncome,'slideup');
+							}
+						})
+					}
+				}
+
+				if(index==9){
+					//财务优化彩蛋
+					var nowTime = new Date().getTime();
+						eggWhiteArr.push(nowTime);
+					
+					var num = compareTime(eggWhiteArr[0], nowTime);
+						console.log(num, eggWhiteArr);
+					if(num >= 0.5) {
+						if(eggWhiteArr.length >= 3) {
+							eggWhiteArr = [];
+							$.am.changePage(am.page.financeOpt, "");
+						}else {}
+					}else {}
+				}
+
+				//员工排序
+				if(index == 11){
+					self.renderEmps();
+					var $empSort = self.$.find(".empSort");
+					//员工列表滚动123工位
+					self.pos1ScrollView = new $.am.ScrollView({
+						$wrap: $empSort.find(".item1"),
+						$inner: $empSort.find(".pos1"),
+						direction: [false, true],
+						hasInput: false,
+					});
+					self.pos2ScrollView = new $.am.ScrollView({
+						$wrap: $empSort.find(".item2"),
+						$inner: $empSort.find(".pos2"),
+						direction: [false, true],
+						hasInput: false,
+					});
+					self.pos3ScrollView = new $.am.ScrollView({
+						$wrap: $empSort.find(".item3"),
+						$inner: $empSort.find(".pos3"),
+						direction: [false, true],
+						hasInput: false,
+					});
+					self.pos1ScrollView.refresh();
+					self.pos1ScrollView.scrollTo("top");
+					self.pos2ScrollView.refresh();
+					self.pos2ScrollView.scrollTo("top");
+					self.pos3ScrollView.refresh();		
+					self.pos3ScrollView.scrollTo("top");		
 				}
 			});
 			this.$tickeNum = $('#about_content').find('.condition');
@@ -297,6 +408,11 @@
 					am.msg('该券不能在此门店使用');
 					return;
 				}
+				if(am.checkDate(data)) return;
+				//美一刻购买的套餐订单不能在此处使用
+				if(data.mallItem && data.mallItem.packageInfo){
+					return am.msg("商城购买的套餐订单需要顾客在美一客/小程序中进行核销");
+				}
 				am.loading.show("正在核销,请稍候...");
 				am.api.verifyOrder.exec(opt, function (res) {
 					am.loading.hide();
@@ -313,83 +429,8 @@
 			}).on("vclick",".toggleBtn",function(){//查看验券记录
 				$.am.changePage(am.page.verifyRecord, "slideup");
 			});
-			this.aboutScroll = new $.am.ScrollView({
-	            $wrap: this.$.find(".about"),
-	            $inner: this.$.find(".about>div"),
-	            direction: [false, true],
-	            hasInput: false,
-	            bubble:false
-	        });
-	        this.aboutScroll.refresh();
-
-	        //收入与支出
-	        this.$checkPayoutRecord = this.$.find('.payout .checkRecord').vclick(function(){
-	        	$.am.changePage(am.page.payoutAndIncome, "slideup",'payout');
-	        });
-
-	        this.$checkIncomeRecord = this.$.find('.income .checkRecord').vclick(function(){
-	        	$.am.changePage(am.page.payoutAndIncome, "slideup",'income');
-	        });
-
-	        this.$payLi = this.$.find('.payout ul,.income ul').on('vclick','li',function(){
-	        	$(this).addClass('active').siblings().removeClass('active');
-	        });
-
-	        this.$payInput = this.$.find('.payout input,.income input').vclick(function(){
-	        	var amount = $(this);
-				am.keyboard.show({
-					title:"请输入数字",//可不传
-					hidedot:false,
-				    submit:function(value){
-				    	amount.val(value);
-				    }
-				});
-	        });
-
-	        //上传支出凭证
-            this.$uploadVoucher = this.$.find('.payout .upload').vclick(function(){
-                var _this = $(this);
-                amGloble.photoManager.takePhoto("voucher", {
-                    parentShopId: am.metadata.userInfo.parentShopId,
-                }, function(res) {
-                    _this.prev().html(am.photoManager.createImage("voucher", {
-                        parentShopId: am.metadata.userInfo.parentShopId,
-                    }, res, 's'));
-                    _this.data('img',res);
-                }, function() {
-                    console.log("fail");
-                });
-            });
-
-            this.$payoutSmt = this.$.find('.payout .smt').vclick(function(){
-            	self.addPayout();
-            });
-
-            this.$incomeSmt = this.$.find('.income .smt').vclick(function(){
-            	self.addIncome();
-            });
-
-	        this.$depUlOut = this.$.find('.payoutDep'),
-			this.$depUlIn = this.$.find('.incomeDep'),
-			this.$depLi = this.$depUlOut.find('li');
-			this.$depUlOut.empty();
-			this.$depUlIn.empty();
-
-			this.$ExpendTypeUlOut = this.$.find('.payoutType'),
-			this.$ExpendTypeUlIn = this.$.find('.incomeType'),
-			this.$ExpendTypeLi = this.$ExpendTypeUlOut.find('li');
-			this.$ExpendTypeUlOut.empty();
-			this.$ExpendTypeUlIn.empty();
-
-			this.$payoutMethod = this.$.find('.payoutMethod');
-
-			this.$payoutIntro = this.$.find('.payoutIntro');
-			this.$incomeIntro = this.$.find('.incomeIntro');
-
-			this.$payoutPrice = this.$.find('.payoutPrice');
-			this.$incomePrice = this.$.find('.incomePrice');
-			
-			
+	        // this.aboutScroll.refresh();
+	
 			this.$.find('div.clickSound .am-radio').vclick(function () {
 				if($(this).hasClass('checked')){
 					$(this).removeClass('checked');
@@ -416,18 +457,102 @@
 				}
 			});
 
-			
+			//收款提示音开光
+			this.$.find('div.paySound .am-radio').vclick(function () {
+				if($(this).hasClass('checked')){
+					$(this).removeClass('checked');
+					localStorage.setItem('mgjpaySoundDisabled',1);
+				}else{
+					$(this).addClass('checked');
+					localStorage.removeItem('mgjpaySoundDisabled');
+				}
+				//am.initpaySound();
+			});
+			if(localStorage.getItem('mgjpaySoundDisabled') !== "1"){
+				this.$.find('div.paySound .am-radio').addClass("checked");
+			}
+			//考勤推送提示音开关
+			this.$.find('div.attendanceSound .am-radio').vclick(function () {
+				if($(this).hasClass('checked')){
+					$(this).removeClass('checked');
+					localStorage.setItem('mgjattendanceSoundDisabled',1);
+				}else{
+					$(this).addClass('checked');
+					localStorage.removeItem('mgjattendanceSoundDisabled');
+				}
+			});
+			if(localStorage.getItem('mgjattendanceSoundDisabled') !== "1"){
+				this.$.find('div.attendanceSound .am-radio').addClass("checked");
+			}
+			//短信充值
+			this.$.find('span.prompt.dx').on('vclick',function(e){
+                $('#page_about_SMSbox').css({
+					 display:'block'
+				 })
+			});
+			//短信退出(我知道了)
+			$('#page_about_SMSbox .exit.box,.know').on('vclick',function(e){
+                $('#page_about_SMSbox').css({
+					display:'none'
+				})
+			});
+			//修改密码
+			this.$.find('span.prompt.mm').on('vclick',function(e){
+				console.log('触发了吗')
+				$('#page_aboutpasswordbox').css({
+					 display:'block'
+				 })
+			});
+			//密码退出
+			$('#page_aboutpasswordbox .pasexit.box,.pasknow').on('vclick',function(e){
+				$('#page_aboutpasswordbox').css({
+					display:'none'
+				})
+			});
+			//未开通小程序点击去开通小程序
+			$("#about_content .minPro .minClose").on('vclick','.open',function(){
+				window.open('http://cn.mikecrm.com/pKDAmFu');
+			});
+
+			//员工排序点击
+			self.$.find(".empSort").on("vclick",".up",function(){
+				var $li = $(this).parents('li.list');
+				var $pre = $li.prev();
+				$pre.before($li);
+			}).on("vclick",".down",function(){
+				var $li = $(this).parents('li.list');
+				var $next = $li.next();
+				$next.after($li);
+			}).on("vclick",".top",function(){
+				var $li = $(this).parents('li.list');
+				var $ul = $(this).parents('ul.pos');
+				$ul.prepend($li);
+			}).on("vclick",".submit",function(){
+				self.saveConfigEmpSort();
+			}).on("vclick",".cancel",function(){
+				$("#about_tab li.selected").trigger("vclick");
+			});
 
 			if(window.device && window.device.platform && window.device.platform.toUpperCase() === 'IOS'){
-				this.$.find('div.btScanner').show();
+				this.$.find('div.btScanner').parent().show();
 				if(localStorage.getItem('mgjBtScanner') == "1"){
 					this.$.find('div.btScanner .am-radio').addClass("checked");
 				}else{
 					this.$.find('div.btScanner .am-radio').removeClass("checked");
 				}
 			}else{
-				this.$.find('div.btScanner').hide();
+				this.$.find('div.btScanner').parent().hide();
 			}
+
+			this.$.on('vclick','.attendanceInterval .item',function(){
+				var setting = {
+					index: $(this).index(),
+					refreshInterval: $(this).data('refresh'),
+					invailidInterval: $(this).data('invailid')
+				}
+				localStorage.setItem(amGloble.metadata.userInfo.userId+'_attendanceCodeSetting',JSON.stringify(setting));
+				$(this).addClass('selected').siblings().removeClass('selected');
+			});
 		},
 		beforeShow : function(paras) {
 			attendance.start();
@@ -442,6 +567,33 @@
 			if($("#about_tab .selected").index()==0){
 				this.refreshData();
 			}
+			if($("#about_tab .selected").index()==9){
+				this.ScrollView_zh.refresh();
+			}
+
+			var attendanceCodeSetting = localStorage.getItem(amGloble.metadata.userInfo.userId+'_attendanceCodeSetting');
+			if(!attendanceCodeSetting){
+				attendanceCodeSetting = {
+					index: 0,
+					refreshInterval: 4,
+					invailidInterval: 8,
+				}
+			}else {
+				attendanceCodeSetting = JSON.parse(attendanceCodeSetting);
+			}
+			this.$.find('.attendanceInterval .item').eq(attendanceCodeSetting.index).addClass('selected').siblings().removeClass('selected');
+
+			if(paras == 'refreshPayOut' && $("#about_tab .selected").index()==3){
+				self.payOutList.reset();
+				self.payOutList.$search.trigger('vclick');
+				return;
+			}
+
+			if(paras == 'refreshIncome' && $("#about_tab .selected").index()==4){
+				self.inComeList.reset();
+				self.inComeList.$search.trigger('vclick');
+				return;
+			}
 		},
 		refreshData:function(){
 			attendanceList.getData(function(list){
@@ -452,24 +604,34 @@
 			
 			if(paras == "back"){
                 return;
-            }
-			this.aboutScroll.refresh();
+			}
+			
 			var mgjVersion=am.metadata.userInfo.mgjVersion;//版本信息
 			if(mgjVersion==3){
-				$("#about_content .account div").find("p:first span").html("尊享版");
+				$("#about_content .account .version").html("尊享版");
 			}else if(mgjVersion==4){
-				$("#about_content .account div").find("p:first span").html("青春版");
+				$("#about_content .account .version").html("青春版");
 			}else if(mgjVersion==2){
-				$("#about_content .account div").find("p:first span").html("风尚版");
+				$("#about_content .account .version").html("风尚版");
 			}
 			var invaliddate=am.metadata.userInfo.invaliddate;//到期时间
 			if(invaliddate){
-				$("#about_content .account div").find("p:last span").html(new Date(invaliddate).format("yyyy/mm/dd"));
+				$("#about_content .account .expire").html(new Date(invaliddate).format("yyyy/mm/dd"));
 			}else{
-				$("#about_content .account div").find("p:last span").html("--");
+				$("#about_content .account .expire").html("--");
 			}
-			var shopName=am.metadata.userInfo.shopName;
-			$("#about_content .concern .top_text span").html(shopName);
+			var osName=$.trim(am.metadata.userInfo.osName)?am.metadata.userInfo.osName:am.metadata.userInfo.shopName;//门店名称 没有就显示商户名
+			var shopId=am.metadata.userInfo.shopId;//门店编号
+			var parentShopId=am.metadata.userInfo.parentShopId;//总部编号
+			var user_account=am.metadata.userInfo.mobile;//登录账号
+			var messageNum=am.metadata.userInfo.smsFee;//短信余量
+			console.log(messageNum,'messageNummessageNummessageNummessageNum')
+			$("#about_content .account .shop_name").html(osName);
+			$("#about_content .account .shopid").html(shopId);
+			$("#about_content .account .parent_shopid").html(parentShopId);
+			$("#about_content .account .user_account").html(user_account);
+            $("#about_content .account .due_time").html(new Date(invaliddate).format("yyyy/mm/dd"));
+			$("#about_content .account .SMSnum").html(messageNum*10);
 			var url = "http://app.meiguanjia.net/syb/";
 			this.$.find("#about_content li.download div").addClass('haspic').html('<img src="' + am.getQRCode(url, 251, 251) + '" />');
 			if(am.metadata.configs.promoteBarLink){
@@ -479,53 +641,17 @@
 				this.$.find("#about_content li.concern div").removeClass('haspic').empty().addClass('ewm_undefined');
 				this.$.find("#about_content li.concern .bottom_text").html("请先在互联网运营系统中配置！");
 			}
+			//判断商户有没有开通小程序
+			if(am.metadata.shopPropertyField != undefined && am.metadata.shopPropertyField.openSmallProgram) {
+				var userInfo = am.metadata.userInfo;
+				this.$.find("#about_content li.minPro").removeClass('close').addClass('open');
+				this.$.find("#about_content li.minPro .barCode").html('<img src="' + am.getMiniProCode(userInfo.parentShopId,'pages/mall/index','3',userInfo.userId,userInfo.userType) + '" />');
+			}else {
+				this.$.find("#about_content li.minPro").removeClass('open').addClass('close');
 
-			//收入支出部门
-			if(!this.$depUlOut.find('li').length){
-				var dep = am.metadata.deparList;
-				for(var i=0;i<dep.length;i++){
-					var $li = this.$depLi.clone();
-					$li.data('data',dep[i]).find('p').html(dep[i].name);
-					this.$depUlOut.append($li);
-				}
-				for(var i=0;i<dep.length;i++){
-					var $li = this.$depLi.clone();
-					$li.data('data',dep[i]).find('p').html(dep[i].name);
-					this.$depUlIn.append($li);
-				}
-			}
-			this.$depUlOut.find('li').eq(0).addClass('active').siblings().removeClass('active');
-			this.$depUlIn.find('li').eq(0).addClass('active').siblings().removeClass('active');
 
-			// 收入支出类型
-			if(!this.$ExpendTypeUlOut.find('li').length){
-				var dayExpendTypeList = am.metadata.dayExpendTypeList;
-					for(var i=0;i<dayExpendTypeList.length;i++){
-						if(dayExpendTypeList[i].dayexpendtypeid!=5){
-							var $li = this.$ExpendTypeLi.clone();
-							$li.data('data',dayExpendTypeList[i]).find('p').html(dayExpendTypeList[i].name);
-							this.$ExpendTypeUlOut.append($li);
-						}
-					}
-				for(var i=0;i<dayExpendTypeList.length;i++){
-					if(dayExpendTypeList[i].dayexpendtypeid==5){
-						var $li = this.$ExpendTypeLi.clone();
-						$li.data('data',dayExpendTypeList[i]).find('p').html(dayExpendTypeList[i].name);
-						this.$ExpendTypeUlIn.append($li);
-					}
-				}
 			}
-			if(!this.$ExpendTypeUlOut.find('li').length){
-				this.$ExpendTypeUlOut.html('未设置');
-			}
-			if(!this.$ExpendTypeUlIn.find('li').length){
-				this.$ExpendTypeUlIn.html('未设置');
-			}
-			this.$ExpendTypeUlOut.find('li').eq(0).addClass('active').siblings().removeClass('active');
-			this.$ExpendTypeUlIn.find('li').eq(0).addClass('active').siblings().removeClass('active');
-
-			//支出方式
-			this.$payoutMethod.find('li').eq(0).addClass('active').siblings().removeClass('active');
+			
 		},
 		beforeHide : function(paras) {
 			attendance.end();
@@ -616,7 +742,7 @@
 			this.$leftBox.find(".conImg").html(am.photoManager.createImage("customer", {
 				parentShopId: am.metadata.userInfo.parentShopId,
 				updateTs: data.lastphotoupdatetime || new Date().getTime()
-			}, data.memId + ".jpg", "s")).end().find(".conName").text(data.memName).end()
+			}, data.memId + ".jpg", "s",data.photopath||'')).end().find(".conName").text(data.memName).end()
 				.find(".conTel").text(data.memMobile);
 			this.$rightBox.find(".imgCenter").html(am.photoManager.createImage("mall", {
 				parentShopId: am.metadata.userInfo.parentShopId,
@@ -633,104 +759,97 @@
 
 			$('.mallOrderHandel').find('.condition').val('');//清空输入框
 			$('.mallOrderHandel').find('.detailMode').removeClass('show');
-			this.$payInput.val('');
-			this.$payoutIntro.val('');
-			this.$incomeIntro.val('');
-			this.$uploadVoucher.prev().html('');
-			this.$uploadVoucher.data('img','');
+			if(this.$payInput){
+				this.$payInput.val('');
+			}
+			this.$payoutIntro && this.$payoutIntro.val('');
+			this.$incomeIntro && this.$incomeIntro.val('');
+			this.$uploadVoucher && this.$uploadVoucher.prev().html('');
+			this.$uploadVoucher && this.$uploadVoucher.data('img','');
 		},
-		addPayout: function(){
-			var depcode = this.$.find('.payoutDep .active').data('data').code,
-				dayExpendType = this.$.find('.payoutType .active').data('data') && this.$.find('.payoutType .active').data('data').id,
-				seFlag = this.$.find('.payoutMethod .active').index()==0?1:0,
-				price = this.$payoutPrice.val(),
-				profile = this.$uploadVoucher.data('img'),
-				intro = this.$payoutIntro.val();
-			if(!this.$.find('.payoutType .active').data('data')){
-				am.msg('未设置支出类型,请前往系统设置');
-				return;
+		//员工排序列表
+		renderEmps: function(){
+			var employeeList = am.metadata.employeeList || [];
+			if(am.metadata.configs && am.metadata.configs['EMP_SORT']){
+				employeeList = JSON.parse(am.metadata.configs['EMP_SORT']);
+				employeeList = am.getConfigEmpSort(employeeList);
 			}
-			if(!price){
-				am.msg('请输入支出金额');
-				return;
-			}
-			var data = {
-				depcode: depcode,
-				dayExpendType: dayExpendType,
-				seFlag: seFlag,
-				price: price,
-				profile: profile || '',
-				intro: intro,
-				type: 2
-			}
-			this.addExps(data);
-			
-		},
-		addIncome: function(){
-			var depcode = this.$.find('.incomeDep .active').data('data').code,
-				dayExpendType = this.$.find('.incomeType .active').data('data') && this.$.find('.incomeType .active').data('data').id,
-				price = this.$incomePrice.val(),
-				intro = this.$incomeIntro.val();
-			if(!this.$.find('.incomeType .active').data('data')){
-				am.msg('未设置收入类型,请前往系统设置');
-				return;
-			}
-			if(!price){
-				am.msg('请输入收入金额');
-				return;
-			}
-			var data = {
-				depcode: depcode,
-				dayExpendType: dayExpendType,
-				seFlag: 0,
-				price: price,
-				profile: '',
-				intro: intro,
-				type: 1
-			}
-			this.addExps(data);
-		},
-		addExps: function(data){
-			am.loading.show();
-			am.api.addExps.exec({
-				parentShopId:  am.metadata.userInfo.realParentShopId,
-				shopId: am.metadata.userInfo.shopId,
-				intro: data.intro,
-				price: data.price,
-				type: data.type,
-				seFlag: data.seFlag,
-				operateId: am.metadata.userInfo.userId,
-				dayExpendType: data.dayExpendType,
-				autoFlag: 0,
-				depcode: data.depcode,
-				profile: data.profile
-			},function(ret){
-				am.loading.hide();
-				console.log(ret);
-				if(ret && ret.code == 0){
-					am.msg('保存成功');
-					if(data.type==2){
-						self.$payoutPrice.val('');
-						self.$payoutIntro.val('');
-						self.$uploadVoucher.prev().html('');
-						self.$uploadVoucher.data('img','');
-					}else if(data.type==1){
-						self.$incomePrice.val('');
-						self.$incomeIntro.val('');
-					}
-				}else if(ret && ret.code == -1){
-					atMobile.nativeUIWidget.confirm({
-                        caption: '网络异常',
-                        description: '数据保存失败，是否立即重试？',
-                        okCaption: '重试',
-                        cancelCaption: '取消'
-                    }, function(){
-                        self.addExps(data);
-                    }, function(){
-                        
-                    });
+			if(am.isNull(employeeList)) return console.log("员工列表异常!");
+			var $empSort = this.$.find(".empSort");
+			var $pos1 = $empSort.find(".pos1").empty();
+			var $pos2 = $empSort.find(".pos2").empty();
+			var $pos3 = $empSort.find(".pos3").empty();
+			var num1 = 0;
+			var num2 = 0;
+			var num3 = 0;
+			$.each(employeeList,function(i,v){
+				var $li = $('<li class="list"><div class="left">'
+							+'<span class="code"></span>'
+							+'<span class="name"></span>'
+							+'</div>'
+							+'<div class="right">'
+							+'<span class="up am-clickable"><i class="iconfont icon-shangyi"></i>上移</span>'
+							+'<span class="down am-clickable"><i class="iconfont icon-xiayi"></i>下移</span>'
+							+'<span class="top am-clickable"><i class="iconfont icon-zhiding"></i>置顶</span>'
+							+'</div>'
+							+'</li>');
+				if(v.pos === 0){
+					$li.find(".code").text(v.no).end().find(".name").text(v.name);
+					$pos1.append($li.data("data",v));
+					num1++;
 				}
-			});		
-		}
+				else if(v.pos === 1){
+					$li.find(".code").text(v.no).end().find(".name").text(v.name);
+					$pos2.append($li.data("data",v));
+					num2++;
+				}
+				else if(v.pos === 2){
+					$li.find(".code").text(v.no).end().find(".name").text(v.name);
+					$pos3.append($li.data("data",v));
+					num3++;
+				}
+			});
+			if(num1 === 0){
+				$pos1.parents(".item").hide();
+			}else{
+				$pos1.parents(".item").show();
+			}
+			if(num2 === 0){
+				$pos2.parents(".item").hide();
+			}else{
+				$pos2.parents(".item").show();
+			}
+			if(num3 === 0){
+				$pos3.parents(".item").hide();
+			}else{
+				$pos3.parents(".item").show();
+			}
+		},
+		saveConfigEmpSort:function(){
+			var self = this,
+				dataArr = [];
+			var $empSort = self.$.find(".empSort");
+			$empSort.find("ul li").each(function(i,v){
+				dataArr.push($(v).data("data").id);
+			});
+			console.log(dataArr,"dataArr")
+			dataArr = JSON.stringify(dataArr);
+			am.loading.show();
+			am.api.saveNormalConfig.exec({
+				"parentshopid": am.metadata.userInfo.parentShopId + '',
+				"configkey": 'EMP_SORT',
+				"configvalue": dataArr,
+				"shopid": am.metadata.userInfo.shopId + '',
+				"setModuleid": "9"
+			}, function (ret) {
+				am.loading.hide();
+				if (ret && ret.code === 0) {
+					am.msg("保存成功");
+					am.metadata.configs['EMP_SORT'] = dataArr;
+				} else {
+					am.msg(ret.message || '员工排序失败!');
+				}
+			});
+		},
 	});
 })();

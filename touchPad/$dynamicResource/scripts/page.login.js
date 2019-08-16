@@ -7,7 +7,9 @@
 		init : function() {
 			this.$code = this.$.find('.code');
 			this.timer = null;
-
+			$(".auth_box").on("vclick",".close_btn",function(){
+				$(".auth_box").hide();
+			})
 			this.$.on("vclick",".title_words,.title_icon",function(){
 				var $box=self.$.find(".formbox");
 				if($box.hasClass('changeLogin')){
@@ -56,6 +58,21 @@
 			});
 
 			this.shopStatus.init();
+			
+			if(/Windows/i.test(navigator.userAgent)) {
+				try {
+					console.log(wPlugin && location.href.indexOf("file:") != -1)
+				}
+				catch(err) {
+					$('#downApp').show();
+					console.log(err)
+				}
+			}
+			
+			if(localStorage.MGJ_LOGID) {
+				$('#mgjLogIdNum').text(localStorage.MGJ_LOGID)
+			}
+			
 		},
 		changeLogin:function(flag){
 			var _this = this;
@@ -68,26 +85,28 @@
 				$box.addClass('changeLogin');
 
 				_this.timer = setInterval(function(){
-					var _ajax = am.api.query.exec({
-		                codeId : _this._uuid
-		            }, function(ret) {
-		                if(ret.code == 0 && ret.content){
-		                	//登录成功
-							if(self.checkStatus(ret.content)){
-								return;
+					if(am&&am.api){
+						var _ajax = am.api.query.exec({
+							codeId : _this._uuid
+						}, function(ret) {
+							if(ret.code == 0 && ret.content){
+								//登录成功
+								if(self.checkStatus(ret.content)){
+									return;
+								}
+								clearInterval(_this.timer);
+								_ajax.abort();
+								_this.showQrcode();
+								am.clearUserData(ret.content.parentShopId,ret.content.userId);
+								localStorage.setItem("userToken",JSON.stringify(ret.content));
+								am.getmetadata(ret.content);
+							}else if(ret.code == 1021030){
+								//正常轮询
+							}else{
+								am.msg(ret.message || '登录失败！');
 							}
-		                	clearInterval(_this.timer);
-		                	_ajax.abort();
-		                	_this.showQrcode();
-							am.clearUserData(ret.content.parentShopId,ret.content.userId);
-		                    localStorage.setItem("userToken",JSON.stringify(ret.content));
-		                    am.getmetadata(ret.content);
-		                }else if(ret.code == 1021030){
-							//正常轮询
-						}else{
-							am.msg(ret.message || '登录失败！');
-						}
-		            });
+						});
+					}
 				},5000);
 			}else{
 				title_words.text("点击此处扫码登录");
@@ -159,7 +178,7 @@
 			$("body").removeClass("loginBg");
 		},
 		afterHide:function () {
-			var params = JSON.parse(JSON.stringify(am.metadata.configs));
+			var params = JSON.parse(JSON.stringify(am.metadata && am.metadata.configs));
 			//console.log(config);
 			am.mediaShow(0,params);
 			am.cashierTab.visible(1);
@@ -176,10 +195,17 @@
 					var dom = '';
 					var header = '<li><div>ID</div><div>产品名称</div><div>消费金额</div><div>消费时间</div><div>是否付款</div></li>';
 					var body = '';
-					var tpl = '<li><div>{{id}}</div><div>{{productname}}</div><div>{{consumefee}}</div><div>{{consumetime}}</div><div>{{payFlag}}</div></li>';
+                    var tpl = '<li><div>{{id}}</div><div>{{productname}}</div><div>{{consumefee}}</div><div>{{consumetime}}</div><div>{{payFlag}}</div></li>';
+                    var onlyXcxFee = true
 					if(userinfo.comFee.fee_list.length){
 						for(var i=0;i<userinfo.comFee.fee_list.length;i++){
-							var item = userinfo.comFee.fee_list[i];
+                            var item = userinfo.comFee.fee_list[i];
+
+                            // 判断是否仅有小程序欠费，仅小程序欠费时要显示关闭按钮
+                            if ('22' != item.productno && '23' != item.productno) {
+                                onlyXcxFee = false
+                            }
+
 							body += tpl
 							.replace('{{id}}',item.id)
 							.replace('{{productname}}',item.productname)
@@ -189,7 +215,7 @@
 						}
 					}
 					dom = '<ul>'+ header + body+'</ul>';
-					if(userinfo.comFee.days<=1){
+					if(userinfo.comFee.days<=1 || onlyXcxFee){
 						this.shopStatus.show({
 							title:"欠款提醒",
 							content:"尊敬的小掌柜用户（"+userinfo.osName+"<"+userinfo.shopId+">），您好！您有欠款记录，欠款清单如下表，请及时清缴。"+dom+'<p>总计费用：<span class=\"highlight\">'+userinfo.comFee.sumfee+'</span>元</p>',
@@ -283,66 +309,114 @@
 		},
 		login: function(userName, pwd) {
             var self = this;
-            am.loading.show("正在登录,请稍候...");
-            am.api.login.exec({
-                "userName": userName,
-                "password": pwd,
-            }, function(loginres) {
-                am.loading.hide();
-                if (loginres.code == 0 && loginres.content) {
-					am.clearUserData(loginres.content.parentShopId,loginres.content.userId);
-
-					if(self.checkStatus(loginres.content)){
-						return;
+			am.loading.show("正在登录,请稍候...");
+			var loginSign = localStorage.getItem("loginToken_"+userName) || localStorage.getItem("loginToken");
+			if(am&&am.api){
+				am.api.login.exec({
+					"userName": userName,
+					"password": pwd,
+					"mgjtpsingletoken":loginSign
+				}, function(loginres) {
+					console.log("登录回调数据",loginres);
+					am.loading.hide();
+					if (loginres.code == 0 && loginres.content) {
+						localStorage.setItem("loginToken_"+userName,loginres.content.mgjtpsingletoken);
+						am.clearUserData(loginres.content.parentShopId,loginres.content.userId);
+						
+						if(self.checkStatus(loginres.content)){
+							return;
+						}
+						//登录成功
+						localStorage.setItem("userToken",JSON.stringify(loginres.content));
+						localStorage.setItem("user",JSON.stringify({"userName": userName}));
+						am.getmetadata(loginres.content);
+					}else if(loginres.code == 200013){
+						$(".auth_box").show();
+						var query="from=pad&shopId="+loginres.content.shopId+"&mobile="+loginres.content.mobile+"&userId="+loginres.content.userId+"&pwd="+encodeURIComponent(pwd)+"&pwFlag="+loginres.content.pwFlag;
+						var iframeUrl=window.config.mobile+"mgj-auth/index.jsp?"+query
+						$('.auth_box iframe').attr('src',iframeUrl);
+						console.log(iframeUrl)
+					}else {
+						//登录失败
+						am.msg(loginres.message || "数据获取失败,请检查网络!");
 					}
-                    //登录成功
-                    localStorage.setItem("userToken",JSON.stringify(loginres.content));
-                    localStorage.setItem("user",JSON.stringify({"userName": userName}));
-					am.getmetadata(loginres.content);
-					// self.getWorkTip(loginres.content.userId);
-                }else {
-                    //登录失败
-                    am.msg(loginres.message || "数据获取失败,请检查网络!");
-                }
-            });
+				});
+			}
 		},
-		getLoginNum: function(sum) {
+		getLoginNum: function(sum,sum2) {
 			var loginNum = am.isNull(localStorage.loginNum) ? "" : localStorage.loginNum;
 			var myDate = new Date();
 			var date = new Date(localStorage.date - 0).getTime() + 86400000;
-			var tomorrow = new Date().getTime();
-			if (am.isNull(localStorage.date)) {
+			var today = new Date().getTime();
+			if (am.isNull(localStorage.date) || am.isNull(localStorage.loginNum)) {
 				localStorage.date = new Date().getTime();
 				localStorage.loginNum = 0;
 			}
-			if(date < tomorrow){
+			if(date < today){
 				localStorage.loginNum = 1;
-				localStorage.date = date;
+				localStorage.date = today;
 			}else{
-				if (loginNum == 3) {
+				if (loginNum == 1) {
 					return;
 				}
 				localStorage.loginNum++;
 			}
-			setTimeout(function(){
-				am.confirm("工单提醒", "您有" + sum + "个工单目前仍未结单或点评，现在去支持中心么？", "好的", "关闭", function() {
+			setTimeout(function () {
+				var str = '',
+					data = {};
+				if (sum > 0) {
+					str = "您当前有" + sum + "个工单客服已经完成服务流程，请您结单并点评，现在去支持中心么？";
+					if (sum2 > 0) {
+						str = "您当前有" + sum + "个工单可结单和" + sum2 + "个工单未点评,现在去支持中心么？";
+					}
+				} else {
+					if (sum2 > 0) {
+						str = "您当前有" + sum2 + "个工单未点评,现在去支持中心么？";
+						if(sum2 == 1){
+							data.detail = 1;
+						}
+					} 
+					else{
+						return false;
+					}
+				}
+				am.confirm("工单提醒", str, "好的", "关闭", function () {
 					$("canvas").hide();
-					$.am.changePage(am.page.workOrder, "slideup", "");
+					$.am.changePage(am.page.workOrder, "slideup", data);
 				});
-			},500);
+			}, 1000);
         },
-        getWorkTip: function(userId) {
-            var self = this;
-            am.loading.show("正在获取,请稍候...");
-            var opt = { submiterId: userId };
-            am.api.workTip.exec(opt, function(res) {
-                am.loading.hide();
-                if (res.code == 0 && res.content) {
-                    var len = res.content.length;
-                    if (len > 0) {
-                        self.getLoginNum(len);
+        getWorkTip: function(userInfo,flag) {
+			var self = this;
+			self.getWorkTipTimer && clearTimeout(self.getWorkTipTimer);
+			var opt = { 
+				submiterId: userInfo.userId,
+				token:userInfo.mgjtouchtoken
+			};
+            am.api.workTipCount.exec(opt, function(res) {
+				if(am.isNull(res.content)){
+                    return;
+                }
+                var count = "";
+                if(res.content.HANDINGCOUNT == 0){
+                    count = "<svg class='icon' aria-hidden='true'><use xlink:href='#icon-ziyuan24'></use></svg><div class='num act bounceIn'></div>";
+                    if(res.content.NOEVALUATECOUNT == 0){
+                        count = "";
+                    }
+                }else{
+                    if(!am.isNull(res.content.HANDINGCOUNT)){
+                        count = "<svg class='icon' aria-hidden='true'><use xlink:href='#icon-ziyuan24'></use></svg><div class='num bounceIn'>"+res.content.HANDINGCOUNT+"</div>";
                     }
                 }
+				$("#tab_main .logo").html(count);
+				//弹窗
+				if(flag){
+					self.getLoginNum(res.content.REMINDSUBMITERCOUNT,res.content.NOEVALUATECOUNT);
+				}
+
+				self.getWorkTipTimer = setTimeout(function(){
+					self.getWorkTip(userInfo,0);
+				},12*60*1000);
             });
 		},
 	});

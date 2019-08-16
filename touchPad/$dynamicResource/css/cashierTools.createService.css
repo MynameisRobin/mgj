@@ -30,6 +30,7 @@
 }
 .createService .inner .manual {
   margin: 0 20px 25px;
+  overflow: hidden;
 }
 .createService .inner .manual .manual_tit {
   line-height: 40px;
@@ -74,6 +75,47 @@
   line-height: 40px;
   color: #222;
 }
+.createService .inner .manual .autoDisplayId {
+  float: right;
+  height: 40px;
+  margin-right: 20px;
+  overflow: hidden;
+}
+.createService .inner .manual .autoDisplayId .icon {
+  display: inline-block;
+  vertical-align: top;
+  margin: 6px;
+  width: 14px;
+  height: 14px;
+  margin-top: 13px;
+  border: 1px solid #a1a1a1;
+  border-radius: 2px;
+  position: relative;
+}
+.createService .inner .manual .autoDisplayId .icon .iconfont {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  display: none;
+}
+.createService .inner .manual .autoDisplayId p {
+  display: inline-block;
+  vertical-align: top;
+  font-size: 14px;
+  color: #555;
+  line-height: 40px;
+  height: 40px;
+}
+.createService .inner .manual .autoDisplayId.autoId .icon {
+  border: none;
+}
+.createService .inner .manual .autoDisplayId.autoId .icon .iconfont {
+  display: block;
+}
 .createService .inner ul::after {
   content: "";
   display: block;
@@ -93,9 +135,15 @@
   margin: 5px 5px;
   cursor: pointer;
 }
+.createService .inner li.am-clickable-active {
+  background-color: #d6d6d6;
+}
 .createService .inner li.am-disabled {
   border-color: #ddd;
   background-color: #f7f7f7;
   color: #bdbdbd;
   cursor: not-allowed;
+}
+.createService .inner li.am-disabled.am-clickable-active {
+  background-color: #f7f7f7;
 }

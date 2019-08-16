@@ -1,7 +1,13 @@
 /* 文字颜色 ***********************/
 /* c0* 为黑白灰色系 */
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .page_pay .payDetail,
-.page_prepay .payDetail {
+.page_prepay .payDetail,
+.page_addIncome .payDetail {
   display: none;
   position: absolute;
   left: 0;
@@ -11,12 +17,23 @@
   background: rgba(0, 0, 0, 0);
   -webkit-transition: background 0.25s ease-in;
 }
+.page_pay .payDetail .mask,
+.page_prepay .payDetail .mask,
+.page_addIncome .payDetail .mask {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
 .page_pay .payDetail.dark,
-.page_prepay .payDetail.dark {
+.page_prepay .payDetail.dark,
+.page_addIncome .payDetail.dark {
   background: rgba(0, 0, 0, 0.4);
 }
 .page_pay .payDetail.mixbottom,
-.page_prepay .payDetail.mixbottom {
+.page_prepay .payDetail.mixbottom,
+.page_addIncome .payDetail.mixbottom {
   top: 51px;
   bottom: 50px;
   left: 60%;
@@ -24,11 +41,13 @@
   -webkit-transition: none;
 }
 .page_pay .payDetail.mixbottom .onlinePay,
-.page_prepay .payDetail.mixbottom .onlinePay {
+.page_prepay .payDetail.mixbottom .onlinePay,
+.page_addIncome .payDetail.mixbottom .onlinePay {
   width: 100%;
 }
 .page_pay .payDetail .onlinePay,
-.page_prepay .payDetail .onlinePay {
+.page_prepay .payDetail .onlinePay,
+.page_addIncome .payDetail .onlinePay {
   height: 100%;
   width: 40%;
   background: #FFF;
@@ -42,19 +61,22 @@
   -webkit-transition: transform 0.25s ease-in;
 }
 .page_pay .payDetail .onlinePay.show,
-.page_prepay .payDetail .onlinePay.show {
+.page_prepay .payDetail .onlinePay.show,
+.page_addIncome .payDetail .onlinePay.show {
   display: block;
   transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
 }
 .page_pay .payDetail .onlinePay .paytitle,
-.page_prepay .payDetail .onlinePay .paytitle {
+.page_prepay .payDetail .onlinePay .paytitle,
+.page_addIncome .payDetail .onlinePay .paytitle {
   padding-top: 40px;
   font-size: 30px;
   line-height: 80px;
   white-space: nowrap;
 }
 .page_pay .payDetail .onlinePay .paytitle::before,
-.page_prepay .payDetail .onlinePay .paytitle::before {
+.page_prepay .payDetail .onlinePay .paytitle::before,
+.page_addIncome .payDetail .onlinePay .paytitle::before {
   content: "您当前正通过";
   display: block;
   line-height: 20px;
@@ -64,29 +86,45 @@
   top: 20px;
 }
 .page_pay .payDetail .onlinePay .paytitle span,
-.page_prepay .payDetail .onlinePay .paytitle span {
+.page_prepay .payDetail .onlinePay .paytitle span,
+.page_addIncome .payDetail .onlinePay .paytitle span {
   display: inline-block;
   white-space: nowrap;
+  vertical-align: top;
 }
 .page_pay .payDetail .onlinePay .paytitle span::before,
-.page_prepay .payDetail .onlinePay .paytitle span::before {
+.page_prepay .payDetail .onlinePay .paytitle span::before,
+.page_addIncome .payDetail .onlinePay .paytitle span::before {
   content: "";
   width: 40px;
   height: 40px;
   float: left;
   margin: 20px 5px 0 0;
 }
+.page_pay .payDetail .onlinePay .paytitle .luckyMoneyRefresh,
+.page_prepay .payDetail .onlinePay .paytitle .luckyMoneyRefresh,
+.page_addIncome .payDetail .onlinePay .paytitle .luckyMoneyRefresh {
+  display: inline-block;
+  vertical-align: top;
+  width: 40px;
+  height: 40px;
+  background: url(../images/hangup-refresh.png) no-repeat center center;
+  background-size: 16px 16px;
+}
 .page_pay .payDetail .onlinePay .paytitle strong,
-.page_prepay .payDetail .onlinePay .paytitle strong {
+.page_prepay .payDetail .onlinePay .paytitle strong,
+.page_addIncome .payDetail .onlinePay .paytitle strong {
   font-weight: normal;
   color: #e82742;
 }
 .page_pay .payDetail .onlinePay .paytitle strong::before,
-.page_prepay .payDetail .onlinePay .paytitle strong::before {
+.page_prepay .payDetail .onlinePay .paytitle strong::before,
+.page_addIncome .payDetail .onlinePay .paytitle strong::before {
   content: "￥";
 }
 .page_pay .payDetail .onlinePay .paycode,
-.page_prepay .payDetail .onlinePay .paycode {
+.page_prepay .payDetail .onlinePay .paycode,
+.page_addIncome .payDetail .onlinePay .paycode {
   width: 300px;
   height: 44px;
   border: 1px solid #ddd;
@@ -97,7 +135,8 @@
   z-index: 1;
 }
 .page_pay .payDetail .onlinePay .paycode.payed::before,
-.page_prepay .payDetail .onlinePay .paycode.payed::before {
+.page_prepay .payDetail .onlinePay .paycode.payed::before,
+.page_addIncome .payDetail .onlinePay .paycode.payed::before {
   content: "";
   display: block;
   position: absolute;
@@ -112,7 +151,8 @@
   border-radius: 8px;
 }
 .page_pay .payDetail .onlinePay .paycode input,
-.page_prepay .payDetail .onlinePay .paycode input {
+.page_prepay .payDetail .onlinePay .paycode input,
+.page_addIncome .payDetail .onlinePay .paycode input {
   height: 44px;
   float: left;
   width: 220px;
@@ -122,7 +162,8 @@
   border-radius: 4px 0 0 4px;
 }
 .page_pay .payDetail .onlinePay .paycode .button,
-.page_prepay .payDetail .onlinePay .paycode .button {
+.page_prepay .payDetail .onlinePay .paycode .button,
+.page_addIncome .payDetail .onlinePay .paycode .button {
   height: 46px;
   width: 72px;
   background: #595959;
@@ -134,17 +175,20 @@
   border-radius: 0 4px 4px 0;
 }
 .page_pay .payDetail .onlinePay .paycode .button.am-clickable-active,
-.page_prepay .payDetail .onlinePay .paycode .button.am-clickable-active {
+.page_prepay .payDetail .onlinePay .paycode .button.am-clickable-active,
+.page_addIncome .payDetail .onlinePay .paycode .button.am-clickable-active {
   background: #282828;
 }
 .page_pay .payDetail .onlinePay .paycode .button.am-disabled,
-.page_prepay .payDetail .onlinePay .paycode .button.am-disabled {
+.page_prepay .payDetail .onlinePay .paycode .button.am-disabled,
+.page_addIncome .payDetail .onlinePay .paycode .button.am-disabled {
   opacity: 0.8;
   background: #595959;
   color: #b0b0b0;
 }
 .page_pay .payDetail .onlinePay .paycode .barcodeScan,
-.page_prepay .payDetail .onlinePay .paycode .barcodeScan {
+.page_prepay .payDetail .onlinePay .paycode .barcodeScan,
+.page_addIncome .payDetail .onlinePay .paycode .barcodeScan {
   position: absolute;
   left: 185px;
   right: auto;
@@ -154,7 +198,8 @@
   opacity: 0.8;
 }
 .page_pay .payDetail .onlinePay .paycode .barcodeScan::before,
-.page_prepay .payDetail .onlinePay .paycode .barcodeScan::before {
+.page_prepay .payDetail .onlinePay .paycode .barcodeScan::before,
+.page_addIncome .payDetail .onlinePay .paycode .barcodeScan::before {
   content: "";
   display: block;
   width: 24px;
@@ -163,11 +208,13 @@
   background-size: 24px 24px;
 }
 .page_pay .payDetail .onlinePay .paycode .barcodeScan.am-clickable-active,
-.page_prepay .payDetail .onlinePay .paycode .barcodeScan.am-clickable-active {
+.page_prepay .payDetail .onlinePay .paycode .barcodeScan.am-clickable-active,
+.page_addIncome .payDetail .onlinePay .paycode .barcodeScan.am-clickable-active {
   opacity: 1;
 }
 .page_pay .payDetail .onlinePay .paycode .statusBox,
-.page_prepay .payDetail .onlinePay .paycode .statusBox {
+.page_prepay .payDetail .onlinePay .paycode .statusBox,
+.page_addIncome .payDetail .onlinePay .paycode .statusBox {
   position: absolute;
   left: -1px;
   right: -1px;
@@ -179,13 +226,15 @@
   padding: 10px;
 }
 .page_pay .payDetail .onlinePay .paycode .statusBox .loading,
-.page_prepay .payDetail .onlinePay .paycode .statusBox .loading {
+.page_prepay .payDetail .onlinePay .paycode .statusBox .loading,
+.page_addIncome .payDetail .onlinePay .paycode .statusBox .loading {
   height: 80px;
   line-height: 30px;
   color: #666;
 }
 .page_pay .payDetail .onlinePay .paycode .statusBox .loading::before,
-.page_prepay .payDetail .onlinePay .paycode .statusBox .loading::before {
+.page_prepay .payDetail .onlinePay .paycode .statusBox .loading::before,
+.page_addIncome .payDetail .onlinePay .paycode .statusBox .loading::before {
   content: "";
   display: block;
   margin: 0 auto;
@@ -196,13 +245,15 @@
   -webkit-animation: animation-loading infinite linear 1.2s;
 }
 .page_pay .payDetail .onlinePay .paycode .statusBox .success,
-.page_prepay .payDetail .onlinePay .paycode .statusBox .success {
+.page_prepay .payDetail .onlinePay .paycode .statusBox .success,
+.page_addIncome .payDetail .onlinePay .paycode .statusBox .success {
   height: 80px;
   line-height: 30px;
   color: #666;
 }
 .page_pay .payDetail .onlinePay .paycode .statusBox .success .icon,
-.page_prepay .payDetail .onlinePay .paycode .statusBox .success .icon {
+.page_prepay .payDetail .onlinePay .paycode .statusBox .success .icon,
+.page_addIncome .payDetail .onlinePay .paycode .statusBox .success .icon {
   width: 50px;
   height: 50px;
   background: #58d56d;
@@ -212,7 +263,8 @@
   position: relative;
 }
 .page_pay .payDetail .onlinePay .paycode .statusBox .success .icon::before,
-.page_prepay .payDetail .onlinePay .paycode .statusBox .success .icon::before {
+.page_prepay .payDetail .onlinePay .paycode .statusBox .success .icon::before,
+.page_addIncome .payDetail .onlinePay .paycode .statusBox .success .icon::before {
   content: "";
   position: absolute;
   left: 50%;
@@ -227,8 +279,10 @@
 }
 .page_pay .payDetail .onlinePay .paycode .statusBox .complete,
 .page_prepay .payDetail .onlinePay .paycode .statusBox .complete,
+.page_addIncome .payDetail .onlinePay .paycode .statusBox .complete,
 .page_pay .payDetail .onlinePay .paycode .statusBox .refund,
-.page_prepay .payDetail .onlinePay .paycode .statusBox .refund {
+.page_prepay .payDetail .onlinePay .paycode .statusBox .refund,
+.page_addIncome .payDetail .onlinePay .paycode .statusBox .refund {
   margin-top: 10px;
   background: #595959;
   color: #FFF;
@@ -238,19 +292,24 @@
 }
 .page_pay .payDetail .onlinePay .paycode .statusBox .complete.am-clickable-active,
 .page_prepay .payDetail .onlinePay .paycode .statusBox .complete.am-clickable-active,
+.page_addIncome .payDetail .onlinePay .paycode .statusBox .complete.am-clickable-active,
 .page_pay .payDetail .onlinePay .paycode .statusBox .refund.am-clickable-active,
-.page_prepay .payDetail .onlinePay .paycode .statusBox .refund.am-clickable-active {
+.page_prepay .payDetail .onlinePay .paycode .statusBox .refund.am-clickable-active,
+.page_addIncome .payDetail .onlinePay .paycode .statusBox .refund.am-clickable-active {
   background: #282828;
 }
 .page_pay .payDetail .onlinePay .paycode .statusBox .complete.am-disabled,
 .page_prepay .payDetail .onlinePay .paycode .statusBox .complete.am-disabled,
+.page_addIncome .payDetail .onlinePay .paycode .statusBox .complete.am-disabled,
 .page_pay .payDetail .onlinePay .paycode .statusBox .refund.am-disabled,
-.page_prepay .payDetail .onlinePay .paycode .statusBox .refund.am-disabled {
+.page_prepay .payDetail .onlinePay .paycode .statusBox .refund.am-disabled,
+.page_addIncome .payDetail .onlinePay .paycode .statusBox .refund.am-disabled {
   background: #595959;
   color: #b0b0b0;
 }
 .page_pay .payDetail .onlinePay .paycode .statusBox .cancel,
-.page_prepay .payDetail .onlinePay .paycode .statusBox .cancel {
+.page_prepay .payDetail .onlinePay .paycode .statusBox .cancel,
+.page_addIncome .payDetail .onlinePay .paycode .statusBox .cancel {
   margin-top: 10px;
   background: #f7f7f7;
   border: 1px solid #ddd;
@@ -260,36 +319,240 @@
   text-align: center;
 }
 .page_pay .payDetail .onlinePay .paycode .statusBox .cancel.am-disabled,
-.page_prepay .payDetail .onlinePay .paycode .statusBox .cancel.am-disabled {
+.page_prepay .payDetail .onlinePay .paycode .statusBox .cancel.am-disabled,
+.page_addIncome .payDetail .onlinePay .paycode .statusBox .cancel.am-disabled {
   color: #bdbdbd;
 }
 .page_pay .payDetail .onlinePay .payqrcode,
-.page_prepay .payDetail .onlinePay .payqrcode {
+.page_prepay .payDetail .onlinePay .payqrcode,
+.page_addIncome .payDetail .onlinePay .payqrcode {
   padding-top: 60px;
   position: relative;
 }
-.page_pay .payDetail .onlinePay .payqrcode .paytip,
-.page_prepay .payDetail .onlinePay .payqrcode .paytip {
+.page_pay .payDetail .onlinePay .payqrcode .paySelect,
+.page_prepay .payDetail .onlinePay .payqrcode .paySelect,
+.page_addIncome .payDetail .onlinePay .payqrcode .paySelect {
+  width: 100%;
+  text-align: center;
+}
+.page_pay .payDetail .onlinePay .payqrcode .paySelect li,
+.page_prepay .payDetail .onlinePay .payqrcode .paySelect li,
+.page_addIncome .payDetail .onlinePay .payqrcode .paySelect li {
+  width: 100px;
+  height: 30px;
   line-height: 30px;
   position: relative;
-  top: 20px;
+  display: inline-block;
+  padding-left: 30px;
+  text-align: left;
+}
+.page_pay .payDetail .onlinePay .payqrcode .paySelect li .radio::before,
+.page_prepay .payDetail .onlinePay .payqrcode .paySelect li .radio::before,
+.page_addIncome .payDetail .onlinePay .payqrcode .paySelect li .radio::before {
+  content: "";
+  position: absolute;
+  left: 5px;
+  display: block;
+  width: 18px;
+  height: 18px;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  border: 1px solid #555555;
+  top: 6px;
+}
+.page_pay .payDetail .onlinePay .payqrcode .paySelect li.act .radio::before,
+.page_prepay .payDetail .onlinePay .payqrcode .paySelect li.act .radio::before,
+.page_addIncome .payDetail .onlinePay .payqrcode .paySelect li.act .radio::before {
+  width: 18px;
+  height: 18px;
+}
+.page_pay .payDetail .onlinePay .payqrcode .paySelect li.act .radio::after,
+.page_prepay .payDetail .onlinePay .payqrcode .paySelect li.act .radio::after,
+.page_addIncome .payDetail .onlinePay .payqrcode .paySelect li.act .radio::after {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 8px;
+  top: 9px;
+  width: 14px;
+  height: 14px;
+  background-color: #555555;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+}
+.page_pay .payDetail .onlinePay .payqrcode .wechatPosList,
+.page_prepay .payDetail .onlinePay .payqrcode .wechatPosList,
+.page_addIncome .payDetail .onlinePay .payqrcode .wechatPosList,
+.page_pay .payDetail .onlinePay .payqrcode .alipayPosList,
+.page_prepay .payDetail .onlinePay .payqrcode .alipayPosList,
+.page_addIncome .payDetail .onlinePay .payqrcode .alipayPosList {
+  display: none;
+  margin-top: 40px;
+}
+.page_pay .payDetail .onlinePay .payqrcode .wechatPosList li,
+.page_prepay .payDetail .onlinePay .payqrcode .wechatPosList li,
+.page_addIncome .payDetail .onlinePay .payqrcode .wechatPosList li,
+.page_pay .payDetail .onlinePay .payqrcode .alipayPosList li,
+.page_prepay .payDetail .onlinePay .payqrcode .alipayPosList li,
+.page_addIncome .payDetail .onlinePay .payqrcode .alipayPosList li {
+  width: 260px;
+  height: 46px;
+  line-height: 46px;
+  margin: 0 auto 20px;
+  border-radius: 3px;
+  border: 1px solid #ddd;
+}
+.page_pay .payDetail .onlinePay .payqrcode .wechatPosList li.am-clickable-active,
+.page_prepay .payDetail .onlinePay .payqrcode .wechatPosList li.am-clickable-active,
+.page_addIncome .payDetail .onlinePay .payqrcode .wechatPosList li.am-clickable-active,
+.page_pay .payDetail .onlinePay .payqrcode .alipayPosList li.am-clickable-active,
+.page_prepay .payDetail .onlinePay .payqrcode .alipayPosList li.am-clickable-active,
+.page_addIncome .payDetail .onlinePay .payqrcode .alipayPosList li.am-clickable-active {
+  background: #f3f3f3;
+}
+.page_pay .payDetail .onlinePay .payqrcode .wechatPosList li .iconfont,
+.page_prepay .payDetail .onlinePay .payqrcode .wechatPosList li .iconfont,
+.page_addIncome .payDetail .onlinePay .payqrcode .wechatPosList li .iconfont,
+.page_pay .payDetail .onlinePay .payqrcode .alipayPosList li .iconfont,
+.page_prepay .payDetail .onlinePay .payqrcode .alipayPosList li .iconfont,
+.page_addIncome .payDetail .onlinePay .payqrcode .alipayPosList li .iconfont {
+  margin-right: 6px;
+  font-size: 14px;
+  margin-top: -1px;
+}
+.page_pay .payDetail .onlinePay .payqrcode .wechatPosList li span,
+.page_prepay .payDetail .onlinePay .payqrcode .wechatPosList li span,
+.page_addIncome .payDetail .onlinePay .payqrcode .wechatPosList li span,
+.page_pay .payDetail .onlinePay .payqrcode .alipayPosList li span,
+.page_prepay .payDetail .onlinePay .payqrcode .alipayPosList li span,
+.page_addIncome .payDetail .onlinePay .payqrcode .alipayPosList li span {
+  display: inline-block;
+  vertical-align: top;
+  height: 46px;
+  line-height: 46px;
+}
+.page_pay .payDetail .onlinePay .payqrcode .wechatPosList li .loading,
+.page_prepay .payDetail .onlinePay .payqrcode .wechatPosList li .loading,
+.page_addIncome .payDetail .onlinePay .payqrcode .wechatPosList li .loading,
+.page_pay .payDetail .onlinePay .payqrcode .alipayPosList li .loading,
+.page_prepay .payDetail .onlinePay .payqrcode .alipayPosList li .loading,
+.page_addIncome .payDetail .onlinePay .payqrcode .alipayPosList li .loading {
+  display: none;
+  width: 15px;
+  background: url(../images/loading.png) no-repeat left center;
+  background-size: 15px 15px;
+  margin-left: 5px;
+  animation: animation-loading infinite linear 1.2s;
+  -webkit-animation: animation-loading infinite linear 1.2s;
+}
+.page_pay .payDetail .onlinePay .payqrcode .wechatPosList li.am-disabled,
+.page_prepay .payDetail .onlinePay .payqrcode .wechatPosList li.am-disabled,
+.page_addIncome .payDetail .onlinePay .payqrcode .wechatPosList li.am-disabled,
+.page_pay .payDetail .onlinePay .payqrcode .alipayPosList li.am-disabled,
+.page_prepay .payDetail .onlinePay .payqrcode .alipayPosList li.am-disabled,
+.page_addIncome .payDetail .onlinePay .payqrcode .alipayPosList li.am-disabled {
+  opacity: 0.8;
+}
+.page_pay .payDetail .onlinePay .payqrcode .wechatPosList li.am-disabled .loading,
+.page_prepay .payDetail .onlinePay .payqrcode .wechatPosList li.am-disabled .loading,
+.page_addIncome .payDetail .onlinePay .payqrcode .wechatPosList li.am-disabled .loading,
+.page_pay .payDetail .onlinePay .payqrcode .alipayPosList li.am-disabled .loading,
+.page_prepay .payDetail .onlinePay .payqrcode .alipayPosList li.am-disabled .loading,
+.page_addIncome .payDetail .onlinePay .payqrcode .alipayPosList li.am-disabled .loading {
+  display: inline-block;
+}
+.page_pay .payDetail .onlinePay .payqrcode .wechatPosList li.am-disabled.am-clickable-active,
+.page_prepay .payDetail .onlinePay .payqrcode .wechatPosList li.am-disabled.am-clickable-active,
+.page_addIncome .payDetail .onlinePay .payqrcode .wechatPosList li.am-disabled.am-clickable-active,
+.page_pay .payDetail .onlinePay .payqrcode .alipayPosList li.am-disabled.am-clickable-active,
+.page_prepay .payDetail .onlinePay .payqrcode .alipayPosList li.am-disabled.am-clickable-active,
+.page_addIncome .payDetail .onlinePay .payqrcode .alipayPosList li.am-disabled.am-clickable-active {
+  background: none;
+}
+.page_pay .payDetail .onlinePay .payqrcode .paytip,
+.page_prepay .payDetail .onlinePay .payqrcode .paytip,
+.page_addIncome .payDetail .onlinePay .payqrcode .paytip {
+  line-height: 30px;
 }
 .page_pay .payDetail .onlinePay .payqrcode .qrcodeimg,
-.page_prepay .payDetail .onlinePay .payqrcode .qrcodeimg {
+.page_prepay .payDetail .onlinePay .payqrcode .qrcodeimg,
+.page_addIncome .payDetail .onlinePay .payqrcode .qrcodeimg {
   width: 300px;
   height: 300px;
   margin: 0 auto;
 }
 .page_pay .payDetail .onlinePay .payqrcode .qrcodeimg img,
-.page_prepay .payDetail .onlinePay .payqrcode .qrcodeimg img {
+.page_prepay .payDetail .onlinePay .payqrcode .qrcodeimg img,
+.page_addIncome .payDetail .onlinePay .payqrcode .qrcodeimg img {
   width: 100%;
   height: 100%;
   display: none;
 }
-.page_pay .payDetail .onlinePay .payqrcode .qrSuccess,
-.page_prepay .payDetail .onlinePay .payqrcode .qrSuccess {
+.page_pay .payDetail .onlinePay .payqrcode .clickToShowCode,
+.page_prepay .payDetail .onlinePay .payqrcode .clickToShowCode,
+.page_addIncome .payDetail .onlinePay .payqrcode .clickToShowCode {
+  position: absolute;
+  left: 50%;
+  right: auto;
+  top: auto;
+  bottom: 0;
   width: 300px;
-  height: 220px;
+  height: 300px;
+  line-height: 330px;
+  margin: 0 0 0 -150px;
+  font-size: 12px;
+  text-align: center;
+  color: #666;
+  background: #fff;
+}
+.page_pay .payDetail .onlinePay .payqrcode .clickToShowCode .corner,
+.page_prepay .payDetail .onlinePay .payqrcode .clickToShowCode .corner,
+.page_addIncome .payDetail .onlinePay .payqrcode .clickToShowCode .corner {
+  width: 250px;
+  height: 250px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+}
+.page_pay .payDetail .onlinePay .payqrcode .clickToShowCode .tips,
+.page_prepay .payDetail .onlinePay .payqrcode .clickToShowCode .tips,
+.page_addIncome .payDetail .onlinePay .payqrcode .clickToShowCode .tips {
+  width: 100%;
+  height: 30px;
+  position: absolute;
+  left: auto;
+  right: auto;
+  top: 50%;
+  bottom: auto;
+  margin-top: -15px;
+}
+.page_pay .payDetail .onlinePay .payqrcode .clickToShowCode .tips .iconfont,
+.page_prepay .payDetail .onlinePay .payqrcode .clickToShowCode .tips .iconfont,
+.page_addIncome .payDetail .onlinePay .payqrcode .clickToShowCode .tips .iconfont {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  vertical-align: top;
+  margin-top: 3px;
+}
+.page_pay .payDetail .onlinePay .payqrcode .clickToShowCode .tips p,
+.page_prepay .payDetail .onlinePay .payqrcode .clickToShowCode .tips p,
+.page_addIncome .payDetail .onlinePay .payqrcode .clickToShowCode .tips p {
+  display: inline-block;
+  vertical-align: top;
+  font-size: 14px;
+  color: #666;
+  line-height: 30px;
+}
+.page_pay .payDetail .onlinePay .payqrcode .qrSuccess,
+.page_prepay .payDetail .onlinePay .payqrcode .qrSuccess,
+.page_addIncome .payDetail .onlinePay .payqrcode .qrSuccess {
+  width: 300px;
+  height: 250px;
   padding-top: 50px;
   position: absolute;
   left: 50%;
@@ -303,7 +566,8 @@
   display: none;
 }
 .page_pay .payDetail .onlinePay .payqrcode .qrSuccess .icon,
-.page_prepay .payDetail .onlinePay .payqrcode .qrSuccess .icon {
+.page_prepay .payDetail .onlinePay .payqrcode .qrSuccess .icon,
+.page_addIncome .payDetail .onlinePay .payqrcode .qrSuccess .icon {
   width: 50px;
   height: 50px;
   background: #58d56d;
@@ -313,7 +577,8 @@
   position: relative;
 }
 .page_pay .payDetail .onlinePay .payqrcode .qrSuccess .icon::before,
-.page_prepay .payDetail .onlinePay .payqrcode .qrSuccess .icon::before {
+.page_prepay .payDetail .onlinePay .payqrcode .qrSuccess .icon::before,
+.page_addIncome .payDetail .onlinePay .payqrcode .qrSuccess .icon::before {
   content: "";
   position: absolute;
   left: 50%;
@@ -327,7 +592,8 @@
   background-size: 30px 20px;
 }
 .page_pay .payDetail .onlinePay .payqrcode .qrSuccess .refund,
-.page_prepay .payDetail .onlinePay .payqrcode .qrSuccess .refund {
+.page_prepay .payDetail .onlinePay .payqrcode .qrSuccess .refund,
+.page_addIncome .payDetail .onlinePay .payqrcode .qrSuccess .refund {
   width: 150px;
   margin: 0 auto;
   background: #595959;
@@ -337,22 +603,22 @@
   text-align: center;
 }
 .page_pay .payDetail .onlinePay .payqrcode .qrSuccess .refund.am-clickable-active,
-.page_prepay .payDetail .onlinePay .payqrcode .qrSuccess .refund.am-clickable-active {
+.page_prepay .payDetail .onlinePay .payqrcode .qrSuccess .refund.am-clickable-active,
+.page_addIncome .payDetail .onlinePay .payqrcode .qrSuccess .refund.am-clickable-active {
   background: #282828;
 }
 .page_pay .payDetail .onlinePay .payqrcode .qrSuccess .refund.am-disabled,
-.page_prepay .payDetail .onlinePay .payqrcode .qrSuccess .refund.am-disabled {
+.page_prepay .payDetail .onlinePay .payqrcode .qrSuccess .refund.am-disabled,
+.page_addIncome .payDetail .onlinePay .payqrcode .qrSuccess .refund.am-disabled {
   background: #595959;
   color: #b0b0b0;
 }
 .page_pay .payDetail .onlinePay .payqrcode .qrReload,
-.page_prepay .payDetail .onlinePay .payqrcode .qrReload {
-  position: absolute;
-  left: 50%;
-  right: auto;
-  top: auto;
-  bottom: 0;
+.page_prepay .payDetail .onlinePay .payqrcode .qrReload,
+.page_addIncome .payDetail .onlinePay .payqrcode .qrReload {
   display: none;
+  position: relative;
+  left: 50%;
   width: 300px;
   height: 300px;
   line-height: 330px;
@@ -362,7 +628,8 @@
   color: #666;
 }
 .page_pay .payDetail .onlinePay .payqrcode .qrReload::before,
-.page_prepay .payDetail .onlinePay .payqrcode .qrReload::before {
+.page_prepay .payDetail .onlinePay .payqrcode .qrReload::before,
+.page_addIncome .payDetail .onlinePay .payqrcode .qrReload::before {
   content: "";
   display: block;
   width: 32px;
@@ -378,7 +645,8 @@
   opacity: 0.7;
 }
 .page_pay .payDetail .onlinePay .payqrcode .qrReload::after,
-.page_prepay .payDetail .onlinePay .payqrcode .qrReload::after {
+.page_prepay .payDetail .onlinePay .payqrcode .qrReload::after,
+.page_addIncome .payDetail .onlinePay .payqrcode .qrReload::after {
   content: "";
   background: url("../images/genqr.png") no-repeat center center;
   position: absolute;
@@ -389,22 +657,21 @@
   opacity: 0.05;
 }
 .page_pay .payDetail .onlinePay .payqrcode .qrLoading,
-.page_prepay .payDetail .onlinePay .payqrcode .qrLoading {
+.page_prepay .payDetail .onlinePay .payqrcode .qrLoading,
+.page_addIncome .payDetail .onlinePay .payqrcode .qrLoading {
   position: absolute;
   left: 50%;
-  right: auto;
-  top: auto;
-  bottom: 0;
   display: none;
   width: 300px;
-  height: 280px;
+  height: 300px;
   color: #666;
   margin: 0 0 0 -150px;
-  line-height: 300px;
+  line-height: 350px;
   background: rgba(255, 255, 255, 0.9);
 }
 .page_pay .payDetail .onlinePay .payqrcode .qrLoading::before,
-.page_prepay .payDetail .onlinePay .payqrcode .qrLoading::before {
+.page_prepay .payDetail .onlinePay .payqrcode .qrLoading::before,
+.page_addIncome .payDetail .onlinePay .payqrcode .qrLoading::before {
   content: "";
   display: block;
   margin: 0 auto;
@@ -415,47 +682,126 @@
   right: auto;
   top: 50%;
   bottom: auto;
-  margin: -64px 0 0 -25px;
+  margin: -45px 0 0 -25px;
   background: url("../images/loading.png") no-repeat center center;
   background-size: contain;
   -webkit-animation: animation-loading infinite linear 1.2s;
 }
+.page_pay .payDetail .onlinePay .showCode,
+.page_prepay .payDetail .onlinePay .showCode,
+.page_addIncome .payDetail .onlinePay .showCode {
+  position: absolute;
+  width: 100%;
+  height: 30px;
+  bottom: 2%;
+  overflow: hidden;
+}
+.page_pay .payDetail .onlinePay .showCode .icon,
+.page_prepay .payDetail .onlinePay .showCode .icon,
+.page_addIncome .payDetail .onlinePay .showCode .icon {
+  display: inline-block;
+  vertical-align: top;
+  margin: 7px;
+  width: 16px;
+  height: 16px;
+  border-radius: 2px;
+  position: relative;
+}
+.page_pay .payDetail .onlinePay .showCode .icon .iconfont,
+.page_prepay .payDetail .onlinePay .showCode .icon .iconfont,
+.page_addIncome .payDetail .onlinePay .showCode .icon .iconfont {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+}
+.page_pay .payDetail .onlinePay .showCode .text,
+.page_prepay .payDetail .onlinePay .showCode .text,
+.page_addIncome .payDetail .onlinePay .showCode .text {
+  display: inline-block;
+  vertical-align: top;
+  font-size: 14px;
+  color: #555;
+  line-height: 30px;
+  height: 30px;
+}
+.page_pay .payDetail .onlinePay .showCode.notAutoShowCode .icon,
+.page_prepay .payDetail .onlinePay .showCode.notAutoShowCode .icon,
+.page_addIncome .payDetail .onlinePay .showCode.notAutoShowCode .icon {
+  width: 14px;
+  height: 14px;
+  border: 1px solid #a1a1a1;
+}
+.page_pay .payDetail .onlinePay .showCode.notAutoShowCode .icon .iconfont,
+.page_prepay .payDetail .onlinePay .showCode.notAutoShowCode .icon .iconfont,
+.page_addIncome .payDetail .onlinePay .showCode.notAutoShowCode .icon .iconfont {
+  display: none;
+}
+.page_pay .payDetail .onlinePay.pos .paytitle span::before,
+.page_prepay .payDetail .onlinePay.pos .paytitle span::before,
+.page_addIncome .payDetail .onlinePay.pos .paytitle span::before {
+  background: url("../images/icons_sprite/icon_pos.png") no-repeat 0px 0px;
+  background-size: 40px 40px;
+}
 .page_pay .payDetail .onlinePay.wechat .paytitle span::before,
-.page_prepay .payDetail .onlinePay.wechat .paytitle span::before {
+.page_prepay .payDetail .onlinePay.wechat .paytitle span::before,
+.page_addIncome .payDetail .onlinePay.wechat .paytitle span::before {
   background: url("../images/icons_sprite/icon_wechat.png") no-repeat 0px 0px;
   background-size: 40px 40px;
 }
 .page_pay .payDetail .onlinePay.alipay .paytitle span::before,
-.page_prepay .payDetail .onlinePay.alipay .paytitle span::before {
+.page_prepay .payDetail .onlinePay.alipay .paytitle span::before,
+.page_addIncome .payDetail .onlinePay.alipay .paytitle span::before {
   background: url("../images/icons_sprite/icon_alipay.png") no-repeat 0px 0px;
   background-size: 40px 40px;
 }
 .page_pay .payDetail .onlinePay.dp .paytitle span::before,
-.page_prepay .payDetail .onlinePay.dp .paytitle span::before {
+.page_prepay .payDetail .onlinePay.dp .paytitle span::before,
+.page_addIncome .payDetail .onlinePay.dp .paytitle span::before {
   background: url("../images/icons_sprite/icon_dp.png") no-repeat 0px 0px;
   background-size: 40px 40px;
 }
+.page_pay .payDetail .onlinePay.kb .paytitle span::before,
+.page_prepay .payDetail .onlinePay.kb .paytitle span::before,
+.page_addIncome .payDetail .onlinePay.kb .paytitle span::before {
+  background: url("../images/icons_sprite/icon_kb.png") no-repeat 0px 0px;
+  background-size: 40px 40px;
+}
+.page_pay .payDetail .onlinePay.jd .paytitle span::before,
+.page_prepay .payDetail .onlinePay.jd .paytitle span::before,
+.page_addIncome .payDetail .onlinePay.jd .paytitle span::before {
+  background: url("../images/icons_sprite/icon_jd.png") no-repeat 0px 0px;
+  background-size: 40px 40px;
+}
 .page_pay .payDetail .onlinePay.mix,
-.page_prepay .payDetail .onlinePay.mix {
+.page_prepay .payDetail .onlinePay.mix,
+.page_addIncome .payDetail .onlinePay.mix {
   text-align: left;
 }
 .page_pay .payDetail .onlinePay.mix .mixTitle,
-.page_prepay .payDetail .onlinePay.mix .mixTitle {
+.page_prepay .payDetail .onlinePay.mix .mixTitle,
+.page_addIncome .payDetail .onlinePay.mix .mixTitle {
   font-size: 12px;
   line-height: 40px;
   padding: 10px 0 0 20px;
   color: #666;
 }
 .page_pay .payDetail .onlinePay.mix .mixTitle .price,
-.page_prepay .payDetail .onlinePay.mix .mixTitle .price {
+.page_prepay .payDetail .onlinePay.mix .mixTitle .price,
+.page_addIncome .payDetail .onlinePay.mix .mixTitle .price {
   color: #e82742;
 }
 .page_pay .payDetail .onlinePay.mix .mixTitle .price::before,
-.page_prepay .payDetail .onlinePay.mix .mixTitle .price::before {
+.page_prepay .payDetail .onlinePay.mix .mixTitle .price::before,
+.page_addIncome .payDetail .onlinePay.mix .mixTitle .price::before {
   content: "￥";
 }
 .page_pay .payDetail .onlinePay.mix .mixPayScroll,
-.page_prepay .payDetail .onlinePay.mix .mixPayScroll {
+.page_prepay .payDetail .onlinePay.mix .mixPayScroll,
+.page_addIncome .payDetail .onlinePay.mix .mixPayScroll {
   position: absolute;
   left: 0;
   right: 0;
@@ -464,7 +810,8 @@
   overflow: hidden;
 }
 .page_pay .payDetail .onlinePay.mix .mixlabel,
-.page_prepay .payDetail .onlinePay.mix .mixlabel {
+.page_prepay .payDetail .onlinePay.mix .mixlabel,
+.page_addIncome .payDetail .onlinePay.mix .mixlabel {
   float: left;
   padding: 10px 0 10px 30px;
   width: 90px;
@@ -475,15 +822,112 @@
   text-overflow: ellipsis;
 }
 .page_pay .payDetail .onlinePay.mix .mixval,
-.page_prepay .payDetail .onlinePay.mix .mixval {
+.page_prepay .payDetail .onlinePay.mix .mixval,
+.page_addIncome .payDetail .onlinePay.mix .mixval {
   height: 40px;
   line-height: 40px;
   padding: 10px 0;
   margin-left: 120px;
   position: relative;
 }
+.page_pay .payDetail .onlinePay.mix .mixval .tipsBox,
+.page_prepay .payDetail .onlinePay.mix .mixval .tipsBox,
+.page_addIncome .payDetail .onlinePay.mix .mixval .tipsBox {
+  position: relative;
+  display: none;
+}
+.page_pay .payDetail .onlinePay.mix .mixval .tipsBox .icon,
+.page_prepay .payDetail .onlinePay.mix .mixval .tipsBox .icon,
+.page_addIncome .payDetail .onlinePay.mix .mixval .tipsBox .icon {
+  position: absolute;
+  top: 10px;
+  margin-left: 5px;
+  width: 20px;
+  height: 20px;
+  opacity: 0.3;
+}
+.page_pay .payDetail .onlinePay.mix .mixval .tipsBox.am-clickable-active .icon,
+.page_prepay .payDetail .onlinePay.mix .mixval .tipsBox.am-clickable-active .icon,
+.page_addIncome .payDetail .onlinePay.mix .mixval .tipsBox.am-clickable-active .icon {
+  opacity: 0.6;
+}
+.page_pay .payDetail .onlinePay.mix .mixval .tipsBox .checkedItemsBox,
+.page_prepay .payDetail .onlinePay.mix .mixval .tipsBox .checkedItemsBox,
+.page_addIncome .payDetail .onlinePay.mix .mixval .tipsBox .checkedItemsBox {
+  display: none;
+  position: absolute;
+  z-index: 1;
+  top: 50px;
+  left: -45px;
+  padding: 20px;
+  color: #999999;
+  max-height: 300px;
+  width: 252px;
+  text-align: left;
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: 0px 1px 11px 0px #A8A8A8;
+}
+.page_pay .payDetail .onlinePay.mix .mixval .tipsBox .checkedItemsBox::after,
+.page_prepay .payDetail .onlinePay.mix .mixval .tipsBox .checkedItemsBox::after,
+.page_addIncome .payDetail .onlinePay.mix .mixval .tipsBox .checkedItemsBox::after {
+  content: '';
+  border: 7px solid #fff;
+  border-color: transparent transparent #fff;
+  position: absolute;
+  top: -13px;
+  right: 42px;
+}
+.page_pay .payDetail .onlinePay.mix .mixval .tipsBox .checkedItemsBox .checkedItemsTitle,
+.page_prepay .payDetail .onlinePay.mix .mixval .tipsBox .checkedItemsBox .checkedItemsTitle,
+.page_addIncome .payDetail .onlinePay.mix .mixval .tipsBox .checkedItemsBox .checkedItemsTitle {
+  height: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #222222;
+  line-height: 20px;
+}
+.page_pay .payDetail .onlinePay.mix .mixval .tipsBox .checkedItemsBox .checkedItemsNames,
+.page_prepay .payDetail .onlinePay.mix .mixval .tipsBox .checkedItemsBox .checkedItemsNames,
+.page_addIncome .payDetail .onlinePay.mix .mixval .tipsBox .checkedItemsBox .checkedItemsNames {
+  margin-top: 6px;
+  font-size: 14px;
+  line-height: 20px;
+  color: #222222;
+}
+.page_pay .payDetail .onlinePay.mix .mixval .tipsBox .checkedItemsBox .tip,
+.page_prepay .payDetail .onlinePay.mix .mixval .tipsBox .checkedItemsBox .tip,
+.page_addIncome .payDetail .onlinePay.mix .mixval .tipsBox .checkedItemsBox .tip {
+  position: relative;
+  margin-top: 22px;
+  padding-left: 24px;
+  font-size: 12px;
+}
+.page_pay .payDetail .onlinePay.mix .mixval .tipsBox .checkedItemsBox .tip .tipsText,
+.page_prepay .payDetail .onlinePay.mix .mixval .tipsBox .checkedItemsBox .tip .tipsText,
+.page_addIncome .payDetail .onlinePay.mix .mixval .tipsBox .checkedItemsBox .tip .tipsText {
+  line-height: 17px;
+}
+.page_pay .payDetail .onlinePay.mix .mixval .tipsBox .checkedItemsBox .tip .iconfont,
+.page_prepay .payDetail .onlinePay.mix .mixval .tipsBox .checkedItemsBox .tip .iconfont,
+.page_addIncome .payDetail .onlinePay.mix .mixval .tipsBox .checkedItemsBox .tip .iconfont {
+  position: absolute;
+  top: -14px;
+  left: 0;
+  width: 14px;
+  height: 14px;
+  font-size: 14px;
+  color: #999999;
+  margin-right: 5px;
+}
+.page_pay .payDetail .onlinePay.mix .mixval .tipsBox.am-clickable-active .checkedItemsBox,
+.page_prepay .payDetail .onlinePay.mix .mixval .tipsBox.am-clickable-active .checkedItemsBox,
+.page_addIncome .payDetail .onlinePay.mix .mixval .tipsBox.am-clickable-active .checkedItemsBox {
+  display: block;
+}
 .page_pay .payDetail .onlinePay.mix .mixval.payed::before,
-.page_prepay .payDetail .onlinePay.mix .mixval.payed::before {
+.page_prepay .payDetail .onlinePay.mix .mixval.payed::before,
+.page_addIncome .payDetail .onlinePay.mix .mixval.payed::before {
   content: "";
   position: absolute;
   left: 158px;
@@ -497,7 +941,8 @@
   background-size: 15px 15px;
 }
 .page_pay .payDetail .onlinePay.mix .mixval input,
-.page_prepay .payDetail .onlinePay.mix .mixval input {
+.page_prepay .payDetail .onlinePay.mix .mixval input,
+.page_addIncome .payDetail .onlinePay.mix .mixval input {
   height: 37px;
   border: 1px solid #ddd;
   border-radius: 2px;
@@ -506,13 +951,34 @@
   float: left;
 }
 .page_pay .payDetail .onlinePay.mix .mixval input.error,
-.page_prepay .payDetail .onlinePay.mix .mixval input.error {
+.page_prepay .payDetail .onlinePay.mix .mixval input.error,
+.page_addIncome .payDetail .onlinePay.mix .mixval input.error {
   border-color: #e82742;
   -webkit-animation: animation_shake 1 ease-in 0.2s;
   color: #e82742;
 }
+.page_pay .payDetail .onlinePay.mix .mixval .redTip,
+.page_prepay .payDetail .onlinePay.mix .mixval .redTip,
+.page_addIncome .payDetail .onlinePay.mix .mixval .redTip {
+  position: absolute;
+  left: 185px;
+  color: #666;
+  font-size: 12px;
+  line-height: 19px;
+}
+.page_pay .payDetail .onlinePay.mix .mixval .redTip .sum,
+.page_prepay .payDetail .onlinePay.mix .mixval .redTip .sum,
+.page_addIncome .payDetail .onlinePay.mix .mixval .redTip .sum {
+  color: #999;
+}
+.page_pay .payDetail .onlinePay.mix .mixval .redTip .red,
+.page_prepay .payDetail .onlinePay.mix .mixval .redTip .red,
+.page_addIncome .payDetail .onlinePay.mix .mixval .redTip .red {
+  color: #e82742;
+}
 .page_pay .payDetail .onlinePay.mix .mixPayButton,
-.page_prepay .payDetail .onlinePay.mix .mixPayButton {
+.page_prepay .payDetail .onlinePay.mix .mixPayButton,
+.page_addIncome .payDetail .onlinePay.mix .mixPayButton {
   float: left;
   width: 60px;
   text-align: center;
@@ -523,19 +989,23 @@
   margin-left: 5px;
 }
 .page_pay .payDetail .onlinePay.mix .mixPayButton.am-clickable-active,
-.page_prepay .payDetail .onlinePay.mix .mixPayButton.am-clickable-active {
+.page_prepay .payDetail .onlinePay.mix .mixPayButton.am-clickable-active,
+.page_addIncome .payDetail .onlinePay.mix .mixPayButton.am-clickable-active {
   background: #282828;
 }
 .page_pay .payDetail .onlinePay.mix .mixPayButton.am-disabled,
-.page_prepay .payDetail .onlinePay.mix .mixPayButton.am-disabled {
+.page_prepay .payDetail .onlinePay.mix .mixPayButton.am-disabled,
+.page_addIncome .payDetail .onlinePay.mix .mixPayButton.am-disabled {
   opacity: 0.8;
   background: #595959;
   color: #b0b0b0;
 }
 .page_pay .payDetail .onlinePay.luckyMoney .paytitle,
 .page_prepay .payDetail .onlinePay.luckyMoney .paytitle,
+.page_addIncome .payDetail .onlinePay.luckyMoney .paytitle,
 .page_pay .payDetail .onlinePay.mallOrder .paytitle,
-.page_prepay .payDetail .onlinePay.mallOrder .paytitle {
+.page_prepay .payDetail .onlinePay.mallOrder .paytitle,
+.page_addIncome .payDetail .onlinePay.mallOrder .paytitle {
   padding-top: 0;
   line-height: 40px;
   font-size: 12px;
@@ -543,22 +1013,28 @@
 }
 .page_pay .payDetail .onlinePay.luckyMoney .paytitle::before,
 .page_prepay .payDetail .onlinePay.luckyMoney .paytitle::before,
+.page_addIncome .payDetail .onlinePay.luckyMoney .paytitle::before,
 .page_pay .payDetail .onlinePay.mallOrder .paytitle::before,
-.page_prepay .payDetail .onlinePay.mallOrder .paytitle::before {
+.page_prepay .payDetail .onlinePay.mallOrder .paytitle::before,
+.page_addIncome .payDetail .onlinePay.mallOrder .paytitle::before {
   display: none;
 }
 .page_pay .payDetail .onlinePay.luckyMoney .paytitle span,
 .page_prepay .payDetail .onlinePay.luckyMoney .paytitle span,
+.page_addIncome .payDetail .onlinePay.luckyMoney .paytitle span,
 .page_pay .payDetail .onlinePay.mallOrder .paytitle span,
-.page_prepay .payDetail .onlinePay.mallOrder .paytitle span {
+.page_prepay .payDetail .onlinePay.mallOrder .paytitle span,
+.page_addIncome .payDetail .onlinePay.mallOrder .paytitle span {
   height: 40px;
   line-height: 40px;
   color: #666;
 }
 .page_pay .payDetail .onlinePay.luckyMoney .paytitle span::before,
 .page_prepay .payDetail .onlinePay.luckyMoney .paytitle span::before,
+.page_addIncome .payDetail .onlinePay.luckyMoney .paytitle span::before,
 .page_pay .payDetail .onlinePay.mallOrder .paytitle span::before,
-.page_prepay .payDetail .onlinePay.mallOrder .paytitle span::before {
+.page_prepay .payDetail .onlinePay.mallOrder .paytitle span::before,
+.page_addIncome .payDetail .onlinePay.mallOrder .paytitle span::before {
   margin: 10px 5px 0 10px;
   width: 20px;
   height: 20px;
@@ -567,8 +1043,10 @@
 }
 .page_pay .payDetail .onlinePay.luckyMoney .c_loading,
 .page_prepay .payDetail .onlinePay.luckyMoney .c_loading,
+.page_addIncome .payDetail .onlinePay.luckyMoney .c_loading,
 .page_pay .payDetail .onlinePay.mallOrder .c_loading,
-.page_prepay .payDetail .onlinePay.mallOrder .c_loading {
+.page_prepay .payDetail .onlinePay.mallOrder .c_loading,
+.page_addIncome .payDetail .onlinePay.mallOrder .c_loading {
   position: absolute;
   left: 0;
   right: 0;
@@ -576,12 +1054,14 @@
   bottom: 0;
   padding-top: 50px;
   background: #FFF;
-  z-index: 1;
+  z-index: 10;
 }
 .page_pay .payDetail .onlinePay.luckyMoney .c_error,
 .page_prepay .payDetail .onlinePay.luckyMoney .c_error,
+.page_addIncome .payDetail .onlinePay.luckyMoney .c_error,
 .page_pay .payDetail .onlinePay.mallOrder .c_error,
-.page_prepay .payDetail .onlinePay.mallOrder .c_error {
+.page_prepay .payDetail .onlinePay.mallOrder .c_error,
+.page_addIncome .payDetail .onlinePay.mallOrder .c_error {
   position: absolute;
   left: 0;
   right: 0;
@@ -593,124 +1073,204 @@
 }
 .page_pay .payDetail .onlinePay.luckyMoney .list,
 .page_prepay .payDetail .onlinePay.luckyMoney .list,
+.page_addIncome .payDetail .onlinePay.luckyMoney .list,
 .page_pay .payDetail .onlinePay.mallOrder .list,
-.page_prepay .payDetail .onlinePay.mallOrder .list {
+.page_prepay .payDetail .onlinePay.mallOrder .list,
+.page_addIncome .payDetail .onlinePay.mallOrder .list {
   border-top: 1px solid #ececec;
   overflow: hidden;
 }
 .page_pay .payDetail .onlinePay.luckyMoney .list ul,
 .page_prepay .payDetail .onlinePay.luckyMoney .list ul,
+.page_addIncome .payDetail .onlinePay.luckyMoney .list ul,
 .page_pay .payDetail .onlinePay.mallOrder .list ul,
-.page_prepay .payDetail .onlinePay.mallOrder .list ul {
+.page_prepay .payDetail .onlinePay.mallOrder .list ul,
+.page_addIncome .payDetail .onlinePay.mallOrder .list ul {
   border-top: 1px solid #ececec;
   margin-top: -1px;
 }
 .page_pay .payDetail .onlinePay.luckyMoney .list li,
 .page_prepay .payDetail .onlinePay.luckyMoney .list li,
+.page_addIncome .payDetail .onlinePay.luckyMoney .list li,
 .page_pay .payDetail .onlinePay.mallOrder .list li,
-.page_prepay .payDetail .onlinePay.mallOrder .list li {
+.page_prepay .payDetail .onlinePay.mallOrder .list li,
+.page_addIncome .payDetail .onlinePay.mallOrder .list li {
   border-bottom: 1px solid #ececec;
   line-height: 22px;
   padding: 10px 40px;
 }
 .page_pay .payDetail .onlinePay.luckyMoney .list li .listRight,
 .page_prepay .payDetail .onlinePay.luckyMoney .list li .listRight,
+.page_addIncome .payDetail .onlinePay.luckyMoney .list li .listRight,
 .page_pay .payDetail .onlinePay.mallOrder .list li .listRight,
-.page_prepay .payDetail .onlinePay.mallOrder .list li .listRight {
+.page_prepay .payDetail .onlinePay.mallOrder .list li .listRight,
+.page_addIncome .payDetail .onlinePay.mallOrder .list li .listRight {
   float: right;
   text-align: right;
 }
 .page_pay .payDetail .onlinePay.luckyMoney .list li .listRight .price,
 .page_prepay .payDetail .onlinePay.luckyMoney .list li .listRight .price,
+.page_addIncome .payDetail .onlinePay.luckyMoney .list li .listRight .price,
 .page_pay .payDetail .onlinePay.mallOrder .list li .listRight .price,
-.page_prepay .payDetail .onlinePay.mallOrder .list li .listRight .price {
+.page_prepay .payDetail .onlinePay.mallOrder .list li .listRight .price,
+.page_addIncome .payDetail .onlinePay.mallOrder .list li .listRight .price {
   color: #e82742;
   font-size: 16px;
 }
 .page_pay .payDetail .onlinePay.luckyMoney .list li .listRight .price::before,
 .page_prepay .payDetail .onlinePay.luckyMoney .list li .listRight .price::before,
+.page_addIncome .payDetail .onlinePay.luckyMoney .list li .listRight .price::before,
 .page_pay .payDetail .onlinePay.mallOrder .list li .listRight .price::before,
-.page_prepay .payDetail .onlinePay.mallOrder .list li .listRight .price::before {
+.page_prepay .payDetail .onlinePay.mallOrder .list li .listRight .price::before,
+.page_addIncome .payDetail .onlinePay.mallOrder .list li .listRight .price::before {
   content: "￥";
+}
+.page_pay .payDetail .onlinePay.luckyMoney .list li .listRight .discount,
+.page_prepay .payDetail .onlinePay.luckyMoney .list li .listRight .discount,
+.page_addIncome .payDetail .onlinePay.luckyMoney .list li .listRight .discount,
+.page_pay .payDetail .onlinePay.mallOrder .list li .listRight .discount,
+.page_prepay .payDetail .onlinePay.mallOrder .list li .listRight .discount,
+.page_addIncome .payDetail .onlinePay.mallOrder .list li .listRight .discount {
+  color: #e82742;
+  font-size: 16px;
 }
 .page_pay .payDetail .onlinePay.luckyMoney .list li .listLeft,
 .page_prepay .payDetail .onlinePay.luckyMoney .list li .listLeft,
+.page_addIncome .payDetail .onlinePay.luckyMoney .list li .listLeft,
 .page_pay .payDetail .onlinePay.mallOrder .list li .listLeft,
-.page_prepay .payDetail .onlinePay.mallOrder .list li .listLeft {
+.page_prepay .payDetail .onlinePay.mallOrder .list li .listLeft,
+.page_addIncome .payDetail .onlinePay.mallOrder .list li .listLeft {
   text-align: left;
+}
+.page_pay .payDetail .onlinePay.luckyMoney .list li .remark,
+.page_prepay .payDetail .onlinePay.luckyMoney .list li .remark,
+.page_addIncome .payDetail .onlinePay.luckyMoney .list li .remark,
+.page_pay .payDetail .onlinePay.mallOrder .list li .remark,
+.page_prepay .payDetail .onlinePay.mallOrder .list li .remark,
+.page_addIncome .payDetail .onlinePay.mallOrder .list li .remark {
+  font-size: 12px;
+  text-align: left;
+  background-color: rgba(124, 124, 124, 0.06);
+  padding: 3px 5px;
+}
+.page_pay .payDetail .onlinePay.luckyMoney .list li .remark span,
+.page_prepay .payDetail .onlinePay.luckyMoney .list li .remark span,
+.page_addIncome .payDetail .onlinePay.luckyMoney .list li .remark span,
+.page_pay .payDetail .onlinePay.mallOrder .list li .remark span,
+.page_prepay .payDetail .onlinePay.mallOrder .list li .remark span,
+.page_addIncome .payDetail .onlinePay.mallOrder .list li .remark span {
+  color: #E82742;
 }
 .page_pay .payDetail .onlinePay.luckyMoney .list li .small,
 .page_prepay .payDetail .onlinePay.luckyMoney .list li .small,
+.page_addIncome .payDetail .onlinePay.luckyMoney .list li .small,
 .page_pay .payDetail .onlinePay.mallOrder .list li .small,
-.page_prepay .payDetail .onlinePay.mallOrder .list li .small {
+.page_prepay .payDetail .onlinePay.mallOrder .list li .small,
+.page_addIncome .payDetail .onlinePay.mallOrder .list li .small {
   font-size: 12px;
   color: #bdbdbd;
 }
+.page_pay .payDetail .onlinePay.luckyMoney .list li .small.status .red,
+.page_prepay .payDetail .onlinePay.luckyMoney .list li .small.status .red,
+.page_addIncome .payDetail .onlinePay.luckyMoney .list li .small.status .red,
+.page_pay .payDetail .onlinePay.mallOrder .list li .small.status .red,
+.page_prepay .payDetail .onlinePay.mallOrder .list li .small.status .red,
+.page_addIncome .payDetail .onlinePay.mallOrder .list li .small.status .red {
+  color: #e82742;
+}
 .page_pay .payDetail .onlinePay.luckyMoney .list li.am-disabled .title,
 .page_prepay .payDetail .onlinePay.luckyMoney .list li.am-disabled .title,
+.page_addIncome .payDetail .onlinePay.luckyMoney .list li.am-disabled .title,
 .page_pay .payDetail .onlinePay.mallOrder .list li.am-disabled .title,
 .page_prepay .payDetail .onlinePay.mallOrder .list li.am-disabled .title,
+.page_addIncome .payDetail .onlinePay.mallOrder .list li.am-disabled .title,
 .page_pay .payDetail .onlinePay.luckyMoney .list li.disabled .title,
 .page_prepay .payDetail .onlinePay.luckyMoney .list li.disabled .title,
+.page_addIncome .payDetail .onlinePay.luckyMoney .list li.disabled .title,
 .page_pay .payDetail .onlinePay.mallOrder .list li.disabled .title,
 .page_prepay .payDetail .onlinePay.mallOrder .list li.disabled .title,
+.page_addIncome .payDetail .onlinePay.mallOrder .list li.disabled .title,
 .page_pay .payDetail .onlinePay.luckyMoney .list li.am-disabled .listRight .price,
 .page_prepay .payDetail .onlinePay.luckyMoney .list li.am-disabled .listRight .price,
+.page_addIncome .payDetail .onlinePay.luckyMoney .list li.am-disabled .listRight .price,
 .page_pay .payDetail .onlinePay.mallOrder .list li.am-disabled .listRight .price,
 .page_prepay .payDetail .onlinePay.mallOrder .list li.am-disabled .listRight .price,
+.page_addIncome .payDetail .onlinePay.mallOrder .list li.am-disabled .listRight .price,
 .page_pay .payDetail .onlinePay.luckyMoney .list li.disabled .listRight .price,
 .page_prepay .payDetail .onlinePay.luckyMoney .list li.disabled .listRight .price,
+.page_addIncome .payDetail .onlinePay.luckyMoney .list li.disabled .listRight .price,
 .page_pay .payDetail .onlinePay.mallOrder .list li.disabled .listRight .price,
-.page_prepay .payDetail .onlinePay.mallOrder .list li.disabled .listRight .price {
+.page_prepay .payDetail .onlinePay.mallOrder .list li.disabled .listRight .price,
+.page_addIncome .payDetail .onlinePay.mallOrder .list li.disabled .listRight .price {
   color: #999;
 }
 .page_pay .payDetail .onlinePay.luckyMoney .list li.am-disabled .title.unopen,
 .page_prepay .payDetail .onlinePay.luckyMoney .list li.am-disabled .title.unopen,
+.page_addIncome .payDetail .onlinePay.luckyMoney .list li.am-disabled .title.unopen,
 .page_pay .payDetail .onlinePay.mallOrder .list li.am-disabled .title.unopen,
 .page_prepay .payDetail .onlinePay.mallOrder .list li.am-disabled .title.unopen,
+.page_addIncome .payDetail .onlinePay.mallOrder .list li.am-disabled .title.unopen,
 .page_pay .payDetail .onlinePay.luckyMoney .list li.disabled .title.unopen,
 .page_prepay .payDetail .onlinePay.luckyMoney .list li.disabled .title.unopen,
+.page_addIncome .payDetail .onlinePay.luckyMoney .list li.disabled .title.unopen,
 .page_pay .payDetail .onlinePay.mallOrder .list li.disabled .title.unopen,
 .page_prepay .payDetail .onlinePay.mallOrder .list li.disabled .title.unopen,
+.page_addIncome .payDetail .onlinePay.mallOrder .list li.disabled .title.unopen,
 .page_pay .payDetail .onlinePay.luckyMoney .list li.am-disabled .listRight .price.unopen,
 .page_prepay .payDetail .onlinePay.luckyMoney .list li.am-disabled .listRight .price.unopen,
+.page_addIncome .payDetail .onlinePay.luckyMoney .list li.am-disabled .listRight .price.unopen,
 .page_pay .payDetail .onlinePay.mallOrder .list li.am-disabled .listRight .price.unopen,
 .page_prepay .payDetail .onlinePay.mallOrder .list li.am-disabled .listRight .price.unopen,
+.page_addIncome .payDetail .onlinePay.mallOrder .list li.am-disabled .listRight .price.unopen,
 .page_pay .payDetail .onlinePay.luckyMoney .list li.disabled .listRight .price.unopen,
 .page_prepay .payDetail .onlinePay.luckyMoney .list li.disabled .listRight .price.unopen,
+.page_addIncome .payDetail .onlinePay.luckyMoney .list li.disabled .listRight .price.unopen,
 .page_pay .payDetail .onlinePay.mallOrder .list li.disabled .listRight .price.unopen,
-.page_prepay .payDetail .onlinePay.mallOrder .list li.disabled .listRight .price.unopen {
+.page_prepay .payDetail .onlinePay.mallOrder .list li.disabled .listRight .price.unopen,
+.page_addIncome .payDetail .onlinePay.mallOrder .list li.disabled .listRight .price.unopen {
   color: #e82742;
 }
 .page_pay .payDetail .onlinePay.luckyMoney .list li.am-disabled .title.unopen::before,
 .page_prepay .payDetail .onlinePay.luckyMoney .list li.am-disabled .title.unopen::before,
+.page_addIncome .payDetail .onlinePay.luckyMoney .list li.am-disabled .title.unopen::before,
 .page_pay .payDetail .onlinePay.mallOrder .list li.am-disabled .title.unopen::before,
 .page_prepay .payDetail .onlinePay.mallOrder .list li.am-disabled .title.unopen::before,
+.page_addIncome .payDetail .onlinePay.mallOrder .list li.am-disabled .title.unopen::before,
 .page_pay .payDetail .onlinePay.luckyMoney .list li.disabled .title.unopen::before,
 .page_prepay .payDetail .onlinePay.luckyMoney .list li.disabled .title.unopen::before,
+.page_addIncome .payDetail .onlinePay.luckyMoney .list li.disabled .title.unopen::before,
 .page_pay .payDetail .onlinePay.mallOrder .list li.disabled .title.unopen::before,
 .page_prepay .payDetail .onlinePay.mallOrder .list li.disabled .title.unopen::before,
+.page_addIncome .payDetail .onlinePay.mallOrder .list li.disabled .title.unopen::before,
 .page_pay .payDetail .onlinePay.luckyMoney .list li.am-disabled .listRight .price.unopen::before,
 .page_prepay .payDetail .onlinePay.luckyMoney .list li.am-disabled .listRight .price.unopen::before,
+.page_addIncome .payDetail .onlinePay.luckyMoney .list li.am-disabled .listRight .price.unopen::before,
 .page_pay .payDetail .onlinePay.mallOrder .list li.am-disabled .listRight .price.unopen::before,
 .page_prepay .payDetail .onlinePay.mallOrder .list li.am-disabled .listRight .price.unopen::before,
+.page_addIncome .payDetail .onlinePay.mallOrder .list li.am-disabled .listRight .price.unopen::before,
 .page_pay .payDetail .onlinePay.luckyMoney .list li.disabled .listRight .price.unopen::before,
 .page_prepay .payDetail .onlinePay.luckyMoney .list li.disabled .listRight .price.unopen::before,
+.page_addIncome .payDetail .onlinePay.luckyMoney .list li.disabled .listRight .price.unopen::before,
 .page_pay .payDetail .onlinePay.mallOrder .list li.disabled .listRight .price.unopen::before,
-.page_prepay .payDetail .onlinePay.mallOrder .list li.disabled .listRight .price.unopen::before {
+.page_prepay .payDetail .onlinePay.mallOrder .list li.disabled .listRight .price.unopen::before,
+.page_addIncome .payDetail .onlinePay.mallOrder .list li.disabled .listRight .price.unopen::before {
   content: "";
 }
 .page_pay .payDetail .onlinePay.luckyMoney .list li.selected,
 .page_prepay .payDetail .onlinePay.luckyMoney .list li.selected,
+.page_addIncome .payDetail .onlinePay.luckyMoney .list li.selected,
 .page_pay .payDetail .onlinePay.mallOrder .list li.selected,
-.page_prepay .payDetail .onlinePay.mallOrder .list li.selected {
+.page_prepay .payDetail .onlinePay.mallOrder .list li.selected,
+.page_addIncome .payDetail .onlinePay.mallOrder .list li.selected {
   background: #f7f7f7;
   position: relative;
 }
 .page_pay .payDetail .onlinePay.luckyMoney .list li.selected::before,
 .page_prepay .payDetail .onlinePay.luckyMoney .list li.selected::before,
+.page_addIncome .payDetail .onlinePay.luckyMoney .list li.selected::before,
 .page_pay .payDetail .onlinePay.mallOrder .list li.selected::before,
-.page_prepay .payDetail .onlinePay.mallOrder .list li.selected::before {
+.page_prepay .payDetail .onlinePay.mallOrder .list li.selected::before,
+.page_addIncome .payDetail .onlinePay.mallOrder .list li.selected::before {
   content: "";
   background: #58d56d url("../images/icons_sprite/selected_white.png") no-repeat 0px 0px;
   background-size: 15px 15px;
@@ -726,18 +1286,553 @@
 }
 .page_pay .payDetail .onlinePay.luckyMoney .list li.am-clickable-active,
 .page_prepay .payDetail .onlinePay.luckyMoney .list li.am-clickable-active,
+.page_addIncome .payDetail .onlinePay.luckyMoney .list li.am-clickable-active,
 .page_pay .payDetail .onlinePay.mallOrder .list li.am-clickable-active,
-.page_prepay .payDetail .onlinePay.mallOrder .list li.am-clickable-active {
+.page_prepay .payDetail .onlinePay.mallOrder .list li.am-clickable-active,
+.page_addIncome .payDetail .onlinePay.mallOrder .list li.am-clickable-active {
   background: #ececec;
 }
 .page_pay .payDetail .onlinePay.luckyMoney .list li.hide,
 .page_prepay .payDetail .onlinePay.luckyMoney .list li.hide,
+.page_addIncome .payDetail .onlinePay.luckyMoney .list li.hide,
 .page_pay .payDetail .onlinePay.mallOrder .list li.hide,
-.page_prepay .payDetail .onlinePay.mallOrder .list li.hide {
+.page_prepay .payDetail .onlinePay.mallOrder .list li.hide,
+.page_addIncome .payDetail .onlinePay.mallOrder .list li.hide {
   display: none;
 }
+.page_pay .payDetail .onlinePay.luckyMoney .paytitle,
+.page_prepay .payDetail .onlinePay.luckyMoney .paytitle,
+.page_addIncome .payDetail .onlinePay.luckyMoney .paytitle {
+  margin-bottom: 20px;
+  padding-top: 41px;
+}
+.page_pay .payDetail .onlinePay.luckyMoney .paytitle span,
+.page_prepay .payDetail .onlinePay.luckyMoney .paytitle span,
+.page_addIncome .payDetail .onlinePay.luckyMoney .paytitle span {
+  margin-left: 20px;
+}
+.page_pay .payDetail .onlinePay.luckyMoney .sendBtn,
+.page_prepay .payDetail .onlinePay.luckyMoney .sendBtn,
+.page_addIncome .payDetail .onlinePay.luckyMoney .sendBtn {
+  display: none;
+  position: absolute;
+  top: 41px;
+  right: 30px;
+  width: 75px;
+  height: 38px;
+  line-height: 38px;
+  text-align: center;
+  font-size: 12px;
+  color: #FFF;
+  background: #555;
+  border-radius: 4px;
+}
+.page_pay .payDetail .onlinePay.luckyMoney .sureBtn,
+.page_prepay .payDetail .onlinePay.luckyMoney .sureBtn,
+.page_addIncome .payDetail .onlinePay.luckyMoney .sureBtn {
+  position: absolute;
+  height: 50px;
+  left: 40px;
+  right: 40px;
+  bottom: 0;
+  padding: 10px 0;
+}
+.page_pay .payDetail .onlinePay.luckyMoney .sureBtn p,
+.page_prepay .payDetail .onlinePay.luckyMoney .sureBtn p,
+.page_addIncome .payDetail .onlinePay.luckyMoney .sureBtn p {
+  height: 100%;
+  background-color: #555;
+  border-radius: 4px;
+  font-size: 16px;
+  color: #fff;
+  text-align: center;
+  line-height: 50px;
+}
+.page_pay .payDetail .onlinePay.luckyMoney .list,
+.page_prepay .payDetail .onlinePay.luckyMoney .list,
+.page_addIncome .payDetail .onlinePay.luckyMoney .list {
+  border-top: none;
+}
+.page_pay .payDetail .onlinePay.luckyMoney .list ul,
+.page_prepay .payDetail .onlinePay.luckyMoney .list ul,
+.page_addIncome .payDetail .onlinePay.luckyMoney .list ul {
+  border-top: none;
+}
+.page_pay .payDetail .onlinePay.luckyMoney .list ul li,
+.page_prepay .payDetail .onlinePay.luckyMoney .list ul li,
+.page_addIncome .payDetail .onlinePay.luckyMoney .list ul li {
+  position: relative;
+  padding-top: 0;
+  border-bottom: none;
+  padding-left: 80px;
+  padding-bottom: 0;
+}
+.page_pay .payDetail .onlinePay.luckyMoney .list ul li.selected::before,
+.page_prepay .payDetail .onlinePay.luckyMoney .list ul li.selected::before,
+.page_addIncome .payDetail .onlinePay.luckyMoney .list ul li.selected::before {
+  display: none;
+}
+.page_pay .payDetail .onlinePay.luckyMoney .list ul li.notUseThisBill::before,
+.page_prepay .payDetail .onlinePay.luckyMoney .list ul li.notUseThisBill::before,
+.page_addIncome .payDetail .onlinePay.luckyMoney .list ul li.notUseThisBill::before,
+.page_pay .payDetail .onlinePay.luckyMoney .list ul li.notUseThisItem::before,
+.page_prepay .payDetail .onlinePay.luckyMoney .list ul li.notUseThisItem::before,
+.page_addIncome .payDetail .onlinePay.luckyMoney .list ul li.notUseThisItem::before,
+.page_pay .payDetail .onlinePay.luckyMoney .list ul li.notEnoughMoney::before,
+.page_prepay .payDetail .onlinePay.luckyMoney .list ul li.notEnoughMoney::before,
+.page_addIncome .payDetail .onlinePay.luckyMoney .list ul li.notEnoughMoney::before,
+.page_pay .payDetail .onlinePay.luckyMoney .list ul li.usedInThisBill::before,
+.page_prepay .payDetail .onlinePay.luckyMoney .list ul li.usedInThisBill::before,
+.page_addIncome .payDetail .onlinePay.luckyMoney .list ul li.usedInThisBill::before {
+  content: '此订单不可使用';
+  position: absolute;
+  top: -1px;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  background-color: #f9f9f9;
+  opacity: 0.8;
+  text-align: right;
+  font-size: 12px;
+  color: #999;
+  padding: 12px 40px 0 0;
+  z-index: 9;
+  border-top: 1px solid #ececec;
+  border-bottom: 1px solid #ececec;
+}
+.page_pay .payDetail .onlinePay.luckyMoney .list ul li.notUseThisItem::before,
+.page_prepay .payDetail .onlinePay.luckyMoney .list ul li.notUseThisItem::before,
+.page_addIncome .payDetail .onlinePay.luckyMoney .list ul li.notUseThisItem::before {
+  content: '此项不可使用';
+}
+.page_pay .payDetail .onlinePay.luckyMoney .list ul li.notEnoughMoney::before,
+.page_prepay .payDetail .onlinePay.luckyMoney .list ul li.notEnoughMoney::before,
+.page_addIncome .payDetail .onlinePay.luckyMoney .list ul li.notEnoughMoney::before {
+  content: '红包金额使用完';
+}
+.page_pay .payDetail .onlinePay.luckyMoney .list ul li.usedInThisBill::before,
+.page_prepay .payDetail .onlinePay.luckyMoney .list ul li.usedInThisBill::before,
+.page_addIncome .payDetail .onlinePay.luckyMoney .list ul li.usedInThisBill::before {
+  content: '此订单已使用';
+}
+.page_pay .payDetail .onlinePay.luckyMoney .list ul li .contentDiv,
+.page_prepay .payDetail .onlinePay.luckyMoney .list ul li .contentDiv,
+.page_addIncome .payDetail .onlinePay.luckyMoney .list ul li .contentDiv {
+  border-bottom: 1px solid #ececec;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.page_pay .payDetail .onlinePay.luckyMoney .list ul li .contentDiv .explainBtn .iconfont,
+.page_prepay .payDetail .onlinePay.luckyMoney .list ul li .contentDiv .explainBtn .iconfont,
+.page_addIncome .payDetail .onlinePay.luckyMoney .list ul li .contentDiv .explainBtn .iconfont {
+  font-size: 10px;
+}
+.page_pay .payDetail .onlinePay.luckyMoney .list ul li .contentDiv .explainDiv,
+.page_prepay .payDetail .onlinePay.luckyMoney .list ul li .contentDiv .explainDiv,
+.page_addIncome .payDetail .onlinePay.luckyMoney .list ul li .contentDiv .explainDiv {
+  padding: 0 7px;
+  font-size: 11px;
+  line-height: 15px;
+  color: #999;
+  background: #FAFAFA;
+}
+.page_pay .payDetail .onlinePay.luckyMoney .list ul li .contentDiv .explainDiv .tipsContent,
+.page_prepay .payDetail .onlinePay.luckyMoney .list ul li .contentDiv .explainDiv .tipsContent,
+.page_addIncome .payDetail .onlinePay.luckyMoney .list ul li .contentDiv .explainDiv .tipsContent {
+  padding: 7px 0;
+  display: block;
+  font-size: 12px;
+  color: #999999;
+}
+.page_pay .payDetail .onlinePay.luckyMoney .list ul li .contentDiv .explainDiv .tipsContent span,
+.page_prepay .payDetail .onlinePay.luckyMoney .list ul li .contentDiv .explainDiv .tipsContent span,
+.page_addIncome .payDetail .onlinePay.luckyMoney .list ul li .contentDiv .explainDiv .tipsContent span {
+  color: #E82742;
+}
+.page_pay .payDetail .onlinePay.luckyMoney .list ul li .contentDiv .line,
+.page_prepay .payDetail .onlinePay.luckyMoney .list ul li .contentDiv .line,
+.page_addIncome .payDetail .onlinePay.luckyMoney .list ul li .contentDiv .line {
+  display: none;
+  height: 15px;
+}
+.page_pay .payDetail .onlinePay.luckyMoney .list ul li .circular,
+.page_prepay .payDetail .onlinePay.luckyMoney .list ul li .circular,
+.page_addIncome .payDetail .onlinePay.luckyMoney .list ul li .circular {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+  left: 40px;
+  width: 21px;
+  height: 21px;
+  border: 1px solid #999;
+  border-radius: 50%;
+}
+.page_pay .payDetail .onlinePay.luckyMoney .list ul li .circular .iconfont,
+.page_prepay .payDetail .onlinePay.luckyMoney .list ul li .circular .iconfont,
+.page_addIncome .payDetail .onlinePay.luckyMoney .list ul li .circular .iconfont {
+  width: 100%;
+  height: 100%;
+  display: none;
+}
+.page_pay .payDetail .onlinePay.luckyMoney .list ul li .circular::before,
+.page_prepay .payDetail .onlinePay.luckyMoney .list ul li .circular::before,
+.page_addIncome .payDetail .onlinePay.luckyMoney .list ul li .circular::before {
+  content: '';
+}
+.page_pay .payDetail .onlinePay.luckyMoney .list ul li .circular.icon-queren,
+.page_prepay .payDetail .onlinePay.luckyMoney .list ul li .circular.icon-queren,
+.page_addIncome .payDetail .onlinePay.luckyMoney .list ul li .circular.icon-queren {
+  border: none;
+}
+.page_pay .payDetail .onlinePay.luckyMoney .list ul li .circular.icon-queren .iconfont,
+.page_prepay .payDetail .onlinePay.luckyMoney .list ul li .circular.icon-queren .iconfont,
+.page_addIncome .payDetail .onlinePay.luckyMoney .list ul li .circular.icon-queren .iconfont {
+  display: block;
+}
 .page_pay .payDetail .onlinePay.mallOrder .paytitle span::before,
-.page_prepay .payDetail .onlinePay.mallOrder .paytitle span::before {
+.page_prepay .payDetail .onlinePay.mallOrder .paytitle span::before,
+.page_addIncome .payDetail .onlinePay.mallOrder .paytitle span::before {
   background: url("../images/icons_sprite/icon_mallOrder.png") no-repeat 0px 0px;
   background-size: 20px 20px;
+}
+.page_pay .payDetail .onlinePay .tickets-list,
+.page_prepay .payDetail .onlinePay .tickets-list,
+.page_addIncome .payDetail .onlinePay .tickets-list {
+  min-width: 360px;
+  margin: 0 auto;
+  padding-top: 30px;
+}
+.page_pay .payDetail .onlinePay .tickets-list .list-title,
+.page_prepay .payDetail .onlinePay .tickets-list .list-title,
+.page_addIncome .payDetail .onlinePay .tickets-list .list-title {
+  height: 30px;
+  font-size: 12px;
+  color: #999;
+  text-align: left;
+  margin-left: 60px;
+  margin-right: 40px;
+  border-bottom: 1px solid #ECECEC;
+}
+.page_pay .payDetail .onlinePay .tickets-list .list-box,
+.page_prepay .payDetail .onlinePay .tickets-list .list-box,
+.page_addIncome .payDetail .onlinePay .tickets-list .list-box {
+  max-height: 440px;
+  overflow: hidden;
+}
+.page_pay .payDetail .onlinePay .tickets-list .list-box .list-ul,
+.page_prepay .payDetail .onlinePay .tickets-list .list-box .list-ul,
+.page_addIncome .payDetail .onlinePay .tickets-list .list-box .list-ul {
+  list-style: none;
+  font-size: 0;
+}
+.page_pay .payDetail .onlinePay .tickets-list .list-box .list-ul .item-li,
+.page_prepay .payDetail .onlinePay .tickets-list .list-box .list-ul .item-li,
+.page_addIncome .payDetail .onlinePay .tickets-list .list-box .list-ul .item-li {
+  position: relative;
+  font-size: 12px;
+  padding-top: 12px;
+  padding-left: 40px;
+  padding-right: 40px;
+}
+.page_pay .payDetail .onlinePay .tickets-list .list-box .list-ul .item-li .right-content,
+.page_prepay .payDetail .onlinePay .tickets-list .list-box .list-ul .item-li .right-content,
+.page_addIncome .payDetail .onlinePay .tickets-list .list-box .list-ul .item-li .right-content {
+  margin-left: 20px;
+  border-bottom: 1px solid #ECECEC;
+}
+.page_pay .payDetail .onlinePay .tickets-list .list-box .list-ul .item-li .right-content .item-title,
+.page_prepay .payDetail .onlinePay .tickets-list .list-box .list-ul .item-li .right-content .item-title,
+.page_addIncome .payDetail .onlinePay .tickets-list .list-box .list-ul .item-li .right-content .item-title {
+  height: 25px;
+}
+.page_pay .payDetail .onlinePay .tickets-list .list-box .list-ul .item-li .right-content .item-title .ticket-name,
+.page_prepay .payDetail .onlinePay .tickets-list .list-box .list-ul .item-li .right-content .item-title .ticket-name,
+.page_addIncome .payDetail .onlinePay .tickets-list .list-box .list-ul .item-li .right-content .item-title .ticket-name {
+  float: left;
+  text-align: left;
+  width: 220px;
+  font-size: 14px;
+  color: #222222;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.page_pay .payDetail .onlinePay .tickets-list .list-box .list-ul .item-li .right-content .item-title .ticket-price,
+.page_prepay .payDetail .onlinePay .tickets-list .list-box .list-ul .item-li .right-content .item-title .ticket-price,
+.page_addIncome .payDetail .onlinePay .tickets-list .list-box .list-ul .item-li .right-content .item-title .ticket-price {
+  float: right;
+  margin-right: 2px;
+  text-align: right;
+  width: 80px;
+  font-size: 16px;
+  color: #E82742;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.page_pay .payDetail .onlinePay .tickets-list .list-box .list-ul .item-li .right-content .item-time,
+.page_prepay .payDetail .onlinePay .tickets-list .list-box .list-ul .item-li .right-content .item-time,
+.page_addIncome .payDetail .onlinePay .tickets-list .list-box .list-ul .item-li .right-content .item-time {
+  height: 25px;
+  line-height: 25px;
+  color: #BDBDBD;
+}
+.page_pay .payDetail .onlinePay .tickets-list .list-box .list-ul .item-li .right-content .item-time .ticket-code,
+.page_prepay .payDetail .onlinePay .tickets-list .list-box .list-ul .item-li .right-content .item-time .ticket-code,
+.page_addIncome .payDetail .onlinePay .tickets-list .list-box .list-ul .item-li .right-content .item-time .ticket-code {
+  float: left;
+}
+.page_pay .payDetail .onlinePay .tickets-list .list-box .list-ul .item-li .right-content .item-time .ticket-time,
+.page_prepay .payDetail .onlinePay .tickets-list .list-box .list-ul .item-li .right-content .item-time .ticket-time,
+.page_addIncome .payDetail .onlinePay .tickets-list .list-box .list-ul .item-li .right-content .item-time .ticket-time {
+  float: right;
+}
+.page_pay .payDetail .onlinePay .tickets-list .list-box .list-ul .item-li svg,
+.page_prepay .payDetail .onlinePay .tickets-list .list-box .list-ul .item-li svg,
+.page_addIncome .payDetail .onlinePay .tickets-list .list-box .list-ul .item-li svg {
+  display: none;
+}
+.page_pay .payDetail .onlinePay .tickets-list .list-box .list-ul .item-li.selected svg,
+.page_prepay .payDetail .onlinePay .tickets-list .list-box .list-ul .item-li.selected svg,
+.page_addIncome .payDetail .onlinePay .tickets-list .list-box .list-ul .item-li.selected svg {
+  display: block;
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  top: 50%;
+  left: 30px;
+  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+}
+.page_pay .payDetail .onlinePay .tickets-list .list-box .list-ul .item-li.am-clickable-active,
+.page_prepay .payDetail .onlinePay .tickets-list .list-box .list-ul .item-li.am-clickable-active,
+.page_addIncome .payDetail .onlinePay .tickets-list .list-box .list-ul .item-li.am-clickable-active {
+  background: #F7F7F7;
+}
+.page_pay .payDetail .onlinePay .tickets-list .list-box .list-ul .item-li.last-checked,
+.page_prepay .payDetail .onlinePay .tickets-list .list-box .list-ul .item-li.last-checked,
+.page_addIncome .payDetail .onlinePay .tickets-list .list-box .list-ul .item-li.last-checked {
+  background: #fff5da;
+}
+.page_pay .payDetail .paycode.pos,
+.page_prepay .payDetail .paycode.pos,
+.page_addIncome .payDetail .paycode.pos {
+  border: 0;
+  height: auto;
+  margin: 30px auto;
+}
+.page_pay .payDetail .paycode.pos .statusBox,
+.page_prepay .payDetail .paycode.pos .statusBox,
+.page_addIncome .payDetail .paycode.pos .statusBox {
+  position: static;
+  border: 0;
+  padding: 0;
+}
+.page_pay .payDetail .paycode.pos .statusBox .loading,
+.page_prepay .payDetail .paycode.pos .statusBox .loading,
+.page_addIncome .payDetail .paycode.pos .statusBox .loading {
+  display: none;
+  height: 30px;
+  line-height: 30px;
+  color: #666;
+}
+.page_pay .payDetail .paycode.pos .statusBox .loading::before,
+.page_prepay .payDetail .paycode.pos .statusBox .loading::before,
+.page_addIncome .payDetail .paycode.pos .statusBox .loading::before {
+  content: "";
+  display: inline-block;
+  margin: 0 auto;
+  width: 23px;
+  height: 23px;
+  vertical-align: -5px;
+  margin-right: 10px;
+  -webkit-animation: animation-loading infinite linear 1.2s;
+}
+.page_pay .payDetail .paycode.pos .statusBox .error,
+.page_prepay .payDetail .paycode.pos .statusBox .error,
+.page_addIncome .payDetail .paycode.pos .statusBox .error {
+  display: none;
+}
+.page_pay .payDetail .paycode.pos .statusBox .error .icon,
+.page_prepay .payDetail .paycode.pos .statusBox .error .icon,
+.page_addIncome .payDetail .paycode.pos .statusBox .error .icon {
+  width: 50px;
+  height: 50px;
+  background: #E82742;
+  border-radius: 25px;
+  display: block;
+  margin: 0 auto;
+  position: relative;
+}
+.page_pay .payDetail .paycode.pos .statusBox .error .icon::before,
+.page_prepay .payDetail .paycode.pos .statusBox .error .icon::before,
+.page_addIncome .payDetail .paycode.pos .statusBox .error .icon::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  right: auto;
+  top: 50%;
+  bottom: auto;
+  margin: -10px 0 0 -11px;
+  width: 21px;
+  height: 20px;
+  background: url(../images/icons_sprite/searchMember_close.png) no-repeat 0px 0px;
+  background-size: 21px 20px;
+}
+.page_pay .payDetail .paycode.pos .statusBox .error .text,
+.page_prepay .payDetail .paycode.pos .statusBox .error .text,
+.page_addIncome .payDetail .paycode.pos .statusBox .error .text {
+  margin-top: 10px;
+}
+.page_pay .payDetail .paycode.pos .statusBox .error .info,
+.page_prepay .payDetail .paycode.pos .statusBox .error .info,
+.page_addIncome .payDetail .paycode.pos .statusBox .error .info {
+  color: #999;
+  margin-top: 10px;
+}
+.page_pay .payDetail .paycode.pos .statusBox .refund,
+.page_prepay .payDetail .paycode.pos .statusBox .refund,
+.page_addIncome .payDetail .paycode.pos .statusBox .refund {
+  width: 150px;
+  margin: 0 auto;
+}
+.page_pay .payDetail .paycode.pos .statusBox .success,
+.page_prepay .payDetail .paycode.pos .statusBox .success,
+.page_addIncome .payDetail .paycode.pos .statusBox .success,
+.page_pay .payDetail .paycode.pos .statusBox .complete,
+.page_prepay .payDetail .paycode.pos .statusBox .complete,
+.page_addIncome .payDetail .paycode.pos .statusBox .complete,
+.page_pay .payDetail .paycode.pos .statusBox .cancel,
+.page_prepay .payDetail .paycode.pos .statusBox .cancel,
+.page_addIncome .payDetail .paycode.pos .statusBox .cancel,
+.page_pay .payDetail .paycode.pos .statusBox .refund,
+.page_prepay .payDetail .paycode.pos .statusBox .refund,
+.page_addIncome .payDetail .paycode.pos .statusBox .refund {
+  display: none;
+}
+.page_pay .payDetail .posList,
+.page_prepay .payDetail .posList,
+.page_addIncome .payDetail .posList,
+.page_pay .payDetail .posStatus,
+.page_prepay .payDetail .posStatus,
+.page_addIncome .payDetail .posStatus {
+  display: none;
+}
+.page_pay .payDetail .posList li,
+.page_prepay .payDetail .posList li,
+.page_addIncome .payDetail .posList li,
+.page_pay .payDetail .posStatus li,
+.page_prepay .payDetail .posStatus li,
+.page_addIncome .payDetail .posStatus li {
+  width: 260px;
+  height: 46px;
+  line-height: 46px;
+  margin: 0 auto 20px;
+  border-radius: 3px;
+  border: 1px solid #DDDDDD;
+}
+.page_pay .payDetail .posList li.am-clickable-active,
+.page_prepay .payDetail .posList li.am-clickable-active,
+.page_addIncome .payDetail .posList li.am-clickable-active,
+.page_pay .payDetail .posStatus li.am-clickable-active,
+.page_prepay .payDetail .posStatus li.am-clickable-active,
+.page_addIncome .payDetail .posStatus li.am-clickable-active {
+  background: #e2e2e2;
+}
+.page_pay .payDetail .posList li .iconfont,
+.page_prepay .payDetail .posList li .iconfont,
+.page_addIncome .payDetail .posList li .iconfont,
+.page_pay .payDetail .posStatus li .iconfont,
+.page_prepay .payDetail .posStatus li .iconfont,
+.page_addIncome .payDetail .posStatus li .iconfont {
+  margin-right: 5px;
+  font-size: 14px;
+  margin-top: -2px;
+}
+.page_pay .payDetail .posList li span,
+.page_prepay .payDetail .posList li span,
+.page_addIncome .payDetail .posList li span,
+.page_pay .payDetail .posStatus li span,
+.page_prepay .payDetail .posStatus li span,
+.page_addIncome .payDetail .posStatus li span {
+  display: inline-block;
+  vertical-align: top;
+  height: 46px;
+  line-height: 46px;
+}
+.page_pay .payDetail .posList li .loading,
+.page_prepay .payDetail .posList li .loading,
+.page_addIncome .payDetail .posList li .loading,
+.page_pay .payDetail .posStatus li .loading,
+.page_prepay .payDetail .posStatus li .loading,
+.page_addIncome .payDetail .posStatus li .loading {
+  display: none;
+  width: 15px;
+  background: url(../images/loading.png) no-repeat left center;
+  background-size: 15px 15px;
+  margin-left: 5px;
+  animation: animation-loading infinite linear 1.2s;
+  -webkit-animation: animation-loading infinite linear 1.2s;
+}
+.page_pay .payDetail .posList li.am-disabled,
+.page_prepay .payDetail .posList li.am-disabled,
+.page_addIncome .payDetail .posList li.am-disabled,
+.page_pay .payDetail .posStatus li.am-disabled,
+.page_prepay .payDetail .posStatus li.am-disabled,
+.page_addIncome .payDetail .posStatus li.am-disabled {
+  opacity: 0.8;
+}
+.page_pay .payDetail .posList li.am-disabled .loading,
+.page_prepay .payDetail .posList li.am-disabled .loading,
+.page_addIncome .payDetail .posList li.am-disabled .loading,
+.page_pay .payDetail .posStatus li.am-disabled .loading,
+.page_prepay .payDetail .posStatus li.am-disabled .loading,
+.page_addIncome .payDetail .posStatus li.am-disabled .loading {
+  display: inline-block;
+}
+.page_pay .payDetail .posList li.am-disabled.am-clickable-active,
+.page_prepay .payDetail .posList li.am-disabled.am-clickable-active,
+.page_addIncome .payDetail .posList li.am-disabled.am-clickable-active,
+.page_pay .payDetail .posStatus li.am-disabled.am-clickable-active,
+.page_prepay .payDetail .posStatus li.am-disabled.am-clickable-active,
+.page_addIncome .payDetail .posStatus li.am-disabled.am-clickable-active {
+  background: none;
+}
+.page_pay .payDetail .onlinePay.luckyMoney .list ul li .circular {
+  top: 26px !important;
+}
+body.isios .page_pay .payDetail .onlinePay.luckyMoney .list ul li .icon-queren::before {
+  top: 0px !important;
+}
+.page_pay .payDetail .onlinePay.mallOrder .list li.remark_bg {
+  background-color: #fff5da;
+}
+body.windows .page_pay .payDetail .onlinePay .tickets-list .list-box,
+body.windows .page_prepay .payDetail .onlinePay .tickets-list .list-box,
+body.windows .page_addIncome .payDetail .onlinePay .tickets-list .list-box {
+  max-height: 625px;
+}
+.transparentMask {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+@media screen and (max-height: 700px) {
+  .page_pay .payDetail .onlinePay .paytitle,
+  .page_prepay .payDetail .onlinePay .paytitle,
+  .page_addIncome .payDetail .onlinePay .paytitle {
+    padding-top: 0;
+  }
+  .page_addIncome .payDetail .onlinePay .payqrcode,
+  .page_pay .payDetail .onlinePay .payqrcode,
+  .page_prepay .payDetail .onlinePay .payqrcode {
+    padding-top: 0;
+  }
 }

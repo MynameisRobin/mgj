@@ -81,8 +81,27 @@
 			var self=this;
 			this.$.on("vclick",".value,.icon",function(e){
 				e.stopPropagation();
-				self.show();
-				
+				if($(this).parents('#page_billRecord')){
+					// 仅在流水查询页面特殊处理
+					var selectHeight=self.$listbox.height();
+					// 窗口高度-点击框距上距离-点击框高度-查询按钮（60）
+					// var marginBottom=$(window).height()-$(this).parents('.common_selectBox').offset().top-$(this).parents('.common_selectBox').height()-60;
+					var marginBottom=$(window).height()-$(this).parents('.common_selectBox').offset().top-$(this).parents('.common_selectBox').height()-60;
+					if(marginBottom<selectHeight){
+						//下拉框在上显示
+						// 32= 12（$('.cm_block')的marginTop） + 20(间隔);
+						self.$listbox.css({"margin-top":-(self.$listbox.height()+$(this).parents('.cm_block').height()+12)+'px'}).addClass('atTop');
+					}else{
+						//默认在下显示
+						self.$listbox.css({"margin-top":0}).removeClass('atTop');
+					}
+				}
+				//点击下拉按钮控制下拉框的显示与隐藏
+				if(self.$listbox.hasClass("disabled")){
+					self.show();
+				}else{
+					self.hide(true);
+				}
 			}).on("vclick",".listbox li",function(e){
 				self.$value.text($(this).text()).data("value",$(this).data("value"));
 				self.$listbox.addClass("disabled");

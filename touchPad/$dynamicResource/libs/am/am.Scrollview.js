@@ -43,6 +43,7 @@
 
 		this.vt = [new MomentumTracker(), new MomentumTracker()];
 
+		this.$wrap.data('scrollview',this).addClass('am-scrollview');
 	};
 	//方法
 	$.extend(ScrollView.prototype, {
@@ -113,10 +114,10 @@
 							newPos[i] = this._currentPos[i] + ((newPos[i] + min[i]) / 2 - this._currentPos[i]) * n;
 
 							if (this.touchBottom && !this.pauseTouchBottom) {
-								if (!this.overBottom && n < 0.1) {
+								if (!this.overBottom && n < 1) {//n < 0.1
 									this.overBottom = new Date().getTime();
 									this.touchBottom && this.touchBottom(1);
-								} else if (this.overBottom > 0 && new Date().getTime() - this.overBottom > 100) {
+								}  if (this.overBottom > 0) {//this.overBottom > 100 && new Date().getTime() - this.overBottom > 50
 									this.touchBottom && this.touchBottom(2);
 									this.overBottom = -1;
 								}

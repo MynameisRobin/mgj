@@ -287,3 +287,7 @@ a {
 	bottom:0;
 	width:30px;
 }
+
+.nativeUIWidget-showPopupMenu .inner li.keypad_select {
+    background: rgba(255,189,2,0.24);
+}

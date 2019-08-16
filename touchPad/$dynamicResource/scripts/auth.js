@@ -26,6 +26,7 @@
                 am.keyboard.show({
 					title:"请输入授权码号码",//可不传
 					hidedot:false,
+					ciphertext:true,
 				    submit:function(value){
                         _this.checkAuth(value);
 				    }

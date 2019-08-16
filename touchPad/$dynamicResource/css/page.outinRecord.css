@@ -15,7 +15,6 @@
 }
 
 .page_outinRecord .recordHead div {
-    // float:left;
 }
 
 .page_outinRecord .recordHead p.dateSelect {
@@ -40,12 +39,7 @@
     width: 31px;
 }
 
-.page_outinRecord .recordHead p.dateSelect span:left {
-    // background-image: url(../images/reservation/datePicker-left.png);
-    // background-position: 2px 2px;
-    // background-repeat:no-repeat;
-    // background-size:7px 10px;
-}
+
 
 .page_outinRecord .recordHead p.dateSelect span.date {
     border-right: 1px solid #666;
@@ -56,12 +50,10 @@
     background-repeat: no-repeat;
     background-position: 16px 5px;
     background-size: 20px 20px;
-    // -webkit-appearance:none;
 }
 
 .page_outinRecord .md p {
     font-size: 20px;
-    // width:965px;
     text-align: center;
     font-weight: bold;
 }
@@ -102,7 +94,6 @@
 }
 
 .page_outinRecord .discrip {
-    // width:178px;
     font-size: 16px;
     line-height: 20px;
     font-weight: bold;
@@ -111,8 +102,6 @@
 }
 
 .page_outinRecord .num {
-    // width:165px;
-    // margin-left:75px;
     font-size: 12px;
     color: #787878;
 }

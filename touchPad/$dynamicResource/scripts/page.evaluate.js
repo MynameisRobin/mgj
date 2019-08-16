@@ -3,7 +3,7 @@
         id: "page_evaluate",
         backButtonOnclick: function() {
             am.goBackToInitPage();
-            am.page.workOrder.getWorkTipCount(am.metadata.userInfo.userId);
+            am.page.login.getWorkTip(am.metadata.userInfo,0);
         },
         init: function() {
             var self = this;

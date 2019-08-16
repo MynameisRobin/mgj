@@ -29,26 +29,28 @@ am.workOrderDetail = {
         this.$.find(".footer-solve .btn").vclick(function() {
             self.resolveFn(self.id);
         });
-        this.$.find(".listBox").on("vclick", ".imgs ul li", function() {
-            var items = [];
-            var idx = $(this).index();
-            $(this)
-                .parent()
-                .find("img")
-                .each(function() {
-                    items.push({
-                        src: $(this).attr("src"),
-                        // src: $(this).attr("src").replace("_s", "_l"),
-                        w: 1024,
-                        h: 1024
-                    });
-                });
-            self.pswpTimer && clearTimeout(self.pswpTimer);
-            am.loading.show();
-            self.pswpTimer = setTimeout(function() {
-                am.loading.hide();
-                am.pswp(items, idx);
-            }, 800);
+        this.$.find(".listBox").on("vclick", ".imgs ul li img", function() {
+            var data = $(this).attr("src");
+            am.viewImgModal.show(data);
+            // var items = [];
+            // var idx = $(this).index();
+            // $(this)
+            //     .parent()
+            //     .find("img")
+            //     .each(function() {
+            //         items.push({
+            //             src: $(this).attr("src"),
+            //             // src: $(this).attr("src").replace("_s", "_l"),
+            //             w: 1024,
+            //             h: 1024
+            //         });
+            //     });
+            // self.pswpTimer && clearTimeout(self.pswpTimer);
+            // am.loading.show();
+            // self.pswpTimer = setTimeout(function() {
+            //     am.loading.hide();
+            //     am.pswp(items, idx);
+            // }, 800);
         });
     },
     show: function(id) {
@@ -111,7 +113,7 @@ am.workOrderDetail = {
             li += "<ul>";
             $.each(d.pictures, function(i, v) {
                 li += "<li>";
-                li += '<img class="am-clickable" src="' + "http://resource.meiguanjia.net/admin/workorder/" + v + '" alt="">';
+                li += '<img class="am-clickable" src="' + "http://img.meiguanjia.net/admin/workorder/" + v + '" alt="">';
                 li += "</li>";
             });
             li += "</ul>";
@@ -120,6 +122,7 @@ am.workOrderDetail = {
 
         li += "</div>";
         li += "</li>";
+
         return li;
     },
     getEvaluate: function(d) {
@@ -190,10 +193,12 @@ am.workOrderDetail = {
                 self.$.find(".workOrderId").html(res.content.id);
                 self.$.find(".createTime").html(self.formatDate(res.content.createTime));
                 $.each(res.content.workOrderProcess, function(i, v) {
-                    if (v.operaterName) {
-                        self.$.find(".list").append(self.getRedLi(v));
-                    } else {
-                        self.$.find(".list").append(self.getLi(v));
+                    if(!v.internalinfo){
+                        if (v.operaterName) {
+                            self.$.find(".list").append(self.getRedLi(v));
+                        } else {
+                            self.$.find(".list").append(self.getLi(v));
+                        }
                     }
                 });
                 if(res.content.status == 1){

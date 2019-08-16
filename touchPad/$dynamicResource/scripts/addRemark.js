@@ -4,6 +4,7 @@ am.addRemark = {
 		this.$ = $("#common_addremark");
 		this.$.find('.addremark_model_mask').vclick(function () {
 			_this.$.hide();
+			_this.$textarea.blur();
 		});
 		this.$textarea = this.$.find('textarea');
 		this.$.find('.save_btn').vclick(function () {
@@ -13,10 +14,13 @@ am.addRemark = {
 			}
 			_this.cb(val);
 			_this.$.hide();
+			_this.$textarea.blur();
 		});
 		this.$.find('.cancel_btn,.right_btn').vclick(function () {
 			_this.$.hide();
+			_this.$textarea.blur();
 		});
+		this.$title = this.$.find('.addremark_title');
 	},
 	show:function (opt){
 		if(!this.$){
@@ -24,7 +28,8 @@ am.addRemark = {
 		}
 		this.maxlength = opt.maxlength || 20;
 		this.$textarea.prop('maxlength',this.maxlength);
-		this.$textarea.prop('placeholder','请输入1-'+this.maxlength+'个字符备注内容');
+		this.$title.text(opt.title || '编辑');
+		this.$textarea.prop('placeholder','请输入1-'+this.maxlength+'个字符'+(opt.subtitle?opt.subtitle:'备注内容'));
 		this.$textarea.val(opt.value || "");
 		this.$.show();
 		this.cb = opt.cb;

@@ -1,5 +1,5 @@
 (function () {
-	if (navigator.userAgent.indexOf("Windows") !== -1) {
+	if (navigator.userAgent.indexOf("Windows") !== -1 || navigator.userAgent.indexOf('Macintosh') !==-1) {
 		$("body").addClass("windows").on("mouseover", ".am-clickable", function () {
 			$(this).addClass("am-clickable-active");
 		}).on("mouseleave", ".am-clickable", function () {
@@ -8,17 +8,22 @@
 
 		$(window).resize(function () {
 			var currentPage = $.am.getActivePage();
-			if(currentPage.id=='page_pay'){
-				am.page.pay.paytool.mix.scrollview.refresh();
-				am.page.pay.paytool.mix.scrollview.scrollTo('top');
-				return;
-			}
-			if(currentPage.id=='page_billRecord'){
-				am.page.billRecord.watercourseScroll.refresh();
-				am.page.billRecord.watercourseScroll.scrollTo('top');
-				am.page.billRecord.facepayScroll.refresh();
-				am.page.billRecord.facepayScroll.scrollTo('top');
-				return;
+			if(currentPage){// fix bug --0015772
+				if(currentPage.id=='page_pay'){
+					am.page.pay.paytool.mix.scrollview.refresh();
+					am.page.pay.paytool.mix.scrollview.scrollTo('top');
+					return;
+				}
+				if(currentPage.id=='page_billRecord'){
+					am.page.billRecord.watercourseScroll.refresh();
+					am.page.billRecord.watercourseScroll.scrollTo('top');
+					am.page.billRecord.facepayScroll.refresh();
+					am.page.billRecord.facepayScroll.scrollTo('top');
+					return;
+				}
+				if(currentPage.id=='page_itemPay'){
+					return;
+				}
 			}
 			window.location.reload();
 		});

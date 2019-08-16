@@ -25,11 +25,11 @@ $(function(){
             }
 
             this.opt = opt;
-            if(this.opt.action !="bill"){
-                this.$.appendTo("#page_pay");
-            }else{
-                this.$.appendTo(".am-app");
-            }
+            // if(this.opt.action !="bill"){
+            //     this.$.appendTo("#page_pay");
+            // }else{
+            //     this.$.appendTo(".am-app");
+            // }
             this.billId = billId;
             this.renderStaticEle();
             this.renderBill();
@@ -113,20 +113,20 @@ $(function(){
 			            }
 			            text.push('扣减' + arrfee.join(","));
 		            }
-		            if (this.opt.comboitem && this.opt.comboitem.length) {
-			            var comboids = {}, combotxt = [];
-			            for (var i = 0; i < this.opt.comboitem.length; i++) {
-				            var item = this.opt.comboitem[i];
-				            if (!comboids[item.itemid] && item.sumtimes != -99) {
-					            comboids[item.itemid] = 1;
-					            combotxt.push(item.itemname + (item.tleavetimes - item.leavetimes) + '次(余:' + item.leavetimes + '次)');
-				            }
-			            }
-			            if (combotxt.length) {
-				            text.push('扣减套餐:' + combotxt.join(","));
-			            }
-		            }
-	            }
+                }
+                if (this.opt.comboitem && this.opt.comboitem.length) {
+                    var comboids = {}, combotxt = [];
+                    for (var i = 0; i < this.opt.comboitem.length; i++) {
+                        var item = this.opt.comboitem[i];
+                        if (!comboids[item.itemid] && item.sumtimes != -99) {
+                            comboids[item.itemid] = 1;
+                            combotxt.push(item.itemname + (item.tleavetimes - item.leavetimes) + '次(余:' + item.leavetimes + '次)');
+                        }
+                    }
+                    if (combotxt.length) {
+                        text.push('扣减套餐:' + combotxt.join(","));
+                    }
+                }
                 //副屏用卡金 赠金
                 if (this.opt.option.billingInfo.cardFee || this.opt.option.billingInfo.presentFee) {
                     var mdtext = [];
@@ -254,6 +254,7 @@ $(function(){
                 this.oneTime=true;
             }
             this.opt=opt;
+            console.log(111111111111111, this.opt);
             this.memid=-1;
             this.memname='';
             this.opt.member && (this.memid=this.opt.member.id);
@@ -272,9 +273,10 @@ $(function(){
                 "billid":this.billId,
                 "commentlevel":ret,
                 "channel":2,
-                "content":"店内点评",
+                "content": this.opt.feedbackComment && this.opt.feedbackComment.content ? this.opt.feedbackComment.content : "店内点评",
+                "label" : this.opt.feedbackComment && this.opt.feedbackComment.label ? this.opt.feedbackComment.label : null,
                 "memid":this.memid || -1,
-                "memname":this.memname || "散客"
+                "memname":this.memname || "散客",
             }, function (res) {
                 am.loading.hide();
                 console.log(res);
@@ -356,8 +358,15 @@ $(function(){
 	            updateTs: new Date().getTime()
 	        }, memberId + ".png", "");
 
+            this.loading = true;
             var check = function(){
+                if($.am.getActivePage().id!='page_billRecord' && $.am.getActivePage().id!='page_memberDetails'){
+                    return;
+                }
                 if(complete == 2){
+                    setTimeout(function(){
+                        _this.loading = false;
+                    },800);
                     if(param[0] && param[1]){
                         am.loading.show();
                         setTimeout(function(){
@@ -431,8 +440,24 @@ $(function(){
             //用户签名
             $signature.load(function(){
                 complete++;
+                // param[1] = {
+                //     src: $(this).attr('src'),
+                //     w: this.naturalWidth,
+                //     h: this.naturalHeight,
+                //     title: '顾客签名'  // used by Default PhotoSwipe UI
+                // };
+                var canvas = document.createElement("canvas");
+                canvas.width = this.naturalWidth;
+                canvas.height = this.naturalHeight;
+                var image = document.createElement("img");
+                image.src = $(this).attr('src');
+                var ctx = canvas.getContext("2d");
+                ctx.fillStyle = 'White';
+                ctx.fillRect(0,0,this.naturalWidth,this.naturalHeight);
+                ctx.drawImage(image, 0, 0);
+                var src = canvas.toDataURL("image/png");
                 param[1] = {
-                    src: $(this).attr('src'),
+                    src: src,
                     w: this.naturalWidth,
                     h: this.naturalHeight,
                     title: '顾客签名'  // used by Default PhotoSwipe UI

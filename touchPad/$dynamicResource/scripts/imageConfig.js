@@ -125,8 +125,38 @@ imageConfig.getImageUrl("invention", {
 
 
     var imgtype = {
+        "card": {
+            "dir": "card/%parentShopId%/",
+            "size": [1248, 780],
+            "name": "uuid",
+            "variations": [{
+                "suffix": "l",
+                "resolution": "1248x780"
+            }, {
+                "suffix": "m",
+                "resolution": "832x520"
+            }, {
+                "suffix": "s",
+                "resolution": "416x260"
+            }]
+        },
         "service": {
             "dir": "service/%parentShopId%/",
+            "size": [1024, 1024],
+            "name": "uuid",
+            "variations": [{
+                "suffix": "l",
+                "resolution": "1024x1024"
+            }, {
+                "suffix": "m",
+                "resolution": "512x512"
+            }, {
+                "suffix": "s",
+                "resolution": "256x256"
+            }]
+        },
+        "serviceUcloud": {
+            "dir": "photo/",
             "size": [1024, 1024],
             "name": "uuid",
             "variations": [{
@@ -247,30 +277,30 @@ imageConfig.getImageUrl("invention", {
         },
         "show": {
             "dir": "show/s%catigoryId%/%parentShopId%/%authorId%/",
-            "size": [1024, 1024],
+            "size": [2048, 2048],
             "variations": [{
                 "suffix": "l",
-                "resolution": "1024x1024"
+                "resolution": "2048x2048"
             }, {
                 "suffix": "m",
-                "resolution": "512x512"
+                "resolution": "1024x1024"
             }, {
                 "suffix": "s",
-                "resolution": "256x256"
+                "resolution": "512x512"
             }]
         },
         "customerFile": {
             "dir": "customerFile/%parentShopId%/",
-            "size": [1024, 1024],
+            "size": [2048, 2048],
             "variations": [{
                 "suffix": "l",
-                "resolution": "1024x1024"
+                "resolution": "2048x2048"
             }, {
                 "suffix": "m",
-                "resolution": "512x512"
+                "resolution": "1024x1024"
             }, {
                 "suffix": "s",
-                "resolution": "256x256"
+                "resolution": "512x512"
             }]
         },
         "tenantLogo": {

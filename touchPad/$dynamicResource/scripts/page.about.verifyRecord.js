@@ -24,6 +24,7 @@
                 setOnDayTap: true,
                 buttons: [],
                 max:new Date(),
+                endYear: amGloble.now().getFullYear()+50,
                 onSet: function(valueText, inst) {
                     console.log(valueText, inst);
                     self.$date.text(valueText.valueText.replace(/\//g,'.'));

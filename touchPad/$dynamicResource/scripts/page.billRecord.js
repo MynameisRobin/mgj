@@ -48,7 +48,7 @@
 			this.$.on("vclick",function(){
 				self.$openList.addClass('hide');
 			});
-
+		
   			this.$openList.on("vclick",".levelList li",function(e){
 				e.stopPropagation();
 				var item=$(this).data("item");
@@ -89,13 +89,23 @@
 				self.$employeeValue.val(item.textName).data("value",sendMessage);
 				self.$openList.addClass('hide');
 				
-  			});
+			  });
+
+			$('#refundVccode').on('vclick','.qx',function(){
+				$('#refundVccode').hide();
+			});	
+	        $('#refundVccode').keydown(function(e){
+				
+				if(e.keyCode==13){
+					$('#refundVccode .qd').trigger('vclick');
+				}
+
+			})
   			this.$.find(".close,.mask").on("vclick",function(){
   				self.hide();
   				self.empFeeLi = null;
   				self.empFeeSel = null;
   			});
-
   			this.$.find(".btngroup").on("vclick",".btnOk",function(){
   				var value=self.getValue();
   				//if(!value) return;
@@ -243,7 +253,11 @@
 						if(self.currentBill.type==2 && !self.currentBill.detailList.length && self.currentBill.cardList.length && self.currentBill.cardList[0].cardType==2){
 							result = self.billFee;
 						}else {
-							result = self.billFee - self.getCost(self.currentBill);
+							if(am.metadata.configs.combNotCalIntoAchiev=='true'){
+								result = self.billFee - self.getCost(self.currentBill)
+							}else {
+								result = self.billFee;
+							}
 						}
 						if(currentFee>result){
 							if(!self.empFeeLi || self.empFeeLi.fee!=value.fee){
@@ -253,14 +267,16 @@
 						}
 					}
 				}
-				if(self.currentBill.type==1){
-					if(self.$totalperformance.val()!=0 && !self.$cardbuckleperformance.val() && !self.$cashearnings.val() && !self.$otherresults.val()){
-						am.msg("请输入业绩详情！");
-						return false;
-					}
-				}
+				// if(self.currentBill.type==1){
+				// 	var enabledNewPerfModel = amGloble.metadata.enabledNewPerfModel;
+				// 	// 开启新业绩模式，不验证卡金类、现金类、其他类业绩
+				// 	if(self.$totalperformance.val()!=0 && (!self.$cardbuckleperformance.val() && !self.$cashearnings.val() && !self.$otherresults.val() && enabledNewPerfModel != 1)){
+				// 		am.msg("请输入业绩详情！");
+				// 		return false;
+				// 	}
+				// }
 				
-				if(_commissionType == 0 || _commissionType == 4){	//验证指定非指定
+				if(_commissionType == 0 || _commissionType == 4 || (_commissionType==3 && (amGloble.metadata.configs.packageSpecial=='true'))){	//验证指定非指定
 					if( self.$source.find('.changesource > .selected').length == 0 ){
 						am.msg("请指定非指定！");
 						return false;
@@ -292,6 +308,12 @@
 				}
 
 				this.$achievementbox.show();
+				// 修改业绩后，自动计算三大类业绩与支付方式业绩，所以取消三大业绩输入框
+				this.$achievementbox.eq(1).hide();
+				// 开启新业绩模式，隐藏 卡金类、现金类、其他类业绩输入框
+				// if (amGloble.metadata.enabledNewPerfModel == 1) {
+				// 	this.$achievementbox.eq(1).hide();
+				// }
 				this.setAchievementVal(item);	//给业绩赋值
 
 				//var bills = am.page.billRecord.$listData;
@@ -306,12 +328,17 @@
 				this.currentBillItem = {}; //获取当前编辑单据中的编辑项目
 				for(var i=0;i<this.currentBill.detailList.length;i++){
 					if(item.itemNo == this.currentBill.detailList[i].itemNo){
+						//如果有相同项目则比对detailId
+						if(item.detailId == this.currentBill.detailList[i].id){
+							this.currentBillItem = this.currentBill.detailList[i];
+							break;
+						}
 						this.currentBillItem = this.currentBill.detailList[i];
 					}
 				}
 				console.log(this.currentBill)
 				console.log(this.currentBillItem)
-				if(item.commissionType == 0 || item.commissionType == 4  || item.commissionType == 6){	//隐藏提成输入框
+				if(item.commissionType == 0 || item.commissionType == 4  || item.commissionType == 6 || (item.commissionType==3 && (amGloble.metadata.configs.packageSpecial=='true'))){	//隐藏提成输入框
 					if(amGloble.metadata.shopPropertyField.handinto==1){
 						this.$commissionbox.show();
 						this.setCommissionVal(item);
@@ -501,17 +528,19 @@
 
 			if(this.btn){	//需要业绩
 				value.fee = this.$totalperformance.val();	//总业绩
-				value.cardfee = this.$cardbuckleperformance.val();	//卡扣业绩
-				value.cashfee = this.$cashearnings.val();	//现金业绩
-				value.otherfee = this.$otherresults.val();	//其他业绩
-
-				if(this.commissionType == 0 || this.commissionType == 4){	//需要指定非指定值
+				// 开启新业绩模式不获取卡金类、现金类、其他类业绩，不开启则获取
+				if (amGloble.metadata.enabledNewPerfModel != 1) {
+					value.cardfee = this.$cardbuckleperformance.val();	//卡扣业绩
+					value.cashfee = this.$cashearnings.val();	//现金业绩
+					value.otherfee = this.$otherresults.val();	//其他业绩
+				}
+				if(this.commissionType == 0 || this.commissionType == 4 || (this.commissionType==3 && (amGloble.metadata.configs.packageSpecial=='true'))){	//需要指定非指定值
 					value.pointFlag = this.$source.find('.changebox.selected .change_words').data('val');
 					if(amGloble.metadata.shopPropertyField.handinto==1){
-						value.gain = this.$commission.val();
+						value.gain = this.$commission.val() || 0;
 					}
 				}else{	//需要提成
-					value.gain = this.$commission.val();	//提成
+					value.gain = this.$commission.val() || 0;	//提成
 				}
 			}
 
@@ -815,6 +844,8 @@
 	});
 	var self = am.page.billRecord = new $.am.Page({
 		id : "page_billRecord",
+		sort:'1',//水单排序 0正序  1倒序
+		orderby:'consumetime',//水单排序条件 billno 单号    consumetime 时间       eafee 入账
 		backButtonOnclick : function() {
 			if ($("#pswp_dom").is(":visible")) {
 				am.gallery.close();
@@ -824,6 +855,21 @@
 			}
 		},
 		init : function() {
+			var $madal = $('<div class="promotionMadal" id="promotionMadal1">'+
+                            '<div class="close iconfont icon-guanbi2  am-clickable"></div>'+
+                            '<div class="title">idull的推广码</div>'+
+                            '<div class="content">'+
+                                '<img/>'+
+                                '<div>微信扫码进入</div>'+
+                            '</div>'+
+                        '</div>')
+			$('body').append($madal)
+			$madal.find('.close').vclick(function(){
+                $madal.hide();
+            })
+			$madal.hide();
+			this.$madal = $madal;
+			
 			this.$billRecordContent=this.$.find(".billRecordContent");
 			this.$contentBox=this.$.find(".billRecordContent .common_tabBox");
 			this.$watercourse=this.$.find(".billRecordContent .watercourse");
@@ -841,13 +887,57 @@
 			this.$searchMask = this.$.find('.searchmask');
 			this.$searchopen = this.$.find('.searchopen');
 			this.$header = this.$.find('.header');
+			this.$searchWrap=this.$.find(".search-scroll-wrap")
+
+			this.$payListWrap=this.$.find('.listWrap');
+			this.$payList=this.$payListWrap.find('.list');
+			this.$payMask=this.$.find('.paymask').on('vclick',function(){
+				self.hideRelatePay();
+			});
+			this.$relatePay=this.$.find('.relatePay');
+			this.relatePayScrollView = new $.am.ScrollView({
+				$wrap: this.$payListWrap,
+				$inner: this.$payList,
+				direction: [false, true],
+				hasInput: false,
+			});
+			this.relatePayScrollView.refresh();
+			// 营业流水表头
+			this.isUp=1;// 升序还是降序 1 升序   0 降序
+			this.$tHead=this.$.find('.watercourse .table-content-head').on('vclick','.sort',function(){
+				self.resetArrows();
+				self.orderby=$(this).data('type');
+				if(self.isUp===1){//升序 
+					self.sort=0;
+					self.render(true);
+					$(this).find('.up').addClass('enabled');
+					self.isUp=0;
+				}else{
+					self.sort=1;
+					self.render(true);
+					$(this).find('.down').addClass('enabled');
+					self.isUp=1;
+				}
+			});
+			this.$ups=self.$tHead.find('.up');//排序向上箭头
+			this.$downs=self.$tHead.find('.down');//排序向下箭头
+
+			this.searchScrollBox = new $.am.ScrollView({ // 搜索弹窗滚动
+                $wrap: this.$searchWrap,
+                $inner: this.$.find(".search-scroll-wrapper"),
+                direction: [false, true],
+                hasInput: false
+            });
+            this.searchScrollBox.refresh();
 
 			//搜索区域展开和隐藏
 			this.$searchopen.vclick(function(){
+				self.hideRelatePay();
 				if(self.$header.hasClass('on')){	//隐藏操作
 					self.searchHide();
 				}else{	//展开操作
 					self.searchOpen();
+					self.searchScrollBox.refresh();
 				}
 			});
 			this.$searchMask.vclick(function(){
@@ -857,9 +947,20 @@
 				self.searchHide();
 			});
 
+			this.$introDetail = this.$.find('.introDetail').vclick(function(){
+        		$(this).hide();
+            });
+			this.$introDetailWrap = this.$introDetail.find('.text');
+			this.$introDetailText = this.$introDetail.find('.text p');
+			this.$introDetailDown = this.$introDetail.find('.text .up');
+			this.$introDetailUp = this.$introDetail.find('.text .down');
+			
 			this.$.on("vclick",".billRecordTab li",function(){
 				var idx=$(this).index();
 				$(this).addClass("selected").siblings().removeClass('selected');
+				if(idx==7){
+					idx = 0;
+				}
 				if(idx<1){
 					self.$contentBox.eq(idx).addClass('selected').siblings().removeClass('selected');
 					setTimeout(function(){
@@ -874,10 +975,82 @@
 					}else{
 						self.$contentBox.find(".search_box .tips").hide();
 					}
+					if(idx==4||idx==5){
+						self.$verificationBox.show().find('.verification_input').val("");
+						self.lIidx=idx;
+					}else{
+						self.$verificationBox.hide();
+					}
 				}
 				self.facePageIndex=0;
 				self.$billRecordContent.addClass("normal");
 				self.setStartDate();
+			}).on('vclick','.listWrap li',function(){
+				var $this=$(this);
+				var payData=$this.data('data');
+				var relateBillInfo=self.relateBillInfo;
+				var facePayMap=relateBillInfo.facePayMap;
+				if (payData && relateBillInfo) {
+					var sum=0;
+					if(!am.isNull(payData.details)){
+						$.each(payData.details,function(k,v){
+							sum += v.amount*1;
+						});
+					}
+					payData.price = (payData.price - sum).toFixed(2);
+					var orderType = payData.type;
+					if(orderType==4){
+						orderType = 6;
+					}else if(orderType==5){
+						orderType = 7;
+					}
+					var opt = {
+						shopId: relateBillInfo.shopId,
+						refBillId: relateBillInfo.id,
+						displayId: relateBillInfo.billNo,
+						payOrderId: payData.id,
+						amount: payData.price,
+						orderType: orderType,
+						parentShopId: am.metadata.userInfo.parentShopId
+					}
+					console.log(opt);
+					var fn=function(confirmed){
+						if(confirmed){
+							am.api.relatePay.exec(opt, function (ret) {
+								if (ret && ret.code == 0) {
+									console.log(ret);
+									am.msg('已关联成功!');
+								} else {
+									am.msg(ret.message || '关联失败！')
+								}
+								self.hideRelatePay();
+							});
+						}else{
+							am.confirm("提示", "是否确定关联？", "确定", "取消", function () {
+								am.api.relatePay.exec(opt, function (ret) {
+									if (ret && ret.code == 0) {
+										console.log(ret);
+										am.msg('已关联成功!');
+									} else {
+										am.msg(ret.message || '关联失败！')
+									}
+									self.hideRelatePay();
+								});
+							});
+						}
+					}
+					if(facePayMap && facePayMap[opt.orderType] && facePayMap[opt.orderType]>opt.amount){
+						am.msg('选择的金额小于消费金额！');
+						return;
+					}else if(facePayMap && facePayMap[opt.orderType] && facePayMap[opt.orderType]<opt.amount){
+						am.confirm("提示", "选择的金额大于消费金额，是否确定关联？", "确定", "取消", function () {
+							fn(1);
+						});
+					}else{
+						fn();
+					}
+				}
+				// self.hideRelatePay();
 			}).on("vclick",function(){
 				//关闭筛选条件
 				for(var i in self.Select){
@@ -887,6 +1060,23 @@
 				}
 				//关闭修改删除弹层
 				self.$.find('.tdedit ul').hide();
+			});
+			// 核销按钮
+			this.$verificationBox=self.$billRecordContent.find('.verification_box').on('vclick','.verification_btn',function(){
+				// 调用核销接口
+				if(self.lIidx && self.lIidx==4){
+					// 点评
+					self.useDpTickets();
+				}else if(self.lIidx && self.lIidx==5){
+					// 口碑
+					self.useKbTickets();
+				}
+			});
+			// 券码输入框
+			this.$ticketCode=this.$verificationBox.find('.verification_input').on('keyup',function(e){
+				if(e.keyCode==13){
+					self.$verificationBox.find('.verification_btn').trigger('vclick');
+				}
 			});
 			this.$.find(".billRecordContent .header").on("vclick",".dateInput .pre",function(){
 				var ts = self.addTime(false);
@@ -904,10 +1094,19 @@
 				if(new Date(val).getTime()>=new Date().getTime()-86400000) return;
 				self.$waterInput.val(self.addTime(true).format('yyyy/mm/dd'));
 			}).on("vclick",".btnOk",function(){
+				if(self.$header.hasClass('on')){  // 点击查询将页面初始化为最初状态 否则修改页面数据及排序不影响原来排序结果
+					// 搜索条件初始化 排序箭头初始化
+					self.sort=1;
+					self.orderby='consumetime';
+					self.resetArrows();
+				}
 				self.searchHide();
 				self.hideSelect();
 				self.$watercourse.removeClass("showmoreresult");
-				//self.$watercourse.find(".tablebody").css("top","145px");
+                //self.$watercourse.find(".tablebody").css("top","145px");
+                // 性能监控点
+                monitor.startTimer('M08')
+
 				self.render(true);
 
 				console.log(self.getSelectValue());
@@ -930,10 +1129,16 @@
 				self.rendercommonReports();
 			}).on("vclick",".refund",function(){
 				if($(this).hasClass("disabled")) return;
+				var opt={
+					parentShopId:am.metadata.userInfo.parentShopId,
+					token:am.metadata.userInfo.mgjtouchtoken,
+				};
 				var item=$(this).parents("tr").data("item");
 				var _this=$(this);
 				var nowDay=self.getoneday(new Date());
 				var outTime=self.getoneday(item.createtime);
+				//获取验证码url 
+				var vc_code=config.gateway+am.api.refundVcCode.serviceName+'?parentShopId='+opt.parentShopId+'&token='+opt.token+'&ts='+new Date().getTime();
 				if(item.payType==0 && !(nowDay.year==outTime.year && nowDay.month==outTime.month && nowDay.day==outTime.day)){
 					am.msg("本单为代收代付，收款已超过一天，已计入提现金额，无法退款！");
 					return false;
@@ -943,15 +1148,65 @@
 					return false;
 				}
 				var msg=item.billid?"建议您去水单记录中撤销水单后退款，如果仍选择退款，水单会成为异常流水单，是否仍选择退款？":"是否确认退款";
-				am.confirm("退款", msg, "确定", "取消", function() {
+				// $('#refundVccode .qd,#vc_code').unbind();
+				$('#vc_code').unbind('vclick').on("vclick",function(){
+					self.vc_coderefresh(vc_code);
+				})
+				self.vc_coderefresh(vc_code);
+				$('#refundVccode .qd').unbind('vclick').on('vclick',function(){
+					var vcCodeText=$('#vcCodeIpt').val();
+					if(!vcCodeText.trim()){
+						am.msg("请输入验证码！");
+						return;
+					}
 					self.withdrawData(item,function(ret){
-						if (ret.content.status == 4 || ret.content.status == 5) {
-						    am.msg("退款成功！");
-						    _this.text("已退款").addClass("disabled");
+						if(item.type == 4 || ((item.type == 1 || item.type == 2) && item.sn)){
+							if (ret.code == 0) {
+								am.msg("退款申请成功，请在POS机上完成退款操作！");
+								_this.text("退款中").addClass("disabled");
+							}	
+						}else{
+							if (ret.content.status == 4 || ret.content.status == 5) {
+								am.msg("退款成功！");
+								_this.text("已退款").addClass("disabled");
+							}					 
 						}
-					})
-				}, function() {});
-
+					},vcCodeText)
+				});
+				//弹出前清空验证码
+				$('#vcCodeIpt').val('');
+				$('#refundVccode').show();
+			}).on("vclick",".refresh",function(){
+				self.synorderstatus($(this).parents("tr"));
+			}).on('vclick','.ordercomment p:nth-child(2)',function(){
+				var w = $(this).width(),
+					h = $(this).height(),
+	        		t = $(this).offset().top,
+	        		l = $(this).offset().left-75,
+					text = $(this).html();
+				self.$introDetailText.html(text);
+				self.$introDetail.show();
+				self.$introDetailWrap.css({
+					'min-width': w+'px',
+					'max-width': 3*w+'px',
+					'top': 'auto',
+					'bottom': $('body').height()-t+'px',
+				});
+				self.$introDetailUp.show();
+				self.$introDetailDown.hide();
+				var _t = self.$introDetailWrap.offset().top;
+				if(_t<0){
+					self.$introDetailWrap.css({
+						'top': t+h-($('body').hasClass('isios')?20:0)+'px',
+						'bottom':'auto'
+					});
+					self.$introDetailUp.hide();
+					self.$introDetailDown.show();
+				}
+				self.$introDetailWrap.css({
+					'left': l-(self.$introDetailText.outerWidth()-w)/2+'px'
+				});
+					
 			});
 			this.$watercourse.on("vclick",".result .detail",function(){
 				// if(self.$watercourse.hasClass('showmoreresult')){
@@ -965,8 +1220,10 @@
 				// self.watercourseScroll.scrollTo("top");
 				$('#tab_main ul p.h').parent('li').trigger('vclick');
 			}).on("vclick",".table-content-list .projectName a.editItem",function(){
+				var childtrItem=$(this).parents(".childtr").data("item");
+				if( !self.auditingFlag(childtrItem) ) return;
 				if( !self.modifyPermissions() ) return;
-
+				if( !self.timePermissions($(this)) ) return;
 				var item=$(this).parent(".projectName").data("item");
 				console.log(item);
 				var _this=$(this);
@@ -1000,7 +1257,10 @@
 					});
 				});
 			}).on("vclick",".table-content-list .projectName a.editDep",function(){
+				var childtrItem=$(this).parents(".childtr").data("item");
+				if( !self.auditingFlag(childtrItem) ) return;
 				if( !self.modifyPermissions() ) return;
+				if( !self.timePermissions($(this)) ) return;
 
 				var item=$(this).parent(".projectName").data("item");
 				console.log(item);
@@ -1015,10 +1275,14 @@
 					});
 				});
 			}).on("vclick",".table-content-list .changeEmployee a",function(){
+				var childtrItem=$(this).parents(".childtr").data("item");
+				if( !self.auditingFlag(childtrItem) ) return;
 				if( !self.modifyPermissions() ) return;
+				if( !self.timePermissions($(this)) ) return;
 
 				var idx=$(this).parents("tr").index();
 				var item=$(this).parents("tbody").data("item");
+				if( !self.auditingFlag(item) ) return;
 				var sendData=$.extend(item["empList"]?item["empList"][idx]:{},item["other"]);
 				var _this=$(this);
 				console.log(sendData);
@@ -1040,23 +1304,88 @@
 				});
 			}).on("vclick",".consumetime",function(ev){
 				ev.stopPropagation();
+				var item = $(this).parents('tr').data('item');
+				if( !self.auditingFlag(item) ) return am.msg("已对单不能修改");
 				if( !self.modifyDatePermissions() ) return;
+				if( !self.timePermissions($(this)) ) return;
 			}).on("vclick",".addcustomer",function(ev){
 				ev.stopPropagation();
 				var _item = $(this).parents('tr').data('item');
-				console.log(_item);
+				// console.log(_item);
+				// if( !self.auditingFlag(_item) ) return;
 
 				if(_item.memberId == 0){
 					//am.msg("!!!");
 					return;
 				}
+                // 性能监控点
+                monitor.startTimer('M07')
 
+				// 性能监控点
+				monitor.startTimer('M07', {customerId:_item.memberId})
+				
 				$.am.changePage(am.page.memberDetails, "slideup",{customerId:_item.memberId,tabId:1});
+			}).on("vclick",".table-content-list .relate",function(e){
+				// 关联收款
+				e.stopPropagation();
+				var relateBillInfo=$(this).parents('tr').data('item');
+				self.relateBillInfo=relateBillInfo;
+				// 获取当面付数据
+				if(relateBillInfo && relateBillInfo.cashList && relateBillInfo.cashList.length){
+					var cashList=relateBillInfo.cashList;
+					var facePayMap={};
+					// 微信1  支付宝2 银联6 京东钱包7
+					for(var i=0,len=cashList.length;i<len;i++){
+						var cashItem=cashList[i];
+						if(cashItem.weixin>0){
+							facePayMap[1]=cashItem.weixin;
+						}
+						if(cashItem.pay>0){
+							facePayMap[2]=cashItem.pay;
+						}
+						if(cashItem.unionPay>0){
+							facePayMap[6]=cashItem.unionPay;
+						}
+						var jdSetting = self.getJdPay();
+						if(jdSetting && cashItem[jdSetting.field.toLowerCase()]>0){
+							facePayMap[7]=cashItem[jdSetting.field.toLowerCase()];
+						}
+					}
+					self.relateBillInfo.facePayMap=facePayMap;
+				}
+				// 获取当面付数据
+					var start = new Date();
+					start.setDate(start.getDate()-6);
+                    start.setHours(0);
+                    start.setMinutes(0);
+                    start.setSeconds(0);
+					var opt={
+						parentShopId:am.metadata.userInfo.parentShopId,
+						status:[3],//接口参数
+						period:(start.getTime())+"_"+new Date().getTime(),
+						shopIds:[am.metadata.userInfo.shopId],
+						united:0
+					}
+					am.api.facePay.exec(opt, function(ret){
+						if(ret && ret.code==0){
+							if(ret.content.length){
+								self.renderRelatePay(ret.content);
+								// self.$relatePay.addClass('on');
+								// self.$payMask.show();
+							}else{
+								am.msg('没有记录！')
+							}
+						}else{
+							am.msg('获取数据失败');
+						}
+					});//接口
+
 			}).on("vclick",".table-content-list .revoke",function(ev){
 				ev.stopPropagation();
 				if($(this).hasClass("disabled")) return;
 
-				//if( !self.modifyPermissions() ) return;
+				// if( !self.modifyPermissions() ) return;
+				if( !self.timePermissions($(this)) ) return;
 
 				var p = $(this).data("revoke");
 				if(p && am.operateArr.indexOf(p) ==-1){
@@ -1065,7 +1394,7 @@
 				}
 
 				var _this=$(this);
-				var item=$(this).parents("tr").data("item");
+				var item=$(this).parents('.childtr').prev('.basictr').data("item");
 				var reason = JSON.parse(am.metadata.configs.cancleBilled);
 				am.selectCancleReason.show({
 					title: '请选择撤单理由',
@@ -1086,26 +1415,102 @@
 				// 		self.$.find(".btnOk").trigger('vclick');
 				// 	});
 				// }, function() {});
+			}).on("vclick",".table-content-list .perf-btn", function(e) {
+				e.stopPropagation();
+				var item=$(this).parents('.childtr').prev('.basictr').data("item"),
+				 paramsObj={
+					shopId: am.metadata.userInfo.shopId,
+					parentShopId: am.metadata.userInfo.parentShopId,
+					billId: item.id,
+				},
+				userToken=JSON.parse(localStorage.getItem("userToken")),
+				url=config.calcServerUrl+'/empFee/billCalc' + "?" + $.param({
+					shopId:userToken? userToken.shopId : null,
+                    parentShopId: userToken? userToken.parentShopId : null,
+					token:userToken ? userToken.mgjtouchtoken : null,
+                });
+				am.loading.show("正在获取数据,请稍候...");
+				$.ajax({
+					type:'POST',
+					url:url,
+					data:JSON.stringify(paramsObj),
+					dataType:'json',
+					contentType:'application/json',
+					success:function(ret){
+						am.loading.hide();
+						if(ret.code==0){
+							self.$.find(".btnOk").trigger('vclick');
+						}else if(ret.code==-3){
+							am.msg(ret.message || "token失效");
+							$.am.changePage(am.page.login, "");
+						}else{
+							am.msg(ret.message || "数据获取失败,请检查网络!");
+						}
+					},
+					error:function(ret){
+						am.loading.hide();
+						am.msg(ret.message || "数据获取失败,请检查网络!");
+					}
+				});
+			}).on("vclick",".table-content-list .bonus-btn",function(ev){
+				ev.stopPropagation();
+				var item=$(this).parents('.childtr').prev('.basictr').data("item"),
+				 paramsObj={
+					shopid:am.metadata.userInfo.shopId,
+					parentShopId:am.metadata.userInfo.parentShopId,
+					billid:item.id,
+					recalculation: true
+				},
+				userToken=JSON.parse(localStorage.getItem("userToken")),
+				url=config.calcServerUrl+'/empGain/billCalc' + "?" + $.param({
+					shopId:userToken? userToken.shopId : null,
+                    parentShopId: userToken? userToken.parentShopId : null,
+					token:userToken ? userToken.mgjtouchtoken : null,
+                });
+				am.loading.show("正在获取数据,请稍候...");
+				$.ajax({
+					type:'POST',
+					url:url,
+					data:JSON.stringify(paramsObj),
+					dataType:'json',
+					contentType:'application/json',
+					success:function(ret){
+						am.loading.hide();
+						if(ret.code==0){
+							self.$.find(".btnOk").trigger('vclick');
+						}else if(ret.code==-3){
+							am.msg(ret.message || "token失效");
+							$.am.changePage(am.page.login, "");
+						}else{
+							am.msg(ret.message || "数据获取失败,请检查网络!");
+						}
+					},
+					error:function(ret){
+						am.loading.hide();
+						am.msg(ret.message || "数据获取失败,请检查网络!");
+					}
+				});
 			}).on("vclick",".table-content-list .print",function(ev){
 				ev.stopPropagation();
 				var that = $(this);
 
-				var $basictr = $(this).parents('.basictr');
+				// var $basictr = $(this).parents('.basictr');
+				var $basictr = $(this).parents('.childtr').prev('.basictr');
 				var _item = $basictr.data('item');
 				console.log(_item);
 
 				var d = self.getDetailData(_item,$basictr);
 				console.log(d);
 
-				that.addClass('am-disabled').text('正在打印');
+				that.addClass('am-disabled').html('<span class="icon iconfont icon-dayinxiaopiao"></span>正在打印');
 				am.print.print(
 	                d,
 	                function(){
-	                    that.removeClass("am-disabled").text("打印小票");
+	                    that.removeClass("am-disabled").html('<span class="icon iconfont icon-dayinxiaopiao"></span>打印小票');
 	                },
 	                function(msg){
 	                    am.msg(msg || "打印失败");
-	                    that.removeClass("am-disabled").text("打印小票");
+	                    that.removeClass("am-disabled").html('<span class="icon iconfont icon-dayinxiaopiao"></span>打印小票');
 	                }
 	            );
 			}).on('vclick','tr.basictr',function(){	//展开隐藏
@@ -1129,10 +1534,15 @@
 			}).on('vclick','.table-content-list .tdedit',function(ev){
 				ev.stopPropagation();
 				self.$.find('.tdedit ul').hide();
-
+				var item=$(this).parents(".childtr").data("item");
+				if( !self.auditingFlag(item) ) return;
 				if( !self.modifyPermissions() ) return;
+				if( !self.timePermissions($(this)) ) return;
 				//编辑
 				$(this).find('ul').show();
+			}).on("vclick",".table-content-list .good",function(e){
+				e.stopPropagation();
+				am.goodModal.show();
 			}).on('vclick','.table-content-list .tdedit ul li',function(ev){
 				ev.stopPropagation();
 				var _index = $(this).index();
@@ -1179,6 +1589,7 @@
 				}
 			}).on('vclick','.table-content-list .addcust div',function(){
 				if( !self.modifyPermissions() ) return;
+				if( !self.timePermissions($(this)) ) return;
 				var _this = $(this);
 				var billFeeStr = _this.parents('.col3').prev().find('dt p').html();
 				$.am.selectEmployee.billFee = billFeeStr.substring(1,billFeeStr.length);
@@ -1198,6 +1609,7 @@
 					item.billtype = childtritem.type;
 					item.itemNo = "-1";
 				}else{
+					item.detailId = detailtritem.id;
 					item.id = detailtritem.id;
 					item.billtype = detailtritem.type;
 					item.itemNo = detailtritem.itemNo;
@@ -1213,6 +1625,9 @@
 				var $childtr = $(this).parents(".childtr");
 				var item=$childtr.data("item");
 				console.log(item);
+				if(am.signatureView.loading){
+					return;
+				}
 				am.signatureView.show({
 					memberId:item.memberId,
 					billId:item.id,
@@ -1227,7 +1642,9 @@
 			}).on('vclick','.billnoBox a',function(e){
 				e.stopPropagation();
 				if( !self.modifyPermissions() ) return;
+				if( !self.timePermissions($(this)) ) return;
 				var item = $(this).parents('tr').data('item');
+				if( !self.auditingFlag(item) ) return;
 				var oldVal = $(this).html();
 				item.oldVal = oldVal;
 				am.keyboard.show({
@@ -1245,28 +1662,45 @@
                 });
 			}).on('vclick','.client a',function(e){
 				e.stopPropagation();
+				var $that=$(this);
 				if( !self.modifyPermissions() ) return;
+				if( !self.timePermissions($(this)) ) return;
 				var item = $(this).parents('tr').data('item');
+				if( !self.auditingFlag(item) ) return;
 				var _this = $(this);
 				var oldClient = _this.html(),
 					newClient = oldClient=='计客'?'不计客':'计客';
 				self.upd(11,item,function(){
-					self.$.find(".btnOk").trigger('vclick');
+					// self.$.find(".btnOk").trigger('vclick');
+					$that.text(newClient);
+					newClient=='计客'?item.customer.clientflag=1:item.customer.clientflag=0;
 				});
 			}).on('vclick','.sextd a',function(e){
 				e.stopPropagation();
+				var $that=$(this);
 				if( !self.modifyPermissions() ) return;
+				if( !self.timePermissions($(this)) ) return;
 				var item = $(this).parents('tr').data('item');
+				if( !self.auditingFlag(item) ) return;
 				var _this = $(this);
 				var oldSex = _this.html(),
 					newSex = oldSex=='男'?'女':'男';
 				self.upd(3,item,function(){
-					self.$.find(".btnOk").trigger('vclick');
+					// self.$.find(".btnOk").trigger('vclick');
+					$that.text(newSex);
+					newSex=='男'?item.sex='M':item.sex='F';
+					
 				});
 			}).on('vclick','.comment',function(e){
 				$(this).toggleClass('checked');
 			}).on('vclick','dt.deptPerfEdit',function () {
 				self.setDeptPerf($(this).parents('tr.childtr'));
+			}).on('vclick','.reward',function(){
+				if(am.metadata.shopPropertyField != undefined && am.metadata.shopPropertyField.openSmallProgram) {
+					self.$madal.find('.title').text('扫码抽好礼');
+					self.$madal.find('img').attr('src',am.getMiniProCodeBySence(am.metadata.userInfo.parentShopId,'pages/mine/index','lottery'+$(this).attr("data-index")+($(this).attr("data-mobile")?'_'+$(this).attr("data-mobile"):''))) 
+					self.$madal.show();
+                }
 			});
 
 			//重试
@@ -1328,7 +1762,7 @@
 			    }
 			}).mobiscroll('getInst');
 			*/
-
+			
 			this.selectData={
 				depcodeselect_form:[{"name":"全部","value":""},{"name":"美发部1","value":1},{"name":"美容部2","value":2}],
 				billselect_form:[
@@ -1362,24 +1796,57 @@
 				{"name":"优惠券","value":16},
 				{"name":"自定义","value":17}],
 				acrossselect_form:[{"name":"全部","value":0},{"name":"跨店","value":1}],
-				operatorselect_form:[{"name":"全部","value":0},{"name":"一店","value":1}]
+				operatorselect_form:[{"name":"全部","value":0},{"name":"一店","value":1}],
+				serverselect_form:[{'name':'1234张三','value':''}],
+				classselect_form:[{'name':'类别','value':''}],
+				subclassselect_form:[{'name':'项目','value':''}]
 			}
 			this.setSelect(this.selectData);
-
+			this.$subclassselect_form=this.$.find('.subclassselect_form');
+			this.$billselect_formBox=this.$.find('.billselect');
 			this.pageIndex=0;
 			self.$listData=[];
 			this.createPicker();
 		},
+		vc_coderefresh:function(url){
+            $('#vc_code').attr('src',url+'&ts='+new Date().getTime());
+		},
 		getBillByNo:function(no,cb){
 			var cachedata = am.page.hangup.cachedata;
-			var list = cachedata.content;
-			if(list && list.length){
-				for(var i=0;i<list.length;i++){
-					if(list[i].serviceNO == no){
-						cb && cb(list[i],i);
+			if (cachedata && cachedata.content) {
+				var list = cachedata.content;
+				if (list && list.length) {
+					for (var i = 0; i < list.length; i++) {
+						if (list[i].serviceNO == no) {
+							cb && cb(list[i], i);
+						}
 					}
 				}
 			}
+		},
+		selectLotteryActivityConfig:function(){
+			var _self=this;
+			delete _self.lcardValue;
+			am.api.selectLotteryActivityConfig.exec({ 
+				parentShopId:am.metadata.userInfo.parentShopId,
+				type:2
+			}, function(res) {
+				_self.lcardValue=0;
+				if (res.code == 0 && res.content) {
+					_self.lcardValue=res.content.cardValue;
+					_self.lcardEndTime=res.content.endTime;
+				}
+			});
+			delete _self.lconsumeValue;
+			am.api.selectLotteryActivityConfig.exec({ 
+				parentShopId:am.metadata.userInfo.parentShopId,
+				type:1
+			}, function(res) {
+				if (res.code == 0 && res.content) {
+					_self.lconsumeValue=res.content.consumeValue;
+					_self.lconsumeEndTime=res.content.endTime;
+				}
+			});
 		},
 		checkIsbilRemark:function(item){
 			if(item.type==2 || item.type==3){
@@ -1398,8 +1865,14 @@
 						sendData.billRemark.buypackage.isbuy = false;
 					}
 					_item.data = JSON.stringify(sendData);
-					am.page.hangup.cachedata.content[idx] = _item;
-					am.page.hangup.saveBill(_item);
+					try{
+						if(am.page.hangup.cachedata){//fix bug--0015769
+							am.page.hangup.cachedata.content[idx] = _item;
+							am.page.hangup.saveBill(_item);
+						}
+					}catch(e){
+						console.info("content属性不存在");
+					}
 				});
 			}
 		},
@@ -1426,6 +1899,12 @@
 			}
 			return name || '部门：无';
 		},
+		auditingFlag: function(item){
+			if(!item.auditingFlag || (item.auditingFlag == 1 && am.operateArr.indexOf('F') > -1)){
+				return true;
+			}
+			return false;
+		},
 		modifyPermissions : function(){
 			if( am.operateArr.indexOf('B') == -1 ){
 				am.msg("您没有权限修改此单!");
@@ -1439,6 +1918,33 @@
 				return false;
 			}
 			return true;
+		},
+		timePermissions:function($dom){
+			var day = '';
+			for(var i=0;i<am.operateArr.length;i++){
+				if(am.operateArr[i].indexOf('MGJZ10') != -1){
+					day = am.operateArr[i].split('MGJZ10')[1];
+				}	
+			}
+			if(day==''){
+				return true;
+			}else {
+				var $parent = $dom.parents('.basictr');
+				if(!$parent.length){
+					$parent = $dom.parents('.childtr').prev();
+				}
+				var data = $parent.data('item');
+				var consumeTime = data.consumeTime*1,
+					now = new Date().getTime(),
+					duration = now - consumeTime,
+					durationDay = duration/(1000*60*60*24);
+				if(durationDay<day){
+					return true;
+				}else {
+					am.msg("您只能修改"+day+"天内的单据!");
+					return false;
+				}
+			}
 		},
 		searchOpen:function(){	//展开
 			this.$header.addClass('on');
@@ -1454,6 +1960,10 @@
 			this.$header.removeClass('on');
 			this.$billRecordMask.hide();
 			this.$searchMask.hide();
+		},
+		hideRelatePay:function(){
+			this.$relatePay.removeClass('on');
+			this.$payMask.hide();
 		},
 		initHeader:function(){	//清空查询列表
 			var self = this;
@@ -1475,12 +1985,14 @@
 			}
 		},
 		renderReports:function(idx,flag){
-			var apiList=["getLuckyMoney","getMallOrder","getdianpingFlow","getexceptionFlow"];
-			var renderList=["renderRedpackReport","renderMallReport","renderViewReport","renderExceptionalReport"];
+			var apiList=["getLuckyMoney","getMallOrder","getdianpingFlow","getkoubeiFlow","getexceptionFlow"];
+			var renderList=["renderRedpackReport","renderMallReport","renderViewReport","renderKoubeiReport","renderExceptionalReport"];
 			this.getreports(apiList[idx],function(res){
 				console.log(res);
 				self.$faceTable.empty();
-				var data=res.content;
+				if(res){//fix bug 0015769
+					var data=res.content;
+				}
 				if(data && data.length){
 					self.renderTableHeader(idx+1);
 					self[renderList[idx]](res.content);
@@ -1500,7 +2012,7 @@
 				var classStyle=(item.status==4?"MGJ_highlight":"");
 				var $html=$('<tr class='+classStyle+'>'+
 				'<td style="width:19%"><div class="tdwrap">'+(item.activityTitle || '红包')+'</div></td>'+
-				'<td style="width:20%"><div class="tdwrap">'+(item.money+'元 ')+'</div></td>'+
+				'<td style="width:20%"><div class="tdwrap">'+ ((item.realMoney||item.money)?(Math.round((item.realMoney||item.money)*100)/100+'元 '):'--')+'</div></td>'+
 				'<td style="width:17%"><div class="tdwrap">'+item.memName+'</div></td>'+
 				'<td style="width:10%"><div class="tdwrap">'+(item.status==3?"已使用":"待再次核销")+'</div></td>'+
 				'<td style="width:14%"><div class="tdwrap">'+(item.displayId || "")+'</div></td>'+
@@ -1536,7 +2048,7 @@
 				'<td style="width:10%"><div class="tdwrap">'+(item.status==3?"已使用":"待再次核销")+'</div></td>'+
 				'<td style="width:10%"><div class="tdwrap">'+(item.displayId || "")+'</div></td>'+
 				'<td style="width:15%"><div class="tdwrap">'+(new Date(item.consumeTime*1).format("yyyy/mm/dd HH:MM"))+'</div></td>'+
-				'<td style="width:10%"><div class="tdwrap">'+item.operatorName+'</div></td>'+
+				'<td style="width:10%"><div class="tdwrap">'+(item.operatorName || item.memName || '--')+'</div></td>'+
 				'</tr>').data("item",item);
 				self.$faceTable.append($html);
 			}
@@ -1562,6 +2074,26 @@
 			self.facepayScroll.refresh();
 			self.facepayScroll.scrollTo("top");
 		},
+		renderKoubeiReport:function(data){
+			/*serialnumber 券号  dealtitle  名称 mobile 顾客手机号  price 价格  consumedate 消费日期  displayid  流水单号*/
+
+			
+			for(var i=0;i<data.length;i++){
+				var item=data[i];
+				var classStyle=(item.status==4?"MGJ_highlight":"");
+				var $html=$('<tr class='+classStyle+'>'+
+				'<td style="width:20%"><div class="tdwrap">'+item.TICKETCODE+'</div></td>'+
+				'<td style="width:15%"><div class="tdwrap">'+item.ITEMNAME+'</div></td>'+
+				// '<td style="width:15%"><div class="tdwrap">'+am.processPhone(item.mobile)+'</div></td>'+
+				'<td style="width:20%"><div class="tdwrap">'+("价格:￥"+item.ORIGINALPRICE+"(实收:￥"+item.PRICE)+')</div></td>'+
+				'<td style="width:25%"><div class="tdwrap">'+(item.DISPLAYID || "")+'</div></td>'+
+				'<td style="width:20%"><div class="tdwrap">'+(new Date(item.USEDATE*1).format("yyyy/mm/dd HH:MM"))+'</div></td>'+
+				'</tr>').data("item",item);
+				self.$faceTable.append($html);
+			}
+			self.facepayScroll.refresh();
+			self.facepayScroll.scrollTo("top");
+		},
 		renderExceptionalReport:function(data){
 			var payName = ["微信","支付宝","免费领取","会员卡支付"];
 			for(var i=0;i<data.length;i++){
@@ -1569,11 +2101,11 @@
 				var payName = ["微信","支付宝","免费领取","会员卡支付"];
 				var mobile=item.mobile?("["+am.processPhone(item.mobile)+"]"):"";
 				var $html=$('<tr>'+
-				'<td style="width:10%"><div class="tdwrap">'+(item.displayId || "")+'</div></td>'+
-				'<td style="width:18%"><div class="tdwrap">'+(item.name || "散客")+mobile+'</div></td>'+
-				'<td style="width:40%"><div class="tdwrap">'+('支付宝:'+item.pay+' 微信:'+item.weixin + '点评：' + item.mall +' 消费金额:'+item.eafee)+'</div></td>'+
-				'<td style="width:20%"><div class="tdwrap">'+item.consumetime+'</div></td>'+
-				'<td style="width:13%"><div class="tdwrap">'+item.operatiorid+'</div></td>'+
+				'<td style="width:12%"><div class="tdwrap">'+(item.displayId || "")+'</div></td>'+
+				'<td style="width:10%"><div class="tdwrap">'+(item.name || "散客")+mobile+'</div></td>'+
+				'<td style="width:50%"><div class="tdwrap">'+('支付宝：'+(item.pay).toFixed(2)+'　微信：'+(item.weixin).toFixed(2) + '　点评：' + (item.mall).toFixed(2) +'　消费金额：'+(item.eafee).toFixed(2))+'</div></td>'+
+				'<td style="width:18%"><div class="tdwrap">'+item.consumetime+'</div></td>'+
+				'<td style="width:10%"><div class="tdwrap">'+item.operatiorid+'</div></td>'+
 				'</tr>').data("item",item);
 				self.$faceTable.append($html);
 			}
@@ -1621,7 +2153,8 @@
 			    display: 'bottom',
 			    months: "auto",
 			    setOnDayTap: true,
-			    buttons: [],
+				buttons: [],
+				endYear: amGloble.now().getFullYear()+50,
 			    onSet: function(valueText, inst) {
 			        self.$.find(".start_Date").val(new Date(valueText.valueText).format("yyyy/mm/dd"));
 			    }
@@ -1660,11 +2193,12 @@
 			return n;
 		},
 		renderTableHeader:function(idx){
-			var headlist=[[{key:"类型",value:"10%"},{key:"交易号",value:"25%"},{key:"金额",value:"20%"},{key:"时间",value:"15%"},{key:"流水单号",value:"10%"},{key:"收款类型",value:"10%"},{key:"操作",value:"10%"}],
+			var headlist=[[{key:"类型",value:"8%"},{key:"交易号",value:"15%"},{key:"金额",value:"8%"},{key:"时间",value:"15%"},{key:"收款类型",value:"8%"},{key:"流水单号",value:"11%"},{key:"核销金额",value:"8%"},{key:"备注",value:"8%"},{key:"状态",value:"7%"},{key:"操作",value:"12%"}],
 			[{key:"活动",value:"19%"},{key:"金额",value:"20%"},{key:"客户",value:"17%"},{key:"状态",value:"10%"},{key:"流水单号",value:"14%"},{key:"使用时间",value:"20%"}],
 			[{key:"单号",value:"12%"},{key:"名称",value:"15%"},{key:"购买价",value:"8%"},{key:"支付方式",value:"10%"},{key:"客户",value:"10%"},{key:"状态",value:"10%"},{key:"流水单号",value:"10%"},{key:"兑换时间",value:"15%"},{key:"操作人",value:"10%"}],
 			[{key:"券号",value:"20%"},{key:"名称",value:"15%"},{key:"顾客手机号",value:"15%"},{key:"价格",value:"20%"},{key:"流水单号",value:"10%"},{key:"消费日期",value:"20%"}],
-			[{key:"单号",value:"10%"},{key:"客户",value:"18%"},{key:"消费金额",value:"40%"},{key:"消费时间",value:"20%"},{key:"操作人",value:"13%"}]
+			[{key:"券号",value:"20%"},{key:"名称",value:"15%"},{key:"价格",value:"20%"},{key:"流水单号",value:"25%"},{key:"消费日期",value:"20%"}],
+			[{key:"单号",value:"12%"},{key:"客户",value:"10%"},{key:"消费金额",value:"50%"},{key:"消费时间",value:"18%"},{key:"操作人",value:"10%"}]
 			];
 			var $faceThead=this.$faceThead.empty();
 			var html="<tr>";
@@ -1681,26 +2215,75 @@
 				var data=res.content;
 				self.$faceTable.empty();
 				self.renderTableHeader(0);
-				var payName = ["微信","支付宝","大众点评"];
-				var payType=["美管加代收","自收","收钱吧"];
+				var payName = ["微信","支付宝","大众点评","银联支付","京东钱包"];//支付类型
+				var payType=["美管加代收","自收","收钱吧","京东聚合支付"];//收款类型
 				if(data && data.length){
 					for(var i=0;i<data.length;i++){
 						var item=data[i];
 						var paytime=new Date(item.createtime*1).format("yyyy/mm/dd HH:MM");
 						var receipts=(item.type==3?("(实收:￥"+((item.dpactivityamount*1||0)+(item.userpayamount*1||0))+")"):"");
-						var classStyle=((item.billid!=null && item.billid>=0)?"":"MGJ_highlight");
-						var $html=$('<tr class='+classStyle+'>'+
-						'<td style="width:10%"><div class="tdwrap">'+payName[item.type*1-1]+'</div></td>'+
-						'<td style="width:25%"><div class="tdwrap addcustomer">'+(item.tradeno || "")+'</div></td>'+
-						'<td style="width:20%"><div class="tdwrap">￥'+(item.price || "0")+receipts+'</div></td>'+
+						var $html=$('<tr class="c_red">'+
+						'<td style="width:8%"><div class="tdwrap">'+payName[item.type*1-1]+'</div></td>'+
+						'<td style="width:15%"><div class="tdwrap addcustomer">'+(item.payType==2||item.payType==3?item.outtradeno:item.tradeno || "")+'</div></td>'+
+						'<td style="width:8%"><div class="tdwrap price red">￥'+(item.price || "0")+receipts+'</div></td>'+
 						'<td style="width:15%"><div class="tdwrap">'+(paytime || "")+'</div></td>'+
-						'<td style="width:10%"><div class="tdwrap">'+(item.billid?(item.displayId || ""):"未关联")+'</div></td>'+
-						'<td style="width:10%"><div class="tdwrap">'+(payType[item.payType*1])+'</div></td>'+
-						'<td style="width:10%"><div class="tdwrap operate">'+
+						'<td style="width:8%"><div class="tdwrap">'+(payType[item.payType*1])+'</div></td>'+
+						'<td style="width:11%"><div class="tdwrap displayId"></div></td>'+
+						'<td style="width:8%"><div class="tdwrap amount"><span class="red">-</span></div></td>'+
+						'<td style="width:8%"><div class="tdwrap ordercomment">'+
+							'<p></p><p class="am-clickable"></p><span class="triangle"></span>'+
+                        '</div></td>'+
+                        '<td style="width:7%"><div class="tdwrap status">'+(item.status == 2 ? '支付中':'已支付')+'</div></td>'+
+						'<td style="width:12%"><div class="tdwrap operate">'+
+							'<span class="am-clickable refresh">同步</span>'+
 							'<span class="am-clickable refund">退款</span>'+
 	                    '</div></td>'+
 						'</tr>').data("item",item);
-
+						if(item.payType==0){
+							$html.find('.refresh').remove();
+                        }
+                        if(item.status != 3) {
+                            $html.find('.refund').hide();
+                        }
+						if(!am.isNull(item.details)){
+							var $displayId = '',
+								$amount = '',
+								sum = 0;
+							$.each(item.details,function(k,v){
+								if(v.amount != 0){
+									if(v.displayId == "-1"){
+										v.displayId = "- -";
+									}
+									$displayId += '<span>'+v.displayId+'</span></br>';
+									$amount += '<span>￥'+(v.amount).toFixed(2)+'</span></br>';
+								}
+								sum += v.amount*1;
+							});
+							sum = sum.toFixed(2);
+							if((item.price - sum) > 0){
+								$displayId += '<span class="red">未关联</span></br>';
+								$amount += '<span class="red">￥' + (item.price - sum).toFixed(2) + '</span></br>';
+							}
+							// else if(((item.price).toFixed(2) - sum) == 0){
+							// 	$html.filter("tr").removeClass("c_red");
+							// }
+							$html.find(".displayId").html($displayId);
+							$html.find(".amount").html($amount);
+						}else {
+                            if (item.status == 3) {
+                                $html.find(".displayId").html('<span class="red">未关联</span>');
+                            }
+						}
+						var billRemark = self.getFaceBillRemark({
+							billno: item.billno,
+							ordercomment: item.ordercomment
+						});
+						if(billRemark){
+							$html.find('.ordercomment p').html(billRemark);
+						}else {
+							$html.find('.ordercomment p').html('--');
+						}
+						
 						self.$faceTable.append($html);
 					}
 					/*self.pager.refresh(res.pageIndex,res.totalCount);*/
@@ -1715,10 +2298,103 @@
 				}*/
 				self.facepayScroll.refresh();
 				self.facepayScroll.scrollTo("top");
+				var lis = self.$faceTable.find('tr');
+				for(var i=0;i<lis.length;i++){
+					var w1 =$(lis[i]).find('.ordercomment p:nth-child(1)').width(),
+						w2 = $(lis[i]).find('.ordercomment p:nth-child(2)').width();
+					if(w1<=w2){
+						$(lis[i]).find('.triangle').remove().end().find('p:nth-child(2)').removeClass('am-clickable');
+					}
+				}
 			});
 
 		},
+		getFaceBillRemark: function(remark){
+			var str = '';
+			if(remark.billno){
+				var l = remark.billno.split('、').length;
+				str += remark.billno+(l>1?'合并收款':'收款')+'；';
+			}
+			if(remark.ordercomment){
+				str += remark.ordercomment;
+			}
+			return str;
+		},
+		synorderstatus:function($tr){
+			var data = $tr.data('item');
+			console.log(data);
+			am.loading.show();
+			var payway = data.payType;
+			if(data.type==1){
+				payway = 3;
+			}else if(data.type==2){
+				payway = 1;
+			}else if(data.type==4){
+				payway = 7;
+			}
+			else if(data.type==5){
+				payway = 5;
+			}
+			am.api.synorderstatus.exec({ 
+				shopId: data.shopId,
+				payway: payway,
+				id: data.id,
+				paytype: data.payType,
+				out_trade_no: data.outtradeno
+			}, function(res) {
+			    am.loading.hide();
+			    if (res.code == 0) {
+                    var payName = ["微信","支付宝","大众点评","银联支付","京东钱包"];//支付类型
+                    var extMsg = ''
+                    if (res.content && res.content.status) {
+                        var tradeNo = data.payType == 2|| data.payType == 3 ? data.outtradeno : data.tradeno || res.content.transactionid
+                        switch (res.content.status) {
+                            case 2:
+                                $tr.find('.status').text("支付中")
+                                // $tr.find(".displayId").html('<span class="red">-</span>');
+                                // $tr.find('.refund').text("退款").addClass("disabled");
+                                extMsg = '<span style="font-size:12px">该笔交易支付中，请稍后再试<br/>' + payName[data.type*1-1] + '：￥' + data.price + '，交易号：' + tradeNo + '</span>'
+                                am.msg(extMsg)
+                                break;
+                            case 3:
+                                $tr.find('.status').text("已支付")
+                                // $tr.find(".displayId").html('<span class="red">未关联</span>');
+                                $tr.find('.refund').show().text("退款").removeClass("disabled");
+                                extMsg = '<span style="font-size:12px">该笔交易支付成功<br/>' + payName[data.type*1-1] + '：￥' + data.price + '，交易号：' + tradeNo + '</span>'
+                                am.msg(extMsg)
+                                break;
+                            case 4:
+                                $tr.find('.status').text("已取消")
+                                // $tr.find(".displayId").html('<span class="red">-</span>');
+                                // $tr.find('.refund').text("退款").addClass("disabled");
+                                extMsg = '<span style="font-size:12px">该笔交易已取消<br/>' + payName[data.type*1-1] + '：￥' + data.price + '，交易号：' + tradeNo + '</span>'
+                                am.msg(extMsg)
+                                break;
+                            case 5:
+                                $tr.find('.status').text("已退款")
+                                //$tr.find(".displayId").html('<span class="red">-</span>');
+                                $tr.find('.refund').show().text("已退款").addClass("disabled");
+                                extMsg = '<span style="font-size:12px">该笔交易已退款<br/>' + payName[data.type*1-1] + '：￥' + data.price + '，交易号：' + tradeNo + '</span>'
+                                am.msg(extMsg)
+                                break;
+                            default:
+                                break;
+                        }
+                    } else {
+                        am.msg('同步成功');
+                    }
+			    }else {
+					am.msg(res.message || "同步失败,请重试!");
+			    }
+			});
+		},
 		beforeShow : function(paras) {
+			this.$introDetail.hide();
+			self.$searchWrap.css('max-height',self.$header.height()-110+'px'); // 适配
+			self.$billselect_formBox.show();
+			if(!paras){ // 初次进入重置排序箭头
+				self.resetArrows();
+			}
 			if(paras == "back" || (paras && paras.customerId)){
 				//back，或者改签名回来
 				return;
@@ -1743,7 +2419,8 @@
 					min:ts,
 				    max: amGloble.now(),
 				    setOnDayTap: true,
-				    buttons: [],
+					buttons: [],
+					endYear: amGloble.now().getFullYear()+50,
 				    onSet: function(valueText, inst) {
 				        console.log(valueText);
 				    }
@@ -1761,7 +2438,7 @@
 			}else{
 				this.$.find(".acrossSelect").show();
 			}
-
+			this.selectLotteryActivityConfig();
 		},
 		afterShow : function(paras) {
 			am.tab.main.show();
@@ -1775,11 +2452,15 @@
 			/*刷新部门列表*/
 			this.Select.depcodeselect_form.refresh(self.getdep());
 			this.Select.operatorselect_form.refresh(self.getoperate());
+			this.Select.serverselect_form.refresh(self.getEmpList());//服务者
+			this.Select.classselect_form.refresh(self.getClassList());//大类
+			// this.Select.subclassselect_form.refresh(self.getSubClassListById());
 			this.setSelectStart();
 			if(typeof paras == 'object' && paras.form && paras.form=='prepay'){//从收款页面跳转过来
 				this.$.find(".billRecordTab ul li:nth-child(2)").trigger('vclick');
 				this.$.find(".facepay .search_box .btnOk").trigger('vclick');
 			}
+
 		},
 		setSelectStart:function(){
 			var select=this.Select;
@@ -1792,11 +2473,15 @@
 		beforeHide : function(paras) {
 			this.hideSelect();
 		},
+		afterHide: function() {
+			self.$subclassselect_form.hide();
+        },
 		hideSelect:function(){
 			var Select=this.Select;
 			for(var i in Select){
 				Select[i].hide(true);
 			}
+			this.$madal.hide();
 		},
 		getoperate:function(){
 			var metaData=am.metadata;
@@ -1826,11 +2511,100 @@
 			}
 			return res;
 		},
+		getEmpList:function(){
+			var metaData=am.metadata;
+			var res=[{"name":"全部",value:""}];
+			if(metaData.employeeList && metaData.employeeList.length){
+				var ems=metaData.employeeList;
+				var emListByNo=ems.slice(0);
+				emListByNo.sort(function(a,b){
+					return a.no - b.no;
+				});
+				for(var i=0;i<emListByNo.length;i++){
+					var item=emListByNo[i];
+					res.push({
+						name:item.no+item.name,
+						value:item.id
+					});
+				}
+			}
+			return res;
+		},
+		getClassList: function (v) {
+			if (v == -1||v==undefined) {
+				$('#page_billRecord .classselect').show(100);
+				var metaData = am.metadata;
+				var res = [{
+					"name": "类别",
+					value: ""
+				}];
+				if (metaData.classes && metaData.classes.length) {
+					for (var i = 0; i < metaData.classes.length; i++) {
+						var item = metaData.classes[i];
+						var subRes = [];
+						if (item.sub && item.sub.length) {
+							for (var j = 0; j < item.sub.length; j++) {
+								var sub = item.sub[j]
+								subRes.push({
+									name: sub.id + sub.name,
+									value: sub.id
+								});
+							}
+						}
+						//classid 是项目编号   id是项目ID
+						res.push({
+							name: item.classid + item.name,
+							value: item.classid,
+							subs: subRes
+						});
+					}
+				}
+				return res;
+			}else{
+				$('#page_billRecord .classselect').hide(100);
+			}
+		},
+		getSubClassByItem:function(id){
+			if(id){
+				// $('#page_billRecord .subclassselect_form').show(100);
+				self.$subclassselect_form.show(100);
+				var subs=[];
+				if(am.metadata.classes&&am.metadata.classes.length){
+					$.each(am.metadata.classes,function(i,v){
+						if(v.classid==id){//改为项目编号匹配
+							subs=v.sub;
+							return false;
+						}
+					});
+				}
+				var res=[{"name":"项目",value:""}];
+				if(subs && subs.length){
+					for(var i=0;i<subs.length;i++){
+						var item=subs[i];
+						res.push({
+							name:item.itemid+item.name,
+							value:item.itemid
+						});
+					}
+				}
+				return res;
+			}else{
+				// $('#page_billRecord .subclassselect_form').hide(100);
+				self.$subclassselect_form.hide(100);
+			}
+		},
+		showBillSelect:function(value){
+			if(value){
+				self.$billselect_formBox.hide(200);
+			}else{
+				self.$billselect_formBox.show(200);
+			}
+		},
 		setSelect:function(selectData){
 			var $dom=this.$.find(".billRecordContent .header");
 			this.Select={};
 			for(var i in selectData){
-				this.Select[i]=new $.am.Select({
+				var opt={
 					$:$dom.find("."+i),
 					startWidth:0,
 					data:selectData[i],
@@ -1842,8 +2616,98 @@
 							}
 						}
 					}
-				});
+				};
+				if(i=='classselect_form'){
+					opt.onSelect=function(){
+						// 设置小类
+						var data= self.getSubClassByItem(this.getValue());
+						self.Select['subclassselect_form'].refresh(data);
+						self.Select['subclassselect_form'].setValue(0);
+						// 控制单据类型显示隐藏
+						self.showBillSelect(this.getValue());
+					}
+				}
+				if(i=='billselect_form'){
+					opt.onSelect=function(){
+						var data= self.getClassList(this.getValue());
+						self.Select['classselect_form'].refresh(data);
+						self.Select['classselect_form'].setValue(0);
+					}
+				}
+				this.Select[i]=new $.am.Select(opt);
+				// this.Select[i]=new $.am.Select({
+				// 	$:$dom.find("."+i),
+				// 	startWidth:0,
+				// 	data:selectData[i],
+				// 	key:i,
+				// 	vclickcb:function(key){
+				// 		for(var j in self.selectData){
+				// 			if(key != j){
+				// 				self.Select[j].hide(true);
+				// 			}
+				// 		}
+				// 	}
+				// });
 			}
+		},
+		useDpTickets:function() {
+			// var $this = $(this);
+			var code = self.$ticketCode.val().replace(/[\s\r\n\\\/\'\"\‘\’\“\”]/g,'');
+			self.$ticketCode.val(code);
+			if (!code) {
+				am.msg('请扫码或输入优惠券码！');
+				return;
+			}
+			am.api.dpQueryCoupon.exec({
+				dynamic_id: code
+			}, function(ret) {
+				if (ret && ret.code == 0) {
+					am.api.dpConsumeCoupon.exec({
+						dynamic_id: code,
+					}, function(ret) {
+						if (ret && ret.code == 0 && ret.content && ret.content.status == 2) {
+							am.msg('核销成功!');
+							self.$ticketCode.val('');
+							self.$.find('.facepay .search_box .btnOk').trigger('vclick');
+						} else {
+							am.msg(ret.message || '优惠券有误，请检查！');
+						}
+					});
+				} else {
+					am.msg(ret.message || '优惠券有误，请检查！');
+				}
+			});
+		},
+		useKbTickets: function () {
+			var code = self.$ticketCode.val().replace(/[\s\r\n\\\/\'\"\‘\’\“\”]/g, '');
+			self.$ticketCode.val(code);
+			if (!code) {
+				am.msg('请扫码或输入优惠券码！');
+				return;
+			}
+			am.api.kbQueryCoupon.exec({
+				parentShopId: amGloble.metadata.userInfo.parentShopId,
+				shopId: amGloble.metadata.userInfo.shopId,
+				ticketCode: code
+			}, function (ret) {
+				if (ret && ret.code == 0) {
+					am.api.kbConsumeCoupon.exec({
+						parentShopId: amGloble.metadata.userInfo.parentShopId,
+						shopId: amGloble.metadata.userInfo.shopId,
+						ticketCode: code,
+					}, function (ret) {
+						if (ret && ret.code == 0 && ret.content && ret.content.status == 3) {
+							am.msg('核销成功！');
+							self.$ticketCode.val('');
+							self.$.find('.facepay .search_box .btnOk').trigger('vclick');
+						} else {
+							am.msg(ret.message || '优惠券有误，请检查！');
+						}
+					});
+				} else {
+					am.msg(ret.message || '优惠券有误，请检查！');
+				}
+			});
 		},
 		getSelectValue:function(){
 			var Select=this.Select;
@@ -1853,7 +2717,10 @@
 				billselect_form:"type",
 				payselect_form:"payFlag",
 				acrossselect_form:"otherFlag",
-				operatorselect_form:"operatorId"
+				operatorselect_form:"operatorId",
+				serverselect_form:"empid",
+				classselect_form:"serviceClass",
+				subclassselect_form:"serviceItem"
 			};
 			for(var i in Select){
 				res[key[i]]=Select[i].getValue();
@@ -1876,6 +2743,15 @@
 				}
 			}
 
+		},
+		getCardCombinedUseFlag:function(cardTypeId){
+			var list=am.metadata.cardTypeList;
+			for(var i=0;i<list.length;i++){
+				if(list[i].cardtypeid==cardTypeId){
+					return list[i].combineduseflag;
+				}
+			}
+			return 0;
 		},
 		updateIdVclick: function(){
 			var _updateId = self.updateId;
@@ -1900,7 +2776,8 @@
 					name : item.name,
 					mobile : am.processPhone(item.mobile),
 					cardName : _this.getCardTypeById(item.cardTypeId) ? _this.getCardTypeById(item.cardTypeId) : '',
-					discount : item.discount
+					discount : item.discount,
+					combinedUseFlag : _this.getCardCombinedUseFlag(item.cardTypeId)
 				};
 			}
 
@@ -1943,6 +2820,7 @@
 				opt.billingInfo.mdFee = _cashList.mdFee;
 				opt.billingInfo.debtFee = item.debtFee;
 				opt.billingInfo.total = $tr.find('.jetd').data('total');
+				opt.billingInfo.mallOrderFee = _cashList.mallOrderFee;
 			}
 			if(item.cardList && item.cardList.length){
 				var _cardList = item.cardList[0];
@@ -1956,6 +2834,8 @@
 				opt.billingInfo.treatfee = _cardList.treatFee;
 				opt.billingInfo.treatpresentfee = _cardList.treatPresentFee;
 				opt.billingInfo.presentFee = _cardList.presentFee;
+				opt.billingInfo.onlineCreditPay = _cardList.onlineCreditPay;
+				opt.billingInfo.offlineCreditPay = _cardList.offlineCreditPay;
 			}
 
 			//expenseCategory
@@ -1970,7 +2850,9 @@
 						var obj = {
 							itemName:detail.itemName,
 							salePrice:detail.price,
-							servers:[]
+							consumeId: detail.treatmentitemId,
+							servers:[],
+							itemNo: detail.itemNo
 						};
 						detail.consumeType==1 && (obj.isComboConsume = 1);
 						var employeeList=self.getEmployeeById(item.empList,detail.id);
@@ -2027,7 +2909,8 @@
 						opt.products.depots.push({
 							productName:detail.itemName,
 							number:detail.num,
-							salePrice: _money
+							salePrice: _money,
+							itemNo:detail.itemNo
 						});
 					}
 				}
@@ -2096,6 +2979,7 @@
 									opt.billingInfo.weixin = item.cashList[i].weixin;
 									opt.billingInfo.cashFee = item.cashList[i].cash;
 									opt.billingInfo.mdFee = item.cashList[i].mdFee;
+									opt.billingInfo.mallOrderFee = item.cashList[i].mallOrderFee;
 									//工本费(total中减去工本费)
 									//opt.billingInfo.total = opt.billingInfo.total - item.cashList[i].cash - item.cashList[i].unionPay;
 									opt.billingInfo.total = opt.billingInfo.total;
@@ -2139,6 +3023,7 @@
 									opt.billingInfo.weixin = item.cashList[i].weixin;
 									opt.billingInfo.cashFee = item.cashList[i].cash;
 									opt.billingInfo.mdFee = item.cashList[i].mdFee;
+									opt.billingInfo.mallOrderFee = item.cashList[i].mallOrderFee;
 									//工本费(total中减去工本费)
 									//opt.billingInfo.total = opt.billingInfo.total - item.cashList[i].cash - item.cashList[i].unionPay;
 									opt.billingInfo.total = opt.billingInfo.total;
@@ -2226,6 +3111,7 @@
 							opt.billingInfo.weixin = item.cashList[i].weixin;
 							opt.billingInfo.cashFee = item.cashList[i].cash;
 							opt.billingInfo.mdFee = item.cashList[i].mdFee;
+							opt.billingInfo.mallOrderFee = item.cashList[i].mallOrderFee;
 							//工本费(total中减去工本费)
 							//opt.billingInfo.total = opt.billingInfo.total - item.cashList[i].cash - item.cashList[i].unionPay;
 							opt.billingInfo.total = opt.billingInfo.total;
@@ -2317,11 +3203,15 @@
 			return list.slice(size,size+l);
 		},
 		renderDetailsData:function(data){
+			var nowTime=new Date().getTime();
 			for(var i=0;i<data.length;i++){
 				var _class = i%2 == 0 ? 'odd' : '';
 				var item = data[i];
-				var $html = $('<tr class="basictr '+ _class +' am-clickable" billid="'+item.id+'">' +
-                                '<td style="width:10%" class="billno">' +
+				var $bonus_btn=amGloble.metadata.enabledNewBonusModel&&amGloble.metadata.enabledNewBonusModel==1&&'<div class="am-clickable bonus-btn">计算提成</div>'||'';
+				var $perf_btn = amGloble.metadata.enabledNewPerfModel == 1 && '<div class="am-clickable perf-btn">计算业绩</div>' || '';
+				var $html = $('<tr width="100%" class="basictr '+ _class +' am-clickable" billid="'+item.id+'">' +
+                                '<td style="width:14%" class="billno">' +
+                                    '<span class="freezeSpan am-clickable iconfont icon-gou"></span>' +
                                     '<div class="tdwrap billnoBox am-clickable"></div>' +
                                 '</td>' +
                                 '<td style="width:10%">' +
@@ -2329,38 +3219,40 @@
                                         '<span class="am-clickable consumetime">'+ (item.consumeTime ? (new Date(item.consumeTime-0).format("mm/dd HH:MM")) : "") +'</span>' +
                                     '</div>' +
                                 '</td>' +
-                                '<td style="width:9%">' +
+                                '<td style="width:8%">' +
                                     '<div class="tdwrap addcustomer am-clickable"></div>' +
                                 '</td>' +
-                                '<td style="width:6%">' +
+                                '<td style="width:8%">' +
                                     '<div class="tdwrap client am-clickable"></div>' +
                                 '</td>' +
-                                '<td style="width:4%">' +
+                                '<td style="width:5%">' +
                                     '<div class="tdwrap sextd"></div>' +
                                 '</td>' +
                                 '<td style="width:8%">' +
                                     '<div class="tdwrap consumptiontype"></div>' +
                                 '</td>' +
-                                '<td style="width:29%">' +
+                                '<td style="width:33%">' +
                                     '<div class="tdwrap consumptionamount">' +
                                         '<dl><dt></dt><dd></dd></dl>' +
                                     '</div>' +
                                 '</td>' +
-                                '<td style="width:6%">' +
+                                '<td style="width:7%">' +
                                     '<div class="tdwrap jetd">' +
                                        '<span></span>' +
                                     '</div>' +
                                 '</td>' +
-                                '<td style="width:6%">' +
+                                '<td style="width:7%">' +
                                     '<div class="tdwrap accountedfor">' +
                                        '<span></span>' +
                                     '</div>' +
-                                '</td>' +
-                                '<td style="width:12%" class="brnone">' +
-                                    '<div class="am-clickable print">打印小票</div>' +
-                                    '<div class="am-clickable revoke">撤单</div>' +
-                                '</td>' +
-                            '</tr>').data("item",item);
+                                '</td>' +'</tr>').data("item",item);
+                                // '<td style="width:16%" class="brnone">' +
+								// 	'<div class="am-clickable print">打印小票</div>' +
+								// 	$perf_btn+
+								// 	$bonus_btn+
+                                //     '<div class="am-clickable revoke">撤单</div>' +
+                                // '</td>' +
+                            // '</tr>').data("item",item);
 
 				//客户
 				var _addcustomer = item.memberId == 0 ? "散客" : item.name;
@@ -2389,7 +3281,11 @@
 				// 	$billNo = '<a href="javascript:void(0)" class="am-clickable">'+ (item.billNo || "") +'</a>';
 				// }
 				$html.find(".billnoBox").html($billNo);
-				$html.find(".addcustomer").html('<p class="'+ _sex +'">'+ _addcustomer +'</p>');
+				if(item.mgjIsHighQualityCust == 1){
+					$html.find(".addcustomer").html('<p class="'+ _sex +'"><span class="name">'+ _addcustomer +'</span><span class="good am-clickable"></span></p>');
+				}else{
+					$html.find(".addcustomer").html('<p class="'+ _sex +'">'+ _addcustomer +'</p>');
+				}
 				if(item.memberId==0){
 					$html.find(".addcustomer").removeClass('am-clickable');
 				}
@@ -2424,26 +3320,10 @@
 						}
 					}
 				}
-				$html.find(".consumptiontype").html($monetary);
-
-				var $revoke = $html.find(".revoke");
-				if(item.type==0 || item.type==4 || (item.type==6 && item.consumeType!=6)){
-					//项目
-					$revoke.data("revoke","M0");
-				}else if(item.type==1){
-					//卖品
-					$revoke.data("revoke","M2");
-				}else if(item.type==2){
-					//开卡充值
-					$revoke.data("revoke","M1");
-				}else if(item.type==3){
-					//套餐购买
-					$revoke.data("revoke","M3");
-				}else if(item.type==5 || (item.type==6 && item.consumeType==6)){
-					//年卡销售
-					$revoke.data("revoke","M4");
+				if(item.debtBillId){
+					$monetary += '(还款)';
 				}
-
+				$html.find(".consumptiontype").html($monetary);
 				//详情tr
 				var $childTr = $('<tr class="childtr">' +
 									'<td colspan="10" class="bbnone">' +
@@ -2459,12 +3339,36 @@
 										'</div>' +
 									'</td>' +
 								'</tr>').data("item",item);
-
+				//冻结/对单
+				if(item.auditingFlag == 1){
+					$html.find(".freezeSpan").css("display","inline-block");
+					if(am.operateArr.indexOf('F') > -1){
+						$childTr.removeClass("freezeTr");
+						$html.removeClass("freezeTr");
+					}else{
+						$childTr.addClass("freezeTr");
+						$html.addClass("freezeTr");
+						//已对单没权限不能修改时间
+						$html.find(".consumetime").removeClass("consumetime");
+					}
+				}else{
+					$html.find(".freezeSpan").hide();
+					$childTr.removeClass("freezeTr");
+					$html.removeClass("freezeTr");
+				}
+				
 				//col1
 				if(item.memberId == 0){	//散客
 					$childTr.find('.col1').append('<dl><dt>散客</dt><dd></dd></dl><dl><dt>操作人</dt><dd>'+ item.operatorName +'</dd></dl>');
 				}else{
-					var $phonecard = $('<dl><dt>会员手机</dt><dd>'+ (item.mobile ? am.processPhone(item.mobile) : '无') +'</dd></dl><dl><dt>'+ (self.getCardTypeById(item.cardTypeId)!=undefined?'('+self.getCardTypeById(item.cardTypeId)+')':'') +'</dt><dd>'+ (item.cardId == "null" ? '' : item.cardId) +'</dd></dl><dl><dt class="dt_red">'+ (item.memberShopName ? item.memberShopName : '') +'</dt></dl><dl><dt>操作人</dt><dd>'+ item.operatorName +'</dd></dl>');
+					// var $phonecard = $('<dl><dt>会员手机</dt><dd>'+ (item.mobile ? am.processPhone(item.mobile) : '无') +'</dd></dl><dl><dt>'+ (self.getCardTypeById(item.cardTypeId)!=undefined?'('+self.getCardTypeById(item.cardTypeId)+')':'') +'</dt><dd>'+ (item.cardId == "null" ? '' : item.cardId) +'</dd></dl><dl><dt class="dt_red">'+ (item.memberShopName ? item.memberShopName : '') +'</dt></dl><dl><dt>操作人</dt><dd>'+ item.operatorName +'</dd></dl>');
+					var mobileText=''
+					if(am.operateArr.indexOf("MGJP") !=-1){// 敏感权限 //手机号隐藏中间四位
+						mobileText=am.processPhone(item.mobile);
+					}else{
+						mobileText=item.mobile;
+					}
+					var $phonecard = $('<dl><dt>会员手机</dt><dd>'+ (mobileText ? mobileText : '无') +'</dd></dl><dl><dt>'+ (self.getCardTypeById(item.cardTypeId)!=undefined?'('+self.getCardTypeById(item.cardTypeId)+')':'') +'</dt><dd>'+ (item.cardId == "null" ? '' : item.cardId) +'</dd></dl><dl><dt class="dt_red">'+ (item.memberShopName ? item.memberShopName : '') +'</dt></dl><dl><dt>操作人</dt><dd>'+ item.operatorName +'</dd></dl>');
 					$childTr.find('.col1').append( $phonecard );
 				}
 
@@ -2475,7 +3379,20 @@
 					comentDOM = '<br/><div class="comment iconfont icon-comments am-clickable am-disabled"></div>';
 				}
 				//col2
-				var $dl = $('<dl><dt><p></p><span>消费总额</span>'+comentDOM+'</dt><dd></dd></dl>');
+				var rewardDom = '';
+				//开通了小程序
+				if(am.metadata.shopPropertyField != undefined && am.metadata.shopPropertyField.openSmallProgram) {			
+					//有抽奖活动
+					if((typeof this.lcardValue!='undefined'&&this.lcardEndTime>nowTime)||(typeof this.lconsumeValue!='undefined'&&this.lconsumeEndTime>nowTime)){
+						var flag=item.lotteryType;
+						var mobile=item.mobile;
+						if(flag){
+							rewardDom='<div class="reward am-clickable" data-index="'+flag+'" data-mobile="'+mobile+'"><svg class="icon" aria-hidden="true" ><use xlink:href="#icon-lipin"></use></svg>抽奖</div>'
+						}
+					}
+				}
+				
+				var $dl = $('<dl><dt>'+rewardDom+'<p></p><span>消费总额</span>'+comentDOM+'</dt><dd></dd></dl>');
 
 
 				var _totleFee = [];
@@ -2518,6 +3435,26 @@
 								paymentmethodArr.push('年卡卡金');
 								_totleFee.push(card.yearFee);
 							}
+							// if(card.onlineCredit > 0){
+							// 	$monetary2+=('<span>'+card.onlineCredit+'<b class="c_red">(线上积分)</b></span>');
+							// 	paymentmethodArr.push('线上积分');
+							// 	_totleFee.push(card.onlineCredit);
+							// }
+							if(card.onlineCreditPay > 0){
+								$monetary2+=('<span>'+card.onlineCreditPay+'<b class="c_red">(线上积分抵扣金)</b></span>');
+								paymentmethodArr.push('线上积分抵扣金');
+								_totleFee.push(card.onlineCreditPay);
+							}
+							// if(card.offlineCredit > 0){
+							// 	$monetary2+=('<span>'+card.offlineCredit+'<b class="c_red">(线下积分)</b></span>');
+							// 	paymentmethodArr.push('线下积分');
+							// 	_totleFee.push(card.offlineCredit);
+							// }
+							if(card.offlineCreditPay > 0){
+								$monetary2+=('<span>'+card.offlineCreditPay+'<b class="c_red">(线下积分抵扣金)</b></span>');
+								paymentmethodArr.push('线下积分抵扣金');
+								_totleFee.push(card.offlineCreditPay);
+							}
 						}
 					}
 				}
@@ -2529,20 +3466,22 @@
 					//作弊，判断到含消费字眼的，就显示这个
 					$childTr.find('.col1').append('<div class="signature am-clickable">查看签名</div>');
 				}
+				var containedFacePay=0; // 是否包含当面付
 				//<!-- 消费付现 -->
 				if(item.cashList && item.cashList.length){
 					for(var cashId=0;cashId<item.cashList.length;cashId++){
 						var cash=item.cashList[cashId];
 						if(cash.depcode == -1 && cash.consumeType != 2 && cash.consumeType != 3){
-							if(item.cardType == 2 || cash.cash > 0){
+							if((item.cardType == 2 && cash.cash > 0) || cash.cash > 0){
 								$monetary2+=('<span>'+cash.cash+'<b class="c_red">(现金)</b></span>');
 								paymentmethodArr.push('现金');
 								_totleFee.push(cash.cash);
 							}
-							if(item.cardType == 2 || cash.unionPay > 0){
+							if((item.cardType == 2 && cash.unionPay > 0) || cash.unionPay > 0){
 								$monetary2+=('<span>'+cash.unionPay+'<b class="c_red">(银联)</b></span>');
 								paymentmethodArr.push('银联');
 								_totleFee.push(cash.unionPay);
+								containedFacePay++;
 							}
 							if(cash.cooperation > 0){
 								$monetary2+=('<span>'+cash.cooperation+'<b class="c_red">(合作券)</b></span>');
@@ -2563,16 +3502,28 @@
 								$monetary2+=('<span>'+cash.weixin+'<b class="c_red">(微信支付)</b></span>');
 								paymentmethodArr.push('微信支付');
 								_totleFee.push(cash.weixin);
+								containedFacePay++;
 							}
 							if(cash.pay > 0){
 								$monetary2+=('<span>'+cash.pay+'<b class="c_red">(支付宝)</b></span>');
 								paymentmethodArr.push('支付宝');
 								_totleFee.push(cash.pay);
+								containedFacePay++;
 							}
-							if(cash.pointfee > 0){
-								$monetary2+=('<span>'+cash.pointfee+'<b class="c_red">(积分)</b></span>');
-								paymentmethodArr.push('积分');
+							if(cash.mallOrderFee > 0){
+								$monetary2+=('<span>'+cash.mallOrderFee+'<b class="c_red">(商城订单)</b></span>');
+								paymentmethodArr.push('商城订单');
+								_totleFee.push(cash.mallOrderFee);
 							}
+							if(cash.jdFee > 0){
+								$monetary2+=('<span>'+cash.jdFee+'<b class="c_red">(京东)</b></span>');
+								paymentmethodArr.push('京东');
+								_totleFee.push(cash.jdFee);
+							}
+							// if(cash.pointfee > 0){
+							// 	$monetary2+=('<span>'+cash.pointfee+'<b class="c_red">(积分)</b></span>');
+							// 	paymentmethodArr.push('积分');
+							// }
 							if(cash.mdFee > 0){
 								$monetary2+=('<span>'+cash.mdFee+'<b class="c_red">(免单)</b></span>');
 								paymentmethodArr.push('免单');
@@ -2598,6 +3549,9 @@
 								$monetary2+=('<span>'+otherpaytypes[kk].value+'<b class="c_red">('+otherpaytypes[kk].name+')</b></span>');
 								paymentmethodArr.push(otherpaytypes[kk].name);
 								_totleFee.push(otherpaytypes[kk].value);
+								if(this.getJdPay() && this.getJdPay().field.toLowerCase()==kk){
+									containedFacePay++;
+								}
 							}
 						}
 					}
@@ -2611,7 +3565,7 @@
 					if(item.remainFee==0){
 						$monetary2+=('<span class="c_red">(已还清)</span>');
 					}else{
-						$monetary2+=('<span class="c_red">(已还)'+(item.debtFee - item.remainFee)+'</span>');
+						$monetary2+=('<span class="c_red">(已还)'+Math.round((item.debtFee - item.remainFee)*100)/100+'</span>');
 					}
 				}
 
@@ -2652,6 +3606,7 @@
 									$monetary2_temp+=('<span>'+cashCost.unionPay+'<b class="c_red">(银联)</b></span>');
 									paymentmethodArr.push('银联');
 									_totleFee.push(cashCost.unionPay);
+									containedFacePay++;
 								}
 								if(cashCost.cooperation > 0){
 									$monetary2_temp+=('<span>'+cashCost.cooperation+'<b class="c_red">(合作券)</b></span>');
@@ -2667,11 +3622,13 @@
 									$monetary2_temp+=('<span>'+cashCost.weixin+'<b class="c_red">(微信支付)</b></span>');
 									paymentmethodArr.push('微信支付');
 									_totleFee.push(cashCost.weixin);
+									containedFacePay++;
 								}
 								if(cashCost.pay > 0){
 									$monetary2_temp+=('<span>'+cashCost.pay+'<b class="c_red">(支付宝)</b></span>');
 									paymentmethodArr.push('支付宝');
 									_totleFee.push(cashCost.pay);
+									containedFacePay++;
 								}
 								if(cashCost.luckymoney>0){
 									$monetary2_temp+=('<span>'+cashCost.luckymoney+'<b class="c_red">(红包)</b></span>');
@@ -2712,8 +3669,19 @@
 						var basisItem=item.cashList[basis];
 						if(basisItem.depcode == -1 && basisItem.consumeType == 2){
 							$monetary2+=('<span>工本费</span>');
-							$monetary2+=('<span>'+basisItem.cash+'<b class="c_red">(现金)</b></span>');paymentmethodArr.push('现金');_totleFee.push(basisItem.cash);
-							$monetary2+=('<span>'+basisItem.unionPay+'<b class="c_red">(银联)</b></span>');paymentmethodArr.push('银联');_totleFee.push(basisItem.unionPay);
+							// $monetary2+=('<span>'+basisItem.cash+'<b class="c_red">(现金)</b></span>');paymentmethodArr.push('现金');_totleFee.push(basisItem.cash);
+							// $monetary2+=('<span>'+basisItem.unionPay+'<b class="c_red">(银联)</b></span>');paymentmethodArr.push('银联');_totleFee.push(basisItem.unionPay);
+							if(basisItem.cash>0){
+								$monetary2+=('<span>'+basisItem.cash+'<b class="c_red">(现金)</b></span>');
+								paymentmethodArr.push('现金');
+								_totleFee.push(basisItem.cash);
+							}
+							if(basisItem.unionPay>0){
+								$monetary2+=('<span>'+basisItem.unionPay+'<b class="c_red">(银联)</b></span>');
+								paymentmethodArr.push('银联');
+								_totleFee.push(basisItem.unionPay);
+								containedFacePay++;
+							}
 							if(basisItem.cooperation > 0){
 								$monetary2+=('<span>'+basisItem.cooperation+'<b class="c_red">(合作券)</b></span>');
 								paymentmethodArr.push('合作券');
@@ -2728,11 +3696,13 @@
 								$monetary2+=('<span>'+basisItem.weixin+'<b class="c_red">(微信支付)</b></span>');
 								paymentmethodArr.push('微信支付');
 								_totleFee.push(basisItem.weixin);
+								containedFacePay++;
 							}
 							if(basisItem.pay > 0){
 								$monetary2+=('<span>'+basisItem.pay+'<b class="c_red">(支付宝)</b></span>');
 								paymentmethodArr.push('支付宝');
 								_totleFee.push(basisItem.pay);
+								containedFacePay++;
 							}
 							if(basisItem.luckymoney>0){
 								$monetary2+=('<span>'+basisItem.luckymoney+'<b class="c_red">(红包)</b></span>');
@@ -2755,6 +3725,9 @@
 								$monetary2+=('<span>'+otherpaytypes[kk].value+'<b class="c_red">('+otherpaytypes[kk].name+')</b></span>');
 								paymentmethodArr.push(otherpaytypes[kk].name);
 								_totleFee.push(otherpaytypes[kk].value);
+								if(this.getJdPay() && this.getJdPay().field.toLowerCase()==kk){
+									containedFacePay++;
+								}
 							}
 						}
 						//算实际入账
@@ -2775,6 +3748,19 @@
 				$dl.find('dt p').html('¥'+self.myAdd(_totleFee));
 				$dl.find('dd').append($monetary2);
 				$childTr.find('.col2').append( $dl );
+				//洗发显示时长
+				console.info(item.jsonstr);
+				if(item.jsonstr){
+					var jsonstr = JSON.parse(item.jsonstr);
+					var $washDiv = $('<div class="washStr"></div>');
+					if(jsonstr.flag == "pass"){
+						$washDiv.html('<span class="iconfont icon-shijianbiao"></span>洗发合格，时长' + jsonstr.washPassTime + (jsonstr.empNo?'<br/>(' + jsonstr.empNo + '&nbsp;&nbsp;' + jsonstr.empName + ')':''));
+					}
+					else if(jsonstr.flag == "nopass"){
+						$washDiv.html('<span class="iconfont icon-shijianbiao red"></span>洗发不合格，时长' + jsonstr.washPassTime + (jsonstr.empNo?'<br/>(' + jsonstr.empNo + '&nbsp;&nbsp;' + jsonstr.empName + ')':''));
+					}
+					$childTr.find('.col2').append( $washDiv );
+				}
 
 				//显示部门业绩
 				this.renderDeptPerf($childTr.find('.col2'),item);
@@ -2803,7 +3789,7 @@
 							var $detailMore=$('<tr class="detailtr"></tr>').data("item",detail);
 
 							$detailMore.append('<td><div class="tdwrap sale"></div></td>');
-							$detailMore.append('<td><div class="tdwrap price">¥'+detail.price+'</div></td>');
+							$detailMore.append('<td><div class="tdwrap price">¥'+Math.round(detail.price*100)/100+'</div></td>');
 
 							var $sale=$detailMore.find(".sale");
 							if((item.type == 0 || item.type == 4 || (item.type == 6 && item.consumeType != 6)) && detail.consumeType != 1 && detail.consumeType != 4){//只有项目能修改
@@ -2838,7 +3824,7 @@
 		                                    $employeeTable.data("item",{empList:item.empList,other:otherSendMessage});
 		                                    //添加员工DOM
 		                                    if(employeeId == item.empList.length - 1){
-		                                    	$employeeTable.append($('<tr><td class="am-clickable addcust" colspan="2"><div class="am-clickable"></div></td></tr>'));
+		                                    	$employeeTable.append($('<tr class="addcustTr"><td class="am-clickable addcust" colspan="2"><div class="am-clickable"></div></td></tr>'));
 		                                    }
 										}
 									}
@@ -2856,7 +3842,7 @@
 								$employeeTable.data("item",{empList:employeeList,other:otherSendMessage});
 								$employeeTable.append($employee);
 								//添加员工DOM
-								$employeeTable.append($('<tr><td class="am-clickable addcust" colspan="3"><div class="am-clickable"></div></td></tr>'));
+								$employeeTable.append($('<tr class="addcustTr"><td class="am-clickable addcust" colspan="3"><div class="am-clickable"></div></td></tr>'));
 							}
 
 							$childTr.find('.col3 .col3table > tbody').append( $detailMore );
@@ -2919,9 +3905,10 @@
 										if(emp.empNo != null){
 											var $employee="";
 											//添加员工
+											var $empGain=emp.automatic===0?'<span>¥'+emp.gain+'</span>':'¥'+emp.gain;
 											$employee = ('<tr>'+
 												'<td class="changeEmployee" data-id='+emp.empId+'><div class="tdwrap"><a class="am-clickable" href="javascript:void(0)">'+(emp.empNo+'号'+emp.dutyTypeName+'('+emp.empName+')')+'</a></div></td>'+
-												'<td><div class="am-clickable tdedit">业绩:¥'+ emp.fee +',提成:¥'+ emp.gain +'<ul><li class="am-clickable updateli">修改</li><li class="am-clickable delli">删除</li></ul></div></td>' +
+												'<td><div class="am-clickable tdedit">业绩:¥'+ emp.fee +',提成:'+$empGain +'<ul><li class="am-clickable updateli">修改</li><li class="am-clickable delli">删除</li></ul></div></td>' +
 											'</tr>');
 		                                    $employeeTable.append($employee);
 		                                    var otherSendMessage={billNo:item.billNo,operatorId:item.operatorId,billtype:item.type,itemNo:(detail?detail.itemNo:""),itemName:(detail?detail.itemName:"")};
@@ -2929,11 +3916,11 @@
 										}
 										//添加员工DOM
 	                                    if(employeeId == item.empList.length - 1){
-	                                    	$employeeTable.append($('<tr><td class="am-clickable addcust" colspan="2"><div class="am-clickable"></div></td></tr>'));
+	                                    	$employeeTable.append($('<tr class="addcustTr"><td class="am-clickable addcust" colspan="2"><div class="am-clickable"></div></td></tr>'));
 	                                    }
 									}
 								}else{
-									$detailMore.append($('<td class="employeeTable" rowspan="'+ item.detailList.length +'"><table class="table"><tbody><tr><td class="am-clickable addcust" colspan="2"><div class="am-clickable"></div></td></tr></tbody></table></td>'));
+									$detailMore.append($('<td class="employeeTable" rowspan="'+ item.detailList.length +'"><table class="table"><tbody><tr class="addcustTr"><td class="am-clickable addcust" colspan="2"><div class="am-clickable"></div></td></tr></tbody></table></td>'));
 									var $employeeTable=$detailMore.find(".employeeTable tbody");
 									var otherSendMessage={billNo:item.billNo,operatorId:item.operatorId,billtype:item.type,itemNo:(detail?detail.itemNo:""),itemName:(detail?detail.itemName:"")};
 		                            $employeeTable.data("item",{empList:item.empList,other:otherSendMessage});
@@ -2974,18 +3961,19 @@
 						for(var employeeId=0;employeeId<item.empList.length;employeeId++){
 							var emp=item.empList[employeeId];
 							if(emp.empNo != null){
+								var $empGain=emp.automatic===0?'<span>¥'+emp.gain+'</span>':'¥'+emp.gain;
 								$employee += ('<tr>'+
 									'<td class="changeEmployee" data-id='+emp.empId+'><div class="tdwrap"><a class="am-clickable" href="javascript:void(0)">'+(emp.empNo+'号'+emp.dutyTypeName+'('+emp.empName+')')+'</a></div></td>'+
-									'<td><div class="am-clickable tdedit">业绩:¥'+ emp.fee +',提成:¥'+ emp.gain +'<ul><li class="am-clickable updateli">修改</li><li class="am-clickable delli">删除</li></ul></div></td>' +
+									'<td><div class="am-clickable tdedit">业绩:¥'+ emp.fee +',提成:'+ $empGain +'<ul><li class="am-clickable updateli">修改</li><li class="am-clickable delli">删除</li></ul></div></td>' +
 								'</tr>');
 							}
 							//添加员工DOM
                             if(employeeId == item.empList.length - 1){
-                            	$employee += '<tr><td class="am-clickable addcust" colspan="2"><div class="am-clickable"></div></td></tr>';
+                            	$employee += '<tr class="addcustTr"><td class="am-clickable addcust" colspan="2"><div class="am-clickable"></div></td></tr>';
                             }
 						}
 					}else{
-						$employee = '<tr><td class="am-clickable addcust" colspan="2"><div class="am-clickable"></div></td></tr>';
+						$employee = '<tr class="addcustTr"><td class="am-clickable addcust" colspan="2"><div class="am-clickable"></div></td></tr>';
 					}
 					var otherSendMessage={billNo:item.billNo,operatorId:item.operatorId,billtype:item.type,itemNo:(detail?detail.itemNo:""),itemName:(detail?detail.itemName:"")};
 					$employeeTable.find("tbody").append($employee).data("item",{empList:item.empList,other:otherSendMessage});
@@ -3048,21 +4036,30 @@
 										if(emp.empNo != null){
 											var $employee="";
 											//添加员工
-											$employee = ('<tr>'+
+											var $empGain=emp.automatic===0?'<span>¥'+emp.gain+'</span>':'¥'+emp.gain;
+											if(item.type==3 && amGloble.metadata.configs.packageSpecial=='true'){
+												$employee = ('<tr>'+
 												'<td class="changeEmployee" data-id='+emp.empId+'><div class="tdwrap"><a class="am-clickable" href="javascript:void(0)">'+(emp.empNo+'号'+emp.dutyTypeName+'('+emp.empName+')')+'</a></div></td>'+
-												'<td><div class="am-clickable tdedit">业绩:¥'+ emp.fee +',提成:¥'+ emp.gain +'<ul><li class="am-clickable updateli">修改</li><li class="am-clickable delli">删除</li></ul></div></td>' +
+												'<td><div class="tdwrap"><span>'+(emp.pointFlag?'指定':'非指定')+'</span></div></td><td><div class="am-clickable tdedit">业绩:¥'+ emp.fee +',提成:'+ $empGain +'<ul><li class="am-clickable updateli">修改</li><li class="am-clickable delli">删除</li></ul></div></td>' +
 											'</tr>');
+											}else {
+												$employee = ('<tr>'+
+												'<td class="changeEmployee" data-id='+emp.empId+'><div class="tdwrap"><a class="am-clickable" href="javascript:void(0)">'+(emp.empNo+'号'+emp.dutyTypeName+'('+emp.empName+')')+'</a></div></td>'+
+												'<td><div class="am-clickable tdedit">业绩:¥'+ emp.fee +',提成:'+ $empGain +'<ul><li class="am-clickable updateli">修改</li><li class="am-clickable delli">删除</li></ul></div></td>' +
+												'</tr>');
+											}
+											
 		                                    $employeeTable.append($employee);
 		                                    var otherSendMessage={billNo:item.billNo,operatorId:item.operatorId,billtype:item.type,itemNo:(detail?detail.itemNo:""),itemName:(detail?detail.itemName:"")};
 		                                    $employeeTable.data("item",{empList:item.empList,other:otherSendMessage});
 										}
 										//添加员工DOM
 	                                    if(employeeId == item.empList.length - 1){
-	                                    	$employeeTable.append($('<tr><td class="am-clickable addcust" colspan="2"><div class="am-clickable"></div></td></tr>'));
+	                                    	$employeeTable.append($('<tr class="addcustTr"><td class="am-clickable addcust" colspan="2"><div class="am-clickable"></div></td></tr>'));
 	                                    }
 									}
 								}else{
-									$detailMore.append($('<td class="employeeTable" rowspan="'+ item.detailList.length +'"><table class="table"><tbody><tr><td class="am-clickable addcust" colspan="2"><div class="am-clickable"></div></td></tr></tbody></table></td>'));
+									$detailMore.append($('<td class="employeeTable" rowspan="'+ item.detailList.length +'"><table class="table"><tbody><tr class="addcustTr"><td class="am-clickable addcust" colspan="2"><div class="am-clickable"></div></td></tr></tbody></table></td>'));
 									var $employeeTable=$detailMore.find(".employeeTable tbody");
 									var otherSendMessage={billNo:item.billNo,operatorId:item.operatorId,billtype:item.type,itemNo:(detail?detail.itemNo:""),itemName:(detail?detail.itemName:"")};
 		                            $employeeTable.data("item",{empList:item.empList,other:otherSendMessage});
@@ -3076,10 +4073,13 @@
 
 				$html.find('.consumptionamount dt').html( '<span class="xfnr">' + projectArr.join('</span><span class="xfnr">') + '</span>' );
 				//$html.find('.consumptionamount dd').html( '¥'+_totleFee );
+				if(item.debtBillId){
+					_totleFee = [item.consumeFee];
+				}
 				$html.find('.jetd span').html( '¥'+self.myAdd(_totleFee) );
 				$html.find('.jetd').data('total',self.myAdd(_totleFee));
 				//入账
-				if(item.type == 0 || item.type == 1 || item.type == 4 || item.type == 6){
+				if(item.type == 0 || item.type == 1 || item.type == 4 || item.type == 6 || item.debtBillId){
 					$html.find('.accountedfor span').html('¥' + item.eafee);
 					//$html.find('.accountedfor').data('total',item.eafee);
 				}else{
@@ -3089,11 +4089,41 @@
 				//支付方式
 				// var _paymentmethod = paymentmethodArr.length == 1 ? paymentmethodArr[0] : '混合支付';
 				// $html.find('.paymentmethod').html(_paymentmethod);
+				var $operateBox=$('<div class="operate_box"></div>');
+				var $print_btn='<div class="am-clickable print"><span class="icon iconfont icon-dayinxiaopiao"></span>打印小票</div>';
+				var $revoke_btn='<div class="am-clickable revoke"><span class="icon iconfont icon-chedan"></span>撤单</div>';
+				var $realte_btn =containedFacePay>0?'<div class="am-clickable relate"><span class="icon iconfont icon-guanlianshoukuan"></span>关联收款</div>':'';
+				var $bonus_btn=amGloble.metadata.enabledNewBonusModel&&amGloble.metadata.enabledNewBonusModel==1&&'<div class="am-clickable bonus-btn"><span class="icon iconfont icon-jisuanticheng"></span>计算提成</div>'||'';
+				var $perf_btn = amGloble.metadata.enabledNewPerfModel == 1 && '<div class="am-clickable perf-btn"><span class="icon iconfont icon-jisuanyeji"></span>计算业绩</div>' || '';
+				$operateBox.html($realte_btn + $bonus_btn + $perf_btn + $print_btn + $revoke_btn);
+				$childTr.find('.tdchildren').append($operateBox)
+				var $revoke = $operateBox.find('.revoke');
+				if(item.type==0 || item.type==4 || (item.type==6 && item.consumeType!=6)){
+					//项目
+					$revoke.data("revoke","M0");
+				}else if(item.type==1){
+					//卖品
+					$revoke.data("revoke","M2");
+				}else if(item.type==2){
+					//开卡充值
+					$revoke.data("revoke","M1");
+				}else if(item.type==3){
+					//套餐购买
+					$revoke.data("revoke","M3");
+				}else if(item.type==5 || (item.type==6 && item.consumeType==6)){
+					//年卡销售
+					$revoke.data("revoke","M4");
+				}
 
 				self.$table.append($html).append($childTr);
-
+				var day = '';
+				for(var di=0;di<am.operateArr.length;di++){
+					if(am.operateArr[di].indexOf('MGJZ10') != -1){
+						day = am.operateArr[di].split('MGJZ10')[1];
+					}	
+				}
 				//改日期
-				if( am.operateArr.indexOf('N') != -1 ){
+				if( am.operateArr.indexOf('N') != -1 && (day=='' || (new Date().getTime()-item.consumeTime*1)/(1000*60*60*24)<day)){
 					var ts = amGloble.now();
 					var user = amGloble.metadata.userInfo;
 					var limitDays=1;
@@ -3105,8 +4135,7 @@
 						limitDays=4;
 					}
 					ts.setDate(ts.getDate()-limitDays);
-
-					self.$table.find(".basictr .consumetime").mobiscroll().calendar({
+					self.$table.find(".basictr .consumetime").mobiscroll().calendar({	
 					    theme: 'mobiscroll',
 					    lang: 'zh',
 					    display: 'bottom',
@@ -3115,7 +4144,8 @@
 					    max: amGloble.now(),
 					    //controls: ['calendar', 'time'],
 					    setOnDayTap: true,
-					    buttons: [],
+						buttons: [],
+						endYear: amGloble.now().getFullYear()+50,
 					    onSet: function(valueText, inst) {
 					        var _valueText = valueText.valueText;
 					        var _tr = $(this).parents('tr');
@@ -3171,38 +4201,100 @@
 			self.watercourseScroll.closeBottomLoading();
 
 		},
+		renderRelatePay:function(data){
+			var payName = ["微信","支付宝","大众点评","银联支付","京东钱包"];//支付类型
+			var payType=["美管加代收","自收","收钱吧","京东聚合支付"];//收款类型
+			var $list=this.$payList.empty();
+			var _this=this;
+			for(var i=0,len=data.length;i<len;i++){
+					var item=data[i],sum=0;
+					var typeName=payName[item.type*1-1];
+					var fromText=payType[item.payType*1];
+					var codeText='';
+					if(item.type == 4 || item.type == 5){
+						codeText=item.outtradeno;
+					}else{
+						codeText=item.tradeno;
+					}
+					var $li=$('<li class="am-clickable"><div class="listRight">'+
+					'<div class="price">'+(item.price||'')+
+					'</div><div class="time small">'+(item.createtime?new Date(item.createtime-0).format('yyyy.mm.dd')+'-付款':'')+
+					'</div><div class="status small">'+'未关联'+
+					'</div></div><div class="listLeft"><div class="title">'+typeName+
+					'</div><div class="code small">'+codeText+'</div><div class="from small">'+fromText+'</div></div></li>').data('data',item);
+					if(!am.isNull(item.details)){
+                        $.each(item.details,function(k,v){
+                            sum += v.amount*1;
+                        });
+                    }
+                    sum = sum.toFixed(2);
+                    $li.find('.price').text((item.price-sum).toFixed(2));
+                    if(sum == item.price){
+                        $li.addClass("am-disabled").addClass('hide').find('.status').text("已关联");
+                    }else{
+                        $li.removeClass("am-disabled").removeClass('hide').find('.status').text("未关联");
+                    }
+					$list.append($li);
+			}
+			setTimeout(function(){
+                _this.relatePayScrollView.$wrap.css({
+                    "height": (_this.$.height()-_this.$.find('.paytitle').outerHeight() - 1) + "px"
+                });
+                _this.relatePayScrollView.refresh();
+			},100);
+			self.$relatePay.addClass('on');
+			self.$payMask.show();
+		},
 		render: function(clear){
+			var self = this;
 			if(clear) {
 				this.pageIndex = 0;
 				self.watercourseScroll.pauseTouchBottom=false;
 				self.watercourseScroll.scrollTo("top");
 				self.$table.empty();
 			}
-			this.getData(function(res){
-				self.watercourseScroll.closeTopLoading();
-				self.watercourseScroll.closeBottomLoading();
-				if(res.content){
-					if((!res.content.billList || !res.content.billList.length) && self.pageIndex === 0){
-						self.$billRecordContent.removeClass('normal error').addClass("empty");
-						//self.$listData=[];
-						return;
-					};
-					if(res.content.billList.length) {
-						self.renderDetailsData(res.content.billList);
-						//self.pageIndex++;
-					}else{
-						am.msg('没有更多的记录了!');
-						self.watercourseScroll.pauseTouchBottom = true;
-					}
-					//self.$listData=res.content.billList;
-					//self.renderTotal(res.content);
-					//var data=self.getDataListByIndex(self.$listData,self.pageIndex);
-				}else if(self.pageIndex === 0){
-					self.$billRecordContent.removeClass('normal error').addClass("empty");
-				}else{
-					am.msg(res.message || '数据读取失败');
-				}
+			// this.getData(function(res){
+				// self.watercourseScroll.closeTopLoading();
+				// self.watercourseScroll.closeBottomLoading();
+				// if(res.content){
+                //     // 性能监控点
+                //     monitor.stopTimer('M08', 0)
+
+				// 	if((!res.content.billList || !res.content.billList.length) && self.pageIndex === 0){
+				// 		self.$billRecordContent.removeClass('normal error').addClass("empty");
+				// 		//self.$listData=[];
+				// 		return;
+				// 	};
+				// 	if(res.content.billList.length) {
+				// 		self.renderDetailsData(res.content.billList);
+				// 		//self.pageIndex++;
+				// 	}else{
+				// 		am.msg('没有更多的记录了!');
+				// 		self.watercourseScroll.pauseTouchBottom = true;
+				// 	}
+				// 	//self.$listData=res.content.billList;
+				// 	//self.renderTotal(res.content);
+				// 	//var data=self.getDataListByIndex(self.$listData,self.pageIndex);
+				// }else if(self.pageIndex === 0){
+                //     // 性能监控点
+                //     monitor.stopTimer('M08', 0)
+
+				// 	self.$billRecordContent.removeClass('normal error').addClass("empty");
+				// }else{
+                //     // 性能监控点
+                //     monitor.stopTimer('M08', 1)
+
+				// 	am.msg(res.message || '数据读取失败');
+				// }
+			// });
+
+			this.getData(function(res) {
+				// res.allCount = 37;
+				self.getDataCb(res)
 			});
+			
+
+
 			/*}
 			 else{
 			 var data=self.getDataListByIndex(self.$listData,self.pageIndex);
@@ -3222,6 +4314,41 @@
 
 
 		},
+
+		getDataCb : function (res) {
+			self.watercourseScroll.closeTopLoading();
+			self.watercourseScroll.closeBottomLoading();
+			if(res.content){
+				// 性能监控点
+				monitor.stopTimer('M08', 0)
+
+				if((!res.content.billList || !res.content.billList.length) && self.pageIndex === 0){
+					self.$billRecordContent.removeClass('normal error').addClass("empty");
+					//self.$listData=[];
+					return;
+				};
+				if(res.content.billList.length) {
+					self.renderDetailsData(res.content.billList);
+				}else{
+					am.msg('没有更多的记录了!');
+					self.watercourseScroll.pauseTouchBottom = true;
+				}
+				//self.$listData=res.content.billList;
+				//self.renderTotal(res.content);
+				//var data=self.getDataListByIndex(self.$listData,self.pageIndex);
+			}else if(self.pageIndex === 0){
+				// 性能监控点
+				monitor.stopTimer('M08', 0)
+
+				self.$billRecordContent.removeClass('normal error').addClass("empty");
+			}else{
+				// 性能监控点
+				monitor.stopTimer('M08', 1)
+
+				am.msg(res.message || '数据读取失败');
+			}
+		},
+
 		// render:function(clear){
 		// 	if(clear){
 		// 		this.pageIndex=0;
@@ -3685,9 +4812,12 @@
 				// }
 				var $gain = '';
 				if(amGloble.metadata.shopPropertyField.handinto==1){
+					var $empGain = emp.automatic===0?'<span>¥'+emp.gain+'</span>':'¥'+emp.gain;
 					if(emp.gain>0){
-					$gain = ',提成:¥'+ emp.gain;
-					}else {
+						$gain = ',提成:'+ $empGain;
+					}else if(amGloble.metadata.enabledNewBonusModel&&amGloble.metadata.enabledNewBonusModel==1&&(emp.gain==0||emp.gain<0)){
+						$gain = ',提成:'+ $empGain;
+					}else{
 						$gain = ',提成自动算'
 					}
 				}
@@ -3798,19 +4928,33 @@
 			}
 		},
 
-		withdrawData:function(item,callback){
+		withdrawData:function(item,callback,vccode){
 			var metadata=am.metadata;
-			var apiArr=["wechatRefund","alipayRefund","dpRefund"];
+			var apiArr=["wechatRefund","alipayRefund","dpRefund","posRefund","jdRefund"];
+			var indexUrl = apiArr[item.type-1];
+			var payway = undefined;
+			if(item.sn){
+				if(indexUrl === "wechatRefund"){
+					payway = 3;
+				}else if(indexUrl === "alipayRefund"){
+					payway = 1;
+				}
+				indexUrl = "posRefund";
+			}
 			am.loading.show("正在获取数据,请稍候...");
-			am.api[apiArr[item.type-1]].exec({
+			am.api[indexUrl].exec({
+				"payway": payway,
 			    "out_trade_no":item.outtradeno,
-			    "parentShopId":metadata.userInfo.parentShopId
+				"parentShopId":metadata.userInfo.parentShopId,
+				"valiCode":vccode
 			}, function(res) {
 			    am.loading.hide();
 			    if (res.code == 0) {
-			    	callback && callback(res);
+					$('#refundVccode').hide();
+					callback&&callback(res);					
 			    }else {
-			        am.msg(res.message || "退款失败,请重试!");
+					am.msg(res.message || "退款失败,请重试!");
+					$('#vc_code').trigger('vclick');
 			    }
 			});
 		},
@@ -3849,7 +4993,7 @@
 			am.loading.show("正在获取数据,请稍候...");
 			am.api.facePay.exec({
 			    "shopIds":shopId,
-			    "status":[3],
+			    "status":[3,2],
 			    "parentShopId":metadata.userInfo.parentShopId,
 			    "pageNumber":self.facePageIndex,
 			    "pageSize":self.facePageSize,
@@ -3866,22 +5010,47 @@
 			    }
 			});
 		},
+		resetArrows:function(){//排序箭头初始化
+			// this.$ups.css('border-bottom','#777 5px solid');
+			// this.$downs.css('border-top','#777 5px solid');
+			this.$ups.removeClass('enabled');
+			this.$downs.removeClass('enabled');
+
+		},
 		getData:function(callback){
 			var metadata=am.metadata;
 			var resValue=self.getSelectValue();
+			for(var key in resValue){ // 空字符串则去掉
+				if(resValue.serviceClass===''){
+					delete resValue.serviceClass;
+					delete resValue.serviceItem;
+				}
+				if(resValue.serviceItem===''){
+					delete resValue.serviceItem;
+				}
+			}
+			console.log('流水查询条件',resValue);
 			var period=new Date(this.$waterInput.val()+" 00:00:00").getTime()+"_"+new Date(this.$waterInput.val()+" 23:59:59").getTime();
 			this.pageIndex === 0 && am.loading.show("正在获取数据,请稍候...");
-			am.api.billRecord.exec($.extend({
+			var idx = this.$.find('.billRecordTab li.selected').index();
+			var apiUrl = 'billRecord';
+			if(idx==7){
+				apiUrl = 'billRepeatRecord';
+			}
+			am.api[apiUrl].exec($.extend({
+				"sort":self.sort,
+				"orderby":self.orderby,
 			    "shopId":metadata.userInfo.shopId,//metadata.userInfo.shopId,
 			    "parentShopId":metadata.userInfo.parentShopId,//metadata.userInfo.parentShopId,
 			    "period":period,
 				"pageNumber":this.pageIndex,
-				"pageSize":20
+				"pageSize":20,
+				"realParentShopId":metadata.userInfo.realParentShopId
 			},resValue), function(res) {
 			    am.loading.hide();
 			    console.log(res);
 			    if (res.code == 0) {
-			    	callback && callback(res);
+					callback && callback(res);
 			    }else {
 			    	self.$billRecordContent.removeClass('normal empty').addClass("error");
 			        am.msg(res.message || "数据获取失败,请检查网络!");
@@ -3893,6 +5062,82 @@
 			var metadata=am.metadata;
 			am.loading.show("正在获取数据,请稍候...");
 			var pushData={};
+			var currentBill = $.am.selectEmployee.currentBill;
+			// 计算非项目的支付方式业绩
+			var isProjectOrder = currentBill ? ([0, 4, 6].indexOf(parseInt(currentBill.type)) > -1) : false;
+			if ([3, 4].indexOf(parseInt(type)) > -1) {
+				var payTypeMaps = {
+					"cardFee": "cardFee",
+					"presentFee": "presentFee",
+					"cash": "cashFee",
+					"unionPay": "unionPay",
+					"cooperation": "cooperation",
+					"mall": "mall",
+					"weixin": "weixin",
+					"pay": "pay",
+					"voucherFee": "voucherFee",
+					"divideFee": "divideFee",
+					"debtFee": "debtFee",
+					"mdFee": "mdFee",
+					"luckymoney": "luckymoney",
+					"coupon": "coupon",
+					"dianpin": "dpFee",
+					"onlineCreditPay":"onlineCreditPay",
+					"offlineCreditPay":"offlineCreditPay",
+					"mallOrderFee":"mallOrderFee",
+					"treatfee": "treatfee",
+					"treatpresentfee": "treatpresentfee",
+					"otherfee1": "otherfee1",
+					"otherfee2": "otherfee2",
+					"otherfee3": "otherfee3",
+					"otherfee4": "otherfee4",
+					"otherfee5": "otherfee5",
+					"otherfee6": "otherfee6",
+					"otherfee7": "otherfee7",
+					"otherfee8": "otherfee8",
+					"otherfee9": "otherfee9",
+					"otherfee10": "otherfee10"
+				};
+				var cardList = currentBill.type == 2 ? [] : currentBill.cardList;
+				var cashList = currentBill.cashList;
+				var total = 0;
+				var totalFee = data.fee;
+				var payDetail = {};
+				var eachItemFn = function(detail) {
+					for(var key in payTypeMaps) {
+						if (key != 'debtFee') {
+							var payVal = detail[key] || 0;
+							var payKey = payTypeMaps[key];
+							if (payDetail[payKey]) {
+								payDetail[payKey] += payVal;
+							} else {
+								payDetail[payKey] = payVal;
+							}
+							total += payVal;
+						}
+					}
+				}
+				cardList.forEach(eachItemFn);
+				cashList.forEach(function(cashDetail) {
+					// 去除开卡成本
+					if (cashDetail.type != 2 || cashDetail.consumeType != 2) {
+						eachItemFn(cashDetail);
+					}
+				});
+				
+				var perfPctObj = am.page.pay.getPayFeePctObj({payDetail: payDetail, total: total, isNotProject: !isProjectOrder});
+				var perfDetail = {};
+				for (var perfKey in perfPctObj) {
+					var pct = perfPctObj[perfKey];
+					if (pct > 0) {
+						perfDetail[perfKey] = totalFee * pct;
+					}
+				}
+				var payCategoryPctObj = am.page.pay.getPayMoneyCategoryPctObj({payDetail: payDetail, total: total});
+				data.cashfee = totalFee * payCategoryPctObj['cash'];
+				data.cardfee = totalFee * payCategoryPctObj['card'];
+				data.otherfee = totalFee * payCategoryPctObj['other'];
+			}
 			// 修改类型(0 单号，1 日期，2 入账金额，3 客户性别，4 服务项目，5 部门，6 项目业绩 7 员工，8 员工业绩 9 提成，10 指定类型，11 是否计客次，12 是否计入日常开支，13 新增单据服务/提成员工，14 工本费，15 外创员工业绩，16 现金消费金额，17 划卡业绩，18 现金业绩，19 卡金消费金额，注：com.sentree.hairv3.manage.bill.web.BillAction.upd())
 			if(type=="1"){//项目
 				pushData.oldName=data.oldName;
@@ -3920,6 +5165,7 @@
 				pushData.employeeId=data.oldVal;
 				pushData.newEmployeeNo=data.newEmployeeNo;
 				pushData.newEmployeeName=data.newEmployeeName;
+				pushData.perfDetail = perfDetail;
 			}else if(type=="4"){//添加员工
 				pushData.updType=13;
 				pushData.newVal = data.fee;
@@ -3930,6 +5176,7 @@
 				pushData.employeeId=data.itemid;
 				pushData.pointFlag = data.pointFlag;
 				pushData.itemNo = data.itemNo;
+				pushData.perfDetail = perfDetail;
 			}else if(type=="5"){//删除员工
 				pushData.updType=20;
 				pushData.subId = data.subId;
@@ -3948,9 +5195,30 @@
 				operatorName: amGloble.metadata.userInfo.userName //data.operator
 			},pushData), function(res) {
 			    am.loading.hide();
-			    console.log(res);
+				console.log(res);
 			    if (res.code == 0) {
-			    	callback && callback(res);
+					callback && callback(res);
+					// 如果是修改员工业绩、提成或者是添加员工，且是项目消费的时候则重算业绩
+					if (amGloble.metadata.enabledNewPerfModel == 1 && [3, 4].indexOf(parseInt(type)) > -1 && isProjectOrder ) {
+						// 请求重算员工的业绩
+						var paramsObj={
+							shopId: am.metadata.userInfo.shopId,
+							parentShopId: am.metadata.userInfo.parentShopId,
+							billId: currentBill.id,
+							empId: pushData.employeeId
+						},
+						userToken=JSON.parse(localStorage.getItem("userToken")),
+						url=config.calcServerUrl+'/empFee/billCalc' + "?" + $.param({
+							token:userToken ? userToken.mgjtouchtoken : null,
+						});
+						$.ajax({
+							type:'POST',
+							url:url,
+							data:JSON.stringify(paramsObj),
+							dataType:'json',
+							contentType:'application/json',
+						});
+					}
 			    }else {
 			        am.msg(res.message || "数据获取失败,请检查网络!");
 			    }
@@ -3976,7 +5244,7 @@
 			am.api.upd.exec($.extend({
 				parentShopId: am.metadata.userInfo.parentShopId,
 				shopId: am.metadata.userInfo.shopId,
-				operator: am.metadata.userInfo.userId,
+				operator: am.metadata.userInfo.userName,
 				updType: type,
 				type: data.type,
 				billNo: data.billNo,
@@ -4125,6 +5393,7 @@
 					am.setPerf.show({
 						total:toFloat(total),
 						emps:emps,
+						isDepart: 1,
 						submit:function (pers) {
 							console.log(pers);
 							var opt = {
@@ -4232,6 +5501,20 @@
 			}else if(item.type === 3 || item.type === 7 || (item.type === 6 && item.consumeType === 6)){
 				return 4;
 			}
+		},
+		getJdPay: function(){
+			if(!this.jdSetting){
+				var payTypes = am.payConfigMap;
+				for(var i=0;i<payTypes.length;i++){
+					for(var key in payTypes[i]){
+						if(payTypes[i][key].otherfeetype==4){
+							this.jdSetting = payTypes[i][key];
+							return payTypes[i][key];
+						}
+					}
+				}
+			}
+			return this.jdSetting;
 		}
 	});
 })();
@@ -4336,7 +5619,7 @@
                 $inner : this.$.find('.wrap'),
                 direction : [false, true],
                 hasInput: false
-            });
+			});
 		},
 		show:function(opt){
             if(!this.$){

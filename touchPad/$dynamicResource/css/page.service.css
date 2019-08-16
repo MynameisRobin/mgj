@@ -6,6 +6,63 @@
 .page_service.openBill {
   left: 60px;
 }
+.page_service .keypadWrap .keypadInner .given li:nth-of-type(1) span {
+  width: 45px;
+}
+.page_service .keypadWrap .keypadInner .given li:nth-of-type(1) span::before {
+  content: "数字键";
+}
+.page_service .keypadWrap .keypadInner .given li:nth-of-type(2) span {
+  width: 45px;
+}
+.page_service .keypadWrap .keypadInner .given li:nth-of-type(2) span::before {
+  content: "方向键";
+}
+.page_service .keypadWrap .keypadInner .given li:nth-of-type(3) span {
+  font-size: 20px;
+}
+.page_service .keypadWrap .keypadInner .given li:nth-of-type(3) span::before {
+  content: "*";
+}
+.page_service .keypadWrap .keypadInner .given li:nth-of-type(4) span {
+  width: 64px;
+}
+.page_service .keypadWrap .keypadInner .given li:nth-of-type(4) span::before {
+  content: "回车键*3次";
+}
+.page_service .keypadWrap .keypadInner .given li:nth-of-type(5) span {
+  width: 25px;
+}
+.page_service .keypadWrap .keypadInner .given li:nth-of-type(5) span::before {
+  content: "+键";
+}
+.page_service .keypadWrap .keypadInner .given li:nth-of-type(6) span::before {
+  top: 0px;
+  left: 6px;
+  content: "-";
+}
+.page_service .keypadWrap .keypadInner .currencyDiv .currency li:nth-of-type(1) span::before {
+  left: 6px;
+  content: "/";
+}
+.page_service .keypadWrap .keypadInner .currencyDiv .currency li:nth-of-type(2) span {
+  width: 45px;
+}
+.page_service .keypadWrap .keypadInner .currencyDiv .currency li:nth-of-type(2) span::before {
+  content: "回车键";
+}
+.page_service .cashierItems .cashierItemScroll {
+  height: 335px;
+}
+.submit.keypadPC .text1 {
+  margin-left: -22px;
+}
+.cashierMain .am-clickable.keypad_select {
+  background: rgba(255, 189, 2, 0.24);
+}
+.cashierMain .am-clickable.keypad_select .price:hover {
+  background-color: #f5f5f5;
+}
 .cashierTab {
   height: 44px;
   border-bottom: 1px solid #ececec;
@@ -111,6 +168,188 @@
 .cashierFilter li.all span {
   font-size: 12px;
 }
+.cashierFilter .priceFilterWrap {
+  position: absolute;
+  left: auto;
+  right: 42px;
+  top: 5px;
+  bottom: auto;
+  width: 90px;
+  height: 26px;
+  border: 1px solid #e5e5e5;
+  border-radius: 28px;
+  display: none;
+  padding: 0 30px;
+}
+.cashierFilter .priceFilterWrap.focus {
+  border: 1px solid #999;
+}
+.cashierFilter .priceFilterWrap.focus .icon-search {
+  color: #999;
+}
+.cashierFilter .priceFilterWrap .icon-search {
+  position: absolute;
+  left: 0;
+  right: auto;
+  top: 0;
+  bottom: auto;
+  width: 26px;
+  height: 26px;
+  text-align: center;
+  line-height: 22px;
+  color: #e5e5e5;
+}
+.cashierFilter .priceFilterWrap .clearPrice {
+  position: absolute;
+  left: auto;
+  right: 0;
+  top: 0;
+  bottom: auto;
+  width: 30px;
+  height: 26px;
+  text-align: center;
+  line-height: 22px;
+  color: #999;
+  display: none;
+}
+.cashierFilter .priceFilterWrap input {
+  display: block;
+  width: 100%;
+  height: 26px;
+  appearance: none;
+  -webkit-appearance: none;
+  background: none;
+  border: none;
+  font-size: 12px;
+  color: #222;
+  line-height: 26px;
+}
+.cashierFilter .priceFilterWrap input::-webkit-input-placeholder {
+  color: #c4c4c4;
+}
+.cashierFilter .priceFilterWrap input:focus::-webkit-input-placeholder {
+  opacity: 0;
+}
+.cashierFilter .priceFilterWrap .inputMask {
+  position: absolute;
+  left: 30px;
+  right: 30px;
+  top: 0;
+  bottom: 0;
+}
+.cashierFilter .typeFilterWrap {
+  position: absolute;
+  left: auto;
+  right: 42px;
+  top: 5px;
+  bottom: auto;
+  width: 120px;
+  height: 26px;
+  border: 1px solid #e5e5e5;
+  border-radius: 28px;
+  display: none;
+}
+.cashierFilter .typeFilterWrap .result {
+  padding: 0 20px;
+  position: relative;
+}
+.cashierFilter .typeFilterWrap .result .val {
+  font-size: 13px;
+  color: #999;
+  height: 26px;
+  line-height: 26px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cashierFilter .typeFilterWrap .result .val.selected {
+  color: #222;
+}
+.cashierFilter .typeFilterWrap .result::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+  right: 8px;
+  width: 0;
+  height: 0;
+  border-color: #898989 transparent transparent transparent;
+  border-style: solid;
+  border-width: 4px;
+}
+.cashierFilter .typeFilterWrap .mask {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 99;
+  display: none;
+}
+.cashierFilter .typeFilterWrap .typeSelect {
+  position: absolute;
+  width: 120px;
+  top: 38px;
+  background-color: #fff;
+  box-shadow: -10px 0 10px rgba(0, 0, 0, 0.2), 10px 0 10px rgba(0, 0, 0, 0.2), 0 10px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  z-index: 100;
+  display: none;
+}
+.cashierFilter .typeFilterWrap .typeSelect::after {
+  content: '';
+  position: absolute;
+  top: -12px;
+  right: 6px;
+  width: 0;
+  height: 0;
+  border-width: 6px;
+  border-style: solid;
+  border-color: transparent transparent #fff transparent;
+}
+.cashierFilter .typeFilterWrap .typeSelect .wrapper {
+  max-height: 360px;
+  overflow: hidden;
+}
+.cashierFilter .typeFilterWrap .typeSelect .inner .item {
+  padding: 0 20px;
+}
+.cashierFilter .typeFilterWrap .typeSelect .inner .item .name {
+  font-size: 14px;
+  color: #222;
+  line-height: 44px;
+  height: 44px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-bottom: 1px solid #f6f6f6;
+}
+.cashierFilter .typeFilterWrap .typeSelect .inner .item:last-child .name {
+  border-bottom: none;
+}
+.cashierFilter .typeFilterWrap .typeSelect .inner .item:hover {
+  background-color: #f8f8f8;
+}
+.cashierFilter .typeFilterWrap .typeSelect .inner .item:first-child {
+  border-radius: 4px 4px 0 0;
+}
+.cashierFilter .typeFilterWrap .typeSelect .inner .item::last-child {
+  border-radius: 0 0 4px 4px;
+}
+.cashierFilter.priceFilter,
+.cashierFilter.typeFilter {
+  padding-right: 162px;
+}
+.cashierFilter.priceFilter .priceFilterWrap,
+.cashierFilter.typeFilter .priceFilterWrap,
+.cashierFilter.priceFilter .typeFilterWrap,
+.cashierFilter.typeFilter .typeFilterWrap {
+  display: block;
+}
+.cashierFilter.priceFilter {
+  padding-right: 192px;
+}
 .cashierFilter .modelType {
   padding: 4px;
   position: absolute;
@@ -165,7 +404,7 @@
   margin-top: -45px;
 }
 .cashierItems .cashierItemScroll {
-  height: 380px;
+  height: 390px;
   overflow-x: hidden;
 }
 .cashierItems .cashierItemScroll ul {
@@ -174,13 +413,19 @@
   overflow: hidden;
 }
 .cashierItems .cashierItemScroll ul li {
-  margin: 0 9px;
   float: left;
-  width: 134px;
   position: relative;
+  width: 134px;
   height: 190px;
+  margin: 0 9px;
+  padding: 4px;
   line-height: 20px;
   background: #FFF;
+  border: 1px solid transparent;
+}
+.cashierItems .cashierItemScroll ul li.hasDeleted,
+.cashierItems .cashierItemScroll ul li.hasStoped {
+  opacity: 0.3;
 }
 .cashierItems .cashierItemScroll ul li.groupingBorder {
   border: 2px solid #c90e28;
@@ -236,6 +481,26 @@
 .cashierItems .cashierItemScroll ul li .price::before {
   content: "￥";
 }
+.cashierItems .cashierItemScroll ul li .idSpan {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  font-size: 11px;
+  color: #FFFFFF;
+  text-shadow: 0 0 4px rgba(0, 0, 0, 0.53);
+}
+.cashierItems .cashierItemScroll ul li .num {
+  position: absolute;
+  right: 4px;
+  top: 91px;
+  line-height: 16px;
+  padding: 0px 3px;
+  color: #999999;
+  font-size: 10px;
+  background: #ECECEC;
+  border-radius: 16px;
+  text-align: center;
+}
 .cashierItems .cashierItemScroll ul li .img {
   background: #ececec url("../images/defultbg.png") no-repeat center center;
   background-size: 100px 100px;
@@ -257,6 +522,26 @@
 }
 .cashierItems .cashierItemScroll ul li.am-clickable-active {
   transform: scale(1.1);
+}
+.cashierItems .cashierItemScroll ul li.am-clickable-active .img {
+  margin-top: 4px;
+}
+.cashierItems .cashierItemScroll ul .availableTrue {
+  border: 1px solid #FFC424;
+  box-shadow: 0 2px 10px 0 rgba(255, 236, 138, 0.69);
+  border-radius: 5px;
+}
+.cashierItems .cashierItemScroll ul .availableTrue::after {
+  position: absolute;
+  left: 50%;
+  bottom: -2px;
+  content: " ";
+  width: 48px;
+  height: 4px;
+  margin-left: -24px;
+  background: #FFC424;
+  box-shadow: 0 0 15px 0#FFC424;
+  border-radius: 5px;
 }
 .cashierItems .cashierItemScroll.onlyText {
   height: 298px;
@@ -342,6 +627,20 @@
 }
 .cashierItems .cashierItemScroll.onlyText ul li.am-clickable-active {
   transform: scale(1.1);
+}
+.page_comboCard .cashierItems .cashierItemScroll .group .img .imgItem,
+#pop_selecteCombo .cashierItems .cashierItemScroll .group .img .imgItem {
+  width: 65px;
+  height: 65px;
+}
+.page_comboCard .cashierItems.wider .cashierItemScroll .group .img .imgItem,
+#pop_selecteCombo .cashierItems.wider .cashierItemScroll .group .img .imgItem {
+  width: 103px;
+  height: 65px;
+}
+.page_comboCard .idSpan,
+#pop_selecteCombo .idSpan {
+  display: none;
 }
 .cashierBox {
   height: 282px;
@@ -430,6 +729,7 @@
   bottom: auto;
   width: 32px;
   height: 32px;
+  z-index: 1;
 }
 .cashierMain .memberInfo .infoclose::before {
   content: "";
@@ -496,11 +796,33 @@
   background: url("../images/icons_sprite/cellphone.png") no-repeat 0px 0px;
   background-size: 16px 16px;
 }
-.cashierMain .memberInfo .content .comment {
+.cashierMain .memberInfo .content .base {
+  position: relative;
+}
+.cashierMain .memberInfo .content .base .more {
+  position: absolute;
+  right: 7px;
+  bottom: 3px;
+  font-size: 12px;
+  color: #00b7ee;
+}
+.cashierMain .memberInfo .content .base .more.am-clickable-active {
+  opacity: 0.6;
+}
+.cashierMain .memberInfo .content .base .more.on {
+  top: 47px;
+}
+.cashierMain .memberInfo .content .base .comment {
   font-size: 12px;
   color: #999;
   clear: both;
   padding: 0 0 3px 5px;
+}
+.cashierMain .memberInfo .content .base .comment.lineText {
+  max-width: 230px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .cashierMain .memberInfo .content .card {
   border-top: 1px solid #ececec;
@@ -538,6 +860,37 @@
   font-size: 12px;
   color: #999;
   line-height: 20px;
+}
+.cashierMain .memberInfo .content .remark_member_box {
+  position: relative;
+  line-height: 16px;
+  font-size: 12px;
+  color: #bdbdbd;
+  background-color: whitesmoke;
+  padding: 6px;
+  margin: 5px -5px 5px -5px;
+  text-align: justify;
+  word-break: break-all;
+}
+.cashierMain .memberInfo .content .remark_member_box .more {
+  position: absolute;
+  right: 5px;
+  bottom: 3px;
+  font-size: 12px;
+  color: #00b7ee;
+}
+.cashierMain .memberInfo .content .remark_member_box .more.am-clickable-active {
+  opacity: 0.6;
+}
+.cashierMain .memberInfo .content .remark_member_box .more.on {
+  top: 5px;
+}
+.cashierMain .memberInfo .content .remark_member_box.lineText {
+  max-width: 236px;
+  padding-right: 35px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .cashierMain .memberInfo .content .recharge {
   margin: 5px -5px 0 -5px;
@@ -602,14 +955,12 @@
   color: #666;
   font-size: 12px;
 }
-.cashierMain .head .setting::before {
-  content: "";
+.cashierMain .head .setting svg {
   float: left;
   width: 20px;
   height: 20px;
-  background: url("../images/icons_sprite/setting.png") no-repeat 0px 0px;
-  background-size: 20px 20px;
   margin: 8px 2px;
+  opacity: 0.6;
 }
 .cashierMain .head .setting.am-clickable-active {
   color: #222;
@@ -657,7 +1008,7 @@
   width: 30px;
   height: 30px;
   margin: 4px 2px 2px 4px;
-  border-radius: 4px;
+  border-radius: 50%;
   background: #ececec url("../images/defultbg.png") no-repeat center center;
   background-size: contain;
   float: left;
@@ -666,7 +1017,42 @@
   display: block;
   width: 30px;
   height: 30px;
-  border-radius: 4px;
+  border-radius: 50%;
+}
+.cashierMain .head .member .img.good {
+  position: relative;
+  border: 2px solid #f7d467;
+}
+.cashierMain .head .member .img.good::before {
+  content: "";
+  width: 13px;
+  height: 12px;
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  margin-left: -6.5px;
+  background: url(../images/good.png) no-repeat;
+  background-size: cover;
+}
+.cashierMain .head .member .img.lock {
+  position: relative;
+}
+.cashierMain .head .member .img.lock::after {
+  content: "\e690";
+  font-family: "iconfont" !important;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  top: 0;
+  left: 0;
+  text-align: center;
+  font-size: 16px;
+  color: #fff;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
 }
 .cashierMain .head .memberInfoBtn {
   padding: 4px 0 4px 4px;
@@ -736,6 +1122,17 @@
 .cashierMain table td {
   height: 40px;
 }
+.cashierMain table td .serviceItemName {
+  position: relative;
+  padding-left: 10px;
+}
+.cashierMain table td .serviceItemName .redStar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 10px;
+  color: #E82742;
+}
 .cashierMain table td.comboitem .serviceItemName {
   display: inline-block;
 }
@@ -768,6 +1165,36 @@
 }
 .cashierMain table tbody tr.show1 {
   -webkit-animation: animation_addItem1 1 ease-in 1s;
+}
+.cashierMain table tbody tr.am-clickable .am-clickable:hover {
+  background-color: #e7e7e7!important;
+}
+.cashierMain table tbody tr .empty-td {
+  display: none;
+}
+.cashierMain table tbody tr.empty {
+  background: #FFE8EB!important;
+}
+.cashierMain table tbody tr.empty .empty-td {
+  display: inline-block;
+  position: relative;
+}
+.cashierMain table tbody tr.empty .empty-td .empty-div {
+  position: absolute;
+  top: -4px;
+  right: 2px;
+  color: #E82742;
+  font-size: 10px;
+  text-align: right;
+  width: 100px;
+}
+.cashierMain table tbody tr.empty .empty-td .empty-div svg {
+  width: 10px;
+  height: 10px;
+  margin-top: 4px;
+}
+.cashierMain table tbody tr.empty .empty-td .empty-div .empty-text {
+  padding-left: 2px;
 }
 .cashierMain table tbody tr:nth-child(2n + 1) {
   background: #f7f7f7;
@@ -1043,7 +1470,7 @@
 .cashierMain .foot .cost-edit-wrapper .cost-edit-wrap {
   display: inline-block;
   vertical-align: top;
-  width: 50px;
+  width: 60px;
   height: 26px;
   border: 1px solid #ececec;
   border-radius: 26px;
@@ -1455,14 +1882,25 @@
   color: #e82742;
 }
 .modalDialog.debtBox .inner {
-  width: 600px;
-  margin-left: -300px;
+  width: 800px;
+  margin-left: -400px;
+}
+.modalDialog.debtBox .inner .content {
+  max-height: 300px;
+}
+.modalDialog.debtBox .inner .content .wrapper {
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+.modalDialog.debtBox .inner .content .scroll-wrap {
+  max-height: 300px;
+  overflow: hidden;
+  border: 1px solid #ddd;
 }
 .modalDialog.debtBox .inner table {
   width: 100%;
   text-align: center;
-  border-left: 1px solid #ddd;
-  border-top: 1px solid #ddd;
 }
 .modalDialog.debtBox .inner table th,
 .modalDialog.debtBox .inner table td {
@@ -1470,12 +1908,19 @@
   border-bottom: 1px solid #ddd;
   line-height: 36px;
 }
+.modalDialog.debtBox .inner table th:last-child,
+.modalDialog.debtBox .inner table td:last-child {
+  border-right: none;
+}
 .modalDialog.debtBox .inner table th {
   font-size: 12px;
   color: #999;
   font-weight: normal;
   background-color: #ececec;
   line-height: 28px;
+}
+.modalDialog.debtBox .inner table tbody tr:last-child td {
+  border-bottom: none;
 }
 .modalDialog.debtBox .inner table .highlight {
   color: #e82742;
@@ -1567,23 +2012,24 @@
 #itemSelect .title {
   margin: 0 15px;
   padding: 0;
-  padding-left: 30px;
-  background: url(../images/hangup/selectItem.png) no-repeat left center;
-  background-size: 19px 19px;
+  font-weight: 600;
 }
 #itemSelect .title .closees {
   content: "";
-  background: url(../images/hangup/close.png) no-repeat left center;
-  background-size: 36px 36px;
   position: absolute;
-  right: 10px;
+  right: 0;
   width: 36px;
   height: 36px;
-  top: 10px;
+  top: 6px;
+  font-size: 18px;
   display: block;
 }
 #itemSelect .title .closees.am-clickable-active {
   -webkit-transform: scale(0.9);
   -moz-transform: scale(0.9);
   transform: scale(0.9);
+}
+#itemSelect .footer {
+  transform: translate(-50%, 0);
+  left: 50%;
 }

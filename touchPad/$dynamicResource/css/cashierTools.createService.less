@@ -28,6 +28,7 @@
         }
         .manual{
             margin:0 20px 25px;
+            overflow: hidden;
             .manual_tit{
                 line-height: 40px;
                 padding: 0 15px;
@@ -71,6 +72,49 @@
                     color:#222;
                 }
             }
+            .autoDisplayId {
+                float: right;
+                height: 40px;
+                margin-right: 20px;
+                overflow: hidden;
+                .icon {
+                    display: inline-block;
+                    vertical-align: top;
+                    margin: 6px;
+                    width: 14px;
+                    height: 14px;
+                    margin-top: 13px;
+                    border: 1px solid #a1a1a1;
+                    border-radius: 2px;
+                    position: relative;
+                    .iconfont {
+                        position: absolute;
+                        width: 20px;
+                        height: 20px;
+                        left: 50%;
+                        top: 50%;
+                        transform: translate(-50%,-50%);
+                        -webkit-transform: translate(-50%,-50%);
+                        display: none;
+                    }
+                }
+                p {
+                    display: inline-block;
+                    vertical-align: top;
+                    font-size: 14px;
+                    color: #555;
+                    line-height: 40px;
+                    height: 40px;
+                }
+                &.autoId {
+                    .icon {
+						border: none;
+						.iconfont {
+							display: block;
+						}
+					}
+                }
+            }
         }
         ul::after{
             content: "";
@@ -90,11 +134,17 @@
             border-radius: 2px;
             margin: 5px 5px;
             cursor: pointer;
+            &.am-clickable-active {
+                background-color: #d6d6d6;
+            }
             &.am-disabled{
                 border-color: @bd03;
                 background-color: @bg06;
                 color: @c04;
                 cursor: not-allowed;
+                &.am-clickable-active{
+                    background-color: @bg06;
+                }
             }
         }
     }

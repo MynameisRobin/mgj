@@ -17,6 +17,10 @@
  * 			luckymoney:1,//红包支付
  * 			coupon:1,//优惠券
  * 			dianpin:1,//点评支付
+ *          "jdFee": 0,//京东
+ *          "onlineCreditPay":0,//线上积分抵扣金额
+ *          "offlineCreditPay":0,//线下积分抵扣金额
+ *          "mallOrderFee":0,//商城订单
  * 			otherfee1:222,//自定义支付1
  * 			...
  * 			otherfee10:222//自定义支付10
@@ -68,7 +72,7 @@ var computingPerformance=(function(win,cashierTab){
 
 		if(fixedNum == 3)	//进位取整
 		{
-			return Math.ceil(val);
+			return Math.ceil(Math.round(val*100)/100);
 		}
 		if($.trim(val+"")=="" || val+"" == "NaN")
 		{
@@ -259,7 +263,7 @@ var computingPerformance=(function(win,cashierTab){
 			var payclass={
 				cardfee:["cardfee","presentfee","dividefee"],
 				cashfee:["cash","cashfee","unionpay","pay","weixin","dianpin","cooperation","mall"],
-				otherfee:["luckymoney","coupon","debtfee","voucherfee","mdfee"]
+				otherfee:["luckymoney","coupon","debtfee","voucherfee","mdfee","onlineCredit","onlineCreditPay","offlineCredit","offlineCreditPay","mallOrderFee"]
 			}
 			for(var i in ret){
 				if(i.indexOf("otherfee")!=-1){
@@ -328,13 +332,17 @@ var computingPerformance=(function(win,cashierTab){
 				for(var i=0;i<itemList.length;i++){
 					var item=itemList[i];
 					res[i]={};
-					res[i].shopper=convertPrice(basePerformance[i].shopper) || 0;
-					res[i].total=this.getitemtotal(i,base.itemtotal);
+					res[i].shopper= convertPrice(basePerformance[i].shopper) || 0;
+					if(item.payDetail){
+						res[i].total = item.payDetail;
+					}else {
+						res[i].total=this.getitemtotal(i,base.itemtotal);
+					}
 					if(item.hasOwnProperty("empList")){
 						if(isArray(item.empList)){
 							res[i].empper=[];
 							for(var j=0;j<item.empList.length;j++){
-								var emppernum=this.computingEmployee(item,item.empList[j],config.card || null,basePerformance[i].empper);//{dutytype:111,pre:100};
+								var emppernum=this.computingEmployee(item,item.empList[j],config.card || null,basePerformance[i].empper,config.rate);//{dutytype:111,pre:100};
 								if(item.empList[j].hasOwnProperty('per') && item.empList[j].hasOwnProperty('perf') && !item.empList[j].per && item.empList[j].perf>0){
 									emppernum.pre = item.empList[j].perf;
 								}
@@ -351,11 +359,10 @@ var computingPerformance=(function(win,cashierTab){
 
 		},
 		computingBase:function(config){//计算基准业绩
+			var debtFlag = amGloble.metadata.configs.debtFlag*1;
 			var perRule=this.getpreruleBykey(config);
 			var courseList=this.getcourseList(config);//获得套餐项目list
 			var coursetotal=this.getcoursetotal(courseList);
-			var course={};
-
 			var  c={};
 			var treatcardfee=config["card"]?Number(config["card"]["treatcardfee"] || 0):0,
 				treatpresentfee=config["card"]?Number(config["card"]["treatpresentfee"] || 0):0;
@@ -384,6 +391,9 @@ var computingPerformance=(function(win,cashierTab){
 
 			var res={},finalres=[],output={},rek={};//存放结果的json
 			for(var i in config.paid){
+				if(i=='debtfee' && debtFlag){
+					continue;
+				}
 				var result=0,outresult=[],outempres=[],outtotal=[],
 					num=parseFloat(config.paid[i]);
 				for(var j=0;j<config.itemList.length;j++){//计算总售价
@@ -393,25 +403,28 @@ var computingPerformance=(function(win,cashierTab){
 				}
 				for(var l=0;l<config.itemList.length;l++){//遍历项目列表 单项目计算业绩
 					var iteml=config.itemList[l];
-
-					if(c.hasOwnProperty(l)){
-						if(i=="cardfee" || i=="presentfee"){
-							outtotal.push(c[l][i] || 0);
-							outresult.push(((c[l][i]|| 0)*(perRule[i].shopper/100)));
-							outempres.push(((c[l][i]|| 0)*(perRule[i].empper/100)));
+					if(iteml.payDetail){
+						outresult.push((iteml.payDetail[i]/num || 0)*num*(perRule[i].shopper/100));
+						outempres.push((iteml.payDetail[i]/num || 0)*num*(perRule[i].empper/100));
+						outtotal.push((iteml.payDetail[i]/num || 0)*num);
+					}else {
+						if(c.hasOwnProperty(l)){
+							if(i=="cardfee" || i=="presentfee"){
+								outtotal.push(c[l][i] || 0);
+								outresult.push(((c[l][i]|| 0)*(perRule[i].shopper/100)));
+								outempres.push(((c[l][i]|| 0)*(perRule[i].empper/100)));
+							}else{
+								outresult.push(0);
+								outempres.push(0);
+								outtotal.push(0);
+							}
 						}else{
-							outresult.push(0);
-							outempres.push(0);
-							outtotal.push(0);
+							//Math.floor(/100)*100
+							outresult.push((parseFloat(iteml.price)/result || 0)*num*(perRule[i].shopper/100));
+							outempres.push((parseFloat(iteml.price)/result || 0)*num*(perRule[i].empper/100));
+							outtotal.push((parseFloat(iteml.price)/result || 0)*num);
 						}
-					}else{
-						outresult.push((parseFloat(iteml.price)/result || 0)*num*(perRule[i].shopper/100));
-						outempres.push((parseFloat(iteml.price)/result || 0)*num*(perRule[i].empper/100));
-						outtotal.push((parseFloat(iteml.price)/result || 0)*num);
 					}
-
-
-
 					// total[i]=(parseFloat(iteml.price)/result)*num;
 				}
 				res[i]={shopper:outresult || 100,empper:outempres || 100};
@@ -421,8 +434,21 @@ var computingPerformance=(function(win,cashierTab){
 			for(var k=0;k<config.itemList.length;k++){//把每种支付方式的业绩加起来  输出数组
 				var a=0,b=0;
 				for(var n in res){
-					a+=res[n]["shopper"][k];
-					b+=res[n]["empper"][k];
+					var shopper = res[n]["shopper"][k];
+					var empper = res[n]["empper"][k];
+					a += shopper;
+					b += empper;
+				}
+				var iteml = config.itemList[k];
+				if(iteml.payDetail){
+					var _shopper = 0;
+					var _empper = 0;
+					for(var pkey in iteml.payDetail){
+						_shopper += (iteml.payDetail[pkey] || 0)*(perRule[pkey].shopper/100);
+						_empper += (iteml.payDetail[pkey] || 0)*(perRule[pkey].empper/100);
+					}
+					a = _shopper;
+					b = _empper;
 				}
 				finalres.push({shopper:a,empper:b});
 			}
@@ -436,7 +462,7 @@ var computingPerformance=(function(win,cashierTab){
 			}
 			return output;
 		},
-		computingEmployee:function(item,emp,card,basepre){//计算员工的业绩
+		computingEmployee:function(item,emp,card,basepre,rate){//计算员工的业绩
 			var spf,res;
 			var itemRule=this.getdataByValue(this.itemList,"itemid",item.itemid);
 			var sidList=this.getdataByValue(itemRule.sidList,"dutytypecode",emp.dutytype);//基础配置
@@ -447,27 +473,27 @@ var computingPerformance=(function(win,cashierTab){
 			}else if(isEmptyObject(sidList) && (!isEmptyObject(spfList) || !isemptyArray(spfList))){//取高级配置
 				spf=this.selectConfiguration(spfList,item,emp,card,basepre,sidList);
 			}else if(!isEmptyObject(sidList) && (isEmptyObject(spfList) || isemptyArray(spfList))){//取基础配置
-				res=this.computingbaseRule(sidList,item,emp,card,basepre);
+				res=this.computingbaseRule(sidList,item,emp,card,basepre,rate);
 			}else{//两个都不为空 取高级配置 若高级配置不匹配 取基础配置
 				spf=this.selectConfiguration(spfList,item,emp,card,basepre,sidList);
 			}
 			if(spf==-1){//没任何配置 100
 				return defres;
 			}else if(spf==1){
-				res=this.computingbaseRule(sidList,item,emp,card,basepre);
+				res=this.computingbaseRule(sidList,item,emp,card,basepre,rate);
 			}else if(!spf){
 				if(isEmptyObject(sidList)){
 					return defres;
 				}else{
-					res=this.computingbaseRule(sidList,item,emp,card,basepre);
+					res=this.computingbaseRule(sidList,item,emp,card,basepre,rate);
 				}
 			}else if(spf.hasOwnProperty("dmode")){//走高级配置
-				res=this.computingfirstRule(spf,item,emp,card,basepre);
+				res=this.computingfirstRule(spf,item,emp,card,basepre,rate);
 			}
 
 			return res;
 		},
-		computingbaseRule:function(sidList,item,emp,card,basepre){//默认配置计算方式
+		computingbaseRule:function(sidList,item,emp,card,basepre,rate){//默认配置计算方式
 			var res={pre:convertPrice(basepre)},right=basepre;
 
 			sidList.dnumber=sidList.dnumber==0?sidList.dnumber.toString():sidList.dnumber;//解决 0!="" 走false 的bug
@@ -475,16 +501,28 @@ var computingPerformance=(function(win,cashierTab){
 
 			res.dutytype=emp.dutytype;
 			res.no=emp.no;
+			var debtFlag = amGloble.metadata.configs.debtFlag*1;
 			if(sidList.dmode==0 && sidList.dnumber!="" && sidList.dnumber!=null){//0:固定业绩 1:水单业绩比例
 				right=parseFloat(sidList.dnumber);
+				if(debtFlag && item.consumemode!=1 && item.consumemode!=4 && item.price!=0){
+					right *=  (rate || 0);
+				}
 			}else if(sidList.dmode==1 && sidList.dnumber!="" && sidList.dnumber!=null){
 				right=(parseFloat(sidList.dnumber)/100)*basepre;
 			}
 			res.pre=convertPrice(right);
 			if(sidList.dagiomode==0 && sidList.dagionumber!="" && sidList.dagionumber!=null){//判断定扣方式 0:固定业绩 1:项目原价比例 2:项目业绩比例
-				res.pre=convertPrice(right-parseFloat(sidList.dagionumber));
+				if(debtFlag && item.consumemode!=1 && item.consumemode!=4 && item.price!=0){
+					res.pre=convertPrice(right-parseFloat(sidList.dagionumber)*(rate || 0));
+				}else {
+					res.pre=convertPrice(right-parseFloat(sidList.dagionumber));
+				}
 			}else if(sidList.dagiomode==1 && sidList.dagionumber!="" && sidList.dagionumber!=null){
-				res.pre=convertPrice(right-(parseFloat(sidList.dagionumber)/100)*item.cost);
+				if(debtFlag && item.consumemode!=1 && item.consumemode!=4 && item.price!=0){
+					res.pre=convertPrice(right-(parseFloat(sidList.dagionumber)/100)*item.cost*(rate || 0));
+				}else {
+					res.pre=convertPrice(right-(parseFloat(sidList.dagionumber)/100)*item.cost);
+				}
 			}else if(sidList.dagiomode==2 && sidList.dagionumber!="" && sidList.dagionumber!=null){
 				res.pre=convertPrice(right-(parseFloat(sidList.dagionumber)/100)*right);
 			}
@@ -553,7 +591,7 @@ var computingPerformance=(function(win,cashierTab){
 				}
 			}
 		},
-		computingfirstRule:function(spf,item,emp,card,basepre){//高级配置计算方式
+		computingfirstRule:function(spf,item,emp,card,basepre,rate){//高级配置计算方式
 			var res={pre:convertPrice(basepre)},right=basepre,discount;
 			discount=(card && card.discount && card.discount!="0")?card.discount:10;
 
@@ -562,8 +600,12 @@ var computingPerformance=(function(win,cashierTab){
 
 			res.dutytype=emp.dutytype;
 			res.no=emp.no;
+			var debtFlag = amGloble.metadata.configs.debtFlag*1;
 			if(spf.dmode==0 && spf.dnumber!="" && spf.dnumber!=null){//0:固定业绩 1:水单业绩比例
 				right=parseFloat(spf.dnumber);
+				if(debtFlag && item.consumemode!=1 && item.consumemode!=4 && item.price!=0){
+					right *=  (rate || 0);
+				}
 			}else if(spf.dmode==1 && spf.dnumber!="" && spf.dnumber!=null){
 				right=(parseFloat(spf.dnumber)/100)*basepre;
 			}
@@ -572,9 +614,17 @@ var computingPerformance=(function(win,cashierTab){
 			}
 			res.pre=convertPrice(right);
 			if(spf.dagiomode==0 && spf.dagionumber!="" && spf.dagionumber!=null){//判断定扣方式 0:固定业绩 1:项目原价比例 2:项目业绩比例
-				res.pre=convertPrice(right-parseFloat(spf.dagionumber));
+				if(debtFlag && item.consumemode!=1 && item.consumemode!=4 && item.price!=0){
+					res.pre=convertPrice(right-parseFloat(spf.dagionumber)*(rate || 0));
+				}else {
+					res.pre=convertPrice(right-parseFloat(spf.dagionumber));
+				}
 			}else if(spf.dagiomode==1 && spf.dagionumber!="" && spf.dagionumber!=null){
-				res.pre=convertPrice(right-(parseFloat(spf.dagionumber)/100)*item.cost);
+				if(debtFlag && item.consumemode!=1 && item.consumemode!=4 && item.price!=0){
+					res.pre=convertPrice(right-(parseFloat(spf.dagionumber)/100)*item.cost*(rate || 0));
+				}else {
+					res.pre=convertPrice(right-(parseFloat(spf.dagionumber)/100)*item.cost);
+				}
 			}else if(spf.dagiomode==2 && spf.dagionumber!="" && spf.dagionumber!=null){
 				res.pre=convertPrice(right-(parseFloat(spf.dagionumber)/100)*right);
 			}

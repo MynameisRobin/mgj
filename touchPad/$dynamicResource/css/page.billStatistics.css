@@ -260,22 +260,36 @@
   overflow: hidden;
   height: 184px;
 }
-.billStatistics_content .billStatistics_list .income div.incomewrapper div.inner {
-  overflow: hidden;
+.billStatistics_content .billStatistics_list .income div.incomewrapper .inner li {
+  height: auto;
 }
-.billStatistics_content .billStatistics_list .income div.incomewrapper div.inner ul {
-  width: 40%;
+.billStatistics_content .billStatistics_list .income div.incomewrapper .inner li .cashSum,
+.billStatistics_content .billStatistics_list .income div.incomewrapper .inner li .cardSum,
+.billStatistics_content .billStatistics_list .income div.incomewrapper .inner li .otherCashSum {
+  width: auto;
+  margin-left: 12px;
+  color: #222;
 }
-.billStatistics_content .billStatistics_list .income div.incomewrapper div.inner ul span {
-  width: 30%;
+.billStatistics_content .billStatistics_list .income div.incomewrapper .inner li .title i {
+  width: 15px;
+  height: 30px;
+  margin-left: 5px;
+  display: inline-block;
+  transform: rotate(0);
+  color: #999;
 }
-.billStatistics_content .billStatistics_list .income div.incomewrapper div.inner ul:first-child {
-  float: left;
-  margin: 0 0 0 8%;
+.billStatistics_content .billStatistics_list .income div.incomewrapper .inner li .title.active i {
+  color: #62c2ed;
+  transform: rotate(180deg);
 }
-.billStatistics_content .billStatistics_list .income div.incomewrapper div.inner ul:last-child {
-  float: right;
-  margin: 0 0 0 8%;
+.billStatistics_content .billStatistics_list .income div.incomewrapper .inner li .childUl {
+  padding: 0;
+}
+.billStatistics_content .billStatistics_list .income div.incomewrapper .inner li .childUl li {
+  display: none;
+}
+.billStatistics_content .billStatistics_list .income div.incomewrapper .inner li .childUl.active li {
+  display: block;
 }
 .billStatistics_content .billStatistics_list .billStatistics.customer {
   font-size: 13px;

@@ -1,0 +1,327 @@
+<div class="am-page page_member" id="page_member">
+    <div class="cashierTab memberTab">
+        <ul>
+            <li class="am-clickable selected">
+                <span>顾客</span>
+            </li>
+            <li class="am-clickable">
+                <span>会员卡</span>
+            </li>
+            <li class="am-clickable">
+                <span>已删顾客</span>
+            </li>
+        </ul>
+    </div>
+    <div class="search_box">
+        <div class="searchinput">
+            <div class="ty_inputbox">
+                <input class="search_input am-clickable searchphone" maxlength="30" placeholder="输入会员手机号或姓名搜索" type="text" />
+            </div>
+            <div class="ty_inputbox_icon am-clickable"><svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-sousuo1"></use>
+                </svg></div>
+            <div class="clear"></div>
+        </div>
+        <div class="addMemberBtn">新增顾客档案</div>
+        <div class="highSearchBtn am-clickable">高级搜索</div>
+    </div>
+    <!--会员卡-->
+    <div class="cardtotal_box hide">
+        <span class="checkSummary">查询汇总</span>
+        <span class="data">
+            <label>总数：</label>
+            <strong class="totalnum">0</strong>
+        </span>
+        <span class="data">
+            <label>总余额：</label>
+            <strong class="totalfee">0</strong>
+        </span>
+        <span class="data">
+            <label>总赠送金余额：</label>
+            <strong class="totalPresentFee">0</strong>
+        </span>
+    </div>
+    <div class="searchresultBox">
+        <div class="contentbox del">
+            <div class="table-content-head">
+                <table width="100%" cellpadding="0" cellspacing="0" class="cm_table">
+                    <thead>
+                        <tr>
+                            <td class="td-address">
+                                <div class="tdwrap">姓名</div>
+                            </td>
+                            <td class="td-address">
+                                <div class="tdwrap">性别</div>
+                            </td>
+                            <td class="td-phone">
+                                <div class="tdwrap">手机号</div>
+                            </td>
+                            <td class="td-showMyk lowVersion">
+                                <div class="tdwrap">客单价</div>
+							</td>
+                            <td class="td-complete lowVersion">
+                                <div class="tdwrap">消费金额</div>
+                            </td>
+                            <td class="td-complete lowVersion">
+                                <div class="tdwrap">消费次数</div>
+                            </td>
+                            <td class="td-complete">
+                                <div class="tdwrap">上次消费</div>
+                            </td>
+                            <td class="td-complete">
+                                <div class="tdwrap">积分</div>
+                            </td>
+                            <td class="td-complete">
+                                <div class="tdwrap">注册日</div>
+                            </td>
+                            <td class="td-complete">
+                                <div class="tdwrap">操作</div>
+                            </td>
+                        </tr>
+                    </thead>
+                    <thead class="hide">
+                        <tr>
+                            <td>
+                                <div class="tdwrap">卡号</div>
+                            </td>
+                            <td>
+                                <div class="tdwrap">卡名称</div>
+                            </td>
+                            <td>
+                                <div class="tdwrap">顾客姓名</div>
+                            </td>
+                            <td>
+                                <div class="tdwrap">性别</div>
+                            </td>
+                            <td>
+                                <div class="tdwrap">手机号</div>
+                            </td>
+                            <td>
+                                <div class="tdwrap">卡内余额</div>
+                            </td>
+                            <td>
+                                <div class="tdwrap">赠送金余额</div>
+                            </td>
+                            <td>
+                                <div class="tdwrap">开卡日期</div>
+                            </td>
+                            <td>
+                                <div class="tdwrap">到期日期</div>
+                            </td>
+                            <td>
+                                <div class="tdwrap">备注</div>
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <!-- 表格内容 -->
+            <div class="table-content-list">
+                <table width="100%" cellpadding="0" cellspacing="0" class="cm_table">
+                    <thead>
+                    </thead>
+                    <tbody>
+                        <!-- <tr>
+                           <td style="width:8%"><div class="tdwrap">111</div></td>
+                           <td style="width:6%"><div class="tdwrap">111</div></td>
+                           <td style="width:14%"><div class="tdwrap">111</div></td>
+                           <td style="width:8%"><div class="tdwrap">111</div></td>
+                           <td style="width:9%"><div class="tdwrap">111</div></td>
+                           <td style="width:8%"><div class="tdwrap">111</div></td>
+                           <td style="width:9%"><div class="tdwrap">111</div></td>
+                           <td style="width:7%"><div class="tdwrap">111</div></td>
+                           <td style="width:10%"><div class="tdwrap">111</div></td>
+                           <td style="width:21%">
+                               <div class="tdwrap operate">
+                                   <span class="details am-clickable">详情</span>
+                                   <span class="del am-clickable">删除</span>
+                               </div>
+                           </td>
+                       </tr> -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="footcontent">
+            <!-- 分页 -->
+        </div>
+        <div class="cm_emptyBox"></div>
+        <div class="cm_cutting">
+            <span class="icon"></span>
+            <span class="btn am-clickable">刷新重试</span>
+        </div>
+    </div>
+    <div class="remarkDetail">
+        <div class="textwrap">
+            <div class="text"></div>
+            <div class="icon"></div>
+        </div>
+    </div>
+    <div class="search_popup_mask am-clickable"></div>
+    <div class="search_popup_wrap">
+        <div class="top_wrap">
+            <div class="content_title">高级搜索</div>
+            <div class="content_tab">
+                <span class="selected am-clickable">按会员信息</span>
+                <span class="am-clickable">按套餐项目</span>
+            </div>
+        </div>
+        <div class="mem_info">
+            <div class="mem_inner">
+                <div class="item radio">
+                    <div class="item_label left">性别：</div>
+                    <div class="item_wrap radio">
+                        <div class="item_box selected am-clickable">
+                            <span class="change_icon"></span>
+                            <span>男</span>
+                        </div>
+                        <div class="item_box am-clickable">
+                            <span class="change_icon"></span>
+                            <span>女</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="item select memType cm_block">
+                    <div class="item_label left">会员类别：</div>
+                    <div class="item_wrap memberClassSelector">
+
+                    </div>
+                </div>
+                <div class="item space consumeTimes">
+                    <div class="item_label left">消费次数：</div>
+                    <div class="item_wrap">
+                        <div class="input_start am-clickable"></div>
+                        <span>-</span>
+                        <div class="input_end am-clickable"></div>
+                    </div>
+                </div>
+                <div class="item space consumeFee">
+                    <div class="item_label left">消费金额：</div>
+                    <div class="item_wrap">
+                        <div class="input_start am-clickable"></div>
+                        <span>-</span>
+                        <div class="input_end am-clickable"></div>
+                    </div>
+                </div>
+                <div class="item space point">
+                    <div class="item_label left">积分：</div>
+                    <div class="item_wrap">
+                        <div class="input_start am-clickable"></div>
+                        <span>-</span>
+                        <div class="input_end am-clickable"></div>
+                    </div>
+				</div>
+				<div class="item select customerSourceType cm_block">
+                    <div class="item_label left">顾客来源：</div>
+                    <div class="item_wrap customerSourceClassSelector">
+
+                    </div>
+                </div>
+                <div class="item space lastConsumeDate">
+                    <div class="item_label left">上次消费至今(天)：</div>
+                    <div class="item_wrap">
+                        <div class="input_start am-clickable"></div>
+                        <span>-</span>
+                        <div class="input_end am-clickable"></div>
+                    </div>
+                </div>
+                <div class="item space timer">
+                    <div class="item_label left">注册时间：</div>
+                    <div class="item_wrap">
+                        <div class="input_start ">
+                            <input type="text">
+                            <b></b>
+                        </div>
+                        <p>至</p>
+                        <div class="input_end">
+                            <input type="text">
+                            <b></b>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="combo_item">
+            <div class="item_inner">
+                <div class="item checkbox">
+                    <div class="item_label left">大项标题01</div>
+                    <div class="item_wrap checkbox">
+                        <div class="item_box am-clickable">
+                            <span class="change_icon"></span>
+                            <span class="text">项目1</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="high_search_btn am-clickable">查询</div>
+    </div>
+    <div class="search_popup_wrap search_card_wrap hide">
+        <div class="content_title">高级搜索</div>
+        <div class="search_key">
+            <div class="mem_info">
+                <div class="item select">
+                    <div class="item_label left">卡名称：</div>
+                    <div class="item_wrap cardClassSelector">
+
+                    </div>
+                </div>
+                <div class="item free">
+                    <div class="item_label left">余额：</div>
+                    <div class="freebox cardfree">
+                        <span>
+                            <div class="intxt am-clickable" data-dot="false"></div>
+                        </span>
+                        <span>-</span>
+                        <span>
+                            <div class="intxt am-clickable" data-dot="false"></div>
+                        </span>
+                    </div>
+                </div>
+                <div class="item free">
+                    <div class="item_label left">赠送金：</div>
+                    <div class="freebox presentfree">
+                        <span>
+                            <div class="intxt am-clickable" data-dot="false"></div>
+                        </span>
+                        <span>-</span>
+                        <span>
+                            <div class="intxt am-clickable" data-dot="false"></div>
+                        </span>
+                    </div>
+                </div>
+                <div class="item validay">
+                    <div class="item_label left">到期日距今(天)：</div>
+                    <div class="freebox dueday">
+                        <span>
+                            <div class="intxt am-clickable" data-dot="true"></div>
+                        </span>
+                        <span></span>
+                    </div>
+                </div>
+                <div class="item openday">
+                    <div class="item_label left">开卡日期：</div>
+                    <div class="freebox daybox">
+                        <span>
+                            <input type="text" class="intxt startday" />
+                            <span class="icon"></span>
+                        </span>
+
+                    </div>
+                </div>
+                <div class="item openday">
+                    <div class="item_label left">至：</div>
+                    <div class="freebox daybox">
+                        <span>
+                            <input type="text" class="intxt endday" />
+                            <span class="icon"></span>
+                        </span>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="high_search_btn am-clickable">查询</div>
+    </div>
+</div>

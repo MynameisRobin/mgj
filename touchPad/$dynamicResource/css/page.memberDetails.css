@@ -1,5 +1,10 @@
 /* 文字颜色 ***********************/
 /* c0* 为黑白灰色系 */
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .bs {
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -8,6 +13,9 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+.page_memberDetails {
+  cursor: default !important;
 }
 .page_memberDetails .highlight {
   color: #e82742;
@@ -40,7 +48,7 @@
   right: 15px;
 }
 .page_memberDetails .memberdetailsbox .pageLeft .leftbox > div {
-  padding-top: 20px;
+  padding-top: 50px;
 }
 .page_memberDetails .memberdetailsbox .pageLeft .two_status {
   text-align: center;
@@ -55,7 +63,8 @@
 .page_memberDetails .memberdetailsbox .pageLeft .two_status .wx,
 .page_memberDetails .memberdetailsbox .pageLeft .two_status .myk,
 .page_memberDetails .memberdetailsbox .pageLeft .two_status .notifySms,
-.page_memberDetails .memberdetailsbox .pageLeft .two_status .deductSmsFeeFlag {
+.page_memberDetails .memberdetailsbox .pageLeft .two_status .deductSmsFeeFlag,
+.page_memberDetails .memberdetailsbox .pageLeft .two_status .memberLock {
   padding: 8px;
   display: inline-block;
   vertical-align: middle;
@@ -66,30 +75,37 @@
   background-size: 15px;
 }
 .page_memberDetails .memberdetailsbox .pageLeft .two_status .wx {
-  background-image: url('../images/wx-w.png');
+  background-image: url("../images/wx-w.png");
 }
 .page_memberDetails .memberdetailsbox .pageLeft .two_status .wx.done {
-  background-image: url('../images/wx-y.png');
+  background-image: url("../images/wx-y.png");
 }
 .page_memberDetails .memberdetailsbox .pageLeft .two_status .myk {
-  background-image: url('../images/myk-w.png');
+  background-image: url("../images/myk-w.png");
 }
 .page_memberDetails .memberdetailsbox .pageLeft .two_status .myk.done {
-  background-image: url('../images/myk-y.png');
+  background-image: url("../images/myk-y.png");
 }
 .page_memberDetails .memberdetailsbox .pageLeft .two_status .notifySms {
   cursor: pointer;
-  background-image: url('../images/notifySms_off.png');
+  background-image: url("../images/notifySms_off.png");
 }
 .page_memberDetails .memberdetailsbox .pageLeft .two_status .notifySms.on {
-  background-image: url('../images/notifySms_on.png');
+  background-image: url("../images/notifySms_on.png");
 }
 .page_memberDetails .memberdetailsbox .pageLeft .two_status .deductSmsFeeFlag {
   cursor: pointer;
-  background-image: url('../images/deductSmsFeeFlag_off.png');
+  background-image: url("../images/deductSmsFeeFlag_off.png");
 }
 .page_memberDetails .memberdetailsbox .pageLeft .two_status .deductSmsFeeFlag.on {
-  background-image: url('../images/deductSmsFeeFlag_on.png');
+  background-image: url("../images/deductSmsFeeFlag_on.png");
+}
+.page_memberDetails .memberdetailsbox .pageLeft .two_status .memberLock {
+  cursor: pointer;
+  background-image: url("../images/memberLock_off.png");
+}
+.page_memberDetails .memberdetailsbox .pageLeft .two_status .memberLock.on {
+  background-image: url("../images/memberLock_on.png");
 }
 .page_memberDetails .memberdetailsbox .pageLeft .header {
   width: 108px;
@@ -101,7 +117,58 @@
   border-radius: 50%;
   -webkit-border-radius: 50%;
   padding: 4px;
-  overflow: hidden;
+}
+.page_memberDetails .memberdetailsbox .pageLeft .header .crown {
+  display: none;
+}
+.page_memberDetails .memberdetailsbox .pageLeft .header.good {
+  position: relative;
+  background: #f7d467;
+}
+.page_memberDetails .memberdetailsbox .pageLeft .header.good .crown {
+  display: block;
+  width: 28px;
+  height: 26px;
+  position: absolute;
+  top: -25px;
+  left: 50%;
+  margin-left: -14px;
+  background: url(../images/good.png) no-repeat;
+  background-size: 28px 26px;
+  cursor: pointer;
+}
+.page_memberDetails .memberdetailsbox .pageLeft .header.lock {
+  position: relative;
+}
+.page_memberDetails .memberdetailsbox .pageLeft .header.lock::after {
+  content: "\e690";
+  font-family: "iconfont" !important;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  line-height: 70px;
+  top: 4px;
+  left: 4px;
+  text-align: center;
+  font-size: 28px;
+  color: #fff;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+}
+.page_memberDetails .memberdetailsbox .pageLeft .header.lock::before {
+  content: "点击解锁";
+  position: absolute;
+  z-index: 2;
+  width: 100px;
+  height: 100px;
+  line-height: 130px;
+  top: 4px;
+  left: 4px;
+  text-align: center;
+  font-size: 12px;
+  color: #fff;
 }
 .page_memberDetails .memberdetailsbox .pageLeft .header .header_box {
   width: 100%;
@@ -200,7 +267,7 @@
 }
 .page_memberDetails .memberdetailsbox .pageLeft .remarks {
   padding: 0 10px;
-  transition: .6s all ease;
+  transition: 0.6s all ease;
   word-break: break-all;
   font-size: 12px;
   text-align: left;
@@ -216,7 +283,7 @@
   position: relative;
 }
 .page_memberDetails .memberdetailsbox .pageLeft .remarks .edit:after {
-  content: '';
+  content: "";
   width: 40px;
   height: 40px;
   position: absolute;
@@ -372,7 +439,7 @@
   margin-top: -5px;
 }
 .page_memberDetails .memberdetailsbox .pageLeft .privilegeCardButton .privilegeCardBtn span.tips::after {
-  content: '';
+  content: "";
   position: absolute;
   width: 8px;
   height: 10px;
@@ -437,7 +504,7 @@
   display: inline-block;
   line-height: 44px;
   height: 44px;
-  padding: 0 20px;
+  padding: 0 10px;
 }
 .page_memberDetails .memberdetailsbox .pageRight .memberDetailsTab li span {
   display: inline-block;
@@ -786,6 +853,22 @@
   padding: 0 10px;
   width: 100%;
 }
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .leftCard .cardBox .list .title {
+  height: 38px;
+  overflow: hidden;
+  padding: 10px 0;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .leftCard .cardBox .list .title .shopname {
+  display: inline-block;
+  background-color: #EDEDED;
+  font-size: 10px;
+  color: #222;
+  height: 18px;
+  border-radius: 18px;
+  padding: 0 10px;
+  line-height: 18px;
+  overflow: hidden;
+}
 .page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .leftCard .cardBox .list ul {
   width: 100%;
 }
@@ -994,10 +1077,19 @@
 .page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .leftCard .cardBox .list ul li .card_base_info .info_left .card_no {
   font-size: 12px;
   color: #7e7e7e;
-  width: 100px;
   height: 20px;
   line-height: 20px;
   overflow: hidden;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .leftCard .cardBox .list ul li .card_base_info .info_left .card_no .cardedit {
+  margin-left: 10px;
+  display: inline-block;
+  vertical-align: middle;
+  width: 16px;
+  height: 16px;
+  background: url("../images/card_edit_icon.png") no-repeat center center;
+  background-size: 11px 14px;
+  position: relative;
 }
 .page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .leftCard .cardBox .list ul li .card_base_info .info_right {
   float: right;
@@ -1071,14 +1163,6 @@
   background-size: 11px 14px;
   position: relative;
 }
-.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .leftCard .cardBox .list ul li .duedatewrap .duedateedit::before {
-  content: "";
-  width: 32px;
-  height: 32px;
-  position: absolute;
-  left: -8px;
-  top: -8px;
-}
 .page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .leftCard .cardBox .list ul li .line {
   width: 100%;
   height: 1px;
@@ -1121,7 +1205,7 @@
   display: inline-block;
   vertical-align: middle;
   max-width: 130px;
-  min-width: 30px;
+  min-width: 32px;
   height: 30px;
   line-height: 30px;
   overflow: hidden;
@@ -1150,7 +1234,7 @@
 .page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .leftCard .cardBox .list ul li .free .value {
   display: inline-block;
   vertical-align: middle;
-  width: 100px;
+  width: 80px;
   height: 30px;
   line-height: 30px;
   float: right;
@@ -1201,6 +1285,9 @@
   background-size: 35px 22px;
   position: relative;
 }
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .leftCard .cardBox .list ul li .free .value .otherAction.am-clickable-active {
+  opacity: 0.6;
+}
 .page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .leftCard .cardBox .list ul li .free .value .otherAction::before {
   content: "";
   width: 45px;
@@ -1218,10 +1305,6 @@
 .page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .emptyIcon {
   display: none;
 }
-.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo.empty .comboTit,
-.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo.empty .combobox {
-  display: none;
-}
 .page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo.empty .emptyIcon {
   position: absolute;
   z-index: 1;
@@ -1232,14 +1315,13 @@
   display: block;
   width: 176px;
   height: 216px;
-  background: url("../images/cardempty.png") no-repeat;
+  background: url("../images/empty.png") no-repeat;
   background-size: 100% 100%;
 }
 .page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .comboTit {
-  height: 25px;
-  margin: 10px 0;
-  /* padding-left: 30px; */
+  margin: 8px 0 10px 15px;
   background-color: #FFF;
+  font-size: 0;
   /* .icon{
 									width: 15px;
 									height:15px;
@@ -1250,166 +1332,212 @@
 								} */
 }
 .page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .comboTit span {
-  vertical-align: middle;
   display: inline-block;
-  line-height: 25px;
+  vertical-align: middle;
+  box-sizing: border-box;
+  line-height: 28px;
+  height: 28px;
   font-size: 12px;
-  color: #514287;
+  color: #222222;
+  padding: 0 18px;
+  border: 1px solid #DDDDDD;
+  border-right: none;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .comboTit span:last-child {
+  border-right: 1px solid #DDDDDD;
+  border-radius: 0 3px 3px 0;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .comboTit span:first-child {
+  border-radius: 3px 0 0 3px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .comboTit span.selected {
+  background: #595959;
+  color: #FFFFFF;
+  border: 1px solid #595959;
+  border-right: none;
 }
 .page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox {
   position: absolute;
   top: 0;
   bottom: 10px;
-  left: 30px;
+  left: 15px;
   right: 0;
   overflow: hidden;
+  margin-top: 45px;
 }
 .page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list {
   width: 100%;
   padding-bottom: 10px;
 }
-.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list ul {
-  width: 100%;
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list .title {
+  height: 38px;
+  overflow: hidden;
+  padding: 10px 0;
 }
-.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list ul li {
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list .title .shopname {
+  display: inline-block;
+  background-color: #EDEDED;
+  font-size: 10px;
+  color: #222;
+  height: 18px;
+  border-radius: 18px;
+  padding: 0 10px;
+  line-height: 18px;
+  overflow: hidden;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list .wrapperUl {
+  width: 100%;
+  padding: 0 5px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list .wrapperUl .comboBoxLi {
+  position: relative;
+  margin-bottom: 20px;
+  padding-right: 10px;
+  background: #ffffff;
+  box-shadow: 0px 1px 6px 1px rgba(10, 10, 10, 0.07);
+  border-radius: 6px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list .wrapperUl .comboBoxLi .comboName {
+  padding: 11px 0 0 12px;
+  height: 17px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #645497;
+  line-height: 17px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list .wrapperUl .comboBoxLi .comboName:before {
+  position: absolute;
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #645497;
+  left: -2px;
+  top: 15px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list .wrapperUl .comboBoxLi .comboItem,
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list .wrapperUl .comboBoxLi .comboItemGoods {
   display: block;
   width: 100%;
-  height: 105px;
-  margin-bottom: 20px;
-  border: 1px solid #BBBBBB;
-  border-radius: 10px;
-  -webkit-border-radius: 10px;
-  padding: 14px 15px;
+  padding: 10px 0 0 14px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list .wrapperUl .comboBoxLi .comboItem:last-child .comboContent,
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list .wrapperUl .comboBoxLi .comboItemGoods:last-child .comboContent {
+  border: none;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list .wrapperUl .comboBoxLi .comboItem .comboContent,
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list .wrapperUl .comboBoxLi .comboItemGoods .comboContent {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-bottom: 1px solid#ECECEC;
+  padding-bottom: 11px;
+  margin-top: 6px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list .wrapperUl .comboBoxLi .comboItem .comboContent span,
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list .wrapperUl .comboBoxLi .comboItemGoods .comboContent span {
+  display: inline-block;
+  margin-top: 6px;
+  color: #909090;
+  max-width: 190px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list .wrapperUl .comboBoxLi .comboItem .comboContent span.remarkText,
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list .wrapperUl .comboBoxLi .comboItemGoods .comboContent span.remarkText {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  max-width: 100%;
+  padding-left: 28px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list .wrapperUl .comboBoxLi .comboItem .comboContent span.enabled,
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list .wrapperUl .comboBoxLi .comboItemGoods .comboContent span.enabled {
+  color: #00B7EE;
+  font-size: 12px;
+  vertical-align: 2px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list .wrapperUl .comboBoxLi .comboItem .comboContent .left,
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list .wrapperUl .comboBoxLi .comboItemGoods .comboContent .left {
+  font-size: 12px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list .wrapperUl .comboBoxLi .comboItem .comboContent .left .name,
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list .wrapperUl .comboBoxLi .comboItemGoods .comboContent .left .name {
+  font-size: 14px;
+  color: #222222;
+  padding-right: 100px;
+  max-width: 100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list .wrapperUl .comboBoxLi .comboItem .comboContent .left .date,
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list .wrapperUl .comboBoxLi .comboItemGoods .comboContent .left .date {
+  color: #909090;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list .wrapperUl .comboBoxLi .comboItem .comboContent .left .remark,
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list .wrapperUl .comboBoxLi .comboItemGoods .comboContent .left .remark {
   position: relative;
 }
-.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list ul li.selected {
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list .wrapperUl .comboBoxLi .comboItem .comboContent .left .remark .remarkLabel,
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list .wrapperUl .comboBoxLi .comboItemGoods .comboContent .left .remark .remarkLabel {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list .wrapperUl .comboBoxLi .comboItem .comboContent .right,
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list .wrapperUl .comboBoxLi .comboItemGoods .comboContent .right {
+  position: absolute;
+  top: 0;
+  right: 0;
+  text-align: right;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list .wrapperUl .comboBoxLi .comboItem .comboContent .right .times,
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list .wrapperUl .comboBoxLi .comboItemGoods .comboContent .right .times {
+  height: 20px;
+  line-height: 20px;
+  font-size: 14px;
+  color: #222222;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list .wrapperUl .comboBoxLi .comboItem .comboContent .right .times.goodStock,
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list .wrapperUl .comboBoxLi .comboItemGoods .comboContent .right .times.goodStock {
+  color: #999999;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list .wrapperUl .comboBoxLi .comboItem .comboContent .right .operate .operateBtn,
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list .wrapperUl .comboBoxLi .comboItemGoods .comboContent .right .operate .operateBtn {
+  display: inline-block;
+  margin: 0 0 0 8px;
+  color: #43C9F2;
+  border: 1px solid #ECECEC;
+  height: 22px;
+  line-height: 19px;
+  padding: 0 9px;
+  border-radius: 10px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list .wrapperUl .comboBoxLi .comboItem .comboContent .right .operate .operateBtn.hide,
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list .wrapperUl .comboBoxLi .comboItemGoods .comboContent .right .operate .operateBtn.hide {
+  display: none;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list .wrapperUl .comboBoxLi .comboItem.selected,
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list .wrapperUl .comboBoxLi .comboItemGoods.selected {
   background-color: #f7f7f7;
 }
-.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list ul li .left {
-  max-width: 200px;
-  display: inline-block;
-  height: 40px;
-}
-.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list ul li .left span {
-  width: 100%;
-  display: inline-block;
-  vertical-align: middle;
-  line-height: 20px;
-}
-.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list ul li .left span.key {
-  font-size: 14px;
-  color: #222;
-  margin-bottom: 10px;
-}
-.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list ul li .left span.key strong {
-  vertical-align: middle;
-}
-.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list ul li .left span.key .combo_tit {
-  width: 140px;
-  vertical-align: middle;
-}
-.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list ul li .left span.key .combo_tit .combo_text {
-  width: 88px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list ul li .left span.key .back_combo {
-  display: inline-block;
-  vertical-align: middle;
-  margin-left: 10px;
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox #buyButton {
+  background-color: #555;
   text-align: center;
-  line-height: 19px;
-  width: 19px;
-  height: 19px;
-  border-radius: 3px;
-  border: 1px solid #eeeeee;
-  -webkit-border-radius: 3px;
-  color: #00b7ee;
+  border-radius: 2px;
+  padding: 2px 6px;
+  color: #fff;
+  z-index: 1;
+  cursor: pointer;
+  position: absolute;
+  right: 20px;
+  top: 8px;
+  line-height: 24px;
   font-size: 12px;
-  position: relative;
-  z-index: 2;
 }
-.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list ul li .left span.key .back_combo::before {
-  content: "";
-  display: inline-block;
-  width: 32px;
-  height: 32px;
-  position: absolute;
-  left: -8px;
-  top: -8px;
-}
-.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list ul li .left span.value {
-  font-size: 12px;
-  color: #999;
-}
-.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list ul li .left span.value .duedate {
-  width: auto;
-}
-.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list ul li .left span.value .treatmentdateedit {
-  margin-left: 10px;
-  display: inline-block;
-  vertical-align: middle;
-  width: 16px;
-  height: 16px;
-  background: url("../images/card_edit_white_icon.png") no-repeat center center;
-  background-size: 11px 14px;
-  position: relative;
-}
-.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list ul li .left span.value .treatmentdateedit::before {
-  content: "";
-  width: 32px;
-  height: 32px;
-  position: absolute;
-  left: -8px;
-  top: -8px;
-}
-.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list ul li .right {
-  position: absolute;
-  width: 224px;
-  height: 224px;
-  right: -56px;
-  top: -77px;
-  transform: scale(0.5, 0.5);
-  /* canvas{
-													width:112px;
-													height:112px;
-												} */
-}
-.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list ul li .comboRemark {
-  margin-top: 10px;
-  border-top: 1px solid #ececec;
-  height: 30px;
-}
-.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list ul li .comboRemark .remarkCon {
-  display: inline-block;
-  vertical-align: middle;
-  max-width: 130px;
-  min-width: 30px;
-  height: 30px;
-  font-size: 12px;
-  color: #999;
-  line-height: 30px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list ul li .comboRemark .comboRemarkIcon {
-  display: inline-block;
-  vertical-align: middle;
-  width: 20px;
-  height: 20px;
-  background: url("../images/card_edit_white_icon.png") no-repeat center center;
-  background-size: 11px 14px;
-  position: relative;
-}
-.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list ul li .comboRemark .comboRemarkIcon::before {
-  content: "";
-  width: 32px;
-  height: 32px;
-  position: absolute;
-  left: -6px;
-  top: -6px;
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox #buyButton.am-clickable-active {
+  background-color: #333;
 }
 .page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.recordBox .recordContent {
   position: relative;
@@ -1536,7 +1664,7 @@
   font-size: 12px;
   color: #222;
 }
-.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.recordBox .recordContent .contentbox .table-content-list tr:nth-child(4n+1) {
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.recordBox .recordContent .contentbox .table-content-list tr:nth-child(4n + 1) {
   background-color: #f7f7f7;
 }
 .page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.recordBox .recordContent .contentbox .table-content-list tr.comment-content {
@@ -1581,13 +1709,13 @@
   padding-left: 12px;
 }
 .page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.recordBox .recordContent .contentbox .table-content-list td.more::after {
-  content: '';
+  content: "";
   position: absolute;
   right: 0;
   bottom: 0;
   width: 0;
   height: 0;
-  border: 8px solid #00B3EA;
+  border: 8px solid #00b3ea;
   border-top-color: transparent;
   border-left-color: transparent;
 }
@@ -1724,6 +1852,863 @@
   bottom: 0;
   line-height: 72px;
 }
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.pointBox .pointContent {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.pointBox .pointContent .point_box {
+  padding: 12px 0;
+  font-size: 0;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.pointBox .pointContent .point_box .selected_box {
+  display: inline-block;
+  font-size: 0;
+  vertical-align: middle;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.pointBox .pointContent .point_box .selected_box .selected_member {
+  height: 40px;
+  vertical-align: middle;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  position: relative;
+  display: inline-block;
+  width: 190px;
+  padding: 0 20px;
+  line-height: 40px;
+  border-radius: 4px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.pointBox .pointContent .point_box .selected_box .selected_member .common_selectBox {
+  position: absolute;
+  left: 0;
+  border: 1px solid #ddd;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.pointBox .pointContent .point_box .selected_box .selected_member .common_selectBox .value {
+  line-height: 40px;
+  font-size: 14px;
+  font-weight: 400;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.pointBox .pointContent .point_box .selected_box .selected_member .common_selectBox .listbox {
+  margin-top: 0 !important;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.pointBox .pointContent .point_box .selected_box .cm_block {
+  display: inline-block;
+  vertical-align: top;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.pointBox .pointContent .point_box .selected_box .cm_block input {
+  height: 40px;
+  vertical-align: middle;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  border: 1px solid #ddd;
+  display: inline-block;
+  width: 120px;
+  padding: 0 20px;
+  line-height: 40px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 100;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.pointBox .pointContent .point_box .selected_box .selected_type {
+  font-size: 12px;
+  display: inline-block;
+  line-height: 40px;
+  margin: 0 14px;
+  color: #999;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.pointBox .pointContent .point_box .selected_box .selected_member {
+  vertical-align: top;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.pointBox .pointContent .point_box .selected_box .selected_member .listbox {
+  overflow: auto;
+  overflow-x: hidden;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.pointBox .pointContent .point_box .selected_box .selected_member .listbox .inner {
+  overflow: initial;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.pointBox .pointContent .point_box .check_btn {
+  vertical-align: top;
+  font-size: 14px;
+  display: inline-block;
+  border: 1px solid #ddd;
+  padding: 0 20px;
+  line-height: 40px;
+  border-radius: 4px;
+  background-color: #555;
+  color: #fff;
+  vertical-align: bottom;
+  height: 40px;
+  margin-left: 14px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.pointBox .pointContent .body {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 64px;
+  bottom: 0;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.pointBox .pointContent .body .cm_cutting {
+  display: none;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.pointBox .pointContent .body.default {
+  display: block;
+  background: url(../images/search_tips.png) no-repeat 50% 40%;
+  background-size: 200px 240px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.pointBox .pointContent .body.default .contentbox,
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.pointBox .pointContent .body.default .point_page_num {
+  display: none;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.pointBox .pointContent .body.empty {
+  display: block;
+  background: url("../images/empty.png") no-repeat center center;
+  background-size: 175px 192px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.pointBox .pointContent .body.empty .contentbox,
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.pointBox .pointContent .body.empty .point_page_num {
+  display: none;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.pointBox .pointContent .body.cutting .contentbox,
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.pointBox .pointContent .body.cutting .point_page_num {
+  display: none;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.pointBox .pointContent .body.cutting .cm_cutting {
+  width: 190px;
+  height: 238px;
+  display: block;
+  position: absolute;
+  z-index: 0;
+  left: 50%;
+  top: 40%;
+  margin-left: -95px;
+  margin-top: -119px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.pointBox .pointContent .body.cutting .cm_cutting .icon {
+  width: 100%;
+  height: 175px;
+  display: block;
+  background: url("../images/cutting.png") no-repeat;
+  background-size: 100% 100%;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.pointBox .pointContent .body.cutting .cm_cutting .btn {
+  width: 150px;
+  height: 38px;
+  margin: 0 auto;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border: 1px solid #ddd;
+  line-height: 38px;
+  font-size: 13px;
+  color: #666;
+  display: block;
+  text-align: center;
+  margin-top: 25px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.pointBox .pointContent .body .table_head {
+  width: 100%;
+  font-family: verdana, arial, sans-serif;
+  font-size: 12px;
+  color: #333333;
+  border-width: 1px;
+  border-color: #666666;
+  border-collapse: collapse;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.pointBox .pointContent .body .table_head th {
+  width: 20%;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 400;
+  color: #999;
+  padding: 8px 12px;
+  border: 1px solid #ebebeb;
+  border-top: 1px solid #dadada;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.pointBox .pointContent .body .contentbox {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 32px;
+  bottom: 72px;
+  overflow: hidden;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.pointBox .pointContent .body .contentbox .table_detail {
+  width: 100%;
+  font-family: verdana, arial, sans-serif;
+  font-size: 12px;
+  color: #333333;
+  border-width: 1px;
+  border-color: #666666;
+  border-collapse: collapse;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.pointBox .pointContent .body .contentbox .table_detail td {
+  width: 20%;
+  min-height: 36px;
+  padding: 10px 12px;
+  border-left: 1px solid #ebebeb;
+  font-size: 13px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.pointBox .pointContent .body .contentbox .table_detail tbody tr td:last-child {
+  border-right: 1px solid #ebebeb;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.pointBox .pointContent .body .contentbox .table_detail tbody tr:nth-child(odd) {
+  background-color: #f6f6f6;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.pointBox .pointContent .body .contentbox .table_detail tbody tr:last-child td {
+  border-bottom: 1px solid #ececec;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.pointBox .pointContent .body .contentbox .table_detail .upright {
+  color: #4DB27A;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.pointBox .pointContent .body .contentbox .table_detail .negative {
+  color: #e82742;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.pointBox .pointContent .body .point_page_num {
+  height: 72px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: auto;
+  bottom: 0;
+  line-height: 72px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.pointBox .pointContent .give_btn {
+  position: absolute;
+  top: 12px;
+  right: 0;
+  vertical-align: top;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  padding: 0 20px;
+  line-height: 40px;
+  border-radius: 4px;
+  background-color: #555;
+  color: #fff;
+  vertical-align: bottom;
+  height: 40px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.cardCashBox .cardCash_box {
+  padding: 12px 0;
+  font-size: 0;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.cardCashBox .cardCash_box .selected_box {
+  display: inline-block;
+  font-size: 0;
+  vertical-align: middle;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.cardCashBox .cardCash_box .selected_box .selected_member {
+  height: 40px;
+  vertical-align: middle;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  position: relative;
+  display: inline-block;
+  width: 190px;
+  padding: 0 20px;
+  line-height: 40px;
+  border-radius: 4px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.cardCashBox .cardCash_box .selected_box .selected_member .common_selectBox {
+  position: absolute;
+  left: 0;
+  border: 1px solid #ddd;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.cardCashBox .cardCash_box .selected_box .selected_member .common_selectBox .value {
+  line-height: 40px;
+  font-size: 14px;
+  font-weight: 400;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.cardCashBox .cardCash_box .selected_box .selected_member .common_selectBox .listbox {
+  margin-top: 0 !important;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.cardCashBox .cardCash_box .selected_box .cm_block {
+  display: inline-block;
+  vertical-align: top;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.cardCashBox .cardCash_box .selected_box .cm_block input {
+  height: 40px;
+  vertical-align: middle;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  border: 1px solid #ddd;
+  display: inline-block;
+  width: 120px;
+  padding: 0 20px;
+  line-height: 40px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 100;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.cardCashBox .cardCash_box .selected_box .selected_type {
+  font-size: 12px;
+  display: inline-block;
+  line-height: 40px;
+  margin: 0 14px;
+  color: #999;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.cardCashBox .cardCash_box .selected_box .selected_member {
+  vertical-align: top;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.cardCashBox .cardCash_box .selected_box .selected_member .listbox {
+  overflow: auto;
+  overflow-x: hidden;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.cardCashBox .cardCash_box .selected_box .selected_member .listbox .inner {
+  overflow: initial;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.cardCashBox .cardCash_box .check_btn {
+  vertical-align: top;
+  font-size: 14px;
+  display: inline-block;
+  border: 1px solid #ddd;
+  padding: 0 20px;
+  line-height: 40px;
+  border-radius: 4px;
+  background-color: #555;
+  color: #fff;
+  vertical-align: bottom;
+  height: 40px;
+  margin-left: 14px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.cardCashBox .card_cash {
+  max-height: 550px;
+  overflow: hidden;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.cardCashBox .card_cash table {
+  padding-bottom: 10px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.cardCashBox .card_cash .tip_box {
+  width: 200px;
+  height: 250px;
+  background: url(../images/search_tips.png) no-repeat;
+  background-size: 100% 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.cardCashBox .card_cash .table_detail {
+  height: 100%;
+  width: 100%;
+  max-width: 100%;
+  font-family: verdana, arial, sans-serif;
+  font-size: 12px;
+  color: #333333;
+  border-width: 1px;
+  border-color: #666666;
+  border-collapse: collapse;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.cardCashBox .card_cash .table_detail th {
+  text-align: left;
+  font-size: 12px;
+  font-weight: 400;
+  color: #999;
+  padding: 8px 12px;
+  border: 1px solid #ebebeb;
+  border-bottom: none;
+  border-top: 1px solid #dadada;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.cardCashBox .card_cash .table_detail td {
+  min-height: 36px;
+  padding: 10px 12px;
+  border-left: 1px solid #ebebeb;
+  font-size: 13px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.cardCashBox .card_cash .table_detail tbody tr td:last-child {
+  border-right: 1px solid #ebebeb;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.cardCashBox .card_cash .table_detail tbody tr:nth-child(odd) {
+  background-color: #f6f6f6;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.cardCashBox .card_cash .table_detail tbody tr:last-child td {
+  border-bottom: 1px solid #dadada;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.cardCashBox .card_cash .table_detail .upright {
+  color: #e82742;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.cardCashBox .card_cash .table_detail .negative {
+  color: #4DB27A;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.cardCashBox .card_cash .empty_box {
+  position: relative;
+  width: 100%;
+  height: 95%;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.cardCashBox .card_cash .empty_box .empty_box_image {
+  background: url(../images/empty.png) no-repeat;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 180px;
+  height: 200px;
+  background-size: 100%;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.cardCashBox .card_cash .tip_box {
+  background: url(../images/search_tips.png) no-repeat;
+  background-size: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 240px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.cardCashBox .cardcash_page_num {
+  height: 72px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: auto;
+  bottom: 0;
+  line-height: 72px;
+  margin: 0 20px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.cardCashBox .page_num .ui-pager {
+  line-height: 24px;
+  font-size: 12px;
+  padding: 15px 0 0;
+  margin-left: -65px;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.cardCashBox .page_num .ui-pager .count {
+  color: #241a11;
+  width: auto;
+  margin-right: 10px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.cardCashBox .page_num .ui-pager .number {
+  border: 1px solid #ddd;
+  padding: 0 10px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.cardCashBox .page_num .ui-pager .active {
+  color: #fff;
+  background-color: #20a0ff;
+  border-color: #20a0ff;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.cardCashBox .page_num .ui-pager .jump {
+  margin-left: 10px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.cardCashBox .page_num .ui-pager .jump .ui-pager__jumper {
+  width: 40px;
+  margin: 0 5px;
+  border: 1px solid #d1dbe5;
+  border-radius: 2px;
+  line-height: 18px;
+  padding: 3px 2px;
+  text-align: center;
+  margin: 0 6px;
+  box-sizing: border-box;
+  transition: border .3s;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.arrearsBox .arrears_table {
+  width: 100%;
+  height: 100%;
+  margin-top: 10px;
+  max-height: 86%;
+  margin-bottom: 10px;
+  overflow: auto;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.arrearsBox .arrears_table .table_detail {
+  width: 100%;
+  max-width: 100%;
+  font-family: verdana, arial, sans-serif;
+  font-size: 12px;
+  color: #333333;
+  border-width: 1px;
+  border-color: #666666;
+  border-collapse: collapse;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.arrearsBox .arrears_table .table_detail th {
+  text-align: left;
+  font-size: 12px;
+  font-weight: 400;
+  color: #999;
+  padding: 8px 12px;
+  border: 1px solid #ebebeb;
+  border-bottom: none;
+  border-top: 1px solid #dadada;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.arrearsBox .arrears_table .table_detail td {
+  min-height: 36px;
+  padding: 6px 12px;
+  border-left: 1px solid #ebebeb;
+  font-size: 13px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.arrearsBox .arrears_table .table_detail tbody tr td:last-child {
+  border-right: 1px solid #ebebeb;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.arrearsBox .arrears_table .table_detail tbody tr:nth-child(odd) {
+  background-color: #f6f6f6;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.arrearsBox .arrears_table .table_detail tbody tr:last-child td {
+  border-bottom: 1px solid #dadada;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.arrearsBox .arrears_table .table_detail .unpay {
+  color: #e82742;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.arrearsBox .arrears_table .table_detail .reimbursement_btn {
+  display: inline-block;
+  border-radius: 2px;
+  background-color: #555;
+  color: #fff;
+  padding: 6px 12px;
+  text-align: center;
+  font-size: 12px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.arrearsBox .arrears_table .empty_box {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.arrearsBox .arrears_table .empty_box .empty_box_image {
+  background: url(../images/empty.png) no-repeat;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 180px;
+  height: 200px;
+  background-size: 100%;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.arrearsBox .arrears_page_num {
+  height: 72px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: auto;
+  bottom: 0;
+  line-height: 72px;
+  margin: 0 20px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.arrearsBox .page_num .ui-pager {
+  line-height: 24px;
+  font-size: 12px;
+  padding: 15px 0 0;
+  margin-left: -65px;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.arrearsBox .page_num .ui-pager .count {
+  color: #241a11;
+  width: auto;
+  margin-right: 10px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.arrearsBox .page_num .ui-pager .number {
+  border: 1px solid #ddd;
+  padding: 0 10px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.arrearsBox .page_num .ui-pager .active {
+  color: #fff;
+  background-color: #20a0ff;
+  border-color: #20a0ff;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.arrearsBox .page_num .ui-pager .jump {
+  margin-left: 10px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.arrearsBox .page_num .ui-pager .jump .ui-pager__jumper {
+  width: 40px;
+  margin: 0 5px;
+  border: 1px solid #d1dbe5;
+  border-radius: 2px;
+  line-height: 18px;
+  padding: 3px 2px;
+  text-align: center;
+  margin: 0 6px;
+  box-sizing: border-box;
+  transition: border .3s;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.redPocketBox .redPocketContent .header {
+  margin-top: 13px;
+  height: 38px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.redPocketBox .redPocketContent .header .note {
+  float: left;
+  font-size: 12px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.redPocketBox .redPocketContent .header .note span {
+  color: #e82742;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.redPocketBox .redPocketContent .header .btnBox {
+  float: right;
+  margin-top: -6px;
+  width: 66px;
+  height: 28px;
+  background: #555;
+  border-radius: 4px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.redPocketBox .redPocketContent .header .btnBox:active {
+  background: #282828;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.redPocketBox .redPocketContent .header .btnBox .sendBtn {
+  color: #ffffff;
+  margin: 6px 15px;
+  font-size: 12px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.redPocketBox .redPocketContent .header .radioBox {
+  float: right;
+  height: 28px;
+  line-height: 28px;
+  margin-top: -6px;
+  margin-right: 15px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.redPocketBox .redPocketContent .header .radioBox .iconfont {
+  font-size: 18px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.redPocketBox .redPocketContent .header .radioBox .font12 {
+  vertical-align: 2px;
+  font-size: 12px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.redPocketBox .redPocketContent .content {
+  display: none;
+  border: 1px solid #EAEAEA;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.redPocketBox .redPocketContent .content .fixedTableHeader table {
+  border-bottom: 1px solid #F7F7F7;
+  border-spacing: 0;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.redPocketBox .redPocketContent .content .fixedTableHeader table thead tr {
+  height: 36px;
+  background: #fff;
+  font-size: 11px;
+  color: #999999;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.redPocketBox .redPocketContent .content td {
+  position: relative;
+  padding-left: 9px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.redPocketBox .redPocketContent .content td:not(:last-child) {
+  border-right: 1px solid #EFEFEF;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.redPocketBox .redPocketContent .content td.activityTitleTd:before {
+  content: "";
+  width: 0;
+  height: 0;
+  border-width: 8px 0 8px 8px;
+  transform: rotate(45deg);
+  border-style: solid;
+  border-color: transparent transparent transparent #555;
+  position: absolute;
+  bottom: -4px;
+  right: 0px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.redPocketBox .redPocketContent .content .redPocketTable.cm_table .textBox {
+  width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.redPocketBox .redPocketContent .content .body {
+  margin-top: -2px;
+  overflow: hidden;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.redPocketBox .redPocketContent .content .body table {
+  border-bottom: 2px solid #F7F7F7;
+  /* td{
+                                            padding-left: 9px;
+                                            &:not(:last-child){
+                                                border-right:2px solid #EFEFEF
+                                            }
+                                        } */
+  /* thead{
+                                            tr{
+                                                height: 32px;
+                                                background: #fff;
+                                                font-size:11px;
+                                                color: #999999;
+                                            }
+                                        } */
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.redPocketBox .redPocketContent .content .body table tbody tr {
+  height: 41px;
+  font-size: 13px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.redPocketBox .redPocketContent .content .body table tbody tr:nth-child(odd) {
+  background: #F7F7F7;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.redPocketBox .redPocketContent .content .body table tbody tr:nth-child(even) {
+  background: #fff;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.redPocketBox .redPocketContent .content .body table tbody tr td:nth-of-type(2) {
+  color: #e82742;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.redPocketBox .redPocketContent .content .body table tbody tr td .verificationBtn {
+  display: inline-block;
+  margin-left: 10px;
+  border: 1px solid #BBBBBB;
+  border-radius: 6px;
+  padding: 3px 5px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.redPocketBox .redPocketContent .content .body table tbody tr td .verificationBtn.am-clickable-active {
+  background: #BBBBBB;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.redPocketBox .redPocketContent .content .body table tbody tr td .verificationBtn.disable {
+  opacity: 0.3;
+  background: #BBBBBB;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.redPocketBox .redPocketContent .empty {
+  display: none;
+  background: url(../images/empty.png) no-repeat;
+  background-size: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 240px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.redPocketBox .redPocketContent .redPocketsPage {
+  height: 72px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: auto;
+  bottom: 0;
+  line-height: 72px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.reservationBox {
+  padding: 0 20px 20px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.reservationBox .openReservationTip {
+  height: 50px;
+  padding: 10px 0;
+  overflow: hidden;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.reservationBox .openReservationTip p {
+  font-size: 12px;
+  color: #222;
+  line-height: 30px;
+  float: left;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.reservationBox .openReservationTip .openReservation {
+  width: 108px;
+  height: 30px;
+  border-radius: 4px;
+  background-color: #555;
+  font-size: 12px;
+  color: #fff;
+  text-align: center;
+  line-height: 30px;
+  float: left;
+  margin-left: 10px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.reservationBox .list {
+  position: absolute;
+  top: 50px;
+  bottom: 20px;
+  overflow: hidden;
+  left: 20px;
+  right: 20px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.reservationBox .list.rights {
+  top: 10px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.reservationBox .list .list-inner li {
+  padding-bottom: 10px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.reservationBox .list .list-inner li .header {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  overflow: hidden;
+  float: left;
+  background: #e1e1e1 url(../images/openbill-customer.png) no-repeat;
+  background-size: 100% 100%;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.reservationBox .list .list-inner li .header img {
+  width: 100%;
+  height: 100%;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.reservationBox .list .list-inner li .info {
+  width: 644px;
+  margin-left: 50px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 14px;
+  position: relative;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.reservationBox .list .list-inner li .info::before {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border: 1px solid #bbb;
+  left: -5px;
+  border-top: none;
+  border-right: none;
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  background: #fff;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.reservationBox .list .list-inner li .info .text-wrap {
+  margin-right: 50px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.reservationBox .list .list-inner li .info .text-wrap .text {
+  font-size: 12px;
+  color: #222;
+  line-height: 20px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.reservationBox .list .list-inner li .info .text-wrap .text p:first-child {
+  width: 50px;
+  float: left;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.reservationBox .list .list-inner li .info .text-wrap .text p:last-child {
+  margin-left: 50px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.reservationBox .list .list-inner li .info .text-wrap .text b {
+  visibility: hidden;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.reservationBox .list .list-inner li .info .status {
+  position: absolute;
+  top: 14px;
+  right: 10px;
+  width: 40px;
+  font-size: 12px;
+  color: #909090;
+  text-align: center;
+  line-height: 18px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.reservationBox .list .list-inner li .info .status .status1.status_1 {
+  color: #009966;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.reservationBox .list .list-inner li .info .status .status1.status_2 {
+  color: #909090;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.reservationBox .list .list-inner li .info .status .status1.status_3 {
+  color: #009966;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.reservationBox .list .list-inner li .info .status .status1.status_4 {
+  color: #909090;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.reservationBox .list .list-inner li .info .status .status1.status_0_1 {
+  color: #E03850;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.reservationBox .list .list-inner li .info .status .status1.status_0_2 {
+  color: #222222;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.reservationBox .list .list-inner li .info .status .status2 {
+  background: #F1F1F1;
+  border-radius: 2px;
+  -webkit-border-radius: 2px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.reservationBox .empty {
+  display: none;
+  background: url(../images/empty.png) no-repeat;
+  background-size: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 240px;
+}
 .page_memberDetails .popup_right_mask {
   position: absolute;
   left: 0;
@@ -1734,13 +2719,61 @@
   background-color: rgba(0, 0, 0, 0.2);
   display: none;
 }
+.page_memberDetails .shops_popup.show .popup_right_mask,
 .page_memberDetails .cardfee_popup.show .popup_right_mask,
 .page_memberDetails .combo_popup.show .popup_right_mask {
   display: inline-block;
 }
+.page_memberDetails .shops_popup.show .popup_right,
 .page_memberDetails .cardfee_popup.show .popup_right,
 .page_memberDetails .combo_popup.show .popup_right {
   right: 0;
+}
+.page_memberDetails .shops_popup .shops_content {
+  display: flex;
+  display: -webkit-flex;
+  box-sizing: border-box;
+}
+.page_memberDetails .shops_popup .shops_content .shops_left {
+  -webkit-flex: 1;
+  flex: 1;
+}
+.page_memberDetails .shops_popup .shops_content .shops_left .shopsWrap {
+  overflow: hidden;
+}
+.page_memberDetails .shops_popup .shops_content .shops_right {
+  -webkit-flex: 1;
+  flex: 1;
+}
+.page_memberDetails .shops_popup .shops_content ul {
+  list-style: none;
+}
+.page_memberDetails .shops_popup .shops_content ul li {
+  height: 40px;
+  font-size: 14px;
+  color: #222;
+  line-height: 40px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding-left: 36px;
+  position: relative;
+  max-width: 170px;
+}
+.page_memberDetails .shops_popup .shops_content ul li.selected:before {
+  background: #555555 url(../images/selectReason.png) no-repeat center center;
+  background-size: 12px 8px;
+  border: none;
+}
+.page_memberDetails .shops_popup .shops_content ul li:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 10px;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #ddd;
+  border-radius: 50%;
 }
 .page_memberDetails .combo_popup .popup_right .card_from {
   padding: 10px 0;
@@ -1809,7 +2842,7 @@
 }
 .page_memberDetails .popup_right .card_from .combo_info {
   font-size: 0px;
-  padding: 4px 15px ;
+  padding: 4px 15px;
 }
 .page_memberDetails .popup_right .card_from .combo_info .combo_times,
 .page_memberDetails .popup_right .card_from .combo_info .combo_remain,
@@ -1902,11 +2935,11 @@
   display: inline-block;
   vertical-align: middle;
   position: absolute;
-  margin-top: 18px ;
+  margin-top: 18px;
   margin-left: -20px;
 }
 .page_memberDetails .popup_right .card_to .toCard_card i::after {
-  content: '';
+  content: "";
   display: inline-block;
   width: 0;
   height: 0;
@@ -1951,7 +2984,7 @@
   margin-top: 40px;
 }
 .page_memberDetails .popup_right .card_trans_total::after {
-  content: '';
+  content: "";
   display: table;
   clear: both;
 }
@@ -1959,7 +2992,7 @@
   color: #eee;
 }
 .page_memberDetails .popup_right .card_trans_total.disabled .trans_fee input {
-  background-color: #eee ;
+  background-color: #eee;
 }
 .page_memberDetails .popup_right .card_trans_total .trans_fee,
 .page_memberDetails .popup_right .card_trans_total .trans_pfee {
@@ -2072,7 +3105,8 @@
 }
 .page_memberDetails .addphoto_model .model_conttent .addphoto_model-header span.left_btn {
   float: left;
-  padding-left: 30px;
+  font-weight: bold;
+  padding-left: 24px;
 }
 .page_memberDetails .addphoto_model .model_conttent .addphoto_model-header span.left_btn label {
   display: inline-block;
@@ -2084,7 +3118,7 @@
   left: -1px;
 }
 .page_memberDetails .addphoto_model .model_conttent .addphoto_model-header span.left_btn label:before {
-  content: ' ';
+  content: " ";
   height: 14px;
   width: 1px;
   background: #000;
@@ -2093,7 +3127,7 @@
   top: 2px;
 }
 .page_memberDetails .addphoto_model .model_conttent .addphoto_model-header span.left_btn label:after {
-  content: ' ';
+  content: " ";
   height: 1px;
   width: 14px;
   background: #000;
@@ -2107,7 +3141,7 @@
   margin-top: -10px;
 }
 .page_memberDetails .addphoto_model .model_conttent .addphoto_model-header span.right_btn:after {
-  content: ' ';
+  content: " ";
   height: 15px;
   width: 15px;
   display: block;
@@ -2123,7 +3157,7 @@
   top: 0;
 }
 .page_memberDetails .addphoto_model .model_conttent .addphoto_model-body .left-dot:before {
-  content: ' ';
+  content: " ";
   height: 10px;
   width: 10px;
   background: #f2f2f2;
@@ -2149,7 +3183,7 @@
 .page_memberDetails .addphoto_model .model_conttent .addphoto_model-body .mbody-left:before {
   height: 98%;
   width: 2px;
-  content: ' ';
+  content: " ";
   display: block;
   position: absolute;
   left: 0;
@@ -2207,7 +3241,7 @@
   bottom: 0;
   height: 95%;
   width: 2px;
-  content: ' ';
+  content: " ";
   display: block;
   background: #f2f2f2;
 }
@@ -2336,7 +3370,7 @@
   margin-right: 4px;
 }
 .page_memberDetails .addphoto_model .model_conttent .addphoto_model-body .mbody-right .right_top .link_box div .e_point::before {
-  content: '!';
+  content: "!";
   position: absolute;
   left: 6px;
   top: 2px;
@@ -2377,7 +3411,7 @@
   vertical-align: top;
 }
 .page_memberDetails .addphoto_model .model_conttent .addphoto_model-body .mbody-right .right_top .linked_box span.item_price:after {
-  content: ' ';
+  content: " ";
   position: absolute;
   right: -15px;
   background: #ddd;
@@ -2528,7 +3562,7 @@
   vertical-align: bottom;
 }
 .page_memberDetails .addphoto_model .model_conttent .addphoto_model-body .mbody-right .right_bottom .text_content .photo_upload_boxs ul li.empty_box:after {
-  content: ' ';
+  content: " ";
   width: 26px;
   height: 1px;
   left: 11px;
@@ -2537,7 +3571,7 @@
   background: #BBBBBB;
 }
 .page_memberDetails .addphoto_model .model_conttent .addphoto_model-body .mbody-right .right_bottom .text_content .photo_upload_boxs ul li.empty_box:before {
-  content: ' ';
+  content: " ";
   width: 1px;
   height: 26px;
   left: 23px;
@@ -2564,7 +3598,7 @@
   margin-right: 4px;
 }
 .page_memberDetails .addphoto_model .model_conttent .addphoto_model-body .mbody-right .right_bottom .bootom_prompt .e_point::before {
-  content: '!';
+  content: "!";
   position: absolute;
   left: 6px;
   top: 2px;
@@ -2655,7 +3689,8 @@
 }
 .page_memberDetails .addqzone_model .model_conttent .addqzone_model-header span.left_btn {
   float: left;
-  padding-left: 30px;
+  font-weight: bold;
+  padding-left: 20px;
 }
 .page_memberDetails .addqzone_model .model_conttent .addqzone_model-header span.left_btn label {
   display: inline-block;
@@ -2667,7 +3702,7 @@
   left: -1px;
 }
 .page_memberDetails .addqzone_model .model_conttent .addqzone_model-header span.left_btn label:before {
-  content: ' ';
+  content: " ";
   height: 14px;
   width: 1px;
   background: #000;
@@ -2676,7 +3711,7 @@
   top: 2px;
 }
 .page_memberDetails .addqzone_model .model_conttent .addqzone_model-header span.left_btn label:after {
-  content: ' ';
+  content: " ";
   height: 1px;
   width: 14px;
   background: #000;
@@ -2690,7 +3725,7 @@
   margin-top: -10px;
 }
 .page_memberDetails .addqzone_model .model_conttent .addqzone_model-header span.right_btn:after {
-  content: ' ';
+  content: " ";
   height: 15px;
   width: 15px;
   display: block;
@@ -2703,6 +3738,7 @@
   display: block;
   box-sizing: border-box;
   position: relative;
+  background: #f7f7f7;
 }
 .page_memberDetails .addqzone_model .model_conttent .addqzone_model-body textarea {
   border: 0;
@@ -2716,12 +3752,13 @@
   padding-top: 10px;
   box-sizing: border-box;
   top: 0;
+  resize: none;
 }
 .page_memberDetails .addqzone_model .model_conttent .addqzone_model-body .photo_upload_boxs {
   height: 60px;
   width: 100%;
   position: absolute;
-  top: 123px;
+  bottom: 0;
 }
 .page_memberDetails .addqzone_model .model_conttent .addqzone_model-body .photo_upload_boxs ul {
   margin: 0;
@@ -2748,7 +3785,7 @@
   vertical-align: bottom;
 }
 .page_memberDetails .addqzone_model .model_conttent .addqzone_model-body .photo_upload_boxs ul li.empty_box:after {
-  content: ' ';
+  content: " ";
   width: 26px;
   height: 1px;
   left: 11px;
@@ -2757,7 +3794,7 @@
   background: #BBBBBB;
 }
 .page_memberDetails .addqzone_model .model_conttent .addqzone_model-body .photo_upload_boxs ul li.empty_box:before {
-  content: ' ';
+  content: " ";
   width: 1px;
   height: 26px;
   left: 23px;
@@ -2823,6 +3860,44 @@
   transform: translateX(-50%);
   -webkit-transform: translateX(-50%);
 }
+.page_memberDetails .am-comment {
+  display: none;
+  position: absolute;
+  z-index: 2;
+  max-width: 500px;
+  min-height: 50px;
+  border-radius: 4px;
+  padding: 8px;
+  font-size: 12px;
+  background: #fff;
+  box-shadow: 0px 1px 12px 0px rgba(168, 168, 168, 0.5);
+}
+.page_memberDetails .am-comment::after {
+  content: "";
+  display: block;
+  bottom: -8px;
+  left: 20px;
+  width: 0;
+  height: 0;
+  border-top: 6px solid #fff;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  position: absolute;
+  top: 100%;
+  transform: translateX(50%);
+  -webkit-transform: translateX(50%);
+}
+.page_memberDetails .am-comment .title {
+  color: #999;
+}
+.page_memberDetails .am-comment .info {
+  margin-top: 5px;
+  color: #222;
+  overflow: hidden;
+}
+.page_memberDetails .am-comment .info .red {
+  color: #E82742;
+}
 .addremark_model {
   position: fixed;
   top: 0;
@@ -2874,7 +3949,8 @@
 }
 .addremark_model .model_conttent .addremark_model-header span.left_btn {
   float: left;
-  padding-left: 30px;
+  font-weight: bold;
+  padding-left: 20px;
 }
 .addremark_model .model_conttent .addremark_model-header span.left_btn label {
   display: inline-block;
@@ -2886,7 +3962,7 @@
   left: -1px;
 }
 .addremark_model .model_conttent .addremark_model-header span.left_btn label:before {
-  content: ' ';
+  content: " ";
   height: 14px;
   width: 1px;
   background: #000;
@@ -2895,7 +3971,7 @@
   top: 2px;
 }
 .addremark_model .model_conttent .addremark_model-header span.left_btn label:after {
-  content: ' ';
+  content: " ";
   height: 1px;
   width: 14px;
   background: #000;
@@ -2907,7 +3983,7 @@
   float: right;
 }
 .addremark_model .model_conttent .addremark_model-header span.right_btn:before {
-  content: ' ';
+  content: " ";
   display: block;
   height: 32px;
   width: 32px;
@@ -2916,7 +3992,7 @@
   position: absolute;
 }
 .addremark_model .model_conttent .addremark_model-header span.right_btn:after {
-  content: ' ';
+  content: " ";
   height: 15px;
   width: 15px;
   display: block;
@@ -2942,6 +4018,7 @@
   padding-top: 10px;
   box-sizing: border-box;
   top: 0;
+  resize: none;
 }
 .addremark_model .model_conttent .addremark_model-footer {
   height: 80px;
@@ -2966,6 +4043,128 @@
   background: #555;
 }
 .addremark_model .model_conttent .addremark_model-footer button.cancel_btn {
+  color: #000;
+  background: #FFF;
+  border: 1px solid #ddd;
+}
+.card_model {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+}
+.card_model.hide {
+  display: none;
+}
+.card_model .card_model_mask {
+  background-color: #222;
+  opacity: 0.7;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.card_model .model_conttent {
+  padding: 45px 20px 80px;
+  box-sizing: border-box;
+  opacity: 1;
+  width: 50%;
+  height: 25%;
+  min-height: 220px;
+  position: absolute;
+  top: 25%;
+  left: 25%;
+  background-color: #FFF;
+  border-radius: 6px;
+}
+.card_model .model_conttent .card_model-header {
+  height: 30px;
+  position: absolute;
+  box-sizing: border-box;
+  width: 100%;
+  left: 0;
+  top: 0;
+  padding: 20px 20px 0 0;
+  height: 45px;
+}
+.card_model .model_conttent .card_model-header span {
+  display: inline-block;
+  color: #000;
+  font-size: 15px;
+  position: relative;
+}
+.card_model .model_conttent .card_model-header span.left_btn {
+  float: left;
+  font-weight: bold;
+  padding-left: 20px;
+}
+.card_model .model_conttent .card_model-header span.right_btn {
+  float: right;
+}
+.card_model .model_conttent .card_model-header span.right_btn:before {
+  content: " ";
+  display: block;
+  height: 32px;
+  width: 32px;
+  background-color: transparent;
+  margin: -8px 0 0 -8px;
+  position: absolute;
+}
+.card_model .model_conttent .card_model-header span.right_btn:after {
+  content: " ";
+  height: 15px;
+  width: 15px;
+  display: block;
+  background: url("../images/icons_sprite/close_employee.png") no-repeat 0px 0px;
+  background-size: 15px 15px;
+}
+.card_model .model_conttent .card_model-body {
+  height: 100%;
+  width: 100%;
+  display: block;
+  box-sizing: border-box;
+  position: relative;
+}
+.card_model .model_conttent .card_model-body input {
+  border: 0;
+  background: #f7f7f7;
+  width: 100%;
+  height: 40px;
+  color: #555;
+  font-size: 14px;
+  padding-left: 20px;
+  margin-top: 10px;
+  box-sizing: border-box;
+}
+.card_model .model_conttent .card_model-body .card_no_txt {
+  margin-top: 10px;
+}
+.card_model .model_conttent .card_model-footer {
+  height: 80px;
+  line-height: 80px;
+  position: absolute;
+  box-sizing: border-box;
+  width: 100%;
+  left: 0;
+  bottom: 0;
+  text-align: center;
+}
+.card_model .model_conttent .card_model-footer button {
+  padding: 10px 60px;
+  border: 0;
+  margin-left: 10px;
+  margin-right: 10px;
+  font-size: 15px;
+  border-radius: 3px;
+}
+.card_model .model_conttent .card_model-footer button.save_btn {
+  color: #FFF;
+  background: #555;
+}
+.card_model .model_conttent .card_model-footer button.cancel_btn {
   color: #000;
   background: #FFF;
   border: 1px solid #ddd;
@@ -3038,7 +4237,7 @@
   float: right;
 }
 .exchange_model .model_content .exchange_model-header span.exheadright:after {
-  content: ' ';
+  content: " ";
   height: 15px;
   width: 15px;
   display: block;
@@ -3203,7 +4402,7 @@
   float: right;
 }
 .privilegeCard_model .model_content .privilegeCard_model-header span.headright:after {
-  content: ' ';
+  content: " ";
   height: 15px;
   width: 15px;
   display: block;
@@ -3233,7 +4432,8 @@
   padding: 10px 0 0 0;
   width: 100%;
 }
-.privilegeCard_model .model_content .privilegeCard_model-body .validDate .item .item_label {
+.privilegeCard_model .model_content .privilegeCard_model-body .validDate .item .item_label,
+.privilegeCard_model .model_content .privilegeCard_model-body .validDate .item .unit_price_wrap {
   font-size: 14px;
   color: #222;
   width: 80px;
@@ -3241,6 +4441,9 @@
   line-height: 38px;
   display: inline-block;
   vertical-align: top;
+}
+.privilegeCard_model .model_content .privilegeCard_model-body .validDate .item .unit_price_wrap {
+  padding-left: 10px;
 }
 .privilegeCard_model .model_content .privilegeCard_model-body .validDate .item .item_wrap {
   width: 150px;
@@ -3439,38 +4642,40 @@
   font-size: 14px;
   line-height: 40px;
 }
-.common_selectBox .listbox:after {
-  content: "";
-  width: 0;
-  height: 0;
-  border-width: 0 6px 6px;
-  border-style: solid;
+.common_selectBox .listbox:before {
+  content: '';
+  border: 7px solid #555;
   border-color: transparent transparent #555;
   position: absolute;
-  top: -6px;
-  left: 10px;
+  top: -14px;
+  left: 16px;
 }
-.common_selectBox .listbox:before {
-  content: "";
-  width: 0;
-  height: 0;
-  border-width: 0 4px 4px;
-  border-style: solid;
-  border-color: transparent transparent #FFF;
+.common_selectBox .listbox:after {
+  content: '';
+  border: 7px solid #fff;
+  border-color: transparent transparent #fff;
   position: absolute;
-  top: -4px;
-  left: 12px;
-  z-index: 2;
+  top: -13px;
+  left: 16px;
+}
+.common_selectBox .listbox.atTop:before {
+  top: unset;
+  bottom: -15px;
+  border-color: #555 transparent transparent;
+}
+.common_selectBox .listbox.atTop:after {
+  top: unset;
+  bottom: -14px;
+  border-color: #fff transparent transparent;
 }
 .common_selectBox .value {
   display: block;
   float: left;
-  width: 90%;
+  width: 88%;
   height: 100%;
   color: #222;
   font-size: 14px;
   overflow: hidden;
-  text-overflow: ellipsis;
   white-space: nowrap;
   padding: 0 12px;
   line-height: 36px;
@@ -3510,7 +4715,7 @@
   outline: none;
 }
 .mui-switch:before {
-  content: '';
+  content: "";
   width: 24px;
   height: 24px;
   position: absolute;
@@ -3525,7 +4730,7 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 .mui-switch:after {
-  content: '否';
+  content: "否";
   color: #555;
   position: absolute;
   left: 26px;
@@ -3543,7 +4748,7 @@
   left: 26px;
 }
 .mui-switch:checked:after {
-  content: '是';
+  content: "是";
   color: #FFF;
   position: absolute;
   left: 10px;
@@ -3582,4 +4787,399 @@
 }
 .MGJ_highlight {
   color: #e82742;
+}
+.c_red .red {
+  color: #e82742;
+}
+.mask_box,
+.mask_box_two {
+  width: 100%;
+  min-height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  z-index: 100;
+  top: -51px;
+  bottom: 0;
+  display: none;
+}
+.mask_box.show_mask,
+.mask_box_two.show_mask {
+  display: block;
+}
+.record_content {
+  width: 50%;
+  height: 100%;
+  position: absolute;
+  right: -50%;
+  top: 0;
+  background-color: #fff;
+  z-index: 120;
+  transition: right 0.3s;
+}
+.record_content.show_detail {
+  right: 0;
+}
+.record_content .record_title {
+  margin: 40px 30px 8px;
+  font-size: 28px;
+}
+.record_content .record_instruction {
+  margin: 0 30px 20px;
+  font-size: 16px;
+}
+.record_content .record_instruction .oblique_line {
+  display: inline-block;
+  font-size: 18px;
+  line-height: 15px;
+  vertical-align: bottom;
+  margin: 0 4px 0 6px;
+}
+.record_content .record_instruction .remain_num {
+  color: #e82742;
+}
+.record_content .record_table_detail {
+  width: 100%;
+  height: 82%;
+  overflow: auto;
+  overflow-x: hidden;
+}
+.record_content .record_table_detail .table_detail {
+  width: 100%;
+  max-width: 100%;
+  font-family: verdana, arial, sans-serif;
+  font-size: 12px;
+  color: #333333;
+  border-width: 1px;
+  border-color: #666666;
+  border-collapse: collapse;
+}
+.record_content .record_table_detail .table_detail th {
+  border: none;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 400;
+  color: #999;
+  padding: 8px 10px;
+}
+.record_content .record_table_detail .table_detail td {
+  padding: 12px 8px;
+  border-left: 1px solid #ebebeb;
+  font-size: 13px;
+}
+.record_content .record_table_detail .table_detail tbody tr td:last-child {
+  border-right: 1px solid #ebebeb;
+}
+.record_content .record_table_detail .table_detail tbody tr:nth-child(odd) {
+  background-color: #f6f6f6;
+}
+.record_content .record_table_detail .table_detail tbody tr:first-child td {
+  border-top: 1px solid #dadada;
+}
+.record_content .record_table_detail .table_detail tbody tr:last-child td {
+  border-bottom: 1px solid #dadada;
+}
+.record_content .record_table_detail .table_detail .first_table {
+  padding-left: 30px;
+}
+.record_content .record_table_detail .table_detail .check_name {
+  color: #00b3ea;
+}
+.record_content .record_table_detail .table_detail .check_name_color {
+  color: #666;
+}
+.selected_membercard {
+  display: none;
+  width: 407px;
+  max-height: 340px;
+  background-color: #fff;
+  z-index: 110;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 5px;
+  text-align: center;
+}
+.selected_membercard.show_active {
+  display: block;
+}
+.selected_membercard .title {
+  font-size: 15px;
+  line-height: 50px;
+  color: #333;
+  padding-top: 4px;
+}
+.selected_membercard .delete_sel_member {
+  background: url("../images/icons_sprite/close_employee.png") no-repeat;
+  width: 16px;
+  height: 16px;
+  margin: 20px;
+  background-size: 100%;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.selected_membercard .sel_membercards {
+  display: inline-block;
+  width: auto;
+  max-height: 270px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  margin: 0 20px 20px;
+}
+.selected_membercard li {
+  background: url(../images/card_bg3.png) no-repeat;
+  background-size: 100%;
+  height: 50px;
+  margin: 0 0 15px 0;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 16px 16px 0 0;
+  position: relative;
+  width: 280px;
+  display: inline-block;
+}
+.selected_membercard li.type_two {
+  background: url("../images/card_bg1.png") no-repeat;
+  background-size: 100% 100%;
+}
+.selected_membercard li.type_one {
+  background: url("../images/card_bg2.png") no-repeat;
+  background-size: 100% 100%;
+}
+.selected_membercard li.type_zero {
+  background: url("../images/card_bg3.png") no-repeat;
+  background-size: 100% 100%;
+}
+.selected_membercard li .card_base_info {
+  padding: 8px 10px 0 18px;
+  height: 40px;
+  text-align: left;
+}
+.selected_membercard li .card_base_info .info_left,
+.selected_membercard li .card_base_info .info_right {
+  display: inline-block;
+  vertical-align: middle;
+}
+.selected_membercard li .card_base_info .info_left .card_name {
+  font-size: 14px;
+  color: #fff;
+  width: 100px;
+  height: 20px;
+  line-height: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.selected_membercard li .card_base_info .info_left .card_no {
+  font-size: 12px;
+  color: #7e7e7e;
+  height: 20px;
+  line-height: 20px;
+  overflow: hidden;
+}
+.selected_membercard li .card_base_info .info_left .card_no .cardedit {
+  margin-left: 10px;
+  display: inline-block;
+  vertical-align: middle;
+  width: 16px;
+  height: 16px;
+  background: url("../images/card_edit_icon.png") no-repeat center center;
+  background-size: 11px 14px;
+  position: relative;
+}
+.selected_membercard li .card_base_info .info_right {
+  float: right;
+  font-size: 14px;
+  max-width: 146px;
+  max-height: 40px;
+  overflow: hidden;
+}
+.selected_membercard li .card_base_info .info_right .card_fee,
+.selected_membercard li .card_base_info .info_right .card_present {
+  display: inline-block;
+  vertical-align: middle;
+}
+.selected_membercard li .card_base_info .info_right.hasnofee .card_fee,
+.selected_membercard li .card_base_info .info_right.hasnofee .card_present {
+  display: none;
+}
+.selected_membercard li .card_base_info .info_right.hasnofee .nofee {
+  font-size: 14px;
+  color: #fff;
+  display: inline-block;
+  vertical-align: top;
+}
+.selected_membercard li .card_base_info .info_right .nofee {
+  display: none;
+}
+.selected_membercard li .card_base_info .info_right .fee_num,
+.selected_membercard li .card_base_info .info_right .fee_name {
+  height: 20px;
+  line-height: 20px;
+}
+.selected_membercard li .card_base_info .info_right .card_fee .fee_num {
+  font-size: 14px;
+  color: #fff;
+  text-align: center;
+}
+.selected_membercard li .card_base_info .info_right .card_fee .fee_name {
+  font-size: 12px;
+  color: #7e7e7e;
+  text-align: center;
+}
+.selected_membercard li .card_base_info .info_right .card_present {
+  margin-left: 0px;
+}
+.selected_membercard li .card_base_info .info_right .card_present .fee_num {
+  font-size: 14px;
+  color: #fff;
+  text-align: center;
+}
+.selected_membercard li .card_base_info .info_right .card_present .fee_name {
+  font-size: 12px;
+  color: #7e7e7e;
+  text-align: center;
+}
+.selected_membercard li .duedatewrap {
+  padding: 0 18px;
+  font-size: 14px;
+  color: #888;
+  text-align: left;
+}
+#redPocketsDialogWrap {
+  display: none;
+  position: absolute;
+  top: -44px;
+  width: 100%;
+  min-height: 100%;
+  padding-bottom: 44px;
+  background: rgba(0, 0, 0, 0.5);
+}
+#redPocketsDialogWrap .sendPocketdialog {
+  display: block;
+  position: absolute;
+  z-index: 110;
+  top: 50%;
+  left: 50%;
+  width: 570px;
+  max-height: 445px;
+  background-color: #fff;
+  transform: translate(-50%, -50%);
+  border-radius: 4px;
+}
+#redPocketsDialogWrap .sendPocketdialog .title {
+  margin: 12px 0 0 25px;
+}
+#redPocketsDialogWrap .sendPocketdialog .title .titleContent {
+  font-weight: bold;
+  font-size: 16px;
+  color: #333333;
+  text-align: left;
+}
+#redPocketsDialogWrap .sendPocketdialog .icon-guanbi2 {
+  float: right;
+  margin-right: 15px;
+  font-size: 20px;
+  color: #909090;
+}
+#redPocketsDialogWrap .sendPocketdialog .icon-guanbi2:active {
+  color: #282828;
+}
+#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox {
+  margin: 22px 20px 20px 20px;
+  max-height: 300px;
+  overflow: hidden;
+}
+#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem {
+  position: relative;
+  padding: 10px;
+  margin-bottom: 18px;
+}
+#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem:nth-child(odd) {
+  border: 1px solid #F2F2F2;
+  border-radius: 4px;
+}
+#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem:nth-child(even) {
+  background: #F6F6F6;
+  border-radius: 4px;
+}
+#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem .pocketCheckBox {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  color: #999;
+}
+#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem .pocketCheckBox .iconfont::before {
+  font-size: 22px;
+}
+#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem .pocketCheckBox .icon-queren {
+  color: #555;
+}
+#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem .pocketContent {
+  padding-left: 30px;
+}
+#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem .pocketContent .baseInfo {
+  text-align: left;
+  font-size: 14px;
+  color: #333333;
+}
+#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem .pocketContent .rightDesc {
+  float: right;
+  font-size: 14px;
+  color: #333333;
+}
+#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem .pocketContent .category {
+  font-size: 13px;
+  color: #E82742;
+}
+#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem .pocketContent .availablePeriod {
+  font-size: 13px;
+  color: #151515;
+}
+#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem .pocketContent .tipsContent {
+  display: block;
+  font-size: 12px;
+  color: #999999;
+}
+#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem .pocketContent .tipsContent span {
+  color: #999;
+  font-weight: bold;
+}
+#redPocketsDialogWrap .sendPocketdialog .btnBox {
+  text-align: center;
+  padding-bottom: 29px;
+}
+#redPocketsDialogWrap .sendPocketdialog .btnBox .confirmBox {
+  display: inline-block;
+  width: 165px;
+  padding: 10px 10px;
+  background: #595959;
+  border-radius: 4px;
+}
+#redPocketsDialogWrap .sendPocketdialog .btnBox .confirmBox:active {
+  background: #282828;
+}
+#redPocketsDialogWrap .sendPocketdialog .btnBox .confirmBox .confirmText {
+  color: #fff;
+  font-size: 14px;
+}
+#redPocketsDialogWrap .sendPocketdialog .btnBox .cancelBox {
+  display: inline-block;
+  margin-left: 30px;
+  width: 165px;
+  padding: 10px 10px;
+  background: #FFFFFF;
+  border: 1px solid #DDDDDD;
+  border-radius: 4px;
+}
+#redPocketsDialogWrap .sendPocketdialog .btnBox .cancelBox:active {
+  background: #DDDDDD;
+}
+#redPocketsDialogWrap .sendPocketdialog .btnBox .cancelBox .cancelText {
+  color: #222;
+  font-size: 14px;
+}
+body.windows .page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.redPocketBox .redPocketContent .content td .textBox {
+  width: 100%;
 }

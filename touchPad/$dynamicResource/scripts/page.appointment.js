@@ -46,40 +46,65 @@
         },
         //[{"name":"显示男女客","key":"genderSelector","flag":1}]
         show: function(items, cb) {
-            this.$serviceItems.empty();
+			this.$serviceItems.empty();
+			var dutyid = that.$.find(".right-part.member").attr("data-dutyid");
+			console.log(dutyid,"当前选中手艺人的dutyid员工类型");
             for (var i = 0; i < items.length; i++) {
-                var itemClass = items[i];
+				var itemClass = items[i];
                 for (var key in itemClass) {
                     var $classItems = $("<div></div>").addClass("classItems");
                     //添加项目类型名称
                     var $itemClassDiv = $("<div></div>").addClass("itemClass");
-                    $itemClassDiv.text(key);
-                    $classItems.append($itemClassDiv);
+					$itemClassDiv.text(key);
+					$classItems.append($itemClassDiv);
                     this.$serviceItems.append($classItems);
                     var classItems = itemClass[key];
                     //存放类型的项目
                     var $divItems = $("<div></div>").addClass("items");
                     //循环项目
-                    var $itemDiv = null;
+					var $itemDiv = null;
+					var num = 0;
                     for (var j = 0; j < classItems.length; j++) {
                         if (!$itemDiv) {
                             $itemDiv = $("<div></div>").addClass("item clearfix");
                         }
                         var $span = $("<span></span>").addClass("am-clickable");
                         var spanText = classItems[j].name;
-                        $span.text(spanText).attr("item-id", classItems[j].id);
+						$span.text(spanText).attr("item-id", classItems[j].id);
                         if (classItems[j].flag) {
                             $span.addClass("selected");
-                        }
-                        $itemDiv.append($span);
+						}
+						//按照当前手艺人员工类型来显示对应的项目
+						if(classItems[j].dutyid && classItems[j].dutyid.indexOf(dutyid+"") > -1 || !classItems[j].dutyid){
+							num++;
+							$itemDiv.append($span);
+						}
                         if (((j + 1) % 5 == 0 && j > 0) || j == classItems.length - 1) {
                             $divItems.append($itemDiv);
                             $classItems.append($divItems);
                             $itemDiv = null;
                         }
-                    }
+					}
+					// console.log(num,"可预约的项目数量")
+					//判断项目都不能用的情况下隐藏大类
+					if(num){
+						$classItems.show();
+					}else{
+						$classItems.hide();
+					}
                 }
-            }
+			}
+			//大类是否全部隐藏
+			var hidNum = 0;
+			this.$.find(".classItems").each(function(i,v){
+				if($(v).css("display") == "none"){
+					hidNum++;
+				}
+			});
+			console.log(hidNum,"隐藏的项目大类数量")
+			if(hidNum == this.$.find(".classItems").length){
+				return am.msg("当前手艺人没有可预约项目~");
+			}
             this.$.css("display", "-webkit-box");
             this.cb = cb;
             this.scrollview.refresh();
@@ -112,6 +137,25 @@
             this.$condition = this.$.find(".condition").keyup(function(evt) {
                 if (evt.keyCode == 13) {
                     that.$search.trigger("vclick");
+                }
+                am.listSelect.hide();
+            }).on("input",function(){
+                var $this = $(this),
+                    val = $this.val();
+                if (val === "0" || val) {
+                    var timer = ''
+                    if (timer && timer.clearExecuted) {
+                        timer.clearExecuted();
+                        timer = am.listSelect.handleTimer(function () {
+                            that.optimizeCardandCustomer($this, val);
+                        }, 500);
+                    } else {
+                        timer = am.listSelect.handleTimer(function () {
+                            that.optimizeCardandCustomer($this, val);
+                        }, 500);
+                    }
+                } else {
+                    am.listSelect.hide();
                 }
             });
             this.$search = this.$.find(".search");
@@ -230,11 +274,15 @@
                 that.$add.hide();
 
                 that.$btnGroup.removeClass("active");
-                that.searchMember(str);
+                if(!that.searchKeywords || that.searchKeywords.replace('j0102','*0102').replace('*0102','')!=str){
+                    that.searchKeywords = str;
+                }
+                that.searchMember();
 
                 that.clearContent();
                 that.$.removeClass("empty");
                 dom.find(".iconfont").attr("class", "iconfont icon-checkboxoutlineblank");
+                am.listSelect.hide();
             });
 
             this.$searchMoreBtn.vclick(function() {
@@ -256,7 +304,10 @@
                 }
                 that.clearContent();
                 that.$.removeClass("empty");
-                that.searchMember(str, true);
+                if(that.searchKeywords.replace('j0102','*0102').replace('*0102','')!=str){
+                    that.searchKeywords = str;
+                }
+                that.searchMember();
             });
 
             this.$new.vclick(function() {
@@ -295,10 +346,12 @@
                 months: "auto",
                 min: new Date(),
                 setOnDayTap: true,
+                endYear: amGloble.now().getFullYear()+50,
                 onSet: function(valueText, inst) {
                     console.log(valueText);
                     that.$date.html(new Date(valueText.valueText).format("yyyy-mm-dd"));
                     that.calTime(new Date(valueText.valueText));
+                    that.getShiftList(new Date(valueText.valueText).getTime());
                 }
             });
 
@@ -332,71 +385,75 @@
                 if (that.serviceItemDetails.length == 0) {
                     am.msg("请在系统中设置预约项目");
                     return false;
-                }
-                var _this = $(this);
-                serviceSelect.show(that.serviceItemDetails, function(res) {
-                    if (res) {
-                        var items = that.serviceItemDetails;
-                        _this.empty();
-                        //选中的项目有哪些 flag:0未选中1选中
-                        for (var i = 0; i < items.length; i++) {
-                            var itemClass = items[i];
-                            for (var key in itemClass) {
-                                var classItems = itemClass[key];
-                                for (var j = 0; j < classItems.length; j++) {
-                                    for (var k = 0; k < res.length; k++) {
-                                        if (res[k].itemId == classItems[j].id) {
-                                            classItems[j].flag = res[k].flag;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        //选中项目显示出来
-                        for (var k = 0; k < res.length; k++) {
-                            if (res[k].flag) {
-                                var $span = $("<span></span>").addClass("item-span");
-                                $span.text(res[k].name);
-                                _this.append($span);
-                            }
-                        }
+				}
+				var _this = $(this);
+				serviceSelect.show(that.serviceItemDetails, function(res) {
+					if (res) {
+						var items = that.serviceItemDetails;
+						_this.empty();
+						//选中的项目有哪些 flag:0未选中1选中
+						for (var i = 0; i < items.length; i++) {
+							var itemClass = items[i];
+							for (var key in itemClass) {
+								var classItems = itemClass[key];
+								for (var q = 0; q < classItems.length; q++) {
+									//重置一下选中的标记
+									classItems[q].flag = 0;
+								}
+								for (var j = 0; j < classItems.length; j++) {
+									for (var k = 0; k < res.length; k++) {
+										if (res[k].itemId == classItems[j].id) {
+											classItems[j].flag = res[k].flag;
+										}
+									}
+								}
+							}
+						}
+						//选中项目显示出来
+						for (var k = 0; k < res.length; k++) {
+							if (res[k].flag) {
+								var $span = $("<span></span>").addClass("item-span");
+								$span.text(res[k].name);
+								_this.append($span);
+							}
+						}
 
-                        //组装要保存的高级预约模式的json
-                        that.itemProp = {};
-                        that.itemProp.strategy = am.metadata.configs.strategy;
-                        var times = 0;
-                        var temTimes = 0;
-                        var items = that.serviceItemDetails;
-                        var itemsJson = {};
-                        for (var i = 0; i < items.length; i++) {
-                            var itemClass = items[i];
-                            for (var key in itemClass) {
-                                var classItems = itemClass[key];
-                                for (var j = 0; j < classItems.length; j++) {
-                                    if (classItems[j].flag) {
-                                        if (classItems[j].time) {
-                                            temTimes = classItems[j].time;
-                                            if (times > 0) {
-                                                if (temTimes > times) {
-                                                    times = temTimes;
-                                                }
-                                            } else {
-                                                times = classItems[j].time;
-                                            }
-                                        }
-                                        var itemKey = classItems[j].id;
-                                        itemsJson[itemKey] = classItems[j];
-                                    }
-                                }
-                            }
-                        }
-                        that.itemProp.times = times;
-                        that.itemProp.items = itemsJson;
-                        // console.log("that.serviceItemDetails2====", that.serviceItemDetails)
-                        // console.log("that.that.itemProp====", that.itemProp)
-                        // _this.saveSetting(res);
-                    }
-                });
+						//组装要保存的高级预约模式的json
+						that.itemProp = {};
+						that.itemProp.strategy = am.metadata.configs.strategy;
+						var times = 0;
+						var temTimes = 0;
+						var items = that.serviceItemDetails;
+						var itemsJson = {};
+						for (var i = 0; i < items.length; i++) {
+							var itemClass = items[i];
+							for (var key in itemClass) {
+								var classItems = itemClass[key];
+								for (var j = 0; j < classItems.length; j++) {
+									if (classItems[j].flag) {
+										if (classItems[j].time) {
+											temTimes = classItems[j].time;
+											if (times > 0) {
+												if (temTimes > times) {
+													times = temTimes;
+												}
+											} else {
+												times = classItems[j].time;
+											}
+										}
+										var itemKey = classItems[j].id;
+										itemsJson[itemKey] = classItems[j];
+									}
+								}
+							}
+						}
+						that.itemProp.times = times;
+						that.itemProp.items = itemsJson;
+						// console.log("that.serviceItemDetails2====", that.serviceItemDetails)
+						// console.log("that.that.itemProp====", that.itemProp)
+						// _this.saveSetting(res);
+					}
+				});
             });
 
             this.$member = this.$content.find(".member");
@@ -410,7 +467,12 @@
                     _this
                         .html(ret.name)
                         .attr("data-id", ret.id)
-                        .attr("data-name", ret.name2);
+                        .attr("data-name", ret.name2)
+                        .attr("data-dutyid", ret.dutyid)
+						.attr("data-nickname", ret.nickname || ret.name2);
+						//清空项目框
+                        $("#projectItems .projectDetail").html("");
+                        that.renderShiftInfo(ret.id);
                 });
             });
 
@@ -471,47 +533,24 @@
             // });
 
             this.$tbody = $('.page_appointment .serviceTable-warp').on('vclick','.list-body',function(){
-                var item = $(this).data("item");
-                console.log(item);
-                that.$searchresult.hide();
-                that.$create.show();
-                that.$content.show();
-                if (that.mgjReservationItem) {
-                    that.$content.find("#projectItemClass").hide();
-                    that.$content.find("#projectItems").show();
-                } else {
-                    that.$content.find("#projectItemClass").show();
-                    that.$content.find("#projectItems").hide();
+				var item = $(this).data("item");
+				if (!(item.allowkd*1) && item.cardshopId != am.metadata.userInfo.shopId) {
+                    am.msg("此会员卡不允许跨店消费！");
+                    return;
                 }
-                that.$find.show();
-                that.$add.hide();
-
-                that.$find.find(".name").html(item.name);
-                if (item.sex == "M") {
-                    that.$sex.addClass("m").removeClass("f");
-                } else {
-                    that.$sex.addClass("f").removeClass("m");
-                }
-                that.$find.find(".tel").html(item.mobile);
-                that.$find.find(".header").html(
-                    am.photoManager.createImage(
-                        "customer",
-                        {
-                            parentShopId: am.metadata.userInfo.parentShopId,
-                            updateTs: item.lastphotoupdatetime || new Date().getTime()
-                        },
-                        item.id + ".jpg",
-                        "s"
-                    )
-                );
-                that.$find.find(".level").html(that.getShopName(item.shopId));
-                that.$find.find(".score").html(item.points);
-                that.$find.find(".card").html(item.cardName + "(" + item.cardNo + ")");
-                that.$find.find(".remark").html(item.comment ? item.comment : "");
-
-                that.$create.data("data", item);
-                that.calTime(new Date());
-            })
+				that.onSelect(item);
+            }). on('vclick','.list-left,.list-title-warp',function(){
+				var index = $(this).parent().index();
+				var listWarpIndex = $(this).parents(".list-warp").index();
+                var id = $(this).parents('.list-warp').data('customerId');
+                $.am.changePage(am.page.memberDetails, "slideup",{
+                    customerId:id,
+                    tabId:1,
+					index: index,
+					listWarpIndex:listWarpIndex,
+                    shiftObj:that.shiftObj
+                });
+            });
 
 
             this.$serviceTable = this.$.find('.serviceTable');
@@ -536,6 +575,7 @@
                     categoryName = that.$project.attr("data-name"),
                     barberId = that.$member.attr("data-id"),
                     barberName = that.$member.attr("data-name"),
+                    barberNickname = that.$member.attr("data-nickname"),
                     comment = that.$remark.find("textarea").val(),
                     name = that.$add.find(".addname").val(),
                     tel = that.$add.find(".addtel").html(),
@@ -609,6 +649,7 @@
                         time: timeStamp.getTime(),
                         barberId: barberId,
                         barberName: barberName,
+                        barberNickname: barberNickname,
                         number: number,
                         comment: comment,
                         name: name,
@@ -621,6 +662,7 @@
                         reservationTime: reqDate.time,
                         barberId: reqDate.barberId,
                         barberName: reqDate.barberName,
+                        barberNickname: reqDate.barberNickname,
                         channel: 4, //0收银台 1美一客web 2美一客app 3生意宝 4小掌柜
                         type: 0, //0预约 1占位
                         custId: that.custId,
@@ -643,6 +685,7 @@
                         categoryName: categoryName,
                         barberId: barberId,
                         barberName: barberName,
+                        barberNickname: barberNickname,
                         number: number,
                         comment: comment,
                         name: name,
@@ -655,6 +698,7 @@
                         reservationTime: reqDate.time,
                         barberId: reqDate.barberId,
                         barberName: reqDate.barberName,
+                        barberNickname: reqDate.barberNickname,
                         channel: 4, //0收银台 1美一客web 2美一客app 3生意宝 4小掌柜
                         type: 0, //0预约 1占位
                         custId: that.custId,
@@ -710,8 +754,73 @@
                     }
                 }
             });
+            this.$shiftInfo=this.$.find('.shift-info');
+        },
+        optimizeCardandCustomer: function ($dom, val) {
+            // am.api.optimizeCardandCustomer.exec({
+            //     "shopId": am.metadata.userInfo.shopId,
+            //     "keyword": val
+            // }, function (res) {
+            //     am.loading.hide();
+            //     console.log(res);
+            //     if (res.code == 0) {
+            //         console.log(res);
+            //         am.listSelect.show({
+            //             $: $dom.parents('.form-wrap'),
+            //             data: res.content
+            //         });
+            //     } else {}
+            // });
+        },
+        getShiftList:function(ts){
+            am.api.reservationList.exec({
+                parentShopId: am.metadata.userInfo.parentShopId,
+                shopId: am.metadata.userInfo.shopId,
+                reservationTime: ts,
+                period:new Date(ts).format('yyyy-mm-dd')  // 2019-01 月  / 2019-01-02   /"employeeIds":[92807] 查询具体员工的排班信息
+            }, function (ret) {
+                if (ret.code == 0) {
+                    var data=ret.content;
+                    that.shiftList= data && data.scheduleShift && data.scheduleShift.scheduleShift;
+                    that.shiftDate=new Date(ts).format('yyyy-mm-dd');
+                    that.arr2Obj(that.shiftList,that.shiftDate);
+                    that.renderShiftInfo();
+                } else {
+                    am.msg(ret.message || "获取数据失败，请刷新页面！", true);
+                }
+            });
+        },
+        arr2Obj:function(arr,date){
+            if(arr && date){
+                var res={},obj={};
+                $.each(arr,function(i,v){
+                    obj[v.employeeId+'']={};
+                    obj[v.employeeId+''].employeeId=v.employeeId;
+                    obj[v.employeeId+''].employeeName=v.employeeName;
+                    var shift=v.scheduleShift && v.scheduleShift[0];
+                    var shiftInfo='未排班';
+                    if(shift && shift.shiftName){
+                        shiftInfo=shift.shiftName+'('+shift.goWorkTime+'~'+shift.outWorkTime+')';
+                        if(shiftInfo && (shiftInfo.indexOf('休')>-1)){
+                            shiftInfo='休假';
+                        }
+                    }
+                    obj[v.employeeId+''].shiftInfo=shiftInfo;
+                });
+                res.date=date;
+                res.shift=obj;
+            }
+            console.log(res);
+            this.shiftObj=res;
         },
         beforeShow: function(params) {
+            if(params=='back') return;
+            this.shiftList=params.shifts;
+            this.shiftDate=params.date;
+            this.arr2Obj(this.shiftList,this.shiftDate);
+
+            this.clearContent();
+
             this.$condition.val("");
 
             this.$btnGroup.removeClass("active");
@@ -759,7 +868,7 @@
                             reserConfig= temp;//字符串
                             mgjReservationConfig = _this.parseReserConfig( reserConfig) || {};//对象拿去渲染
                         }
-                        // console.log("mgjReservationConfig=====",mgjReservationConfig)
+						// console.log("mgjReservationConfig=====",mgjReservationConfig)
                         //先得到可预约的项目
                         var itemDetails = {};
                         var serviceItemMap = am.metadata.serviceItemMap;
@@ -778,7 +887,7 @@
                                     itemDetails[j] = json[j];
                                 }
                             }
-                        }
+						}
                         //服务项目明细
                         for (var i = 0; i < _this.serviceItem.length; i++) {
                             var classFlag = false;
@@ -808,19 +917,6 @@
                 }
             }
 
-            if (!this.startHour) {
-                var sts = (am.metadata.configs.reservationFrom || "9:00").split(":");
-                var ets = (am.metadata.configs.reservationTo || "22:00").split(":");
-                var startTs = new Date(am.now().format("yyyy/mm/dd ") + (am.metadata.configs.reservationFrom || "9:00") + ":00");
-                var endTs = new Date(am.now().format("yyyy/mm/dd ") + (am.metadata.configs.reservationTo || "22:00") + ":00");
-                this.startHour = sts[0] * 1;
-                if (ets[1] * 1 > 0) {
-                    this.endHour = ets[0] * 1;
-                } else {
-                    this.endHour = ets[0] * 1;
-                }
-            }
-
             //可预约员工
             this.member = [];
             for (var i = 0; i < am.metadata.employeeList.length; i++) {
@@ -828,13 +924,16 @@
                     this.member.push({
                         name: am.metadata.employeeList[i].name,
                         no: am.metadata.employeeList[i].no,
-                        id: am.metadata.employeeList[i].id
+                        id: am.metadata.employeeList[i].id,
+						nickname : am.metadata.employeeList[i].nickname,
+						dutyid : am.metadata.employeeList[i].dutyid,
                     });
                 }
             }
             for (var i = 0; i < this.member.length; i++) {
                 this.member[i].name2 = this.member[i].name;
                 this.member[i].name = this.member[i].no + " " + this.member[i].name;
+                nickname = this.member[i].nickname
             }
             if (!this.member.length) {
                 this.member[0] = {
@@ -844,7 +943,7 @@
                 };
             }
 
-            this.$date.html(new Date().format("yyyy-mm-dd"));
+			this.$date.html(new Date().format("yyyy-mm-dd"));
             this.$project
                 .html(this.serviceItem[0].name)
                 .attr("data-id", this.serviceItem[0].id)
@@ -860,11 +959,13 @@
                 }
             }
 
-            this.$number.html(this.serviceNumber[0].name);
+			this.$number.html(this.serviceNumber[0].name);
             this.$member
                 .html(this.member[0].name)
                 .attr("data-id", this.member[0].id)
-                .attr("data-name", this.member[0].name2);
+                .attr("data-name", this.member[0].name2)
+                .attr("data-dutyid", this.member[0].dutyid)
+                .attr("data-nickname", this.member[0].nickname);
 
             if (!this.hideDepart) {
                 if (am.metadata.shopList.length == 1) {
@@ -926,6 +1027,8 @@
                     that.calTime(new Date());
                 }
             }
+            var currentDate=this.$date.html().replace(/-/g,'/');
+            this.getShiftList(new Date(currentDate).getTime());
         },
         serviceItem: [],
         serviceItemDetails: [],
@@ -934,28 +1037,22 @@
         itemProp: {},
         mgjReservationItem: false,
         calTime: function(date) {
-            if (date.format("yyyymmdd") == new Date().format("yyyymmdd")) {
-                var nowHour = new Date().getHours() + 1;
-                if (nowHour > this.startHour) {
-                    this.startHour = nowHour;
-                }
-            } else {
-                this.startHour = (am.metadata.configs.reservationFrom || "9:00").split(":")[0] * 1;
-            }
             this.timeArea = [];
-            var startTs = new Date(am.now().format("yyyy/mm/dd ") + (this.startHour + ":00" || "9:00") + ":00").getTime();
-            var endTs = new Date(am.now().format("yyyy/mm/dd ") + (this.endHour + ":00" || "22:00") + ":00").getTime();
+            var startTs = new Date(am.now().format("yyyy/mm/dd ") + (am.metadata.configs.reservationFrom + ":00" || "9:00")).getTime();
+            var endTs = new Date(am.now().format("yyyy/mm/dd ") + (am.metadata.configs.reservationTo || "22:00")).getTime();
             var blocks = (endTs - startTs) / 1800000;
             for (var i = 0; i < blocks; i++) {
                 var time = new Date(startTs + i * 1800000);
                 var min = time.format("MM");
                 if ((am.metadata.configs.strategy == 1 && min != 30) || am.metadata.configs.strategy == 0) {
-                    this.timeArea.push({
-                        name: time.format("HH") + ":" + min
-                    });
+                    if(date.format("yyyymmdd") != new Date().format("yyyymmdd") || new Date(time).getTime() > new Date().getTime()){
+                        this.timeArea.push({
+                            name: time.format("HH") + ":" + min
+                        });
+                    }
                 }
             }
-            this.$time.html(this.startHour + ":00");
+            this.$time.html(this.timeArea[0].name);
         },
         isJSON:function(something){
             if (typeof something == 'string') {
@@ -982,23 +1079,105 @@
                         obj[propArr[0]].name = propArr[1];
                         obj[propArr[0]].time = propArr[2]*1;
                         obj[propArr[0]].priceFlag = propArr[3]*1;
-                        obj[propArr[0]].reserv = 1;
-                        if(propArr[4]){
-                            obj[propArr[0]].mgjReservationDays = propArr[4];
-                        }
+						obj[propArr[0]].reserv = 1;
+						if(propArr[4] && propArr[4].indexOf("@") > -1){
+							obj[propArr[0]].dutyid = propArr[4].split("@");
+							obj[propArr[0]].mgjReservationType = propArr[4];
+						}else if(propArr[4]){
+							obj[propArr[0]].mgjReservationDays = propArr[4];
+							if(propArr[5]){
+								obj[propArr[0]].dutyid = propArr[5].split("@");
+								obj[propArr[0]].mgjReservationType = propArr[5];
+							}
+						}
                     }
                 })
                 console.log(obj);
                 return obj;
             }
         },
-        afterShow: function() {},
+        afterShow: function() {
+            //不允许搜索分店会员
+            var ifm=am.metadata.userInfo.operatestr.split(',').indexOf('T1');
+            if(ifm!=-1){
+                this.$.find('.searchTip,.searchMoreShop').css({
+                    display:'none'
+                })
+            }
+           
+        },
         beforeHide: function() {},
         afterHide: function() {
-            this.clearContent();
+            
         },
         backButtonOnclick: function() {
             $.am.page.back("slidedown");
+		},
+		onSelect: function(item){
+			that.$searchresult.hide();
+			that.$create.show();
+			that.$content.show();
+			if (that.mgjReservationItem) {
+				that.$content.find("#projectItemClass").hide();
+				that.$content.find("#projectItems").show();
+			} else {
+				that.$content.find("#projectItemClass").show();
+				that.$content.find("#projectItems").hide();
+			}
+			that.$find.show();
+			that.$add.hide();
+
+			that.$find.find(".name").html(item.name);
+			if (item.sex == "M") {
+				that.$sex.addClass("m").removeClass("f");
+			} else {
+				that.$sex.addClass("f").removeClass("m");
+			}
+			that.$find.find(".tel").html(item.mobile);
+			if(item.mgjIsHighQualityCust == 1){
+				that.$find.find(".header").addClass("good am-clickable");
+			}else{
+				that.$find.find(".header").removeClass("good");
+            }
+            if(item.reservationReject*1){
+                that.$find.find('.breakAppointment').show();
+            }else {
+                that.$find.find('.breakAppointment').hide();
+            }
+			if(am.isMemberLock(item.lastconsumetime || item.lastConsumeTime, item.locking)){
+				that.$find.find(".header").addClass("lock");
+			}else{
+				that.$find.find(".header").removeClass("lock");
+			}
+			that.$find.find(".header").html(
+				am.photoManager.createImage(
+					"customer",
+					{
+						parentShopId: am.metadata.userInfo.parentShopId,
+						updateTs: item.lastphotoupdatetime || new Date().getTime()
+					},
+					item.id + ".jpg",
+					"s"
+				)
+			);
+			that.$find.find(".level").html(that.getShopName(item.shopId));
+			that.$find.find(".score").html(item.points);
+			that.$find.find(".card").html(item.cardName + "(" + item.cardNo + ")");
+			that.$find.find(".remark").html(item.comment ? item.comment : "");
+
+			that.$create.data("data", item);
+            that.calTime(new Date());
+            this.renderShiftInfo();
+        },
+        renderShiftInfo:function(id){
+            var empId=that.$member.attr("data-id");
+            if(id){
+                empId=id; // 员工选择器选择的新员工
+            }
+            var date=that.$date.html();
+            if(date==that.shiftObj.date){
+                that.$shiftInfo.text((that.shiftObj.shift[empId] && that.shiftObj.shift[empId].shiftInfo)||'');
+            }
         },
         render: function(data, hideIf) {
             var $tbody = this.$tbody;
@@ -1071,10 +1250,10 @@
 
             var isActive = this.$btnGroup.hasClass("active");
             if(isActive){
-                txt = "在本店中搜索：" + this.$condition.val();
+                txt = "在本店中搜索：" + this.searchKeywords.replace(/[\s\r\n\\\/\'\"\‘\’\“\”]/g, "").replace('j0102','*0102').replace('*0102','');
                 that.$searchresult.removeClass('active');
             }else{
-                txt = "在分店中搜索：" + this.$condition.val();
+                txt = "在分店中搜索：" + this.searchKeywords.replace(/[\s\r\n\\\/\'\"\‘\’\“\”]/g, "").replace('j0102','*0102').replace('*0102','');
                 that.$searchresult.addClass('active');
             }
             this.$searchresult.find(".title").html(txt);
@@ -1084,15 +1263,16 @@
             //this.$condition.val('');
         },
         filterData:function(data, hideIf){
+            return am.page.searchMember.filterData.call(this,data,hideIf);
             var itemObj = {};
             $.each(data, function(i, item) {
                 if(hideIf){
                     if ((item.invaliddate && Number(item.invaliddate) < new Date().getTime())) {
                         return true;
                     }
-                    if(item.balance == 0 && item.cardtype == 1){
-                        return true;
-                    }
+                    // if(item.balance == 0 && item.cardtype == 1){
+                    //     return true;
+                    // }
                 }
                 if(!itemObj[item.id]){
                     itemObj[item.id] = [item]; 
@@ -1100,28 +1280,70 @@
                     itemObj[item.id].push(item) 
                 }
             });
-            return itemObj
+            if(hideIf){
+                for(var key in itemObj){
+                    if(itemObj[key].length>1){
+                        var arr = [];
+                        for(var i=0;i<itemObj[key].length;i++){
+                            var item = itemObj[key][i]; 
+                            if((item.balance || item.gift) || item.cardtype==2){
+                                arr.push(item);
+                            }
+                        }
+                        if(!arr.length){
+                            var _last = null;
+                            for(var i=0;i<itemObj[key].length;i++){
+                                if(itemObj[key][i].cardName!='散客卡'){
+                                    if(!_last){
+                                        _last = itemObj[key][i];
+                                    }
+                                }
+                            }
+                            if(!_last){
+                                _last = itemObj[key][0];
+                            }
+                            arr.push(_last);
+                        }
+                        itemObj[key] = arr;
+                    }
+                }
+            }
+            return itemObj;
         },
 
         renderList:function(filterData){
             console.log(filterData)
             var $serviceTableWarp = $('.page_appointment .serviceTable .serviceTable-warp');
             $serviceTableWarp.html('');
-
             $.each(filterData, function(i, item) {
                 var itemIndex = item[0];
                 var $listWarp = $('<div class="list-warp"></div>');
-                var $listAvatar = $('<div class="list-left"><div class="list-avatar"></div></div>');
+                var $listAvatar = $('<div class="list-left am-clickable"><div class="list-avatar"></div></div>');
                 var $listRight = $('<div class="list-right"><dl class="list-content"></dl></div>');
                 var $dt = '';
+                if(itemIndex.mgjIsHighQualityCust == 1){
+                    $listAvatar.find(".list-avatar").addClass("good");
+                }else{
+                    $listAvatar.find(".list-avatar").removeClass("good");
+				}
+
+				//判断是否锁定
+				var lastconsumetime = itemIndex.lastConsumeTime || itemIndex.lastconsumetime;
+				//根据会员的消费时间和登录者的配置月份匹配
+				if(am.isMemberLock(lastconsumetime, itemIndex.locking)){
+					$listAvatar.find(".list-avatar").addClass("lock");
+				}else{
+                    $listAvatar.find(".list-avatar").removeClass("lock");
+				}
+				
                 $listAvatar.find('.list-avatar').html(am.photoManager.createImage("customer", {
                         parentShopId: am.metadata.userInfo.parentShopId,
                         updateTs: itemIndex.lastphotoupdatetime || ""
-                    }, itemIndex.id + ".jpg", "s"));
+                    }, itemIndex.id + ".jpg", "s",itemIndex.photopath||''));
                 if(itemIndex.comment){
-                    $dt = $('<dt class="list-title-warp"><div class="name"> '+itemIndex.name+'  （'+ that.getShopName(itemIndex.shopId)+'）</div><div class="phone"><i class="icon iconfont icon-44"></i> '+ am.processPhone(itemIndex.mobile) +' </div><div class="score"><i class="icon iconfont icon-jifen"></i> 积分 ：'+itemIndex.points+'</div><div class="mark"><i class="icon iconfont icon-24_beizhu"></i> 备注 ：'+itemIndex.comment+'</div></dt>')
+                    $dt = $('<dt class="list-title-warp am-clickable"><div class="name"> '+itemIndex.name+'  （'+ that.getShopName(itemIndex.shopId)+'）</div><div class="phone"><i class="icon iconfont icon-44"></i> '+ am.processPhone(itemIndex.mobile) +' </div><div class="score"><i class="icon iconfont icon-jifen"></i> 积分 ：'+itemIndex.points+'</div><div class="mark"><i class="icon iconfont icon-24_beizhu"></i> 备注 ：'+itemIndex.comment+'</div></dt>')
                 }else{
-                    $dt = $('<dt class="list-title-warp"><div class="name"> '+itemIndex.name+'  （'+ that.getShopName(itemIndex.shopId)+'）</div><div class="phone"><i class="icon iconfont icon-44"></i> '+ am.processPhone(itemIndex.mobile) +' </div><div class="score"><i class="icon iconfont icon-jifen"></i> 积分 ：'+itemIndex.points+'</div></dt>')
+                    $dt = $('<dt class="list-title-warp am-clickable"><div class="name"> '+itemIndex.name+'  （'+ that.getShopName(itemIndex.shopId)+'）</div><div class="phone"><i class="icon iconfont icon-44"></i> '+ am.processPhone(itemIndex.mobile) +' </div><div class="score"><i class="icon iconfont icon-jifen"></i> 积分 ：'+itemIndex.points+'</div></dt>')
                 }
                 $listRight.find('.list-content').append($dt);
                 for (var index = 0; index < item.length; index++) {
@@ -1135,17 +1357,18 @@
 						if (_item.timeflag == "2") {
 							imgType='type_zero';
 						} else {
-							imgType='type_one';
+							imgType='type_two';
 						}
 					} else {
-                        imgType='type_two';
+                        imgType='type_one';
                     }
                     var cardtype = "",
                             balance = "<span class='red'>￥"+am.cashierRound(_item.balance)+"</span>",
                             gift = "<span class='red'>￥"+_item.gift+"</span>";
                     if (am.operateArr.indexOf("MGJP") != -1) {
                         _item.realMobile = _item.mobile;
-                        _item.mobile = _item.mobile.replace(/\d{4}$/, "****");
+                        // _item.mobile = _item.mobile.replace(/\d{4}$/, "****");
+                        _item.mobile = _item.mobile.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2');//手机号改为中间四位隐藏
                     }
 
                     if (_item.cardtype == 2) {
@@ -1164,9 +1387,9 @@
                     }
 
                     if(_item.cardtype==1){
-                        _html = '<div class="card"><span class="cardImg '+ imgType+'"></span>'+ _item.cardName +'('+ _item.cardNo +')</div><div class="rest-money">余额 '+ balance +'</div><div class="rest-money">赠金 '+ gift +'</div><div class="money">折扣 <span class="red">'+(_item.discount == null ? 0 : _item.discount)+' </span> 折 </div>' ;
+                        _html = '<div class="card"><span class="cardImg '+ imgType+'"></span><div class="cardinfo"><p>'+ _item.cardName +'('+ _item.cardNo +')</p><p>'+(that.getShopName(_item.cardshopId)+(_item.cardshopId==amGloble.metadata.userInfo.shopId?'(本店)':''))+'</p></div></div><div class="rest-money">余额 '+ balance +'</div><div class="rest-money">赠金 '+ gift +'</div><div class="money">折扣 <span class="red">'+(_item.discount == null ? 0 : _item.discount)+' </span> 折 </div>' ;
                     }else{
-                        _html = '<div class="card"><span class="cardImg '+ imgType+'"></span>'+ _item.cardName +'('+ _item.cardNo +')</div><div class="money"> <span class="red" >资格卡</span></div><div class="money">折扣 <span class="red">'+(_item.discount == null ? 0 : _item.discount)+' </span> 折 </div>' ;
+                        _html = '<div class="card"><span class="cardImg '+ imgType+'"></span><div class="cardinfo"><p>'+ _item.cardName +'('+ _item.cardNo +')</p><p>'+(that.getShopName(_item.cardshopId)+(_item.cardshopId==amGloble.metadata.userInfo.shopId?'(本店)':''))+'</p></div></div><div class="money"> <span class="red" >资格卡</span></div><div class="money">折扣 <span class="red">'+(_item.discount == null ? 0 : _item.discount)+' </span> 折 </div>' ;
                     }
 
                     // _html = '<div class="card"><span class="cardImg '+ imgType+'"></span>'+ _item.cardName +'('+ _item.cardNo +')</div> <div class="money"> '+ cardtype +'</div> <div class="rest-money">余额 <b>￥'+ balance +'</b></div><div class="rest-money">赠金 <b>￥'+gift +'</b></div><div class="money">折扣 <b>'+(_item.discount == null ? 0 : _item.discount)+' </b> 折 </div>' ;
@@ -1180,7 +1403,7 @@
                     $listRight.find('.list-content').append($dd);
                 }
                 $listWarp.append($listAvatar).append($listRight)
-                $serviceTableWarp.append($listWarp)
+                $serviceTableWarp.append($listWarp.data('customerId',_item.id))
             })
         },
         resetHeight:function(){
@@ -1213,7 +1436,7 @@
             this.$.find(".list-body  .mark").css("width",markMax + "px");
 
         },
-        searchMember: function(str) {
+        searchMember: function() {
             var idx = 0;
             if (this.$.find(".depart li.active").index() == 1) {
                 idx = 1;
@@ -1234,20 +1457,24 @@
                 this.$btnGroup.addClass("active");
             }
 
-            str = str.replace('j0102','*0102').replace(/[\s\r\n\\\/\'\"\‘\’\“\”]/g, "");
+            this.$condition.val(this.searchKeywords.replace(/[\s\r\n\\\/\'\"\‘\’\“\”]/g, "").replace('j0102','*0102').replace('*0102',''));
 
-            am.loading.show();
-            am.api.searchmember.exec(
+            am.searchMemberLoading.show({
+                cb:function(){
+                    that.searchMemberAjax.abort();
+                }
+            });
+            this.searchMemberAjax = am.api.searchmember.exec(
                 {
                     parentShopId: am.metadata.userInfo.parentShopId,
                     shopId: am.metadata.userInfo.shopId,
                     shopIds: shopIds,
-                    keyword: str,
+                    keyword: that.searchKeywords.replace(/[\s\r\n\\\/\'\"\‘\’\“\”]/g, "").replace('j0102','*0102'),
                     pageSize: 9999,
                     pageNumber: 0
                 },
                 function(ret) {
-                    am.loading.hide();
+                    am.searchMemberLoading.hide();
                     console.log(ret);
                     if (ret.code == 0) {
                         console.log(that.num);
@@ -1388,4 +1615,40 @@
             that.hasAddMember = false;
         }
     }));
+
+
+    var searchMemberLoading = {
+        init: function(){
+            var _this = this;
+            var $dom = $('<div class="am-modalLoading am-modalLoading-searchMember">'+
+                            '<div class="page-modalLoading-wrap">'+
+                                '<div class="page-modalLoading-inner">'+
+                                    '<span class="loading"></span>'+
+                                    '<span class="text">请稍候...</span>'+
+                                '</div>'+
+                                '<p class="tip">搜索条件不够精准可能导致查询缓慢，建议输入精准条件加快查询速度</p>'+
+                                '<div class="abort">返回重新搜索</div>'+
+                            '</div>'+
+                        '</div>');
+            $('body').append($dom)
+            this.$ = $dom;
+            this.$abort = this.$.find('.abort').vclick(function(){
+                _this.cb && _this.cb();
+                _this.hide();
+            })
+        },
+        show: function(opt){
+            if(!this.$){
+                this.init();
+            }
+            this.$.show();
+            if(opt && opt.cb){
+                this.cb = opt.cb;
+            }
+        },
+        hide: function(){
+            this.$.hide();
+        }
+    }
+    am.searchMemberLoading = searchMemberLoading;
 })();

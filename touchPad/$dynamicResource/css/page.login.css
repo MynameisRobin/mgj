@@ -4,6 +4,31 @@
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
 }
+.page_login .auth_box {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  height: 500px;
+  width: 700px;
+  border-radius: 5px;
+  background-color: #fff;
+  z-index: 999;
+  display: none;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+}
+.page_login .auth_box img {
+  width: 48px;
+  height: 48px;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  cursor: pointer;
+  z-index: 1;
+}
+.page_login .auth_box iframe {
+  opacity: 1;
+}
 .page_login .login_bg {
   position: absolute;
   left: 0;
@@ -209,9 +234,31 @@
   font-size: 14px;
   color: #222;
 }
+.page_login .downApp {
+  display: none;
+  padding-top: 27px;
+  text-align: center;
+  color: #b0b0b0;
+  font-size: 13px;
+}
+.page_login .downApp a {
+  color: #b0b0b0;
+}
+.page_login .downApp a img {
+  width: 13px;
+  height: 13px;
+  margin-left: 7px;
+}
+.page_login .mgjLogIdNum {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  font-size: 10px;
+  color: #666;
+}
 .page_login .foot {
   /*.abs(@bottom:45px;@left: 0;@right: 0);*/
-  padding-top: 20px;
+  padding-top: 24px;
   text-align: center;
   color: #b0b0b0;
 }

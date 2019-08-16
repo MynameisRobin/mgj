@@ -15,8 +15,10 @@
                 $: this.$,
                 tab: true,
 				filter: true,
-				flag: true,
+				// flag: true,
 				page:"product",
+				priceFilter: true,
+				groupKey: 'PRODUCT_ITEM_GROUP',
                 onSelect: function(data) {
 					return self.billMain.addItem(data);
                 },
@@ -27,7 +29,10 @@
                         self.billMain.rise(1);
                         self.billServerSelector.rise(1);
                     }
-                },
+				},
+				onTouchHold: function(data, $this){
+					self.billItemSelector.startGrouping();
+				},
 				onSize:function(){
                     self.billMain.dispatchSettingSelf();
                 }
@@ -76,7 +81,8 @@
 	                if(nprice.isMemberPrice){
 	                	showDel = 1;
 	                	price   = mprice;
-	                	data.memberprice = mprice;
+						data.memberprice = mprice;
+						data.cardDiscount = 1;
 	                }else if(self.member && self.member.buydiscount){
                         price = price*self.member.buydiscount*0.1;
                     }
@@ -94,7 +100,12 @@
 					// floatNum
 					$tr.append('<td class="center"><div class="number"><span class="reduce am-clickable am-disabled"></span><span class="value am-clickable floatNum">1</span><span class="plus am-clickable"></span></div></td>');
 					$tr.append('<td class="center"><span class="sum">'+price+'</span></td>');
-                    $container.append($tr.data("data",data));
+					$tr.append('<td class="empty-td"><div class="empty-div"><svg class="icon svg-icon" aria-hidden="true"><use xlink:href="#icon-yduigantanhaokongxin"></use></svg><span class="empty-text">库存 '+'<span class="num">'+(self.numObj && self.numObj[data.id])+'</span>'+'</span></div></td>');
+					$container.append($tr.data("data",data));
+					//校验是否库存为0 
+					if(self.numObj && (self.numObj[data.id]<=0)){
+						$tr.addClass('empty');
+					}
 					return $tr;
                 },
 				onPriceChange:function($tr){
@@ -125,7 +136,9 @@
                 onSubmit:function(){
                     self.submit();
                 }
-            });
+			});
+			this.$goodsUl=this.$.find('.cashierItemScroll > ul');
+			this.$tbodyBill=this.$.find('.cashierMain tbody')
 
 			this.billMain.$.find('.memberInfoBtn').vclick(function() {
                 $.am.changePage(am.page.memberDetails, "slideup",{
@@ -175,7 +188,23 @@
 	            muti:true,
 	            getTotalPerf:function () {
 		            return self.billMain.totalPrice;
-	            }
+				},
+				onSetEmpPer: function(emp, per,perf,gain) {
+                    var $server = self.billMain.$list.find("tr.selected .server").eq(emp.pos);
+                    var data = $server.data("data");
+                    if (data) {
+                        setTimeout(function() {
+                            for (var i = 0; i < data.length; i++) {
+                                if (data[i] && data[i].empId === emp.id) {
+                                    data[i].per = per;
+                                    data[i].perf = perf;
+                                    data[i].gain = gain;
+                                    break;
+                                }
+                            }
+                        }, 51);
+                    }
+                },
             });
 
 			/* document.addEventListener('scanningGunResult',function(result){
@@ -224,6 +253,12 @@
 					self.scanner = true;
 					self.startScanningGun();
 				}
+			});
+
+			this.$.find('.priceFilterWrap input').focus(function(){
+				$(this).parent().addClass('focus');
+			}).blur(function(){
+				$(this).parent().removeClass('focus');
 			});
 
 			this.member = null;
@@ -281,6 +316,7 @@
 		    }
 		},
 		beforeShow : function(paras) {
+			var _this = this;
 			this.$.removeClass('openBill');
 			this.scanner = (localStorage.getItem('TP_scanner') == 1);
 			if(this.scanner){
@@ -289,12 +325,38 @@
 				this.$scanner.removeClass('checked');
 			}
             am.tab.main.show().select(1);
-            this.checkIsOpen(paras);
+			this.checkIsOpen(paras);
+			if(paras && paras.afterRecharge && this.member){
+				var afterRecharge = paras.afterRecharge;
+				if(afterRecharge.memId){
+					//自动升级
+					am.searchMember.getMemberById(afterRecharge.memId,afterRecharge.cid,function(card){
+						if(card){
+							_this.setMember(card);
+						}
+					});
+				}
+				// else {
+				// 	//手动升级
+				// 	this.member.balance += paras.afterRecharge.cardFee;
+				// 	this.member.gift += paras.afterRecharge.presentFee;
+				// 	if(afterRecharge.upgradeCard){
+				// 		this.member.cardName = afterRecharge.upgradeCard.cardName;
+				// 		this.member.discount = afterRecharge.upgradeCard.discount;
+				// 		this.member.buydiscount = afterRecharge.upgradeCard.buydiscount;
+				// 	}
+				// 	this.setMember(this.member,null);
+				// }
+				return;
+			}
             if(paras=="back"){
             	//this.checkIsOpen(paras);
                 return;
-            }else if(paras && paras.member){
-                this.setMember(paras.member);
+            }else if(paras && paras.hasOwnProperty("member")){
+				this.setMember(paras.member);
+				this.checkComboMatch();
+				am.page.service.checkComboMatch();
+				// this.billMain.onPriceChange();
                 // setTimeout(function(){
                 //     am.tips.details( am.page.product.billMain.$.find(".member"), am.page.product.billMain.$.find('.memberInfoBtn') );
                 // }, 500);
@@ -319,12 +381,18 @@
             }
 		},
 		reset:function (paras) {
+			var employeeList = am.metadata.employeeList || [];
+			if(am.metadata.configs && am.metadata.configs['EMP_SORT']){
+				employeeList = JSON.parse(am.metadata.configs['EMP_SORT']);
+				employeeList = am.getConfigEmpSort(employeeList);
+			}
 			this.billItemSelector.dataBind(this.processData(am.metadata.category));
-			this.billServerSelector.dataBind(am.metadata.employeeList,["销售"]);//多个工位传true, 不分工位传false;
+			this.billItemSelector.setGroup(am.page.service.getGroupData.call(this));
+			this.billServerSelector.dataBind(employeeList,["销售"]);//多个工位传true, 不分工位传false;
 
 			this.billItemSelector.reset();
 			this.billServerSelector.reset();
-			this.billMain.defaultSetting = this.getServerDefultSetting(am.metadata.employeeList);
+			this.billMain.defaultSetting = this.getServerDefultSetting(employeeList);
 			this.billMain.reset();
 
 			if(paras != 'freezing'){
@@ -345,9 +413,99 @@
 			}
 			this.selectedServer = null;
 		},
+		fillNum: function () {
+			console.log(this.numObj);
+			var numObj = this.numObj;
+			if (numObj) {
+				var $lis = this.$goodsUl.find('li');
+				$lis.each(function (i, v) {
+					var goodId = $(v).data('data').id;
+					if($(v).hasClass('group')){
+						// 组合卖品
+						var group=$(v).data('group'),
+							isEmpty=1,
+							items=group.items;
+						for(var j=0,len=items.length;j<len;j++){
+							var productItem = am.metadata.categoryCodeMap[items[j]];
+							if(productItem && numObj[productItem.id]>0){
+								isEmpty=0;
+								break;
+							}
+						}
+						if(isEmpty){
+							$(v).addClass('empty');
+						}
+					}else{
+						// 非组合卖品
+						if(numObj[goodId] <= 0){
+							// 库存为0 商品变为半透明 不可加入购物车
+							$(v).addClass('empty').find('.num').text('库存 ' + numObj[goodId]);
+						}else if(numObj[goodId]){
+							// 库存不为0
+							$(v).find('.num').text('库存 ' + numObj[goodId]);
+						}else{
+							// 库存数据不存在
+						}
+					}
+				});
+			}
+			this.fillBillNum();
+		},
+		fillBillNum: function () {
+			var numObj = this.numObj;
+			if (numObj) {
+				var $trs = this.$tbodyBill.find('tr.am-clickable');
+				$trs.each(function (i, v) {
+					var goodId = $(v).data('data').id;
+					if (numObj[goodId] <= 0) {
+						if (!$(v).hasClass('empty')) {
+							$(v).addClass('empty').find('.num').text(numObj[goodId]);
+						}
+					}
+				});
+			}
+		},
+		arr2obj: function (arr) {
+			var obj = {};
+			if (arr && arr.length) {
+				for (var i = 0, len = arr.length; i < len; i++) {
+					obj[arr[i].ID] = arr[i].NUM;
+				}
+				this.numObj = obj;
+			} else {
+
+			}
+		},
+		getGoodsNum: function (cb) {
+			var opt = {
+				parentShopId: am.metadata.userInfo.parentShopId,
+				shopId: am.metadata.userInfo.shopId,
+			};
+			am.api.getGoodsNum.exec(opt, function (res) {
+				if (res.code == 0) {
+					var data = self.arr2obj(res.content)
+					cb && cb(data);
+				} else {
+				}
+			});
+		},
 		afterShow : function(paras) {
 			am.cashierTab.show(1);
 			$.am.debug.log("ss");
+
+			if(paras && paras.afterRecharge && paras.afterRecharge.upgradeCard && amGloble.metadata.shopPropertyField.mgjBillingType == 1){
+				am.cashierTab.getOpt(function (opt) {
+					if(!opt){
+						return am.msg("请设定项目价格");
+					}
+					am.cashierTab.getDisplayId(opt,function(items){
+						am.cashierTab.hangupSave(items,0,0,1);
+					});
+				});
+			}
+			this.getGoodsNum(function(){
+				self.fillNum();
+			});
 			/* if(this.scanner || 1){
 				if(this.scannerTimer) clearTimeout(this.scannerTimer);
 				this.scannerTimer = setTimeout(function(){
@@ -365,28 +523,7 @@
 			var _this=this;
 			this.member = member;
 			if(this.member){
-				this.billMain.$list.find("tr").each(function(){
-					var data = $(this).data("data");
-					var $price = $(this).find(".price");
-					var price  = data.price;
-					var nprice = self.getProductPrice(data,price);
-					var mprice = nprice.price;
-					var showDel = 0; 
-					if(!$price.hasClass("modifyed")){
-						if(nprice.isMemberPrice){
-							showDel = 1;
-							price   = mprice;
-						}else if(data){
-							var discount = self.member.buydiscount*1 || 10;
-							$(this).attr("data-showdel",showDel);
-							price = price * discount * 0.1
-						                   
-						}
-						$price.text(toFloat(price));
-					}
-					
-				});
-				this.billMain.onPriceChange();
+				this.checkComboMatch();
 			}
 
 			/*var cardName = this.member.cardName;
@@ -402,6 +539,31 @@
                 updateTs: member.lastphotoupdatetime || ""
             }, member.id + ".jpg", "s"));*/
 
+		},
+		checkComboMatch : function(){
+			this.billMain.$list.find("tr").each(function () {
+				var data = $(this).data("data");
+				var $price = $(this).find(".price");
+				var price = data.price;
+				var nprice = self.getProductPrice(data, price);
+				var mprice = nprice.price;
+				var showDel = 0;
+				if (!$price.hasClass("modifyed")) {
+					if (nprice.isMemberPrice) {
+						showDel = 1;
+						price = mprice;
+						data.cardDiscount = 1;
+					} else if (data) {
+						if (self.member) {
+							var discount = self.member.buydiscount * 1 || 10;
+							$(this).attr("data-showdel", showDel);
+							price = price * discount * 0.1
+						}
+					}
+					$price.text(toFloat(price));
+				}
+			});
+			this.billMain.onPriceChange();
 		},
 		beforeHide : function(paras) {
 			/* if(this.scanner || 1){
@@ -468,11 +630,15 @@
 							name:list[j].name,
 							price:list[j].saleprice*1,
 							pinyin:list[j].pinyin,
-							mgjdepotlogo:list[j].mgjdepotlogo
+							mgjdepotlogo:list[j].mgjdepotlogo,
+							itemid:list[j].no
 						};
 						type.sub.push(subitem);
 						if(list[j].mgj_barcode){
-							this.scanMap[list[j].mgj_barcode] = subitem;
+							if(!this.scanMap[list[j].mgj_barcode]){
+								this.scanMap[list[j].mgj_barcode] = [];
+							}
+							this.scanMap[list[j].mgj_barcode].push(subitem);
 						}
 					}
 					categorys.push(type);
@@ -543,7 +709,8 @@
                 }
             };
 
-            if(this.billData && amGloble.metadata.shopPropertyField.mgjBillingType==1){
+			// if(this.billData && amGloble.metadata.shopPropertyField.mgjBillingType==1){
+            if(this.billData){
                 opt.instoreServiceId = this.billData.id;
             }
 
@@ -570,8 +737,9 @@
                     "price": data.price || 0,
                     "salePrice": price,
                     "depcode": this.getDepCode(data.id),
-                    "number":num
-                };
+					"number":num,
+					"cardDiscount": data.cardDiscount
+				};
 	            if($price.hasClass("modifyed")){
 		            item.modifyed=1;
 	            }
@@ -625,8 +793,14 @@
 		},
 		scanningResultSearch:function(key){
 			var item = this.scanMap[key];
-			if(item){
-				self.billMain.addItem(item);
+			if(item && item.length){
+				if(item.length==1){
+					self.billMain.addItem(item[0]);
+				}else {
+					am.popupMenu("请选择商品", item , function (ret) {
+						self.billMain.addItem(ret);
+					});
+				}
 			}else{
 				am.msg('没有找到对应商品，请检查商品条码是否正确录入');
 			}
@@ -684,6 +858,21 @@
 					this.needReset = 0;
 				}
 			}
-		}
+		},
+		onBillStatusChange:function(data){
+            if(data.id && data.id === this.billData.id){
+                atMobile.nativeUIWidget.showMessageBox({
+                    title: "单据已修改",
+                    content: '由于其它终端的操作，此单状态已改变！'
+                });
+                $.am.changePage(am.page.hangup);
+            }
+        },
+		keyboardCtrl:function(keyCode){
+            var ctrl = window.keyboardCtrl;
+            if(keyCode === 192){
+                $('#tab_cash li[data-pow=a20]').trigger('vclick');
+            }
+        }
 	});
 })();

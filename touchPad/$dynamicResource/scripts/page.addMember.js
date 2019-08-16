@@ -1,6 +1,6 @@
 (function () {
     var self = am.page.addMember = new $.am.Page({
-        id: "page_addMember",
+		id: "page_addMember",
         backButtonOnclick: function () {
             if (this.$uploadMemberImg.is(':visible')) {
                 if (self.uploadMemberImgCallback) self.uploadMemberImgCallback();
@@ -36,7 +36,13 @@
             //     $inner : this.$.find(".addMember_box .body-inner"),
             //     direction : [false, true],
             //     hasInput: false
-            // });
+			// });
+			this.$sourceScroll = new $.am.ScrollView({
+                $wrap : this.$.find(".addMember_box .changesource-wrapper"),
+                $inner : this.$.find(".addMember_box .changesource-wrapper .changesource"),
+                direction : [false, true],
+                hasInput: false
+            });
 
             this.$uesrname = this.$.find('.uesrname').blur(function () {
                 $(this).val($(this).val().replace(/[\s\r\n\\\/\'\"\‘\’\“\”]/g, ''))
@@ -131,8 +137,19 @@
             }).on("vclick", ".sexbox>span", function () {
                 $(this).addClass("selected").siblings().removeClass("selected");
             }).on("vclick", ".footbutton", function () {
+                var thisDom = $(this);
+         
+                //禁用按钮2500ms 防止重复提交
+                thisDom.addClass('am-disabled');
+                clearTimeout(time);
+                var time = null;
+                if(!time){
+                    time = setTimeout(function(){
+                        thisDom.removeClass('am-disabled');
+                    }, 2500);
+                }
+         
                 self.$.find("textarea").blur();
-
                 var data = self.getValue();
                 if (data) {
                     if (self.$.find(".cm_mobile_phone .tips").hasClass('show')) {
@@ -151,7 +168,7 @@
                         self.setData(data);
                     }
                 }
-
+            
             });
             this.submit = "createMember";
 
@@ -166,7 +183,7 @@
                             var $img = am.photoManager.createImage("customer", {
                                 parentShopId: am.metadata.userInfo.parentShopId,
                                 updateTs: new Date().getTime() //self.$data.userInfo.lastphotoupdatetime || ""
-                            }, self.$data.userInfo.id + ".jpg", "s");
+                            }, self.$data.userInfo.id + ".jpg", "s",self.$data.userInfo.photopath||'');
                             self.$.find('.cm_updateImg .img').html($img);
                         }, 1000);
                     });
@@ -210,8 +227,9 @@
         getValue: function () {
             var name = this.$.find(".addMember_list .uesrname").val();
             var mobile = this.$input.val();
-            var sex = this.$.find(".sexbox span.selected").data("val");
-            var sourceId = this.$.find(".changesource .changebox.selected .change_words").data("val");
+			var sex = this.$.find(".sexbox span.selected").data("val");
+			var sourceId = this.$.find(".changesource .changebox.selected .change_words").data("val");
+			var useStatus = this.$.find(".changesource .changebox.selected .change_words").data("status");
             var page = this.$.find(".page_textarea").val();
             var birthday=this.$birthday.val();//.replace(/\-/g,"/")
             var birthType = this.$selectBirthday.find("li.selected").index();
@@ -231,7 +249,13 @@
                 am.msg("请选择推荐人！");
                 return false;
             }
-
+			if (this.paras && this.paras.hasOwnProperty("userInfo")) {
+                var mgjsourceid = this.paras.userInfo.mgjsourceid
+				if (mgjsourceid != sourceId && !useStatus) {
+					am.msg("您所选择的顾客来源分类已取消启用，请重新选择！");
+					return false;
+				}
+			}
             var res = {
                 name: name,
                 mobile: mobile,
@@ -261,7 +285,7 @@
             this.$selectBirthday.find("li").removeClass('selected');
             this.$selectBirthday.find("li").eq(0).addClass('selected');
         },
-        mbRepeatConfig:false,
+		mbRepeatConfig:false,
         beforeShow: function (paras) {
             if (paras == 'back') {
                 return;
@@ -292,24 +316,29 @@
             } else {
                 this.signaturePad.clear();
             }
-
-            if (paras && paras.hasOwnProperty("userInfo")) {//编辑资料
+			if (paras && paras.hasOwnProperty("userInfo")) {//编辑资料
+				self.renderCustomerSource(am.metadata.memSourceList)
                 this.$.find(".am-header p").text("编辑资料");
                 this.$.find(".footbutton").text("确认并修改");
                 this.renderData(paras.userInfo);
                 this.submit = "editMember";
                 this.$.find('.modifyMemberImg').show();
                 this.$.find("textarea").attr("readonly", false);
-                this.$.find('.changebox-hidden').show();
+				this.$.find('.changebox-hidden').show();
+				
+
             } else if (paras && paras.introducer) {
                 this.$introducer.show().find('.addintroducer').val(paras.introducer.name + ' | ' + paras.introducer.mobile + ' | ' + this.getShopNameById(paras.introducer.shopId));
-            } else {//添加会员
+			} else {//添加会员
+				var memSourceList = self.getCustomerSource()
+				self.renderCustomerSource(memSourceList)
                 this.$.find('.modifyMemberImg').hide();
                 this.$.find(".am-header p").text("创建会员");
                 this.$.find(".footbutton").text("创建并选择");
                 this.setStartData();
                 this.submit = "createMember";
-                this.$.find('.changebox-hidden').hide();
+				this.$.find('.changebox-hidden').hide();
+				
                 //目前只有大众点评这一种情况，如果以后增加，应该需要增加类型来判断
                 if (paras && paras.defultInfo) {
                     if (paras.defultInfo.mobile) {
@@ -381,7 +410,7 @@
             var $img = am.photoManager.createImage("customer", {
                 parentShopId: am.metadata.userInfo.parentShopId,
                 updateTs: userInfo.lastphotoupdatetime || new Date().getTime()
-            }, userInfo.id + ".jpg", "s");
+            }, userInfo.id + ".jpg", "s",userInfo.photopath||'');
             this.$.find('.cm_updateImg .img').html($img);
 
             var $signature = am.photoManager.createImage("signature", {
@@ -425,7 +454,8 @@
 			    "shopId":am.metadata.userInfo.shopId,
 			    "parentShopId":am.metadata.userInfo.parentShopId
 			},data), function(res) {
-			    am.loading.hide();
+                am.loading.hide();
+                
 			    //console.log(res);
 			    if (res.code == 0) {
 						//console.log(data);
@@ -443,12 +473,13 @@
 			    			$.am.changePage($.am.history[$.am.history.length-1], "slidedown",{
 								customerId:self.$data.userInfo.id,
 								shopId:self.$data.userInfo.shopid,
-								tabId:1
+                                tabId:1,
+                                openbill:self.$data.openbill
                             });
                             $('.tab_cash .bottom .user .img').html(am.photoManager.createImage("customer", {
                                 parentShopId: am.metadata.userInfo.parentShopId,
                                 updateTs: data.lastphotoupdatetime || new Date().getTime()
-                            }, data.memberid + ".jpg", "s"));
+                            }, data.memberid + ".jpg", "s",data.photopath||''));
 
 			    			// $.am.history.pop();
 			    			// $.am.history.pop();
@@ -465,8 +496,10 @@
 							});
 						}
 
-                    if (!self.signaturePad.isEmpty()) {
-                        self.saveSignature();
+                    if(self.signaturePad){//fix bug --0015771
+                        if (!self.signaturePad.isEmpty()) {
+                            self.saveSignature();
+                        }
                     }
                 } else {
                     am.msg(res.message || "数据获取失败,请检查网络!");
@@ -490,23 +523,25 @@
             });
         },
         saveSignature: function (clear,cb) {
-            var opt = {
-                dir: "signature/member/" + am.metadata.userInfo.parentShopId,
-                imageBase64: this.signaturePad.toDataURL("image/png").replace("data:image/png;base64,", ""),
-                name: (this.uploadMemberImgData ? this.uploadMemberImgData.id : this.$data.userInfo.id) + ".png",
-                realName: "1.png",
-                trim: false,
-                // variations:[
-                //     {suffix: "l", resolution: "1024x1024"},
-                //     {suffix: "m", resolution: "512x512"},
-                //     {suffix: "s", resolution: "256x256"}
-                // ]
-            };
-            if(clear){
-                opt.imageBase64 = '';
+            if(this.uploadMemberImgData||this.$data.userInfo){
+                var opt = {
+                    dir: "signature/member/" + am.metadata.userInfo.parentShopId,
+                    imageBase64: this.signaturePad.toDataURL("image/png").replace("data:image/png;base64,", ""),
+                    name: (this.uploadMemberImgData ? this.uploadMemberImgData.id : this.$data.userInfo.id) + ".png",
+                    realName: "1.png",
+                    trim: false,
+                    // variations:[
+                    //     {suffix: "l", resolution: "1024x1024"},
+                    //     {suffix: "m", resolution: "512x512"},
+                    //     {suffix: "s", resolution: "256x256"}
+                    // ]
+                };
+                if(clear){
+                    opt.imageBase64 = '';
+                }
+                this.times = 0;
+                this.execUpload(opt,clear,cb);
             }
-            this.times = 0;
-            this.execUpload(opt,clear,cb);
         },
         execUpload: function (opt,clear,cb) {
             var _this = this;
@@ -575,6 +610,35 @@
                 }
             }
             return name;
-        }
+		},
+		// 获取顾客来源分类
+		getCustomerSource: function() {
+			var memSourceList = am.metadata.memSourceList;
+			var menSourceRes = []
+			$.each(memSourceList, function(i, item) {
+				if(!!item.status) {
+					menSourceRes.push(item)
+				}
+			})
+			return menSourceRes
+		},
+		// 渲染顾客来源分类
+		renderCustomerSource:function(arr) {
+            var selectedSourceId = self.$.find('.cm_form.source .changesource .selected .change_words').attr('data-val');
+			self.$.find('.cm_form.source .changesource').empty()
+			$.each(arr, function(i, item) {
+                var $div = $('<div class="changebox am-clickable"><span class="change_icon"></span><span class="change_words"></span></div>')
+				if(item.sourceId == 4 || item.sourceId == 5 || item.sourceId == 6) {
+					$div.addClass('changebox-hidden').find('.change_words').text(item.sourceName).attr('data-val', item.sourceId).attr('data-status', item.status)
+				} else {
+					$div.removeClass('changebox-hidden').find('.change_words').text(item.sourceName).attr('data-val', item.sourceId).attr('data-status', item.status)
+                }
+                if(selectedSourceId==item.sourceId){
+                    $div.addClass('selected');
+                }
+				self.$.find('.cm_form.source .changesource').append($div)
+			})
+			this.$sourceScroll.refresh();
+		}
     });
 })();

@@ -125,12 +125,136 @@
                         str += (serverNo + "-" + (serverName.substr(0,4) || "") +(server.pointFlag==1?'-指定':'')+' ');
                     }
                 }
+                if(str.substr(-1,1)==' '){
+                    str = str.substring(0,str.length-1);
+                }
                 info.push(str);
                 info.push("--------------------------------");
             }
             return info;
         },
+        getNoRepeatServers: function(productServersTotal,itemServersTotal){
+            var servers = [];
+            var tempServersArr = productServersTotal.concat(itemServersTotal);
+            var tempServersObj = {};
+            if(tempServersArr.length){
+                for(var i=0;i<tempServersArr.length;i++){
+                    if(!tempServersObj[tempServersArr[i].empNo]){
+                        tempServersObj[tempServersArr[i].empNo] = tempServersArr[i];
+                    }else {
+                        if(tempServersArr[i].pointFlag==1){
+                            tempServersObj[tempServersArr[i].empNo].pointFlag = 1;
+                        }
+                    }
+                    
+                }
+            }
+            for(var key in tempServersObj){
+                servers.push(tempServersObj[key]);
+            }
+            return servers;
+        },
+        mergeSameItems: function(serviceItems){
+            var service = [];
+            var serviceArr = [];
+            var combcardMap = {};
+            if(serviceItems.length){
+                for(var i=0;i<serviceItems.length;i++){
+                    var item = serviceItems[i];
+                    if(item.consumeType!=0 && item.consumeId){
+                        if(!combcardMap[item.consumeId]){
+                            combcardMap[item.consumeId] = [item]
+                        }else {
+                            combcardMap[item.consumeId].push(item);
+                        }
+                    }else {
+                        serviceArr.push(item);
+                    }
+                }
+            }
+
+            for(var key in combcardMap){
+                var combcard = combcardMap[key];
+                var obj = {};
+                for(var i=0;i<combcard.length;i++){
+                    if(!obj[combcard[i].id]){
+                        obj[combcard[i].id] = [combcard[i]];
+                    }else {
+                        obj[combcard[i].id].push(combcard[i]);
+                    }
+                }
+                combcardMap[key] = obj;
+            }
+
+            for(var key in combcardMap){
+                for(var key2 in combcardMap[key]){
+                    combcardMap[key][key2][0].times = combcardMap[key][key2].length;
+                    combcardMap[key][key2][0].leaveTimes =  combcardMap[key][key2][0].totalTimes - this.getLeaveTimes(combcardMap[key]);
+                    for(var i=1;i<combcardMap[key][key2].length;i++){
+                        combcardMap[key][key2][0].servers = combcardMap[key][key2][0].servers.concat(combcardMap[key][key2][i].servers);
+                    }
+                    service.push(combcardMap[key][key2][0]);
+                }
+            }
+            for(var i=0;i<serviceArr.length-1;i++){
+                for(var j=i+1;j<serviceArr.length;j++){
+                    if(!serviceArr[i].repeat){
+                        if(serviceArr[i].itemNo==serviceArr[j].itemNo && serviceArr[i].itemName==serviceArr[j].itemName && serviceArr[i].salePrice==serviceArr[j].salePrice){
+                            if(!serviceArr[i].times){
+                                serviceArr[i].times = 1;
+                            }
+                            serviceArr[i].times ++;
+                            serviceArr[i].servers = serviceArr[i].servers.concat(serviceArr[j].servers);
+                            serviceArr[j].repeat = true;
+                        }
+                    }
+                }
+            }
+            for(var i=0;i<serviceArr.length;i++){
+                if(!serviceArr[i].repeat){
+                    service.push(serviceArr[i]);
+                }
+            }
+            return service;
+        },
+        getLeaveTimes:function(comb){
+            var time = 0;
+            for(var key in comb){
+                time += comb[key].length || 0;
+            }
+            return time;
+        },
+        setQrcode: function(qrcode,callback){
+            //获取本地暂存的短网址
+            var savedCode = localStorage.getItem("TP_savedCode");
+            if (savedCode) {
+                savedCode = JSON.parse(savedCode);
+            }
+
+            //如果长网址和暂存的短网址相同，则不请求新浪服务，直接使用
+            if (savedCode && savedCode.long == qrcode) {
+                qrcode = savedCode.short;
+                callback && callback(qrcode)
+            } else if (qrcode.length > 50) {
+                amGloble.getShortUrl(qrcode, function(ret) {
+                    localStorage.setItem("TP_savedCode", JSON.stringify({
+                        long: qrcode,
+                        short: ret,
+                    }));
+                    qrcode = ret;
+                    callback && callback(ret)
+                }, function(ret) {
+                    callback && callback(ret);
+                })
+            }else {
+                callback && callback(qrcode)
+            }
+        },
         print: function(serviceData, scb, fcb) {
+            var serviceData = JSON.parse(JSON.stringify(serviceData));
+            if(serviceData[1].serviceItems && serviceData[1].serviceItems.length){
+                serviceData[1].serviceItems = this.mergeSameItems(serviceData[1].serviceItems);
+            }
             this.$prodItem = [];
             this.$serverItem = [];
             this.$cardItem = [];
@@ -164,7 +288,16 @@
             //操作者-用户名
             var operateName = am.metadata.userInfo.userName || "";
             console.log(operateName);
-                //[单号]，有就显示，没有就不显示这一行
+            //店铺地址
+            var address = am.metadata.userInfo.address || "";
+            console.log(address);
+            //店铺号码
+			var firstPhone = am.metadata.userInfo.firstPhone || "";
+			if(am.metadata.shopPropertyField.billbyphonetype == "1"){
+				firstPhone = am.metadata.userInfo.secondPhone || "";
+			}
+            console.log(firstPhone);
+            //[单号]，有就显示，没有就不显示这一行
             var printDataBillNo = [];
             (data[1].billNo) && printDataBillNo.push(["流 水 号 : " + data[1].billNo, "normal"]);
             //顾客 [卡 ]
@@ -221,14 +354,21 @@
 		        //卖品数据
 		        for (var j = 0; j < products.depots.length; j++) {
 			        var item = products.depots[j];
-			        //项目名称，打印小票用
-			        var itemName = item.productName;
+                    //项目名称，打印小票用
+                    var originPrice = 0;
+                    var _item = amGloble.metadata.categoryItemMap[item.productid || item.itemNo];
+                    if(_item && _item.saleprice*1){
+                        originPrice = _item.saleprice;
+                    }else {
+                        originPrice = item.salePrice;
+                    }
+			        var itemName = item.productName+'(￥'+originPrice+')';
 			        var itemNum = item.number;
 			        var itemPrice = item.salePrice;
 			        var lineString = this.splitString(itemName, 16);
-                    this.$prodItem.push([itemName,itemNum,'￥'+itemPrice]);
+                    this.$prodItem.push([itemName,itemNum,'￥'+Math.round(itemPrice*100)/100]);
 			        console.log(lineString);
-			        prodPrintItems.push(this.formatString(lineString[0], "left", 16) + this.formatString(itemNum, "left", 5) + "￥" + itemPrice);
+			        prodPrintItems.push(this.formatString(lineString[0], "left", 16) + this.formatString(itemNum, "left", 5) + "￥" + Math.round(itemPrice*100)/100);
 			        if (lineString[1] && lineString[1].length > 0) {
 				        prodPrintItems.push(lineString[1]);
 			        }
@@ -247,47 +387,61 @@
                 this.$serverItem = [];
                 //项目数据
                 var comboItemMap={},itemServersTotal=[];
-                if(serviceItem.length){
-                    for(var j=0;j<serviceItem.length;j++){
-                        var item=serviceItem[j];
-                        if(item.consumeId){
-                            if(comboItemMap[item.consumeId]){
-                                comboItemMap[item.consumeId].use++;
-                            }else{
-                                comboItemMap[item.consumeId]={};
-                                comboItemMap[item.consumeId].use = 1;
-                                comboItemMap[item.consumeId].total = item.totalTimes;
-                            }
-                        }
-                    }
-                }
-                console.log(comboItemMap);
+                // if(serviceItem.length){
+                //     for(var j=0;j<serviceItem.length;j++){
+                //         var item=serviceItem[j];
+                //         if(item.consumeId){
+                //             if(comboItemMap[item.consumeId]){
+                //                 comboItemMap[item.consumeId].use++;
+                //             }else{
+                //                 comboItemMap[item.consumeId]={};
+                //                 comboItemMap[item.consumeId].use = 1;
+                //                 comboItemMap[item.consumeId].total = item.totalTimes;
+                //             }
+                //         }
+                //     }
+                // }
+                // console.log(comboItemMap);
                 for (var i = 0; i < serviceItem.length; i++) {
                     var item = serviceItem[i];//分两种消费 普通项目消费和套餐消费
                     var itemServers = item.servers;
                     itemServersTotal = itemServersTotal.concat(itemServers);
-                    servantNameArray=this.spellServers(itemServersTotal.concat( productServersTotal || [] ));
-                    var itemName = item.itemName;//项目名称，打印小票用
+                    // servantNameArray=this.spellServers(itemServersTotal.concat( productServersTotal || [] ));
+                    var originPrice = 0;
+                    var _item = amGloble.metadata.serviceCodeMap[item.itemId || item.itemNo];
+                    if(_item && _item.price*1){
+                        originPrice = _item.price;
+                    }else {
+                        originPrice = item.salePrice;
+                    }
+                    var itemName = item.itemName+'(￥'+originPrice+')';//项目名称，打印小票用
                     var lineString = this.splitString(itemName, 16);
                     if(item.consumeId || item.isComboConsume){//套餐消费 显示剩余次数
                         var itemTimes = '';
-                        if(item.totalTimes && comboItemMap[item.consumeId]){
-                            if(item.totalTimes!=-99){
-                                comboItemMap[item.consumeId].total = comboItemMap[item.consumeId].total -1;//项目剩余次数 套餐消费 显示 次数
-                                itemTimes = comboItemMap[item.consumeId].total;
-                            }else{
-                                itemTimes=item.totalTimes;
-                            }   
+                        // if(item.totalTimes && comboItemMap[item.consumeId]){
+                        //     if(item.totalTimes!=-99){
+                        //         comboItemMap[item.consumeId].total = comboItemMap[item.consumeId].total -1;//项目剩余次数 套餐消费 显示 次数
+                        //         itemTimes = comboItemMap[item.consumeId].total;
+                        //     }else{
+                        //         itemTimes=item.totalTimes;
+                        //     }   
+                            
+                        // }
+                        if(item.leaveTimes){
+                            itemTimes=item.leaveTimes;
                         }
-                        printItems.push(this.formatString(lineString[0], "left", 16) + this.formatString('1', "left", 9) + (itemTimes?(itemTimes==-99?'不限次':("余" +itemTimes+"次")):''));
-                        this.$serverItem.push([itemName,1,(itemTimes?(itemTimes==-99?'不限次':("余" +itemTimes+"次")):'')]);
+                        if(item.totalTimes==-99){
+                            itemTimes =  item.totalTimes;
+                        }
+                        printItems.push(this.formatString(lineString[0], "left", 16) + this.formatString((item.times || 1), "left", 7) + (itemTimes?(itemTimes==-99?'不限次':("余" +itemTimes+"次")):''));
+                        this.$serverItem.push([itemName,(item.times || 1),(itemTimes?(itemTimes==-99?'不限次':("余" +itemTimes+"次")):'')]);
                         if (lineString[1] && lineString[1].length > 0) {
                             printItems.push(lineString[1]);
                         }
                     }else {//普通项目消费 显示价格
                         var itemPrice = item.salePrice;//项目价格 普通项目消费 显示 价格
-                        printItems.push(this.formatString(lineString[0], "left", 16) + this.formatString("1", "left", 9) + "￥" + itemPrice);
-                        this.$serverItem.push([itemName,1,'￥'+itemPrice]);
+                        printItems.push(this.formatString(lineString[0], "left", 16) + this.formatString((item.times || 1), "left", 7) + "￥" + Math.round(itemPrice*100)/100);
+                        this.$serverItem.push([itemName,(item.times || 1),'￥'+Math.round(itemPrice*100)/100]);
                         if (lineString[1] && lineString[1].length > 0) {
                             printItems.push(lineString[1]);
                         }
@@ -295,6 +449,9 @@
                     /*total += itemPrice;*/
                     
                 }
+                var noRepeatServers = this.getNoRepeatServers((productServersTotal || []),itemServersTotal);
+                servantNameArray=this.spellServers(noRepeatServers);
+
                 total = data[1].billingInfo.total-(data[1].billingInfo.treatfee || 0)-(data[1].billingInfo.treatpresentfee||0);
             } else if (expenseCategory == 2) { //开卡
                 var present = data[1].billingInfo.presentFee;
@@ -414,7 +571,10 @@
                 "mdFee": "免单",
                 "luckymoney": "红包",
                 "coupon": "优惠券",
-                "pointFee": "扣积分",
+                // "pointFee": "扣积分",
+                "mallOrderFee": "商城订单",
+                "onlineCreditPay": "线上积分抵扣金",
+                "offlineCreditPay": "线下积分抵扣金",
                 // "treatfee": "套餐卡金",
                 // "treatpresentfee": "套餐赠金",
 
@@ -440,7 +600,7 @@
             var printFeeType = ['工本费'];
             var printCostType = ['开卡成本'];
             $.each(payType, function(i, item) {
-                if (item != 0 && item != null && i != "luckyMoneyId" && i != "weixinId" && i != "payId" && i != "dpId" && i != "eaFee" && i != "total" && i != "mallId" && i != "mallNo" && i != "dpCouponId"  && i != "totalfeeanddebtfee" && i != "treatfee" && i != "treatpresentfee") {
+                if (item != 0 && item != null && i != "luckyMoneyId" && i!= "kBOrderid" && i!= "luckMoneys" && i != "weixinId" && i != "payId" && i != "dpId" && i != "eaFee" && i != "total" && i != "mallId" && i != "mallNo" && i != "dpCouponId" && i != "jdOrderId"  && i != "totalfeeanddebtfee" && i != "treatfee" && i != "treatpresentfee") {
                     if (expenseCategory == 2 || expenseCategory == 3) {
                         if (i != "presentFee") {
                             if (i.indexOf('otherfee') != -1) {
@@ -482,6 +642,22 @@
                 }
             })
             console.log(printDataPayType);
+            if(data[0] && data[0].combinedUseFlag==1){
+                for(var i=0;i<printDataPayType.length;i++){
+                    if(printDataPayType[i].indexOf('划赠送金')!=-1){
+                        var _gift = printDataPayType[i].replace('划赠送金: ￥','')*1;
+                        printDataPayType.splice(i,1);
+                        for(var j=0;j<printDataPayType.length;j++){
+                            if(printDataPayType[j].indexOf('划卡')!=-1){
+                                var _blance = printDataPayType[j].replace('划卡: ￥','')*1;
+                                printDataPayType[j] = '划卡: ￥'+Math.round((_blance+_gift)*100)/100;
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
             if(expenseCategory==3 && data[1].cardType==2){
                 printDataPayType = [];
             }
@@ -495,32 +671,13 @@
             }
 
             console.log(printDataPayType);
+
             //二维码
-
-            //获取本地暂存的短网址
-            var savedCode = localStorage.getItem("TP_savedCode");
-            if (savedCode) {
-                savedCode = JSON.parse(savedCode);
-            }
-
-            //获取正确的长网址
             var qrcode = config.mykDownloadPage + am.metadata.userInfo.parentShopId;
             if (am.metadata.configs.showPromoteBarCode == "true" && am.metadata.configs.promoteBarLink) {
                 qrcode = am.metadata.configs.promoteBarLink;
             }
 
-            //如果长网址和暂存的短网址相同，则不请求新浪服务，直接使用
-            if (savedCode && savedCode.long == qrcode) {
-                qrcode = savedCode.short;
-            } else if (qrcode.length > 50) {
-                amGloble.getShortUrl(qrcode, function(ret) {
-                    localStorage.setItem("TP_savedCode", JSON.stringify({
-                        long: qrcode,
-                        short: ret,
-                    }));
-                    qrcode = ret;
-                }, function(ret) {})
-            }
             //套餐卡 结算前 添加 工本费明细
             if(expenseCategory == 4 || expenseCategory == 2){//套餐
                 if(costNum){
@@ -538,7 +695,7 @@
                     })
                 }
             }
-            var printData = [
+            var printData = [this.formatString(" ", "center", 32),// fix bug 0017545
                     [this.formatString(tenantName, "center", 16), "big", "bold"],
                     this.formatString("消费清单", "center", 32)
                 ],
@@ -550,23 +707,30 @@
                 ],*/
                 printFooter = [
                     "--------------------------------",
-                    this.formatString("总计: ", "right", 25) + "￥" + Math.round(total*100)/100,
+                    this.formatString("总计: ", "right", 20) + "￥" + Math.round(total*100)/100,
                     // "--------------------------------",
                     // " ", this.formatString("客户签名: ", "right", 25) + "_______",
                     //[qrcode, "qrcode"],
                     //this.formatString(am.metadata.configs.promoteLiterature || "扫码查卡金,享优惠", "center", 32)
                 ];
                 if(data[1].hasOwnProperty('cardBalance')){
-                    var balance = [
-                        "--------------------------------",
-                        this.formatString("卡金余额: ￥"+data[1].cardBalance),
-                        this.formatString("赠金余额: ￥"+data[1].presentBalance),
-                    ];
+                    if((data[1].expenseCategory!=2 && data[0].combinedUseFlag==1) || (data[1].expenseCategory==2 && data[1].card.combinedUseFlag==1)){
+                        var balance = [
+                            "--------------------------------",
+                            this.formatString("卡金余额: ￥"+Math.round((data[1].cardBalance+data[1].presentBalance)*100)/100),
+                        ];
+                    }else {
+                        var balance = [
+                            "--------------------------------",
+                            this.formatString("卡金余额: ￥"+data[1].cardBalance),
+                            this.formatString("赠金余额: ￥"+data[1].presentBalance),
+                        ];
+                    }
                     printFooter = printFooter.concat(balance);
                 }
                 printFooter.push("--------------------------------");
                 printFooter.push(" ");
-                printFooter.push(this.formatString("客户签名: ", "right", 25) + "_______");
+                printFooter.push(this.formatString("客户签名: ", "right", 20) + "_______");
                 if(am.metadata.configs.isPrintQRcode != "true"){
                     //关闭了显示二维码
                     printFooter.push(" ");
@@ -599,9 +763,14 @@
             this.$.find('.time').html(consumeTime);
             //操作者
             printData = printData.concat("操 作 者 : " + operateName );//拼操作者
-            this.$.find('.operator').html(operateName);
-            //拼服务者
-            // printData = printData.concat(servantNameArray);
+			this.$.find('.operator').html(operateName);
+			//号码
+			printData = printData.concat("电 话 : " + firstPhone );//拼号码
+			this.$.find('.mobile').html(firstPhone);
+			//号码
+			printData = printData.concat("地 址 : " + address );//拼号码
+			this.$.find('.address').html(address);
+			//拼服务者
             if(servantNameArray.length){
                 var sArr0 = servantNameArray[0].split(' : ')[0];
                 var sArr1 = servantNameArray[0].split(' : ')[1].split(' ');
@@ -659,8 +828,13 @@
             this.$.find('.total').html('总计: ￥'+Math.round(total*100)/100);
 
             if(data[1].hasOwnProperty('cardBalance')){
-                this.$.find('.cardBalance').show().html('￥'+data[1].cardBalance);
-                this.$.find('.presentBalance').show().html('￥'+data[1].presentBalance);
+                if((data[1].expenseCategory!=2 && data[0].combinedUseFlag==1) || (data[1].expenseCategory==2 && data[1].card.combinedUseFlag==1)){
+                    this.$.find('.cardBalance').html('￥'+Math.round((data[1].cardBalance+data[1].presentBalance)*100)/100).parent().show();
+                    this.$.find('.presentBalance').parent().hide();
+                }else {
+                    this.$.find('.cardBalance').html('￥'+data[1].cardBalance).parent().show();
+                    this.$.find('.presentBalance').html('￥'+data[1].presentBalance).parent().show();
+                }
             }else {
                 this.$.find('.cardBalance').parent().hide();
                 this.$.find('.presentBalance').parent().hide();
@@ -668,15 +842,18 @@
             
 
             console.log(printData);
-
+            var _this = this;
             if(window.location.protocol.indexOf('http')!=-1){
                 if(am.metadata.configs.isPrintQRcode != "true"){
-                    this.$.find('.qrcode').show().find('img').attr('src',am.getQRCode(qrcode,200,200));
-                    var img = new Image();
-                    img.src = this.$.find('.qrcode').show().find('img').attr('src');
-                    img.onload = function(){
-                        window.print();
-                    }
+                    this.setQrcode(qrcode,function(newCode){
+                        qrcode = newCode;
+                        _this.$.find('.qrcode').show().find('img').attr('src',am.getQRCode(qrcode,200,200));
+                        var img = new Image();
+                        img.src = _this.$.find('.qrcode').show().find('img').attr('src');
+                        img.onload = function(){
+                            window.print();
+                        }
+                    });
                 }else {
                     this.$.find('.qrcode').hide();
                     window.print();
@@ -693,6 +870,17 @@
             } else {
                 this.printDataStorage = JSON.stringify(printData);
             }
+
+            if(am.metadata.configs.isPrintQRcode != "true"){
+                this.setQrcode(qrcode,function(newCode){
+                    printData[printData.length-2][0] = newCode;
+                    _this.containerPrint(printData,scb,fcb);
+                });
+            }else {
+                this.containerPrint(printData,scb,fcb);
+            }
+        },
+        containerPrint:function(printData,scb,fcb){
             var printType = this.getPrintType();
             if(printType=='usb'){
                 if(navigator.userAgent.indexOf("Windows")!==-1 && window.wPlugin) {
@@ -743,7 +931,7 @@
                     fcb && fcb('没有可用的打印机');
                 }
             }
-	        
+            
             console.log(printData);
         },
         getPrintType:function(){

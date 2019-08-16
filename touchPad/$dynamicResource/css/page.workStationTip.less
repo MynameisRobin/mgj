@@ -1,0 +1,114 @@
+ .page_workStationTip {
+    *,
+	&:after,
+	&:before {
+		box-sizing: border-box;
+		-webkit-box-sizing: border-box;
+	}
+	.clearfix:after {
+		content: ".";
+	    display: block;
+	    height: 0;
+	    visibility: hidden;
+	    clear: both;
+    }
+    .content-wrap {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 50px;
+        bottom: 0;
+        overflow: hidden;
+        .content {
+            .top {
+                margin-top: 30px;
+                .title {
+                    font-size: 20px;
+                    color: #333;
+                    text-align: center;
+                    line-height: 28px;
+                    margin-top: 44px;
+                }
+                .subtitle {
+                    font-size: 16px;
+                    color: #909090;
+                    text-align: center;
+                    line-height: 24px;
+                    margin-top: 5px;
+                }
+            }
+            .middle {
+                width: 967px;
+                height: 183px;
+                margin: 50px auto;
+                background: url(../images/workStation.png);
+                background-size: 100% 100%;
+            }
+            .footer {
+                .tip {
+                    font-size: 15px;
+                    color: #333;
+                    text-align: center;
+                    line-height: 20px;
+                }
+                .setWorkStation {
+                    width: 146px;
+                    height: 44px;
+                    border-radius: 4px;
+                    background-color: #555;
+                    font-size: 14px;
+                    color: #fff;
+                    text-align: center;
+                    line-height: 44px;
+                    margin: 10px auto;
+                    &.am-clickable-active {
+                        background-color: #6c6c6c;
+                    }
+                }
+                .openWorkStationBill {
+                    height: 30px;
+                    text-align: center;
+                    overflow: hidden;
+                    opacity: 0.5;
+                    .icon {
+                        display: inline-block;
+                        vertical-align: top;
+                        margin: 7px;
+                        width: 16px;
+                        height: 16px;
+                        border-radius: 2px;
+                        position: relative;
+                        border: 1px solid #a1a1a1;
+                        .iconfont {
+                            position: absolute;
+                            width: 20px;
+                            height: 20px;
+                            left: 50%;
+                            top: 50%;
+                            transform: translate(-50%, -50%);
+                            -webkit-transform: translate(-50%, -50%);
+                            display: none;
+                        }
+                    }
+                    .text {
+                        display: inline-block;
+                        vertical-align: top;
+                        font-size: 14px;
+                        color: #555;
+                        line-height: 30px;
+                        height: 30px;
+                    }
+                    &.selected {
+                        opacity: 1;
+                        .icon {
+                            border: none;
+                            .iconfont {
+                                display: block;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+ }

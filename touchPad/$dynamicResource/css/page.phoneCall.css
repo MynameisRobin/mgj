@@ -185,17 +185,46 @@
   color: #999;
   font-size: 14px;
 }
-#page_phoneCall .am-right .vip-select .select ul {
+#page_phoneCall .am-right .vip-select .select .warp {
   height: 400px;
-  overflow: auto;
+  overflow: hidden;
   margin-top: 32px;
   padding-top: 1px;
 }
-#page_phoneCall .am-right .vip-select .select ul li {
-  padding: 12px 0;
-  margin-top: -1px;
-  border-top: 1px solid #ececec;
+#page_phoneCall .am-right .vip-select .select .warp ul {
   border-bottom: 1px solid #ececec;
+}
+#page_phoneCall .am-right .vip-select .select .warp ul li {
+  height: 40px;
+  margin-top: -1px;
+  position: relative;
+  line-height: 40px;
+  text-align: center;
+}
+#page_phoneCall .am-right .vip-select .select .warp ul li .shopName {
+  display: none;
+  position: absolute;
+  left: 19px;
+}
+#page_phoneCall .am-right .vip-select .select .warp ul li .name {
+  width: 150px;
+  height: 40px;
+  position: absolute;
+  margin-left: -100px;
+  left: 50%;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+#page_phoneCall .am-right .vip-select .select .warp ul li.first {
+  border-top: 1px solid #ececec;
+}
+#page_phoneCall .am-right .vip-select .select .warp ul li.first .shopName {
+  display: inline;
+}
+#page_phoneCall .am-right .vip-select .select .warp ul li.act {
+  background: #fff5f6;
 }
 #page_phoneCall .am-right .vip-info {
   display: none;
@@ -228,14 +257,14 @@
 #page_phoneCall .am-right .vip-info .comboBox .leftCard .cardTit {
   height: 25px;
   margin: 10px 0;
-  background-color: #FFF;
+  background-color: #ffffff;
 }
 #page_phoneCall .am-right .vip-info .comboBox .leftCard .cardTit span {
   vertical-align: middle;
   display: inline-block;
   line-height: 25px;
   font-size: 12px;
-  color: #999;
+  color: #999999;
 }
 #page_phoneCall .am-right .vip-info .comboBox .leftCard .cardTit .icon {
   width: 15px;
@@ -269,7 +298,7 @@
   width: 0;
   height: 0;
   border-top: 1px solid transparent;
-  border-right: 3px solid #FFF;
+  border-right: 3px solid #ffffff;
   border-bottom: 1px solid transparent;
   position: absolute;
   z-index: 2;
@@ -294,7 +323,7 @@
 #page_phoneCall .am-right .vip-info .comboBox .leftCard .cardBox .list ul li {
   width: 100%;
   height: 100px;
-  border: 1px solid #BBBBBB;
+  border: 1px solid #bbbbbb;
   border-radius: 10px;
   -webkit-border-radius: 10px;
   margin-bottom: 25px;
@@ -359,19 +388,19 @@
   margin-top: -20px;
 }
 #page_phoneCall .am-right .vip-info .comboBox .leftCard .cardBox .list ul li.addcard .line {
-  background-color: #ECECEC;
+  background-color: #ececec;
 }
 #page_phoneCall .am-right .vip-info .comboBox .leftCard .cardBox .list ul li.addcard:after {
   z-index: 0;
 }
 #page_phoneCall .am-right .vip-info .comboBox .leftCard .cardBox .list ul li.selected {
-  /* // background-color: @bg03; */
+ 
 }
 #page_phoneCall .am-right .vip-info .comboBox .leftCard .cardBox .list ul li.selected:after {
   z-index: -1;
 }
 #page_phoneCall .am-right .vip-info .comboBox .leftCard .cardBox .list ul li.selected .name {
-  /* // color: @c01; */
+  
 }
 #page_phoneCall .am-right .vip-info .comboBox .leftCard .cardBox .list ul li.selected:before {
   content: "";
@@ -392,14 +421,14 @@
   height: 5px;
   left: -5%;
   z-index: -1;
-  background: -webkit-linear-gradient(0deg, #f0f0f0, #fff);
-  background: -o-linear-gradient(0deg, #f0f0f0, #fff);
-  background: linear-gradient(0deg, #f0f0f0, #fff);
+  background: -webkit-linear-gradient(0deg, #f0f0f0, #ffffff);
+  background: -o-linear-gradient(0deg, #f0f0f0, #ffffff);
+  background: linear-gradient(0deg, #f0f0f0, #ffffff);
   opacity: 0.7;
 }
 #page_phoneCall .am-right .vip-info .comboBox .leftCard .cardBox .list ul li .num {
   font-size: 12px;
-  color: #999;
+  color: #999999;
   padding: 0 0 0 18px;
 }
 #page_phoneCall .am-right .vip-info .comboBox .leftCard .cardBox .list ul li .num .key {
@@ -520,7 +549,7 @@
 #page_phoneCall .am-right .vip-info .comboBox .leftCard .cardBox .list ul li .duedatewrap {
   position: relative;
   font-size: 12px;
-  color: #999;
+  color: #999999;
   padding: 0 18px;
 }
 #page_phoneCall .am-right .vip-info .comboBox .leftCard .cardBox .list ul li .duedatewrap .duedate {
@@ -554,7 +583,7 @@
   height: 30px;
   width: 100%;
   padding: 0 0 0 18px;
-  color: #999;
+  color: #999999;
   font-size: 0px;
   font-size: 12px;
   background-color: rgba(255, 255, 255, 0.1);
@@ -676,7 +705,7 @@
   height: 25px;
   margin: 10px 0;
   /* padding-left: 30px; */
-  background-color: #FFF;
+  background-color: #ffffff;
   /* .icon{
               width: 15px;
               height:15px;
@@ -714,7 +743,7 @@
   height: 50px;
   display: block;
   margin-bottom: 20px;
-  border: 1px solid #BBBBBB;
+  border: 1px solid #bbbbbb;
   border-radius: 10px;
   -webkit-border-radius: 10px;
   padding: 14px 15px;
@@ -736,7 +765,7 @@
 }
 #page_phoneCall .am-right .vip-info .comboBox .rightcombo .combobox .list ul li .left span.key {
   font-size: 14px;
-  color: #222;
+  color: #222222;
   margin-bottom: 10px;
 }
 #page_phoneCall .am-right .vip-info .comboBox .rightcombo .combobox .list ul li .left span.key strong {
@@ -778,7 +807,7 @@
 }
 #page_phoneCall .am-right .vip-info .comboBox .rightcombo .combobox .list ul li .left span.value {
   font-size: 12px;
-  color: #999;
+  color: #999999;
 }
 #page_phoneCall .am-right .vip-info .comboBox .rightcombo .combobox .list ul li .left span.value .duedate {
   width: auto;

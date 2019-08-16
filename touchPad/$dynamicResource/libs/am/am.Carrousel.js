@@ -67,22 +67,45 @@
 			});
 		},
 		refresh : function() {
-		    var w = this._itemw = (this.width || (window.innerWidth > 500 ? 500 : window.innerWidth)) / this.visible, h = this.height;
+			//after_carrousel 服务页二维码弹窗JS
+			if(this.id == 'after_carrousel' || this.id == 'qrCodeSwiper') {
+				var w = (this.width || (window.innerWidth > 500 ? 380 : window.innerWidth)) / this.visible, h = this.height;
+			}else {
+				var w = this._itemw = (this.width || (window.innerWidth > 500 ? 500 : window.innerWidth)) / this.visible, h = this.height;
+			}
+			
 			this.$items = this.$inner.children();
 			if (this.$items.length < 1) {
 				return;
 			}
 
-			this.$inner.css({
-				width : w * this.$items.length + "px"
-			});
-			this.$items.each(function() {
-				$(this).css({
-					'width' : w + "px",
-					'height' : h + "px",
-					'float' : "left"
-				}).addClass("imgBg");
-			});
+			if(this.id == 'after_carrousel' || this.id == 'qrCodeSwiper') {
+				var allW = 0;
+				this.$items.each(function(i, item) {
+					$(item).addClass("imgBg");
+					allW += $(item).outerWidth(true);
+				}) 
+
+				//加上有selected 类名的80px 以及 zoom后的20px
+				this.$inner.css({
+					width : allW + 100 + "px"
+				});
+
+				this._itemw = this.$items.outerWidth(true);
+
+			}else {
+				this.$inner.css({
+					width : w * this.$items.length + "px"
+				});
+
+				this.$items.each(function() {
+					$(this).css({
+						'width' : w + "px",
+						'height' : h + "px",
+						'float' : "left"
+					}).addClass("imgBg");
+				});
+			}
 			this.nPos = 0;
 			this.current = 0;
 			this.show(0);

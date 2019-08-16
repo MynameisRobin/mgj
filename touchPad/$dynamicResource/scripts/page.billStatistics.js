@@ -126,7 +126,24 @@
 			self.incomeScroll.refresh();
 
 			this.$.find('.gotoManageSys').vclick(function() {
-				window.open(window.config.baseSys + am.metadata.userInfo.mgjtouchtoken, '_blank', 'location=yes');
+				var random = Math.ceil(Math.random()*7)+1;
+				window.open(window.config.baseSys.replace('vip4','vip'+random) + am.metadata.userInfo.mgjtouchtoken, '_blank', 'location=yes');
+			});
+
+			//小计收入汇总点击
+			this.$.find('.income .title').vclick(function(){
+				var childUl = $(this).next(".childUl");
+				if(childUl.hasClass("active")){
+					$(this).removeClass("active");
+					childUl.removeClass("active");
+				}else{
+					self.$.find(".income .title").removeClass("active");
+					self.$.find(".income .childUl").removeClass("active");
+					$(this).addClass("active");
+					childUl.addClass("active");
+				}
+				self.incomeScroll.scrollTo('top');
+				self.incomeScroll.refresh();
 			});
 		},
 		changeSelected: function() {
@@ -229,7 +246,6 @@
 				perfData.sort(function(a, b) {
 					return -(a.val - b.val);
 				});
-				console.log(perfData);
 				if (total1 == 0) {
 					renderobjGray = [{value: 100, color: '#eee'}];
 					self.drawCircle(circle1, renderobjGray);
@@ -339,35 +355,74 @@
 					renderobj3 = [],
 					total3 = 0,
 					incomeSummary = data.incomeSummary,
+					//type 0非现金类 1现金类 2卡扣类
+					//现金类:现金,银联,微信,支付宝,点评,商场卡,合作券  
+					//卡扣类:储值卡扣卡，储值卡扣赠，套餐卡扣卡，套餐卡扣赠,储值卡分期赠金
+					//其他非现类:自定义非现1-10,商城订单,欠款、代金券、红包、积分、免单
 					incomeMap = {
-						cash: {color: '#eb6877', name: '现金'},
-						pos: {color: '#c490bf', name: '银联'},
-						weixinfee: {color: '#80c269', name: '微信'},
-						payfee: {color: '#13b5b1', name: '支付宝'},
-						memCardPay: {color: '#facd89', name: '储值卡扣卡'},
-						memCardPresentPay: {color: '#62c2ed', name: '储值卡扣赠'},
-						comboCardPay: {color: '#acd598', name: '套餐卡扣卡'},
-						comboCardPresentPay: {color: '#f29b75', name: '套餐卡扣赠'},
-						dianpin: {color: '#88abda', name: '点评'},
-						mallfee: {color: '#556fb5', name: '商场卡'},
-						cooperationfee: {color: '#601986', name: '合作券'},
-						otherfee: {color: '#32b16c', name: '其他现金'}
+						cash: {color: '#eb6877', name: '现金', type:"1"},
+						pos: {color: '#c490bf', name: '银联', type:"1"},
+						weixinfee: {color: '#80c269', name: '微信', type:"1"},
+						payfee: {color: '#13b5b1', name: '支付宝', type:"1"},
+						dianpin: {color: '#88abda', name: '点评', type:"1"},
+						mallfee: {color: '#556fb5', name: '商场卡', type:"1"},
+						cooperationfee: {color: '#601986', name: '合作券', type:"1"},
+						memCardPay: {color: '#facd89', name: '划卡', type:"2"},
+						memCardPresentPay: {color: '#62c2ed', name: '划赠送金', type:"2"},
+						comboCardPay: {color: '#acd598', name: '划套餐卡金', type:"2"},
+						comboCardPresentPay: {color: '#f29b75', name: '划套餐赠送金', type:"2"},
+						dividefee: {color: '#73CED9', name: '划分期赠送金', type:"2"},
+						mallOrderFee: {color: '#42ADDC', name: '商城订单', type:"0"},
+						debtfee: {color: '#8ECE6F', name: '欠款', type:"0"},
+						voucherfee: {color: '#7B2BA6', name: '代金券', type:"0"},
+						mdfee: {color: '#4EC6A0', name: '免单', type:"0"},
+						luckymoney: {color: '#FFC62D', name: '红包', type:"0"},
+						onlineCreditPay: {color: '#F74285', name: '线上积分', type:"0"},
+						offlineCreditPay: {color: '#F72E5C', name: '线下积分', type:"0"},
 					},
-                    $income = $('div.billStatistics.income').find('ul');
-                    $incomeTotal = $('div.billStatistics.income span.total');
+					//颜色不够这里来拿
+					incomeColorArr = ['#32B16C','#FF9191','#ED6C9C','#FFBFA4','#C17E7C','#FFB13C','#71B2B0','#CFA796','#9151B3','#73CED9'],
+					$incomeCashUl = $('div.billStatistics.income').find('.incomeCashUl'),
+					$incomeCardUl = $('div.billStatistics.income').find('.incomeCardUl'),
+					$incomeOtherNoCashUl = $('div.billStatistics.income').find('.incomeOtherNoCashUl'),
+					$incomeTotal = $('div.billStatistics.income span.total');
+					
+				var payConfigs = am.metadata.payConfigs || [],
+					otherFeeMap = {},
+					num = 0;
+
+				//全部支付方式
+				$.each(payConfigs, function(i,v){
+					var field = v.field.toLowerCase();
+					if(field.indexOf("otherfee") > -1){
+						otherFeeMap[field] = {name:v.fieldname,type:v.type};
+					}
+				});
+
+				//匹配其他支付方式
+				$.each(otherFeeMap, function(q,r){
+					r.color = incomeColorArr[num++];
+				});
+
+				//合并支付方式
+				$.extend(incomeMap,otherFeeMap)
+				// console.log(incomeMap);
 
 				$.each(incomeSummary, function(i, item) {
-					var temp = {
-						val: item,
-						name: incomeMap[i].name,
-						color: incomeMap[i].color
-					};
-					incomeData.push(temp);
-					renderobj3.push({
-						value: item,
-						color: incomeMap[i].color
-					});
-					total3 += item;
+					if(incomeMap[i]){
+						var temp = {
+							val: item,
+							name: incomeMap[i].name,
+							color: incomeMap[i].color,
+							type: incomeMap[i].type
+						};
+						incomeData.push(temp);
+						renderobj3.push({
+							value: item,
+							color: incomeMap[i].color
+						});
+						total3 += item;
+					}
 				});
 				incomeData.sort(function(a, b) {
 					return b.val - a.val;
@@ -378,17 +433,39 @@
 				} else {
 					self.drawCircle(circle3, renderobj3);
 				}
-				$income.empty();
+				$incomeCashUl.empty();
+				$incomeCardUl.empty();
+				$incomeOtherNoCashUl.empty();
 				if (incomeSummary == null) {
-                    $('div.billStatistics.income ul:last-child').replaceWith('<div class="textGray">暂无数据</div>');
+                    $('div.billStatistics.income .treeUl').replaceWith('<div class="textGray">暂无数据</div>');
                     $incomeTotal.hide();
 				} else {
+					var cashSum = 0,cardSum = 0,otherCashSum = 0;
 					$.each(incomeData, function(i, item) {
-						var $html = $(
-							'<li class="am-clickable">' + '<i style="background-color:' + item.color + ';"></i>' + '<span>' + item.name + '</span>' + '<span>' + (item.val || '--') + '</span></li>'
-						);
-						$income.append($html);
-                    });
+						// console.log(item);
+						if(item.type == "0"){// 其他非现类
+							var $li0 = $(
+								'<li class="am-clickable">' + '<i style="background-color:' + item.color + ';"></i>' + '<span>' + item.name + '</span>' + '<span>' + (item.val || '--') + '</span></li>'
+							);
+							$incomeOtherNoCashUl.append($li0);
+							otherCashSum += item.val || 0;
+						}else if(item.type == "1"){// 现金类
+							var $li1 = $(
+								'<li class="am-clickable">' + '<i style="background-color:' + item.color + ';"></i>' + '<span>' + item.name + '</span>' + '<span>' + (item.val || '--') + '</span></li>'
+							);
+							$incomeCashUl.append($li1);
+							cashSum += item.val || 0;
+						}else if(item.type == "2"){// 卡扣类
+							var $li2 = $(
+								'<li class="am-clickable">' + '<i style="background-color:' + item.color + ';"></i>' + '<span>' + item.name + '</span>' + '<span>' + (item.val || '--') + '</span></li>'
+							);
+							$incomeCardUl.append($li2);
+							cardSum += item.val || 0;
+						}
+					});
+					self.$.find(".cashSum").html(cashSum.toFixed(2));
+					self.$.find(".cardSum").html(cardSum.toFixed(2));
+					self.$.find(".otherCashSum").html(otherCashSum.toFixed(2));
                     $incomeTotal.show().text('总计：'+total3.toFixed(2));
 				}
 				self.incomeScroll.refresh();
@@ -514,6 +591,7 @@
 					max: max,
 					min: min,
 					buttons: [],
+					endYear: amGloble.now().getFullYear()+50,
 					onSet: function(valueText, inst) {
 						self.valueText = valueText;
 						self.getData();

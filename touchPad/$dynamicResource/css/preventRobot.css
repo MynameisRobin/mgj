@@ -1,0 +1,77 @@
+/* 文字颜色 ***********************/
+/* c0* 为黑白灰色系 */
+#preventRobot {
+  z-index: 9999;
+}
+#preventRobot .wrapper {
+  width: 400px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background: #ffffff;
+  border-radius: 5px;
+  transform: translate(-50%, -50%);
+}
+#preventRobot .wrapper .title {
+  font-size: 16px;
+  line-height: 48px;
+  height: 48px;
+  padding: 0px 1rem;
+  color: #555555;
+  font-weight: normal;
+}
+#preventRobot .wrapper .close {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 35px;
+  height: 35px;
+}
+#preventRobot .wrapper .close::before {
+  content: "";
+  display: block;
+  width: 15px;
+  height: 15px;
+  margin: 10px;
+  background: url("../images/icons_sprite/close_employee.png") no-repeat 0px 0px;
+  background-size: 15px 15px;
+}
+#preventRobot .wrapper .content {
+  border-top: 1px solid #eeeeee;
+  border-bottom: 1px solid #eeeeee;
+  padding: 16px;
+}
+#preventRobot .wrapper .content .tip {
+  font-size: 16px;
+  line-height: 24px;
+}
+#preventRobot .wrapper .content .code {
+  width: 205px;
+  height: 36px;
+  border-radius: 2px;
+  border: solid 1px #dedede;
+  font-size: 16px;
+  padding: 0 10px;
+}
+#preventRobot .wrapper .content .codeImg {
+  position: relative;
+  top: 14px;
+  left: 24px;
+  height: 38px;
+  width: 88px;
+}
+#preventRobot .wrapper .footer {
+  height: 48px;
+}
+#preventRobot .wrapper .footer .btn {
+  line-height: 48px;
+  text-align: center;
+  font-size: 18px;
+  width: 50%;
+  float: left;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+#preventRobot .wrapper .footer .btn:first-child {
+  border-right: 1px solid #eeeeee;
+}

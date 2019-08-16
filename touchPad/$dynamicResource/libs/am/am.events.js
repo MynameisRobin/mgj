@@ -54,20 +54,20 @@
 		init : function() {
 			// setTextareaPointerEvents('none');
 
-			if ("ontouchend" in document) {
+			if ("ontouchend" in document && !device2.windows()) {
 				$(document).bind({
 					touchstart : this.touchstart,
 					touchmove : this.touchmove,
 					touchend : this.touchend
 				});
-			} else if (window.navigator.msPointerEnabled) {
+			/* } else if (window.navigator.msPointerEnabled && false) {
 
 				$(document).bind({
 					"MSPointerDown" : this.touchstart,
 					"MSPointerMove" : this.touchmove,
 					"MSPointerUp" : this.touchend
 				});
-
+ 			*/
 			}else{
 				$(document).bind({
 					"mousedown" : this.touchstart,
@@ -260,7 +260,7 @@
 								window.amClickAudio.play();
 							}
 						}
-					}, 50);
+					}, 1);
 					setTimeout(function(){
 						$target.removeClass("am-clickable-active");
 					},300);

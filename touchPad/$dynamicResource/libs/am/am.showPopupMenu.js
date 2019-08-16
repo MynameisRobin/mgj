@@ -2,7 +2,7 @@
 	if(atMobile && atMobile.nativeUIWidget){
 		var obj={
 			init:function () {
-				var $dom = $('<div class="nativeUIWidget-showPopupMenu"><div class="inner"><h1></h1><div class="list"><ul></ul></div><div class="ok">确定</div><div class="cancel">返 回</div></div></div>');
+				var $dom = $('<div class="nativeUIWidget-showPopupMenu"><div class="inner"><h1></h1><div class="radioBox am-clickable"><span class="iconfont icon-checkboxoutlineblank"></span><span class="cbText"></span></div><div class="list"><ul></ul></div><div class="ok">确定</div><div class="cancel">返 回</div></div></div>');
 				$dom.css({
 					"position":"absolute",
 					"left":0,
@@ -24,6 +24,16 @@
 					"line-height":"3rem",
 					"padding":"0 1rem",
 					"color":"#555"
+				}).end().find(".radioBox").css({
+					"position": "absolute",
+					"top": "0",
+					"right": "1rem",
+					"color":"#555555",
+					"line-height":"2.5rem"
+				}).find(".cbText").css({
+					"vertical-align": "2px"
+				}).end().find(".iconfont").css({
+					"font-size":"18px"
 				});
 				$dom.find(".list").css({
 					"max-height":"500px",
@@ -49,10 +59,27 @@
 				$("body").append($dom).append("<style>.nativeUIWidget-showPopupMenu li.am-clickable-active{background:#EEE}</style>");
 				this.$ = $dom;
 				this.$h=this.$.find("h1");
-				this.$ul=$dom.find("ul").on("vclick","li",function(){
-					if(obj.muti){
+				this.$radioBox = this.$.find(".radioBox").on("vclick", function () {
+					var $radio = $(this).find(".iconfont");
+					if ($radio.hasClass("icon-checkbox")) {
+						$radio.removeClass("icon-checkbox").addClass("icon-checkboxoutlineblank");
+					} else {
+						$radio.removeClass("icon-checkboxoutlineblank").addClass("icon-checkbox");
+					}
+				});
+				this.$cbText=this.$radioBox.find(".cbText");
+				this.$radio=this.$radioBox.find(".iconfont");
+				this.$ul = $dom.find("ul").on("vclick", "li", function () {
+					var allowed = amGloble.metadata.shopPropertyField.depotNumGt0; //0 允许  1 不允许  是否允许售卖库存不足商品
+					if ($(this).find('.empty').length && allowed) {
+						// 库存不足 不允许售卖库存为0的商品
+						am.msg('商品无库存！');
+						return;
+					} else {
+					}
+					if (obj.muti) {
 						$(this).toggleClass('selected');
-					}else{
+					} else {
 						obj.hide($(this).index());
 					}
 				});
@@ -74,18 +101,39 @@
 				this.$cancel = this.$.find("div.cancel").vclick(function(){
 					obj.onCancel && obj.onCancel();
 					obj.$.hide();
+					obj.$radioBox.find(".iconfont").removeClass('icon-checkbox').addClass('icon-checkboxoutlineblank');
 				});
 			},
 			show:function (opt) {
 				this.$h.text(opt.title);
+				if(opt.hasCb && opt.cbText){
+					this.$radioBox.show();
+					this.$cbText.text(opt.cbText)
+				}else{
+					this.$radioBox.hide()
+				}
 				this.$ul.empty();
 				for(var i=0;i<opt.items.length;i++){
-					this.$ul.append($('<li class="am-clickable">'+opt.items[i]+'</li>').css({
+					// 增加弹窗中库存不足时的样式显示
+					var $li=$('<li class="am-clickable">'+opt.items[i]+'</li>');
+					var baseStyle={
 						"line-height":"1.8rem",
 						"padding":"0.6rem 1rem",
 						"border-bottom":"1px solid #EEE",
 						"font-size":"1.1rem"
-					}));
+					},emptyStyle={
+						"line-height":"1.8rem",
+						"padding":"0.6rem 1rem",
+						"border-bottom":"1px solid #EEE",
+						"font-size":"1.1rem",
+						"opacity": "0.3"
+					};
+					if($li.find('.empty').length){
+						$li.css(emptyStyle);
+					}else{
+						$li.css(baseStyle);
+					}
+					this.$ul.append($li);
 				}
 				this.muti = opt.muti;
 				if(this.muti){
@@ -107,7 +155,8 @@
 			},
 			hide:function (idx) {
 				this.$.hide();
-				this.cb && this.cb(idx);
+				this.cb && this.cb(idx,this.$radio.hasClass('icon-checkbox'));
+				this.$radioBox.find(".iconfont").removeClass('icon-checkbox').addClass('icon-checkboxoutlineblank');
 			}
 		};
 		atMobile.nativeUIWidget.showPopupMenu = function (opt,cb) {

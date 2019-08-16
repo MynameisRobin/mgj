@@ -1,20 +1,18 @@
-(function() {
-    // var self = (am.page.phoneCall = new $.am.Page({
+(function () {
     am.phoneCall = {
         id: "page_phoneCall",
-        backButtonOnclick: function() {
-            // am.goBackToInitPage();
+        backButtonOnclick: function () {
             this.$.hide();
         },
-        init: function() {
+        init: function () {
             var self = this;
             this.$ = $("#page_phoneCall");
-            // this.selectScroll = new $.am.ScrollView({
-            //   $wrap: this.$.find(".select"),
-            //   $inner: this.$.find(".select ul"),
-            //   direction: [false, true],
-            //   hasInput: false
-            // });
+            this.selectScroll = new $.am.ScrollView({
+                $wrap: this.$.find(".warp"),
+                $inner: this.$.find(".warp ul"),
+                direction: [false, true],
+                hasInput: false
+            });
             this.cardScroll = new $.am.ScrollView({
                 $wrap: this.$.find(".comboBox .cardBox"),
                 $inner: this.$.find(".comboBox .cardBox .inner"),
@@ -27,23 +25,28 @@
                 direction: [false, true],
                 hasInput: false
             });
-            this.cardScroll.refresh();
-            this.comboScroll.refresh();
-            this.$.find(".btn").vclick(function() {
+            this.$.find(".btn").vclick(function () {
                 var type = $(this).data("type");
                 var cid = self.$.find(".leftUl li.active").attr("cid");
                 var memberid = self.$.find(".leftUl li.active").attr("memberid");
                 var mobile = self.$.find(".mobile").text();
                 // var len = self.$.find(".leftUl li").length;
+                // 散客
                 if (type == 1) {
-                    // 散客
-                    var data = { phoneCall: mobile, type: 1 };
+                    var data = {
+                        phoneCall: mobile,
+                        type: 1
+                    };
                     if ($.am.getActivePage().id == "page_appointment") {
                         self.backButtonOnclick();
-                        am.page.appointment.beforeShow({ data: data });
+                        am.page.appointment.beforeShow({
+                            data: data
+                        });
                     } else {
                         self.backButtonOnclick();
-                        $.am.changePage(am.page.appointment, "slideup", { data });
+                        $.am.changePage(am.page.appointment, "slideup", {
+                            data:data
+                        });
                     }
                     $("#page_appointment")
                         .find(".new")
@@ -52,60 +55,147 @@
                     if (self.$.find(".leftUl li.active").length < 1) {
                         return am.msg("请选择一张会员卡");
                     }
-                    am.searchMember.getMemberById(memberid, cid, function(card) {
-                        var data = { phoneCall: card };
+                    am.searchMember.getMemberById(memberid, cid, function (card) {
+                        var data = {
+                            phoneCall: card
+                        };
                         if ($.am.getActivePage().id == "page_appointment") {
                             self.backButtonOnclick();
-                            am.page.appointment.beforeShow({ data: data });
+                            am.page.appointment.beforeShow({
+                                data: data
+                            });
                         } else {
                             self.backButtonOnclick();
-                            $.am.changePage(am.page.appointment, "slideup", { data });
+                            $.am.changePage(am.page.appointment, "slideup", {
+                                data:data
+                            });
                         }
                     });
                 }
             });
-            this.$.find(".leftUl").on("vclick", "li", function() {
+            this.$.find(".leftUl").on("vclick", "li", function () {
                 $(this)
                     .addClass("active")
                     .siblings()
                     .removeClass("active");
             });
-            this.$.find(".select ul").on("vclick", "li", function() {
-                var id = $(this).data("id");
+            this.$.find(".warp ul").on("vclick", "li", function () {
+                var item = $(this).data("item");
                 self.$.find(".vip-select").hide();
                 self.$.find(".vip-info").show();
                 self.getDetailData({
-                    memberid: id,
+                    memberid: item.id,
                     shopId: am.metadata.userInfo.shopId,
                     parentShopId: am.metadata.userInfo.parentShopId
                 });
             });
-            this.$.find(".close").vclick(function() {
+            this.$.find(".close").vclick(function () {
                 self.backButtonOnclick();
             });
         },
-        beforeShow: function(callerNumber) {
+        beforeShow: function (callerNumber) {
+            var self = this;
+            this.shopIds = [];
             this.callerNumber = callerNumber;
             if (!this.flag) {
                 this.init();
                 this.flag = true;
             }
             this.$.show();
-            this.cardScroll.refresh();
-            this.comboScroll.refresh();
+            this.resetDom();
+            // 右侧内容
+            var shopList = am.isNull(am.metadata) ? '' : am.metadata.shopList;
+            if (shopList.length == 0) return console.info("shopList为空");
+            $.each(shopList, function (i, v) {
+                self.shopIds.push(v.shopId);
+            });
+            self.getUserInfo({
+                shopId: am.metadata.userInfo.shopId,
+                value: callerNumber,
+                shopIds: self.shopIds.join(',')
+            }, function (res) {
+                // 右侧内容
+                if (res.content.length == 1) {
+                    self.$.find(".btn").data({
+                        type: 2
+                    });
+                    self.$.find(".vip-info").show();
+                    self.$.find(".default,.vip-select").hide();
+                    self.getDetailData({
+                        memberid: res.content[0].id,
+                        shopId: am.metadata.userInfo.shopId,
+                        parentShopId: am.metadata.userInfo.parentShopId
+                    });
+                } else if (res.content.length > 1) {
+                    self.$.find(".btn").data({
+                        type: 3
+                    });
+                    self.$.find(".vip-select").show();
+                    self.$.find(".default,.vip-info").hide();
+                    var content = self.filterData(res.content);
+                    if (am.isNull(content)) return;
+                    console.log(content)
+                    /**
+                     * @param content 过滤id后的数据return {id:[],id:[]}
+                     * @param flag 代表第一个
+                     * @param obj 数组按门店归类
+                     */
+                    var obj = {};
+                    $.each(content, function (q, r) {
+                        if (!obj[r[0].shopId]) {
+                            var arr = [];
+                            r[0].flag = true;
+                            arr.push(r[0]);
+                            obj[r[0].shopId] = arr;
+                        } else {
+                            r[0].flag = false;
+                            obj[r[0].shopId].push(r[0]);
+                        }
+                    });
+                    for (var k in obj) {
+                        $.each(obj[k], function (i, v) {
+                            var $li = $("<li class='am-clickable' data-id='" + v.id + "'></li>").data('item', v);
+                            var span = $('<span class="shopName">' + am.page.searchMember.getShopName(k) + '</span><span class="name">' + v.name + '</span>');
+                            $li.append(span);
+                            if (v.flag) {
+                                $li.addClass("first");
+                            }
+                            //如果相等就是本店,背景色变红
+                            if (v.shopId == am.metadata.userInfo.shopId) {
+                                $li.addClass("act");
+                            }
+                            self.$.find(".warp ul").append($li);
+                        })
+                    }
+                    self.selectScroll.refresh();
+                    self.selectScroll.scrollTo("top");
+                }
+            });
+        },
+        filterData: function (data) {
+            var itemObj = {};
+            $.each(data, function (i, item) {
+                if ((item.invaliddate && Number(item.invaliddate) < new Date().getTime())) {
+                    return true;
+                }
+                if (!itemObj[item.id]) {
+                    itemObj[item.id] = [item];
+                } else {
+                    itemObj[item.id].push(item)
+                }
+            });
+            return itemObj;
         },
         // 清空并重置
-        resetDom: function() {
+        resetDom: function () {
             var self = this;
-            self.$.find(".header,.mobile,.page,.leftUl,.rightUl").html("");
+            self.$.find(".header,.mobile,.page,.leftUl,.rightUl,.warp ul").html("");
             self.$.find(".name").html("非会员用户");
             self.$.find(".default").show();
             self.$.find(".vip-select,.vip-info").hide();
-            this.cardScroll.refresh();
-            this.comboScroll.refresh();
         },
         // 获取会员卡dom
-        getCardBoxDom: function(d) {
+        getCardBoxDom: function (d) {
             var li = "";
             //到期日
             if (d.invaliddate) {
@@ -157,7 +247,7 @@
             return li;
         },
         //获取右侧洗剪吹次数DOM
-        getRightComboDom: function(d) {
+        getRightComboDom: function (d) {
             var sumtimes = d.sumtimes == -99 ? "不限" : d.sumtimes;
             var validdate = d.validdate ? "到期日：" + this.getTime(d.validdate) : "不限期";
             if (d.isNewTreatment && d.timesItemNOs) {
@@ -181,106 +271,80 @@
             li += "</li>";
             return li;
         },
-        getData: function(data, value) {
+        // 获取左侧用户信息
+        getUserInfo: function (data, cb) {
             var self = this;
-            self.resetDom();
             am.loading.show("正在获取,请稍候...");
             var opt = {
-                shopId: am.metadata.userInfo.shopId,
+                shopId: data.shopId,
                 pageNumber: 0,
                 pageSize: 9999,
-                deleted: 0, //0为资料 1为已删
-                keyword: value,
-                searchType: "0"
+                keyword: data.value,
+                shopIds: data.shopIds
             };
             if (data) $.extend(opt, data);
-            am.api.memberList.exec(opt, function(res) {
+            am.api.searchmember.exec(opt, function (res) {
                 am.loading.hide();
                 if (res.code == 0) {
+                    // 填充左侧内容
                     if (res.content == "") {
                         self.$.find(".btn").data({
                             type: 1
                         });
-                        self.$.find(".mobile").html(value);
+                        self.$.find(".mobile").html(data.value);
                         self.$.find(".default").show();
                         self.$.find(".page,.vip-info").hide();
                         return;
                     }
-                    // 填充左侧内容
                     self.$.find(".header").html(
                         am.photoManager.createImage(
-                            "customer",
-                            {
+                            "customer", {
                                 parentShopId: am.metadata.userInfo.parentShopId,
-                                updateTs: new Date().getTime()
+                                // updateTs: new Date().getTime()
+                                updateTs: res.content[0].lastphotoupdatetime || new Date().getTime()
                             },
                             res.content[0].id + ".jpg",
                             "s"
                         )
                     );
-                    $.each(res.content[0], function(i, v) {
+                    $.each(res.content[0], function (i, v) {
                         self.$.find("." + i).text(v);
                     });
-                    // 右侧内容
-                    if (res.count == 1) {
-                        self.$.find(".btn").data({
-                            type: 2
-                        });
-                        self.$.find(".vip-info").show();
-                        self.$.find(".default,.vip-select").hide();
-                        self.getDetailData({
-                            memberid: res.content[0].id,
-                            shopId: am.metadata.userInfo.shopId,
-                            parentShopId: am.metadata.userInfo.parentShopId
-                        });
-                    } else if (res.count > 1) {
-                        self.$.find(".btn").data({
-                            type: 3
-                        });
-                        self.$.find(".vip-select").show();
-                        self.$.find(".default,.vip-info").hide();
-                        var li = "";
-                        $.each(res.content, function(q, r) {
-                            li += "<li class='am-clickable' data-id='" + r.id + "'>" + r.name + "</li>";
-                        });
-                        self.$.find(".select ul").html(li);
-                    }
+                    cb && cb(res);
                 } else {
                     am.msg(res.message || "数据获取失败,请检查网络!");
                 }
-                self.cardScroll.refresh();
-                self.comboScroll.refresh();
             });
         },
         // 详情
-        getDetailData: function(d) {
+        getDetailData: function (d) {
             var self = this;
             self.$.find(".cardBox .leftUl,.combobox .rightUl").html("");
             am.loading.show("正在获取数据,请稍候...");
-            am.api.memberDetails.exec(d, function(res) {
+            am.api.memberDetails.exec(d, function (res) {
                 am.loading.hide();
                 if (res.code == 0) {
                     var treatMentItems = res.content.memberInfo.treatMentItems;
-                    $.each(res.content.cards, function(i, v) {
+                    $.each(res.content.cards, function (i, v) {
                         self.$.find(".cardBox .leftUl").append(self.getCardBoxDom(v));
                     });
                     // 填充左侧内容
                     self.$.find(".header").html(
                         am.photoManager.createImage(
-                            "customer",
-                            {
+                            "customer", {
                                 parentShopId: am.metadata.userInfo.parentShopId,
-                                updateTs: new Date().getTime()
+                                // updateTs: new Date().getTime()
+                                updateTs:  res.content.memberInfo.lastphotoupdatetime || new Date().getTime()
                             },
                             res.content.memberInfo.id + ".jpg",
                             "s"
                         )
                     );
-                    $.each(res.content.memberInfo, function(i, v) {
+                    $.each(res.content.memberInfo, function (i, v) {
                         self.$.find("." + i).text(v);
                     });
                     if (!am.isNull(treatMentItems)) {
-                        $.each(treatMentItems, function(q, r) {
+                        $.each(treatMentItems, function (q, r) {
                             self.$.find(".combobox .rightUl").append(self.getRightComboDom(r));
                         });
                         self.renderCircle(treatMentItems);
@@ -292,7 +356,7 @@
                 }
             });
         },
-        getTime: function(time) {
+        getTime: function (time) {
             if (!time) {
                 return "无";
             }
@@ -304,7 +368,7 @@
                 return year + "." + month + "." + day;
             } catch (e) {}
         },
-        drawCircel: function(ctx, x, y, r, sAngle, eAngle, color, words, flag) {
+        drawCircel: function (ctx, x, y, r, sAngle, eAngle, color, words, flag) {
             ctx.beginPath();
             ctx.lineWidth = 4;
             ctx.strokeStyle = color ? color : "#eeeeee";
@@ -326,7 +390,7 @@
             ctx.stroke();
         },
         // 环形进度条
-        renderCircle: function(data, flag) {
+        renderCircle: function (data, flag) {
             var self = this;
             var canvas = self.$.find(".combobox .rightUl canvas");
             var num = [];
@@ -339,12 +403,12 @@
                 var ctx = canvas[i].getContext("2d");
                 !flag && ctx.scale(2, 2);
                 ctx.clearRect(0, 0, 112, 112);
-                (function(ctx, idx, self, words) {
+                (function (ctx, idx, self, words) {
                     if (!words) {
                         return;
                     }
                     var j = 0;
-                    var timer = setInterval(function() {
+                    var timer = setInterval(function () {
                         ctx.clearRect(0, 0, 112, 112);
                         self.drawCircel(ctx, 70, 56, 25, 0, 2 * Math.PI);
                         j++;
@@ -355,25 +419,13 @@
                     }, 50);
                 })(ctx, i, this, data[i].leavetimes == -99 ? "不限" : data[i].leavetimes);
             }
-        },
-        beforeHide: function(paras) {},
-        // 完全进来后
-        afterShow: function(paras) {
-            this.cardScroll.refresh();
-            this.comboScroll.refresh();
-        },
-        // 完全退出之后
-        afterHide: function() {},
-        updateData: function(memberInfo) {},
-        render: function() {}
+        }
     };
 })();
 
-(function() {
-    window.usbPhoneCallIn = function(callerNumber) {
-        // $.am.changePage(am.page.phoneCall, "slideup", {});
+(function () {
+    window.usbPhoneCallIn = function (callerNumber) {
         console.log("调用电话宝容器方法");
         am.phoneCall.beforeShow(callerNumber);
-        am.phoneCall.getData({}, callerNumber);
     };
 })();

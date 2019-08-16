@@ -1,6 +1,12 @@
 /* 文字颜色 ***********************/
 /* c0* 为黑白灰色系 */
-.page_pay {
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.page_pay,
+.page_itemPay {
   /* .print{
         height: 50px;
         text-align: center;
@@ -23,14 +29,81 @@
         }
     } */
 }
-.page_pay .payContent {
+.page_pay .ruleTag,
+.page_itemPay .ruleTag {
+  top: 0;
+  left: 0;
+  height: 32px;
+  color: #555;
+  display: none;
+  font-size: 12px;
+  z-index: 1;
+  max-width: 300px;
+  line-height: 32px;
+  position: absolute;
+  background: #FFFADF;
+  padding: 0 30px 0 10px;
+  border-radius: 5px;
+  box-shadow: 0px 1px 11px 0px rgba(174, 174, 174, 0.5);
+}
+.page_pay .ruleTag:before,
+.page_itemPay .ruleTag:before {
+  content: "";
+  position: absolute;
+  left: -7px;
+  top: 50%;
+  margin-top: -7px;
+  border-right: 7px solid #FFFADF;
+  border-top: 7px solid transparent;
+  border-bottom: 7px solid transparent;
+}
+.page_pay .ruleTag .red,
+.page_itemPay .ruleTag .red {
+  color: #E72B45;
+}
+.page_pay .ruleTag .close,
+.page_itemPay .ruleTag .close {
+  width: 30px;
+  height: 32px;
+  color: #999;
+  position: absolute;
+  line-height: 30px;
+  text-align: center;
+  font-size: 12px;
+  top: 0;
+  right: 0;
+}
+.page_pay .keypadWrap .keypadInner .given li:nth-of-type(1) span,
+.page_itemPay .keypadWrap .keypadInner .given li:nth-of-type(1) span {
+  width: 45px;
+}
+.page_pay .keypadWrap .keypadInner .given li:nth-of-type(1) span::before,
+.page_itemPay .keypadWrap .keypadInner .given li:nth-of-type(1) span::before {
+  content: "数字键";
+}
+.page_pay .keypadWrap .keypadInner .currencyDiv .currency li:nth-of-type(1) span::before,
+.page_itemPay .keypadWrap .keypadInner .currencyDiv .currency li:nth-of-type(1) span::before {
+  left: 6px;
+  content: "/";
+}
+.page_pay .keypadWrap .keypadInner .currencyDiv .currency li:nth-of-type(2) span,
+.page_itemPay .keypadWrap .keypadInner .currencyDiv .currency li:nth-of-type(2) span {
+  width: 45px;
+}
+.page_pay .keypadWrap .keypadInner .currencyDiv .currency li:nth-of-type(2) span::before,
+.page_itemPay .keypadWrap .keypadInner .currencyDiv .currency li:nth-of-type(2) span::before {
+  content: "回车键";
+}
+.page_pay .payContent,
+.page_itemPay .payContent {
   position: absolute;
   left: 0;
   right: 0;
   top: 51px;
   bottom: 0;
 }
-.page_pay .am-header .billno {
+.page_pay .am-header .billno,
+.page_itemPay .am-header .billno {
   height: 32px;
   background-color: #eeeeee;
   border-radius: 30px;
@@ -42,7 +115,8 @@
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
 }
-.page_pay .am-header .billno input {
+.page_pay .am-header .billno input,
+.page_itemPay .am-header .billno input {
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
   display: block;
@@ -55,15 +129,18 @@
   font-size: 13px;
   cursor: pointer;
 }
-.page_pay .am-header .billno input::-webkit-placeholder {
+.page_pay .am-header .billno input::-webkit-placeholder,
+.page_itemPay .am-header .billno input::-webkit-placeholder {
   color: #999;
 }
-.page_pay .left {
+.page_pay .left,
+.page_itemPay .left {
   height: 100%;
   float: left;
   width: 60%;
 }
-.page_pay .left .checkboxes {
+.page_pay .left .checkboxes,
+.page_itemPay .left .checkboxes {
   position: absolute;
   left: 0;
   right: 0;
@@ -71,13 +148,15 @@
   bottom: 50px;
   height: 36px;
 }
-.page_pay .left .checkboxes .checkbox {
+.page_pay .left .checkboxes .checkbox,
+.page_itemPay .left .checkboxes .checkbox {
   float: left;
   line-height: 30px;
   padding: 0 10px;
   color: #bdbdbd;
 }
-.page_pay .left .checkboxes .checkbox::before {
+.page_pay .left .checkboxes .checkbox::before,
+.page_itemPay .left .checkboxes .checkbox::before {
   content: "";
   float: left;
   width: 15px;
@@ -86,15 +165,18 @@
   border-radius: 4px;
   margin: 6px;
 }
-.page_pay .left .checkboxes .checkbox.checked {
+.page_pay .left .checkboxes .checkbox.checked,
+.page_itemPay .left .checkboxes .checkbox.checked {
   color: #666;
 }
-.page_pay .left .checkboxes .checkbox.checked::before {
+.page_pay .left .checkboxes .checkbox.checked::before,
+.page_itemPay .left .checkboxes .checkbox.checked::before {
   border-color: #6D6D6D;
   background: url("../images/icons_sprite/selected.png") no-repeat 0px 0px;
   background-size: 15px 15px;
 }
-.page_pay .left .comment {
+.page_pay .left .comment,
+.page_itemPay .left .comment {
   position: absolute;
   left: 0;
   right: auto;
@@ -108,7 +190,8 @@
   font-size: 12px;
   color: #888;
 }
-.page_pay .left .comment::before {
+.page_pay .left .comment::before,
+.page_itemPay .left .comment::before {
   content: "备注:";
   position: absolute;
   left: 16px;
@@ -116,7 +199,8 @@
   top: 3px;
   bottom: auto;
 }
-.page_pay .left .comment::after {
+.page_pay .left .comment::after,
+.page_itemPay .left .comment::after {
   position: absolute;
   left: 48px;
   right: auto;
@@ -128,31 +212,54 @@
   background: url("../images/card_edit_white_icon.png") no-repeat center center;
   background-size: 11px 14px;
 }
-.page_pay .left dt {
-  height: 62px;
-  line-height: 62px;
+.page_pay .left dt,
+.page_itemPay .left dt {
+  height: 52px;
+  line-height: 52px;
   border-top: 1px solid #ececec;
   border-bottom: 1px solid #ececec;
   padding: 0 20px;
 }
-.page_pay .left dt:first-child {
+.page_pay .left dt:first-child,
+.page_itemPay .left dt:first-child {
   border-top: none;
 }
-.page_pay .left dt.rechargeItem {
+.page_pay .left dt.rechargeItem,
+.page_itemPay .left dt.rechargeItem {
   border-top: none;
 }
-.page_pay .left dt.comboitemItem {
+.page_pay .left dt.comboitemItem,
+.page_itemPay .left dt.comboitemItem {
   border-bottom: none;
 }
-.page_pay .left dt .val {
-  height: 62px;
+.page_pay .left dt .val,
+.page_itemPay .left dt .val {
+  height: 52px;
 }
-.page_pay .left dd {
+.page_pay .left dd,
+.page_itemPay .left dd {
   padding: 0 20px 0 50px;
   height: 44px;
   line-height: 44px;
+  position: relative;
 }
-.page_pay .left .val {
+.page_pay .left dd.luckymoney.hasGetData::after,
+.page_itemPay .left dd.luckymoney.hasGetData::after,
+.page_pay .left dd.mallOrder.hasGetData::after,
+.page_itemPay .left dd.mallOrder.hasGetData::after,
+.page_pay .left dd.prePay.hasGetData::after,
+.page_itemPay .left dd.prePay.hasGetData::after {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background-color: #e82742;
+  top: 5px;
+  right: 10px;
+  border-radius: 50%;
+}
+.page_pay .left .val,
+.page_itemPay .left .val {
   float: right;
   color: #222;
   height: 44px;
@@ -161,13 +268,15 @@
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-.page_pay .left .val.add {
+.page_pay .left .val.add,
+.page_itemPay .left .val.add {
   padding-right: 50px;
   position: relative;
   left: 12px;
   min-width: 50%;
 }
-.page_pay .left .val.add::before {
+.page_pay .left .val.add::before,
+.page_itemPay .left .val.add::before {
   content: "";
   display: block;
   width: 15px;
@@ -181,7 +290,8 @@
   top: 50%;
   bottom: auto;
 }
-.page_pay .left .val.add::after {
+.page_pay .left .val.add::after,
+.page_itemPay .left .val.add::after {
   content: "";
   display: block;
   width: 24px;
@@ -195,12 +305,14 @@
   bottom: auto;
   margin: -13px -13px 0 0;
 }
-.page_pay .left .val.edit {
+.page_pay .left .val.edit,
+.page_itemPay .left .val.edit {
   padding-right: 50px;
   position: relative;
   left: 12px;
 }
-.page_pay .left .val.edit::before {
+.page_pay .left .val.edit::before,
+.page_itemPay .left .val.edit::before {
   content: "";
   display: block;
   width: 15px;
@@ -214,7 +326,8 @@
   top: 50%;
   bottom: auto;
 }
-.page_pay .left .val.edit::after {
+.page_pay .left .val.edit::after,
+.page_itemPay .left .val.edit::after {
   content: "";
   display: block;
   width: 24px;
@@ -228,23 +341,44 @@
   bottom: auto;
   margin: -13px -13px 0 0;
 }
-.page_pay .left .val.am-disabled {
+.page_pay .left .val.am-disabled,
+.page_itemPay .left .val.am-disabled {
   opacity: 0.3;
 }
 .page_pay .left .val.total,
+.page_itemPay .left .val.total,
 .page_pay .left .val.rechargePrice,
+.page_itemPay .left .val.rechargePrice,
 .page_pay .left .val.rechargeBonus,
-.page_pay .left .val.combocost {
+.page_itemPay .left .val.rechargeBonus,
+.page_pay .left .val.combocost,
+.page_itemPay .left .val.combocost {
   font-size: 18px;
 }
-.page_pay .left .val.payTotal {
+.page_pay .left .val.payTotal,
+.page_itemPay .left .val.payTotal {
   font-size: 30px;
   color: #e82742;
 }
-.page_pay .left .val .name {
+.page_pay .left .val .name,
+.page_itemPay .left .val .name {
   padding-right: 5px;
 }
-.page_pay .left dd.luckymoney .val .price::before {
+.page_pay .left .val .iconfont,
+.page_itemPay .left .val .iconfont {
+  color: #c6c6c6;
+  padding: 0 0 2px 15px;
+}
+.page_pay .left dd.luckymoney .val .price,
+.page_itemPay .left dd.luckymoney .val .price {
+  margin-right: 10px;
+}
+.page_pay .left dd.luckymoney .val .price:last-child,
+.page_itemPay .left dd.luckymoney .val .price:last-child {
+  margin-right: 0;
+}
+.page_pay .left dd.luckymoney .val .price:last-child::before,
+.page_itemPay .left dd.luckymoney .val .price:last-child::before {
   content: "";
   width: 20px;
   height: 20px;
@@ -253,7 +387,8 @@
   background-size: 20px 20px;
   margin: 12px 0 0 10px;
 }
-.page_pay .left dd.mallOrder .val .price::before {
+.page_pay .left dd.mallOrder .val .price::before,
+.page_itemPay .left dd.mallOrder .val .price::before {
   content: "";
   width: 20px;
   height: 20px;
@@ -262,111 +397,141 @@
   background-size: 20px 20px;
   margin: 12px 0 0 10px;
 }
-.page_pay .left .am-disabled .val::before {
+.page_pay .left .am-disabled .val::before,
+.page_itemPay .left .am-disabled .val::before {
   opacity: 0.2;
 }
-.page_pay .left .am-disabled .val::after {
+.page_pay .left .am-disabled .val::after,
+.page_itemPay .left .am-disabled .val::after {
   opacity: 0.2;
 }
-.page_pay .left dd.am-clickable-active {
+.page_pay .left dd.am-clickable-active,
+.page_itemPay .left dd.am-clickable-active {
   background-color: #ececec;
 }
-.page_pay .left .label {
+.page_pay .left .label,
+.page_itemPay .left .label {
   color: #666;
 }
-.page_pay .left .payTypes .title {
-  line-height: 48px;
+.page_pay .left .payTypes .title,
+.page_itemPay .left .payTypes .title {
+  line-height: 44px;
   padding: 0 20px;
   color: #666;
 }
-.page_pay .left .payTypes ul {
+.page_pay .left .payTypes ul,
+.page_itemPay .left .payTypes ul {
   padding: 0 10px;
 }
-.page_pay .left .payTypes ul::after {
+.page_pay .left .payTypes ul::after,
+.page_itemPay .left .payTypes ul::after {
   content: "";
   display: block;
   clear: both;
 }
-.page_pay .left .payTypes li {
+.page_pay .left .payTypes li,
+.page_itemPay .left .payTypes li {
   line-height: 15px;
   width: 90px;
-  height: 110px;
+  height: 120px;
   font-size: 12px;
   text-align: center;
   float: left;
   position: relative;
 }
-.page_pay .left .payTypes li p {
+.page_pay .left .payTypes li p,
+.page_itemPay .left .payTypes li p {
   font-size: 10px;
 }
-.page_pay .left .payTypes li::before {
+.page_pay .left .payTypes li::before,
+.page_itemPay .left .payTypes li::before {
   content: "";
   display: block;
   margin: 0 auto;
   width: 80px;
   height: 80px;
 }
-.page_pay .left .payTypes li.pay_memberCard::before {
+.page_pay .left .payTypes li.pay_memberCard::before,
+.page_itemPay .left .payTypes li.pay_memberCard::before {
   background: url("../images/icons_sprite/pay_card.png") no-repeat 0px 0px;
   background-size: 80px 80px;
 }
-.page_pay .left .payTypes li.pay_cash::before {
+.page_pay .left .payTypes li.pay_cash::before,
+.page_itemPay .left .payTypes li.pay_cash::before {
   background: url("../images/icons_sprite/pay_cash.png") no-repeat 0px 0px;
   background-size: 80px 80px;
 }
-.page_pay .left .payTypes li.pay_pos::before {
+.page_pay .left .payTypes li.pay_pos::before,
+.page_itemPay .left .payTypes li.pay_pos::before {
   background: url("../images/icons_sprite/pay_pos.png") no-repeat 0px 0px;
   background-size: 80px 80px;
 }
-.page_pay .left .payTypes li.pay_wechat::before {
+.page_pay .left .payTypes li.pay_wechat::before,
+.page_itemPay .left .payTypes li.pay_wechat::before {
   background: url("../images/icons_sprite/pay_wechat.png") no-repeat 0px 0px;
   background-size: 80px 80px;
 }
-.page_pay .left .payTypes li.pay_alipay::before {
+.page_pay .left .payTypes li.pay_alipay::before,
+.page_itemPay .left .payTypes li.pay_alipay::before {
   background: url("../images/icons_sprite/pay_alipay.png") no-repeat 0px 0px;
   background-size: 80px 80px;
 }
-.page_pay .left .payTypes li.pay_dp::before {
+.page_pay .left .payTypes li.pay_dp::before,
+.page_itemPay .left .payTypes li.pay_dp::before {
   background: url("../images/icons_sprite/pay_dp.png") no-repeat 0px 0px;
   background-size: 80px 80px;
 }
-.page_pay .left .payTypes li.pay_mix::before {
+.page_pay .left .payTypes li.pay_mix::before,
+.page_itemPay .left .payTypes li.pay_mix::before {
   background: url("../images/icons_sprite/pay_mix.png") no-repeat 0px 0px;
   background-size: 80px 80px;
 }
-.page_pay .left .payTypes li.pay_bonus::before {
+.page_pay .left .payTypes li.pay_bonus::before,
+.page_itemPay .left .payTypes li.pay_bonus::before {
   background: url("../images/icons_sprite/pay_bonus.png") no-repeat 0px 0px;
   background-size: 80px 80px;
 }
-.page_pay .left .payTypes li .tip {
+.page_pay .left .payTypes li.pay_kb::before,
+.page_itemPay .left .payTypes li.pay_kb::before {
+  background: url(../images/icons_sprite/pay_kb.png) no-repeat 0 0;
+  background-size: 80px 80px;
+}
+.page_pay .left .payTypes li.pay_jd::before,
+.page_itemPay .left .payTypes li.pay_jd::before {
+  background: url(../images/icons_sprite/pay_jd.png) no-repeat 0 0;
+  background-size: 80px 80px;
+}
+.page_pay .left .payTypes li .tip,
+.page_itemPay .left .payTypes li .tip {
+  position: absolute;
+  right: 0;
+  bottom: 13px;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  line-height: 30px;
   display: none;
-  position: absolute;
-  bottom: -18px;
-  z-index: -1;
-  left: 0;
-  border: 1px solid #AAA;
-  background-color: #AAA;
-  border-radius: 2px;
-  line-height: 20px;
-  padding: 0 5px;
-  font-size: 12px;
-  white-space: nowrap;
-  color: #FFF;
 }
-.page_pay .left .payTypes li .tip::before {
-  content: "";
-  position: absolute;
-  left: 45px;
-  top: -5px;
-  margin: 0 0 0 -8px;
-  border-bottom: 7px solid #AAA;
-  border-left: 7px solid transparent;
-  border-right: 7px solid transparent;
+.page_pay .left .payTypes li .tip .text,
+.page_itemPay .left .payTypes li .tip .text {
+  display: none;
 }
-.page_pay .left .payTypes li.pay_dp.am-disabled.mixProdPay .tip {
+.page_pay .left .payTypes li .tip .icon,
+.page_itemPay .left .payTypes li .tip .icon {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  right: 0;
+  top: 0;
+}
+.page_pay .left .payTypes li.pay_dp.am-disabled.mixProdPay .tip,
+.page_itemPay .left .payTypes li.pay_dp.am-disabled.mixProdPay .tip,
+.page_pay .left .payTypes li.pay_kb.am-disabled.mixProdPay .tip,
+.page_itemPay .left .payTypes li.pay_kb.am-disabled.mixProdPay .tip {
   display: block;
 }
-.page_pay .left .payTypes li span {
+.page_pay .left .payTypes li span,
+.page_itemPay .left .payTypes li span {
   display: none;
   width: 66px;
   height: 66px;
@@ -379,7 +544,8 @@
   bottom: auto;
   margin: 0 0 0 -33px;
 }
-.page_pay .left .payTypes li span::before {
+.page_pay .left .payTypes li span::before,
+.page_itemPay .left .payTypes li span::before {
   content: "";
   position: absolute;
   left: 50%;
@@ -392,7 +558,8 @@
   margin: -10px 0 0 -10px;
   border-radius: 10px;
 }
-.page_pay .left .payTypes li span::after {
+.page_pay .left .payTypes li span::after,
+.page_itemPay .left .payTypes li span::after {
   content: "";
   position: absolute;
   left: 50%;
@@ -405,16 +572,61 @@
   height: 15px;
   margin: -8px 0 0 -7px;
 }
-.page_pay .left .payTypes li.selected span {
+.page_pay .left .payTypes li b,
+.page_itemPay .left .payTypes li b {
+  display: none;
+  position: absolute;
+  left: 50%;
+  bottom: -5px;
+  margin-left: -9px;
+  display: block;
+  width: 16px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  font-weight: inherit;
+  background: #FFFFFF;
+  border: 1px solid #DDDDDD;
+  border-radius: 2px;
+  height: 10px;
+  line-height: 10px;
+}
+.page_pay .left .payTypes li .whynot,
+.page_itemPay .left .payTypes li .whynot {
+  position: absolute;
+  right: -10px;
+  bottom: 13px;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  line-height: 30px;
+  display: none;
+}
+.page_pay .left .payTypes li .whynot .text,
+.page_itemPay .left .payTypes li .whynot .text {
+  display: none;
+}
+.page_pay .left .payTypes li .whynot .icon,
+.page_itemPay .left .payTypes li .whynot .icon {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  right: 0;
+  top: 0;
+}
+.page_pay .left .payTypes li.selected span,
+.page_itemPay .left .payTypes li.selected span {
   display: block;
 }
-.page_pay .left .payTypes li.payed span::before {
+.page_pay .left .payTypes li.payed span::before,
+.page_itemPay .left .payTypes li.payed span::before {
   background: #58d56d;
 }
-.page_pay .left .payTypes li.am-disabled {
+.page_pay .left .payTypes li.am-disabled,
+.page_itemPay .left .payTypes li.am-disabled {
   opacity: 0.3;
 }
-.page_pay .left .depPerfVal {
+.page_pay .left .depPerfVal,
+.page_itemPay .left .depPerfVal {
   /*float: right;
             height: 44px;*/
   /*.depPerfItem{
@@ -447,7 +659,8 @@
                 }
             }*/
 }
-.page_pay .right {
+.page_pay .right,
+.page_itemPay .right {
   height: 100%;
   float: right;
   width: 40%;
@@ -455,43 +668,53 @@
   border-left: 1px solid #ececec;
   margin-left: -1px;
 }
-.page_pay .right .payTip {
+.page_pay .right .payTip,
+.page_itemPay .right .payTip {
   display: none;
   text-align: center;
 }
-.page_pay .right .payTip .lineGray {
+.page_pay .right .payTip .lineGray,
+.page_itemPay .right .payTip .lineGray {
   color: #999;
   line-height: 30px;
   padding-bottom: 5px;
 }
-.page_pay .right .payTip .lineMain {
+.page_pay .right .payTip .lineMain,
+.page_itemPay .right .payTip .lineMain {
   font-size: 20px;
 }
-.page_pay .right .payTip .lineMain .highlight {
+.page_pay .right .payTip .lineMain .highlight,
+.page_itemPay .right .payTip .lineMain .highlight {
   color: #e82742;
 }
-.page_pay .right .payTip .lineSmall {
+.page_pay .right .payTip .lineSmall,
+.page_itemPay .right .payTip .lineSmall {
   line-height: 30px;
 }
-.page_pay .right .payTip::before {
+.page_pay .right .payTip::before,
+.page_itemPay .right .payTip::before {
   content: "";
   display: block;
   margin: 150px auto 0 auto;
   width: 120px;
   height: 120px;
 }
-.page_pay .right .payTip.cash::before {
+.page_pay .right .payTip.cash::before,
+.page_itemPay .right .payTip.cash::before {
   background: url("../images/tipbg_sprite.png") no-repeat 0px -930px;
   background-size: 255px 1055px;
 }
-.page_pay .right .payTip.pos::before {
+.page_pay .right .payTip.pos::before,
+.page_itemPay .right .payTip.pos::before {
   background: url("../images/tipbg_sprite.png") no-repeat -125px -930px;
   background-size: 255px 1055px;
 }
-.page_pay .right .payTip.card::before {
+.page_pay .right .payTip.card::before,
+.page_itemPay .right .payTip.card::before {
   margin-top: 50px;
 }
-.page_pay .right .payTip.card .cardBg {
+.page_pay .right .payTip.card .cardBg,
+.page_itemPay .right .payTip.card .cardBg {
   color: #FFF;
   height: 103px;
   width: 260px;
@@ -501,37 +724,64 @@
   background-size: 280px 103px;
   text-align: left;
 }
-.page_pay .right .payTip.card .cardBg.combo {
+.page_pay .right .payTip.card .cardBg.combo,
+.page_itemPay .right .payTip.card .cardBg.combo {
   background: url("../images//card_bg3.png") no-repeat center center;
   background-size: 280px 103px;
 }
-.page_pay .right .payTip.card .cardBg.combo .line2 {
+.page_pay .right .payTip.card .cardBg.combo .line2,
+.page_itemPay .right .payTip.card .cardBg.combo .line2 {
   color: #FFF;
 }
-.page_pay .right .payTip.card .cardBg .line1 {
+.page_pay .right .payTip.card .cardBg .line1,
+.page_itemPay .right .payTip.card .cardBg .line1 {
   padding-top: 17px;
   font-weight: bold;
   line-height: 22px;
 }
-.page_pay .right .payTip.card .cardBg .line1 .price {
+.page_pay .right .payTip.card .cardBg .line1 .price,
+.page_itemPay .right .payTip.card .cardBg .line1 .price {
   float: right;
 }
-.page_pay .right .payTip.card .cardBg .line2 {
+.page_pay .right .payTip.card .cardBg .line2,
+.page_itemPay .right .payTip.card .cardBg .line2 {
   color: #666;
   line-height: 20px;
   padding-bottom: 14px;
 }
-.page_pay .right .payTip.card .cardBg .line2 .label {
+.page_pay .right .payTip.card .cardBg .line2 .label,
+.page_itemPay .right .payTip.card .cardBg .line2 .label {
   float: right;
 }
-.page_pay .right .payTip.card .cardBg .line3 {
+.page_pay .right .payTip.card .cardBg .line3,
+.page_itemPay .right .payTip.card .cardBg .line3 {
   margin: 0 -10px;
   padding: 0 10px;
   line-height: 30px;
   color: #b0b0b0;
   background: rgba(255, 255, 255, 0.1);
 }
-.page_pay .right::before {
+.page_pay .right .payTip.card .checkedItemsBox,
+.page_itemPay .right .payTip.card .checkedItemsBox {
+  color: #999999;
+  max-height: 300px;
+  width: 280px;
+  margin: 20px auto 0 auto;
+  text-align: left;
+  font-size: 12px;
+}
+.page_pay .right .payTip.card .checkedItemsBox .checkedItemsWrap,
+.page_itemPay .right .payTip.card .checkedItemsBox .checkedItemsWrap {
+  max-height: 100px;
+  overflow: hidden;
+}
+.page_pay .right .payTip.card .checkedItemsBox .checkedItemsWrap .checkedItemsNames,
+.page_itemPay .right .payTip.card .checkedItemsBox .checkedItemsWrap .checkedItemsNames {
+  line-height: 17px;
+  margin-top: 2px;
+}
+.page_pay .right::before,
+.page_itemPay .right::before {
   content: "";
   position: absolute;
   left: 50%;
@@ -543,38 +793,48 @@
   margin: -125px 0 0 -125px;
   display: none;
 }
-.page_pay .right.pay_memberCard .card {
+.page_pay .right.pay_memberCard .card,
+.page_itemPay .right.pay_memberCard .card {
   display: block;
 }
-.page_pay .right.pay_cash .cash {
+.page_pay .right.pay_cash .cash,
+.page_itemPay .right.pay_cash .cash {
   display: block;
 }
-.page_pay .right.pay_pos .pos {
+.page_pay .right.pay_pos .pos,
+.page_itemPay .right.pay_pos .pos {
   display: block;
 }
-.page_pay .right.pay_cash1::before {
+.page_pay .right.pay_cash1::before,
+.page_itemPay .right.pay_cash1::before {
   display: block;
   background: url("../images/tipbg_sprite.png") no-repeat 0px -310px;
   background-size: 255px 1055px;
 }
-.page_pay .right.pay_alipay::before {
+.page_pay .right.pay_alipay::before,
+.page_itemPay .right.pay_alipay::before {
   display: block;
   background: url("../images/tipbg_sprite.png") no-repeat 0px 0px;
   background-size: 255px 1055px;
 }
-.page_pay .right.pay_wechat::before {
+.page_pay .right.pay_wechat::before,
+.page_itemPay .right.pay_wechat::before {
   display: block;
   background: url("../images/tipbg_sprite.png") no-repeat 0px -775px;
   background-size: 255px 1055px;
 }
-.page_pay .right.pay_dp::before {
+.page_pay .right.pay_dp::before,
+.page_itemPay .right.pay_dp::before {
   display: block;
   background: url("../images/tipbg_sprite.png") no-repeat 0px -465px;
   background-size: 255px 1055px;
 }
-.page_pay .submit {
+.page_pay .submit,
+.page_itemPay .submit {
+  position: relative;
   height: 50px;
   background: #e82742;
+  font-size: 16px;
   color: #FFF;
   text-align: center;
   line-height: 50px;
@@ -583,9 +843,37 @@
   right: 0;
   top: auto;
   bottom: 0;
-  font-size: 16px;
 }
-.page_pay .userPrintType {
+.page_pay .submit.keypadPC,
+.page_itemPay .submit.keypadPC {
+  text-align: initial;
+  line-height: initial;
+}
+.page_pay .submit.keypadPC .text1,
+.page_itemPay .submit.keypadPC .text1 {
+  position: absolute;
+  top: 5px;
+  left: 50%;
+  width: 60px;
+  margin-left: -30px;
+  text-align: center;
+  font-size: 16px;
+  color: #FFF;
+}
+.page_pay .submit.keypadPC .text2,
+.page_itemPay .submit.keypadPC .text2 {
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  width: 60px;
+  margin-left: -30px;
+  line-height: 16px;
+  text-align: center;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.43);
+}
+.page_pay .userPrintType,
+.page_itemPay .userPrintType {
   height: 32px;
   background-color: #eeeeee;
   border-radius: 30px;
@@ -597,18 +885,22 @@
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
 }
-.page_pay .userPrintType.web {
+.page_pay .userPrintType.web,
+.page_itemPay .userPrintType.web {
   width: 41px;
 }
-.page_pay .userPrintType .printType {
+.page_pay .userPrintType .printType,
+.page_itemPay .userPrintType .printType {
   height: 100%;
   float: left;
 }
-.page_pay .userPrintType .printType ul {
+.page_pay .userPrintType .printType ul,
+.page_itemPay .userPrintType .printType ul {
   width: 100%;
   overflow: hidden;
 }
-.page_pay .userPrintType .printType ul li {
+.page_pay .userPrintType .printType ul li,
+.page_itemPay .userPrintType .printType ul li {
   float: left;
   width: 60px;
   padding-left: 27px;
@@ -618,7 +910,8 @@
   position: relative;
   cursor: pointer;
 }
-.page_pay .userPrintType .printType ul li::after {
+.page_pay .userPrintType .printType ul li::after,
+.page_itemPay .userPrintType .printType ul li::after {
   content: "";
   position: absolute;
   left: 5px;
@@ -631,10 +924,12 @@
   border: 1px solid #d6d6d6;
   top: 3px;
 }
-.page_pay .userPrintType .printType ul li.selected::after {
+.page_pay .userPrintType .printType ul li.selected::after,
+.page_itemPay .userPrintType .printType ul li.selected::after {
   border: 1px solid #999999;
 }
-.page_pay .userPrintType .printType ul li.selected::before {
+.page_pay .userPrintType .printType ul li.selected::before,
+.page_itemPay .userPrintType .printType ul li.selected::before {
   content: "";
   display: block;
   position: absolute;
@@ -647,7 +942,8 @@
   -moz-border-radius: 50%;
   border-radius: 50%;
 }
-.page_pay .userPrintType .icon {
+.page_pay .userPrintType .icon,
+.page_itemPay .userPrintType .icon {
   float: right;
   width: 27px;
   height: 27px;
@@ -659,10 +955,12 @@
   margin-right: 4px;
   opacity: 0.7;
 }
-.page_pay .userPrintType .icon.am-clickable-active {
+.page_pay .userPrintType .icon.am-clickable-active,
+.page_itemPay .userPrintType .icon.am-clickable-active {
   opacity: 1;
 }
-.page_pay .payConfirm {
+.page_pay .payConfirm,
+.page_itemPay .payConfirm {
   position: absolute;
   left: 0;
   right: 0;
@@ -671,7 +969,8 @@
   background: rgba(0, 0, 0, 0.4);
   display: none;
 }
-.page_pay .payConfirm .content {
+.page_pay .payConfirm .content,
+.page_itemPay .payConfirm .content {
   width: 300px;
   padding-bottom: 30px;
   background: #FFF;
@@ -683,10 +982,12 @@
   bottom: auto;
   margin: -100px 0 0 -150px;
 }
-.page_pay .payConfirm .content .paySuccess {
+.page_pay .payConfirm .content .paySuccess,
+.page_itemPay .payConfirm .content .paySuccess {
   padding-top: 30px;
 }
-.page_pay .payConfirm .content .paySuccess .icon {
+.page_pay .payConfirm .content .paySuccess .icon,
+.page_itemPay .payConfirm .content .paySuccess .icon {
   width: 50px;
   height: 50px;
   position: relative;
@@ -694,7 +995,8 @@
   border-radius: 25px;
   margin: 0 auto;
 }
-.page_pay .payConfirm .content .paySuccess .icon::after {
+.page_pay .payConfirm .content .paySuccess .icon::after,
+.page_itemPay .payConfirm .content .paySuccess .icon::after {
   content: "";
   position: absolute;
   left: 50%;
@@ -707,18 +1009,43 @@
   background: url("../images/icons_sprite/searchMember_success.png") no-repeat 0px 0px;
   background-size: 30px 20px;
 }
-.page_pay .payConfirm .content .paySuccess .text {
+.page_pay .payConfirm .content .paySuccess .text,
+.page_itemPay .payConfirm .content .paySuccess .text {
   text-align: center;
   line-height: 30px;
 }
-.page_pay .payConfirm .content .paySuccess .text strong {
+.page_pay .payConfirm .content .paySuccess .text strong,
+.page_itemPay .payConfirm .content .paySuccess .text strong {
   font-size: 16px;
   padding: 0 5px;
 }
-.page_pay .payConfirm .content .paySuccess .tip {
+.page_pay .payConfirm .content .paySuccess .tip,
+.page_itemPay .payConfirm .content .paySuccess .tip {
   text-align: center;
   font-size: 12px;
   color: #999;
+}
+.page_pay .payConfirm .content .paySuccess .cardUpTip,
+.page_itemPay .payConfirm .content .paySuccess .cardUpTip {
+  width: 176px;
+  font-size: 12px;
+  color: #4DBF60;
+  text-align: center;
+  margin: 0 auto 10px;
+}
+.page_pay .redWrap,
+.page_itemPay .redWrap {
+  display: none;
+  position: absolute;
+  top: -44px;
+  width: 100%;
+  min-height: 100%;
+  padding-bottom: 44px;
+  background: rgba(0, 0, 0, 0.5);
+}
+.page_pay .redWrap .sendPocketdialog,
+.page_itemPay .redWrap .sendPocketdialog {
+  display: block;
 }
 .print_error_box {
   position: absolute;
@@ -823,4 +1150,786 @@
   width: 100%;
   display: block;
   height: auto;
+}
+@media screen and (max-height: 800px) {
+  .page_pay .left .val {
+    height: 32px;
+  }
+  .page_pay .left .val.add::after,
+  .page_pay .left .val.edit::after {
+    width: 20px;
+    height: 20px;
+  }
+  .page_pay .left .val.add::before,
+  .page_pay .left .val.edit::before {
+    margin: -9px -9px 0 0;
+  }
+  .page_pay .left .val .price::before {
+    margin-top: 6px !important;
+  }
+  .page_pay .left dt {
+    height: 40px;
+    line-height: 40px;
+  }
+  .page_pay .left dt .val {
+    height: 40px;
+  }
+  .page_pay .left dd {
+    height: 32px;
+    line-height: 32px;
+  }
+  .page_pay .left dd.luckymoney.hasGetData::after,
+  .page_pay .left dd.mallOrder.hasGetData::after,
+  .page_pay .left dd.prePay.hasGetData::after {
+    top: 0;
+  }
+  .page_pay .left .payTypes .title {
+    line-height: 40px;
+  }
+  .page_pay .left .payTypes li {
+    height: 100px;
+  }
+  .page_pay .left .payTypes li::before {
+    width: 58px;
+    height: 58px;
+  }
+  .page_pay .left .payTypes li.pay_memberCard::before,
+  .page_pay .left .payTypes li.pay_cash::before,
+  .page_pay .left .payTypes li.pay_pos::before,
+  .page_pay .left .payTypes li.pay_wechat::before,
+  .page_pay .left .payTypes li.pay_alipay::before,
+  .page_pay .left .payTypes li.pay_dp::before,
+  .page_pay .left .payTypes li.pay_mix::before,
+  .page_pay .left .payTypes li.pay_bonus::before,
+  .page_pay .left .payTypes li.pay_kb::before,
+  .page_pay .left .payTypes li.pay_jd::before {
+    background-size: 58px 58px;
+  }
+  .page_pay .left .payTypes li span {
+    width: 50px;
+    height: 50px;
+    margin: 0 0 0 -25px;
+  }
+  .page_pay .left .payTypes li .whynot,
+  .page_pay .left .payTypes li .tip {
+    bottom: 5px;
+  }
+}
+.page_itemPay .fix:after {
+  content: ".";
+  display: block;
+  height: 0;
+  visibility: hidden;
+  clear: both;
+}
+.page_itemPay .container {
+  position: absolute;
+  top: 51px;
+  left: 0;
+  right: 0;
+  bottom: 82px;
+  overflow: hidden;
+}
+.page_itemPay .container .listContainer {
+  max-height: 100%;
+  padding-bottom: 110px;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+.page_itemPay .container .listWrapper {
+  border-bottom: 1px solid #e5e5e5;
+  overflow: hidden;
+}
+.page_itemPay .container .listWrapper .list .item {
+  padding: 18px 24px;
+  position: relative;
+}
+.page_itemPay .container .listWrapper .list .item:nth-child(2n+1) {
+  background-color: #f7f7f7;
+}
+.page_itemPay .container .listWrapper .list .item .info {
+  width: 340px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+}
+.page_itemPay .container .listWrapper .list .item .info p {
+  font-size: 14px;
+  color: #222;
+  line-height: 30px;
+  height: 30px;
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: top;
+}
+.page_itemPay .container .listWrapper .list .item .info .nameInfo {
+  height: 30px;
+  overflow: hidden;
+}
+.page_itemPay .container .listWrapper .list .item .info .nameInfo .multi,
+.page_itemPay .container .listWrapper .list .item .info .nameInfo .itemNum {
+  font-size: 12px;
+  color: #999;
+}
+.page_itemPay .container .listWrapper .list .item .info .nameInfo .itemName {
+  margin-right: 10px;
+}
+.page_itemPay .container .listWrapper .list .item .info .priceInfo {
+  height: 30px;
+  overflow: hidden;
+}
+.page_itemPay .container .listWrapper .list .item .info .priceInfo .wrap {
+  float: left;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+.page_itemPay .container .listWrapper .list .item .info .priceInfo .origin {
+  width: 70%;
+  padding-right: 10px;
+}
+.page_itemPay .container .listWrapper .list .item .info .priceInfo .sale {
+  width: 30%;
+}
+.page_itemPay .container .listWrapper .list .item .info .priceInfo .sale .unit {
+  color: #E82742;
+}
+.page_itemPay .container .listWrapper .list .item .info .priceInfo .originPrice {
+  padding-right: 10px;
+}
+.page_itemPay .container .listWrapper .list .item .info .priceInfo .discountInfo {
+  font-size: 12px;
+  color: #999;
+}
+.page_itemPay .container .listWrapper .list .item .info .priceInfo .salePrice {
+  color: #E82742;
+}
+.page_itemPay .container .listWrapper .list .item .details {
+  max-width: 930px;
+  margin-left: 364px;
+  padding-left: 30px;
+  border-left: 1px solid #E5E5E5;
+  position: relative;
+}
+.page_itemPay .container .listWrapper .list .item .details .selectPayTip {
+  font-size: 12px;
+  color: #c2c2c2;
+  line-height: 24px;
+  height: 24px;
+  padding-left: 20px;
+  position: relative;
+}
+.page_itemPay .container .listWrapper .list .item .details .selectPayTip .icon {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  left: 0;
+  top: 3px;
+}
+.page_itemPay .container .listWrapper .list .item .details .selectPayTip .icon .iconfont {
+  width: 100%;
+  height: 100%;
+}
+.page_itemPay .container .listWrapper .list .item .details .addPayType {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  top: 50%;
+  margin-top: -20px;
+  right: 0;
+  display: none;
+}
+.page_itemPay .container .listWrapper .list .item .details .addPayType .iconfont {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 27px;
+  height: 27px;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+}
+.page_itemPay .container .listWrapper .list .item .details .settled,
+.page_itemPay .container .listWrapper .list .item .details .unSettled,
+.page_itemPay .container .listWrapper .list .item .details .error {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  top: 50%;
+  margin-top: -11px;
+  left: -11px;
+  display: none;
+  background: #fff;
+  border-radius: 50%;
+}
+.page_itemPay .container .listWrapper .list .item .details .settled .iconfont,
+.page_itemPay .container .listWrapper .list .item .details .unSettled .iconfont,
+.page_itemPay .container .listWrapper .list .item .details .error .iconfont {
+  width: 18px;
+  height: 18px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -9px;
+  margin-top: -9px;
+}
+.page_itemPay .container .listWrapper .list .item .details .payInfos {
+  padding-right: 64px;
+}
+.page_itemPay .container .listWrapper .list .item .details .payInfos .payInfo {
+  border-bottom: 1px solid #E5E5E5;
+  overflow: hidden;
+}
+.page_itemPay .container .listWrapper .list .item .details .payInfos .payInfo:last-child {
+  border-bottom: none;
+}
+.page_itemPay .container .listWrapper .list .item .details .payInfos .payInfo .del {
+  width: 20px;
+  height: 20px;
+  padding: 10px;
+  float: left;
+  margin: 10px 10px 10px -10px;
+}
+.page_itemPay .container .listWrapper .list .item .details .payInfos .payInfo .del::before {
+  content: "";
+  width: 20px;
+  height: 20px;
+  display: block;
+  background: url("../images/icons_sprite/delete.png") no-repeat 0px 0px;
+  background-size: 20px 20px;
+}
+.page_itemPay .container .listWrapper .list .item .details .payInfos .payInfo .payName {
+  width: 100px;
+  height: 40px;
+  line-height: 40px;
+  float: left;
+  margin: 10px 10px 10px 0;
+  overflow: hidden;
+  position: relative;
+}
+.page_itemPay .container .listWrapper .list .item .details .payInfos .payInfo .payName ._wrap {
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+}
+.page_itemPay .container .listWrapper .list .item .details .payInfos .payInfo .payName p {
+  font-size: 14px;
+  color: #222;
+  line-height: 22px;
+  height: 22px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.page_itemPay .container .listWrapper .list .item .details .payInfos .payInfo .payName span {
+  display: block;
+  font-size: 10px;
+  color: #999;
+  line-height: 18px;
+  height: 18px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.page_itemPay .container .listWrapper .list .item .details .payInfos .payInfo .payMoney {
+  width: 50px;
+  height: 30px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  background-color: #fff;
+  font-size: 13px;
+  color: #222;
+  line-height: 30px;
+  float: left;
+  margin: 14px 10px 14px 0;
+  padding: 0 10px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.page_itemPay .container .listWrapper .list .item .details .payInfos .payInfo .payIntro {
+  margin: 10px 0 10px 240px;
+  min-height: 40px;
+}
+.page_itemPay .container .listWrapper .list .item .details .payInfos .payInfo .payIntro .noteWrap {
+  position: relative;
+  padding-right: 30px;
+  min-height: 40px;
+}
+.page_itemPay .container .listWrapper .list .item .details .payInfos .payInfo .payIntro .edit {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  right: 0;
+  top: 50%;
+  margin-top: -15px;
+}
+.page_itemPay .container .listWrapper .list .item .details .payInfos .payInfo .payIntro .edit .iconfont {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 50%;
+  left: 50%;
+  margin-top: -8px;
+  margin-left: -8px;
+}
+.page_itemPay .container .listWrapper .list .item .details .payInfos .payInfo .payIntro .note {
+  font-size: 12px;
+  color: #222;
+  text-align: right;
+  line-height: 40px;
+  height: 40px;
+  margin-top: -15px;
+  overflow: hidden;
+}
+.page_itemPay .container .listWrapper .list .item .details .payInfos .payInfo .payIntro .note span {
+  height: 40px;
+  float: right;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.page_itemPay .container .listWrapper .list .item .details .payInfos .payInfo .payIntro .note span:last-child {
+  max-width: 70%;
+}
+.page_itemPay .container .listWrapper .list .item .details .payInfos .payInfo .payIntro .note span:first-child {
+  max-width: 20%;
+}
+.page_itemPay .container .listWrapper .list .item .details .payInfos .payInfo .payIntro .note span:first-child.remain {
+  max-width: 100%;
+}
+.page_itemPay .container .listWrapper .list .item .details .payInfos .payInfo .payIntro .note span.pay {
+  color: #32A1E0;
+}
+.page_itemPay .container .listWrapper .list .item .details .payInfos .payInfo .payIntro .note:first-child {
+  margin-top: 0;
+}
+.page_itemPay .container .listWrapper .list .item .details .payInfos .payInfo .payIntro .note.point {
+  text-align: left;
+}
+.page_itemPay .container .listWrapper .list .item .details .payInfos .payInfo .payIntro .note.point span {
+  float: left;
+}
+.page_itemPay .container .listWrapper .list .item .details .payInfos .payInfo .payIntro .note.point span:last-child {
+  color: #E82742;
+}
+.page_itemPay .container .listWrapper .list .item .details .payInfos .payInfo .payIntro .note.remainWrap {
+  position: absolute;
+  width: 100%;
+  height: 40px;
+  bottom: -30px;
+}
+.page_itemPay .container .listWrapper .list .item .details .payInfos .payInfo .payIntro .note .remain {
+  display: inline-block;
+  height: 16px;
+  line-height: 16px;
+  font-size: 10px;
+  color: #E82742;
+  padding: 0 8px;
+  border-radius: 16px;
+  background-color: #e5e5e5;
+  margin-right: 30px;
+}
+.page_itemPay .container .listWrapper .list .item .details .payTypes {
+  height: 46px;
+  overflow: hidden;
+  position: relative;
+  margin-left: -10px;
+}
+.page_itemPay .container .listWrapper .list .item .details .payTypes .del {
+  width: 20px;
+  height: 20px;
+  padding: 10px;
+  position: absolute;
+  left: 0;
+  top: 3px;
+}
+.page_itemPay .container .listWrapper .list .item .details .payTypes .del::before {
+  content: "";
+  width: 20px;
+  height: 20px;
+  display: block;
+  background: url("../images/icons_sprite/delete.png") no-repeat 0px 0px;
+  background-size: 20px 20px;
+}
+.page_itemPay .container .listWrapper .list .item .details .payTypes .payTypesWrapper {
+  position: absolute;
+  left: 50px;
+  right: 0;
+  height: 50px;
+  overflow: hidden;
+}
+.page_itemPay .container .listWrapper .list .item .details .payTypes .payTypesWrapper .payItem {
+  float: left;
+  padding: 0 12px 0 36px;
+  height: 34px;
+  background-color: #F2F2F2;
+  border-radius: 3px;
+  margin: 8px 8px 8px 0;
+  font-size: 12px;
+  color: #555;
+  line-height: 34px;
+  position: relative;
+  background-image: url('../images//payItem/OTHERFEE.png');
+  background-repeat: no-repeat;
+  background-size: 20px 20px;
+  background-position: 10px 8px;
+}
+.page_itemPay .container .listWrapper .list .item .details .payTypes .payTypesWrapper .payItem.disabled {
+  opacity: 0.3;
+}
+.page_itemPay .container .listWrapper .list .item .details .payTypes .payTypesWrapper .payItem::after {
+  content: '折';
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border: 1px solid #ebdd79;
+  border-radius: 50%;
+  background-color: #EBDD79;
+  font-size: 10px;
+  color: #756D35;
+  text-align: center;
+  line-height: 14px;
+  top: -6px;
+  right: -4px;
+}
+.page_itemPay .container .listWrapper .list .item .details .payTypes .payTypesWrapper .payItem.noDiscount::after {
+  display: none;
+}
+.page_itemPay .container .listWrapper .list .item .details .payTypes .payTypesWrapper .payItem.REDPAPER {
+  background-image: url('../images//payItem/REDPAPER.png');
+  opacity: 0.3;
+}
+.page_itemPay .container .listWrapper .list .item .details .payTypes .payTypesWrapper .payItem.MALLORDER {
+  background-image: url('../images//payItem/MALLORDER.png');
+  opacity: 0.3;
+}
+.page_itemPay .container .listWrapper .list .item .details .payTypes .payTypesWrapper .payItem.REDPAPER.hasGetData,
+.page_itemPay .container .listWrapper .list .item .details .payTypes .payTypesWrapper .payItem.MALLORDER.hasGetData {
+  opacity: 1;
+}
+.page_itemPay .container .listWrapper .list .item .details .payTypes .payTypesWrapper .payItem.CARDFEE {
+  background-image: url('../images//payItem/CARDFEE.png');
+}
+.page_itemPay .container .listWrapper .list .item .details .payTypes .payTypesWrapper .payItem.PRESENTFEE {
+  background-image: url('../images//payItem/PRESENTFEE.png');
+}
+.page_itemPay .container .listWrapper .list .item .details .payTypes .payTypesWrapper .payItem.WEIXIN {
+  background-image: url('../images//payItem/WEIXIN.png');
+}
+.page_itemPay .container .listWrapper .list .item .details .payTypes .payTypesWrapper .payItem.PAY {
+  background-image: url('../images//payItem/PAY.png');
+}
+.page_itemPay .container .listWrapper .list .item .details .payTypes .payTypesWrapper .payItem.DIANPIN {
+  background-image: url('../images//payItem/DIANPIN.png');
+}
+.page_itemPay .container .listWrapper .list .item .details .payTypes .payTypesWrapper .payItem.KOUBEI {
+  background-image: url('../images//payItem/KOUBEI.png');
+}
+.page_itemPay .container .listWrapper .list .item .details .payTypes .payTypesWrapper .payItem.JINGDONG {
+  background-image: url('../images//payItem/JINGDONG.png');
+}
+.page_itemPay .container .listWrapper .list .item .details .payTypes .payTypesWrapper .payItem.CASH {
+  background-image: url('../images//payItem/CASH.png');
+}
+.page_itemPay .container .listWrapper .list .item .details .payTypes .payTypesWrapper .payItem.UNIONPAY {
+  background-image: url('../images//payItem/UNIONPAY.png');
+}
+.page_itemPay .container .listWrapper .list .item .details .payTypes .payTypesWrapper .payItem.COOPERATION {
+  background-image: url('../images//payItem/COOPERATION.png');
+}
+.page_itemPay .container .listWrapper .list .item .details .payTypes .payTypesWrapper .payItem.MALL {
+  background-image: url('../images//payItem/MALL.png');
+}
+.page_itemPay .container .listWrapper .list .item .details .payTypes .payTypesWrapper .payItem.VOUCHERFEE {
+  background-image: url('../images//payItem/COOPERATION.png');
+}
+.page_itemPay .container .listWrapper .list .item .details .payTypes .payTypesWrapper .payItem.MDFEE {
+  background-image: url('../images//payItem/MDFEE.png');
+}
+.page_itemPay .container .listWrapper .list .item .details .payTypes .payTypesWrapper .payItem.DEBTFEE {
+  background-image: url('../images//payItem/DEBTFEE.png');
+}
+.page_itemPay .container .listWrapper .list .item .details .payTypes .payTypesWrapper .payItem.ONLINECREDITPAY {
+  background-image: url('../images//payItem/POINT.png');
+}
+.page_itemPay .container .listWrapper .list .item .details .payTypes .payTypesWrapper .payItem.OFFLINECREDITPAY {
+  background-image: url('../images//payItem/POINT.png');
+}
+.page_itemPay .container .listWrapper .list .item .details .payTypes.disableDel .del {
+  display: none;
+}
+.page_itemPay .container .listWrapper .list .item .details .payTypes.disableDel .payTypesWrapper {
+  left: 0;
+}
+.page_itemPay .container .listWrapper .list .item .details.settled {
+  border-left: 1px solid #58D56D;
+}
+.page_itemPay .container .listWrapper .list .item .details.settled .payInfos .payInfo .payMoney {
+  color: #58D56D;
+  border: 1px solid #58D56D;
+  background: #f6fff8;
+}
+.page_itemPay .container .listWrapper .list .item .details.settled.comboitem .payInfo .payName,
+.page_itemPay .container .listWrapper .list .item .details.settled.comboitem .payInfo .payMoney {
+  border: none;
+}
+.page_itemPay .container .listWrapper .list .item .details.settled.comboitem .payInfo .payMoney {
+  margin: 15px 10px 15px 0;
+  cursor: auto;
+  background: none;
+}
+.page_itemPay .container .listWrapper .list .item .details.settled .settled {
+  display: block;
+}
+.page_itemPay .container .listWrapper .list .item .details.settled .unSettled,
+.page_itemPay .container .listWrapper .list .item .details.settled .error {
+  display: none;
+}
+.page_itemPay .container .listWrapper .list .item .details.unSettled .settled,
+.page_itemPay .container .listWrapper .list .item .details.unSettled .error {
+  display: none;
+}
+.page_itemPay .container .listWrapper .list .item .details.unSettled .unSettled {
+  display: block;
+}
+.page_itemPay .container .listWrapper .list .item .details.error {
+  border-left: 1px solid #E82742;
+}
+.page_itemPay .container .listWrapper .list .item .details.error .payInfos .payInfo .payMoney {
+  color: #E82742;
+  border: 1px solid #E82742;
+  background: #fff0f2;
+  animation: errorShake 1s both;
+  -webkit-animation: errorShake 1s both;
+}
+.page_itemPay .container .listWrapper .list .item .details.error .settled,
+.page_itemPay .container .listWrapper .list .item .details.error .unSettled {
+  display: none;
+}
+.page_itemPay .container .listWrapper .list .item .details.error .error {
+  display: block;
+}
+.page_itemPay .container .listWrapper .list .item:nth-child(2n+1) .details .settled,
+.page_itemPay .container .listWrapper .list .item:nth-child(2n+1) .details .unSettled,
+.page_itemPay .container .listWrapper .list .item:nth-child(2n+1) .details .error {
+  background-color: #f7f7f7;
+}
+.page_itemPay .container .summaryWrapper {
+  padding: 0 24px;
+  margin-top: -110px;
+}
+.page_itemPay .container .summaryWrapper .total {
+  height: 40px;
+  overflow: hidden;
+  padding-top: 10px;
+  position: relative;
+}
+.page_itemPay .container .summaryWrapper .total span {
+  display: inline-block;
+  vertical-align: top;
+  font-size: 14px;
+  line-height: 40px;
+  height: 40px;
+  color: #222;
+}
+.page_itemPay .container .summaryWrapper .total span.amount {
+  font-size: 20px;
+  color: #E82742;
+}
+.page_itemPay .container .summaryWrapper .total span.allPayed {
+  position: absolute;
+  height: 40px;
+  left: 175px;
+  top: 10px;
+  color: #29BF4D;
+  display: none;
+}
+.page_itemPay .container .summaryWrapper .total span.allPayed .iconfont {
+  display: inline-block;
+  vertical-align: top;
+  width: 18px;
+  height: 18px;
+  margin: 11px 0;
+}
+.page_itemPay .container .summaryWrapper .total.allPayed span.allPayed {
+  display: inline-block;
+}
+.page_itemPay .container .summaryWrapper .detail {
+  max-height: 60px;
+  overflow: hidden;
+}
+.page_itemPay .container .summaryWrapper .detail .item {
+  height: 20px;
+  overflow: hidden;
+}
+.page_itemPay .container .summaryWrapper .detail .item p {
+  display: inline-block;
+  vertical-align: top;
+  font-size: 12px;
+  color: #222;
+  line-height: 20px;
+  height: 20px;
+  overflow: hidden;
+}
+.page_itemPay .container .summaryWrapper .detail .item p.name,
+.page_itemPay .container .summaryWrapper .detail .item p.amount {
+  width: 80px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.page_itemPay .container .summaryWrapper .detail .item p.pay {
+  margin-left: 10px;
+  display: none;
+  padding-left: 20px;
+  position: relative;
+}
+.page_itemPay .container .summaryWrapper .detail .item p.pay .icon {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  left: 0;
+  top: 1px;
+}
+.page_itemPay .container .summaryWrapper .detail .item p.pay .icon .iconfont {
+  width: 100%;
+  height: 100%;
+}
+.page_itemPay .container .summaryWrapper .detail .item.unpay p {
+  color: #E82742;
+}
+.page_itemPay .container .summaryWrapper .detail .item.unpay p.amount::after {
+  content: '(未付)';
+}
+.page_itemPay .container .summaryWrapper .detail .item.unpay .pay {
+  display: inline-block;
+  color: #32A1E0;
+}
+.page_itemPay .footer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 50px;
+  overflow: hidden;
+  padding: 16px 24px 16px 8px;
+}
+.page_itemPay .footer .settings {
+  position: absolute;
+  height: 50px;
+  top: 16px;
+  left: 8px;
+  right: 302px;
+}
+.page_itemPay .footer .settings .checkboxes {
+  height: 36px;
+}
+.page_itemPay .footer .settings .checkboxes .checkbox {
+  float: left;
+  line-height: 30px;
+  padding: 0 10px;
+  color: #bdbdbd;
+}
+.page_itemPay .footer .settings .checkboxes .checkbox::before {
+  content: "";
+  float: left;
+  width: 15px;
+  height: 15px;
+  border: 1px solid #dfdfdf;
+  border-radius: 4px;
+  margin: 6px;
+}
+.page_itemPay .footer .settings .checkboxes .checkbox.checked {
+  color: #666;
+}
+.page_itemPay .footer .settings .checkboxes .checkbox.checked::before {
+  border-color: #6D6D6D;
+  background: url("../images/icons_sprite/selected.png") no-repeat 0px 0px;
+  background-size: 15px 15px;
+}
+.page_itemPay .footer .settings .comment {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  line-height: 20px;
+  min-height: 26px;
+  padding: 3px 15px 3px 65px;
+  font-size: 12px;
+  color: #888;
+}
+.page_itemPay .footer .settings .comment::before {
+  content: "备注:";
+  position: absolute;
+  left: 16px;
+  right: auto;
+  top: 3px;
+  bottom: auto;
+}
+.page_itemPay .footer .settings .comment::after {
+  position: absolute;
+  left: 48px;
+  right: auto;
+  top: 5px;
+  bottom: auto;
+  content: "";
+  width: 11px;
+  height: 14px;
+  background: url("../images/card_edit_white_icon.png") no-repeat center center;
+  background-size: 11px 14px;
+}
+.page_itemPay .footer .submit {
+  width: 270px;
+  height: 50px;
+  border-radius: 3px;
+  position: absolute;
+  top: 16px;
+  right: 24px;
+  left: auto;
+}
+@-webkit-keyframes errorShake {
+  from,
+  to {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    -webkit-transform: translate3d(-10px, 0, 0);
+    transform: translate3d(-10px, 0, 0);
+  }
+  20%,
+  40%,
+  60%,
+  80% {
+    -webkit-transform: translate3d(10px, 0, 0);
+    transform: translate3d(10px, 0, 0);
+  }
+}
+@keyframes errorShake {
+  from,
+  to {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    -webkit-transform: translate3d(-10px, 0, 0);
+    transform: translate3d(-10px, 0, 0);
+  }
+  20%,
+  40%,
+  60%,
+  80% {
+    -webkit-transform: translate3d(10px, 0, 0);
+    transform: translate3d(10px, 0, 0);
+  }
 }

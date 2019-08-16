@@ -20,6 +20,13 @@ var cashierDebt = {
             _this.repay($(this).parents('tr'));
             _this.$.hide();
         });
+
+        this.scrollview = new $.am.ScrollView({
+            $wrap : _this.$.find('.scroll-wrap'),
+            $inner : _this.$.find('.scroll-wrap .scroll-inner'),
+            direction : [false, true],
+            hasInput: false
+        });
     },
     cache:{},
     check:function(member,nocache){
@@ -44,7 +51,7 @@ var cashierDebt = {
         //if(member.shopId == am.metadata.userInfo.shopId){
         for (var i in this.cache) {
             //清除超时缓存
-            if(new Date().getTime() - this.cache[i].cachedate > 5*1000){
+            if(new Date().getTime() - this.cache[i].cachedate > 5*60*1000){
                 delete this.cache[i];
             }
         }
@@ -91,7 +98,7 @@ var cashierDebt = {
             $td.eq(3).text(new Date(list[i].debtTime).format('yyyy-mm-dd HH:MM'));
             $td.eq(4).text('￥'+list[i].remainFee);
             var adm= this.admin[list[i].operatorId];
-            $td.eq(5).text(adm?adm.name:'操作员已删除');
+            $td.eq(5).text(list[i].operatorname);
             //this.$tbody.append($tr.clone());
             this.$tbody.append($tr);
         }
@@ -102,9 +109,12 @@ var cashierDebt = {
             this.$repay.show();
             this.$.find('.muti').hide();
         }
+        this.scrollview.refresh();
+        this.scrollview.scrollTo('top');
     },
     getRepayOption:function(payVal,member,debtlog){
-        var msg = "会员"+member.name+"(手机号:"+member.mobile+",卡号:"+member.cardNo+",单号:"+(debtlog.billNO||"--")+",类别:"+this.type[debtlog.type-1]+")还款";
+        // var msg = "会员"+member.name+"(手机号:"+member.mobile+",卡号:"+member.cardNo+",单号:"+(debtlog.billNO||"--")+",类别:"+this.type[debtlog.type-1]+")还款";
+        var msg = this.type[debtlog.type-1]+"还款(单号:"+(debtlog.billNO||"--")+")";
         return {
             "shopId":am.metadata.userInfo.shopId,
             "parentShopId":am.metadata.userInfo.realParentShopId,
@@ -114,7 +124,14 @@ var cashierDebt = {
             "type":debtlog.type,
             "remainFee":debtlog.remainFee,
             "repayFee":payVal*1||0,
-            "operatorId":am.metadata.userInfo.userId
+            "operatorId":am.metadata.userInfo.userId,
+            "memberid": member.id,
+            "membername": member.name,
+            "debtFlag": debtlog.debtFlag,
+            "bill": debtlog.bill,
+            "billDetails": debtlog.billDetails,
+            "cards": debtlog.cards,
+            "cashs": debtlog.cashs
         };
     },
     repay:function($tr){
@@ -131,69 +148,68 @@ var cashierDebt = {
             return;
         }
 
-        if(data.type == 1 || data.type==3){
-            am.keyboard.show({
-                "title":"请确定还款金额，此操作将产生营业外收入",
-                "submit":function(value){
-                    if(!value || value>data.remainFee){
-                        am.msg('请输入正确的还款金额！');
-                        am.keyboard.$dom.find(".input_value").text("");
-                        am.keyboard.value='';
-                        return 1;
-                    }
-
-                    am.loading.show();
-                    am.api.repayDebt.exec(_this.getRepayOption(value*1||0,_this.member,data),function(ret){
-                        am.loading.hide();
-                        if(ret && ret.code==0){
-                            am.msg('还款完成，已产生营业外收入！');
-                        }else if(ret.code == -1){
-                            am.msg('网络异常，请检查网络后重试');
-                        }else{
-                            am.msg('还款失败！');
-                        }
-                        _this.check(null,1);
-                    });
-                }
-            });
-            am.keyboard.$dom.find(".input_value").text(data.remainFee);
-            am.keyboard.value=data.remainFee+'';
-        }else{
-            am.loading.show();
-            am.api.queryMemberById.exec({
-                memberid:this.member.id
-            },function(ret){
-                am.loading.hide();
-                if(ret && ret.code==0 && ret.content && ret.content.length){
-                    var cards = [];
-                    for(var i=0;i<ret.content.length;i++){
-                        if(ret.content[i].cardtype==1){
-                            cards.push(ret.content[i]);
-                        }
-                    }
-                    if(cards.length==1){
-                        _this.gotoRecharge(data,cards[0]);
-                    }else{
-                        var arr = [];
-                        for(var i=0;i<cards.length;i++){
-                            arr.push({
-                                name:cards[i].cardName + ' (余额:￥'+ (cards[i].balance )+')',
-                                data:cards[i]
-                            });
-                        }
-                        am.popupMenu("请选择会员卡进行还款充值",arr, function (memberdata) {
-                            if(ret){
-                                _this.gotoRecharge(data,memberdata.data);
-                            }
-                        });
-                    }
-                }else{
-                    am.msg('客户资料读取失败！');
-                }
-            });
+        if(data.shopId != amGloble.metadata.userInfo.shopId){
+            amGloble.msg('不可跨店还款');
+            return;
         }
-    },
+
+        if(data.debtFlag==1){
+            $.am.changePage(am.page.addIncome,'slideup',this.getRepayOption(0,this.member,data));
+            this.clearCache(this.member.id);
+        }else {
+            if(data.type == 1 || data.type==3){
+                $.am.changePage(am.page.addIncome,'slideup',this.getRepayOption(0,this.member,data));
+                this.clearCache(this.member.id);
+            }else{
+                am.loading.show();
+                am.api.queryMemberById.exec({
+                    memberid:this.member.id
+                },function(ret){
+                    am.loading.hide();
+                    if(ret && ret.code==0 && ret.content && ret.content.length){
+                        var cards = [];
+                        for(var i=0;i<ret.content.length;i++){
+                            if(ret.content[i].cardtype==1){
+                                cards.push(ret.content[i]);
+                            }
+                        }
+                        if(cards.length==1){
+                            _this.gotoRecharge(data,cards[0]);
+                        }else{
+                            var arr = [];
+                            for(var i=0;i<cards.length;i++){
+                                arr.push({
+                                    name:cards[i].cardName + ' (余额:￥'+ (cards[i].balance )+')',
+                                    data:cards[i]
+                                });
+                            }
+                            _this.popupMenu(arr,data);
+                        }
+                    }else{
+                        am.msg('客户资料读取失败！');
+                    }
+                });
+            }
+        }
+	},
+	popupMenu: function(arr,data){
+		var self = this;
+		am.popupMenu("请选择会员卡进行还款充值",arr, function (memberdata) {
+			if(!memberdata) return;
+			var member = memberdata.data || {};
+			if (!(member.allowkd-0) && member.shopId != am.metadata.userInfo.shopId) {
+				am.msg('此会员卡不允许跨店消费！');
+				self.popupMenu(arr,data);
+				return;
+			}
+			self.gotoRecharge(data,member);
+		});
+	},
     gotoRecharge:function(debt,member){
+		if (!(member.allowkd-0) && member.shopId != am.metadata.userInfo.shopId) {
+			am.msg('此会员卡不允许跨店消费！');
+			return;
+		}
         if(member.cardtype==1 && (member.timeflag==1 || member.timeflag==3)){
             //计次卡
             atMobile.nativeUIWidget.showMessageBox({
@@ -207,6 +223,7 @@ var cashierDebt = {
                 debt:debt,
                 member:member
             });
+            this.clearCache(member.id);
         }
     }
 };

@@ -1,0 +1,130 @@
+@import "var.less";
+@path: "../images/";
+@import "../images/login_sprite.less";
+
+#page_financeOpt {
+    .contentWrap {
+        width: 555px;
+        margin: 47px auto;
+        .header {
+            position: relative;
+            img {
+                position: absolute;
+                top: -14px;
+                left: 70px;
+                width: 60px;
+                height: 60px;
+            }
+            h2 {
+                text-align: center;
+                font-size: 25px;
+                color: #222;
+                span {
+                    margin-left: 15px;
+                    font-size: 25px;
+                    color: #E92A45;
+                }
+                span.hasLevel {
+                    color: #7BC885;
+                }
+            }
+            p {
+                padding-top: 18px;
+                text-align: center;
+                font-size: 15px;
+                color: #999;
+            }
+            .inputDiv {
+                width: 220px;
+                height: 40px;
+                line-height: 40px;
+                margin: 20px auto;
+                padding: 5px 20px;
+                border: 1px solid rgba(207,207,207,0.5);
+                border-radius: 25px;
+                input {
+                    width: 120px;
+                    line-height: 35px;
+                    font-size: 20px;
+                    height: 35px;
+                    border: none;
+                }
+                span {
+                    display: inline-block;
+                    font-size: 20px;
+                }
+            }   
+        }
+        .content {
+            ul {
+                li {
+                    display: inline-block;
+                    width: 81px;
+                    height: 81px;
+                    padding: 12px;
+                    margin-right: 40px;
+                    margin-bottom: 26px;
+                    color: #222;
+                    border-radius: 50%;
+                    background: rgba(207,207,207, 0.15);
+                    div {
+                        width: 81px;
+                        height: 81px;
+                        background: #FFF;
+                        border-radius: 50%;
+                        box-shadow: 0 0 8px 3px rgba(0,0,0,0.09);
+                        p {
+                            position: relative;
+                            top: 14px;
+                            text-align: center;
+                            font-size: 30px;
+                            &:after {
+                                position: absolute;
+                                bottom: -12px;
+                                left: 36px;
+                                content: '级';
+                                font-size: 12px;
+                            }
+                        }
+                    }
+                }
+                li.action {
+                    color: #7BC885;
+                    background : #7BC885;
+                }
+                li:nth-of-type(4) {
+                    margin-right: 0;
+                }
+                li:nth-of-type(8) {
+                    margin-right: 0;
+                }
+                li:last-of-type {
+                    div {
+                        background: #FFF;
+                        border-radius: 50%;
+                        box-shadow: 0 0 8px 3px rgba(0,0,0,0.09);
+                        p {
+                            position: static;
+                            text-align: center;
+                            line-height: 81px;
+                            font-size: 14px;
+                            &:after {
+                                display: none;
+                            }
+                        }
+                        
+                    }
+                    &.action {
+                        background: rgba(207,207,207, 0.15);
+                        p {
+                            color: #222;
+                            &:after {
+                                display: none;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

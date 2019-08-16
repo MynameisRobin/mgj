@@ -28,11 +28,17 @@
 			this.$billno_box = this.$.find(".billno_box");
 			this.$remark_box = this.$.find(".remark_box");
 			this.$member = this.$.find(".member");
+			//回车键1秒内连敲3次结算
+			_this.submitArr = [];
+            _this.compareTime = function(time1, time2) {
+                    return time2 / 1000 - time1 / 1000;
+                };
 
 			this.$list.on('vclick', '.outside', function () {
 				if($(this).parent().hasClass('disabled')){
 					return;
 				}
+				console.log('bac');
 				var parentData = $(this).parents('.wrapper').data('data');
 				if (parentData && parentData.status == 0) {
 					// am.msg('无法选择非状态牌');
@@ -51,7 +57,6 @@
 						var pos2 = item.empId ? am.metadata.empMap[item.empId].pos : item.pos;
 						if (pos2 == pos) {
 							$(lis[i]).removeClass('active');
-
 						}
 					}
 				}
@@ -150,12 +155,18 @@
 			}).on("vclick", ".sex li", function () {
 				$(this).addClass("active").siblings().removeClass("active");
 			}).on("vclick", ".submit", function () {
+                // 性能监控点
+                monitor.startTimer('M02')
+				
 				var item = _this.getSaveData();
 				/*if(!$.isPlainObject(item.data)){
 					item.data = JSON.parse(item.data);
 				}else{
 
 				}*/
+
+				// 性能监控点
+				monitor.startTimer('M02', item)
 				if (item.displayId == "") {
 					//am.msg("请先选择服务号！");
 					self.getData(function (ret) {
@@ -174,7 +185,10 @@
 						am.cashierTab.feedBill(ret.content, 1);
 					});
 				}
-
+				console.log(_this.paras);
+				if(_this.paras && _this.paras.member){
+					localStorage.openbill = _this.paras.member.openbill;
+				}
 				//am.cashierTab.feedBill(item,1);
 				//console.log(item);
 			}).on("vclick", ".member", function () {
@@ -186,19 +200,29 @@
 							var data = _this.getSaveData();
 							am.pageStatus.setStatus("openbill_billInfo", data);
 							$.am.changePage(am.page.searchMember, "slideup", {
+								openbill: 1,
 								onSelect: function (item) {
-									$.am.changePage(am.page.openbill, "slidedown", $.extend(_this.paras, {
+									var opt = {
 										member: item
-									}));
+									}
+									if(_this.paras.displayId){
+										opt.displayId = _this.paras.displayId;
+									}
+									$.am.changePage(am.page.openbill, "slidedown", $.extend(_this.paras, opt));
 								}
 							});
+							am.page.searchMember.$.find(".memberBill").trigger("vclick");
 						}else {
 							var data = $(this).parents('.memberInfo').data('item');
 							console.log(data);
-							$.am.changePage(am.page.memberDetails, "slideup",{
+							var opt = {
 								customerId:data.memId,
 								tabId:1
-							});
+							}
+							if(_this.paras.displayId){
+								opt.displayId = _this.paras.displayId;
+							}
+							$.am.changePage(am.page.memberDetails, "slideup",opt);
 						}
 					}
 				}
@@ -208,13 +232,14 @@
 				var data = _this.getSaveData();
 				am.pageStatus.setStatus("openbill_billInfo", data);
 				$.am.changePage(am.page.searchMember, "slideup", {
+					openbill: 1,
 					onSelect: function (item) {
 						$.am.changePage(am.page.openbill, "slidedown", $.extend(_this.paras, {
 							member: item
 						}));
 					}
 				});
-
+				am.page.searchMember.$.find(".memberBill").trigger("vclick");
 			}).on("vclick", ".num", function () {
 				self.getData(function (ret) {
 					am.createService.show(ret, function (data) {
@@ -223,15 +248,63 @@
 				})
 			}).on("vclick", ".orderOpen", function () {
 				var data = _this.getSaveData();
-				am.pageStatus.setStatus("openbill_billInfo", data);
-				$.am.changePage(am.page.reservation, "slideup", {
+				// am.pageStatus.setStatus("openbill_billInfo", data);
+				var opt = {
 					openbill: 1
-				});
+				}
+				if(data.displayId){
+					opt.displayId = data.displayId;
+				}
+				$.am.changePage(am.page.reservation, "slideup", opt);
 			});
+
+			$('#keypadInputDiv').on('vclick', function () {
+				var obj = {
+					type : '2'
+				}
+				self.keypadInputDivClickFun(obj);
+			})
+			$('#keypadInputDiv .inputDiv').on('vclick', function (event) {
+				event.stopPropagation();
+			})
+			$('#keypadInputDiv .inputDiv input').on('keyup', function(event) {
+
+				var keyCode = event.keyCode;
+                var c = $(this);  
+                if(/[^\d]/.test(c.val())){//替换非数字字符  
+                    var temp_amount=c.val().replace(/[^\d]/g,'');  
+                    $(this).val(temp_amount);  
+                }else {} 
+
+				if(keyCode >= 37 && keyCode <= 40 || keyCode === 13) {
+					return;
+                }
+
+                if( typeof parseInt(event.key) === 'number' ) {
+                    self.keypadSearch(event.target.value);
+                }
+
+				// var keyCode = event.keyCode;
+				// if(keyCode >= 37 && keyCode <= 40 || keyCode == 13) {
+				// 	return;
+				// }
+				// self.keypadSearch(event.target.value);
+			})
 
 			this.$closeTip = this.$.find('.closeTip').vclick(function () {
 				$(this).parent().hide();
 			});
+			
+			/* this.$changeView = this.$.find('.changeView').vclick(function () {
+				// $uls=this.$.find('ul.wrap');
+				if(_this.$list.hasClass('picMode')){
+					_this.$list.removeClass('picView');
+					localStorage.setItem("isPicMode",0);
+				}else{
+					_this.$list.addClass('picMode');
+					localStorage.setItem("isPicMode",1);
+				}
+			}); */
 
 			this.listScroll = new $.am.ScrollView({
 				$wrap: this.$list.parent(),
@@ -264,6 +337,16 @@
                 // });
 			});
 
+			this.$autoDisplayId = this.$.find('.autoDisplayId').vclick(function(){
+				if($(this).hasClass('autoId')){
+					$(this).removeClass('autoId');
+					localStorage.setItem('autoDisplayId'+amGloble.metadata.userInfo.userId,false);
+				}else {
+					$(this).addClass('autoId');
+					localStorage.setItem('autoDisplayId'+amGloble.metadata.userInfo.userId,true);
+				}
+			});
+
 		},
 		setHangUpNum: function (i) {
 			if (i) {
@@ -289,7 +372,8 @@
 		},
 		setdisplayId:function(id){
 			if (id) {
-				this.$.find(".displayId").html(id);
+				this.$.find(".displayId").html(id).parent().show();
+				this.$autoDisplayId.hide();
 			} else {
 				this.$.find(".displayId").html("--");
 			}
@@ -308,19 +392,26 @@
 			}
 			if (paras && paras.member) {
 				//渲染会员
-
 				var member = paras.member;
 				this.$member.find(".name").html(member.name);
 				this.$member.find('.header').html(am.photoManager.createImage('customer', {
 					parentShopId: am.metadata.userInfo.parentShopId,
 					updateTs: member.lastphotoupdatetime || ""
 				}, member.id + ".jpg", "s"));
+				//会员锁定
+				if(am.isMemberLock(member.lastConsumeTime || member.lastconsumetime, member.locking)){
+					this.$member.find('.header').addClass("lock");
+				}else{
+					this.$member.find('.header').removeClass("lock");
+				}
+
 				this.$.find(".memberInfo").data("item", {
 					memId: member.id,
 					memName: member.name,
 					memPhone: member.mobile,
 					cid: member.cid,
-					sex: member.sex
+					sex: member.sex,
+					uuid:member.uuid
 				});
 				if (member.comment) {
 					member.comment = member.comment.substring(0, 50);
@@ -343,10 +434,17 @@
 					editInfo = {};
 				}
 				editInfo.genderGuest = member.sex=="M"?1:0;
+				if(paras.displayId){
+					rowdata.displayId = paras.displayId;
+					this.$.find(".displayId").html(rowdata.displayId);
+				}else {
+					rowdata.displayId = '';
+					this.$.find(".displayId").html("--");
+				}
 				this.paras.rowdata = rowdata; //赋给paras
-
 			} else {
 				this.$.find(".memberInfo").data("item", null);
+				this.$member.find('.header').removeClass("lock");
 			}
 			if (paras.reservation) { //从预约开单
 				rowdata = am.pageStatus.getStatus("openbill_billInfo");
@@ -363,6 +461,7 @@
 				rowdata.memId = paras.reservation.custId;
 				rowdata.memName = paras.reservation.custName;
 				rowdata.memPhone = paras.reservation.memmobile;
+				rowdata.instorecomment = paras.reservation.comment;
 				//检查发型师
 				if (paras.reservation.barberId) {
 					var emp = am.metadata.empMap[paras.reservation.barberId];
@@ -374,6 +473,14 @@
 					editInfo = {};
 				}
 				editInfo.genderGuest = paras.reservation.sex=="M"?1:0;
+
+				if(paras.reservation.displayId){
+					rowdata.displayId = paras.reservation.displayId;
+					this.$.find(".displayId").html(rowdata.displayId);
+				}else {
+					rowdata.displayId = '';
+					this.$.find(".displayId").html("--");
+				}
 
 				am.api.queryMemberById.exec({
                     memberid:paras.reservation.custId
@@ -389,10 +496,12 @@
 				this.$.find(".orderOpen").data("item", null);
 			}
 
-			if (rowdata && rowdata.displayId) {
-				this.$.find(".displayId").html(rowdata.displayId);
+			if (rowdata && rowdata.displayId || paras.displayId) {
+				this.$.find(".displayId").html((rowdata && rowdata.displayId)?rowdata.displayId:paras.displayId).parent().show();
+				this.$autoDisplayId.hide();
 			} else {
-				this.$.find(".displayId").html("--");
+				this.$.find(".displayId").html("--").parent().hide();
+				this.$autoDisplayId.show();
 			}
 			console.log(paras.reservation);
 
@@ -405,6 +514,11 @@
 							parentShopId: am.metadata.userInfo.parentShopId,
 							updateTs: ""
 						}, rowdata.memId + ".jpg", "s"));
+						if(rowdata.reservation && am.isMemberLock(rowdata.reservation.lastConsumeTime || rowdata.reservation.lastconsumetime, rowdata.reservation.locking)){
+							this.$member.find('.header').addClass("lock");
+						}else{
+							this.$member.find('.header').removeClass("lock");
+						}
 						this.$.find(".memberInfo").data("item", {
 							memId: rowdata.memId,
 							memName: rowdata.memName,
@@ -417,22 +531,36 @@
 				} else {
 					this.$member.find(".name").html("散客");
 					this.$member.find('.header').html("");
+					this.$member.find('.header').removeClass("lock");
 				}
 				this.$.find(".sex li").removeClass("active").eq(0).addClass('active');
 				if (editInfo) {
 					this.$.find(".sex li").removeClass("active").eq(editInfo.genderGuest || 0).addClass('active');
 				}
 				if (rowdata.id) {
-					this.$.find(".submit").text("确认修改");
+					this.$.find(".submit").eq(0).text("确认修改");
 					this.$.find(".head .right").hide();
 					this.$.find('.head .mid').addClass('edit');
+
+					$('#page_openbill .submit').show();
+					$('#page_openbill .submit.keypadPC').hide();
 				} else {
-					this.$.find(".submit").text("确认开单");
+				
+					if(device2.windows() || navigator.platform.indexOf("Mac") == 0 ) {
+						$('#page_openbill .submit').hide();
+						$('#page_openbill .submit.keypadPC').show();
+					}else {
+						this.$.find(".submit").text("确认开单");
+						$('#page_openbill .submit.keypadPC').hide();
+					}
+
 					this.$.find(".head .right").show();
 					this.$.find('.head .mid').removeClass('edit');
 				}
 				if (rowdata.serviceNO) {
 					this.$billno_box.show().find(".billno").html(rowdata.serviceNO);
+				}else {
+					this.$billno_box.hide()
 				}
 				this.$remark.addClass('edit');
 			} else { //
@@ -450,7 +578,7 @@
 		getBillRemark:function(editInfo){
 			var data = null;
 			try{
-				data = JSon.parse(editInfo);
+				data = JSON.parse(editInfo);
 			}catch(e){}
 			if(data){
 				return data.billRemark;
@@ -466,19 +594,40 @@
 			this.$member.find(".name").html("散客");
 			this.$member.find('.header').html("");
 			this.$.find(".sex li").removeClass("active").eq(0).addClass('active');
-			this.$.find(".submit").text("确认开单");
+			// this.$.find(".submit").text("确认开单");
+
+			if(device2.windows() || navigator.platform.indexOf("Mac") == 0 ) {
+                $('#page_openbill .submit').hide();
+				$('#page_openbill .submit.keypadPC').html('<span class="text1">确认开单</span><p class="text2"><span>回车键*3次</span></p>').show();
+            }else {
+                $('#page_openbill .submit.keypadPC').hide();
+            }
 			this.$billno_box.hide();
 		},
 		beforeShow: function (paras) {
+			/* if(localStorage.getItem("isPicMode")&&localStorage.getItem("isPicMode")==='1'){
+				$('#page_openbill div.list').addClass('picMode');
+			}else{
+				$('#page_openbill div.list').removeClass('picMode');
+			} */
 			this.selectArr = [];
 			this.server = [null, null, null];
+			this.tableId = null;
+			if((paras && paras.tableId) || (paras && paras.rowdata && paras.rowdata.tableId)){
+				this.tableId = paras.tableId || paras.rowdata.tableId;
+			}
 			this.paras = paras;
+			var autoDisplayId = localStorage.getItem('autoDisplayId'+amGloble.metadata.userInfo.userId);
+			if(autoDisplayId=='true'){
+				this.$autoDisplayId.addClass('autoId');
+			}else {
+				this.$autoDisplayId.removeClass('autoId');
+			}
 			if (paras == 'back') {
 				return;
 			}
 			this.$list.empty();
 			this.renderopenbill(paras);
-
 		},
 		afterShow: function (paras) {
 			if (paras == 'back') {
@@ -489,6 +638,13 @@
 			} else {
 				this.renderPos();
 			}
+
+			var activePage = $.am.getActivePage().id;
+			if(activePage === 'page_service') {
+			    $('#keypadInputDiv').find('.label').text('输入项目编号')
+			}else if(activePage === 'page_openbill') {
+			    $('#keypadInputDiv').find('.label').text('输入员工编号')
+			}
 		},
 		beforeHide: function () {
 			for (var i = 0; i < this.$list.find('.wrapper').length; i++) {
@@ -497,10 +653,11 @@
 			if (this.timerRetry) {
                 clearTimeout(this.timerRetry);
                 delete this.timerRetry;
-            }
+			}
+			
 		},
 		afterHide: function () {
-
+			$('#keypadInputDiv').hide();
 		},
 		getEmpdata: function () {
 			// var json = {
@@ -554,6 +711,11 @@
 			var displayId = this.$.find(".displayId").html();
 			var reservation = this.$.find(".orderOpen").data("item");
 			var member = this.$.find(".memberInfo").data("item");
+			var sexIndex = this.$.find('.sex .active').index();
+			var sex = sexIndex==0?'F':'M';
+			if(member){
+				member.sex = sex;
+			}
 			var editInfo = null;
 			if (rowdata && 　rowdata.data) {
 				editInfo = JSON.parse(rowdata.data);
@@ -564,7 +726,6 @@
 			if (rowdata && rowdata.serviceNO) {
 				opt.serviceNO = rowdata.serviceNO;
 			}
-
 			
 			if (member) {
 				opt.memId = member.memId;
@@ -580,7 +741,9 @@
 						"cid": member.cid
 					};
 				}
-
+				if(member.uuid){
+					opt.data.uuid = member.uuid;
+				}
 			} else {
 				opt.memId = -1;
 				opt.memName = "";
@@ -588,7 +751,7 @@
 				if (editInfo) {
 					opt.data = editInfo;
 				} else {
-					opt.data = {"memGender":"F"};
+					opt.data = {"memGender":sex};
 				}
 
 			}
@@ -598,7 +761,7 @@
 				var sumfee = 0.0;
 
 				var items = {};packages = {};
-				if(reservation.itemProp){
+				if(reservation.itemProp && am.metadata.configs.mgjReservationItem == "true" && am.metadata.configs.mgjReservationItemAuto == "true"){
 					items = JSON.parse(reservation.itemProp).items;
 					packages = JSON.parse(reservation.itemProp).packages;
 				}
@@ -625,6 +788,7 @@
 				}
 				opt.data.serviceItems=serviceItems;
 				opt.data.sumfee=sumfee;
+				// opt.src = reservation.src;
 				opt.reservationId = reservation.id;
 			} else {
 				opt.reservationId = -1;
@@ -636,7 +800,7 @@
 			}
 			opt.channel = 1; //渠道 1从无纸化开单 2从收银开单
 			opt.createDateTime = now;
-			if(!rowdata || (rowdata && !rowdata.id)){
+			if(!rowdata || (rowdata && !rowdata.id) || rowdata.status==3){
 				opt.shampooStartTime = null; //洗发开始时间
 				opt.shampooFinishTime = null; //洗发结束时间,
 				if (amGloble.metadata.configs.notAutoStartShampooTime != "true") {
@@ -653,8 +817,50 @@
 			var billRemark = this.$.find(".remark_box").data("item");
 			opt.data.billRemark  = billRemark;
 
+			if(opt.data.serviceItems && opt.data.serviceItems.length){
+				for(var i=0;i<opt.data.serviceItems.length;i++){
+					var serviceItem = amGloble.metadata.serviceItemMap[opt.data.serviceItems[i].id];
+					if (serviceItem.autoStation && !opt.data.serviceItems[i].manual) {
+						var autoStation = serviceItem.autoStation.split(","),
+							autoArr = [];
+						for (var n = 1; n < 4; n++) {
+							if (autoStation.indexOf(n.toString()) != -1 && opt["emp" + n] != -1) {
+								var s1 = am.metadata.empMap[opt["emp" + n]];
+								var serverData = {
+									id: opt["emp" + n],
+									name: opt["emp" + n + "Name"],
+									per: 100,
+									perf: 0,
+									gain: 0,
+									specified: opt["isSpecified" + n],
+									station:s1.pos
+								}
+								autoArr.push(serverData);
+							}
+						}
+						opt.data.serviceItems[i].servers = autoArr;
+					}
+				}
+			}
+
 			if ($.isPlainObject(opt.data)) {
-				opt.data = JSON.stringify(opt.data);
+				var _data = {};
+				if(!opt.id && !reservation && !opt.data.uuid){
+					_data = {
+						"memGender": opt.data.memGender,
+						"genderGuest":opt.data.genderGuest,
+						"billRemark": null,
+						"cid": opt.data.cid || "",
+						"cardTypeId": opt.data.cardTypeId || "",
+						"sumfee": 0,
+						"prodSumfee": 0,
+						"serviceItems": [],
+						"products": null
+					}
+				}else {
+					_data = opt.data;
+				}
+				opt.data = JSON.stringify(_data);
 			}
 			opt.shampooworkbay = null;
 			for (var i = 0; i < this.server.length; i++){
@@ -666,9 +872,40 @@
 					}
 				}
 			}
+			opt.backupShampooFinishTime = opt.shampooFinishTime;
+			opt.shampooFinishTime = null;
+			opt.isIdInvoked = window.isIdInvoked;
+			opt.status = 0;
+			if(this.tableId){
+				opt.tableId = this.tableId;
+			}
 			return opt;
 		},
 		save: function (opt, callback) {
+			var hasChanged = 0;
+			if(am.billOriginData){
+				for(var key in opt){
+					if(key=='data'){
+						if(opt[key]!=am.billOriginData[key]){
+							hasChanged ++;
+							break;
+						}
+					}else if(!am.cashierTab.stringCompare(JSON.stringify(opt[key]),JSON.stringify(am.billOriginData[key]),key) && key !='channel' && key !='order' && key !='createDateTime' && key!='backupShampooFinishTime' && key!='isIdInvoked'){
+						hasChanged ++;
+						break;
+					}
+				}
+			}
+			if(!hasChanged && am.billOriginData){
+				if(self.paras.src=='reservation'){
+					opt.src='reservation';
+				}
+				callback && callback({
+					content: opt
+				});
+				return;
+			}
+			console.log('------------单据发生改变----------------');
 			am.loading.show();
 			$.extend(opt, {
 				parentShopId: am.metadata.userInfo.parentShopId,
@@ -677,8 +914,24 @@
 			am.api.hangupSave.exec(opt, function (ret) {
 				am.loading.hide();
 				if (ret && ret.code == 0) {
+                    // 性能监控点
+                    monitor.stopTimer('M02', 0)
+
+					ret.content.shampooFinishTime = opt.backupShampooFinishTime;
+					if(self.paras.src=='reservation'){
+						ret.content.src='reservation';
+					}
+					opt.id = ret.content.id;
+					opt.serviceNO = ret.content.serviceNO;
+					opt.emp1RotateId = ret.content.emp1RotateId;
+					opt.emp2RotateId = ret.content.emp2RotateId;
+					opt.emp3RotateId = ret.content.emp3RotateId;
+					am.billOriginData = opt;
 					callback && callback(ret);
 				} else {
+                    // 性能监控点
+                    monitor.stopTimer('M02', 1)
+
 					am.msg(ret.message || "操作失败，请重试~");
 				}
 			});
@@ -693,8 +946,12 @@
 				shopId: am.metadata.userInfo.shopId,
 			}, function (ret) {
 				am.loading.hide();
-				console.log(ret);
+                console.log(ret);
+
 				if (ret && ret.code == 0) {
+                    // 性能监控点
+                    monitor.stopTimer('M01', 0)
+
 					self.renderQueue(ret.content);
 					if (self.timerRetry) {
 		                clearTimeout(self.timerRetry);
@@ -704,6 +961,9 @@
 	                    self.getQueueList();
 	                }, 60000);
 				}else if (ret && ret.code == -1) {
+                    // 性能监控点
+                    monitor.stopTimer('M01', 1)
+
 					atMobile.nativeUIWidget.confirm({
 		                caption: '数据获取失败',
 		                description: '是否重试',
@@ -722,13 +982,22 @@
 			if(am.auth.$){
 				am.auth.hide();
 			}
+			if(am.isNull(data)){
+				return console.info("data:"+data);
+			}
 			for (var i = 0; i < data.length; i++) {
 				var $wrapper = this.$wrapper.clone();
 				$wrapper.find('.type').html(data[i].name);
 				$wrapper.data('data', data[i]);
-				var _status = data[i].status;
+				
+				if(data[i].status != undefined) {
+					var _status = data[i].status;
+				}
+				
 				var setting_washTime = am.page.service.billMain.getSetting().setting_washTime;
 				var washTimeFlag = setting_washTime && setting_washTime == 1 && am.metadata.configs.rcordRinseTime && am.metadata.configs.rcordRinseTime == 'false';
+				
+				var arrIndex_X = 1;
 				if (data[i].users.length) {
 					for (var j = 0; j < data[i].users.length; j++) {
 						var $li = this.$li.clone();
@@ -740,7 +1009,11 @@
 						var item = data[i].users[j];
 						$li.find('.no').html(item.empId);
 						var emp = am.metadata.empMap[item.empId];
+						
 						if (emp) {
+							//赋值X坐标
+							$li.attr('arrIndex_X', arrIndex_X++);
+				
 							$li.find('.no').html(emp.no);
 							$li.find('.name').html(emp.name);
 							$li.find('.role').html('已选择第'+(Number(emp.pos)+1)+'工位');
@@ -758,7 +1031,7 @@
 								var pos = item.empId ? emp.pos : item.pos;
 								// if (_status) {
 									var dutyType = Number(pos) + 1;
-									if (rowdata["emp" + dutyType] == emp.id && rowdata["emp" + dutyType + "RotateId"] == item.rotateId) {
+									if (rowdata["emp" + dutyType] == emp.id && (rowdata.reservation || rowdata["emp" + dutyType + "RotateId"] == item.rotateId)) {
 										$li.addClass('active');
 										if (rowdata["isSpecified" + dutyType] == 1) {
 											$li.find(".appoint").addClass('yes').find('p').html('指定');
@@ -781,12 +1054,13 @@
 							}
 
 
-							if (_status) {
+							if (_status&&item&&item.status) {//fix bug 0015760
 								$li.addClass('status' + item.status)
 								$li.find('.status').html(statusName[item.status]);
 								$li.find('.time').html(item.statusTime);
 							} else {
 								$li.find('.time').hide();
+								$li.find('.status').hide();
 							}
 
 							$li.data('data', item);
@@ -796,6 +1070,8 @@
 					this.$list.append($wrapper);
 					this.startInterval($wrapper, i)
 				}
+
+				
 			}
 			this.listScroll.refresh();
 			this.listScroll.scrollTo('top');
@@ -805,6 +1081,22 @@
 			if (!this.$list.find('li').length) {
 				am.msg('轮牌未设置');
 			}
+			
+			//所有的li手牌
+			this.showAllLiDOM = $('ul.wrap li');
+			this.maxNum = parseInt(($(document).width()-20)/this.showAllLiDOM.outerWidth(true));
+
+
+			$('ul.wrap').each(function(i, item) {
+				$(this).find('li').attr('arrIndex_Y', i+1)
+			})
+
+			// var obj = {
+			// 	type = '2'
+			// } 
+			// self.keypadInputDivClickFun(obj);
+
+			console.log('包含条目', this.maxNum);
 		},
 		startInterval: function (obj, index) {
 			var self = this;
@@ -815,6 +1107,7 @@
 					var $this = $(item);
 					var data = $this.data("data");
 					var now = new Date().getTime();
+					if(!data) return;
 					if (data.status == 4) {
 						var dt = Math.floor((data.restTime - now - data.diff) / 1000);
 						if (dt < 0) {
@@ -881,6 +1174,9 @@
 					});
 					var setting_washTime = am.page.service.billMain.getSetting().setting_washTime;
 					var washTimeFlag = setting_washTime && setting_washTime == 1 && am.metadata.configs.rcordRinseTime && am.metadata.configs.rcordRinseTime == 'false';
+
+					var arrIndex_X = 1;
+
 					for (var j = 0; j < emp.length; j++) {
 						if (emp[j].pos == i) {
 							emp[j].empId = emp[j].id;
@@ -890,6 +1186,10 @@
 							}else {
 								$li.addClass('notWash');
 							}
+
+							//赋值X坐标
+							$li.attr('arrIndex_X', arrIndex_X++);
+
 							$li.find('.no').html(emp[j].no);
 							$li.find('.name').html(emp[j].name);
 							$li.find('.role').html('已选择第'+(i+1)+'工位');
@@ -933,6 +1233,24 @@
 			this.listScroll.scrollTo('top');
 
 			// this.disabledCard();
+
+
+			//所有的li手牌
+			this.showAllLiDOM = $('ul.wrap li');
+			this.maxNum = parseInt(($(document).width()-20)/this.showAllLiDOM.outerWidth(true));
+
+
+			$('ul.wrap').each(function(i, item) {
+				$(this).find('li').attr('arrIndex_Y', i+1)
+			})
+
+			// var obj = {
+			// 	type = '2'
+			// } 
+			// self.keypadInputDivClickFun(obj);
+
+			console.log('包含条目', this.showAllLiDOM, this.maxNum);
+
 		},
 		getInstoreBill:function(){
 			var user = am.metadata.userInfo;
@@ -1034,6 +1352,418 @@
             }, function(){
 
             });
-		}
+		},
+
+		keypadInputDivClickFun : function (obj) {
+
+			if( $.am.getActivePage().id !== 'page_openbill' ) {
+				return;
+			}
+			
+			// type 1.表示是敲击回车键 2.手动清除(鼠标点击蒙层)
+			var type = obj.type;
+
+			if(type == '1') {
+				// this.showAllLiDOM.removeClass('available am-disabled').children('.outside').removeClass('am-disabled');
+				if(this.showAllLiDOM.hasClass('available')) {
+				}else {
+					this.showAllLiDOM.removeClass('available availableTrue am-disabled').children('.outside').removeClass('am-disabled');
+				}
+				
+			}else if(type == '2') {
+				//this.showAllLiDOM.removeClass('available availableTrue active am-disabled').children('.outside').removeClass('am-disabled');
+				this.showAllLiDOM.removeClass('available availableTrue am-disabled').children('.outside').removeClass('am-disabled');
+			}
+			$('#keypadInputDiv').hide();
+		},
+
+		keypadSearch : function (val) {
+			if( $.am.getActivePage().id !== 'page_openbill' ) {
+				return;
+			}else {
+				var self = this,
+					inputVal = $('#keypadInputDiv input').val();
+
+				self.availableLi = [];
+				self.directionKeyObj = {
+					maxNum : this.maxNum,
+					availableArr : [],
+				};
+
+			$('ul.wrap').each(function(i, item) {
+				var data = [i];
+				self.availableLi.push(data);
+			})
+
+			self.showAllLiDOM.removeClass('available availableTrue').addClass('am-disabled').children('.outside').addClass('am-disabled');
+
+			if(val === '' || typeof parseInt(val) != 'number' || val == null) {
+				// this.showAllLiDOM.removeClass('available availableTrue active').addClass('am-disabled').children('.outside').addClass('am-disabled');
+				return;
+			}
+
+			self.showAllLiDOM.each(function(i, item) {
+				var thisItem = $(item),
+				noText = thisItem.find('.no').text();
+
+				if (noText.indexOf(inputVal) == 0) {
+					thisItem.addClass('available').removeClass('am-disabled').children('.outside').removeClass('am-disabled');
+					
+					var availableALL = $('ul.wrap .available').eq(0).addClass('availableTrue');
+						// if(!availableALL.eq(0).hasClass('active')) {
+						// 	availableALL.eq(0).addClass('availableTrue').children('.outside').trigger('vclick');
+						// }
+					var arrIndex_X = thisItem.attr('arrIndex_X'),
+						arrIndex_Y = thisItem.attr('arrIndex_Y'),
+						arrIndexArr = [arrIndex_Y, arrIndex_X];
+
+						self.directionKeyObj.availableArr.push(arrIndexArr);
+						self.directionKeyObj.activeIndex = self.directionKeyObj.availableArr[0];
+					
+				} else {
+					// if(thisItem.hasClass('active')) {
+					// 	console.log('outside1')
+					// 	thisItem.removeClass('am-disabled').children('.outside').removeClass('am-disabled').trigger('vclick');
+					// }
+					// thisItem.removeClass('available availableTrue active').addClass('am-disabled').children('.outside').addClass('am-disabled');
+					
+					// if(thisItem.hasClass('active')) {
+					// 	console.log('outside1')
+					// 	thisItem.removeClass('am-disabled').children('.outside').removeClass('am-disabled').trigger('vclick');
+					// }
+					// thisItem.addClass('am-disabled').children('.outside').addClass('am-disabled');
+					
+				}
+			})
+			}
+			
+		},
+		directionKey : function (obj) {
+			var self = this;
+			var keyCode = obj.keyCode,
+				availableArr = obj.availableArr,
+				maxNum = obj.maxNum,
+                activeIndex = obj.activeIndex;
+			
+			var thisArr, 
+				newArr = [],
+				newCeilArr = [],
+				hasZero = false, positiveArr = [], negativeArr = []; //存储正值 和 负值
+
+            switch (keyCode) {　　　　
+                case 37:
+                    thisArr = availableArr[availableArr.indexOf(activeIndex) - 1];
+                    //同行判断
+					if(activeIndex != availableArr[0] && thisArr != undefined 
+						&& Math.ceil(thisArr[1]/maxNum) == Math.ceil(activeIndex[1]/maxNum)
+						&& thisArr[0] == activeIndex[0] ) {
+							self.setActiveIndex(thisArr)
+                    }else {
+                        return;   
+                    }
+
+                    break;　　　　
+                case 38: 
+                    $.each(availableArr, function(index, item) {
+                        if(item[0] == activeIndex[0] && Math.ceil(item[1]/maxNum) < Math.ceil(activeIndex[1]/maxNum) && item[1] < activeIndex[1] 
+                            && item[0] <= activeIndex[0]) {
+                                newArr.push(item);
+                        }
+                    });
+                    
+                    //判断 同个ul中 已无可用数据 需向上一个ul查找 即小于
+                    if(newArr.length < 1) {
+                        $.each(availableArr, function(index, item) {
+                            if(item[0] < activeIndex[0]) {
+                                newArr.push(item);
+                            }
+                        });
+                    }
+                    
+                    newArr = newArr.reverse();
+                    $.each(newArr, function(index, item) {
+                        var num = Math.ceil(item[1]/maxNum);
+                        if(newCeilArr.length < 1) {
+                            newCeilArr.push(item);
+                        }else if(num == Math.ceil(newCeilArr[0][1]/maxNum)) {
+                            newCeilArr.push(item);
+                        }
+                    })
+                    
+                    $.each(newCeilArr, function(index, item) {
+                        //var num = activeIndex[1] - (maxNum - (Math.ceil(item[1]/maxNum)*maxNum - item[1]));
+
+                        var num = (maxNum - (Math.ceil(activeIndex[1]/maxNum)*maxNum - activeIndex[1])) - (maxNum - (Math.ceil(item[1]/maxNum)*maxNum - item[1]));
+                        if(num == 0) {
+                            self.setActiveIndex(item);
+                            hasZero = true;
+                            return false;
+                        }else if(num > 0) {
+                            positiveArr.push(num);
+                        }else if(num < 0) {
+                            negativeArr.push(num);
+                        }
+                    })
+                    
+                    if(!hasZero) {
+                        var val = Math.min.apply(null, positiveArr) + Math.max.apply(null, negativeArr);
+                        console.log(val);
+                        if(val <= 0 || val == -Infinity) {
+                            //0、负值、负无穷 均优先左边
+                            $.each(newCeilArr, function(index, item) {
+                                var num = (maxNum - (Math.ceil(activeIndex[1]/maxNum)*maxNum - activeIndex[1])) - (maxNum - (Math.ceil(item[1]/maxNum)*maxNum - item[1]));
+                                if(Math.min.apply(null, positiveArr) == num) {
+                                    self.setActiveIndex(item);
+                                    return false;
+                                }
+                                
+                            })
+                           
+                        }else {
+                            //正值优先右边
+                            $.each(newCeilArr, function(index, item) {
+                                var num = (maxNum - (Math.ceil(activeIndex[1]/maxNum)*maxNum - activeIndex[1])) - (maxNum - (Math.ceil(item[1]/maxNum)*maxNum - item[1]));
+                                if(Math.max.apply(null, negativeArr) == num) {
+									self.setActiveIndex(item);
+                                    return false;
+                                }
+                                
+                            })
+                        }
+                        
+                    }
+                    //newArr 同个ul中 所有大于当前activeIndex的数据
+                    //newCeilArr 同行可用数据
+                    //positiveArr 大于0的数据
+                    //negativeArr 小于0的数据
+
+                    
+                    break;　　　　
+				case 39:
+                    thisArr = availableArr[availableArr.indexOf(activeIndex) + 1];
+					console.log(thisArr);
+                    //同行判断
+					if(activeIndex != availableArr[availableArr.length-1] && thisArr != undefined 
+						&& Math.ceil(thisArr[1]/maxNum) == Math.ceil(activeIndex[1]/maxNum) 
+						&& thisArr[0] == activeIndex[0]) {
+							self.setActiveIndex(thisArr);
+							console.log('activeIndex123', thisArr);
+                    }else {
+                        return;   
+                    }
+
+                    break;　　　　
+                case 40: 
+                    
+                    $.each(availableArr, function(index, item) {
+                        if(item[0] == activeIndex[0] && Math.ceil(item[1]/maxNum) > Math.ceil(activeIndex[1]/maxNum) && item[1] > activeIndex[1] 
+                            && item[0] >= activeIndex[0]) {
+                                newArr.push(item);
+                        }
+                    });
+                    
+                    //判断 同个ul中 已无可用数据 需向下一个ul查找
+                    if(newArr.length < 1) {
+                        $.each(availableArr, function(index, item) {
+                            if(item[0] > activeIndex[0]) {
+                                newArr.push(item);
+                            }
+                        });
+                    }
+
+                    $.each(newArr, function(index, item) {
+                        var num = Math.ceil(item[1]/maxNum);
+                        if(newCeilArr.length < 1) {
+                            newCeilArr.push(item);
+                        }else if(num == Math.ceil(newCeilArr[0][1]/maxNum)) {
+                            newCeilArr.push(item);
+                        }
+                    })
+
+                    $.each(newCeilArr, function(index, item) {
+                        //var num = activeIndex[1] - (maxNum - (Math.ceil(item[1]/maxNum)*maxNum - item[1]));
+
+                        var num = (maxNum - (Math.ceil(activeIndex[1]/maxNum)*maxNum - activeIndex[1])) - (maxNum - (Math.ceil(item[1]/maxNum)*maxNum - item[1]));
+                        if(num == 0 ) {
+                            self.setActiveIndex(item);
+                            hasZero = true;
+                            return false;
+                        }else if(num > 0) {
+                            positiveArr.push(num);
+                        }else if(num < 0) {
+                            negativeArr.push(num);
+                        }
+                    })
+                    
+                    if(!hasZero) {
+                        var val = Math.min.apply(null, positiveArr) + Math.max.apply(null, negativeArr);
+                        console.log(val);
+                        if(val <= 0 || val == -Infinity) {
+                            //0、负值、负无穷 均优先左边
+                            $.each(newCeilArr, function(index, item) {
+                                var num = (maxNum - (Math.ceil(activeIndex[1]/maxNum)*maxNum - activeIndex[1])) - (maxNum - (Math.ceil(item[1]/maxNum)*maxNum - item[1]));
+                                if(Math.min.apply(null, positiveArr) == num) {
+                                    self.setActiveIndex(item);
+                                    return false;
+                                }
+                                
+                            })
+                           
+                        }else {
+                            //正值优先右边
+                            $.each(newCeilArr, function(index, item) {
+                                var num = (maxNum - (Math.ceil(activeIndex[1]/maxNum)*maxNum - activeIndex[1])) - (maxNum - (Math.ceil(item[1]/maxNum)*maxNum - item[1]));
+                                if(Math.max.apply(null, negativeArr) == num) {
+									self.setActiveIndex(item);
+                                    return false;
+                                }
+                                
+                            })
+                        }
+                        
+                    }
+                    //newArr 同个ul中 所有大于当前activeIndex的数据
+                    //newCeilArr 同行可用数据
+                    //positiveArr 大于0的数据
+                    //negativeArr 小于0的数据
+                    break;　　　　　　　
+                default:
+                    break;　　
+			}
+			
+			console.log(newArr, newCeilArr, positiveArr, negativeArr);
+		},
+		setActiveIndex : function (thisArr) {
+			console.log('outside2')
+			var self = this;
+			var wrapLi = $('ul.wrap li');
+				// wrapLi.removeClass('active availableTrue');
+				wrapLi.removeClass('availableTrue');
+
+				// $('#page_openbill ul.wrap').eq(thisArr[0]-1).find('li').eq(thisArr[1]-1).addClass('availableTrue').children('.outside').trigger('vclick');
+				$('#page_openbill ul.wrap').eq(thisArr[0]-1).find('li').eq(thisArr[1]-1).addClass('availableTrue');
+
+				self.directionKeyObj.activeIndex = thisArr;
+			console.log('setActiveIndex', self.directionKeyObj.activeIndex);
+		},
+		keyboardCtrl:function(keyCode){
+			var self = this,
+				ctrl = window.keyboardCtrl;
+
+            if(document.activeElement && $(document.activeElement).hasClass('input_no')){
+
+            }else{
+				if(keyCode === 27 || keyCode === 111) {
+					if($('#keypadInputDiv').is(':visible')) {
+						return;
+					}
+					self.backButtonOnclick();
+				}else if(keyCode === 106 && !$('#keypadInputDiv').is(':visible') ) {
+					if($('.sex li').eq(0).hasClass('active')) {
+						$('.sex li').eq(1).trigger('vclick');
+					}else {
+						$('.sex li').eq(0).trigger('vclick');
+					}
+				}else if(keyCode === 107) {
+					if($('#keypadInputDiv').is(':visible')) {
+						return;
+					}
+					$('.memberOpen').trigger('vclick');
+				}else if(keyCode == 13) {
+					var dom = $('li.availableTrue');
+					
+					if($('#keypadInputDiv').is(':visible')){
+						var obj = {
+							type : '1'
+						}
+						self.keypadInputDivClickFun(obj);
+
+						if(dom.hasClass('active') && dom.hasClass('availableTrue')) {
+							//选完后执行
+							self.showAllLiDOM.removeClass('available availableTrue am-disabled').children('.outside').removeClass('am-disabled');
+						}else if(dom.length > 0){
+							dom.children('.outside').trigger('vclick');
+						}
+					
+						return;
+					}else if(dom.length > 0 ) {
+		
+						if(dom.hasClass('active') && dom.hasClass('availableTrue')) {
+							//选完后执行
+							self.showAllLiDOM.removeClass('available availableTrue am-disabled').children('.outside').removeClass('am-disabled');
+						}else {
+							dom.children('.outside').trigger('vclick');
+						}
+
+						// if(dom.hasClass('active')) {
+						// 	dom.children('.inside').trigger('vclick');
+						// }else {
+						// 	dom.children('.outside').trigger('vclick');
+						// }
+
+						return;
+					}
+				
+                    //结算
+					var nowTime = new Date().getTime();
+                        this.submitArr.push(nowTime);
+                    
+                    var num = this.compareTime(this.submitArr[0], nowTime);
+                        console.log(num, this.submitArr);
+                    if(num >= 0.3) {
+                        if(this.submitArr.length >= 2) {
+							this.submitArr = [];
+							
+							//禁用按钮2500ms 防止重复提交
+							var dom = $("#page_openbill .keypadPC");
+							dom.trigger('vclick');	
+							dom.addClass('am-disabled');
+							clearTimeout(time);
+							var time = null;
+							if(!time){
+								time = setTimeout(function(){
+									dom.removeClass('am-disabled');
+								}, 2500);
+							}
+							
+                        }else {}
+					}else {}
+					
+                }else if(typeof(ctrl.getNum(keyCode)) === 'number') {
+					var val = ctrl.getNum(keyCode);
+					if(!$('#keypadInputDiv').is(':visible') && !$('li.availableTrue').is(':visible') ) {
+						$('#keypadInputDiv').show();
+						$('#keypadInputDiv input').val(val).focus();
+						self.keypadSearch(val);
+					}else {}
+
+				}else if(keyCode == 109) {
+					if(!$('#keypadInputDiv').is(':visible')) {
+						$('li.active.availableTrue .appoint').trigger('vclick');
+					}else {}
+
+				}else if(keyCode >= 37 && keyCode <= 40 ) {
+					// var dom = $('li.availableTrue');
+					// if(dom.hasClass('active')) {
+					// 	return;
+					// }
+
+					// if(!$('#keypadInputDiv').is(':visible') && self.showAllLiDOM.hasClass('availableTrue') ) {
+					// 	self.directionKeyObj.keyCode = keyCode;
+
+					// 	console.log(self.directionKeyObj);
+					// 	self.directionKey(self.directionKeyObj);
+					// }else {}
+					
+					if(self.showAllLiDOM.hasClass('availableTrue') ) {
+						self.directionKeyObj.keyCode = keyCode;
+
+						console.log(self.directionKeyObj);
+						self.directionKey(self.directionKeyObj);
+					}else {}
+
+				}
+            }
+        }
 	});
 })();

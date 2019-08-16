@@ -1,0 +1,47 @@
+#locking {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url(../images/lock_bg.jpg) no-repeat center center;
+  background-size: cover;
+  text-align: center;
+  color: #fff;
+  font-size: 12px;
+}
+#locking .wrapper {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+}
+#locking .wrapper .header {
+  padding-top: 15px;
+}
+#locking .wrapper .header .timeBox {
+  font-size: 14px;
+}
+#locking .wrapper .content {
+  color: #fff;
+}
+#locking .wrapper .footer {
+  width: 100%;
+  position: absolute;
+  bottom: 40px;
+}
+#locking .wrapper .footer .unlock {
+  font-size: 14px;
+  margin-bottom: 30px;
+  color: rgba(255, 255, 255, 0.85);
+}
+#locking .wrapper .footer .unlock .iconfont {
+  font-size: 27px;
+}
+#locking .wrapper .footer .unlock .tip {
+  margin-top: 8px;
+}
+#locking .wrapper .footer .forget .pwdBtn {
+  color: rgba(255, 255, 255, 0.85);
+  border-bottom: 1px solid #fff;
+}

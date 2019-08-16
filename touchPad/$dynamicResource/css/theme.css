@@ -1,0 +1,272 @@
+.cashierTotalPanel .submit {
+    background: #40c9c9;
+}
+.cashierTotalPanel .submit.am-clickable-active {
+    background: #24aca8;
+}
+.cashierTotalPanel .submit.itemPay.am-disabled.am-clickable-active {
+    background: #40c9c9;
+}
+.cashierTotalPanel .submit.itemPay .icon {
+    background-color: #37dbdb;
+}
+.tab_cash .tab_memList .tabItem .seatName.noSeat {
+    color: #40c9c9;
+}
+.tab_cash .tab_memList .tabItem .waiterNum {
+    color: #40c9c9;
+}
+.tab_cash .tabUl li.selected {
+    border-top: 1px solid #40c9c9;
+    border-bottom: 1px solid #40c9c9;
+    background-color: #40c9c9;
+}
+.tab_cash .tabUl li.selected::before {
+    border-left: 7px solid #40c9c9;
+}
+.page_hangup.half_page .left_operate_btn .openbill {
+    background-color: #40c9c9;
+}
+.page_hangup.half_page .left_operate_btn .openbill.am-clickable-active {
+    opacity: 0.8;
+    background-color: #24aca8;
+}
+.page_hangup.half_page .left_operate_btn .toSetWorkStation {
+    background-color: #24aca8;
+}
+.page_hangup.half_page .left_operate_btn .toSetWorkStation.am-clickable-active {
+    opacity: 0.8;
+    background-color: #40c9c9;
+}
+.tab_cash .hangupBtn .num,
+.tab_cash .settingBtn .num,
+.tab_cash .genderBtn .num,
+.tab_cash .searchBtn .num,
+.tab_cash .cardBtn .num,
+.tab_cash .hangupListBtn .num,
+.tab_cash .roundCardsBtn .num {
+    background: #40c9c9;
+}
+.animateDot {
+    background: #40c9c9;
+}
+.am-radio.checked {
+    background-color: #40c9c9;
+}
+.about_tab li.selected span {
+    color: #40c9c9;
+    border-bottom: 4px solid #40c9c9;
+}
+.about_content li .attendanceInterval .items .item span b {
+    background-color: #40c9c9;
+}
+.about_content li.mallOrderHandel .container-wrap .detailMode .detailRt .productDetail .verifyBtn.am-clickable {
+    background-color: #40c9c9;
+}
+.page_addIncome .smt {
+    background-color: #40c9c9;
+}
+.page_addMember .footbutton {
+    background-color: #40c9c9;
+}
+.page_addMember .uploadMemberImg .uploadBtn {
+    background: #40c9c9;
+  }
+.page_addMember .uploadMemberImg .uploadBtn.am-clickable-active {
+    background: #24aca8;
+}
+.page_appointment .create  {
+    background: #40c9c9;
+}
+.serviceItem .serviceItemBox .foot div.button {
+    color: #40c9c9;
+}
+.page_billRecord .billRecordContent .common_tabBox.facepay .contentbox .table-content-list td .tdwrap.operate span.refund {
+    background-color: #40c9c9;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list td .tdwrap.operate span.revoke b {
+    background-color: #40c9c9;
+}
+.billStatistics_tab li.selected span {
+    color: #40c9c9;
+    border-bottom: 4px solid #40c9c9;
+}
+#page_complain .complain .sub_complain.active {
+    color: #40c9c9;
+}
+#page_complain .complain .tip_txt {
+    background-color: #40c9c9;
+}
+.delete_p {
+    color: #40c9c9;
+}
+#suenum {
+    background-color: #40c9c9;
+}
+#sueList .submitted {
+    color: #40c9c9;
+}
+#complainDetail .services_image {
+    background-color: #40c9c9;
+}
+.page_hangup .hangup-foot-list li.seat .visible {
+    background-color: #40c9c9;
+}
+.page_hangup .hangup-foot-list .selected {
+    background-color: #40c9c9;
+}
+.page_hangup.half_page .left_operate_btn .c_left_btn.tip-highlight {
+    background-color: #40c9c9;
+}
+.page_hangup .am-header .operate_wrap .merge_btn,
+.page_hangup .am-header .operate_wrap .merge_action .sure_btn {
+    background-color: #40c9c9;
+}
+.page_hangup .hangup_container .content_wrap .hangup_block .self_mask.firstSelected::before {
+    background-color: #40c9c9;
+}
+.page_hangup .hangup_container .content_wrap .hangup_block .operation .hangup_cash_btn,
+.page_hangup .hangup_container .content_wrap .hangup_block .operation .hangup_settle_btn {
+    background-color: #40c9c9;
+}
+.page_hangup .hangup_container .content_wrap .hangup_block .operation .hangup_cash_btn.am-clickable-active,
+.page_hangup .hangup_container .content_wrap .hangup_block .operation .hangup_settle_btn.am-clickable-active {
+    background: #24aca8;
+}
+.page_hangup .hangup-foot-list .selected {
+    background-color: #40c9c9;
+}
+.page_memberDetails .memberdetailsbox .pageRight .memberDetailsTab li.selected span {
+    color: #40c9c9;
+    border-bottom: 4px solid #40c9c9;
+}
+.page_openbill .head .mid .num p:first-child {
+    color: #40c9c9;
+}
+.page_openbill .head .mid .memberInfo .member .name {
+    color: #40c9c9;
+}
+#page_orderOverdue .orderOverdue_wrap .orderOverdue_container .content_wrap .hangup_block .self_mask.firstSelected::before {
+    background-color: #40c9c9;
+}
+.page_pay .submit,
+.page_itemPay .submit {
+    background-color: #40c9c9;
+}
+#page_phoneCall .am-left .btn {
+    background: #40c9c9;
+    box-shadow: none;
+}
+@-webkit-keyframes unlimitTextAni {
+    0% {
+      background: #ececec;
+    }
+    50% {
+      background: #40c9c9;
+    }
+    100% {
+      background: #ececec;
+    }
+}
+.setMutiPerf .footer .btn .am-clickable-active {
+    background: #40c9c9;
+}
+.page_queue .head .nav .wrapper .item.active span {
+    border-bottom: 4px solid #40c9c9;
+    color: #40c9c9;
+}
+.page_reservation .appointment-btn {
+    background-color: #40c9c9;
+    border: 1px solid #24aca8;
+  }
+.page_reservation .appointment-btn:hover {
+    background-color: #24aca8;
+}
+.page_searchMember .am-header .o-title span.active {
+    color: #40c9c9;
+    border-bottom: 4px solid #40c9c9;
+}
+.cashierTab li.selected span {
+    color: #40c9c9;
+    border-bottom: 4px solid #40c9c9;
+    height: 40px;
+}
+.cashierItems .cashierItemScroll ul li .groupActionWrap .groupAction {
+    background: #24aca8;
+}
+.cashierItems .cashierItemScroll ul li .groupActionWrap .groupAction.am-clickable-active {
+    background: #40c9c9;
+}
+.cashierMain table tbody tr .checkbox.checked {
+    color: #24aca8;
+}
+.cashierMain .foot .submit {
+    background: #40c9c9;
+  }
+.cashierMain .foot .submit.am-clickable-active {
+    background: #24aca8;
+}
+@-webkit-keyframes animation_addItem {
+    0% {
+      background: #FFF;
+      opacity: 0;
+    }
+    40% {
+      background: #40c9c9;
+      color: #FFF;
+      opacity: 0;
+    }
+    70% {
+      opacity: 1;
+      color: #FFF;
+      background: #40c9c9;
+    }
+    100% {
+      background: #ececec;
+    }
+}
+@-webkit-keyframes animation_addItem1 {
+    40% {
+      background: #ececec;
+      color: #222;
+    }
+    70% {
+      color: #FFF;
+      background: #40c9c9;
+    }
+    100% {
+      background: #ececec;
+    }
+}
+.page_storage .nav .item.active span {
+    color: #40c9c9;
+    border-bottom: 4px solid #40c9c9;
+}
+.page_storage .content .stock .container-wrap .tab li.active {
+    background-color: #40c9c9;
+}
+.page_storage .content .action .left .tab ul li.active {
+    background-color: #40c9c9;
+}
+.page_storage .content .action .right .smt {
+    background-color: #40c9c9;
+}
+.page_storage .content .action .right .smt.am-clickable-active {
+    background-color: #24aca8;
+}
+.page_test .testContent .copytext {
+    background: #40c9c9;
+}
+.setImgModal .inner .modal-head ul li.active {
+    color: #40c9c9;
+    border-bottom: 4px solid #40c9c9;
+}
+.signname .btns .btn {
+    background-color: #24aca8;
+}
+.tab_main li.selected {
+    background-color: #40c9c9;
+}
+.page_hangup.half_page .left_operate_btn .c_left_btn.tip-highlight.am-clickable-active {
+    background-color: #24aca8;
+}

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>小程序二维码</title>
+
+    <style>
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        .codeDiv {
+            position: relative;
+            width: 100%;
+            height: 550px;
+        }
+        .bg {
+            width: 100%;
+            height: 100%;
+        }
+        .codeImg {
+            position: absolute;
+            bottom: 21%;
+            left: 50%;
+            width: 150px;
+            height: 150px;
+            margin-left: -75px;
+        }
+        .predict_img {
+            width: 100%;
+        }
+        .shopName {
+            position: absolute;
+            width: 100%;
+            font-size: 14px;
+            color: #fff;
+            text-align: center;
+        }
+        .shopName.a {
+            top: 35%;
+        }
+        .shopName.b {
+            top: 0;
+        }
+        .shopName.c {
+            top: 35%;
+        }
+    </style>
+</head>
+
+<body>
+    
+    <div class="codeDiv" id="codeDiv">
+        <img id="bg" class="bg" src="../../$dynamicResource/images/server/b.jpg" alt="">
+        <p class="shopName"></p>
+        <img id="codeImg" class="codeImg">
+    </div>
+    
+    <img id="predict_img" class="predict_img">
+
+    <script src="../../$dynamicResource/libs/jquery-2.1.4.min.js"></script>
+    <script src="../../$dynamicResource/libs/html2canvas.min.js"></script>
+
+    <script>
+
+        $(document).ready(function () {
+
+            function GetQueryString(name) {
+                var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+                var r = decodeURIComponent(window.location.search).substr(1).match(reg);//search,查询？后面的参数，并匹配正则
+                if(r!=null)return  unescape(r[2]); return null;
+            }
+        
+            function getQrCode () {
+                var url = location.origin + "/mgj-cashier/comment/qrCode?" + $.param({
+                    parentShopId: parseInt(GetQueryString('parentShopId')),
+                    token: GetQueryString('token'),
+                    tenantId: parseInt(GetQueryString('parentShopId')),
+                    page: GetQueryString('page'),
+                    scene: GetQueryString('scene')
+                });
+                return url;
+            }
+            
+            var bgStr = '';
+            if(GetQueryString("v") == '0') {
+                bgStr = 'a';
+            }else if(GetQueryString("v") == '1') {
+                $('#codeImg').css({
+                    bottom : '46%',
+                    'marginLeft' : '-78px'
+                })
+                bgStr = 'b';
+            }else {
+                bgStr = 'c';
+            }
+
+            var shopName = GetQueryString("shopName");
+            if(shopName){
+                $('.shopName').text(shopName+'小程序').addClass(bgStr);
+            }
+            
+            $('#bg').attr('src', '../../$dynamicResource/images/server/'+ bgStr +'.jpg');
+
+            $('#codeImg').attr('src', getQrCode());
+
+            html2canvas($("#codeDiv")[0], {
+                scale: 3,
+                logging:false,
+                useCORS:true,
+                onrendered: function(canvas) {
+                    $('#codeDiv').hide();
+                    $("#predict_img").attr('src', canvas.toDataURL()); 
+                }    
+            })
+        })
+    </script>
+</body>
+</html>

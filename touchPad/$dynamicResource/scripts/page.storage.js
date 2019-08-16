@@ -83,11 +83,15 @@
                             $serviceType.next().hide();
                         }
                     }
-                    $children.filter(".remark").html('<span>'+(data.remark || "" )+'</span>'); // + '<p class="sj"></p>'
+                    if(data.outwaretype=='11' && data.flowBillNo){
+                        var remark='流水单号：'+ data.flowBillNo;
+                    }
+                    $children.filter(".remark").html('<span>'+(data.remark || remark || "" )+'</span>'); // + '<p class="sj"></p>'
                 }
             });
         },
         beforeShow: function(param) {
+            am.tab.main.show().select(7);
             if(param == "back"){
                 return;
             }
@@ -151,6 +155,7 @@
                 if(!this.showPrice){
                     $('.page_storage .out .slip').addClass('hidePrice');
                     $('.page_storage .into .slip').addClass('hidePrice');
+                    $('.page_storage .out .right .info,.page_storage .into .right .info,.outbillPop .popType2').addClass('hidePrice');
                 }
             }
             if(!this.checkSingle){
@@ -164,6 +169,7 @@
         shopList: [],
         categoryType: [],
         afterShow: function(param) {
+            this.$.find("[isdisabled=1]").attr("disabled",false).removeAttr("isdisabled");
             if(param == "back"){
                 return;
             }
@@ -408,8 +414,8 @@
                 '<div>{{num}}</div>'+'\n'+
                 '<div>{{remark}}</div>'+'\n'+
                 '<div>'+'\n'+
-                    '<p class="record am-clickable" data-id="{{id}}"><span>出入库记录</span></p>'+'\n'+
-                    '<p class="other am-clickable" data-id="{{id}}"><span>分店库存</span></p>'+'\n'+
+                    '<p class="record am-clickable" data-id="{{id}}"><span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-yuanjiaojuxing1"></use></svg>出入库记录</span></p>'+'\n'+
+                    '<p class="other am-clickable" data-id="{{id}}"><span><svg class="icon" aria-hidden="true"><use xlink:href="#icon-ziyuan29"></use></svg>分店库存</span></p>'+'\n'+
                 '</div>'+'\n'+
             '</li>',
             data: [],
@@ -450,7 +456,7 @@
                 }
             },
             render:function(index){
-                var pageDate = this.renderDate.slice(index*15,(index+1)*15);
+                var pageDate = this.usingData.slice(index*15,(index+1)*15);
                 this.$list.empty();
                 for(var i=0;i<pageDate.length;i++){
                     var html = '';
@@ -522,6 +528,9 @@
                 });
 
                 $('.page_storage .stock .scan').vclick(function(){
+                    if(typeof(cordova)=='undefined'){
+                        return;
+                    }
                     cordova.plugins.barcodeScanner.scan(function(result) {
                         // $.am.debug.log("We got a barcode\n" + "Result: " + result.text + "\n" + "Format: " + result.format + "\n" + "Cancelled: " + result.cancelled);
                         if(result && result.text){
@@ -568,6 +577,19 @@
                     that.$.find('.photo-and-barcode').removeClass('active');
                 });
 
+                $('.page_storage .includezero').vclick(function(){
+                    if($(this).hasClass('active')){
+                        $(this).removeClass('active');
+                        self.excludezero = 0;
+                    }else {
+                        $(this).addClass('active');
+                        self.excludezero = 1;
+                    }
+                    that.getData(function(data){
+                        self.filter(data,'',$('.page_storage .stock .tab li.active').index());
+                    });
+                });
+
                 //上传编辑图片
                 $('.page_storage .photo-and-barcode .take-photo').vclick(function(){
                     var _this = $(this);
@@ -608,6 +630,9 @@
 
                 //扫描获取条码
                 $('.page_storage .photo-and-barcode .scan-barcode').vclick(function(){
+                    if(typeof(cordova)=='undefined'){
+                        return;
+                    }
                     cordova.plugins.barcodeScanner.scan(function(result) {
                         $.am.debug.log("We got a barcode\n" + "Result: " + result.text + "\n" + "Format: " + result.format + "\n" + "Cancelled: " + result.cancelled);
                         if(result && result.text){
@@ -646,6 +671,12 @@
                     });
                 });
 
+                $('.page_storage .photo-and-barcode .scan-result').on('keyup',function(e){
+                    if(e.keyCode==13){
+                        $('.page_storage .smt-barcode').trigger('vclick');
+                    }
+                });
+
                 $('.page_storage .stock .container .list').on('vclick','.record,.other',function(e){
                     e.stopPropagation();
                     var data  = $(this).parents("li").data("data");
@@ -663,7 +694,7 @@
                 new $.am.Paging({
                     $:$('.page_storage .page-wrap'),
                     showNum:15,//每页显示的条数
-                    total:self.renderDate.length,//总数
+                    total:self.usingData.length,//总数
                     action:function(_this,index){
                         self.renderIndex = index;
                         this.refresh(index,self.renderDate.length);
@@ -680,31 +711,41 @@
                     }else{
                         var arr = [];
                         for(var i=0;i<that.data.content.length;i++){
-                            if(that.data.content[i].no.indexOf(str)>-1 || that.data.content[i].pycode.indexOf(str)>-1 || that.data.content[i].name.indexOf(str)>-1 || that.getCategoryTypeByMarqueid(that.data.content[i].marqueid).indexOf(str)>-1 || str==that.data.content[i].mgj_barcode){
+                            if((that.data.content[i].no && that.data.content[i].no.indexOf(str)>-1) || that.data.content[i].pycode.indexOf(str)>-1 || that.data.content[i].name.indexOf(str)>-1 || that.getCategoryTypeByMarqueid(that.data.content[i].marqueid).indexOf(str)>-1 || str==that.data.content[i].mgj_barcode){
                                 arr.push(that.data.content[i]);
                             }
                         }
                         this.renderDate = arr;
                         that.$.find('.tab li').removeClass('active');
                     }
-                    if(this.renderDate && this.renderDate.length){
-                        $('.page_storage .stock .container-wrap').show();
-                        $('.page_storage .stock .page-wrap').show();
-                        this.render(this.renderIndex);
-                        this.pager();
+                    if(this.excludezero){
+                        var usingData = [];
+                        for(var i=0;i<this.renderDate.length;i++){
+                            if(this.renderDate[i].num!=0){
+                                usingData.push(this.renderDate[i]);
+                            }
+                        }
+                        this.usingData = usingData;
                     }else {
-                        $('.page_storage .stock .container-wrap').hide();
-                        $('.page_storage .stock .page-wrap').hide();
+                        this.usingData = this.renderDate;
+                    }
+                    $('.page_storage .stock .container-wrap').show();
+                    $('.page_storage .stock .page-wrap').show();
+                    this.render(this.renderIndex);
+                    this.pager();
+                    if(!this.usingData || !this.usingData.length){
                         am.msg('未查询到数据');
-                        $('.page_storage .stock .condition').val('');
-                        this.renderIndex = 0;
-                        this.filter(data,'',0);
                     }
                 }else if(data.code == 0 && data.content.length == 0){
                     am.msg('暂时没有数据...');
+                    $('.page_storage .stock .container-wrap').hide();
+                    $('.page_storage .stock .page-wrap').hide();
                 }else{
+                    $('.page_storage .stock .container-wrap').hide();
+                    $('.page_storage .stock .page-wrap').hide();
                     am.msg('数据异常！');
                 }
+                $('.page_storage .stock .condition').val('');
             }
         },
         out:{
@@ -794,6 +835,9 @@
                 });
 
                 this.parent.find('.scan').vclick(function(){
+                    if(typeof(cordova)=='undefined'){
+                        return;
+                    }
                     cordova.plugins.barcodeScanner.scan(function(result) {
                         // $.am.debug.log("We got a barcode\n" + "Result: " + result.text + "\n" + "Format: " + result.format + "\n" + "Cancelled: " + result.cancelled);
                         if(result && result.text){
@@ -930,13 +974,14 @@
                     var type = self.parent.find('.info .method').attr('data-type'),
                         waretype = self.parent.find('.info .method').attr('data-waretype');
                     var list = [];
-                    for(var i=0;i<inputBox.length;i++){
-                        list[i] = {};
-                        list[i].id = '';
-                        list[i].depotid = $(inputBox[i]).parent().parent().attr('data-id');
-                        list[i].num = $(inputBox[i]).html();
-                        list[i].price = parseFloat($(inputBox[i]).parent().parent().find('.actPrice').text());
-                        list[i].remark = '';
+                    for (var i=0;i<inputBox.length;i++){
+                        var _i = inputBox.length-i-1;
+                        list[_i] = {};
+                        list[_i].id = '';
+                        list[_i].depotid = $(inputBox[i]).parent().parent().attr('data-id');
+                        list[_i].num = $(inputBox[i]).html();
+                        list[_i].price = parseFloat($(inputBox[i]).parent().parent().find('.actPrice').text());
+                        list[_i].remark = '';
                     }
                     var price = self.calTotalPrice();
                     
@@ -965,6 +1010,7 @@
                 });
             },
             filter:function(str){
+                this.parent.find('.debarInput').val('');
                 var self = this;
                 var hasItem = 0;
                 var item = [];
@@ -1013,7 +1059,7 @@
                                         var item = self.parent.find('.right .list li[data-id='+id+'] .actNumber');
                                         var html = Math.round(item.html()*10)/10 || 0;
                                         item.html(html+1);
-                                        this.calTotalPrice();
+                                        self.calTotalPrice();
                                         return;
                                     }
                                 }
@@ -1025,7 +1071,7 @@
                                     .replace('{{num}}',self.checkNull(ret.num))
                                     .replace('{{price}}',ret.price || 0);
                                 self.parent.find('.right .container .list').prepend(html);
-                                this.calTotalPrice();
+                                self.calTotalPrice();
                                 if(!that.showPrice){
                                     $('.page_storage .out .slip').addClass('hidePrice');
                                 }
@@ -1219,6 +1265,9 @@
                 });
 
                 this.parent.find('.scan').vclick(function(){
+                    if(typeof(cordova)=='undefined'){
+                        return;
+                    }
                     cordova.plugins.barcodeScanner.scan(function(result) {
                         // $.am.debug.log("We got a barcode\n" + "Result: " + result.text + "\n" + "Format: " + result.format + "\n" + "Cancelled: " + result.cancelled);
                         if(result && result.text){
@@ -1319,13 +1368,14 @@
                     var type = self.parent.find('.info .method').attr('data-type'),
                         waretype = self.parent.find('.info .method').attr('data-waretype');
                     var list = [];
-                    for(var i=0;i<inputBox.length;i++){
-                        list[i] = {};
-                        list[i].id = '';
-                        list[i].depotid = $(inputBox[i]).parent().parent().attr('data-id');
-                        list[i].num = $(inputBox[i]).html();
-                        list[i].price = parseFloat($(inputBox[i]).parent().parent().find('.actPrice').text());
-                        list[i].remark = '';
+                    for (var i=0;i<inputBox.length;i++){
+                        var _i = inputBox.length-i-1;
+                        list[_i] = {};
+                        list[_i].id = '';
+                        list[_i].depotid = $(inputBox[i]).parent().parent().attr('data-id');
+                        list[_i].num = $(inputBox[i]).html();
+                        list[_i].price = parseFloat($(inputBox[i]).parent().parent().find('.actPrice').text());
+                        list[_i].remark = '';
                     }
                     var price = self.calTotalPrice();
                     
@@ -1350,6 +1400,7 @@
                 });
             },
             filter:function(str){
+                this.parent.find('.debarInput').val('');
                 var self = this;
                 var hasItem = 0;
                 var item = [];
@@ -1398,7 +1449,7 @@
                                         var item = self.parent.find('.right .list li[data-id='+id+'] .actNumber');
                                         var html = Math.round(item.html()*10)/10 || 0;
                                         item.html(html+1);
-                                        this.calTotalPrice();
+                                        self.calTotalPrice();
                                         return;
                                     }
                                 }
@@ -1408,9 +1459,9 @@
                                     .replace('{{name}}',ret.name)
                                     .replace('{{marqueid}}',that.getCategoryTypeByMarqueid(ret.marqueid))
                                     .replace('{{num}}',self.checkNull(ret.num))
-                                    .replace('{{price}}',item[0].inprice || 0);
+                                    .replace('{{price}}',ret.inprice || 0);
                                 self.parent.find('.right .container .list').prepend(html);
-                                this.calTotalPrice();
+                                self.calTotalPrice();
                                 if(!that.showPrice){
                                     $('.page_storage .into .slip').addClass('hidePrice');
                                 }
@@ -1603,6 +1654,9 @@
                 });
 
                 this.parent.find('.scan').vclick(function(){
+                    if(typeof(cordova)=='undefined'){
+                        return;
+                    }
                     cordova.plugins.barcodeScanner.scan(function(result) {
                         // $.am.debug.log("We got a barcode\n" + "Result: " + result.text + "\n" + "Format: " + result.format + "\n" + "Cancelled: " + result.cancelled);
                         if(result && result.text){
@@ -1670,24 +1724,26 @@
                     var intoList = [],
                         outList = [];
                     for(var i=0;i<intoArr.length;i++){
-                        intoList[i] = {};
-                        intoList[i].id = '';
-                        intoList[i].depotid = $(inputBox[intoArr[i]]).parent().parent().attr('data-id');
-                        intoList[i].num = Math.abs(Math.round($(inputBox[intoArr[i]]).parent().next().html()*10)/10);
-                        intoList[i].price = parseFloat($(inputBox[intoArr[i]]).parent().parent().attr('data-price'));
-                        intoList[i].remark = '';
+                        var _i = intoArr.length-i-1;
+                        intoList[_i] = {};
+                        intoList[_i].id = '';
+                        intoList[_i].depotid = $(inputBox[intoArr[i]]).parent().parent().attr('data-id');
+                        intoList[_i].num = Math.abs(Math.round($(inputBox[intoArr[i]]).parent().next().html()*10)/10);
+                        intoList[_i].price = parseFloat($(inputBox[intoArr[i]]).parent().parent().attr('data-price'));
+                        intoList[_i].remark = '';
                     }
                     var intoprice = 0;
                     for(var i=0;i<intoList.length;i++){
                         intoprice += intoList[i].num * intoList[i].price;
                     }
                     for(var i=0;i<outArr.length;i++){
-                        outList[i] = {};
-                        outList[i].id = '';
-                        outList[i].depotid = $(inputBox[outArr[i]]).parent().parent().attr('data-id');
-                        outList[i].num = Math.abs(Math.round($(inputBox[outArr[i]]).parent().next().html()*10)/10);
-                        outList[i].price = parseFloat($(inputBox[outArr[i]]).parent().parent().attr('data-price'));
-                        outList[i].remark = '';
+                        var _i = outArr.length-i-1;
+                        outList[_i] = {};
+                        outList[_i].id = '';
+                        outList[_i].depotid = $(inputBox[outArr[i]]).parent().parent().attr('data-id');
+                        outList[_i].num = Math.abs(Math.round($(inputBox[outArr[i]]).parent().next().html()*10)/10);
+                        outList[_i].price = parseFloat($(inputBox[outArr[i]]).parent().parent().attr('data-price'));
+                        outList[_i].remark = '';
                     }
                     var outprice = 0;
                     for(var i=0;i<outList.length;i++){
@@ -1745,6 +1801,7 @@
                 });
             },
             filter:function(str){
+                this.parent.find('.condition').val('');
                 var self = this;
                 if(str==''){
                     am.msg('请输入搜索条件');
@@ -1920,6 +1977,7 @@
                 });
             }else {
                 cb(this.data);
+                
             }
         },
         deepfresh:function(){
@@ -2007,7 +2065,7 @@
             for(var i=0;i<originalData.content.length;i++){
                 for(var j=0;j<data.length;j++){
                     if(originalData.content[i].marqueid==data[j].marqueid){
-                        data[j].list.push(originalData.content[i]);
+                            data[j].list.push(originalData.content[i]);
                     }else if(typeNumber.indexOf(originalData.content[i].marqueid)==-1){
                         if(data[j].marqueid=='NO_ID'){
                             data[j].list.push(originalData.content[i]);
@@ -2016,6 +2074,6 @@
                 }
             }
             return data;
-        }
+        },
     });
 })();

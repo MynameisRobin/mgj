@@ -9,7 +9,8 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.page_billRecord .searchmask {
+.page_billRecord .searchmask,
+.page_billRecord .paymask {
   display: none;
   position: absolute;
   left: 0;
@@ -167,6 +168,7 @@
   display: block;
 }
 .page_billRecord .billRecordContent .common_tabBox.facepay .search_box {
+  position: relative;
   height: 36px;
   margin: 10px 0;
   padding: 0 28px;
@@ -208,12 +210,41 @@
   color: #999;
   margin-left: 20px;
 }
+.page_billRecord .billRecordContent .common_tabBox.facepay .search_box .verification_box {
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 32px;
+  height: 36px;
+}
+.page_billRecord .billRecordContent .common_tabBox.facepay .search_box .verification_box .verification_input {
+  height: 100%;
+  width: 199px;
+  padding: 0 5px;
+  font-size: 14px;
+  outline: none;
+  border: 1px solid #DDDDDD;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
+.page_billRecord .billRecordContent .common_tabBox.facepay .search_box .verification_box .verification_btn {
+  height: 100%;
+  width: 61px;
+  background: #595959;
+  padding: 12px 18px;
+  color: #fff;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
+.page_billRecord .billRecordContent .common_tabBox.facepay .search_box .verification_box .verification_btn.am-clickable-active {
+  background: #222;
+}
 .page_billRecord .billRecordContent .common_tabBox.facepay .faceTableBox {
   position: absolute;
-  left: 28px;
-  right: 28px;
+  left: 15px;
+  right: 158px;
   top: 56px;
-  bottom: 0;
+  bottom: 10px;
 }
 .page_billRecord .billRecordContent .common_tabBox.facepay .faceTableBox .cm_cutting {
   display: none;
@@ -221,10 +252,10 @@
 .page_billRecord .billRecordContent .common_tabBox.facepay .common_tableBox {
   display: none;
   position: absolute;
-  left: 28px;
-  right: 28px;
+  left: 15px;
+  right: 15px;
   top: 56px;
-  bottom: 0;
+  bottom: 10px;
 }
 .page_billRecord .billRecordContent .common_tabBox.facepay .common_tableBox.selected {
   display: block;
@@ -234,7 +265,7 @@
   left: 0;
   right: 0;
   top: 0;
-  bottom: 10px;
+  bottom: 0;
   border: 1px solid #ececec;
 }
 .page_billRecord .billRecordContent .common_tabBox.facepay .contentbox table {
@@ -252,14 +283,18 @@
   font-size: 14px;
   color: #222;
 }
-.page_billRecord .billRecordContent .common_tabBox.facepay .contentbox .table-content-list tr:nth-child(2n+1) {
+.page_billRecord .billRecordContent .common_tabBox.facepay .contentbox .table-content-list tr:nth-child(2n + 1) {
   background-color: #f7f7f7;
 }
+.page_billRecord .billRecordContent .common_tabBox.facepay .contentbox .table-content-list tr td {
+  border-right: 1px solid #ececec;
+}
 .page_billRecord .billRecordContent .common_tabBox.facepay .contentbox .table-content-list tr td:last-child {
-  border-left: 1px solid #ececec;
+  border-right: 0;
 }
 .page_billRecord .billRecordContent .common_tabBox.facepay .contentbox .table-content-list td {
-  height: 36px;
+  height: 40px;
+  position: relative;
 }
 .page_billRecord .billRecordContent .common_tabBox.facepay .contentbox .table-content-list td .tdwrap {
   width: 100%;
@@ -267,21 +302,79 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   vertical-align: middle;
-  text-align: center;
+  clear: both;
+  padding: 0 5px;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+.page_billRecord .billRecordContent .common_tabBox.facepay .contentbox .table-content-list td .tdwrap.displayId span {
+  margin-top: 2px;
+  display: inline-block;
 }
 .page_billRecord .billRecordContent .common_tabBox.facepay .contentbox .table-content-list td .tdwrap.operate span {
   color: #999;
   padding: 0 18px;
   display: inline-block;
   vertical-align: middle;
-  height: 25px;
-  line-height: 25px;
+  height: 24px;
+  line-height: 24px;
   cursor: pointer;
   position: relative;
 }
+.page_billRecord .billRecordContent .common_tabBox.facepay .contentbox .table-content-list td .tdwrap.operate span.refund,
+.page_billRecord .billRecordContent .common_tabBox.facepay .contentbox .table-content-list td .tdwrap.operate span.refresh {
+  text-align: center;
+  background-color: #595959;
+  margin-left: 3px;
+  border-radius: 3px;
+  color: #fff;
+  font-size: 13px;
+  padding: 0 8px;
+}
+.page_billRecord .billRecordContent .common_tabBox.facepay .contentbox .table-content-list td .tdwrap.operate span.refund.disabled,
+.page_billRecord .billRecordContent .common_tabBox.facepay .contentbox .table-content-list td .tdwrap.operate span.refresh.disabled {
+  background: 0;
+  color: #595959;
+}
 .page_billRecord .billRecordContent .common_tabBox.facepay .contentbox .table-content-list td .tdwrap.operate span.refund {
-  color: #00b7ee;
-  font-size: 12px;
+  background-color: #e82742;
+}
+.page_billRecord .billRecordContent .common_tabBox.facepay .contentbox .table-content-list td .tdwrap.addcustomer {
+  line-height: 16px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  word-break: break-all;
+  white-space: normal;
+}
+.page_billRecord .billRecordContent .common_tabBox.facepay .contentbox .table-content-list td .tdwrap.ordercomment p {
+  position: absolute;
+  height: 40px;
+  line-height: 40px;
+  left: 5px;
+  top: 0;
+}
+.page_billRecord .billRecordContent .common_tabBox.facepay .contentbox .table-content-list td .tdwrap.ordercomment p:nth-child(1) {
+  width: auto;
+  opacity: 0;
+}
+.page_billRecord .billRecordContent .common_tabBox.facepay .contentbox .table-content-list td .tdwrap.ordercomment p:nth-child(2) {
+  right: 5px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.page_billRecord .billRecordContent .common_tabBox.facepay .contentbox .table-content-list td .tdwrap.ordercomment .triangle {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 0;
+  height: 0;
+  border: 5px solid #555;
+  border-top-color: transparent;
+  border-left-color: transparent;
 }
 .page_billRecord .billRecordContent .common_tabBox.facepay .contentbox .table-content-head {
   line-height: 36px;
@@ -294,17 +387,21 @@
 .page_billRecord .billRecordContent .common_tabBox.facepay .contentbox .table-content-head td {
   height: 36px;
   font-size: 12px;
+  border-right: 1px solid #ececec;
 }
 .page_billRecord .billRecordContent .common_tabBox.facepay .contentbox .table-content-head td:last-child {
-  border-left: 1px solid #ececec;
+  border-right: 0;
 }
 .page_billRecord .billRecordContent .common_tabBox.facepay .contentbox .table-content-head td .tdwrap {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
   width: 100%;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
   vertical-align: middle;
-  text-align: center;
+  text-align: left;
+  padding: 0 5px;
 }
 .page_billRecord .billRecordContent .common_tabBox.facepay .footcontent {
   height: 72px;
@@ -325,6 +422,133 @@
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
 }
+.page_billRecord .billRecordContent .common_tabBox.watercourse .relatePay {
+  position: absolute;
+  right: -40%;
+  top: -45px;
+  bottom: 0;
+  width: 40%;
+  background: #fff;
+  z-index: 99;
+  transition: 0.4s all ease;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .relatePay.on {
+  right: 0px;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .relatePay .paytitle {
+  padding-top: 0;
+  line-height: 40px;
+  font-size: 12px;
+  text-align: left;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .relatePay .paytitle span {
+  height: 40px;
+  line-height: 40px;
+  color: #666;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .relatePay .paytitle span::before {
+  content: "";
+  width: 40px;
+  height: 40px;
+  float: left;
+  margin: 10px 5px 0 10px;
+  width: 20px;
+  height: 20px;
+  background: url("../images/icons_sprite/icon_mallOrder.png") no-repeat 0px 0px;
+  background-size: 20px 20px;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .relatePay .listWrap {
+  overflow: hidden;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .relatePay .listWrap .list {
+  border-top: 1px solid #ececec;
+  overflow: hidden;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .relatePay .listWrap .list ul {
+  border-top: 1px solid #ececec;
+  margin-top: -1px;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .relatePay .listWrap .list li {
+  border-bottom: 1px solid #ececec;
+  line-height: 22px;
+  padding: 10px 40px;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .relatePay .listWrap .list li .listRight {
+  float: right;
+  text-align: right;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .relatePay .listWrap .list li .listRight .price {
+  color: #e82742;
+  font-size: 16px;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .relatePay .listWrap .list li .listRight .price::before {
+  content: "￥";
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .relatePay .listWrap .list li .listRight .discount {
+  color: #e82742;
+  font-size: 16px;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .relatePay .listWrap .list li .listLeft {
+  text-align: left;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .relatePay .listWrap .list li .remark {
+  font-size: 12px;
+  text-align: left;
+  background-color: rgba(124, 124, 124, 0.06);
+  padding: 3px 5px;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .relatePay .listWrap .list li .remark span {
+  color: #E82742;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .relatePay .listWrap .list li .small {
+  font-size: 12px;
+  color: #bdbdbd;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .relatePay .listWrap .list li .small.status .red {
+  color: #e82742;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .relatePay .listWrap .list li.am-disabled .title,
+.page_billRecord .billRecordContent .common_tabBox.watercourse .relatePay .listWrap .list li.disabled .title,
+.page_billRecord .billRecordContent .common_tabBox.watercourse .relatePay .listWrap .list li.am-disabled .listRight .price,
+.page_billRecord .billRecordContent .common_tabBox.watercourse .relatePay .listWrap .list li.disabled .listRight .price {
+  color: #999;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .relatePay .listWrap .list li.am-disabled .title.unopen,
+.page_billRecord .billRecordContent .common_tabBox.watercourse .relatePay .listWrap .list li.disabled .title.unopen,
+.page_billRecord .billRecordContent .common_tabBox.watercourse .relatePay .listWrap .list li.am-disabled .listRight .price.unopen,
+.page_billRecord .billRecordContent .common_tabBox.watercourse .relatePay .listWrap .list li.disabled .listRight .price.unopen {
+  color: #e82742;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .relatePay .listWrap .list li.am-disabled .title.unopen::before,
+.page_billRecord .billRecordContent .common_tabBox.watercourse .relatePay .listWrap .list li.disabled .title.unopen::before,
+.page_billRecord .billRecordContent .common_tabBox.watercourse .relatePay .listWrap .list li.am-disabled .listRight .price.unopen::before,
+.page_billRecord .billRecordContent .common_tabBox.watercourse .relatePay .listWrap .list li.disabled .listRight .price.unopen::before {
+  content: "";
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .relatePay .listWrap .list li.selected {
+  background: #f7f7f7;
+  position: relative;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .relatePay .listWrap .list li.selected::before {
+  content: "";
+  background: #58d56d url("../images/icons_sprite/selected_white.png") no-repeat 0px 0px;
+  background-size: 15px 15px;
+  width: 15px;
+  height: 15px;
+  border-radius: 8px;
+  margin: -8px 0 0 0;
+  position: absolute;
+  left: 15px;
+  right: auto;
+  top: 50%;
+  bottom: auto;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .relatePay .listWrap .list li.am-clickable-active {
+  background: #ececec;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .relatePay .listWrap .list li.hide {
+  display: none;
+}
 .page_billRecord .billRecordContent .common_tabBox.watercourse .header {
   position: absolute;
   right: -228px;
@@ -335,6 +559,12 @@
   background: #fff;
   z-index: 99;
   transition: 0.4s all ease;
+  /* @media only screen and  (max-width: 1024px) {
+                        .search-scroll-wrap{
+                            max-height: 700px;
+                            overflow: hidden;
+                        }
+                    } */
 }
 .page_billRecord .billRecordContent .common_tabBox.watercourse .header.on {
   right: 0px;
@@ -343,37 +573,35 @@
   background: url(../images/bill/searchopen2.png) no-repeat center center;
   background-size: contain;
 }
-.page_billRecord .billRecordContent .common_tabBox.watercourse .header .searchopen {
-  width: 20px;
-  height: 80px;
-  position: absolute;
-  left: -17px;
-  top: 50%;
-  margin-top: -40px;
-  background: url(../images/bill/searchopen.png) no-repeat center center;
-  background-size: contain;
-  cursor: pointer;
-}
 .page_billRecord .billRecordContent .common_tabBox.watercourse .header .header-tit {
   line-height: 50px;
   padding-top: 20px;
   font-size: 18px;
 }
-.page_billRecord .billRecordContent .common_tabBox.watercourse .header .cm_block {
+.page_billRecord .billRecordContent .common_tabBox.watercourse .header .search-scroll-wrap {
+  overflow: hidden;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .header .search-scroll-wrap .search-scroll-wrapper {
+  padding-bottom: 280px;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .header .search-scroll-wrap .search-scroll-wrapper .subclassselect_form {
+  display: none;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .header .search-scroll-wrap .search-scroll-wrapper .cm_block {
   vertical-align: middle;
   margin-top: 12px;
 }
-.page_billRecord .billRecordContent .common_tabBox.watercourse .header .cm_block span {
+.page_billRecord .billRecordContent .common_tabBox.watercourse .header .search-scroll-wrap .search-scroll-wrapper .cm_block span {
   color: #999;
 }
-.page_billRecord .billRecordContent .common_tabBox.watercourse .header .cm_block.dateInput span {
+.page_billRecord .billRecordContent .common_tabBox.watercourse .header .search-scroll-wrap .search-scroll-wrapper .cm_block.dateInput span {
   display: block;
   float: left;
   color: #555;
   font-weight: bold;
 }
-.page_billRecord .billRecordContent .common_tabBox.watercourse .header .cm_block.dateInput span.pre,
-.page_billRecord .billRecordContent .common_tabBox.watercourse .header .cm_block.dateInput span.next {
+.page_billRecord .billRecordContent .common_tabBox.watercourse .header .search-scroll-wrap .search-scroll-wrapper .cm_block.dateInput span.pre,
+.page_billRecord .billRecordContent .common_tabBox.watercourse .header .search-scroll-wrap .search-scroll-wrapper .cm_block.dateInput span.next {
   width: 24px;
   height: 40px;
   line-height: 40px;
@@ -385,22 +613,22 @@
   background-position: center center;
   background-size: 5px 8px;
 }
-.page_billRecord .billRecordContent .common_tabBox.watercourse .header .cm_block.dateInput span.pre.am-clickable-active,
-.page_billRecord .billRecordContent .common_tabBox.watercourse .header .cm_block.dateInput span.next.am-clickable-active {
+.page_billRecord .billRecordContent .common_tabBox.watercourse .header .search-scroll-wrap .search-scroll-wrapper .cm_block.dateInput span.pre.am-clickable-active,
+.page_billRecord .billRecordContent .common_tabBox.watercourse .header .search-scroll-wrap .search-scroll-wrapper .cm_block.dateInput span.next.am-clickable-active {
   background-color: #ececec;
 }
-.page_billRecord .billRecordContent .common_tabBox.watercourse .header .cm_block.dateInput span.next {
+.page_billRecord .billRecordContent .common_tabBox.watercourse .header .search-scroll-wrap .search-scroll-wrapper .cm_block.dateInput span.next {
   border-radius: 0 3px 3px 0;
   background-image: url(../images/bill/next.png);
 }
-.page_billRecord .billRecordContent .common_tabBox.watercourse .header .cm_block.dateInput span.value {
+.page_billRecord .billRecordContent .common_tabBox.watercourse .header .search-scroll-wrap .search-scroll-wrapper .cm_block.dateInput span.value {
   width: 128px;
   padding: 0 12px;
   border: 1px solid #ddd;
   border-left: none;
   border-right: none;
 }
-.page_billRecord .billRecordContent .common_tabBox.watercourse .header .cm_block.dateInput span.value input {
+.page_billRecord .billRecordContent .common_tabBox.watercourse .header .search-scroll-wrap .search-scroll-wrapper .cm_block.dateInput span.value input {
   width: 74px;
   height: 38px;
   display: block;
@@ -408,14 +636,14 @@
   float: left;
   font-size: 14px;
 }
-.page_billRecord .billRecordContent .common_tabBox.watercourse .header .cm_block.dateInput span.value .icon {
+.page_billRecord .billRecordContent .common_tabBox.watercourse .header .search-scroll-wrap .search-scroll-wrapper .cm_block.dateInput span.value .icon {
   display: block;
   width: 15px;
   height: 38px;
   float: right;
   line-height: 35px;
 }
-.page_billRecord .billRecordContent .common_tabBox.watercourse .header .cm_block.dateInput span.value .icon:after {
+.page_billRecord .billRecordContent .common_tabBox.watercourse .header .search-scroll-wrap .search-scroll-wrapper .cm_block.dateInput span.value .icon:after {
   content: "";
   display: inline-block;
   vertical-align: middle;
@@ -425,8 +653,8 @@
   background: url("../images/icons_sprite/calendar_icon.png") no-repeat 0px 0px;
   background-size: 15px 15px;
 }
-.page_billRecord .billRecordContent .common_tabBox.watercourse .header .cm_block.yesterdaybtn,
-.page_billRecord .billRecordContent .common_tabBox.watercourse .header .cm_block.todaybtn {
+.page_billRecord .billRecordContent .common_tabBox.watercourse .header .search-scroll-wrap .search-scroll-wrapper .cm_block.yesterdaybtn,
+.page_billRecord .billRecordContent .common_tabBox.watercourse .header .search-scroll-wrap .search-scroll-wrapper .cm_block.todaybtn {
   display: none;
   width: 65px;
   height: 40px;
@@ -436,15 +664,15 @@
   -webkit-border-radius: 3px;
   text-align: center;
 }
-.page_billRecord .billRecordContent .common_tabBox.watercourse .header .cm_block.yesterdaybtn.am-clickable-active,
-.page_billRecord .billRecordContent .common_tabBox.watercourse .header .cm_block.todaybtn.am-clickable-active {
+.page_billRecord .billRecordContent .common_tabBox.watercourse .header .search-scroll-wrap .search-scroll-wrapper .cm_block.yesterdaybtn.am-clickable-active,
+.page_billRecord .billRecordContent .common_tabBox.watercourse .header .search-scroll-wrap .search-scroll-wrapper .cm_block.todaybtn.am-clickable-active {
   background-color: #ececec;
 }
-.page_billRecord .billRecordContent .common_tabBox.watercourse .header .cm_block.todaybtn {
+.page_billRecord .billRecordContent .common_tabBox.watercourse .header .search-scroll-wrap .search-scroll-wrapper .cm_block.todaybtn {
   margin-right: 5px;
   margin-left: 16px;
 }
-.page_billRecord .billRecordContent .common_tabBox.watercourse .header .cm_block.common_se.phoneselect .select_input {
+.page_billRecord .billRecordContent .common_tabBox.watercourse .header .search-scroll-wrap .search-scroll-wrapper .cm_block.common_se.phoneselect .select_input {
   vertical-align: middle;
   height: 40px;
   border: 1px solid #ddd;
@@ -455,7 +683,7 @@
   border-radius: 3px;
   -webkit-border-radius: 3px;
 }
-.page_billRecord .billRecordContent .common_tabBox.watercourse .header .cm_block.common_se.phoneselect .select_input input {
+.page_billRecord .billRecordContent .common_tabBox.watercourse .header .search-scroll-wrap .search-scroll-wrapper .cm_block.common_se.phoneselect .select_input input {
   border: 0;
   border-radius: 3px;
   -webkit-border-radius: 3px;
@@ -463,39 +691,62 @@
   width: 100%;
   height: 100%;
 }
-.page_billRecord .billRecordContent .common_tabBox.watercourse .header .cm_block.common_se .common_select {
+.page_billRecord .billRecordContent .common_tabBox.watercourse .header .search-scroll-wrap .search-scroll-wrapper .cm_block.common_se .common_select {
   height: 40px;
   vertical-align: middle;
   margin-top: 8px;
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
 }
-.page_billRecord .billRecordContent .common_tabBox.watercourse .header .cm_block.common_se .common_select .common_selectBox {
+.page_billRecord .billRecordContent .common_tabBox.watercourse .header .search-scroll-wrap .search-scroll-wrapper .cm_block.common_se .common_select .common_selectBox {
   border: 1px solid #ddd;
 }
-.page_billRecord .billRecordContent .common_tabBox.watercourse .header .cm_block.common_se .common_select .common_selectBox .value {
+.page_billRecord .billRecordContent .common_tabBox.watercourse .header .search-scroll-wrap .search-scroll-wrapper .cm_block.common_se .common_select .common_selectBox .value {
   padding: 0 12px;
   width: 88%;
 }
-.page_billRecord .billRecordContent .common_tabBox.watercourse .header .cm_block.common_se .common_select .common_selectBox .icon {
+.page_billRecord .billRecordContent .common_tabBox.watercourse .header .search-scroll-wrap .search-scroll-wrapper .cm_block.common_se .common_select .common_selectBox .icon {
   width: 12%;
 }
-.page_billRecord .billRecordContent .common_tabBox.watercourse .header .cm_block.common_se .common_select .common_selectBox .listbox {
-  width: 176px;
+.page_billRecord .billRecordContent .common_tabBox.watercourse .header .search-scroll-wrap .search-scroll-wrapper .cm_block.common_se .common_select .common_selectBox .listbox {
+  width: 175px;
   padding: 5px;
-  max-height: 117px;
+  max-height: 267px;
 }
-.page_billRecord .billRecordContent .common_tabBox.watercourse .header .cm_block.common_se .common_select .common_selectBox .listbox .inner {
+.page_billRecord .billRecordContent .common_tabBox.watercourse .header .search-scroll-wrap .search-scroll-wrapper .cm_block.common_se .common_select .common_selectBox .listbox:before {
+  top: -15px;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .header .search-scroll-wrap .search-scroll-wrapper .cm_block.common_se .common_select .common_selectBox .listbox:after {
+  top: -14px;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .header .search-scroll-wrap .search-scroll-wrapper .cm_block.common_se .common_select .common_selectBox .listbox.atTop:before {
+  top: unset;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .header .search-scroll-wrap .search-scroll-wrapper .cm_block.common_se .common_select .common_selectBox .listbox.atTop:after {
+  top: unset;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .header .search-scroll-wrap .search-scroll-wrapper .cm_block.common_se .common_select .common_selectBox .listbox .inner {
   width: 100%;
-  max-height: 105px;
+  max-height: 255px;
   padding: 0;
 }
-.page_billRecord .billRecordContent .common_tabBox.watercourse .header .cm_block.common_se .common_select .common_selectBox .listbox ul {
+.page_billRecord .billRecordContent .common_tabBox.watercourse .header .search-scroll-wrap .search-scroll-wrapper .cm_block.common_se .common_select .common_selectBox .listbox ul {
   padding: 0;
   overflow: hidden;
 }
-.page_billRecord .billRecordContent .common_tabBox.watercourse .header .cm_block.common_se .common_select .common_selectBox .listbox ul li {
+.page_billRecord .billRecordContent .common_tabBox.watercourse .header .search-scroll-wrap .search-scroll-wrapper .cm_block.common_se .common_select .common_selectBox .listbox ul li {
   line-height: 30px;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .header .searchopen {
+  width: 20px;
+  height: 80px;
+  position: absolute;
+  left: -17px;
+  top: 50%;
+  margin-top: -40px;
+  background: url(../images/bill/searchopen.png) no-repeat center center;
+  background-size: contain;
+  cursor: pointer;
 }
 .page_billRecord .billRecordContent .common_tabBox.watercourse .header .btnOk {
   position: absolute;
@@ -538,7 +789,7 @@
   padding: 10px 0px 10px 100px;
   display: inline-block;
   vertical-align: middle;
-  background: url('../images/bill/earnings.jpg') no-repeat 30px 0px;
+  background: url("../images/bill/earnings.jpg") no-repeat 30px 0px;
   background-size: 60px 57px;
 }
 .page_billRecord .billRecordContent .common_tabBox.watercourse .result .labour div {
@@ -606,12 +857,9 @@
   position: absolute;
   left: 15px;
   right: 15px;
-  bottom: 5px;
+  bottom: 10px;
   top: 10px;
   border: 1px solid #ececec;
-}
-.page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody table {
-  table-layout: fixed;
 }
 .page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list {
   box-sizing: border-box;
@@ -665,7 +913,7 @@
 .page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list .table tr {
   border: none;
 }
-.page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list .table tr:nth-child(2n+1) .employeeTable {
+.page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list .table tr:nth-child(2n + 1) .employeeTable {
   /* background-color:@bg06; */
 }
 .page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list .table tr.addmember {
@@ -721,8 +969,8 @@
   height: 0;
   border-left: transparent 3px solid;
   border-right: transparent 3px solid;
-  border-bottom: #777 5px solid;
-  border-top: none;
+  border-top: #777 5px solid;
+  border-bottom: none;
   top: 50%;
   right: 6px;
   transform: translateY(-50%);
@@ -736,32 +984,12 @@
   height: 0;
   border-left: transparent 3px solid;
   border-right: transparent 3px solid;
-  border-top: #777 5px solid;
-  border-bottom: none;
+  border-bottom: #777 5px solid;
+  border-top: none;
   top: 50%;
   right: 6px;
   transform: translateY(-50%);
   -webkit-transform: translateY(-50%);
-}
-.page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list tr td .revoke {
-  line-height: 24px;
-  color: #fff;
-  display: inline-block;
-  font-size: 12px;
-  padding: 0 5px;
-  background-color: #e82742;
-  border-radius: 3px;
-  margin-left: 2px;
-}
-.page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list tr td .print {
-  line-height: 24px;
-  color: #fff;
-  display: inline-block;
-  font-size: 12px;
-  padding: 0 5px;
-  background-color: #555;
-  border-radius: 3px;
-  margin-right: 2px;
 }
 .page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list tr td .operatorname {
   height: 30px;
@@ -781,8 +1009,99 @@
 .page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list tr.childtr td.bbnone .tdchildren {
   display: none;
 }
+.page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list tr.childtr td.bbnone .tdchildren .operate_box {
+  text-align: right;
+  margin: 10px;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list tr.childtr td.bbnone .tdchildren .operate_box .print,
+.page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list tr.childtr td.bbnone .tdchildren .operate_box .relate,
+.page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list tr.childtr td.bbnone .tdchildren .operate_box .revoke,
+.page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list tr.childtr td.bbnone .tdchildren .operate_box .bonus-btn,
+.page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list tr.childtr td.bbnone .tdchildren .operate_box .perf-btn {
+  width: 84px;
+  padding: 8px 10px;
+  margin-left: 9px;
+  color: #EDEDED;
+  display: inline-block;
+  font-size: 12px;
+  background-color: #424242;
+  border-radius: 3px;
+  text-align: center;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list tr.childtr td.bbnone .tdchildren .operate_box .print .iconfont,
+.page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list tr.childtr td.bbnone .tdchildren .operate_box .relate .iconfont,
+.page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list tr.childtr td.bbnone .tdchildren .operate_box .revoke .iconfont,
+.page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list tr.childtr td.bbnone .tdchildren .operate_box .bonus-btn .iconfont,
+.page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list tr.childtr td.bbnone .tdchildren .operate_box .perf-btn .iconfont {
+  margin-right: 2px;
+  width: 16px;
+  height: 16px;
+  color: #fff;
+  font-size: 14px;
+  line-height: 16px;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list tr.childtr td.bbnone .tdchildren .operate_box .print.am-clickable-active,
+.page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list tr.childtr td.bbnone .tdchildren .operate_box .relate.am-clickable-active,
+.page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list tr.childtr td.bbnone .tdchildren .operate_box .revoke.am-clickable-active,
+.page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list tr.childtr td.bbnone .tdchildren .operate_box .bonus-btn.am-clickable-active,
+.page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list tr.childtr td.bbnone .tdchildren .operate_box .perf-btn.am-clickable-active {
+  background-color: #222;
+  color: #fff;
+}
 .page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list td {
-  height: 36px;
+  height: 50px;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list td.col2 {
+  text-align: center;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list td.col2 .washStr {
+  font-size: 12px;
+  margin-top: 10px;
+  color: #c6c6c6;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list td.col2 .washStr .iconfont {
+  margin-right: 5px;
+  vertical-align: -2px;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list td.col2 .washStr .red {
+  color: #ff798c;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list td.col2 dt {
+  position: relative;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list td.col2 dt .reward {
+  position: absolute;
+  height: 30px;
+  width: 90%;
+  border-radius: 30px;
+  background-color: #FF003A;
+  font-size: 12px;
+  color: #fff;
+  line-height: 30px;
+  top: -38px;
+  left: 50%;
+  margin-left: -45%;
+  min-width: 66px;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list td.col2 dt .reward::after {
+  content: '';
+  width: 0;
+  height: 0;
+  border-width: 6px;
+  border-style: solid;
+  border-color: #FF003A transparent transparent transparent;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list td.col2 dt .reward .icon {
+  display: inline-block;
+  vertical-align: top;
+  width: 16px;
+  height: 16px;
+  margin: 7px 3px;
 }
 .page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list td .tdwrap {
   width: 100%;
@@ -803,9 +1122,7 @@
   color: #e82742;
 }
 .page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list td .tdwrap > span {
-  width: 100%;
-  display: block;
-  float: left;
+  display: inline-block;
   margin: 2px 0;
   font-size: 14px;
   overflow: hidden;
@@ -814,6 +1131,10 @@
 }
 .page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list td .tdwrap > span.consumetime {
   padding: 10px 0;
+  color: #00b7ee;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list td .tdwrap > span.consumetime.am-clickable-active {
+  opacity: 0.7;
 }
 .page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list td .tdwrap .c_red {
   color: #e82742;
@@ -877,11 +1198,39 @@
   line-height: 24px;
   color: #00b7ee;
 }
+.page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list td .tdwrap.addcustomer.am-clickable {
+  color: #00b7ee;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list td .tdwrap.addcustomer.am-clickable.am-clickable-active {
+  opacity: 0.7;
+}
 .page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list td .tdwrap.addcustomer p {
   line-height: 24px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  position: relative;
+  padding-right: 14px;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list td .tdwrap.addcustomer p .name {
+  display: block;
+  width: 100%;
+  height: 24px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list td .tdwrap.addcustomer p .good {
+  position: absolute;
+  right: 0;
+  top: 4px;
+  width: 14px;
+  height: 13px;
+  background: url(../images/good.png) no-repeat;
+  cursor: pointer;
+  display: inline-block;
+  background-size: 14px 13px;
+  vertical-align: -2px;
 }
 .page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-head {
   line-height: 36px;
@@ -896,10 +1245,41 @@
   border-top: 1px solid #ececec;
 }
 .page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-head td {
+  position: relative;
   height: 36px;
   font-size: 12px;
   border-right: 1px solid #ececec;
   border-bottom: 1px solid #ececec;
+  /*                             .tBillNo:before,.tTime:before,.tMoney:before{
+                                content: "";
+                                position: absolute;
+                                display: block;
+                                width: 0;
+                                height: 0;
+                                border-left: transparent 3px solid;
+                                border-right: transparent 3px solid;
+                                border-bottom: #777 5px solid;
+                                border-top: none;
+                                top: 50%;
+                                right: 6px;
+                                transform: translateY(-50%);
+                                -webkit-transform: translateY(-50%);
+                            }
+                            .tBillNo:after,.tTime:after,.tMoney:after{
+                                content: "";
+                                position: absolute;
+                                display: block;
+                                width: 0;
+                                height: 0;
+                                border-left: transparent 3px solid;
+                                border-right: transparent 3px solid;
+                                border-top: #777 5px solid;
+                                border-bottom: none;
+                                top: 70%;
+                                right: 6px;
+                                transform: translateY(-50%);
+                                -webkit-transform: translateY(-50%);
+                            } */
 }
 .page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-head td:last-child {
   border-right: none;
@@ -911,6 +1291,48 @@
   text-overflow: ellipsis;
   vertical-align: middle;
   padding: 0 5px;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-head td .tdwrap .up {
+  content: "";
+  position: absolute;
+  display: block;
+  width: 0;
+  height: 0;
+  border-left: transparent 3px solid;
+  border-right: transparent 3px solid;
+  border-bottom: #777 5px solid;
+  border-top: none;
+  top: 45%;
+  right: 6px;
+  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-head td .tdwrap .up.am-clickable-active {
+  border-bottom: #00b7ee 5px solid;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-head td .tdwrap .up.enabled {
+  border-bottom: #00b7ee 5px solid;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-head td .tdwrap .down {
+  content: "";
+  position: absolute;
+  display: block;
+  width: 0;
+  height: 0;
+  border-left: transparent 3px solid;
+  border-right: transparent 3px solid;
+  border-top: #777 5px solid;
+  border-bottom: none;
+  top: 65%;
+  right: 6px;
+  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-head td .tdwrap .down.am-clickable-active {
+  border-top: #00b7ee 5px solid;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-head td .tdwrap .down.enabled {
+  border-top: #00b7ee 5px solid;
 }
 .page_billRecord .billRecordContent .common_tabBox .search_box {
   height: 36px;
@@ -982,10 +1404,43 @@
 .page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .basictr.odd {
   background: #f7f7f7;
 }
+.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .basictr td .billnoBox {
+  width: auto;
+  display: inline-block;
+}
+.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .basictr td .freezeSpan {
+  width: 10%;
+  margin-left: 5px;
+  display: none;
+  color: #555;
+  font-size: 12px;
+}
+.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .basictr.freezeTr td .tdwrap > span.consumetime,
+.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .basictr.freezeTr td .tdwrap a {
+  color: #222;
+  text-decoration: none;
+}
+.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .basictr.freezeTr td .perf-btn,
+.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .basictr.freezeTr td .bonus-btn,
+.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .basictr.freezeTr td .revoke {
+  display: none;
+}
 .page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr {
   background: #777777;
   color: #fff;
   box-shadow: 5px 5px 5px #716e6e inset;
+}
+.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr.freezeTr .addcustTr,
+.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr.freezeTr .signature,
+.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr.freezeTr .icon-comments,
+.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr.freezeTr .deptPerf {
+  display: none;
+}
+.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr.freezeTr .col3 tbody .tdedit {
+  background: 0;
+}
+.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr.freezeTr .col3 tbody .tdwrap a {
+  text-decoration: none;
 }
 .page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr td {
   border-right: 1px solid #949494;
@@ -995,7 +1450,6 @@
   vertical-align: top;
   font-size: 12px;
   border-right: 0px;
-  border-bottom: 0px;
 }
 .page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr .col3 thead td {
   color: #b5b5b5;
@@ -1004,8 +1458,8 @@
   border-right: none;
 }
 .page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr .col3 tbody .tdwrap.sale .projectName {
+  min-width: 150px;
   display: inline-block;
-  width: 80%;
   text-align: left;
 }
 .page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr .col3 tbody .tdwrap.sale .projectName a {
@@ -1022,7 +1476,6 @@
 }
 .page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr .col3 tbody .tdwrap.sale .num {
   display: inline-block;
-  width: 20%;
   line-height: 24px;
 }
 .page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr .col3 tbody .tdwrap.price {
@@ -1043,6 +1496,9 @@
   white-space: nowrap;
   background: url(../images/bill/editmodification.png) no-repeat 5px center;
   background-size: 13px 15px;
+}
+.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr .col3 tbody .tdedit span {
+  color: #e82742;
 }
 .page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr .col3 tbody .tdedit ul {
   display: none;
@@ -1107,13 +1563,13 @@
 }
 .page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr .col2 .comment.am-disabled {
   display: none;
-  color: #FFF;
+  color: #fff;
 }
 .page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr .col2 .comment .comment-content {
   position: absolute;
   display: none;
   bottom: 32px;
-  background-color: #FFF;
+  background-color: #fff;
   border-radius: 4px;
   color: #00b7ee;
   padding: 10px;
@@ -1128,7 +1584,7 @@
 .page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr .col2 .comment .comment-content::before {
   position: absolute;
   content: "";
-  border-top: 5px solid #FFF;
+  border-top: 5px solid #fff;
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
   border-bottom: none;
@@ -1216,8 +1672,53 @@
   background: url(../images/bill/addbg.png) no-repeat 1px 1px;
   background-size: 17px 17px;
 }
+.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr .employeeTable .table tr td.addcust div.am-clickable-active {
+  width: 20px;
+  height: 20px;
+  background: url(../images/bill/addbg_enabled.png) no-repeat 1px 1px;
+  background-size: 17px 17px;
+}
 .page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr .employeeTable .table tr td:last-child {
   color: #e69925;
+}
+.page_billRecord .introDetail {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  background-color: rgba(0, 0, 0, 0.2);
+  display: none;
+}
+.page_billRecord .introDetail .text {
+  position: absolute;
+}
+.page_billRecord .introDetail .text p {
+  background: #fff;
+  border-radius: 5px;
+  padding: 20px 30px;
+  word-break: break-all;
+  color: #00b7ee;
+}
+.page_billRecord .introDetail .text .up,
+.page_billRecord .introDetail .text .down {
+  content: "";
+  width: 0;
+  height: 0;
+  border-left: 9px solid transparent;
+  border-right: 9px solid transparent;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
+}
+.page_billRecord .introDetail .text .down {
+  top: 100%;
+  border-top: 11px solid #fff;
+}
+.page_billRecord .introDetail .text .up {
+  bottom: 100%;
+  border-bottom: 11px solid #fff;
 }
 #selectEmployee {
   position: fixed;
@@ -1278,12 +1779,15 @@
   width: 15px;
   height: 15px;
   display: block;
-  top: 20px;
-  right: 20px;
+  top: 4px;
+  right: 26px;
   position: absolute;
   z-index: 3;
-  background: url("../images/icons_sprite/close_employee.png") no-repeat 0px 0px;
-  background-size: 15px 15px;
+  color: #999;
+  font-size: 26px;
+}
+#selectEmployee .employeeBox .close:hover {
+  color: #333;
 }
 #selectEmployee .employeeBox .selectBox {
   height: 250px;
@@ -1545,9 +2049,15 @@
   -webkit-border-radius: 3px;
   border: 1px solid #ddd;
 }
+#selectEmployee .employeeBox .btngroup span.am-clickable-active {
+  background-color: #f5f5f5;
+}
 #selectEmployee .employeeBox .btngroup span.selected {
   background-color: #595959;
   color: #FFF;
+}
+#selectEmployee .employeeBox .btngroup span.selected.am-clickable-active {
+  background-color: #333;
 }
 .billrecordmask {
   display: none;
@@ -1711,7 +2221,7 @@
   margin-top: 10px;
 }
 #selectCancleReason .content .warn::before {
-  content: '!';
+  content: "!";
   display: inline-block;
   vertical-align: top;
   width: 16px;

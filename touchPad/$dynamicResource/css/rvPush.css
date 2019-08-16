@@ -11,13 +11,19 @@
 .MGJ_rvPush .MGJ_rvPushContent {
   width: 480px;
   border-radius: 4px;
-  border-top: 4px solid #832688;
   background: #FFF;
   position: absolute;
   left: 50%;
   top: 50%;
   margin: -240px 0 0 -240px;
   padding-bottom: 10px;
+}
+.MGJ_rvPush svg {
+  position: absolute;
+  left: 18px;
+  top: 10px;
+  width: 20px;
+  height: 20px;
 }
 .MGJ_rvPush .MGJ_pushTitle {
   line-height: 44px;
@@ -26,12 +32,19 @@
   color: #222222;
   padding: 0 20px 0 45px;
   font-size: 14px;
-  background: url("../images/rvPush/bell.png") no-repeat 15px center;
 }
 .MGJ_rvPush .MGJ_status {
   padding: 0 50px;
   margin-bottom: 10px;
   height: 66px;
+}
+.MGJ_rvPush .MGJ_status svg {
+  display: none;
+  position: absolute;
+  top: 66px;
+  left: 150px;
+  height: 30px;
+  width: 180px;
 }
 .MGJ_rvPush .MGJ_status .MGJ_head {
   height: 66px;
@@ -60,27 +73,30 @@
   float: right;
   background-image: url("../images/rvPush/barberBg-man.gif");
 }
-.MGJ_rvPush .MGJ_status.status1 {
-  background: url("../images/rvPush/status1.png") no-repeat center center;
+.MGJ_rvPush .MGJ_status.status1 .reservation {
+  display: block;
 }
-.MGJ_rvPush .MGJ_status.status2 {
-  background: url("../images/rvPush/status2.png") no-repeat center center;
+.MGJ_rvPush .MGJ_status.status2 .cancel {
+  display: block;
 }
 .MGJ_rvPush .MGJ_status.status3 {
   background: url("../images/rvPush/status3.png") no-repeat center center;
 }
 .MGJ_rvPush .MGJ_close {
-  width: 30px;
-  height: 30px;
-  background: #832688 url("../images/rvPush/close.png") no-repeat center center;
-  border-radius: 5px;
   position: absolute;
-  top: -4px;
   right: 0;
+  top: 0;
+  width: 35px;
+  height: 35px;
 }
-.MGJ_rvPush .MGJ_close:hover,
-.MGJ_rvPush .MGJ_close.am-clickable-active {
-  background-color: #5a225e;
+.MGJ_rvPush .MGJ_close::before {
+  content: "";
+  display: block;
+  width: 15px;
+  height: 15px;
+  margin: 10px;
+  background: url(../images/icons_sprite/close_employee.png) no-repeat 0px 0px;
+  background-size: 15px 15px;
 }
 .MGJ_rvPush .MGJ_mute {
   width: 30px;

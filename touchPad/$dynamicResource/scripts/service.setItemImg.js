@@ -50,30 +50,34 @@ am.setItemImg = {
             return am.msg("请选择图片");
         }
         am.loading.show();
-        am.api.copyPhoto.exec(
-            {
-                type: "项目图片",
-                name: d.name,
-                fileName: d.filename,
-                shopId: am.metadata.userInfo.parentShopId
-            },
-            function(res) {
-                am.loading.hide();
-                if (res.code == 0 && res.content) {
-                    self.editImg(res.content, data);
-                    cb && cb(res.content);
-                } else {
-                    am.msg("图片获取失败");
-                }
-            }
-        );
+        var url=d.type+"/"+d.name+"/"+d.filename;
+        self.editImg(url, data);
+        cb && cb(url);
+        // am.api.copyPhoto.exec(
+        //     {
+        //         type: "项目图片",
+        //         name: d.name,
+        //         fileName: d.filename,
+        //         shopId: am.metadata.userInfo.parentShopId
+        //     },
+        //     function(res) {
+        //         am.loading.hide();
+        //         if (res.code == 0 && res.content) {
+        //             self.editImg(res.content, data);
+        //             cb && cb(res.content);
+        //         } else {
+        //             am.msg("图片获取失败");
+        //         }
+        //     }
+        // );
     },
     getServiceSetLogo: function(id, serviceSetLogo) {
         var classes = am.metadata.classes;
         for (var i = 0; i < classes.length; i++) {
             for (var j = 0; j < classes[i].sub.length; j++) {
                 if (classes[i].sub[j].id == id) {
-                    classes[i].sub[j].mgjservicesetlogo = serviceSetLogo + ".jpg";
+                    // classes[i].sub[j].mgjservicesetlogo = serviceSetLogo + ".jpg";
+                    classes[i].sub[j].mgjservicesetlogo = serviceSetLogo ;
                 }
             }
         }
@@ -86,7 +90,8 @@ am.setItemImg = {
         am.api.serviceItemPicSet.exec(
             {
                 id: data.id,
-                serviceSetLogo: serviceSetLogo + ".jpg"
+                serviceSetLogo: serviceSetLogo 
+                // serviceSetLogo: serviceSetLogo + ".jpg"
             },
             function(res) {
                 am.loading.hide();

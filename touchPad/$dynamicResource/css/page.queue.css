@@ -124,6 +124,9 @@
 }
 .page_queue .tip .status div:nth-child(4) {
   background: #555;
+}
+.page_queue .tip .status div:nth-child(5) {
+  background: #677DC4;
   margin-right: 0;
   border-radius: 0 3px 3px 0;
 }
@@ -135,7 +138,7 @@
   overflow: hidden;
 }
 .page_queue .content .list {
-  padding: 6px 10px;
+  padding: 6px 6px 6px 10px;
 }
 .page_queue .content .wrapper {
   margin-top: 14px;
@@ -167,15 +170,40 @@
   padding-left: 4px;
 }
 .page_queue .content li {
-  width: 75px;
-  height: 104px;
-  margin: 4px;
-  float: left;
-  border-radius: 5px;
-  padding: 6px;
   position: relative;
-  background-color: #5dae72;
-  color: #fff;
+  width: 78px;
+  height: 110px;
+  margin: 6px 6px 6px 0;
+  float: left;
+  border-radius: 4px;
+  background: #5dae72;
+  /* .name {
+				position: absolute;
+				margin: 4px 2px 4px 0;
+				width: 48px;
+				left: 10px;
+				line-height: 12px;
+				color:#fff;
+				text-align: center;
+				font-size: 12px;
+			} */
+  /* .icon-xiala-{
+				position: absolute;
+				height: 12px;
+				line-height: 12px;
+				top: 14px;
+				right: 5px;
+				color: #fff;
+			} */
+}
+.page_queue .content li.am-clickable-active .mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 78px;
+  height: 110px;
+  border-radius: 4px;
+  background: rgba(34, 34, 34, 0.1);
 }
 .page_queue .content li.status4 {
   background-color: #e59b37;
@@ -193,61 +221,93 @@
 .page_queue .content li.status3 {
   background-color: #555;
 }
+.page_queue .content li.status5 {
+  background-color: #677DC4;
+}
 .page_queue .content li.add {
   background: #ececec url(../images/add-queue.png) no-repeat center center;
   background-size: 41px 41px;
 }
 .page_queue .content li .no {
-  font-size: 24px;
+  margin-left: 16px;
+  width: 45px;
+  height: 13px;
+  background: rgba(0, 0, 0, 0.28);
+  border-radius: 0 0 5px 5px;
+  text-align: center;
+  font-size: 10px;
+  color: #fff;
   font-weight: bold;
-  height: 24px;
-  line-height: 24px;
 }
-.page_queue .content li .name {
-  font-size: 12px;
-  height: 20px;
-  line-height: 20px;
+.page_queue .content li .name-icon {
+  height: 12px;
+  line-height: 12px;
+  text-align: center;
+  margin-top: 3px;
 }
-.page_queue .content li .time {
+.page_queue .content li .name-icon .name {
+  display: inline-block;
+  max-width: 48px;
+  color: #fff;
   font-size: 12px;
-  height: 20px;
-  line-height: 20px;
+}
+.page_queue .content li .name-icon .icon-xiala- {
+  color: #fff;
+  margin-left: -6px;
 }
 .page_queue .content li .header {
   position: absolute;
-  width: 22px;
-  height: 22px;
-  left: 6px;
-  bottom: 6px;
-  border-radius: 50%;
+  width: 78px;
+  height: 78px;
+  left: 0;
+  top: 32px;
+  border-radius: 0 0 4px 4px;
   overflow: hidden;
   background: #e2e2e2 url(../images/openbill-emp.png) no-repeat bottom center;
-  background-size: 20px 32px;
+  background-size: 27px 45px;
+  background-position: 25px 15px;
 }
 .page_queue .content li .header img {
   width: 100%;
   height: 100%;
 }
-.page_queue .content li .status {
+.page_queue .content li .footer {
   position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding-top: 1px;
+  max-width: 78px;
+  height: 15px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 4px 4px 4px 4px;
+  color: #fff;
+}
+.page_queue .content li .footer .time {
+  float: left;
   width: 50px;
+  font-size: 10px;
+  padding-left: 2px;
   height: 14px;
-  right: 6px;
-  bottom: 6px;
+  line-height: 14px;
+}
+.page_queue .content li .footer .status {
+  float: right;
+  padding: 0 2px;
+  width: 28px;
+  height: 14px;
   font-size: 10px;
   line-height: 14px;
-  text-align: right;
-  padding-right: 14px;
-}
-.page_queue .content li .status::after {
-  content: '';
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  top: 1px;
-  right: 0;
-  background: url(../images/queue-arrow.png);
-  background-size: 100% 100%;
+  /* &::after {
+						content: '';
+						position: absolute;
+						width: 12px;
+						height: 12px;
+						top: 4px;
+						right: 2px;
+						background: url(../images/queue-arrow.png);
+						background-size: 100% 100%;
+					} */
 }
 .page_queue .content li .no,
 .page_queue .content li .name,
@@ -356,7 +416,7 @@
   text-overflow: ellipsis;
 }
 #addQueue .content .wrapper .list li.selected span {
-  background: #555555 url(../images/add-queue-selected.png) no-repeat center center;
+  background: #555 url(../images/add-queue-selected.png) no-repeat center center;
   background-size: 12px 8px;
   border-radius: none;
 }
@@ -424,7 +484,7 @@
 }
 #editQueue .content li {
   height: 45px;
-  padding: 0 20px;
+  padding: 0 10px;
   position: relative;
 }
 #editQueue .content li p {
@@ -433,9 +493,8 @@
   height: 44px;
   line-height: 44px;
   border-bottom: 1px solid #f6f6f6;
-  overflow: hidden;
   white-space: nowrap;
-  text-overflow: ellipsis;
+  text-align: center;
 }
 #editQueue .content li.active {
   background-color: #f8f8f8;
@@ -490,6 +549,39 @@
 #editQueue .content li .second.left::after {
   left: 100%;
   border-color: transparent transparent transparent #fff;
+}
+.promotionMadal {
+  width: 285px;
+  height: 265px;
+  box-shadow: 0px 0px 50px 0px rgba(0, 0, 0, 0.2);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  border-radius: 4px;
+  text-align: center;
+  padding: 20px 0;
+}
+.promotionMadal .title {
+  font-size: 19px;
+  color: #000;
+  padding-bottom: 24px;
+}
+.promotionMadal .close {
+  position: absolute;
+  right: 10px;
+  top: 0px;
+  font-size: 20px;
+}
+.promotionMadal .content img {
+  width: 141px;
+  height: 141px;
+}
+.promotionMadal .content div {
+  font-size: 12px;
+  color: #999;
+  padding-top: 16px;
 }
 .shake {
   -webkit-animation: animation-shake infinite linear 0.2s;

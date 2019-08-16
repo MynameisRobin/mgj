@@ -48,11 +48,11 @@ window.cashierTools.BillMain.prototype = {
 
 		this.$.find(".submit").vclick(function() {
 			var $tr = _this.$list.find("tr");
-			if($tr.length){
+			// if($tr.length){
 				_this.onSubmit && _this.onSubmit();
-			}else{
-				am.msg("没有任何项目，请添加项目！");
-			}
+			// }else{
+				// am.msg("没有任何项目，请添加项目！");
+			// }
 		});
 
 		this.$list = this.$.find("tbody").on("vclick","tr",function(evt,wait){
@@ -76,7 +76,7 @@ window.cashierTools.BillMain.prototype = {
 					if($prev.length){
 						$prev.trigger("vclick");
 					}else if($next.length){
-						$prev.trigger("vclick");
+						$next.trigger("vclick");
 					}else{
 						//应该清除员工选择器，暂时不管
 					}
@@ -143,7 +143,7 @@ window.cashierTools.BillMain.prototype = {
 				/*console.log($this.html());
 				 console.log(typeof(parseInt($this.html())));*/
 				var offset = $this.offset();
-				var price = parseInt($this.html());
+				var price = parseFloat($this.html());
 				if($this.hasClass("noDiscount")){
 					price = 0;
 				}
@@ -155,8 +155,10 @@ window.cashierTools.BillMain.prototype = {
 							var autoPrice = $this.data("autoPrice");
 							if(autoPrice!=value){
 								$this.addClass("modifyed");
+								$this.parents("tr").data('data').modifyed = 1;
 							}else{
 								$this.removeClass("modifyed");
+								$this.parents("tr").data('data').modifyed = 0;
 							}
 							$this.text(value);
 							if(_this.onPriceChange) _this.onPriceChange($this.parents("tr"),$this);
@@ -172,8 +174,11 @@ window.cashierTools.BillMain.prototype = {
 			}
 			
 			return false;
-		}).on("webkitAnimationEnd","tr",function(){
-			$(this).removeClass('show').removeClass('show1');
+		}).on("webkitAnimationEnd","tr",function(evt){
+			console.log(evt);
+			if(evt && evt.originalEvent && (evt.originalEvent.animationName === 'animation_addItem' || evt.originalEvent.animationName === 'animation_addItem1')){
+				$(this).removeClass('show').removeClass('show1');
+			}
 		}).on("vclick","div.server",function(){
 			if($(this).parents("tr").hasClass("selected")){//只有点击选中的才响应此事件
 				var data = $(this).data('data');
@@ -206,7 +211,7 @@ window.cashierTools.BillMain.prototype = {
 		//         _this.autoCloseMemberInfo();
 		//     }
 		// });
-		this.$memberInfo.find(".content").bind("webkitAnimationEnd",function(evt){
+		this.$content=this.$memberInfo.find(".content").bind("webkitAnimationEnd",function(evt){
 			//console.log(evt);
 			if(evt.originalEvent && evt.originalEvent.animationName == "animation_memberInfoHide"){
 				_this.hideMemberInfo();
@@ -229,11 +234,59 @@ window.cashierTools.BillMain.prototype = {
 			}
 			$.am.changePage(am.page.pay, "slideup",{
 				action:"recharge",
+				from:"recharge",
 				member:_this.member
 			});
 			return false;
 		});
-
+		
+			
+		this.$memberInfo.on('vclick','.base .more',function(){
+			// event.stopPropagation();
+			var $memberComment=$(this).prev('.comment'),
+				originalContentHeight=_this.$content.outerHeight(),
+				originalCommentHeight=$memberComment.outerHeight(),$this=$(this);
+			if($this.hasClass('on')){
+				$memberComment.removeClass('lineText');
+				$this.text('收起').removeClass('on');
+				var difference=$memberComment.outerHeight()-originalCommentHeight;
+				_this.$memberInfo.css({
+					'top':-(difference+originalContentHeight+12)+'px',
+					'height':difference+originalContentHeight+'px'
+				});
+			}else{
+				$memberComment.addClass('lineText');
+				$this.text('更多').addClass('on');
+				var difference=$memberComment.outerHeight()-originalCommentHeight;
+				_this.$memberInfo.css({
+					'top':-(difference+originalContentHeight+12)+'px',
+					'height':difference+originalContentHeight+'px'
+				});
+			}
+			return false;
+		}).on('vclick','.card .more',function(){
+			var $remark_member_box=_this.$memberInfo.find('.remark_member_box'),
+				originalContentHeight=_this.$content.outerHeight(),
+				originalRemarkHeight=$remark_member_box.outerHeight(),$this=$(this);
+			if($this.hasClass('on')){
+				$remark_member_box.html(_this.cardComment).removeClass('lineText');
+				$this.removeClass('on');
+				var difference=$remark_member_box.outerHeight()-originalRemarkHeight;
+				_this.$memberInfo.css({
+					'top':-(difference+originalContentHeight+12)+'px',
+					'height':difference+originalContentHeight+'px'
+				});
+			}else{
+				$remark_member_box.html(_this.subCardComment).addClass('lineText');
+				$this.addClass('on');
+				var difference=$remark_member_box.outerHeight()-originalRemarkHeight;
+				_this.$memberInfo.css({
+					'top':-(difference+originalContentHeight+12)+'px',
+					'height':difference+originalContentHeight+'px'
+				});
+			}
+			return false;
+		});
 		this.comboItemScroll = new $.am.ScrollView({
 			$wrap: this.$memberInfo.find('.items'),
 			$inner: this.$memberInfo.find('.items ul'),
@@ -352,7 +405,7 @@ window.cashierTools.BillMain.prototype = {
 	},
 	addServer: function(data,$newtr,specified) {
 		var $tr = $newtr || this.$list.find("tr.selected");
-		if($tr.length){
+		// if($tr.length){
 			var $server = $tr.find(".server").eq(data.pos);
 			$server.text(data.name).data("data",data).addClass("show");
 			if(typeof(specified) == 'boolean'){
@@ -372,14 +425,14 @@ window.cashierTools.BillMain.prototype = {
 			this.showServerAniTimer = setTimeout(function(){
 				$server.removeClass("show");
 			},250);
-		}else{
-			am.msg("没有任何项目，请添加项目！");
-			return 1;
-		}
+		// }else{
+			// am.msg("没有任何项目，请添加项目！");
+			// return 1;
+		// }
 	},
 	removeServer: function(data,$newtr,specified){
 		var $tr = $newtr || this.$list.find("tr.selected");
-		if($tr.length){
+		// if($tr.length){
 			var $server = $tr.find(".server").eq(data.pos);
 			$server.text('').removeData("data").addClass("show");
 			$server.removeClass('checked');
@@ -388,10 +441,10 @@ window.cashierTools.BillMain.prototype = {
 			this.showServerAniTimer = setTimeout(function(){
 				$server.removeClass("show");
 			},250);
-		}else{
+		// }else{
 			am.msg("没有任何项目，请添加项目！");
 			return 1;
-		}
+		// }
 	},
 	reset: function(keepList) {
 		if(!keepList){
@@ -469,10 +522,78 @@ window.cashierTools.BillMain.prototype = {
 			$gender.removeClass('male');
 		}
 		this.$memberInfo.find('.membername').text(member.name);
-		this.$memberInfo.find('.tel').text(member.mobile);
-		this.$memberInfo.find('.comment').text(member.comment || "");
+		// this.$memberInfo.find('.tel').text(member.mobile);
+		if(am.operateArr.indexOf("MGJP") !=-1){// 敏感权限 //手机号隐藏中间四位
+			this.$memberInfo.find('.tel').text(am.processPhone(member.mobile));
+		}else{
+			this.$memberInfo.find('.tel').text(member.mobile);
+		}
+		this.$memberInfo.find('.more').remove();
+		if(member.comment){
+			var $comment=this.$memberInfo.find('.comment').addClass('lineText');
+			if(member.comment.length>21){
+				// var subComment=member.comment.substr(0,18)+'<a href="javascript:;" class="more am-clickable">更多</a>'
+				if($comment.hasClass('lineText')){
+					$comment.html(member.comment).after('<span class="more on am-clickable">更多</span>');
+				}else{
+					$comment.html(member.comment).after('<span class="more am-clickable">收起</span>');
+				}
+			}else{
+				$comment.html(member.comment);
+			}
+		}else{
+			this.$memberInfo.find('.comment').text('');
+		}
+		// this.$memberInfo.find('.comment').text(member.comment || "");
 		this.$memberInfo.find('.name').text(member.cardName);
 		this.$memberInfo.find('.cardNo').text(member.cardNo);
+		this.$memberInfo.find('.card_R').html("");
+		this.$memberInfo.find('.package_R').html("");
+		// 卡类购买
+		if(member.cardComment) {
+			var $cardRemark=this.$memberInfo.find('.card_R').addClass('remark_member_box lineText ');
+			if(member.cardComment.length>21){
+				this.cardComment=member.cardComment+'<span class="more am-clickable">收起</span>';
+				this.subCardComment=member.cardComment.substr(0,21)+'<span class="more on am-clickable">更多</span>';
+				if($cardRemark.hasClass('lineText')){
+					$cardRemark.html(this.subCardComment);
+				}else{
+					$cardRemark.html(this.cardComment);
+				}
+			}else{
+				$cardRemark.html(member.cardComment);
+			}
+		}else{
+			this.$memberInfo.find('.card_R').removeClass("remark_member_box").html('');
+		}
+		// 套餐购买
+		if(member.cardComment) {
+			var $packageRemark=this.$memberInfo.find('.package_R').addClass('remark_member_box lineText ');
+			if(member.cardComment.length>21){
+				this.packageComment=member.cardComment+'<span class="more am-clickable">收起</span>';
+				this.subPackageComment=member.cardComment.substr(0,21)+'<span class="more on am-clickable">更多</span>';
+				if($packageRemark.hasClass('lineText')){
+					$packageRemark.html(this.subPackageComment);
+				}else{
+					$packageRemark.html(this.packageComment);
+				}
+			}else{
+				$packageRemark.html(member.cardComment);
+			}
+		}else{
+			this.$memberInfo.find('.package_R').removeClass("remark_member_box").html('');
+		}
+		
+		/* if(member.cardComment) {
+			// this.$memberInfo.find('.card_R').html(member.cardComment);
+			// this.$memberInfo.find('.card_R').addClass("remark_member_box");
+			this.$memberInfo.find('.package_R').html(member.cardComment);
+			this.$memberInfo.find('.package_R').addClass("remark_member_box");
+		}else if(!member.cardComment){
+			// this.$memberInfo.find('.card_R').removeClass("remark_member_box");
+			this.$memberInfo.find('.package_R').removeClass("remark_member_box");
+		} */
+		
 		if(member.cardtype==1){
 			this.$memberInfo.find('.price').show().text(Math.round((member.balance )*100)/100);
 			this.$memberInfo.find('.bonus').text("￥"+Math.round((member.gift )*100)/100);
@@ -489,11 +610,11 @@ window.cashierTools.BillMain.prototype = {
 			discount.push('卖品'+ member.buydiscount+'折');
 		}
 		this.$memberInfo.find('.discount').text(discount.length?discount.join(","):"无折扣");
-		if(member.cardtype==1 && (member.timeflag==0 || member.timeflag==2) && !this.shutDownSubmit){
+		if(member.cardtype==1 && (member.timeflag==0 || member.timeflag==2) && !this.shutDownSubmit ){
 			this.$memberInfo.find('.recharge').show();
 		}else{
 			this.$memberInfo.find('.recharge').hide();
-        }
+		}
 		if(member.comboitems && member.comboitems.length){
 			var $ul = this.$memberInfo.find('.items').show().find('ul').empty();
 			for (var i = 0; i < member.comboitems.length; i++) {

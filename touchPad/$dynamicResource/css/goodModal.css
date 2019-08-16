@@ -1,0 +1,107 @@
+.goodModal {
+  font-size: 16px;
+  text-align: left;
+}
+.goodModal .inner {
+  z-index: 1;
+  width: 360px;
+  height: 370px;
+  margin-left: -209px;
+  margin-top: -212px;
+  padding: 27px 30px;
+}
+.goodModal .inner h2 {
+  font-size: 18px;
+  font-weight: bold;
+}
+.goodModal .inner h2 .good {
+  width: 26px;
+  height: 24px;
+  margin-right: 10px;
+  display: inline-block;
+  vertical-align: -2px;
+  background: url(../images/good.png) no-repeat;
+  background-size: cover;
+}
+.goodModal .inner .modal-head {
+  height: 35px;
+}
+.goodModal .inner .modal-head .close {
+  top: 10px;
+  right: 10px;
+}
+.goodModal .inner .modal-content {
+  margin-top: 10px;
+  overflow: hidden;
+  position: relative;
+  font-size: 12px;
+}
+.goodModal .inner .modal-content .modal-warp {
+  margin: 20px 0;
+  height: 120px;
+}
+.goodModal .inner .modal-content .modal-warp .chart {
+  width: 31px;
+  height: 115px;
+  background: #f3f3f3;
+  border-radius: 2px;
+  position: relative;
+  margin-left: 58px;
+}
+.goodModal .inner .modal-content .modal-warp .chart .box {
+  width: 100%;
+  bottom: 0;
+  position: absolute;
+}
+.goodModal .inner .modal-content .modal-warp .chart .box span {
+  width: 50px;
+  position: absolute;
+  left: -56px;
+  text-align: right;
+}
+.goodModal .inner .modal-content .modal-warp .chart .box1 {
+  height: 92px;
+  background: #ec7bac;
+}
+.goodModal .inner .modal-content .modal-warp .chart .box2 {
+  height: 47px;
+  background: #f19ec2;
+}
+.goodModal .inner .modal-content .modal-warp .l-img {
+  width: 30%;
+  float: left;
+}
+.goodModal .inner .modal-content .modal-warp .r-text {
+  float: left;
+  height: 85px;
+  margin-top: 10px;
+  text-align: center;
+}
+.goodModal .inner .modal-content .modal-warp .r-text p {
+  color: #222;
+  margin-top: 10px;
+}
+.goodModal .inner .modal-content .modal-warp .r-text p.tip {
+  margin-top: 0;
+  color: #888;
+}
+.goodModal .inner .modal-content p {
+  color: #888;
+}
+.goodModal .inner .modal-content .info {
+  height: 44px;
+  line-height: 40px;
+  margin-top: 20px;
+  background: #fffaf2;
+  color: #e1af61;
+  text-indent: 1em;
+}
+.goodModal .inner .modal-content .info::before {
+  content: "\e648";
+  font-size: 21px;
+  margin-right: 8px;
+  vertical-align: -2px;
+  font-family: "iconfont" !important;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+}

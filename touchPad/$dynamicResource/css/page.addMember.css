@@ -161,24 +161,26 @@
   background-color: #595959;
   color: #FFF;
 }
-.page_addMember .addMember_box .addMember_list .cm_form .changesource {
+.page_addMember .addMember_box .addMember_list .cm_form .changesource-wrapper {
+  min-height: 180px;
+  max-height: 220px;
   min-width: 200px;
   max-width: 320px;
-  height: 100%;
+  overflow: hidden;
   float: left;
 }
-.page_addMember .addMember_box .addMember_list .cm_form .changesource .changebox {
+.page_addMember .addMember_box .addMember_list .cm_form .changesource-wrapper .changebox {
   min-width: 90px;
   max-width: 260px;
   display: inline-block;
   margin-right: 10px;
 }
-.page_addMember .addMember_box .addMember_list .cm_form .changesource .changebox span {
+.page_addMember .addMember_box .addMember_list .cm_form .changesource-wrapper .changebox span {
   display: inline-block;
   vertical-align: middle;
   position: relative;
 }
-.page_addMember .addMember_box .addMember_list .cm_form .changesource .changebox span.change_icon {
+.page_addMember .addMember_box .addMember_list .cm_form .changesource-wrapper .changebox span.change_icon {
   width: 28px;
   height: 28px;
   vertical-align: middle;
@@ -191,10 +193,10 @@
   -webkit-border-radius: 50%;
   margin-right: 3px;
 }
-.page_addMember .addMember_box .addMember_list .cm_form .changesource .changebox.selected span.change_icon {
+.page_addMember .addMember_box .addMember_list .cm_form .changesource-wrapper .changebox.selected span.change_icon {
   border-color: #555;
 }
-.page_addMember .addMember_box .addMember_list .cm_form .changesource .changebox.selected span.change_icon:after {
+.page_addMember .addMember_box .addMember_list .cm_form .changesource-wrapper .changebox.selected span.change_icon:after {
   content: "";
   width: 18px;
   height: 18px;
@@ -613,6 +615,15 @@
   display: inline-block;
   vertical-align: middle;
 }
+#maskBoard .box .close {
+  width: 15px;
+  height: 15px;
+  background: url("../images/icons_sprite/close_employee.png") no-repeat center center;
+  background-size: 100%;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
 #maskBoard .box .prime_price {
   margin-top: 10px;
   vertical-align: top;
@@ -754,7 +765,21 @@
   -webkit-border-radius: 3px;
   border: 1px solid #ddd;
 }
+#maskBoard .box .btngroup span:hover {
+  background-color: #f5f5f5;
+}
 #maskBoard .box .btngroup span.selected {
   background-color: #595959;
   color: #FFF;
+}
+#maskBoard .box .btngroup span.selected:hover {
+  background-color: #333333;
+}
+#maskBoard .box .toggleBox {
+  position: absolute;
+  bottom: 10px;
+  color: #222;
+  font-size: 14px;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }

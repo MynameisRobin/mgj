@@ -1,10 +1,18 @@
 (function(){
-	var self = am.page.payoutAndIncome = new $.am.Page({
-		id : "page_payout",
-		backButtonOnclick: function() {
-			$.am.page.back("slidedown");
-		},
+	var payoutAndIncome = function(opt){
+		this.$ = opt.$;
+		this.type = opt.type;
+		this.add = opt.add;
+		this.init();
+		this.reset();
+		this.getDeparList();
+		this.getDayExpendTypeList();
+	};
+
+	payoutAndIncome.prototype = {
 		init: function(){
+			var self = this;
+
 			this.$start = this.$.find('.start').mobiscroll().calendar({
 			    theme: 'mobiscroll',
 			    lang: 'zh',
@@ -13,10 +21,11 @@
 				// min: self.getStartMin(),
 			    max: amGloble.now(),
 			    setOnDayTap: true,
-			    buttons: [],
+				buttons: [],
+				endYear: amGloble.now().getFullYear()+50,
 			    onSet: function(valueText, inst) {
 			        console.log(valueText.valueText);
-			        self.$start.html(valueText.valueText);
+			        self.$start.html(new Date(valueText.valueText).format('yyyy.mm.dd'));
 			        var time = new Date(valueText.valueText);
 			        self.startTs = time.getTime();
 			        var start = self.$start.html().split('/').join(''),
@@ -38,10 +47,11 @@
 				// min: self.getStartMin(),
 			    max: amGloble.now(),
 			    setOnDayTap: true,
-			    buttons: [],
+				buttons: [],
+				endYear: amGloble.now().getFullYear()+50,
 			    onSet: function(valueText, inst) {
 			        console.log(valueText.valueText);
-			        self.$end.html(valueText.valueText);
+			        self.$end.html(new Date(valueText.valueText).format('yyyy.mm.dd'));
 			        var time = new Date(valueText.valueText);
 			        time.setHours(23);
 					time.setMinutes(59);
@@ -86,10 +96,24 @@
             		return;
             	}
             	self.getList();
-            });
-
-            this.$title = this.$.find('.am-header p');
-            this.$summary = this.$.find('.summary');
+			});
+			
+			this.$title = this.$.find('.am-header p');
+            this.$summary = this.$.find('.summary').vclick(function(){
+				if($(this).hasClass('toggle')){
+					if($(this).hasClass('open')){
+						$(this).removeClass('open');
+						self.$summaryMask.hide();
+					}else {
+						$(this).addClass('open');
+						self.$summaryMask.show();
+					}
+				}
+			});
+			this.$summaryMask = this.$.find('.summaryMask').vclick(function(){
+				self.$summary.removeClass('open');
+				$(this).hide();
+			});
             this.$form = this.$.find('.form');
             this.$formHeader = this.$form.find('.header');
             this.$formList = this.$form.find('.list');
@@ -98,20 +122,20 @@
 
             this.$suggest = this.$.find('.suggest');
             this.$empty = this.$.find('.empty');
-            this.$result = this.$.find('.result');
-
-            this.$introDetail = this.$.find('.introDetail').vclick(function(){
+			this.$result = this.$.find('.result');
+			
+			this.$introDetail = am.page.about.$.find('.introDetail').vclick(function(){
         		$(this).hide();
             });
             this.$introDetailText = this.$introDetail.find('.text');
 
-            this.$proofDetail = this.$.find('.proofDetail');
-            this.$proofMask = this.$.find('.mask').vclick(function(){
+            this.$proofDetail = am.page.about.$.find('.proofDetail');
+            this.$proofMask = am.page.about.$.find('.mask').vclick(function(){
             	self.closeProof();
             	self.closeEdit();
 			});
 			
-			this.$editContainer = this.$.find('.editContainer').on('vclick','.sure',function(){
+			this.$editContainer = am.page.about.$.find('.editContainer').on('vclick','.sure',function(){
 				var data = $(this).parents('.editContainer').data('data');
 				var editDate = {};
 				var operateDate = self.$editTime.html();
@@ -161,7 +185,8 @@
 				// min: self.getStartMin(),
 			    max: amGloble.now(),
 			    setOnDayTap: true,
-			    buttons: [],
+				buttons: [],
+				endYear: amGloble.now().getFullYear()+50,
 			    onSet: function(valueText, inst) {
 			        console.log(valueText.valueText);
 			        self.$editTime.html(valueText.valueText);
@@ -234,7 +259,7 @@
 	        this.$formList.on('vclick','.delete',function(){
 	        	var _this = $(this);
 	        	var data = _this.parents('.item').data('data');
-	        	console.log(data);
+				if(data.auditingFlag == 1) return am.msg("已对单状态不能删除单据");
 	        	if(am.operateArr.indexOf('H')==-1 && am.operateArr.indexOf('H1')==-1){
 	        		am.msg('您没有权限删除单据');
 	        		return;
@@ -246,10 +271,14 @@
 	        			am.msg('您只能删除3天内的单据');
 	        			return;
 	        		}
-	        	}
+				}
+				var des = '确定删除该条记录？';
+				if(data.payWay==2 || data.payWay==3){
+					des += '(该记录对应了收款)';
+				}
 	        	atMobile.nativeUIWidget.confirm({
                     caption: '删除记录',
-                    description: '确定删除该条记录？',
+                    description: des,
                     okCaption: '确定',
                     cancelCaption: '取消'
                 }, function(){
@@ -258,11 +287,15 @@
                     
                 });
 	        }).on('vclick','.proof',function(){
+				if($(this).hasClass('noProof')){
+					return;
+				}
 	        	var data = $(this).parents('.item').data('data');
 	        	console.log(data);
 	        	self.openProof(data);
 			}).on('vclick','.edit',function(){
-	        	var data = $(this).parents('.item').data('data');
+				var data = $(this).parents('.item').data('data');
+				if(data.auditingFlag == 1) return am.msg("已对单状态不能修改单据");
 	        	if(am.operateArr.indexOf('H')==-1 && am.operateArr.indexOf('H1')==-1){
 	        		am.msg('您没有权限修改单据');
 	        		return;
@@ -276,13 +309,13 @@
 	        		}
 	        	}
 	        	self.openEdit(data);
-			}).on('vclick','.intro p:nth-child(2)',function(){
+			}).on('vclick','.intro p:nth-child(3)',function(){
 	        	if(!$(this).next()){
 	        		return;
 	        	}
-	        	var w = $(this).width();
+	        	var w = $(this).width(),
 	        		t = $(this).offset().top,
-	        		l = $(this).offset().left,
+	        		l = $(this).offset().left-75,
 	        		text = $(this).html();
 	        	self.$introDetail.show();
 	        	self.$introDetailText.html(text).css({
@@ -293,12 +326,30 @@
 	        	self.$introDetailText.css({
 	        		'left': l-(self.$introDetailText.outerWidth()-w)/2+'px'
 	        	});
-	        });
+			}).on('vclick','.intro p:nth-child(1)',function(){
+				var id = $(this).data('id');
+	        	$.am.changePage(am.page.memberDetails, "slideup",{
+                    customerId:id,
+                    tabId:1
+                });
+			});
+
+			this.$.find('.add').vclick(function(){
+				self.add && self.add();
+			});
+			
+			if(this.type == 2){
+				this.$form.removeClass('income');
+				this.$formHeader.find('div:nth-child(2)').html('支出类型');
+			}else if(this.type == 1){
+				this.$form.addClass('income');
+				this.$formHeader.find('div:nth-child(2)').html('收入类型');
+			}
 		},
-		beforeShow: function(paras){
+		reset:function(){
 			var today = new Date();
-			this.$start.html(today.format('yyyy/mm/dd'));
-			this.$end.html(today.format('yyyy/mm/dd'));
+			this.$start.html(today.format('yyyy.mm.dd'));
+			this.$end.html(today.format('yyyy.mm.dd'));
 			today.setHours(0);
 			today.setMinutes(0);
 			today.setSeconds(0);
@@ -307,18 +358,6 @@
 			today.setMinutes(59);
 			today.setSeconds(59);
 			this.endTs = today.getTime();
-
-			if(paras=='payout'){
-				this.$title.html('支出查询');
-				this.type = 2;
-				this.$form.removeClass('income');
-				this.$formHeader.find('div:nth-child(2)').html('支出类型');
-			}else if(paras=='income'){
-				this.$title.html('收入查询');
-				this.type = 1;
-				this.$form.addClass('income');
-				this.$formHeader.find('div:nth-child(2)').html('收入类型');
-			}
 
 			this.$suggest.show();
 			this.$empty.hide();
@@ -330,43 +369,43 @@
 			this.$dep.find('.select').html('全部');
 			this.$type.find('.select').html('全部');
 		},
-		afterShow: function(paras){
-			if(!this.deparList){
-				this.deparList = JSON.parse(JSON.stringify(am.metadata.deparList));
-				this.deparList.unshift({
-					name:'全部',
-					code: null
-				});
-			}
+		getDeparList:function(){
+			this.deparList = JSON.parse(JSON.stringify(am.metadata.deparList));
+			this.deparList.unshift({
+				name:'全部',
+				code: null
+			});
+		},
+		getDayExpendTypeList:function(){
 			this.dayExpendTypeList = [];
 			for(var i=0;i<am.metadata.dayExpendTypeList.length;i++){
-				if(paras=='payout'){
+				if(this.type==2){
 					if(am.metadata.dayExpendTypeList[i].dayexpendtypeid!=5){
 						this.dayExpendTypeList.push(am.metadata.dayExpendTypeList[i]);
 					}
-				}else if(paras=='income'){
+				}else if(this.type==1){
 					if(am.metadata.dayExpendTypeList[i].dayexpendtypeid==5){
 						this.dayExpendTypeList.push(am.metadata.dayExpendTypeList[i]);
 					}
 				}
+			}
+			if(this.type==1){
+				this.dayExpendTypeList.unshift({
+					name:'特权卡开通',
+					id: -10086
+				});
+				this.dayExpendTypeList.unshift({
+					name:'特权卡续费',
+					id: -10087
+				})
 			}
 			this.dayExpendTypeList.unshift({
 				name:'全部',
 				id: null
 			})
 		},
-		beforeHide: function(){
-
-		},
-		afterHide: function(){
-			
-		},
-		// getStartMin:function(){
-		// 	var today = new Date();
-		// 	today.setMonth(today.getMonth()-1);
-		// 	return new Date(today);
-		// },
 		getList:function(){
+			var self = this;
 			am.loading.show();
 			this.scroll.scrollTo('top');
 			am.api.queryData.exec({
@@ -393,33 +432,53 @@
 				}
 			});
 		},
+		payTypes: ['现金','银联','微信','支付宝','大众点评'],
 		render:function(data){
 			this.$suggest.hide();
+			this.$summaryMask.hide();
+			this.$summary.removeClass('toggle open');
 			if(data.list.length){
 				//统计
-				var firstLine = '<div class="wrap"><p>总笔数：<span>'+data.totalCount+'笔</span></p><p>总金额：<span>'+Number(data.totalMoney).toFixed(2)+'元</span></p></div>';
+				var firstLine = '<div class="wrap"><p>总金额：<span>'+Number(data.totalMoney).toFixed(2)+'元</span></p><p>总笔数：<span>'+data.totalCount+'笔</span></p></div>';
 				var secondLine = '';
 				for(var i=0;i<data.typeList.length;i++){
 					secondLine += '<p>'+this.getDayExpendNameByType(data.typeList[i].dayExpendType)+'：<span>'+Number(data.typeList[i].price).toFixed(2)+'元</span></p>'
 				}
-				secondLine = '<div class="wrap">'+secondLine+'</div>';
+				secondLine = '<div class="wrap"><div class="clearfix inner">'+secondLine+'</div></div>';
 				this.$summary.html(firstLine+secondLine);
-
+				
 				//列表
 				this.$formList.empty();
 				for(var i=0;i<data.list.length;i++){
 					var $li = this.$li.clone();
-					$li.find('.operateDate').html(new Date(data.list[i].operateDate*1).format('yyyy/mm/dd'));
+					var auditStr = "";
+					if(data.list[i].auditingFlag == 1){
+						auditStr = "<span class='freezeSpan iconfont icon-gou'></span>";
+					}
+					if(data.list[i].payWay == "5"){
+						data.list[i].payWay = "1";
+					}
+					$li.find('.operateDate').html(auditStr + new Date(data.list[i].operateDate*1).format('yyyy.mm.dd'));
 					$li.find('.dayExpendType').html(this.getDayExpendNameByType(data.list[i].dayExpendType));
+					$li.find('.payType').html(this.payTypes[data.list[i].payWay] || '--');
 					$li.find('.price').html(Number(data.list[i].price).toFixed(2));
 					$li.find('.depcode').html(this.getDepNameByCode(data.list[i].depcode));
 					$li.find('.seFlag').html(data.list[i].seFlag==0?'从备用金':'从营收');
-					$li.find('.intro p').html(data.list[i].intro || '--');
+					$li.find('.intro p:nth-child(2),.intro p:nth-child(3)').html(data.list[i].intro || '--');
 					$li.find('.operateName').html(data.list[i].operateName);
 					if(!data.list[i].profile){
-						$li.find('.proof').remove();
+						$li.find('.proof').text('--').addClass('noProof');
 					}
 					$li.data('data',data.list[i]);
+
+					if(data.list[i].memberid){
+						$li.find('.intro').addClass('rebate');
+						$li.find('.intro p:nth-child(1)').data('id',data.list[i].memberid)
+						$li.find('.intro p:nth-child(1)').text(data.list[i].membername);
+					}else {
+						$li.find('.intro').removeClass('rebate');
+					}
+
 					this.$formList.append($li);
 				}
 				this.scroll.refresh();
@@ -429,11 +488,17 @@
 
 				var lis = this.$formList.find('li');
 				for(var i=0;i<lis.length;i++){
-					var w1 =$(lis[i]).find('.intro p:nth-child(1)').width(),
-						w2 = $(lis[i]).find('.intro p:nth-child(2)').width();
+					var w1 =$(lis[i]).find('.intro p:nth-child(2)').width(),
+						w2 = $(lis[i]).find('.intro p:nth-child(3)').width();
 					if(w1<=w2){
-						$(lis[i]).find('.triangle').remove().end().find('p').removeClass('am-clickable');
+						$(lis[i]).find('.triangle').remove().end().find('p:nth-child(3)').removeClass('am-clickable');
 					}
+				}
+
+				var _h = this.$summary.find('.wrap:last-child p').height(),
+					_th = this.$summary.find('.wrap:last-child .inner').height();
+				if(_th>2*_h){
+					this.$summary.addClass('toggle');
 				}
 			}else {
 				this.$result.hide();
@@ -441,6 +506,7 @@
 			}
 		},
 		deleteRecord:function(data){
+			var self = this;
 			am.loading.show();
 			am.api.delExps.exec({
 				id: data.id
@@ -464,11 +530,25 @@
 			});
 		},
 		openProof:function(data){
-			this.$proofMask.show();
-			this.$proofDetail.addClass('active');
+			// this.$proofMask.show();
+			// this.$proofDetail.addClass('active');
 			this.$proofDetail.html(am.photoManager.createImage("voucher", {
                 parentShopId: am.metadata.userInfo.parentShopId,
-            }, data.profile, 'm'));
+			}, data.profile, 'l'));
+			var src = this.$proofDetail.find('img').attr('src');
+			var items = [];
+			var idx = 0;
+			items.push({
+				src: src,
+				w: 1024,
+				h: 1024
+			});
+			self.pswpTimer && clearTimeout(self.pswpTimer);
+			am.loading.show();
+			self.pswpTimer = setTimeout(function () {	
+				am.loading.hide();
+				am.pswp(items, idx);
+			}, 800);
 		},
 		closeProof:function(){
 			this.$proofMask.hide();
@@ -502,7 +582,7 @@
 					this.$editDelProof.hide();
 				}
 			}
-			this.$editTime.html(new Date(data.operateDate*1).format('yyyy/mm/dd'));
+			this.$editTime.html(new Date(data.operateDate*1).format('yyyy.mm.dd'));
 			this.$editMoney.val(data.price);
 			this.$editDepart.html(this.getDepNameByCode(data.depcode)).data('depcode',data.depcode);
 			this.$editDes.val(data.intro);
@@ -512,10 +592,21 @@
 			this.$editContainer.removeClass('active');
 		},
 		getDayExpendNameByType:function(type){
+			var types = am.metadata.dayExpendTypeList;
+			types = types.concat([
+				{
+					name:'特权卡开通',
+					id: -10086
+				},
+				{
+					name:'特权卡续费',
+					id: -10087
+				}
+			]);
 			var name = '';
-			for(var i=0;i<am.metadata.dayExpendTypeList.length;i++){
-				if(am.metadata.dayExpendTypeList[i].id==type){
-					name = am.metadata.dayExpendTypeList[i].name;
+			for(var i=0;i<types.length;i++){
+				if(types[i].id==type){
+					name = types[i].name;
 				}
 			}
 			return name || '--';
@@ -536,6 +627,7 @@
 			return dateObj.getTime();
 		},
 		addExps: function(data){
+			var self = this;
 			am.loading.show();
 			am.api.editExps.exec({
 				parentShopId:  am.metadata.userInfo.parentShopId,
@@ -574,5 +666,7 @@
 				}
 			});		
 		}
-	});
+	}
+
+	$.am.payoutAndIncome = payoutAndIncome;
 })();

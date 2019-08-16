@@ -112,22 +112,15 @@
   width: 38px;
   height: 38px;
 }
-.page_member .search_box .searchinput .ty_inputbox_icon:after {
-  content: "";
-  width: 29px;
-  height: 29px;
-  margin-left: 3.5px;
-  margin-top: 4.5px;
-  vertical-align: middle;
-  display: inline-block;
-  background: url("../images/icons_sprite/searchMember_serch.png") no-repeat 0px 0px;
-  background-size: 29px 29px;
-}
 .page_member .search_box .searchinput .ty_inputbox_icon.am-clickable-active {
   opacity: 0.7;
 }
 .page_member .cardtotal_box {
-  margin: 0 24px;
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  top: 115px;
+  z-index: 9;
   padding-left: 12px;
   height: 43px;
   line-height: 43px;
@@ -137,9 +130,17 @@
 }
 .page_member .cardtotal_box span {
   margin-right: 25px;
+  display: none;
 }
 .page_member .cardtotal_box.hide {
   display: none;
+}
+.page_member .cardtotal_box .checkSummary {
+  display: inline-block;
+  height: 43px;
+  font-size: 14px;
+  color: #1fb2f3;
+  line-height: 43px;
 }
 .page_member .remarkDetail {
   position: absolute;
@@ -149,6 +150,7 @@
   top: 0;
   background-color: rgba(0, 0, 0, 0.2);
   display: none;
+  z-index: 9;
 }
 .page_member .remarkDetail .textwrap {
   position: absolute;
@@ -250,6 +252,7 @@
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.2);
   display: none;
+  z-index: 10;
 }
 .page_member .search_popup_wrap {
   position: absolute;
@@ -262,6 +265,7 @@
   background-color: #fff;
   transition: 0.3s all ease;
   -webkit-transition: 0.3s all ease;
+  z-index: 10;
 }
 .page_member .search_popup_wrap .content_inner {
   margin: 10px 25px;
@@ -478,7 +482,7 @@
   vertical-align: middle;
   white-space: nowrap;
 }
-.page_member .search_popup_wrap .item .freebox span:nth-child(2n+1) {
+.page_member .search_popup_wrap .item .freebox span:nth-child(2n + 1) {
   width: 44%;
 }
 .page_member .search_popup_wrap .item .freebox span:nth-child(2n) {
@@ -620,7 +624,7 @@
   position: absolute;
   width: 0;
   height: 0;
-  border: 8px solid #00B3EA;
+  border: 8px solid #00b3ea;
   border-top-color: transparent;
   border-left-color: transparent;
   margin: 25px 0 0 -16px;
@@ -642,7 +646,7 @@
   top: 32px;
   bottom: 0px;
 }
-.page_member .contentbox .table-content-list tr:nth-child(2n+1) {
+.page_member .contentbox .table-content-list tr:nth-child(2n + 1) {
   background-color: #f7f7f7;
 }
 .page_member .contentbox .table-content-list td {
@@ -660,6 +664,23 @@
   text-overflow: ellipsis;
   vertical-align: middle;
   text-align: left;
+}
+.page_member .contentbox .table-content-list td .tdwrap .name {
+  width: calc(100% - 30px);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+  text-align: left;
+  display: inline-block;
+}
+.page_member .contentbox .table-content-list td .tdwrap .icon-good {
+  width: 17px;
+  height: 16px;
+  display: inline-block;
+  background-size: cover;
+  vertical-align: -3px;
+  cursor: pointer;
 }
 .page_member .contentbox .table-content-list td .tdwrap.operate span {
   color: #999;
@@ -709,6 +730,13 @@
   background: url("../images/icons_sprite/del_icon.png") no-repeat 0px 0px;
   background-size: 15px 15px;
 }
+.page_member .contentbox .table-content-list td .tdwrap.operate span.del_restore {
+  margin: 0 auto;
+}
+.page_member .contentbox .table-content-list td .tdwrap.operate span.del_restore:after {
+  background: url(../images/bill/backout.png) no-repeat 0 0;
+  background-size: 15px 15px;
+}
 .page_member .contentbox .table-content-list tr td:nth-child(1) {
   width: 12%;
 }
@@ -728,16 +756,19 @@
   width: 8%;
 }
 .page_member .contentbox .table-content-list tr td:nth-child(7) {
-  width: 9%;
+  width: 11%;
 }
 .page_member .contentbox .table-content-list tr td:nth-child(8) {
   width: 7%;
 }
 .page_member .contentbox .table-content-list tr td:nth-child(9) {
-  width: 10%;
+  width: 11%;
 }
 .page_member .contentbox .table-content-list tr td:nth-child(10) {
-  width: 18%;
+  width: 15%;
+}
+.page_member .contentbox .table-content-list .none {
+  display: none;
 }
 .page_member .contentbox.del .table-content-head tr td:nth-child(1),
 .page_member .contentbox.del .table-content-list tr td:nth-child(1) {
@@ -745,7 +776,7 @@
 }
 .page_member .contentbox.del .table-content-head tr td:nth-child(2),
 .page_member .contentbox.del .table-content-list tr td:nth-child(2) {
-  width: 10%;
+  width: 6%;
 }
 .page_member .contentbox.del .table-content-head tr td:nth-child(3),
 .page_member .contentbox.del .table-content-list tr td:nth-child(3) {
@@ -753,15 +784,15 @@
 }
 .page_member .contentbox.del .table-content-head tr td:nth-child(4),
 .page_member .contentbox.del .table-content-list tr td:nth-child(4) {
-  width: 10%;
+  width: 8%;
 }
 .page_member .contentbox.del .table-content-head tr td:nth-child(5),
 .page_member .contentbox.del .table-content-list tr td:nth-child(5) {
-  width: 10%;
+  width: 9%;
 }
 .page_member .contentbox.del .table-content-head tr td:nth-child(6),
 .page_member .contentbox.del .table-content-list tr td:nth-child(6) {
-  width: 13%;
+  width: 8%;
 }
 .page_member .contentbox.del .table-content-head tr td:nth-child(7),
 .page_member .contentbox.del .table-content-list tr td:nth-child(7) {
@@ -769,16 +800,16 @@
 }
 .page_member .contentbox.del .table-content-head tr td:nth-child(8),
 .page_member .contentbox.del .table-content-list tr td:nth-child(8) {
-  width: 10%;
+  width: 7%;
 }
 .page_member .contentbox.del .table-content-head tr td:nth-child(9),
 .page_member .contentbox.del .table-content-list tr td:nth-child(9) {
-  width: 10%;
-  border-right-color: transparent;
+  width: 11%;
 }
 .page_member .contentbox.del .table-content-head tr td:nth-child(10),
 .page_member .contentbox.del .table-content-list tr td:nth-child(10) {
-  display: none;
+  width: 10%;
+  border-right-color: transparent;
 }
 .page_member .contentbox .table-content-head {
   line-height: 32px;
@@ -824,16 +855,16 @@
   width: 8%;
 }
 .page_member .contentbox .table-content-head tr td:nth-child(7) {
-  width: 9%;
+  width: 11%;
 }
 .page_member .contentbox .table-content-head tr td:nth-child(8) {
   width: 7%;
 }
 .page_member .contentbox .table-content-head tr td:nth-child(9) {
-  width: 10%;
+  width: 11%;
 }
 .page_member .contentbox .table-content-head tr td:nth-child(10) {
-  width: 18%;
+  width: 15%;
 }
 .page_member .footcontent {
   height: 85px;
@@ -906,4 +937,45 @@
 .pagerBox .centerBox .inputBox input {
   width: 120px;
   height: 28px;
+}
+.page_member .search_box .searchinput .ty_inputbox_icon svg {
+  width: 29px;
+  height: 29px;
+  margin-left: 3.5px;
+  margin-top: 4.5px;
+  vertical-align: middle;
+  display: inline-block;
+}
+.page_member .contentbox .table-content-list td .tdwrap .icon-good svg {
+  width: 17px;
+  height: 16px;
+  display: inline-block;
+  background-size: cover;
+  cursor: pointer;
+}
+.list-select {
+  position: absolute;
+  z-index: 999;
+  max-height: 1000px;
+  overflow: hidden;
+  background: #fff;
+  display: none;
+  box-sizing: border-box;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
+.list-select .list-ul {
+  list-style: none;
+  font-size: 0;
+}
+.list-select .list-ul .item-li {
+  height: 26px;
+  line-height: 26px;
+  padding-left: 13px;
+  font-size: 12px;
+  color: #999999;
+}
+.list-select .list-ul .item-li.am-clickable-active {
+  background: #f7f7f7;
 }

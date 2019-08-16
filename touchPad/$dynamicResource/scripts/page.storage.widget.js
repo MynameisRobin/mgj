@@ -10,13 +10,23 @@
             this.getDataAndRender();
             this.cb = cb;
             if(this.$li.data('data').status==0){
-                this.$.find(".DeleteBill").show();
+                if(amGloble.metadata.userInfo.operatestr.indexOf(',J,')!=-1){
+                    this.$.find(".DeleteBill").show();
+                }else {
+                    this.$.find(".DeleteBill").hide();
+                }
                 this.$.find(".AuditBill").show();
                 this.$.find(".CancelBill").hide();
             }else if(this.$li.data('data').status==1){
                 this.$.find(".DeleteBill").hide();
                 this.$.find(".AuditBill").hide();
                 this.$.find(".CancelBill").show();
+            }
+            var data=this.$li.data('data');
+            if(data.outwaretype==11 && data.billId){
+                // 随套餐出库的出库单不能审核和反审
+                this.$.find(".AuditBill").hide();
+                this.$.find(".CancelBill").hide();
             }
         },
         initEventBind:function(){
@@ -133,7 +143,7 @@
                     this.$emp.text(this.getShopName(data.toshopid)).prev().html('调入门店：').parent().show();
                 }else if(data.outwaretype==4 || data.outwaretype==8 || data.outwaretype==6 || data.outwaretype==7){
                     this.$emp.text(am.metadata.empMap[data.employeeid].name).prev().html('员<b style="visibility: hidden;">占位</b>工：').parent().show();
-                }else {
+                }else{
                     this.$emp.parent().hide();
                 }
             }
@@ -212,7 +222,9 @@
             am.loading.show();
             var index = am.page.storage.$.find('.nav .active').index();
             var apiName = '';
-            var para = {};
+            var para = {
+                shopId: amGloble.metadata.userInfo.shopId
+            };
             if(index==2){
                 apiName = 'storageOutDelete';
                 para.outdepot = {};
@@ -538,6 +550,7 @@
                                 //controls: ['calendar', 'time'],
                                 setOnDayTap: true,
                                 buttons: [],
+                                endYear: amGloble.now().getFullYear()+50,
                                 onSet: function(valueText, inst) {
                                     _this.updateTime(valueText,inst);
                                 }

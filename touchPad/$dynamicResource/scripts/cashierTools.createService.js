@@ -51,6 +51,19 @@ am.createService = {
                 _this.$.find('.sure_btn').trigger('vclick');
             }
         }).val('');
+
+        this.$autoDisplayId = this.$.find('.autoDisplayId').vclick(function(){
+            if($(this).hasClass('autoId')){
+                $(this).removeClass('autoId');
+                am.page.openbill.$autoDisplayId.removeClass('autoId');
+                localStorage.setItem('autoDisplayId'+amGloble.metadata.userInfo.userId,false);
+            }else {
+                $(this).addClass('autoId');
+                am.page.openbill.$autoDisplayId.addClass('autoId');
+                localStorage.setItem('autoDisplayId'+amGloble.metadata.userInfo.userId,true);
+                _this.setAutoId();
+            }
+        });
     },
     show:function(opt,cb){
         if(!this.$){
@@ -77,6 +90,20 @@ am.createService = {
         this.$.show();
         this.isWin==true && this.$.find('.input_no').focus();
         this.cb = cb;
+
+        if(amGloble.metadata.shopPropertyField.mgjBillingType != 1){
+            this.$autoDisplayId.hide();
+        }else {
+            this.$autoDisplayId.show();
+        }
+
+        var autoDisplayId = localStorage.getItem('autoDisplayId'+amGloble.metadata.userInfo.userId);
+        if(autoDisplayId=='true'){
+            this.$autoDisplayId.addClass('autoId');
+            this.setAutoId();
+        }else {
+            this.$autoDisplayId.removeClass('autoId');
+        }
     },
     hide:function(type,num){
         if(type&&type==1&&num){
@@ -108,6 +135,16 @@ am.createService = {
             return 0;
         }else{
             return 2;
+        }
+    },
+    setAutoId:function(){
+        if(amGloble.metadata.shopPropertyField.mgjBillingType == 1 && (!am.page.openbill.paras.rowdata || !am.page.openbill.paras.rowdata.displayId)){
+            var $enables = this.$ul.find('li:not(.am-disabled)');
+            if($enables.length){
+                this.hide(1,$enables.eq(0));
+            }else {
+                am.msg('没有空闲手牌');
+            }
         }
     }
 };

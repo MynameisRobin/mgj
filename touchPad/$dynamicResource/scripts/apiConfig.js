@@ -1,5 +1,32 @@
 ﻿(function() {
     var self = (am.api = {
+        relatePay:new Api({
+            serviceName: "mgj-cashier/bill/ContactPayOrderDetail"
+        }),
+        updTreatShops:new Api({
+            serviceName: "mgj-cashier/setting/updTreatShops"
+        }),
+        optimizeCardandCustomer:new Api({
+            serviceName: "mgj-cashier/member/getAllBySolr"
+        }),
+        optimizeSearchCard:new Api({
+            serviceName: "mgj-cashier/member/shopMemberCardSolr"
+        }),
+        optimizeSearchCustomer:new Api({
+            serviceName: "mgj-cashier/member/shopMemebersolr"
+        }),
+        getGoodsNum:new Api({
+            serviceName: "mgj-cashier/storage/getNum"
+        }),
+        verificationRedPocket: new Api({
+            serviceName: "mgj-cashier/member/checkluckyMoney"
+        }),
+        addVacation: new Api({
+            serviceName: "mgj-cashier/vacation/addVacation"
+        }),
+        delVacation: new Api({
+            serviceName: "mgj-cashier/vacation/deleteVacation"
+        }),
         sendMemPwd: new Api({
             serviceName: "mgj-cashier/sms/sendMemPwd"
         }),
@@ -24,6 +51,21 @@
         }),
         updatelastphototime: new Api({
             serviceName: "mgj-cashier/member/updatelastphototime"
+		}),
+		posPrecreate: new Api({
+            serviceName: "mgj-cashier/pay/union/precreate"
+        }),
+        posQuery: new Api({
+            serviceName: "mgj-cashier/pay/union/query"
+        }),
+        posRefund: new Api({
+            serviceName: "mgj-cashier/pay/union/refund"
+        }),
+        wechatRefund: new Api({
+            serviceName: "mgj-cashier/pay/wechat/refund"
+        }),
+        wechatQrpay: new Api({
+            serviceName: "mgj-cashier/pay/wechat/qrpay"
         }),
         wechatPay: new Api({
             serviceName: "mgj-cashier/pay/wechat/pay"
@@ -55,6 +97,21 @@
         alipayQrpay: new Api({
             serviceName: "mgj-cashier/pay/alipay/qrpay"
         }),
+        jdPay: new Api({
+            serviceName: "mgj-cashier/pay/jd/pay"
+        }),
+        jdQuery: new Api({
+            serviceName: "mgj-cashier/pay/jd/query"
+        }),
+        jdCancel: new Api({
+            serviceName: "mgj-cashier/pay/jd/cancel"
+        }),
+        jdRefund: new Api({
+            serviceName: "mgj-cashier/pay/jd/refund"
+        }),
+        jdQrpay: new Api({
+            serviceName: "mgj-cashier/pay/jd/qrpay"
+        }),
         dpPay: new Api({
             serviceName: "mgj-cashier/pay/dianping/pay"
         }),
@@ -82,11 +139,18 @@
         hangupDelete: new Api({
             serviceName: "mgj-cashier/instoreService/delete"
         }),
+        //删除待开单的单
+        deleteInstoreServices: new Api({
+            serviceName: "mgj-cashier/instoreService/deleteInstoreServices"
+        }),
         memberList: new Api({
             serviceName: "mgj-cashier/member/list"
         }),
         cardList: new Api({
             serviceName: "mgj-cashier/member/cardList"
+        }),
+        cardListTemp: new Api({
+            serviceName: "mgj-cashier/member/summary"
         }),
         //积分兑换
         expendPoint: new Api({
@@ -97,16 +161,25 @@
         }),
         updateMemberSms: new Api({
             serviceName: "mgj-cashier/member/updateMemberSms"
-        }),
+		}),
+		memberLocking: new Api({
+			serviceName: "mgj-cashier/member/locking"
+		}),
         queryDebt: new Api({
             serviceName: "mgj-cashier/member/queryDebt"
         }),
         repayDebt: new Api({
             serviceName: "mgj-cashier/member/repay"
         }),
+        checkBillNo: new Api({
+            serviceName: "mgj-cashier/bill/checkBillNo",
+        }),
         billCheck: new Api({
             serviceName: "mgj-cashier/bill/check",
             md5: 1
+        }),
+        checkCardAboutCurrentDay: new Api({
+            serviceName: "mgj-cashier/bill/checkCardAboutCurrentDay"
         }),
         mutiBillCheck: new Api({
             serviceName: "mgj-cashier/bill/checks",
@@ -121,6 +194,12 @@
         dpConsumeCoupon: new Api({
             serviceName: "mgj-cashier/pay/dianping/consumeCoupon"
         }),
+        kbQueryCoupon: new Api({
+            serviceName: "mgj-cashier/pay/queryKoubei"
+        }),
+        kbConsumeCoupon: new Api({
+            serviceName: "mgj-cashier/pay/useKoubei"
+        }),
         inventionList: new Api({
             serviceName: "mgj-cashier/member/inventionList"
         }),
@@ -130,8 +209,27 @@
         listService: new Api({
             serviceName: "mgj-cashier/member/listService"
         }),
+        //套餐消耗记录
+        consumption: new Api({
+            serviceName: "mgj-cashier/member/treatmentitemConsume"
+		}),
+		//积分记录
+		pointRecord: new Api({
+            serviceName: "mgj-cashier/member/queryPoint"
+		}),
+		// 赠送积分
+		sendPoint: new Api({
+			serviceName: "mgj-cashier/member/sendPointManual"
+		}),
+        //卡金变动流水
+        goldCard: new Api({
+            serviceName: "mgj-cashier/member/memberCardChange"
+        }),
         billRecord: new Api({
             serviceName: "mgj-cashier/bill/billcheck"
+        }),
+        billRepeatRecord: new Api({
+            serviceName: "mgj-cashier/bill/billcheckrepeat"
         }),
         createMember: new Api({
             serviceName: "mgj-cashier/member/createMember"
@@ -152,6 +250,12 @@
         reservationList: new Api({
             serviceName: "mgj-cashier/reservation/reservationList"
         }),
+        queryMemberReservation: new Api({
+            serviceName: "mgj-cashier/reservation/queryMemberReservation"
+        }),
+        offReservationReject: new Api({
+            serviceName: "mgj-cashier/member/offReservationReject"
+        }),
         reservationChangestatus: new Api({
             serviceName: "mgj-cashier/reservation/reservationChangeStatus"
         }),
@@ -163,6 +267,9 @@
         }),
         getShopReservationsNum: new Api({
             serviceName: "mgj-cashier/reservation/getShopReservationsNum"
+        }),
+        reservationUpdateComment: new Api({
+            serviceName: "mgj-cashier/reservation/updateComment"
         }),
         itemOfCard: new Api({
             serviceName: "mgj-cashier/member/itemOfCard"
@@ -189,6 +296,10 @@
         getdianpingFlow: new Api({
             //点评
             serviceName: "mgj-cashier/flow/dianpingFlow"
+        }),
+        getkoubeiFlow: new Api({
+            //口碑
+            serviceName: "mgj-cashier/flow/koubeiFlow"
         }),
         getexceptionFlow: new Api({
             //异常单
@@ -229,6 +340,9 @@
         }),
         memberUpdatepage: new Api({
             serviceName: "mgj-cashier/member/updatepage"
+        }),
+        editMemberCardId: new Api({
+            serviceName: "mgj-cashier/member/editMemberCardId" //修改会员卡
         }),
         billUpd: new Api({
             serviceName: "mgj-cashier/bill/upd"
@@ -333,7 +447,7 @@
             serviceName: "mgj-cashier/member/delMemberCard"
         }),
         backCombo: new Api({
-            //退疗程
+            //退套餐
             serviceName: "mgj-cashier/member/returnTreatItems"
         }),
         commentService: new Api({
@@ -351,7 +465,15 @@
         //开通/延期会员特权卡
         editPrivilege: new Api({
             serviceName: "mgj-cashier/member/addPrivilege"
-        }),
+		}),
+		//获取跨店规则
+		cardUpDetail: new Api({
+            serviceName: "mgj-cashier/member/cardUpDetail"
+		}),
+		//获取跨店规则
+		treatDetail: new Api({
+			serviceName: "mgj-cashier/member/treatDetail"
+		}),
         //轮牌
         queueList: new Api({
             serviceName: "mgj-cashier/rotateUser/list"
@@ -407,9 +529,74 @@
         workTipCount: new Api({
             serviceName: "mgj-cashier/workorder/tipCount"
         }),
+        // 我的未处理投诉数
+        sueCount: new Api({
+            serviceName: "mgj-cashier/sue/processNum"
+        }),
+        // 我的投诉列表
+        sueQuery: new Api({
+            serviceName: "mgj-cashier/sue/mySue"
+        }),
+        // 投诉客服和销售
+        sueData: new Api({
+            serviceName: "mgj-cashier/sue/getOrgemp"
+        }),
+        // 添加投诉
+        sueCreate: new Api({
+            serviceName: "mgj-cashier/sue/addSue"
+        }),
+        // 接受投诉处理结果
+        sueUpdate: new Api({
+            serviceName: "mgj-cashier/sue/sureState"
+        }),
+        // 处理详情
+        sueInfo: new Api({
+            serviceName: "mgj-cashier/sue/info"
+        }),
         // 设置normalConfig
         saveNormalConfig: new Api({
             serviceName: "mgj-cashier/normalConfig/insertOrUpdateConfig"
+        }),
+        // 查询设置过期服务小红点
+        instoreServiceCount: new Api({
+            serviceName: "mgj-cashier/instoreService/count"
+        }),
+        // 查询用户体验项目的剩余次数
+        getConsumeCount: new Api({
+            serviceName: 'mgj-cashier/item/consumeCount'
+        }),
+        // 送红包
+        sendRedPacket: new Api({
+            serviceName: 'mgj-cashier/member/sendRedPacket'
+        }),
+        //恢复已删除顾客
+        resume: new Api({
+            serviceName: 'mgj-cashier/member/resume'
+        }),
+        refundVcCode: new Api({
+            serviceName: 'mgj-cashier/user/vc'
+        }),
+        synorderstatus: new Api({
+            serviceName: 'mgj-cashier/pay/synorderstatus'
+        }),
+        //查询门店抽奖方案
+        selectLotteryActivityConfig: new Api({
+            serviceName: 'mgj-cashier/lottery/selectLotteryActivityConfig'
+		}),
+		//发送验证码接口
+		sendCode: new Api({
+			serviceName: "mgj-cashier/member/sendCode"
+		}),
+		//校验验证码接口
+		checkCode: new Api({
+			serviceName:"mgj-cashier/member/checkCode"
+		}),
+        //配置桌位
+        addTables: new Api({
+            serviceName: 'mgj-cashier/setting/addTables'
+        }),
+        getTables: new Api({
+            serviceName: 'mgj-cashier/setting/getTables'
         }),
     });
 })();

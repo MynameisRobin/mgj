@@ -607,10 +607,10 @@
 			this.$app = $("div.am-app");
 			height = $.am.getInnerHeight();
 		},
-		back : function(animation) {
+		back : function(animation,param) {
 			animation = animation || "slideright";
 			if ($.am.history.length > 0) {
-				$.am.changePage($.am.history[$.am.history.length - 1], animation, "back");
+				$.am.changePage($.am.history[$.am.history.length - 1], animation, param||"back");
 				return true;
 			}
 			return false;

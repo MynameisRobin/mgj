@@ -1,5 +1,5 @@
 (function(){
-    var statusName = [null, "待客", "轮牌", "点客", "临休"];
+    var statusName = [null, "待客", "轮牌", "点客", "临休", "盖牌"];
 	var self = am.page.queue = new $.am.Page({
 		id: "page_queue",
 		init: function(){
@@ -9,17 +9,19 @@
             this.$list.empty();
 
             this.$tip = this.$.find('.tip');
+            this.$promotionMadal = this.$.find('#promotionMadal').hide();
 
 			this.$.find('.content').on('vclick','.add',function(){
                 var parent = $(this).parents('.wrapper'),
                     lis = parent.find('ul').children(':not(.add)');
                 self.loadingWrap = parent;
                 var roles = parent.data('data').role;
+                var referType = parent.data('data').referType;
                 var selectedUsers = [];
                 for(var i=0;i<lis.length;i++){
                     selectedUsers.push($(lis[i]).data('data'));
                 }
-                var empData = self.getAddedEmps(roles,selectedUsers);
+                var empData = self.getAddedEmps(roles,referType,selectedUsers);
                 if(empData.length){
     				am.addQueue.show({
     					title: '添加'+parent.find('.type').html(),
@@ -51,6 +53,9 @@
                             tail = $this.data('tail');
                         var queueRestType = $this.data('data');
                         if (command=='changeStatus') {
+							if(status == "2" && tail == "0"){
+								status = 5;
+							}
                             self.changeStatus(emp,status,data,tail,queueRestType);
                         } else if (command=='off') {
                             self.off(emp);
@@ -135,7 +140,7 @@
             this.$nav.empty();
             this.$tip.hide();
 		},
-        getAddedEmps:function(roles,selectedUsers){
+        getAddedEmps:function(roles,referType,selectedUsers){
             var arr = [];
             $.each(am.metadata.employeeList, function(i, item) {
                 //将已选择的过滤
@@ -154,7 +159,7 @@
                 if (roleIds && roleIds.length) {
                     for (var k = 0; k < roleIds.length; k++) {
                         var itemj = roleIds[k];
-                        if (itemj == item.pos+1) {
+                        if((referType==0 && itemj == item.pos+1) || (referType==1 && itemj == item.id)){
                             arr.push(item);
                         }
                     };
@@ -208,46 +213,48 @@
             }
             var cqueue = $card.parents('.wrapper').data('data');
 
-            var id = card.id;
-            var rotateId = cqueue.id;
-            //var tail = null;
-            var restTime = null;
-            var restType = null;
+            if (card&&card.id) {//fix bug 0015732
+                var id = card.id;
+                var rotateId = cqueue.id;
+                //var tail = null;
+                var restTime = null;
+                var restType = null;
 
-            if (status == 2) {
-                //轮牌自动到最后
-                tail = typeof(tail) == "undefined" ? 1 : tail;
-            } else if (status == 3) {
-                //点客是否翻牌
-                if (cqueue.turnOver) {
-                    tail = 1;
+                if (status == 2) {
+                    //轮牌自动到最后
+                    tail = typeof (tail) == "undefined" ? 1 : tail;
+                } else if (status == 3) {
+                    //点客是否翻牌
+                    if (cqueue.turnOver) {
+                        tail = 1;
+                    }
+                } else if (status == 4) {
+                    var restType = queueRestType;
+                    restTime = restType.time;
+                    restType = data;
                 }
-            } else if (status == 4) {
-                var restType = queueRestType;
-                restTime = restType.time;
-                restType = data;
+
+                self.loading.show();
+                am.api.queueStatus.exec({
+                    parentShopId: am.metadata.userInfo.parentShopId,
+                    shopId: am.metadata.userInfo.shopId,
+                    id: id,
+                    rotateId: rotateId,
+                    tail: tail,
+                    status: status,
+                    restTime: restTime,
+                    restType: restType
+                }, function (ret) {
+                    self.loading.hide();
+                    console.log(ret);
+                    if (ret && ret.code == 0) {
+                        am.msg('修改成功');
+                        self.getQueueList(true);
+                    } else if (ret && ret.code == -1) {
+                        am.msg(ret.message || '数据提交失败');
+                    }
+                });
             }
-
-            self.loading.show();
-            am.api.queueStatus.exec({
-                parentShopId: am.metadata.userInfo.parentShopId,
-                shopId:  am.metadata.userInfo.shopId,
-                id : id,
-                rotateId : rotateId,
-                tail : tail,
-                status : status,
-                restTime : restTime,
-                restType : restType
-            },function(ret){
-                self.loading.hide();
-                console.log(ret);
-                if(ret && ret.code == 0){
-                    am.msg('修改成功');
-                    self.getQueueList(true);
-                }else if(ret && ret.code == -1){
-                    am.msg(ret.message || '数据提交失败');
-                }
-            });
         },
         getQueueList: function(needLoading){
             if(this.$list.find('.shake').length){
@@ -264,7 +271,7 @@
                     self.loading.hide();
                 }
                 if(ret && ret.code == 0){
-                    self.hasSocket = false;
+					self.hasSocket = false;
                     self.renderQueue(ret.content);
                     if (self.timerRetry) {
                         clearTimeout(self.timerRetry);
@@ -331,11 +338,17 @@
                             item.diff = _diff;
 
                             if(_status){
-                                $li.addClass('status' + item.status)
+								$li.addClass('status' + item.status)
                                 $li.find('.status').html(statusName[item.status]);
                                 $li.find('.time').html(item.statusTime);
                             }else {
                                 $li.find('.time').hide();
+                            }
+                            // 如果时间和轮牌状态不显示，则轮牌的footer不显示
+                            if(!$li.find('.status').html()&&!$li.find('.time').is(':visible')){
+                                $li.find('.footer').hide();
+                            }else{
+                                $li.find('.footer').show();
                             }
                             
                             $li.data('data',item);
@@ -575,7 +588,7 @@
         show:function(opt){
         	if(!this.$){
         		this.init();
-        	}
+            }
             this.$ul.empty();
             this.callback = opt.callback;
             this.$title.html(opt.title);
@@ -599,12 +612,19 @@
 (function(){
     var editQueue = {
         init: function(){
+            var $promotion = '';
+            if(am.metadata.shopPropertyField != undefined && am.metadata.shopPropertyField.openSmallProgram) {
+                $promotion =  '<li data-command="changeStatus" data-status="4"><p>小程序码</p></li>';     
+
+            }
+
             var $dom = $('<div id="editQueue">'+
                 '<div class="mask"></div>'+
                 '<ul class="content">'+
+                    $promotion+
                     '<li data-command="changeStatus" data-status="2"><p>轮牌</p></li>'+      
                     '<li data-command="changeStatus" data-status="3"><p>点客</p></li>'+
-                    '<li>'+
+                    '<li data-status="5">'+
                         '<p>临休</p>'+
                         '<div class="second">'+
                             '<div class="second-content">'+
@@ -620,13 +640,37 @@
                 '</ul>'+
             '</div>');
             $('body').append($dom)
+            $dom.hide();
+            var $madal = $('<div class="promotionMadal" id="promotionMadal">'+
+                            '<div class="close iconfont icon-guanbi2  am-clickable"></div>'+
+                            '<div class="title">idull的推广码</div>'+
+                            '<div class="content">'+
+                                '<img/>'+
+                                '<div>微信扫码进入</div>'+
+                            '</div>'+
+                        '</div>')
+            $('body').append($madal)
+            $madal.hide();
             this.$ = $dom;
+            this.$madal = $madal;
             this.$content = this.$.find('.content');
             this.$second = this.$.find('.second');
-
+            var _this = this;
+            $madal.find('.close').vclick(function(){
+                $madal.hide();
+            })
             this.$firstLi = this.$.find('.content > li').vclick(function(){
-                var index = $(this).index();
-                if(index==2){
+                var data = _this.data;
+                var emp = am.metadata.empMap[data.empId];
+                if(am.metadata.shopPropertyField != undefined && am.metadata.shopPropertyField.openSmallProgram) {
+                    _this.$madal.find('.title').text('扫码享优惠');
+                    _this.$madal.find('img').attr('src',am.getMiniProCode(data.parentShopId,'pages/mall/index','3',emp.id,1)) 
+                }
+                var index = $(this).attr("data-status");
+                if(index ==4){
+                    $madal.show();
+                    editQueue.hide();
+                }else if(index==5){
                     if($(this).hasClass('active')){
                         return;
                     }
@@ -665,10 +709,25 @@
                 hasInput: false
             });
         },
+        closeMadal:function(){
+            this.$madal.hide();
+        },
+        showMadal:function(parentShopId,empId){
+            if(!this.$){
+                this.init();
+            }
+            var emp = am.metadata.empMap[empId];
+            this.$madal.find('.title').text('扫码享优惠');
+            this.$madal.find('img').attr('src',am.getMiniProCode(parentShopId,'pages/mall/index','3',emp.id,1)) 
+            this.$madal.show();
+        },
         show:function(opt){
             if(!this.$){
                 this.init();
             }
+            
+            // //更改推荐码的数据
+            this.data = opt.parent.data('data');
             this.$.show();
             this.$content.css({
                 left: 'auto',
@@ -686,7 +745,8 @@
                 this.$content.css({
                     left: left+'px',
                     top: 'auto',
-                    bottom: containerHeight - top - height*0.75 +'px'
+                    bottom: containerHeight - top +'px'
+                    // bottom: containerHeight - top - height*0.75 +'px'
                 }).addClass('down');
             }else {
                 this.$content.css({
@@ -698,6 +758,11 @@
             if(opt.status==0){
                 this.$content.children('li').hide();
                 this.$content.children('li:first-child,li:last-child').show();
+                if(am.metadata.shopPropertyField != undefined && am.metadata.shopPropertyField.openSmallProgram) {
+                    this.$content.children('li:nth-child(2)').show();
+                }
+                
+                
             }else {
                 this.$content.children('li').show();
             }

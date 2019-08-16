@@ -1,535 +1,1243 @@
 @import "var.less";
-@path:"../images/";
+@path: "../images/";
 @import "../images/icons_sprite.less";
 @import "../images/tipbg_sprite.less";
 @import "../images/tab_sprite.less";
 @import "../images/payIcon_sprite.less";
 
-.page_pay,.page_prepay{
-	.payDetail{
-		display: none;
-		.abs(@left:0;@right: 0;@top:0;@bottom: 0);
-		background: rgba(0,0,0,0);
-		-webkit-transition:background 0.25s ease-in;
-		&.dark{
-			background: rgba(0,0,0,0.4);
-		}
-		&.mixbottom{
-			top:51px;
-			bottom: 50px;
-			left:60%;
-			background: none;
-			-webkit-transition:none;
-			.onlinePay{
-				width: 100%;
-			}
-		}
-		.onlinePay{
-			// display: none;
-			height: 100%;
-			width: 40%;
-			background: @bg04;
-			text-align: center;
-			.abs(@right: 0;@top:0;);
-			transform: matrix3d(1, 0, 0, 0, 0,1, 0, 0, 0, 0,1, 0, 500, 0, 0, 1);
-			-webkit-transition:transform 0.25s ease-in;
-			&.show{
-				display: block;
-				transform: matrix3d(1, 0, 0, 0, 0,1, 0, 0, 0, 0,1, 0, 0, 0, 0, 1);
-			}
-			.paytitle{
-				padding-top: 40px;
-				font-size: @fs5;
-				line-height: 80px;
-				white-space: nowrap;
-				&::before{
-					content: "您当前正通过";
-					display: block;
-					line-height: 20px;
-					font-size: @fs2;
-					color: @c06;
-					position: relative;
-					top: 20px;
-				}
-				span{
-					display: inline-block;
-					white-space: nowrap;
-					&::before{
-						content: "";
-						width: 40px;
-						height: 40px;
-						float: left;
-						margin: 20px 5px 0 0;
-					}
-				}
-				strong{
-					&::before{
-						content: "￥";
-					}
-					font-weight: normal;
-					color: @c11;
-				}
-			}
-			.paycode{
-				width: 300px;
-				height: 44px;
-				border: 1px solid @bd03;
-				margin: 0 auto;
-				border-radius: 4px;
-				margin-bottom: 20px;
-				position: relative;
+.page_pay,
+.page_prepay,
+.page_addIncome {
+    .payDetail {
+        .mask {
+            .abs(@left:0; @right: 0; @top:0; @bottom: 0);
+        }
+        display: none;
+        .abs(@left:0; @right: 0; @top:0; @bottom: 0);
+        background: rgba(0, 0, 0, 0);
+        -webkit-transition: background 0.25s ease-in;
+        &.dark {
+            background: rgba(0, 0, 0, 0.4);
+        }
+        &.mixbottom {
+            top: 51px;
+            bottom: 50px;
+            left: 60%;
+            background: none;
+            -webkit-transition: none;
+            .onlinePay {
+                width: 100%;
+            }
+        }
+        .onlinePay {
+            // display: none;
+            height: 100%;
+            width: 40%;
+            background: @bg04;
+            text-align: center;
+            .abs(@right: 0; @top:0;);
+            transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 500, 0, 0, 1);
+            -webkit-transition: transform 0.25s ease-in;
+            &.show {
+                display: block;
+                transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+            }
+            .paytitle {
+                padding-top: 40px;
+                font-size: @fs5;
+                line-height: 80px;
+                white-space: nowrap;
+                &::before {
+                    content: "您当前正通过";
+                    display: block;
+                    line-height: 20px;
+                    font-size: @fs2;
+                    color: @c06;
+                    position: relative;
+                    top: 20px;
+                }
+                span {
+                    display: inline-block;
+                    white-space: nowrap;
+                    vertical-align: top;
+                    &::before {
+                        content: "";
+                        width: 40px;
+                        height: 40px;
+                        float: left;
+                        margin: 20px 5px 0 0;
+                    }
+                }
+                .luckyMoneyRefresh {
+                    display: inline-block;
+                    vertical-align: top;
+                    width: 40px;
+                    height: 40px;
+                    background: url(../images/hangup-refresh.png) no-repeat center center;
+                    background-size: 16px 16px;
+                }
+                strong {
+                    &::before {
+                        content: "￥";
+                    }
+                    font-weight: normal;
+                    color: @c11;
+                }
+            }
+            .paycode {
+                width: 300px;
+                height: 44px;
+                border: 1px solid @bd03;
+                margin: 0 auto;
+                border-radius: 4px;
+                margin-bottom: 20px;
+                position: relative;
 				z-index: 1;
-				&.payed{
-					&::before{
-						content: "";
-						display: block;
-						.abs(@left:205px;@top:14px;);
-						width: 15px;
-						height: 15px;
-						background:@bg08 @selected_white_png no-repeat @selected_white_png_pos;
-						background-size: @selected_white_png_size;
-						border-radius: 8px;
-					}
-				}
-				input{
-					height: 44px;
-					float: left;
-					width: 220px;
-					padding-left: 10px;
-					font-size: @fs1;
-					border: none;
-					border-radius: 4px 0 0 4px;
-				}
-				.button{
-					height: 46px;
-					width: 72px;
-					background: @bg03;
-					float: left;
-					color: @c01;
-					line-height: 44px;
+                &.payed {
+                    &::before {
+                        content: "";
+                        display: block;
+                        .abs(@left:205px; @top:14px;);
+                        width: 15px;
+                        height: 15px;
+                        background: @bg08 @selected_white_png no-repeat @selected_white_png_pos;
+                        background-size: @selected_white_png_size;
+                        border-radius: 8px;
+                    }
+                }
+                input {
+                    height: 44px;
+                    float: left;
+                    width: 220px;
+                    padding-left: 10px;
+                    font-size: @fs1;
+                    border: none;
+                    border-radius: 4px 0 0 4px;
+                }
+                .button {
+                    height: 46px;
+                    width: 72px;
+                    background: @bg03;
+                    float: left;
+                    color: @c01;
+                    line-height: 44px;
+                    text-align: center;
+                    margin: -1px;
+                    border-radius: 0 4px 4px 0;
+                    &.am-clickable-active {
+                        background: @bg01;
+                    }
+                    &.am-disabled {
+                        opacity: 0.8;
+                        background: @bg03;
+                        color: @c06;
+                    }
+                }
+                .barcodeScan {
+                    .abs(@left:185px; @top:0;);
+                    padding: 10px;
+                    opacity: 0.8;
+                    &::before {
+                        content: "";
+                        display: block;
+                        width: 24px;
+                        height: 24px;
+                        background: @scan_png no-repeat @scan_png_pos;
+                        background-size: @scan_png_size;
+                    }
+                    &.am-clickable-active {
+                        opacity: 1;
+                    }
+                }
+                .statusBox {
+                    .abs(@left:-1px; @top:47px; @right:-1px;);
+                    border: 1px solid @bd03;
+                    border-radius: 2px;
+                    background: @bg04;
+                    padding: 10px;
+                    .loading {
+                        height: 80px;
+                        line-height: 30px;
+                        color: @c07;
+                        &::before {
+                            content: "";
+                            display: block;
+                            margin: 0 auto;
+                            width: 50px;
+                            height: 50px;
+                            background: url("@{path}loading.png") no-repeat center center;
+                            background-size: contain;
+                            -webkit-animation: animation-loading infinite linear 1.2s;
+                        }
+                    }
+                    .success {
+                        height: 80px;
+                        line-height: 30px;
+                        color: @c07;
+                        .icon {
+                            width: 50px;
+                            height: 50px;
+                            background: @bg08;
+                            border-radius: 25px;
+                            display: block;
+                            margin: 0 auto;
+                            position: relative;
+                            &::before {
+                                content: "";
+                                .abs(@left:50%; @top:50%;);
+                                margin: -10px 0 0 -14px;
+                                width: 29px;
+                                height: 20px;
+                                background: @searchMember_success_png no-repeat @searchMember_success_png_pos;
+                                background-size: @searchMember_success_png_size;
+                            }
+                        }
+                    }
+                    .complete,
+                    .refund {
+                        margin-top: 10px;
+                        background: @bg03;
+                        color: @c01;
+                        line-height: 36px;
+                        border-radius: 2px;
+                        text-align: center;
+                        &.am-clickable-active {
+                            background: @bg01;
+                        }
+                        &.am-disabled {
+                            background: @bg03;
+                            color: @c06;
+                        }
+                    }
+                    .cancel {
+                        margin-top: 10px;
+                        background: @bg06;
+                        border: 1px solid @bd03;
+                        color: @c02;
+                        line-height: 34px;
+                        border-radius: 2px;
+                        text-align: center;
+                        &.am-disabled {
+                            color: @c04;
+                        }
+                    }
+                }
+            }
+            .payqrcode {
+                padding-top: 60px;
+				position: relative;
+				.paySelect{
+					width:100%;
 					text-align: center;
-					margin: -1px;
-					border-radius: 0 4px 4px 0;
-					&.am-clickable-active{
-						background: @bg01;
-					}
-					&.am-disabled{
-						opacity: 0.8;
-						background: @bg03;
-						color: @c06;
-					}
-				}
-				.barcodeScan{
-					.abs(@left:185px;@top:0;);
-					padding: 10px;
-					opacity: 0.8;
-					&::before{
-						content: "";
-						display: block;
-						width: 24px;
-						height: 24px;
-						background: @scan_png no-repeat @scan_png_pos;
-						background-size: @scan_png_size;
-					}
-					&.am-clickable-active{
-						opacity: 1;
-					}
-				}
-				.statusBox{
-					.abs(@left:-1px;@top:47px;@right:-1px;);
-					border:1px solid @bd03;
-					border-radius: 2px;
-					background: @bg04;
-					padding: 10px;
-					.loading{
-						height: 80px;
+					li{
+						width:100px;
+						height: 30px;
 						line-height: 30px;
-						color: @c07;
-						&::before{
-							content: "";
-							display: block;
-							margin: 0 auto;
-							width: 50px;
-							height: 50px;
-							background: url("@{path}loading.png") no-repeat center center;
-							background-size: contain;
-							-webkit-animation: animation-loading infinite linear 1.2s;
-						}
-						
-					}
-					.success{
-						height: 80px;
-						line-height: 30px;
-						color: @c07;
-						.icon{
-							width: 50px;
-							height: 50px;
-							background: @bg08;
-							border-radius: 25px;
-							display: block;
-							margin: 0 auto;
-							position: relative;
+						position: relative;
+						display:inline-block;
+						padding-left: 30px;
+						text-align: left;
+						.radio{
 							&::before{
 								content: "";
-								.abs(@left:50%;@top:50%;);
-								margin: -10px 0 0 -14px;
-								width: 29px;
-								height: 20px;
-								background: @searchMember_success_png no-repeat @searchMember_success_png_pos;
-								background-size: @searchMember_success_png_size;
+								position: absolute;
+								left: 5px;
+								display: block;
+								width: 18px;
+								height: 18px;
+								-webkit-border-radius: 50%;
+								-moz-border-radius: 50%;
+								border-radius: 50%;
+								border: 1px solid #555555;
+								top: 6px;
+							}
+						}
+						&.act{
+							.radio{
+								&::before{
+									width: 18px;
+									height: 18px;
+								}
+								&::after{
+									content: "";
+									display: block;
+									position: absolute;
+									left: 8px;
+									top: 9px;
+									width: 14px;
+									height: 14px;
+									background-color: #555555;
+									-webkit-border-radius: 50%;
+									-moz-border-radius: 50%;
+									border-radius: 50%;
+								}
 							}
 						}
 					}
-					.complete,.refund{
-						margin-top: 10px;
-						background: @bg03;
-						color:@c01;
-						line-height: 36px;
-						border-radius: 2px;
-						text-align: center;
-						&.am-clickable-active{
-							background: @bg01;
+				}
+				.wechatPosList,.alipayPosList{
+					display: none;
+					margin-top: 40px;
+					li{
+						width: 260px;
+						height: 46px;
+						line-height: 46px;
+						margin: 0 auto 20px;
+						border-radius: 3px;
+						border: 1px solid #ddd;
+						&.am-clickable-active {
+							background: #f3f3f3;
 						}
-						&.am-disabled{
-							background: @bg03;
-							color: @c06;
+						.iconfont{
+							margin-right: 6px;
+							font-size: 14px;
+							margin-top: -1px;
 						}
-					}
-					.cancel{
-						margin-top: 10px;
-						background: @bg06;
-						border: 1px solid @bd03;
-						color: @c02;
-						line-height: 34px;
-						border-radius: 2px;
-						text-align: center;
-						&.am-disabled{
-							color: @c04;
+						span {
+							display: inline-block;
+							vertical-align: top;
+							height: 46px;
+							line-height: 46px;
+						}
+						.loading {
+							display: none;
+							width: 15px;
+							background: url(../images/loading.png) no-repeat left center;
+							background-size: 15px 15px;
+							margin-left: 5px;
+							animation: animation-loading infinite linear 1.2s;
+							-webkit-animation: animation-loading infinite linear 1.2s;
+						}
+						&.am-disabled {
+							opacity: 0.8;
+							.loading {
+								display: inline-block;
+							}
+							&.am-clickable-active {
+								background: none;
+							}
 						}
 					}
 				}
-			}
-			.payqrcode{
-				padding-top: 60px;
-				position: relative;
-				.paytip{
+                .paytip {
 					line-height: 30px;
+                    // position: relative;
+                    // top: 22px;
+                }
+                .qrcodeimg {
+                    width: 300px;
+                    height: 300px;
+                    margin: 0 auto;
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        display: none;
+                    }
+                }
+                .clickToShowCode {
+                    .abs(@left:50%; @bottom: 0);
+                    // display: none;
+                    width: 300px;
+                    height: 300px;
+                    line-height: 330px;
+                    margin: 0 0 0 -150px;
+                    font-size: @fs2;
+                    text-align: center;
+                    color: @c07;
+                    background: #fff;
+                    .corner {
+                        width: 250px;
+                        height: 250px;
+                        position: absolute;
+                        left: 50%;
+                        top: 50%;
+                        transform: translate(-50%,-50%);
+                        -webkit-transform: translate(-50%,-50%);
+                    }
+                    .tips {
+                        width: 100%;
+                        height: 30px;
+                        .abs(@top:50%);
+                        margin-top: -15px;
+                        .iconfont {
+                            display: inline-block;
+                            width: 24px;
+                            height: 24px;
+                            vertical-align: top;
+                            margin-top: 3px;
+                        }
+                        p {
+                            display: inline-block;
+                            vertical-align: top;
+                            font-size: 14px;
+                            color: #666;
+                            line-height: 30px;
+                        }
+                    }
+                }
+                .qrSuccess {
+                    width: 300px;
+                    height: 250px;
+                    padding-top: 50px;
+                    .abs(@left:50%; @bottom: 0);
+                    margin: 0 0 0 -150px;
+                    background: rgba(255, 255, 255, 0.9);
+                    line-height: 30px;
+                    color: @c07;
+                    display: none;
+                    .icon {
+                        width: 50px;
+                        height: 50px;
+                        background: @bg08;
+                        border-radius: 25px;
+                        display: block;
+                        margin: 0 auto;
+                        position: relative;
+                        &::before {
+                            content: "";
+                            .abs(@left:50%; @top:50%;);
+                            margin: -10px 0 0 -14px;
+                            width: 29px;
+                            height: 20px;
+                            background: @searchMember_success_png no-repeat @searchMember_success_png_pos;
+                            background-size: @searchMember_success_png_size;
+                        }
+                    }
+                    .refund {
+                        width: 150px;
+                        margin: 0 auto;
+                        background: @bg03;
+                        color: @c01;
+                        line-height: 36px;
+                        border-radius: 2px;
+                        text-align: center;
+                        &.am-clickable-active {
+                            background: @bg01;
+                        }
+                        &.am-disabled {
+                            background: @bg03;
+                            color: @c06;
+                        }
+                    }
+                }
+                .qrReload {
+                    // .abs(@left:50%; @bottom: 0);
+					display: none;
 					position: relative;
-					top:20px;
-				}
-				.qrcodeimg{
-					width: 300px;
-					height: 300px;
-					margin: 0 auto;
-					img{
-						width: 100%;
-						height: 100%;
-						display: none;
+					left:50%;
+                    width: 300px;
+                    height: 300px;
+                    line-height: 330px;
+                    margin: 0 0 0 -150px;
+                    font-size: @fs2;
+                    text-align: center;
+                    color: @c07;
+                    &::before {
+                        content: "";
+                        display: block;
+                        width: 32px;
+                        height: 32px;
+                        background: url("@{path}refresh.png") no-repeat center center;
+                        background-size: 32px 32px;
+                        .abs(@left:50%; @top:50%);
+                        margin: -36px 0 0 -16px;
+                        opacity: 0.7;
+                    }
+                    &::after {
+                        content: "";
+                        background: url("@{path}genqr.png") no-repeat center center;
+                        .abs(@left:0; @top:0; @bottom:0; @right:0);
+                        opacity: 0.05;
+                    }
+                }
+                .qrLoading {
+					// .abs(@left:50%; @bottom: 0);
+					position: absolute;
+					left:50%;
+                    display: none;
+                    width: 300px;
+                    height: 300px;
+                    color: @c07;
+                    margin: 0 0 0 -150px;
+					line-height: 350px;
+                    background: rgba(255, 255, 255, 0.9);
+                    &::before {
+                        content: "";
+                        display: block;
+                        margin: 0 auto;
+                        width: 50px;
+                        height: 50px;
+                        .abs(@left:50%; @top:50%);
+                        margin: -45px 0 0 -25px;
+                        background: url("@{path}loading.png") no-repeat center center;
+                        background-size: contain;
+                        -webkit-animation: animation-loading infinite linear 1.2s;
+                    }
+                }
+            }
+            .showCode {
+                position: absolute;
+                width: 100%;
+                height: 30px;
+                bottom: 2%;
+                overflow: hidden;
+                .icon {
+                    display: inline-block;
+                    vertical-align: top;
+                    margin: 7px;
+                    width: 16px;
+                    height: 16px;
+                    border-radius: 2px;
+                    position: relative;
+                    .iconfont {
+                        position: absolute;
+                        width: 20px;
+                        height: 20px;
+                        left: 50%;
+                        top: 50%;
+                        transform: translate(-50%,-50%);
+                        -webkit-transform: translate(-50%,-50%);
+                    }
+                }
+                .text {
+                    display: inline-block;
+                    vertical-align: top;
+                    font-size: 14px;
+                    color: #555;
+                    line-height: 30px;
+                    height: 30px;
+                }
+                &.notAutoShowCode {
+                    .icon {
+                        width: 14px;
+                        height: 14px;
+                        border: 1px solid #a1a1a1;
+                        .iconfont {
+                            display: none;
+                        }
+                    }
+                }
+			}
+			&.pos {
+                .paytitle {
+                    span::before {
+                        background: @icon_pos_png no-repeat @icon_pos_png_pos;
+                        background-size: @icon_pos_png_size;
+                    }
+                }
+            }
+            &.wechat {
+                .paytitle {
+                    span::before {
+                        background: @icon_wechat_png no-repeat @icon_wechat_png_pos;
+                        background-size: @icon_wechat_png_size;
+                    }
+                }
+            }
+            &.alipay {
+                .paytitle {
+                    span::before {
+                        background: @icon_alipay_png no-repeat @icon_alipay_png_pos;
+                        background-size: @icon_alipay_png_size;
+                    }
+                }
+            }
+            &.dp {
+                .paytitle {
+                    span::before {
+                        background: @icon_dp_png no-repeat @icon_dp_png_pos;
+                        background-size: @icon_dp_png_size;
+                    }
+                }
+            }
+            &.kb {
+                .paytitle {
+                    span::before {
+                        background: url("../images/icons_sprite/icon_kb.png") no-repeat 0px 0px;
+                        background-size: 40px 40px;
+                    }
+                }
+            }
+            &.jd {
+                .paytitle {
+                    span::before {
+                        background: url("../images/icons_sprite/icon_jd.png") no-repeat 0px 0px;
+                        background-size: 40px 40px;
+                    }
+                }
+            }
+            &.mix {
+                text-align: left;
+                .mixTitle {
+                    font-size: @fs2;
+                    line-height: 40px;
+                    padding: 10px 0 0 20px;
+                    color: @c07;
+                    .price {
+                        color: @c11;
+                        &::before {
+                            content: "￥";
+                        }
+                    }
+                }
+                .mixPayScroll {
+                    .abs(@left:0; @top:50px; @right:0; @bottom:0);
+                    overflow: hidden;
+                }
+                .mixPayItem {
+                }
+                .mixlabel {
+                    float: left;
+                    padding: 10px 0 10px 30px;
+                    width: 90px;
+                    height: 40px;
+                    line-height: 40px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+                .mixval {
+                    height: 40px;
+                    line-height: 40px;
+                    padding: 10px 0;
+                    margin-left: 120px;
+                    position: relative;
+                    .tipsBox{
+                        position: relative;
+                        display: none;
+                        .icon{
+                            position: absolute;
+                            top: 10px;
+                            margin-left: 5px;
+                            width: 20px;
+                            height: 20px;
+                            opacity: 0.3;
+                        }
+                        &.am-clickable-active{
+                            .icon{
+                                opacity: 0.6;
+                            }
+                        }
+                        .checkedItemsBox {
+                            display: none;
+                            position: absolute;
+                            z-index: 1;
+                            top: 50px;
+                            left: -45px;
+                            padding: 20px;
+                            color: #999999;
+                            max-height: 300px;
+                            width: 252px;
+                            text-align: left;
+                            background: #fff;
+                            border-radius: 4px;
+                            box-shadow: 0px 1px 11px 0px #A8A8A8;
+                            &::after {
+                                content: '';
+                                border: 7px solid #fff;
+                                border-color: transparent transparent #fff;
+                                position: absolute;
+                                top: -13px;
+                                right: 42px;
+                            }
+                            .checkedItemsTitle {
+                                height: 20px;
+                                font-size: 14px;
+                                font-weight: bold;
+                                color: #222222;
+                                line-height: 20px;
+                            }
+                            .checkedItemsNames {
+                                margin-top: 6px;
+                                font-size: 14px;
+                                line-height: 20px;
+                                color: #222222;
+                            }
+                            .tip {
+                                position: relative;
+                                margin-top: 22px;
+                                padding-left: 24px;
+                                font-size: 12px;
+
+                                .tipsText {
+                                    line-height: 17px;
+                                }
+
+                                .iconfont {
+                                    position: absolute;
+                                    top: -14px;
+                                    left: 0;
+                                    width: 14px;
+                                    height: 14px;
+                                    font-size: 14px;
+                                    color: #999999;
+                                    margin-right: 5px;
+                                }
+                            }
+                            
+                        }
+                        &.am-clickable-active {
+                            .checkedItemsBox {
+                                display: block;
+                            }
+                        }
+                    }
+                    &.payed::before {
+                        content: "";
+                        .abs(@left:158px; @top:21px;);
+                        width: 15px;
+                        height: 15px;
+                        border-radius: 15px;
+                        background: @bg08 @selected_white_png no-repeat @selected_white_png_pos;
+                        background-size: @selected_white_png_size;
+                    }
+                    input {
+                        height: 37px;
+                        border: 1px solid @bd03;
+                        border-radius: 2px;
+                        width: 170px;
+                        padding-left: 10px;
+                        float: left;
+                        &.error {
+                            border-color: @bd02;
+                            -webkit-animation: animation_shake 1 ease-in 0.2s;
+                            color: @c11;
+                        }
+                    }
+					.redTip {
+						position: absolute;
+						left: 185px;
+                        color:#666;
+                        font-size: 12px;
+                        line-height: 19px;
+                        .sum{
+                            color:#999;
+                        }
+                        .red{
+                            color:#e82742;
+                        }
 					}
-				}
-				.qrSuccess{
-					width: 300px;
-					height: 220px;
-					padding-top: 50px;
-					.abs(@left:50%;@bottom: 0);
-					margin: 0 0 0 -150px;
-					background: rgba(255,255,255,0.9);
+                }
+                .mixPayButton {
+                    float: left;
+                    width: 60px;
+                    text-align: center;
+                    line-height: 39px;
+                    background: @bg03;
+                    color: @c01;
+                    border-radius: 2px;
+                    margin-left: 5px;
+                    &.am-clickable-active {
+                        background: @bg01;
+                    }
+                    &.am-disabled {
+                        opacity: 0.8;
+                        background: @bg03;
+                        color: @c06;
+                    }
+                }
+            }
+            &.luckyMoney,
+            &.mallOrder {
+                .paytitle {
+                    padding-top: 0;
+                    line-height: 40px;
+                    font-size: @fs2;
+                    text-align: left;
+                    &::before {
+                        display: none;
+                    }
+                    span {
+                        height: 40px;
+                        line-height: 40px;
+                        color: @c07;
+                        &::before {
+                            margin: 10px 5px 0 10px;
+                            width: 20px;
+                            height: 20px;
+                            background: @icon_lcMoney_png no-repeat @icon_lcMoney_png_pos;
+                            background-size: @icon_lcMoney_png_size;
+                        }
+                    }
+                }
+                .c_loading {
+                    .abs(@left: 0; @right:0; @bottom: 0; @top:41px;);
+                    padding-top: 50px;
+                    background: @bg04;
+                    z-index: 10;
+                }
+                .c_error {
+                    .abs(@left: 0; @right:0; @bottom: 0; @top:41px;);
+                    padding-top: 50px;
+                    background: @bg04;
+                    z-index: 1;
+                }
+                .list {
+                    border-top: 1px solid @bd01;
+                    overflow: hidden;
+                    ul {
+                        border-top: 1px solid @bd01;
+                        margin-top: -1px;
+                    }
+                    li {
+                        border-bottom: 1px solid @bd01;
+                        line-height: 22px;
+                        padding: 10px 40px;
+                        .listRight {
+                            float: right;
+                            text-align: right;
+                            .price {
+                                color: @c11;
+                                font-size: @fs3;
+                                &::before {
+                                    content: "￥";
+                                }
+                            }
+                            .discount {
+                                color: @c11;
+                                font-size: @fs3;
+                            }
+                        }
+                        .listLeft {
+                            text-align: left;
+                        }
+                        .remark {
+                            font-size: 12px;
+                            text-align: left;
+                            background-color: rgba(124,124,124,0.06);
+                            padding: 3px 5px;
+                            span {
+                                color: #E82742;
+                            }
+                        }
+                        .small {
+                            font-size: @fs2;
+							color: @c04;
+							&.status{
+								// color:#222;
+								.red{
+									color:#e82742;
+								}
+							}
+                        }
+                        &.am-disabled,
+                        &.disabled {
+                            .title,
+                            .listRight .price {
+                                color: @c03;
+                                &.unopen {
+                                    color: @c11;
+                                    &::before {
+                                        content: "";
+                                    }
+                                }
+                            }
+                        }
+
+                        &.selected {
+                            background: @bg06;
+                            position: relative;
+                            &::before {
+                                content: "";
+                                background: @bg08 @selected_white_png no-repeat @selected_white_png_pos;
+                                background-size: @selected_white_png_size;
+                                width: 15px;
+                                height: 15px;
+                                border-radius: 8px;
+                                margin: -8px 0 0 0;
+                                .abs(@left: 15px; @top:50%;);
+                            }
+                        }
+                        &.am-clickable-active {
+                            background: @bg05;
+                        }
+                        &.hide {
+                            display: none;
+                        }
+                    }
+                }
+            }
+            &.luckyMoney {
+                // padding-top: 41px;
+                .paytitle {
+                    margin-bottom: 20px;
+                    padding-top: 41px;
+                    span {
+                        margin-left: 20px;
+                    }
+                }
+                .sendBtn {
+                    display: none;
+                    position: absolute;
+                    top: 41px;
+                    right: 30px;
+                    width: 75px;
+                    height: 38px;
+                    line-height: 38px;
+                    text-align: center;
+                    font-size: 12px;
+                    color: #FFF;
+                    background: #555;
+                    border-radius: 4px;
+                }
+                .sureBtn {
+                    position: absolute;
+                    height: 50px;
+                    left: 40px;
+                    right: 40px;
+                    bottom: 0;
+                    padding: 10px 0;
+                    p {
+                        height: 100%;
+                        background-color: #555;
+                        border-radius: 4px;
+                        font-size: 16px;
+                        color: #fff;
+                        text-align: center;
+                        line-height: 50px;
+                    }
+                }
+                .list {
+                    border-top: none;
+                    ul {
+                        border-top: none;
+                        li {
+                            position: relative;
+                            padding-top: 0;
+                            border-bottom: none;
+                            padding-left: 80px;
+                            padding-bottom: 0;
+                            &.selected {
+                                &::before {
+                                    display: none;
+                                }
+                            }
+
+                            &.notUseThisBill::before,&.notUseThisItem::before,&.notEnoughMoney::before,&.usedInThisBill::before {
+                                content: '此订单不可使用';
+                                position: absolute;
+                                top: -1px;
+                                bottom: -1px;
+                                left: 0;
+                                right: 0;
+                                background-color: #f9f9f9;
+                                opacity: 0.8;
+                                text-align: right;
+                                font-size: 12px;
+                                color: #999;
+                                padding: 12px 40px 0 0;
+                                z-index: 9;
+                                border-top: 1px solid #ececec;
+                                border-bottom: 1px solid #ececec;
+                            }
+                            &.notUseThisItem::before {
+                                content: '此项不可使用';
+                            }
+                            &.notEnoughMoney::before {
+                                content: '红包金额使用完';
+                            }
+                            &.usedInThisBill::before {
+                                content: '此订单已使用';
+                            }
+
+                            .contentDiv {
+                                border-bottom: 1px solid @bd01;
+                                padding-top: 10px;
+                                padding-bottom: 10px;
+                                .explainBtn {
+                                    .iconfont {
+                                        font-size: 10px;
+                                    }
+                                }
+                                .explainDiv {
+                                    padding: 0 7px;
+                                    font-size: 11px;
+                                    line-height: 15px;
+                                    color: #999;
+                                    background: #FAFAFA;
+                                    .tipsContent{
+                                        padding: 7px 0;
+                                        display: block;
+                                        font-size: 12px;
+                                        color: #999999;
+                                        span {
+                                            color: #E82742;
+                                        }
+                                    }
+                                }
+                                .line {
+                                    display: none;
+                                    height: 15px;
+                                }
+                            }
+                            .circular {
+                                position: absolute;
+                                top: 50%;
+                                transform: translateY(-50%);
+                                -webkit-transform: translateY(-50%);
+                                left: 40px;
+                                width: 21px;
+                                height: 21px;
+                                border: 1px solid #999;
+                                border-radius: 50%;
+                                .iconfont {
+                                    width: 100%;
+                                    height: 100%;
+                                    display: none;
+                                }
+                                &::before {
+                                    content: '';
+                                }
+                                &.icon-queren{
+                                    border:  none;
+                                    .iconfont {
+                                        display: block;
+                                    }
+                                } 
+                            }
+                        }
+                    }
+                }
+            }
+            &.mallOrder .paytitle span::before {
+                background: @icon_mallOrder_png no-repeat @icon_mallOrder_png_pos;
+                background-size: @icon_mallOrder_png_size;
+            }
+            // 核销列表
+            .tickets-list{
+                // width: 80%;
+                min-width: 360px;
+                margin: 0 auto;
+                padding-top: 30px;
+                .list-title{
+                    height: 30px;
+                    font-size: 12px;
+                    color: #999;                    ;
+                    text-align: left;
+                    margin-left: 60px;
+                    margin-right: 40px;
+                    border-bottom: 1px solid #ECECEC;
+                }
+                .list-box{
+                    max-height: 440px;
+                    overflow: hidden;
+                    // padding-left: 30px;
+                    .list-ul{
+                        list-style: none;
+                        font-size: 0;
+                        .item-li{
+                            position: relative;
+                            font-size: 12px;
+                            padding-top: 12px;
+                            padding-left: 40px;
+                            padding-right: 40px;
+                            // border-bottom: 1px solid #ECECEC;
+                            .right-content{
+                                margin-left: 20px;
+                                border-bottom: 1px solid #ECECEC;
+                                .item-title{
+                                    height: 25px;
+                                    .ticket-name{
+                                        float: left;
+                                        text-align: left;
+                                        width:220px;
+                                        font-size:14px;
+                                        color:#222222;
+                                        .ellipsis
+                                    }
+                                    .ticket-price{
+                                        float: right;
+                                        margin-right: 2px;
+                                        text-align: right;
+                                        width:80px;
+                                        font-size:16px;
+                                        color:#E82742;
+                                        .ellipsis
+                                    }
+                                }
+                                .item-time{
+                                    height: 25px;
+                                    line-height: 25px;
+                                    color: #BDBDBD;
+                                    .ticket-code{
+                                        float: left;
+                                    }
+                                    .ticket-time{
+                                        float: right;
+                                    }
+                                }
+                            }
+                            svg{
+                                display: none;
+                            }
+                            &.selected{
+                                svg{
+                                    display: block;
+                                    width: 16px;
+                                    height: 16px;
+                                    position: absolute;
+                                    top: 50%;
+                                    left: 30px;
+                                    transform: translateY(-50%);
+                                    -webkit-transform: translateY(-50%);
+                                }
+                            }
+                            &.am-clickable-active{
+                                background: #F7F7F7;
+                            }
+                            &.last-checked{
+                                background:#fff5da;
+                            }
+                        }
+                    }
+                }
+            }
+
+		}
+		.paycode.pos {
+			border:0;
+			height: auto;
+			margin: 30px auto;
+			.statusBox{
+				position: static;
+				border:0;
+				padding:0;
+				.loading {
+					display: none;
+					height: 30px;
 					line-height: 30px;
 					color: @c07;
+					&::before {
+						content: "";
+						display: inline-block;
+						margin: 0 auto;
+						width: 23px;
+						height: 23px;
+						vertical-align: -5px;
+						margin-right: 10px;
+						-webkit-animation: animation-loading infinite linear 1.2s;
+					}
+				}
+				.error{
 					display: none;
 					.icon{
 						width: 50px;
 						height: 50px;
-						background: @bg08;
+						background: #E82742;
 						border-radius: 25px;
 						display: block;
 						margin: 0 auto;
 						position: relative;
 						&::before{
 							content: "";
-							.abs(@left:50%;@top:50%;);
-							margin: -10px 0 0 -14px;
-							width: 29px;
+							position: absolute;
+							left: 50%;
+							right: auto;
+							top: 50%;
+							bottom: auto;
+							margin: -10px 0 0 -11px;
+							width: 21px;
 							height: 20px;
-							background: @searchMember_success_png no-repeat @searchMember_success_png_pos;
-							background-size: @searchMember_success_png_size;
+							background: url(../images/icons_sprite/searchMember_close.png) no-repeat 0px 0px;
+							background-size: 21px 20px;
 						}
 					}
-					.refund{
-						width: 150px;
-						margin: 0 auto;
-						background: @bg03;
-						color:@c01;
-						line-height: 36px;
-						border-radius: 2px;
-						text-align: center;
-						&.am-clickable-active{
-							background: @bg01;
-						}
-						&.am-disabled{
-							background: @bg03;
-							color: @c06;
-						}
+					.text{
+						margin-top:10px;
+					}
+					.info{
+						color:#999;
+						margin-top:10px;
 					}
 				}
-				.qrReload{
-					.abs(@left:50%;@bottom: 0);
+				.refund{
+					width: 150px;
+    				margin: 0 auto;
+				}
+				.success,.complete,.cancel,.refund{
 					display: none;
-					width: 300px;
-					height: 300px;
-					line-height: 330px;
-					margin: 0 0 0 -150px;
-					font-size: @fs2;
-					text-align: center;
-					color: @c07;
-					&::before{
-						content: "";
-						display: block;
-						width: 32px;
-						height: 32px;
-						background: url("@{path}refresh.png") no-repeat center center;
-						background-size: 32px 32px;
-						.abs(@left:50%;@top:50%);
-						margin: -36px 0 0 -16px;
-						opacity: 0.7;
-					}
-					&::after{
-						content: "";
-						background: url("@{path}genqr.png") no-repeat center center;
-						.abs(@left:0;@top:0;@bottom:0;@right:0);
-						opacity: 0.05;
-					}
 				}
-				.qrLoading{
-					.abs(@left:50%;@bottom: 0);
-					display: none;
-					width: 300px;
-					height: 280px;
-					color: @c07;
-					margin: 0 0 0 -150px;
-					line-height: 300px;
-					background: rgba(255,255,255,0.9);
-					&::before{
-						content: "";
-						display: block;
-						margin: 0 auto;
-						width: 50px;
-						height: 50px;
-						.abs(@left:50%;@top:50%);
-						margin: -64px 0 0 -25px;
-						background: url("@{path}loading.png") no-repeat center center;
-						background-size: contain;
-						-webkit-animation: animation-loading infinite linear 1.2s;
-					}
-				}
-			}
-			&.wechat{
-				.paytitle{
-					span::before{
-						background: @icon_wechat_png no-repeat @icon_wechat_png_pos;
-						background-size: @icon_wechat_png_size;
-					}
-				}
-			}
-			&.alipay{
-				.paytitle{
-					span::before{
-						background: @icon_alipay_png no-repeat @icon_alipay_png_pos;
-						background-size: @icon_alipay_png_size;
-					}
-				}
-			}
-			&.dp{
-				.paytitle{
-					span::before{
-						background: @icon_dp_png no-repeat @icon_dp_png_pos;
-						background-size: @icon_dp_png_size;
-					}
-				}
-			}
-			&.mix{
-				text-align: left;
-				.mixTitle{
-					font-size: @fs2;
-					line-height: 40px;
-					padding:10px 0 0 20px;
-					color: @c07;
-					.price{
-						color:@c11;
-						&::before{
-							content: "￥";
-						}
-					}
-				}
-				.mixPayScroll{
-					.abs(@left:0;@top:50px;@right:0;@bottom:0);
-					overflow: hidden;
-				}
-				.mixPayItem{
-				
-				}
-				.mixlabel{
-					float: left;
-					padding:10px 0 10px 30px;
-					width: 90px;
-					height: 40px;
-					line-height: 40px;
-					white-space: nowrap;
-					overflow: hidden;
-					text-overflow: ellipsis;
-				}
-				.mixval{
-					height: 40px;
-					line-height: 40px;
-					padding: 10px 0;
-					margin-left: 120px;
-					position: relative;
-					&.payed::before{
-						content: "";
-						.abs(@left:158px;@top:21px;);
-						width: 15px;
-						height: 15px;
-						border-radius: 15px;
-						background: @bg08 @selected_white_png no-repeat @selected_white_png_pos;
-						background-size: @selected_white_png_size;
-					}
-					input{
-						height: 37px;
-						border: 1px solid @bd03;
-						border-radius: 2px;
-						width: 170px;
-						padding-left: 10px;
-						float: left;
-						&.error{
-							border-color:@bd02;
-							-webkit-animation: animation_shake 1 ease-in 0.2s;
-							color: @c11;
-						}
-					}
-				}
-				.mixPayButton{
-					float: left;
-					width: 60px;
-					text-align: center;
-					line-height: 39px;
-					background: @bg03;
-					color: @c01;
-					border-radius: 2px;
-					margin-left: 5px;
-					&.am-clickable-active{
-						background: @bg01;
-					}
-					&.am-disabled{
-						opacity: 0.8;
-						background: @bg03;
-						color: @c06;
-					}
-				}
-			}
-			&.luckyMoney,&.mallOrder{
-				.paytitle{
-					padding-top:0;
-					line-height: 40px;
-					font-size: @fs2;
-					text-align: left;
-					&::before{
-						display: none;
-						
-					}
-					span{
-						height: 40px;
-						line-height: 40px;
-						color: @c07;
-						&::before{
-							margin: 10px 5px 0 10px;
-							width: 20px;
-							height: 20px;
-							background: @icon_lcMoney_png no-repeat @icon_lcMoney_png_pos;
-							background-size: @icon_lcMoney_png_size;
-						}
-					}
-				}
-				.c_loading{
-					.abs(@left: 0;@right:0;@bottom: 0;@top:41px;);
-					padding-top: 50px;
-					background: @bg04;
-					z-index: 1;
-				}
-				.c_error{
-					.abs(@left: 0;@right:0;@bottom: 0;@top:41px;);
-					padding-top: 50px;
-					background: @bg04;
-					z-index: 1;
-				}
-				.list{
-					border-top: 1px solid @bd01;
-					overflow: hidden;
-					ul{
-						border-top: 1px solid @bd01;
-						margin-top: -1px;
-					}
-					li{
-						border-bottom: 1px solid @bd01;
-						line-height: 22px;
-						padding:10px 40px;
-						.listRight{
-							float: right;
-							text-align: right;
-							.price{
-								color:@c11;
-								font-size: @fs3;
-								&::before{
-									content: "￥";
-								}
-							}
-						}
-						.listLeft{
-							text-align: left;
-						}
-						.small{
-							font-size: @fs2;
-							color: @c04;
-						}
-						&.am-disabled,&.disabled{
-							.title,.listRight .price{
-								color: @c03;
-								&.unopen{
-									color:@c11;
-									&::before{
-										content: "";
-									}
-								}
-							}
-						}
-						
-						&.selected{
-							background: @bg06;
-							position: relative;
-							&::before{
-								content: "";
-								background: @bg08 @selected_white_png no-repeat @selected_white_png_pos;
-								background-size: @selected_white_png_size;
-								width: 15px;
-								height: 15px;
-								border-radius: 8px;
-								margin: -8px 0 0 0;
-								.abs(@left: 15px;@top:50%;);
-							}
-						}
-						&.am-clickable-active{
-							background: @bg05;
-						}
-						&.hide{
-							display: none;
-						}
-					}
-				}
-			}
-			&.mallOrder .paytitle span::before{
-				background: @icon_mallOrder_png no-repeat @icon_mallOrder_png_pos;
-				background-size: @icon_mallOrder_png_size;
 			}
 		}
-		
-	}
+		.posList,.posStatus{
+			display: none;
+			li{
+				width: 260px;
+				height: 46px;
+				line-height: 46px;
+				margin: 0 auto 20px;
+				border-radius: 3px;
+				border: 1px solid #DDDDDD;
+				&.am-clickable-active{
+					background: #e2e2e2;
+				}
+				.iconfont{
+					margin-right: 5px;
+                    font-size: 14px;
+                    margin-top: -2px;
+                }
+                span {
+                    display: inline-block;
+                    vertical-align: top;
+                    height: 46px;
+                    line-height: 46px;
+                }
+                .loading {
+                    display: none;
+                    width: 15px;
+                    background: url(../images/loading.png) no-repeat left center;
+                    background-size: 15px 15px;
+                    margin-left: 5px;
+                    animation: animation-loading infinite linear 1.2s;
+                    -webkit-animation: animation-loading infinite linear 1.2s;
+                }
+                &.am-disabled {
+                    opacity: 0.8;
+                    .loading {
+                        display: inline-block;
+                    }
+                    &.am-clickable-active {
+                        background: none;
+                    }
+                }
+			}
+		}
+    }
 }
+
+.page_pay .payDetail .onlinePay.luckyMoney .list ul li .circular{
+    top: 26px !important;
+}
+body.isios .page_pay .payDetail .onlinePay.luckyMoney .list ul li .icon-queren::before{
+    top: 0px !important;
+}
+.page_pay .payDetail .onlinePay.mallOrder .list li.remark_bg {
+    background-color: #fff5da;
+}
+
+body.windows .page_pay .payDetail .onlinePay .tickets-list .list-box, 
+body.windows .page_prepay .payDetail .onlinePay .tickets-list .list-box, 
+body.windows .page_addIncome .payDetail .onlinePay .tickets-list .list-box{
+    max-height: 625px;
+}
+.transparentMask{
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+@media screen and (max-height: 700px) {
+    .page_pay .payDetail .onlinePay .paytitle, .page_prepay .payDetail .onlinePay .paytitle, .page_addIncome .payDetail .onlinePay .paytitle {
+        padding-top: 0;
+    }
+    .page_addIncome .payDetail .onlinePay .payqrcode, .page_pay .payDetail .onlinePay .payqrcode, .page_prepay .payDetail .onlinePay .payqrcode {
+        padding-top: 0;
+    }
+}
+ 

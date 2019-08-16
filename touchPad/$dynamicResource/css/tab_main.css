@@ -27,26 +27,12 @@
   margin: 5px auto 10px;
   text-align: center;
 }
-.tab_main .logo::before {
-  content: "";
-  display: block;
-  height: 54px;
-  background: #595959;
-  border-radius: 27px;
-}
 .tab_main .logo img {
   width: 54px;
   height: 54px;
   border-radius: 30px;
 }
 .tab_main .logo.loaded::before {
-  display: none;
-}
-.tab_main .logo.mgj {
-  background: url('../images/logo.png') no-repeat center center;
-  background-size: contain;
-}
-.tab_main .logo.mgj::before {
   display: none;
 }
 .tab_main .logo .num {
@@ -124,7 +110,7 @@
 }
 .tab_main li.selected {
   background-color: #e82742;
-  color: #FFF;
+  color: #ffffff;
 }
 .tab_main li.selected p.a {
   background: url("../images/tab_sprite.png") no-repeat 0px -350px;
@@ -221,4 +207,8 @@
   90% {
     transform: translate3d(0, -2px, 0);
   }
+}
+.logo svg {
+  width: 75px;
+  height: 70px;
 }

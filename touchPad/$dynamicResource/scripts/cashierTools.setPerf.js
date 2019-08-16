@@ -314,7 +314,7 @@ am.setPerf = {
 		// 	this.$title.text('总业绩￥'+this.total);
 		// 	this.$.removeClass('noPerf');
 		// }
-		if(am.operateArr.indexOf('a9')==-1){
+		if(am.operateArr.indexOf('a9')==-1 || opt.isDepart){
 			this.$.addClass('noSalary');
 			if(this.total===-1){
 				this.$title.text('请设置业绩');

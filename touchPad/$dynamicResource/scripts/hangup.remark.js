@@ -30,7 +30,9 @@ var popup = {
             $: this.$,
             tab: 1,
             filter: 1,
-            itemWidth:228,
+            itemWidth:238,
+            typeFilter: 1,
+            groupKey: 'COMBOCARD_ITEM_GROUP',
             onSelect: function(data,callback) {
                 //return _this.billMain.addItem(data);
                 var $tr = _this.addItem(data);
@@ -64,13 +66,16 @@ var popup = {
                 //     self.billServerSelector.rise(1);
                 // }
             },
+            onTouchHold: function(data, $this){
+                _this.billItemSelector.startGrouping();
+            },
             beforeTabChange:function(data){
                 if(data.id){
-                    this.itemWidth = 152;
+                    this.itemWidth = 162;
                     this.itemScroll.$wrap.parent().removeClass("wider");
                 }else{
                     this.itemScroll.$wrap.parent().addClass("wider");
-                    this.itemWidth = 228;
+                    this.itemWidth = 238;
                 }
             },
             onSize:function(){
@@ -126,9 +131,11 @@ var popup = {
     hide:function(){
         this.$.hide();
         this.cancel && this.cancel();
+        this.billItemSelector.typeFilterSelect && this.billItemSelector.typeFilterSelect.hide();
     },
     refresh:function(){
         this.billItemSelector.dataBind(this.processData(am.metadata.tpList));
+        this.billItemSelector.setGroup(am.page.service.getGroupData.call(this));
         this.billItemSelector.reset();
     },
     processData: function(types) {
@@ -144,12 +151,13 @@ var popup = {
                 pinyin: types[i].pinyin,
                 tpd: types[i].tpd,
                 costMoney: types[i].costMoney,
-                img:"$dynamicResource/images/card3.png",
+                img:"$dynamicResource/images/card3.jpg",
                 isNewTreatment:types[i].isNewTreatment,
                 validDay:types[i].validDay,
                 validity:types[i].validity,
                 validitycheck:types[i].validitycheck,
-                cashshopids:types[i].cashshopids
+                cashshopids:types[i].cashshopids,
+                itemid: types[i].id.toString()
             };
             categorys.push(type);
         }
@@ -304,7 +312,11 @@ var remark = {
             var index = $(this).parents("li").index();
             $(this).parents("li").remove();
             data.splice(index,1);
-            _this.$ul.data("item",data); 
+            if(!data.length){
+                _this.$.find('.c-buypackage .c-left').trigger('vclick');
+            }else {
+                _this.$ul.data("item",data); 
+            }
         }).on("vclick",".c-openCard .value",function(){
             _this.showOpenCard();
         }).on("vclick",".c-recharge .value",function(){
