@@ -1,0 +1,29 @@
+.ruleTable thead tr th,
+.schemeTable thead tr th,
+.cardTable thead tr th {
+  background: #FAFCFF;
+}
+.ruleTable tbody tr:nth-child(2n),
+.schemeTable tbody tr:nth-child(2n),
+.cardTable tbody tr:nth-child(2n) {
+  background: #FAFAFA;
+}
+.ruleTable tbody td span,
+.schemeTable tbody td span,
+.cardTable tbody td span {
+  color: #333;
+}
+.ruleTable tbody td .content_span,
+.schemeTable tbody td .content_span,
+.cardTable tbody td .content_span {
+  width: 95%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: middle;
+}
+.el-tooltip__popper {
+  max-width: 350px;
+  line-height: 18px;
+}

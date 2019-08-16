@@ -1,0 +1,14 @@
+{
+	"presets": [
+		["env", {
+			"modules": false,
+		}]
+	],
+	"plugins": [
+		"transform-runtime", 
+		"transform-class-properties",
+		"transform-vue-jsx",
+		"array-includes",
+		"transform-object-rest-spread"
+	]
+}

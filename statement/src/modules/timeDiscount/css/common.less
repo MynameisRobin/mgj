@@ -1,0 +1,33 @@
+.ruleTable,.schemeTable,.cardTable{
+    thead{
+        tr{
+            th{
+                background: #FAFCFF;
+            }
+        }
+    }
+    tbody{
+        tr{
+            &:nth-child(2n){
+                background: #FAFAFA;
+            }
+        }
+        td{
+            span{
+                color:#333;
+            }
+            .content_span{
+                width: 95%;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                display: inline-block;
+                overflow: hidden;
+                vertical-align: middle;
+            }
+        }
+    }
+}
+.el-tooltip__popper {
+    max-width: 350px;
+    line-height: 18px;
+}

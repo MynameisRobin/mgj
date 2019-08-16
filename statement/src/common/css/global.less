@@ -1,0 +1,66 @@
+@import "./reset.css";
+@import "../fonts/iconfont.css";
+
+body {
+	word-break: break-all;
+	font-family: "pingfang sc", system-ui, Helvetica Neue,Helvetica,Roboto,Segoe UI,Arial,sans-serif;
+	font-size: 12px;
+}
+a {
+	text-decoration: none;
+	color: #409EFF;
+}
+* {
+	box-sizing: border-box;
+}
+
+
+// 第三方库样式覆盖
+.app-body {
+	& .el-popover {
+		font-size: 12px !important;
+	}
+	& .el-popover .el-popover__title {
+		font-size: 12px;
+		text-align: center;
+	}
+	& .action_button_wrap {
+		text-align: center;
+	}
+	& .el-popper[x-placement^="bottom"] {
+		margin-top: 5px;
+	}
+	& .el-autocomplete-suggestion li {
+		font-size: 12px !important;
+	}
+	& .el-cascader-menu {
+		& .el-cascader-menu__item {
+			&.el-cascader-menu__item--extensible {
+				padding: 8px 30px 8px 20px;
+			}
+		}
+	}
+	& .el-message-box__wrapper {
+		& .el-message-box {
+			width: 350px;
+		}
+	}
+	& .el-select-dropdown .el-select-dropdown__item {
+		font-size: 12px;
+	}
+	& .el-checkbox__label,
+	& .el-form-item__label,
+	& .el-radio__label {
+		font-size: 12px;
+	}
+
+	& .am_table .el-table {
+		& td,
+		& th {
+			padding: 1px 0;
+			font-size: 12px;
+		}
+	}
+}
+
+

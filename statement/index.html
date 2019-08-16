@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="preconnect" href="<%=htmlWebpackPlugin.options.preconnect%>">
+<% if (htmlWebpackPlugin.options.vendorJs){ %>
+<link href="<%= htmlWebpackPlugin.options.commonCss %>" rel="stylesheet">
+  <% } %>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache" />
+  <meta http-equiv="Cache-Control" content="no-cache" />  
+  <meta name="viewport" content="initial-scale=1, user-scalable=no">
+  <title>美管加</title>
+  <!-- 单据明细 -->
+  <link rel="stylesheet" href="/shair/js/public/qrModal/css/index.css">
+  <script type="text/javascript" src="/shair/js/public/util/util.js"></script>
+  <script type="text/javascript" src="/shair/js/public/qrModal/js/index.js"></script>
+  <script type="text/javascript" src="/shair/js/theme.js"></script>
+</head>
+
+<body ontouchstart class="app-body">
+	<div id="app"></div>  
+	<% if (htmlWebpackPlugin.options.vendorJs){ %>
+	<script type="text/javascript" src="<%= htmlWebpackPlugin.options.vendorJs %>"></script>    
+	<% } %>
+	<% if (htmlWebpackPlugin.options.commonJs){ %>
+	<script type="text/javascript" src="<%= htmlWebpackPlugin.options.commonJs %>"></script>
+	<% } %>
+ 
+
+  
+  <!-- built files will be auto injected -->
+
+</body>
+
+</html>

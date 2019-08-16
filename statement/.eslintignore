@@ -1,0 +1,4 @@
+build/*.js
+env/*.js
+src/common/config/*.js
+src/common/lib/pinyin.js
