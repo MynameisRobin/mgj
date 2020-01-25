@@ -105,6 +105,14 @@ window.cashierTools.BillServerSelector = function(opt) {
 	});
 };
 window.cashierTools.BillServerSelector.prototype = {
+	getPerfMode:function(){
+		if(this.$.selector.indexOf('#page_service')==-1){
+			//默认为2 员工共享100%业绩 bug 0027015 后端觉得数据库设置默认值影响较大 不同意加 所以前端设置默认值 造成基础系统配置必须点击保存才真正数据库有值
+			return (amGloble.metadata.shopPropertyField && amGloble.metadata.shopPropertyField.notSharedPerformance || 0) * 1;
+		}else{
+			return 0;
+		}
+	},
 	initRender:function(){
 		var em = this.emps;
 		var emArr = [];
@@ -145,7 +153,8 @@ window.cashierTools.BillServerSelector.prototype = {
 					$wrap: $wrap,
 					$inner: $inner,
 					direction: [false, true],
-					hasInput: false
+					hasInput: false,
+					bubble: true
 				});
 				sv.pos = i;
 				sv.refresh();
@@ -155,6 +164,8 @@ window.cashierTools.BillServerSelector.prototype = {
 
 		if(this.muti){
 			var _this=this;
+			// var notSharedPerformance = this.notSharedPerformance; //业绩共享0共享100%，1各独享100%  undefined 未设置 原来的
+			var notSharedPerformance = this.getPerfMode();
 			this.$head.find('div.headLi').each(function () {
 				var $setPerf = $('<div class="perfSetBtn iconfont icon-yuangong-fu am-clickable"></div>').vclick(function () {
 					var idx = _this.$head.find('.perfSetBtn').index($(this));
@@ -268,6 +279,11 @@ window.cashierTools.BillServerSelector.prototype = {
 								var total = 0;
 								var $modified = $(this).siblings('.modified');
 								var $selected = $(this).siblings('.selected');
+								if(notSharedPerformance){
+									// 设置了业绩共享
+									$modified = $(this).parents('.body').find("li.modified").not(this)
+									$selected = $(this).parents('.body').find('li.selected').not(this);
+								}
 								if($modified.length === $selected.length && $(this).hasClass("modified")) {
 									$modified.removeClass("modified");
 								}else{
@@ -300,20 +316,31 @@ window.cashierTools.BillServerSelector.prototype = {
 								/*$perf.css({
 									width: w+'%'
 								}).find('.perfNum').text(w);*/
-								if(am.operateArr.indexOf('MGJZ8')==-1){
+								if(am.operateArr.indexOf('MGJZ8')==-1 && notSharedPerformance!=1){
 									var $sibings = $(this).siblings('.selected:not(.modified)');
+									if(notSharedPerformance){
+										// 设置了业绩共享
+										$sibings = $(this).parents('.body').find('.selected:not(.modified)').not(this);
+										console.log('$sibings--------',$sibings)
+									}
 									console.log($sibings.length);
 									if($sibings.length >= 1){
 										total+=w;
+										console.log('total========',total)
 										var r = Math.round((100-total)/$sibings.length*100)/100;
 										if(r<0){
 											r=0;
 										}
+										// if(notSharedPerformance==1){
+										// 	// 设置了业绩共享
+										// 	r = 100;
+										// }
 										/*$sibings.find('.perfVal').css({
 											width: r+'%'
 										}).find('.perfNum').text(r);*/
 										$sibings.each(function () {
 											_this.setEmpPer($(this),r);
+											console.log('r=============',r)
 										});
 									}
 								}
@@ -322,6 +349,9 @@ window.cashierTools.BillServerSelector.prototype = {
 									_this.$perfSetList.empty();
 									var _thisDOM = this;
 									var $allSel = $(this).parent().find('li.selected');
+									if(notSharedPerformance){
+										$allSel = $(this).parents('.body').find('li.selected');
+									}
 									$allSel.each(function () {
 										var $tr = $('<tr></tr>');
 										var $this=$(this);
@@ -375,7 +405,7 @@ window.cashierTools.BillServerSelector.prototype = {
 	},
 	reset: function($item,t,keepList) {
 		if(!keepList){
-			var $server = this.$body.find("li").removeClass("selected").removeClass("checked"),_this=this;
+		var $server = this.$body.find("li").removeClass("selected").removeClass("checked"),_this=this;
 			if($item){
 				$item.find(".server").each(function(){
 					var data = $(this).data("data");
@@ -388,36 +418,7 @@ window.cashierTools.BillServerSelector.prototype = {
 						}
 					}*/
 					if(data){
-						var per = false;
-						for(var i=0;i<data.length;i++){
-							var $s = $server.filter("[serverid="+data[i].empId+"]").addClass("selected");
-							if(data[i].pointFlag){
-								$s.addClass('checked');
-							}else{
-								$s.removeClass('checked');
-							}
-
-							if(typeof(data[i].per)!== 'undefined'){
-								//任何一个不是空就认为有设置
-								per = true;
-							}
-							var p = data[i].per || 0;
-							$s.find('.perfVal').css({
-								width:(p>100?100:p)+'%'
-							}).find('.perfNum').text(p);
-							$s.data('perf',data[i].perf);
-							$s.data('gain',data[i].gain);
-						}
-
-						if(!per){
-							var s = Math.round(1000/data.length)/10;
-							for(var i=0;i<data.length;i++){
-								var $s = $server.filter("[serverid="+data[i].empId+"]").addClass("selected");
-								$s.find('.perfVal').css({
-									width:(s>100?100:s)+'%'
-								}).find('.perfNum').text(s);
-							}
-						}
+						_this.resetServers(data,$server);
 					}
 				});
 			}
@@ -428,6 +429,38 @@ window.cashierTools.BillServerSelector.prototype = {
 		//}
 		if($item){
 			this.rise(0,t);
+		}
+	},
+	resetServers: function (data,$server) {
+		var per = false;
+		for (var i = 0; i < data.length; i++) {
+			var $s = $server.filter("[serverid=" + data[i].empId + "]").addClass("selected");
+			if (data[i].pointFlag) {
+				$s.addClass('checked');
+			} else {
+				$s.removeClass('checked');
+			}
+
+			if (typeof (data[i].per) !== 'undefined') {
+				//任何一个不是空就认为有设置
+				per = true;
+			}
+			var p = data[i].per || 0;
+			$s.find('.perfVal').css({
+				width: (p > 100 ? 100 : p) + '%'
+			}).find('.perfNum').text(p);
+			$s.data('perf', data[i].perf);
+			$s.data('gain', data[i].gain);
+		}
+
+		if (!per) {
+			var s = Math.round(1000 / data.length) / 10;
+			for (var i = 0; i < data.length; i++) {
+				var $s = $server.filter("[serverid=" + data[i].empId + "]").addClass("selected");
+				$s.find('.perfVal').css({
+					width: (s > 100 ? 100 : s) + '%'
+				}).find('.perfNum').text(s);
+			}
 		}
 	},
 	getMaxHeight:function(){
@@ -479,7 +512,7 @@ window.cashierTools.BillServerSelector.prototype = {
 		this.roleName = roleName;
 		this.initRender();
 	},
-	dispatchSetting:function(setting,posSet){
+	dispatchSetting:function(setting,posSet,sellsSet){
 		var visible = 0;
 		for(var i=1;i<=3;i++){
 			if(this.scrollviews[i-1]){
@@ -495,7 +528,7 @@ window.cashierTools.BillServerSelector.prototype = {
 			}
 		}
 
-		if(!posSet && setting){
+		if(!sellsSet && !posSet && setting){
 			var sEmp = [];
 			for (var i = 0; i < this.data.length; i++) {
 				var key = 'emps_'+this.data[i].id;
@@ -509,6 +542,30 @@ window.cashierTools.BillServerSelector.prototype = {
 				visible=0;
 			}else{
 				visible=1;
+			}
+		}
+		if (sellsSet && setting) {
+			// 显示销售时单个设置销售是否可见
+			// var _this = this;
+			// $.each(setting, function (key, value) {
+			// 	if (value.flag === 0) {
+			// 		_this.$.find("li[serverid='94123']")
+
+			// 	}
+			// });
+			var sEmp = [];
+			for (var i = 0; i < this.data.length; i++) {
+				var key = 'emps_'+this.data[i].id;
+				if(setting[key]==1){
+					sEmp.push(this.data[i]);
+				}
+			}
+			this.emps = sEmp;
+			this.initRender();
+			if(!sEmp.length){
+				visible=0;
+			}else{
+				visible=3;
 			}
 		}
 
@@ -530,19 +587,46 @@ window.cashierTools.BillServerSelector.prototype = {
 		this.getMaxHeight();
 		this.rise(1);
 	},
-	refreshPerf:function ($li) {
-		var $ul = $li.parent();
-		var $selected = $ul.find('li.selected');
-		$ul.find('li.modified').removeClass('modified');
-		var per = Math.round(1000/$selected.length)/10;
-		/*$selected.find('.perfVal').css({
-			width:per+'%'
-		}).find('.perfNum').text(per);*/
-		if($selected && $selected.length){
-			this.setEmpPer($selected,per,0,0);
-		}else{
-			this.setEmpPer($li,per,0,0);
+	getSelectedEmpAndPer:function($li,$parentsDom){
+		// 获取选中的员工和员工所得业绩比例
+		// var $parentsDom=$li.parents('.body');
+		var $selected = $parentsDom.find('li.selected'),
+		per = Math.round(1000/$selected.length)/10;
+		$parentsDom.find('li.modified').removeClass('modified');
+		return {
+			"$selectedLis":$selected.length?$selected:$li,
+			"per":per
 		}
+	},
+	refreshPerf:function ($li) {
+		// var notSharedPerformance = this.notSharedPerformance;
+		var notSharedPerformance = this.getPerfMode()
+		if(notSharedPerformance){
+			//配置了共享业绩
+			var res=this.getSelectedEmpAndPer($li,$li.parents('.body'));
+			if(notSharedPerformance==1){
+				// 各独享100%
+				this.setEmpPer(res.$selectedLis,100,0,0);
+			}else{
+				// 共享100%
+				this.setEmpPer(res.$selectedLis,res.per,0,0);
+			}
+		}else{
+			var res=this.getSelectedEmpAndPer($li,$li.parent());
+			this.setEmpPer(res.$selectedLis,res.per,0,0);
+		}
+		// var $ul = $li.parent();
+		// var $selected = $ul.find('li.selected');
+		// $ul.find('li.modified').removeClass('modified');
+		// var per = Math.round(1000/$selected.length)/10;
+		// /*$selected.find('.perfVal').css({
+		// 	width:per+'%'
+		// }).find('.perfNum').text(per);*/
+		// if($selected && $selected.length){
+		// 	this.setEmpPer($selected,per,0,0);
+		// }else{
+		// 	this.setEmpPer($li,per,0,0);
+		// }
 		
 	},
 	setEmpPer:function ($dom,per,perf,gain) {

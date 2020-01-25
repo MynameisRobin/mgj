@@ -5,7 +5,76 @@
 
 		},
 		init : function() {
-			this.$stateBox=this.$.find(".searchresultBox");
+			this.$stateBox=this.$.find(".searchresultBox").on("vclick",".checkCustomerBox",function(){
+				// checkbox 点击事件
+				var $this = $(this).toggleClass("checked"),
+					$dom = self.$stateBox,
+					$checkCustomerAll = $dom.find(".checkCustomerAll"), // 全选按钮
+					$mergeCustomerBtn = self.$mergeCustomerBtn;
+				if ($this.hasClass('checkCustomerAll')) {
+					// 点击全选按钮
+					if ($this.hasClass("checked")) {
+						$dom.find('.checkCustomerBox:not(.checked)').addClass('checked');
+					} else {
+						$dom.find('.checkCustomerBox.checked').removeClass('checked');
+					}
+				} else {
+					if ($customers && $checkedCustomers) {
+						if ($customers.length == $checkedCustomers.length) {
+							$checkCustomerAll.addClass('checked');
+						} else {
+							$checkCustomerAll.removeClass('checked');
+						}
+					}
+				}
+				// 是否激活合并按钮
+				var $customers = $dom.find('.checkCustomerItem'), // 全部顾客
+					$checkedCustomers = $dom.find('.checkCustomerItem.checked'); // 选中的顾客
+				if ($checkedCustomers && $checkedCustomers.length > 1) {
+					if ($mergeCustomerBtn.hasClass("am-disabled")) {
+						$mergeCustomerBtn.removeClass("am-disabled");
+					}
+				} else {
+					if (!$mergeCustomerBtn.hasClass("am-disabled")) {
+						self.$mergeCustomerBtn.addClass("am-disabled");
+					}
+				}
+			});
+			this.$mergeBtnWrap = this.$.find('.mergeWrap'); // 合并按钮及tips
+			this.$mergeCustomerBtn = this.$mergeBtnWrap.find('.mergeCustomerBtn').on("vclick", function () {
+				var $checkedCustomers = self.$.find('.checkCustomerItem.checked'),
+					isRepeated = 1,
+					memberId = [];
+				if ($checkedCustomers && $checkedCustomers.length) {
+					var currentMobile = $($checkedCustomers[0]).parents('tr').data('item').mobile;
+					$.each($checkedCustomers, function (i, v) {
+						var customerInfo = $(v).parents('tr').data('item');
+						if (currentMobile && customerInfo.mobile == currentMobile) {
+							memberId.push(customerInfo.id);
+						} else {
+							isRepeated = 0;
+							return true;
+						}
+					})
+					if (!isRepeated) {
+						am.msg('亲，您所选会员手机号不同，无法合并');
+					} else {
+						// 手机号都相同 调合并接口
+						am.confirm("合并顾客资料", "顾客资料一旦合并，不可拆分，您确认要合并顾客资料吗？", "确定", "取消", function () {
+							self.mergeCustomer(memberId, function (res) {
+								//_this.find("b").text("已销单");
+								self.$.find(".btnOk").trigger('vclick');
+								self.$.find(".memberTab li.selected").trigger('vclick');
+								// self.checkIsbilRemark(item);
+							});
+						}, function () {
+							console.log('取消合并');
+							// self.$.find('.checkCustomerItem.checked').removeClass('checked');
+							// self.resetMergeModule();
+						});
+					}
+				}
+			});
 			this.$remarkDetail = this.$.find(".remarkDetail").vclick(function(){
 				$(this).hide();
 			});
@@ -28,7 +97,8 @@
 			    $wrap : this.$.find(".table-content-list"),
 			    $inner : this.$.find(".table-content-list table"),
 			    direction : [false, true],
-			    hasInput: false
+				hasInput: false,
+				bubble: true
 			});
 			this.pageIndex=0;
 			this.mainScroll.refresh();
@@ -197,9 +267,10 @@
 					self.$stateBox.find('.contentbox').removeClass('card').end().find('.table-content-head thead').eq(1).addClass('hide').siblings('thead').removeClass('hide');
 					self.$input.attr("placeholder","输入会员手机号或姓名搜索")
 					self.getData();
-					self.$cardtotal.addClass('hide')
+					self.$cardtotal.addClass('hide');
 					self.$.find('.addMemberBtn').show();
 				}else{
+					
 					self.$listTbody.empty();
 					self.$cardtotal.removeClass('hide')
 					self.$stateBox.find('.contentbox').addClass('card').removeClass('del').end().find('.table-content-head thead').eq(1).removeClass('hide').siblings('thead').addClass('hide');
@@ -207,6 +278,15 @@
 					self.$input.attr("placeholder","输入卡号搜索")
 					self.$.find('.addMemberBtn').hide();
 					self.$.find('.highSearchBtn').removeClass('hide');
+				}
+				if(tabindex == 0){
+					if(self.getMergeAccess()){
+						self.showMergeModule();
+					}else{
+						self.hideMergeModule();
+					}
+				}else{
+					self.hideMergeModule();
 				}
 				if(tabindex==2){
 					self.$.find('.highSearchBtn').addClass('hide');
@@ -379,6 +459,47 @@
 			this.highSearchOpt=null;
 			this.cardSearchPara = null;
 		},
+		mergeCustomer:function(memberIds,callback){
+			var userInfo = am.metadata.userInfo;
+			am.loading.show("正在合并,请稍候...");
+			am.api.mergeCustomer.exec({
+				"shopid": userInfo.shopId,
+				"memberIds": memberIds,
+				"operator": userInfo.userName || '',
+				"shopName": (userInfo.shopName || '') + (userInfo.osName || ''),
+			}, function (res) {
+				am.loading.hide();
+				console.log(res);
+				if (res.code == 0) {
+					am.msg("会员合并成功");
+					callback && callback(res);
+				} else {
+					am.msg(res.message || "数据获取失败,请检查网络!");
+				}
+			});
+		},
+		showMergeModule:function(){
+			// 显示合并会员模块
+			// 合并会员权限
+			this.$mergeBtnWrap.show();
+			this.$.find('.checkCustomerBox').show();
+			this.resetMergeModule();
+		},
+		hideMergeModule:function(){
+			// 隐藏会员合并模块
+			this.$mergeBtnWrap.hide();
+			this.$.find('.checkCustomerBox').hide();
+		},
+		getMergeAccess:function(){
+			return am.operateArr.indexOf('MGJMM')>-1;
+		},
+		resetMergeModule:function(){
+			// 重置会员合并模块
+			if(!this.$mergeCustomerBtn.hasClass('am-disabled')){
+				this.$mergeCustomerBtn.addClass('am-disabled')
+			}
+			this.$.find('.checkCustomerBox').removeClass('checked');
+		},
 		optimizeSearchCard: function ($dom, val) {
 			// am.api.optimizeSearchCard.exec({
 			// 	"shopId": am.metadata.userInfo.shopId,
@@ -494,7 +615,7 @@
 					}
 
 			        var $thtml=$('<tr>'+
-			        '<td><div class="tdwrap">'+item.name+'</div></td>'+
+			        '<td><div class="tdwrap">'+'<span class="checkCustomerItem checkCustomerBox am-clickable"></span>'+item.name+'</div></td>'+
 			        '<td><div class="tdwrap">'+sex[item.sex]+'</div></td>'+
 			        '<td><div class="tdwrap">'+am.processPhone(item.mobile)+'</div></td>'+
 			        // (SHRINK_LEVEL == '0' ? '<td><div class="tdwrap">'+(item.avgfee*1==0?0:item.avgfee.toFixed(0))+'元</div></td>' : '') +
@@ -510,7 +631,7 @@
 	                    '</div>'+
 	                '</td>'+
 					'</tr>').data("item",item);
-					var good = '<div class="tdwrap"><span class="name">'+ item.name +'</span><span class="icon-good am-clickable"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-youzhike"></use></svg></span></div>';
+					var good = '<div class="tdwrap"><span class="name">'+'<span class="checkCustomerItem checkCustomerBox am-clickable"></span>'+ item.name +'</span><span class="icon-good am-clickable"><svg class="icon" aria-hidden="true"><use xlink:href="#icon-youzhike"></use></svg></span></div>';
 					if(deleted==2){
 						//已删除
 						var del = '<span class="del_restore am-clickable">恢复</span>';
@@ -556,6 +677,16 @@
 			}
 			this.mainScroll.refresh();
 			this.mainScroll.scrollTo("top");
+
+			if(this.$.find(".memberTab li.selected").index() == 0){
+				if(this.getMergeAccess()){
+					this.showMergeModule();
+				}else{
+					this.hideMergeModule();
+				}
+			}else{
+				this.hideMergeModule();
+			}
 		},
 		getDelData:function(memberid,callback){
 			am.loading.show("正在删除,请稍候...");

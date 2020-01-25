@@ -1,8 +1,20 @@
 (function () {
-	var statusName = [null, "待客", "轮牌", "点客", "临休"];
+	var statusName = [null, "待客", "轮牌", "点客", "临休", "盖牌"];
 	var posName = ['第一工位', '第二工位', '第三工位'];
 	var self = am.page.openbill = new $.am.Page({
 		id: "page_openbill",
+		queueCategoryMap: null,
+		getQueueCategoryData: function(id) {
+			return this.queueCategoryMap ? this.queueCategoryMap[id] : null
+		},
+		setQueueCategoryData: function(id, data) {
+			this.queueCategoryMap[id] = data;
+		},
+		removeQueueCategoryData: function(id) {
+			if (this.queueCategoryMap) {
+				delete this.queueCategoryMap[id];
+			}
+		},
 		backButtonOnclick: function () {
 			if(this.paras.source == "service"){
 				$.am.page.back();
@@ -20,6 +32,7 @@
 		},
 		init: function () {
 			var _this = this;
+			this.queueCategoryMap = null;
 			this.$list = this.$.find('.list');
 			this.$li = this.$list.find('li').eq(0).remove();
 			this.$wrapper = this.$list.find('.wrapper').eq(0).remove();
@@ -27,6 +40,7 @@
 
 			this.$billno_box = this.$.find(".billno_box");
 			this.$remark_box = this.$.find(".remark_box");
+			this.$customerSource = this.$.find(".customerSource input");
 			this.$member = this.$.find(".member");
 			//回车键1秒内连敲3次结算
 			_this.submitArr = [];
@@ -154,6 +168,16 @@
 				_this.backButtonOnclick();
 			}).on("vclick", ".sex li", function () {
 				$(this).addClass("active").siblings().removeClass("active");
+			}).on("vclick", ".customerSource input", function () {
+				var $this = $(this);
+				var sourcedata = $this.data('sourcedata');
+				am.sourceModal.show({
+					mgjsourceid: sourcedata?sourcedata.mgjsourceid:"",
+					sourceSave: function (data) {
+						$this.val(data.mgjsourcename);
+						$this.data('sourcedata', data);
+					}
+				})
 			}).on("vclick", ".submit", function () {
                 // 性能监控点
                 monitor.startTimer('M02')
@@ -164,7 +188,7 @@
 				}else{
 
 				}*/
-
+				var isEdit = item.id;
 				// 性能监控点
 				monitor.startTimer('M02', item)
 				if (item.displayId == "") {
@@ -182,6 +206,9 @@
 					self.save(item, function (ret) {
 						console.log("item=====", item);
 						console.log("ret.content=====", ret.content);
+						if(isEdit){
+							ret.content.version ++;
+						}
 						am.cashierTab.feedBill(ret.content, 1);
 					});
 				}
@@ -234,9 +261,15 @@
 				$.am.changePage(am.page.searchMember, "slideup", {
 					openbill: 1,
 					onSelect: function (item) {
-						$.am.changePage(am.page.openbill, "slidedown", $.extend(_this.paras, {
-							member: item
-						}));
+						if (item) {
+							$.am.changePage(am.page.openbill, "slidedown", $.extend(_this.paras, {
+								member: item
+							}));
+						}else {
+							$.am.changePage(am.page.openbill, "slidedown", {
+								member: item
+							});
+						}
 					}
 				});
 				am.page.searchMember.$.find(".memberBill").trigger("vclick");
@@ -347,6 +380,11 @@
 				}
 			});
 
+			$.am.on('instoreServiceHasBeenSynced',function(ret){
+				if($.am.getActivePage() === self){
+					self.changePosStatus(ret.content);
+				}
+			});
 		},
 		setHangUpNum: function (i) {
 			if (i) {
@@ -393,6 +431,7 @@
 			if (paras && paras.member) {
 				//渲染会员
 				var member = paras.member;
+				this.$.find('.customerSource').hide();
 				this.$member.find(".name").html(member.name);
 				this.$member.find('.header').html(am.photoManager.createImage('customer', {
 					parentShopId: am.metadata.userInfo.parentShopId,
@@ -404,7 +443,6 @@
 				}else{
 					this.$member.find('.header').removeClass("lock");
 				}
-
 				this.$.find(".memberInfo").data("item", {
 					memId: member.id,
 					memName: member.name,
@@ -445,6 +483,7 @@
 			} else {
 				this.$.find(".memberInfo").data("item", null);
 				this.$member.find('.header').removeClass("lock");
+				this.$.find('.customerSource').show();
 			}
 			if (paras.reservation) { //从预约开单
 				rowdata = am.pageStatus.getStatus("openbill_billInfo");
@@ -605,6 +644,10 @@
 			this.$billno_box.hide();
 		},
 		beforeShow: function (paras) {
+			// 性能监控点
+			if (paras != 'back') {
+				monitor.startTimer('M01', paras)
+			}
 			/* if(localStorage.getItem("isPicMode")&&localStorage.getItem("isPicMode")==='1'){
 				$('#page_openbill div.list').addClass('picMode');
 			}else{
@@ -613,6 +656,7 @@
 			this.selectArr = [];
 			this.server = [null, null, null];
 			this.tableId = null;
+			this.$customerSource.data("sourcedata","").val("");
 			if((paras && paras.tableId) || (paras && paras.rowdata && paras.rowdata.tableId)){
 				this.tableId = paras.tableId || paras.rowdata.tableId;
 			}
@@ -626,8 +670,15 @@
 			if (paras == 'back') {
 				return;
 			}
-			this.$list.empty();
+			// this.$list.empty();
 			this.renderopenbill(paras);
+			
+			if (this.queueCategoryMap) {
+				// 如果存在缓存数据，则删除上次选中状态
+				this.$.find('.list li.active').removeClass('active');
+			} else {
+				this.queueCategoryMap = {};
+			}
 		},
 		afterShow: function (paras) {
 			if (paras == 'back') {
@@ -641,7 +692,7 @@
 
 			var activePage = $.am.getActivePage().id;
 			if(activePage === 'page_service') {
-			    $('#keypadInputDiv').find('.label').text('输入项目编号')
+			    $('#keypadInputDiv').find('.label').text('输入项目价格')
 			}else if(activePage === 'page_openbill') {
 			    $('#keypadInputDiv').find('.label').text('输入员工编号')
 			}
@@ -654,6 +705,7 @@
                 clearTimeout(this.timerRetry);
                 delete this.timerRetry;
 			}
+			this.clearTimeInterval();
 			
 		},
 		afterHide: function () {
@@ -726,6 +778,9 @@
 			if (rowdata && rowdata.serviceNO) {
 				opt.serviceNO = rowdata.serviceNO;
 			}
+			if(rowdata && rowdata.version){
+				opt.version = rowdata.version;
+			}
 			
 			if (member) {
 				opt.memId = member.memId;
@@ -751,7 +806,7 @@
 				if (editInfo) {
 					opt.data = editInfo;
 				} else {
-					opt.data = {"memGender":sex};
+					opt.data = {"memGender":sex,"sourcedata": this.$customerSource.data("sourcedata")};
 				}
 
 			}
@@ -857,6 +912,9 @@
 						"serviceItems": [],
 						"products": null
 					}
+					if(opt.memId==-1){
+						_data.sourcedata = opt.data.sourcedata;
+					}
 				}else {
 					_data = opt.data;
 				}
@@ -882,21 +940,8 @@
 			return opt;
 		},
 		save: function (opt, callback) {
-			var hasChanged = 0;
-			if(am.billOriginData){
-				for(var key in opt){
-					if(key=='data'){
-						if(opt[key]!=am.billOriginData[key]){
-							hasChanged ++;
-							break;
-						}
-					}else if(!am.cashierTab.stringCompare(JSON.stringify(opt[key]),JSON.stringify(am.billOriginData[key]),key) && key !='channel' && key !='order' && key !='createDateTime' && key!='backupShampooFinishTime' && key!='isIdInvoked'){
-						hasChanged ++;
-						break;
-					}
-				}
-			}
-			if(!hasChanged && am.billOriginData){
+			var hasChanged = am.cashierTab.getSaveDataIsChanged(opt);
+			if(!hasChanged){
 				if(self.paras.src=='reservation'){
 					opt.src='reservation';
 				}
@@ -910,6 +955,7 @@
 			$.extend(opt, {
 				parentShopId: am.metadata.userInfo.parentShopId,
 				shopId: am.metadata.userInfo.shopId,
+				version: opt.version || 0
 			});
 			am.api.hangupSave.exec(opt, function (ret) {
 				am.loading.hide();
@@ -926,12 +972,13 @@
 					opt.emp1RotateId = ret.content.emp1RotateId;
 					opt.emp2RotateId = ret.content.emp2RotateId;
 					opt.emp3RotateId = ret.content.emp3RotateId;
-					am.billOriginData = opt;
 					callback && callback(ret);
+				}else if(ret && ret.code==11008){
+					monitor.stopTimer('M02', 0)
+					am.billChangeToHangup();
 				} else {
                     // 性能监控点
-                    monitor.stopTimer('M02', 1)
-
+                    monitor.stopTimer('M02', 1);
 					am.msg(ret.message || "操作失败，请重试~");
 				}
 			});
@@ -949,10 +996,10 @@
                 console.log(ret);
 
 				if (ret && ret.code == 0) {
-                    // 性能监控点
-                    monitor.stopTimer('M01', 0)
 
 					self.renderQueue(ret.content);
+					// 性能监控点
+                    monitor.stopTimer('M01', 0)
 					if (self.timerRetry) {
 		                clearTimeout(self.timerRetry);
 		                delete self.timerRetry;
@@ -977,17 +1024,122 @@
 				}
 			});
 		},
+		setDomStyleOrder: function(dom, value) {
+			dom.css({
+				'-webkit-box-ordinal-group': value + 1, // 兼容语法
+				'-webkit-order': value, // 兼容语法
+				'-ms-flex-order': value, // 兼容语法
+				'order': value,
+			}).attr('arrIndex_X', value);
+		},
+		updateActiveStatus: function(params) {
+			var $li = params.dom,
+				item = params.data,
+				rowdata = params.rowData,
+				emp = params.empData;
+			if (rowdata) {
+				var pos = item.empId ? emp.pos : item.pos;
+				var dutyType = Number(pos) + 1;
+				if (rowdata["emp" + dutyType] == emp.id && (rowdata.reservation || rowdata["emp" + dutyType + "RotateId"] == item.rotateId)) {
+					$li.addClass('active');
+					if (rowdata["isSpecified" + dutyType] == 1) {
+						$li.find(".appoint").addClass('yes').find('p').text('指定');
+					}else {
+						$li.find(".appoint").removeClass('yes').find('p').text('非指定');
+					}
+					if(dutyType == rowdata.shampooworkbay){
+						$li.find(".wash").addClass('washing');
+					}
+					this.server[pos] = {
+						$: $li,
+						data: item
+					};
+				}
+			}
+		},
+		updateQueueDom: function(dom, params) {
+			var item = params.userData,
+				emp = params.empData,
+				washTimeFlag = params.washTimeFlag,
+				arrIndex_X = params.arrIndex_X,
+				_status = params.status;
+			var $li = dom;
+			if(washTimeFlag){
+				$li.removeClass('notWash');
+			}else {
+				$li.addClass('notWash');
+			}
+				
+			$li.find('.no').text(emp.no);
+			$li.find('.name').text(emp.name);
+			$li.find('.role').text('已选择第'+(Number(emp.pos)+1)+'工位');
+
+			var now = new Date().getTime();
+			var _diff = now - item.statusTime < 0 ? Math.abs(now - item.statusTime) : 0;
+			item.diff = _diff;
+
+			// 只删除状态标识的 clssName
+			var oldData = $li.data('data');
+			if (oldData && oldData.status) {
+				$li.removeClass('status' + oldData.status);
+			}
+			if (_status&&item&&item.status) {//fix bug 0015760
+				$li.addClass('status' + item.status)
+				$li.find('.status').text(statusName[item.status]);
+				$li.find('.time').text(item.statusTime);
+			} else {
+				$li.find('.time').hide();
+				$li.find('.status').hide();
+				$li.find('.footer').addClass('hide');
+			}
+
+			$li.data('data', item);
+			this.setDomStyleOrder($li, item.order_no);
+			return $li;
+		},
+		createQueueDom: function(params) {
+			var emp = params.empData;
+			var $li = this.$li.clone();
+			var updateTs = emp.mgjUpdateTime ? new Date(emp.mgjUpdateTime).getTime() : '';
+			$li.find('.header').append(am.photoManager.createImage('artisan', {
+				parentShopId: am.metadata.userInfo.parentShopId,
+				updateTs: updateTs
+			}, emp.id + '.jpg', 's'));
+			this.updateQueueDom($li, params);
+			return $li;
+		},
+		getWrapperClassName: function(id) {
+			return 'wrapper' + id;
+		},
+		getWrapperDomByClassName: function(className) {
+			return this.$.find('.' + className);
+		},
+		getWrapperDomByCategoryId: function(id) {
+			var className = this.getWrapperClassName(id);
+			return this.getWrapperDomByClassName(className);
+		},
 		renderQueue: function (data) {
-			this.$list.empty();
+			// this.$list.empty();
 			if(am.auth.$){
 				am.auth.hide();
 			}
 			if(am.isNull(data)){
 				return console.info("data:"+data);
 			}
+			var existCategoryIdList = [];
 			for (var i = 0; i < data.length; i++) {
-				var $wrapper = this.$wrapper.clone();
-				$wrapper.find('.type').html(data[i].name);
+				var categoryData = data[i];
+				var categoryId = categoryData.id;
+				var queueCacheCategoryData = this.getQueueCategoryData(categoryId);
+				var wrapperClassName = this.getWrapperClassName(categoryId);
+				var $wrapper = this.getWrapperDomByClassName(wrapperClassName);
+				var queueDomMap = queueCacheCategoryData || {};
+				existCategoryIdList.push(categoryId);
+				if (!queueCacheCategoryData) {
+					$wrapper = this.$wrapper.clone();
+					$wrapper.addClass(wrapperClassName);
+				}
+				$wrapper.find('.type').text(data[i].name);
 				$wrapper.data('data', data[i]);
 				
 				if(data[i].status != undefined) {
@@ -996,86 +1148,76 @@
 				
 				var setting_washTime = am.page.service.billMain.getSetting().setting_washTime;
 				var washTimeFlag = setting_washTime && setting_washTime == 1 && am.metadata.configs.rcordRinseTime && am.metadata.configs.rcordRinseTime == 'false';
-				
-				var arrIndex_X = 1;
+				var paramsRowData = this.paras ? this.paras.rowdata : null;
 				if (data[i].users.length) {
+					var existIdList = [];
 					for (var j = 0; j < data[i].users.length; j++) {
-						var $li = this.$li.clone();
-						if(washTimeFlag){
-							$li.removeClass('notWash');
-						}else {
-							$li.addClass('notWash');
-						}
 						var item = data[i].users[j];
-						$li.find('.no').html(item.empId);
 						var emp = am.metadata.empMap[item.empId];
-						
-						if (emp) {
-							//赋值X坐标
-							$li.attr('arrIndex_X', arrIndex_X++);
-				
-							$li.find('.no').html(emp.no);
-							$li.find('.name').html(emp.name);
-							$li.find('.role').html('已选择第'+(Number(emp.pos)+1)+'工位');
-							$li.find('.header').html(am.photoManager.createImage('artisan', {
-								parentShopId: am.metadata.userInfo.parentShopId,
-							}, emp.id + '.jpg', 's'));
-
-							var now = new Date().getTime();
-							var _diff = now - item.statusTime < 0 ? Math.abs(now - item.statusTime) : 0;
-							item.diff = _diff;
-
-							if (this.paras && this.paras.rowdata) {
-								var rowdata = this.paras.rowdata;
-								console.log(rowdata)
-								var pos = item.empId ? emp.pos : item.pos;
-								// if (_status) {
-									var dutyType = Number(pos) + 1;
-									if (rowdata["emp" + dutyType] == emp.id && (rowdata.reservation || rowdata["emp" + dutyType + "RotateId"] == item.rotateId)) {
-										$li.addClass('active');
-										if (rowdata["isSpecified" + dutyType] == 1) {
-											$li.find(".appoint").addClass('yes').find('p').html('指定');
-										}else {
-											$li.find(".appoint").removeClass('yes').find('p').html('非指定');
-										}
-										if(dutyType==this.paras.rowdata.shampooworkbay){
-											$li.find(".wash").addClass('washing');
-										}
-										// if (rowdata["unTail" + dutyType] == 1) {
-										// 	$li.find(".overcard").addClass('yes');
-										// }
-										self.server[pos] = {
-											$: $li,
-											data: item
-										};
-									}
-								// }
-
-							}
-
-
-							if (_status&&item&&item.status) {//fix bug 0015760
-								$li.addClass('status' + item.status)
-								$li.find('.status').html(statusName[item.status]);
-								$li.find('.time').html(item.statusTime);
-							} else {
-								$li.find('.time').hide();
-								$li.find('.status').hide();
-							}
-
-							$li.data('data', item);
-							$wrapper.find('ul').append($li)
+						if (!emp) continue;
+						existIdList.push(item.id);
+						var domParams = {
+							userData: item,
+							empData: emp,
+							washTimeFlag: washTimeFlag,
+							arrIndex_X: j,
+							status: _status
 						}
+						var queueData = queueDomMap[item.id];
+						if (queueData) {
+							if (queueData.statusTime !== item.statusTime) {
+								this.updateQueueDom(queueData.dom, domParams);
+								queueDomMap[item.id].statusTime = item.statusTime;
+							} else {
+								this.setDomStyleOrder(queueData.dom, item.order_no);
+							}
+						} else {
+							var userDom = this.createQueueDom(domParams);
+							$wrapper.find('ul').append(userDom)
+							queueData = {
+								dom: userDom,
+								statusTime: item.statusTime
+							}
+							queueDomMap[item.id] = queueData;
+						}
+						// 更新选中状态
+						this.updateActiveStatus({
+							dom: queueData.dom,
+							data: item,
+							rowData: paramsRowData,
+							empData: emp
+						})
 					}
-					this.$list.append($wrapper);
-					this.startInterval($wrapper, i)
+					if (queueCacheCategoryData) {
+						// 遍历缓存数据，若缓存数据在新数据中不存在，则 remove dom
+						for(var cacheId in queueDomMap) {
+							if (existIdList.indexOf(Number(cacheId)) === -1) {
+								queueDomMap[cacheId].dom.remove();
+								delete queueDomMap[cacheId];
+							}
+						};
+					} else {
+						this.$list.append($wrapper);
+					}
+					this.startInterval($wrapper, categoryId);
+					this.setQueueCategoryData(categoryId, queueDomMap)
+				} else if (queueCacheCategoryData) {
+					// 当缓存数据存在，但轮牌无员工时，删除轮牌 dom 与数据
+					$wrapper.remove();
+					this.removeQueueCategoryData(categoryId);
 				}
-
-				
+			}
+			// 遍历缓存数据，若缓存数据不在新数据中，则删除 dom 与数据
+			for (var cacheCategoryId in this.queueCategoryMap) {
+				if (existCategoryIdList.indexOf(Number(cacheCategoryId)) === -1) {
+					var $wrapperDom = this.getWrapperDomByCategoryId(cacheCategoryId);
+					$wrapperDom.remove();
+					this.removeQueueCategoryData(cacheCategoryId);
+				}
 			}
 			this.listScroll.refresh();
 			this.listScroll.scrollTo('top');
-
+			
 			// this.disabledCard();
 
 			if (!this.$list.find('li').length) {
@@ -1085,7 +1227,6 @@
 			//所有的li手牌
 			this.showAllLiDOM = $('ul.wrap li');
 			this.maxNum = parseInt(($(document).width()-20)/this.showAllLiDOM.outerWidth(true));
-
 
 			$('ul.wrap').each(function(i, item) {
 				$(this).find('li').attr('arrIndex_Y', i+1)
@@ -1114,12 +1255,12 @@
 							$this.remove();
 							self.listScroll.refresh();
 						} else {
-							$this.find(".time").html(self.formatTime(dt));
+							$this.find(".time").text(self.formatTime(dt));
 						}
 					} else {
 						var statusTime = data.statusTime || 1440522000000;
 						var dt = Math.floor((now - statusTime + data.diff) / 1000);
-						$this.find(".time").html(self.formatTime(dt));
+						$this.find(".time").text(self.formatTime(dt));
 					}
 				});
 			};
@@ -1129,6 +1270,13 @@
 			this['timer' + index] = setInterval(once, 1000);
 			
 			once();
+		},
+		clearTimeInterval: function() {
+			if (this.queueCategoryMap) {
+				for(var id in this.queueCategoryMap) {
+					this.stopInterval(id);
+				}
+			}
 		},
 		stopInterval: function (index) {
 			if (this['timer' + index]) {
@@ -1158,6 +1306,7 @@
 			};
 			return [zero(h), zero(i), zero(s)].join(":");
 		},
+		//更新员工状态数据，此方法仅在不按轮牌，按工位显示时有用；
 		renderPos: function () {
 			this.$list.empty();
 			if(am.auth.$){
@@ -1193,12 +1342,20 @@
 							$li.find('.no').html(emp[j].no);
 							$li.find('.name').html(emp[j].name);
 							$li.find('.role').html('已选择第'+(i+1)+'工位');
+							var updateTs = '';
+							if(emp[j].mgjUpdateTime){
+								updateTs = new Date(emp[j].mgjUpdateTime).getTime();
+							}
 							$li.find('.header').html(am.photoManager.createImage('artisan', {
 								parentShopId: am.metadata.userInfo.parentShopId,
+								updateTs: updateTs
 							}, emp[j].id + '.jpg', 's'));
 							$li.find('.time,.overcard').remove();
 							$li.find('.status').html(statusName[1]);
-
+							if($li.find('.time').length==0 && $li.find('.status').html()){
+								$li.find('.footer').addClass('hide');
+								$li.find('.status').addClass('bg');
+							}
 							var emps = am.metadata.empMap[emp[j].id];
 
 							if (this.paras.rowdata) {
@@ -1227,8 +1384,12 @@
 					}
 				}
 				this.$list.append($wrapper);
-				this.getInstoreBill();
 			}
+			var hangupCacheData = am.page.hangup.cachedata;
+			if (hangupCacheData) {
+				this.changePosStatus(hangupCacheData.content);
+			}
+			//this.getInstoreBill();
 			this.listScroll.refresh();
 			this.listScroll.scrollTo('top');
 
@@ -1251,18 +1412,6 @@
 
 			console.log('包含条目', this.showAllLiDOM, this.maxNum);
 
-		},
-		getInstoreBill:function(){
-			var user = am.metadata.userInfo;
-			am.api.hangupList.exec({
-				"shopId": user.shopId,
-				"pageSize": 99999, //可选，如果有则分页，否则不分页
-				"channel": 1
-			}, function (ret) {
-				if(ret && ret.code==0){
-					self.changePosStatus(ret.content);
-				}
-			});
 		},
 		changePosStatus:function(data){
 			data.sort(function(a,b){
@@ -1340,6 +1489,7 @@
 		},
 		onPosStatusChange:function(){
 			if (am.metadata.userInfo.mgjVersion == 3 && am.metadata.configs.orderConnectWithRotate == 'true'){
+				//显示轮牌的时候就不理它
 				return;
 			}
 			atMobile.nativeUIWidget.confirm({
@@ -1641,7 +1791,8 @@
 				wrapLi.removeClass('availableTrue');
 
 				// $('#page_openbill ul.wrap').eq(thisArr[0]-1).find('li').eq(thisArr[1]-1).addClass('availableTrue').children('.outside').trigger('vclick');
-				$('#page_openbill ul.wrap').eq(thisArr[0]-1).find('li').eq(thisArr[1]-1).addClass('availableTrue');
+				var selectorKey = 'li[arrindex_x=' + thisArr[1] + ']';
+				$('#page_openbill ul.wrap').eq(thisArr[0]-1).find(selectorKey).addClass('availableTrue');
 
 				self.directionKeyObj.activeIndex = thisArr;
 			console.log('setActiveIndex', self.directionKeyObj.activeIndex);
@@ -1652,7 +1803,8 @@
 
             if(document.activeElement && $(document.activeElement).hasClass('input_no')){
 
-            }else{
+            }else if($("#addMoreRemark").is(":visible")){	
+			}else{
 				if(keyCode === 27 || keyCode === 111) {
 					if($('#keypadInputDiv').is(':visible')) {
 						return;

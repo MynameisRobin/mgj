@@ -12,6 +12,10 @@ if(navigator && navigator.userAgent && navigator.userAgent.indexOf('Windows') !=
     }
 }
 
+Date.now = function() {
+    return am.now().getTime();
+}
+
 var config;
 window.am = {
     page: {
@@ -36,6 +40,57 @@ window.am = {
     },
     tab: {},
     popup: {},
+    checkShopAvailable: function (obj) {
+        // 判断门店是否可用
+        // shopIdsStr='1,2,3'       正向1,2,3
+        // shopIdsStr='r,1,2,3'     反向1，2，3
+        // shopIdsStr='a'            全部
+        var targetShopId = obj.targetShopId+'',// 字符串
+            shopIdsStr = obj.shopIdsStr,
+            itemShopId = obj.itemShopId;// 项目门店id 在仅销售门店时判断
+        // targetShopId 当前门店id
+        // shopIdsStr   当前项目配置的使用门店
+        // 去掉设置门店的首尾,  ',23,4,'
+        if(shopIdsStr.indexOf(',')===0 && shopIdsStr.lastIndexOf(',')===shopIdsStr.length-1){
+            shopIdsStr = shopIdsStr.substr(1,shopIdsStr.length-2)
+        }
+        var arr = shopIdsStr.split(',');
+        var available = 1;
+        if (arr && arr.length > 0) {
+            var prefix = arr[0];
+            if (arr.indexOf('-99') > -1) {
+                // 仅销售门店可用
+                if (itemShopId == am.metadata.userInfo.shopId) {
+                    available = 1;
+                } else {
+                    available = 0;
+                }
+            } else if (prefix === 'r') {
+                //反向
+                if (arr.indexOf(targetShopId) > -1) {
+                    // 反向 中包含当前门店，即当前门店不可用
+                    available = 0;
+                } else {
+                    // 反向中不包含当前门店，即当前门店可用
+                    available = 1;
+                }
+            } else if (prefix === 'a') {
+                // 全选，即所有门店可用 （正向，全选反向不存在）
+                available = 1;
+            } else {
+                //  正向
+                if (arr.indexOf(targetShopId) > -1) {
+                    // 正向 中包含当前门店，即当前门店可用
+                    available = 1;
+                } else {
+                    // 正向中不包含当前门店，即当前门店不可用
+                    available = 0
+                }
+            }
+
+        }
+        return available;
+    },
     clone: function(data) {
         try {
             return JSON.parse(JSON.stringify(data));
@@ -45,10 +100,36 @@ window.am = {
 	},
 	//判断值是否正常
     isNull: function(val) {
-        if (val == null || val == undefined || val == "" || val == "NaN" || JSON.stringify(val) == "{}") {
+        if (val == null || val == "null" || val == "undefined" || val == undefined || val == "" || val == "NaN" || JSON.stringify(val) == "{}") {
             return true;
         }
         return false;
+    },
+    getVideoHelp:function($ele,helpPoint){
+        am.api.getHelpVideo.exec({
+                "helpPoint": helpPoint
+            }, function (res) {
+                am.loading.hide();
+                console.log(res);
+                console.log("videoHelp--",res);
+                if (res.code == 0) {
+                    console.log(res);
+                    if(res.content && res.content.length){
+                        am.showVideo($ele,res.content);
+                    }else{
+                        am.msg("视频帮助资源不存在，请联系管理员");
+                    }
+                } else {
+                    am.msg(res.message||"网络错误，请稍后再试")
+                }
+            });
+    },
+    showVideo:function($ele,arr){
+        if(arr.length==1){
+            VideoPlayer.showVideo(arr[0])
+        }else{
+            VideoList.showVideoList($ele,arr);
+        }
     },
     getCalenderSelector: function(cb) {
         this.calenderSelectorCb = cb;
@@ -117,16 +198,39 @@ window.am = {
         // 处理当前门店是否开启新提成
         var _this=this;
         // var obj={};
-        var selfAppointmentSet = false;
+		var selfAppointmentSet = false;
+		$.each(data.configs, function(i, v) {
+			if (!v) {
+				data.configs.splice(i, 1);
+			}
+		})
         $.each(data.configs,function(i,v){
 			var newModuleConfigKeyList = ['enabledNewBonusModel', 'enabledNewPerfModel'];
-			if (newModuleConfigKeyList.indexOf(v.configKey) > -1 && v.shopId==data.userInfo.shopId) {
+			if (v && newModuleConfigKeyList.indexOf(v.configKey) > -1 && v.shopId==data.userInfo.shopId) {
 				_this.metadata[v.configKey]=v.configValue;
             }
-            if(v.configKey=='customAppointmentSet' && v.configValue=='true'){
+            if(v && v.configKey=='customAppointmentSet' && v.configValue=='true' && v.shopId==data.userInfo.shopId){
                 selfAppointmentSet = true;
             }
         });
+        // 增加套餐包map
+        var tpMap={};
+        if(data.tpList && data.tpList.length){
+            var tpList=data.tpList;
+            $.each(tpList,function(i,t){
+                tpMap[t.id]=t;
+            })
+        }
+        data.tpMap=tpMap;
+        // 增加过期套餐包map
+        var tpExpireMap={};
+        if(data.tpListExpire && data.tpListExpire.length){
+            var tpListExpire=data.tpListExpire;
+            $.each(tpListExpire,function(i,t){
+                tpExpireMap[t.id]=t;
+            })
+        }
+        data.tpExpireMap=tpExpireMap;
         // 增加门店map
         data.shopMap={};
         $.each(data.shopList,function(i,v){
@@ -135,7 +239,7 @@ window.am = {
 		//处理configs
 		var _congfigs = this.metadata.configs || [],
 			filterConfigs = [];
-        var filterKeys = ['EMP_SORT','workStationSwitch','SHRINK_LEVEL','SERVICE_ITEM_GROUP','PRODUCT_ITEM_GROUP','COMBOCARD_ITEM_GROUP'];
+        var filterKeys = ['EMP_SORT','workStationSwitch','SHRINK_LEVEL','SERVICE_ITEM_GROUP','PRODUCT_ITEM_GROUP','COMBOCARD_ITEM_GROUP','TREAT_PRINT_ORIGINALPRICE','TREAT_PRINT_ONCEMONEY'];
         if(!am.isNull(_congfigs)){
             $.each(_congfigs,function(a,b){
                 if(b && (b.configKey=='reservationFrom' || b.configKey=='reservationTo')){
@@ -160,9 +264,16 @@ window.am = {
             });
         }
         this.metadata.configs = am.arr2obj(filterConfigs || []);
+        if(this.metadata.configs.EMP_SORT=='[]'){
+            this.metadata.configs.EMP_SORT = '';
+        }
+        //处理userConfigs
+        var _userConfigs = this.metadata.userConfigs || [];
+        this.metadata.userConfigs = am.arr2obj(_userConfigs || []);
         //处理项目拼音
         data.serviceItemMap = {};
         data.serviceCodeMap = {};
+        var serviceSubItems = [];// 全部服务项目小类
         var itemsLength = 0;
         var autoStationItemsLength = 0;
         if (data.classes && data.classes.length) {
@@ -193,13 +304,14 @@ window.am = {
                         if(sub[j].autoStation){
                             autoStationItemsLength ++;
                         }
-
+                        serviceSubItems.push(sub[j]);
                         data.serviceItemMap[sub[j].id] = sub[j];
                         data.serviceCodeMap[sub[j].itemid] = sub[j];
                     }
                 }
             }
         }
+        data.serviceSubItems = serviceSubItems;
         // 停用的服务项目
         data.stopServiceItemMap={};
         data.stopServiceCodeMap={};
@@ -237,6 +349,10 @@ window.am = {
                 }
             }
         }
+
+        //分管门店
+        var controlShops = this.getControlShops(data.userInfo.shopids,data.shopList);
+        this.metadata.controlShops = controlShops;
 
         if(autoStationItemsLength<itemsLength/3 && data.shopPropertyField.mgjBillingType==1){
             this.autoStationTip.show();
@@ -289,7 +405,9 @@ window.am = {
 							name:sub[j].name,
 							price:sub[j].saleprice*1,
 							pinyin:sub[j].pinyin,
-							mgjdepotlogo:sub[j].mgjdepotlogo,
+                            mgjdepotlogo:sub[j].mgjdepotlogo,
+                            modifyEnable:sub[j].modifyEnable,
+                            minPrice:sub[j].minPrice,
 							itemid:sub[j].no
                         };
                         data.categoryCodeMap[sub[j].no] = subitem;
@@ -322,7 +440,6 @@ window.am = {
         }
 
         var sub = data.tpList;
-        data.tpCodeMap = {};
         if (sub && sub.length) {
             for (var j = 0; j < sub.length; j++) {
                 try {
@@ -338,24 +455,6 @@ window.am = {
                         sub[j].price += data.tpdList[k].itemMoney;
                     }
                 }
-            }
-            for (var j = 0; j < sub.length; j++) {
-                var type = {
-                    name: sub[j].packName,
-                    id: sub[j].id,
-                    price: sub[j].price,
-                    pinyin: sub[j].pinyin,
-                    tpd: sub[j].tpd,
-                    costMoney: sub[j].costMoney,
-                    img:"$dynamicResource/images/card3.jpg",
-                    isNewTreatment:sub[j].isNewTreatment,
-                    validDay:sub[j].validDay,
-                    validity:sub[j].validity,
-                    validitycheck:sub[j].validitycheck,
-                    cashshopids:sub[j].cashshopids,
-                    itemid: sub[j].id.toString()
-                };
-                data.tpCodeMap[sub[j].id] = type;
             }
         }
         // 判断套餐包里面是否包含已删除和已停用项目
@@ -407,8 +506,34 @@ window.am = {
               return subs;
             }
             return subs;
-          }
+        }
         am.metadata.tpList=validateItems();
+        data.tpCodeMap = {};
+        if (sub && sub.length) {
+            for (var j = 0; j < sub.length; j++) {
+                var type = {
+                    name: sub[j].packName,
+                    id: sub[j].id,
+                    price: sub[j].price,
+                    pinyin: sub[j].pinyin,
+                    tpd: sub[j].tpd,
+                    costMoney: sub[j].costMoney,
+                    img:"$dynamicResource/images/card3.jpg",
+                    isNewTreatment:sub[j].isNewTreatment,
+                    validDay:sub[j].validDay,
+                    validity:sub[j].validity,
+                    validitycheck:sub[j].validitycheck,
+                    cashshopids:sub[j].cashshopids,
+                    itemid: sub[j].id.toString(),
+                    hasStoped:sub[j].hasStoped,// 套餐包含停用项目
+                    hasDeleted:sub[j].hasDeleted,// 套餐包含删除项目
+                    applyShopIds:sub[j].applyShopIds,// 套餐包适用门店
+                    manualgift:sub[j].manualgift
+                };
+                data.tpCodeMap[sub[j].id] = type;
+            }
+        }
+
         var em = data.employeeList;
         var lv = data.employeeLevels;
         var ro = data.employeeRoles;
@@ -448,39 +573,109 @@ window.am = {
                     }
                 }
                 data.empMap[em[i].id] = em[i];
-            }
+			}
+			data.employeeListBackup = data.employeeList;
+            if(data.configs.EMP_SORT){
+                var EMP_SORT = JSON.parse(data.configs['EMP_SORT']);
+                data.employeeList = this.getConfigEmpSort(EMP_SORT,data.employeeList);
+			}
         }
 
-        // if (data.configs.v4_tenantLogo) {
-        //     var $img = am.photoManager.createImage(
-        //         "tenantLogo",
-        //         {
-        //             parentShopId: am.metadata.userInfo.parentShopId
-        //         },
-        //         data.configs.v4_tenantLogo
-        //     );
-        //     $("#tab_main .logo").html(
-        //         $img
-        //             .load(function() {
-        //                 $(this)
-        //                     .show()
-        //                     .parent()
-        //                     .addClass("loaded");
-        //                 localStorage.setItem("TP_logo", $(this).attr("src"));
-        //             })
-        //             .error(function() {
-        //                 $("#tab_main .logo").addClass("mgj");
-        //             })
-        //     );
-        // } else {
-        //     $("#tab_main .logo").addClass("mgj");
-        //     localStorage.removeItem("TP_logo");
-        // }
+        if (data.configs.v4_tenantLogo) {
+            var $img = am.photoManager.createImage(
+                "tenantLogo",
+                {
+                    parentShopId: am.metadata.userInfo.parentShopId
+                },
+                data.configs.v4_tenantLogo
+            );
+            $img.load(function() {
+                localStorage.setItem("TP_logo", $(this).attr("src"));
+            }).error(function() {
+
+            })
+        } else {
+            localStorage.removeItem("TP_logo");
+        }
 
         //websocket 初始化
         am.socketPush.login();
 
         am.operateArr = data.userInfo.operatestr.split(",");
+        // 校验是否结单需要选择员工
+        am.checkContainedServers = function (opt) {
+            //expenseCategory 0 卖项目，1 卖品 2开卡 3 充值 4 卖套餐
+            var contained = 1;
+            if (am.operateArr.indexOf("a51") > -1) {
+                // 结算必须选择员工
+                var expenseCategory=-1;
+                if(opt.expenseCategory!==undefined){
+                    expenseCategory = opt.expenseCategory; 
+                }else{
+                    // 项目 卖品 充值
+                    expenseCategory = opt.option && opt.option.expenseCategory;
+                }
+                if (expenseCategory === 4) {
+                    // 套餐
+                    var treatments = opt.comboCard.treatments;
+                    $.each(treatments, function (key, treatInfo) {
+                        if (treatInfo.packageId > 0) {
+                            if (!treatInfo.servers || treatInfo.servers.length == 0) {
+                                contained = 0;
+                                return false;
+                            }
+                        } else {
+                            serviceItems = treatInfo.serviceItems;
+                            var finded = 0;
+                            $.each(serviceItems, function (s, serviceItem) {
+                                if (!serviceItem.servers || serviceItem.servers.length == 0) {
+                                    contained = 0;
+                                    finded = 1;
+                                    return false;
+                                }
+                            });
+                            if (finded) {
+                                return false;
+                            }
+                        }
+                    });
+                }else if(expenseCategory === 3){
+                    if (!opt.option.card.servers || opt.option.card.servers.length === 0) {
+                        contained = 0;
+                    }
+
+                } else if (expenseCategory === 2 ) {
+                    // 开充卡
+                    if (!opt.card.servers || opt.card.servers.length === 0) {
+                        contained = 0;
+                    }
+                } else if (expenseCategory === 1) {
+                    // 卖品
+                    var depots = (opt.option.prodOption && opt.option.prodOption.products && opt.option.prodOption.products.depots) || (opt.option.products && opt.option.products.depots);
+                    if (depots && depots.length) {
+                        $.each(depots, function (d, depot) {
+                            if (!depot.servers || depot.servers.length == 0) {
+                                contained = 0;
+                                return false;
+                            }
+                        })
+                    }
+                } else if (expenseCategory === 0) {
+                    // 卖项目
+                    var serviceItems= opt.option.serviceItems;
+                    $.each(serviceItems,function(s,serviceItem){
+                        if (!serviceItem.servers || serviceItem.servers.length == 0) {
+                            contained = 0;
+                            return false;
+                        }
+                    })
+                }
+                return contained;
+            } else {
+                // 结算时不必选择员工
+                return contained;
+            }
+        };
 
         var payCfg = [
             {
@@ -708,7 +903,7 @@ window.am = {
         //控制菜单权限
         am.tab.main._$items.each(function() {
             var pow = $(this).data("pow");
-            if(data.userInfo.shopType==0){
+            if(data.userInfo.accountType==0 && data.userInfo.shopType==0){
                 if(pow!='a27'){
                     $(this).hide();
                 }else {
@@ -779,6 +974,14 @@ window.am = {
         },
         hide: function() {
             $.am.modalLoading.hide();
+        }
+    },
+    partLoading: {
+        show: function(e, area) {
+            $.am.partLoading.show(e, area);
+        },
+        hide: function() {
+            $.am.partLoading.hide();
         }
     },
     loginout: {
@@ -1045,11 +1248,18 @@ window.am = {
         }
         return new NativeDate(localtime);
     },
+    getLocalQrCode: function($target,message,width,height){
+        var qrcode = new QRCode($target.get(0), {
+            width: width || 200,
+            height: height || 200,
+        });
+        qrcode.makeCode(message);
+    },
     getQRCode: function(message, width, height) {
         width = width || 200;
         height = height || 200;
         //return config.commonUrl + "/component/genqr?message=" + encodeURIComponent(message) + "&width=" + width + "&height=" + height;
-        return "http://common.reeli.cn/component/genqr?message=" + encodeURIComponent(message) + "&width=" + width + "&height=" + height;
+        return "http://common.meiguanjia.net/component/genqr?message=" + encodeURIComponent(message) + "&width=" + width + "&height=" + height;
     },
     //获取小程序码
     getMiniProCode: function(tenantId, page,scene,promoteUserId, promoteUserType) {
@@ -1090,18 +1300,45 @@ window.am = {
         var options = {
             tapToClose: true,
             shareEl: false,
-            index: index || 0
+            index: index || 0,
+            bgOpacity: 0.5,
         };
         this.gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
         this.gallery.init();
     },
-    getmetadata: function(userInfo) {
+    getmetadata: function(userInfo,shopId){
+        var self = this;
+        am.loading.show("正在登录,请稍候...");
+        am.api.getConfUpdTime.exec({
+            shopid: userInfo.shopId
+        },function(ret){
+            am.loading.hide();
+            if(ret && ret.code==0 && ret.content){
+                var confLastUpdTime = ret.content.confLastUpdTime;
+                var localMetadata = localStorage.getItem("METADATA_" + userInfo.userId);
+                if(localMetadata){
+                    localMetadata = JSON.parse(localMetadata);
+                }
+                if(!localMetadata  || localMetadata.ts < confLastUpdTime || userInfo.accountType==0){
+                    self.reallyGetmetadata(userInfo,shopId);
+                }else {
+                    localMetadata.userInfo = userInfo;
+                    localStorage.setItem("METADATA_" + userInfo.userId, JSON.stringify(localMetadata));
+                    self.initGoto(am.setMetadata(localMetadata));
+                }
+            }else {
+                self.reallyGetmetadata(userInfo,shopId);
+            }
+        });
+    },
+    reallyGetmetadata: function(userInfo,shopId) {
         var self = this;
         am.loading.show("正在登录,请稍候...");
         am.api.metadata.exec(
             {
                 parentShopId: userInfo.parentShopId,
-                token: userInfo.mgjtouchtoken
+                token: userInfo.mgjtouchtoken,
+                shopid:userInfo.shopId
             },
             function(ret) {
                 console.log('getMetadata done!');
@@ -1109,16 +1346,32 @@ window.am = {
                 if (ret && ret.code == 0 && ret.content) {
                     ret.content.ts = +new Date();
                     ret.content.userInfo = userInfo;
-                    localStorage.setItem("METADATA_" + userInfo.userName, JSON.stringify(ret.content));
+                    var controlShops = self.getControlShops(userInfo.shopids,ret.content.shopList);
+                    if(userInfo.accountType==0 && userInfo.operatestr && userInfo.operatestr.indexOf('a48')!=-1 && controlShops && controlShops.length && !shopId){
+                        am.shopSelect.show({
+                            shops: {
+                                shopList: controlShops,
+                                shopAreas: ret.content.shopAreas
+                            },
+                            callback: function(shops){
+                                console.log(shops);
+                                am.page.login.loginOtherShop(userInfo.mgjtouchtoken,shops[0].shopId);
+                            }
+                        });
+                        return;
+                    }
+                    localStorage.setItem("METADATA_" + userInfo.userId, JSON.stringify(ret.content));
                     self.initGoto(am.setMetadata(ret.content));
                 } else if(ret && ret.code == -1){
                     var metadata;
                     try {
-                        metadata = JSON.parse(localStorage.getItem("METADATA_" + userInfo.userName));
+                        metadata = JSON.parse(localStorage.getItem("METADATA_" + userInfo.userId));
                     } catch (e) {
                         $.am.debug.log("parse metadta error");
                     }
                     if (metadata) {
+                        metadata.userInfo = userInfo;
+                        localStorage.setItem("METADATA_" + userInfo.userId, JSON.stringify(metadata));
                         self.initGoto(am.setMetadata(metadata));
                     } else {
                         am.msg("登录失败，请重试！");
@@ -1131,26 +1384,75 @@ window.am = {
             }
         );
     },
+    getControlShops: function(shopids,shopList){
+        if(!shopids){
+            return shopList;
+        }
+        var list = [];
+        for(var i=0;i<shopList.length;i++){
+            if(shopids && shopids.indexOf(shopList[i].shopId) !=-1){
+                list.push(shopList[i]);
+            }
+        }
+        return list;
+    },
     initGoto: function(pow) {
         var self = this;
         if (pow) {
             am.tab.main._idx = -1;
-            am.tab.main._$items.filter("[data-pow=" + pow + "]").trigger("vclick");
+            var e = $.Event("vclick", {FORCEREFRESH: 1});
+            am.tab.main._$items.filter("[data-pow=" + pow + "]").trigger(e);
             // 工单
             am.tips && am.tips.workOrder($("#debug"));
             //轮询工单
             am.page.login.getWorkTip(am.metadata.userInfo,1);
             //设置主题
-            themeSetting.set(am.metadata.userInfo.parentShopId);
+			themeSetting.set(am.metadata.userInfo.parentShopId);
+			// 刷新之前是否是锁屏,从登录进来不锁
+			if (localStorage.getItem('lockScreenFlag_' + am.metadata.userInfo.userId) == '1' && !am.lockScreenFlag) {
+				am.lockScreen.show();
+			}else{
+				// 启动无操作锁屏
+				am.lockScreen.operateTime();
+            }
+            if(am.metadata.userInfo.accountType==0 && am.metadata.userInfo.operatestr && am.metadata.userInfo.operatestr.indexOf('a48')!=-1 && am.metadata.controlShops && am.metadata.controlShops.length){
+                $('#shopSelcetBtn').show();
+                var shopSelcetTip = localStorage.getItem(am.metadata.userInfo.userId+'_shopSelcetTip');
+                if(shopSelcetTip){
+                    $('#shopSelcetTip').hide();
+                }else {
+                    $('#shopSelcetTip').show();
+                }
+            }else {
+                $('#shopSelcetBtn').hide();
+            }
+
         } else {
             am.msg("对不起，你无权登录！");
             $.am.changePage(am.page.login, "");
+            $('#shopSelcetBtn,#shopSelcetTip,#autoStationTip').hide();
         }
 
         //初始化蓝牙扫码枪
         if(window.device && window.device.platform && window.device.platform.toUpperCase() === 'IOS' && localStorage.getItem('mgjBtScanner')){
             //打开蓝牙扫码枪支持
             am.startBTScanner();
+        }
+
+        var params = JSON.stringify(am.metadata.configs)?JSON.parse(JSON.stringify(am.metadata.configs)):{};
+        am.mediaShow(0,params);
+    },
+    billChangeToHangup: function(){
+        try {
+            var gotoHangup = function () {
+                $.am.changePage(am.page.hangup,"",{
+                    openbill:am.metadata.shopPropertyField.mgjBillingType,
+                    setting_washTime:am.page.service.billMain.getSetting().setting_washTime
+                });
+            };
+            am.confirm('单据已变更','由于其它终端的操作，此单状态已改变！','知道了','返回',gotoHangup,gotoHangup);
+        }catch(e){
+
         }
     },
     startBTScanner:function(){
@@ -1225,7 +1527,7 @@ window.am = {
             if (location.hash) {
                 $.am.changePage(am.page.login, "");
             } else {
-                var meta = JSON.parse(localStorage.getItem("METADATA_" + user.userName));
+                var meta = JSON.parse(localStorage.getItem("METADATA_" + user.userId));
                 if(meta && meta.ts){
                     var d = newDate - meta.ts;
                     if (d / (1000 * 60) > 12 * 60) {
@@ -1233,10 +1535,10 @@ window.am = {
                         $.am.changePage(am.page.login, "");
                     } else {
                         //小于30分钟 直接进去 刷新metadata
-                        self.getmetadata(meta.userInfo);
+                        self.getmetadata(meta.userInfo,meta.userInfo.shopId);
                     }
                 }else if(meta && meta.userInfo){
-                    self.getmetadata(meta.userInfo);
+                    self.getmetadata(meta.userInfo,meta.userInfo.shopId);
                 }else {
                 	$.am.changePage(am.page.login, "");
                 }
@@ -1546,7 +1848,8 @@ window.am = {
                     id: _this.id,
                     seatName: _this.seatName,
                     size: size,
-                    isAll: isAll
+                    isAll: isAll,
+                    title: info
                 });
             });
         },
@@ -1594,16 +1897,19 @@ window.am = {
             this.$bottom.find('ul').empty();
             var ret = {
                 content : [
-                    'd', 'e', 'f'
+                    'public1', 'public2', 'public3','public4', 'public5', 'public6','public7', 'public8', 'public9','public10', 'public11', 'public12'
                 ]
             }
+            var mghScanningMode = amGloble.metadata.configs && amGloble.metadata.configs.mgjScanningMode ? amGloble.metadata.configs.mgjScanningMode : '1',
+                storeName = amGloble.metadata.userInfo.osName,
+                locLogo = localStorage.getItem('TP_logo');
             for(var i=0;i<ret.content.length;i++){
                 var	$li = $('<li class="' + ret.content[i] + ' am-clickable"></li>'),
                     $imgDiv = '',
                     userInfo = am.metadata.userInfo,
                     // hash = 'v=' + i + '&isAll='+opt.isAll +'&areaid='+ opt.areaid + '&spaceName=' + opt.spaceName + '&id=' + opt.id + '&seatName=' + opt.seatName +'&parentShopId=' + userInfo.parentShopId +'&shopId=' + userInfo.shopId + '&token=' + userInfo.mgjtouchtoken + '&tenantId=' + userInfo.parentShopId + '&gateway=' + config.gateway + '&page=pages/mine/index' + '&scene=settlement',
-                    hash = 'opt=' + i + '_'+opt.isAll +'_'+ opt.areaid + '_' + opt.spaceName + '_' + opt.id + '_' + opt.seatName +'_' + userInfo.parentShopId +'_' + userInfo.shopId + '_' + userInfo.mgjtouchtoken  + '_' + config.gateway + '_' + opt.size,
-                    urls = this.createCode(hash),
+                    hash = 'opt=' + (i + 1) + '_'+opt.isAll +'_'+ opt.areaid + '_' + opt.spaceName + '_' + opt.id + '_' + opt.seatName +'_' + userInfo.parentShopId +'_' + userInfo.shopId + '_' + userInfo.mgjtouchtoken  + '_' + config.gateway + '_' + opt.size + '_' + mghScanningMode + '_' + storeName + '_' + locLogo,
+                    urls = this.createCode(hash), 
                     img = this.createImage(),
                     $btn = $('<li></li>');
                 img.setHref(urls.base,function(){
@@ -1744,9 +2050,8 @@ window.am = {
 	 * @param {*} arr4 最后得到全新的员工列表
 	 * @param {*} arr5 按照一二三工位进行排序处理
 	 */
-	getConfigEmpSort: function(arr){
-		var employeeList = am.metadata.employeeList || [];
-		if(am.isNull(arr)) return [];
+	getConfigEmpSort: function(arr,employeeList){
+		if(am.isNull(arr)) return employeeList;
 		if(am.isNull(employeeList)) return [];
 		var arr2 = arr.concat(employeeList);
 		var arr3 = [],arr4 = [];
@@ -1784,7 +2089,28 @@ window.am = {
 		arr5 = $.merge(arr5,pos3);
 		console.log(arr5,"arr==========================arr");
 		return arr5;
-	}
+    },
+    // 保存normalConfig
+    addNormalConfig: function (params, cb) {
+        var self = this;
+        am.loading.show();
+        am.api.saveNormalConfig.exec({
+            "parentshopid": am.metadata.userInfo.parentShopId + '',
+            "configkey": params.key,
+            "configvalue": JSON.stringify(params.value),
+            "shopid": am.metadata.userInfo.shopId + '',
+            "setModuleid": params.id
+        }, function (ret) {
+            am.loading.hide();
+            if (ret && ret.code === 0) {
+                am.msg("操作成功");
+                am.metadata.configs[params.key] = JSON.stringify(params.value);
+                cb && cb();
+            } else {
+                am.msg(ret.message);
+            }
+        });
+    }
 };
 
 Number.prototype.toFloat = function() {
@@ -1827,7 +2153,18 @@ $.am.init = function(){
                 }
                 if(c){
                     window.config = c;
+                    if(ret.id.indexOf('test')!=-1 || ret.id.indexOf('develop')!=-1){
+                        window.serverClusterConfig = {};
+                    }else if(ret.id.indexOf('fyd')!=-1 || ret.id.indexOf('gray')!=-1){
+                        window.serverClusterConfig = {};
+                        window.config.socketloginurl = 'socketlogin.meiguanjia.net';
+                    }else if(ret.id.indexOf('staging')!=-1){
+                        window.serverClusterConfig = serverClusterConfigStaging;
+                        window.config.socketloginurl = 'socketlogin.meiguanjia.net';
+                    }
                 }
+            }else {
+                window.config.socketloginurl = 'socketlogin.meiguanjia.net';
             }
             $(".app_version").text("v" + ret.version);
             appStart();
@@ -1892,7 +2229,8 @@ function appStart() {
                         }
                         console.log("登出成功");
                         localStorage.removeItem("userToken");
-                        localStorage.removeItem("METADATA_" + am.metadata.userInfo.userName);
+						// localStorage.removeItem("METADATA_" + am.metadata.userInfo.userId);
+						localStorage.removeItem('lockScreenFlag_' + am.metadata.userInfo.userId);
                         //$.am.changePage(am.page.login, "slideup");
                         window.location.reload();
                     }
@@ -1900,6 +2238,111 @@ function appStart() {
             },
             function() {}
         );
+    });
+
+    $('#shopSelcetBtn').vclick(function(){
+        $('.pswp__button--close').trigger('click');
+        $('#seatDownload').find('.close').trigger('vclick');
+        $('#selectEmployee').find('.close').trigger('vclick');
+        $('#refundVccode').find('.qx').trigger('vclick');
+        $('#privilegeCard').find('.headright').trigger('vclick');
+        $('#addMoreRemark').find('.c-close').trigger('vclick');
+        $('#page_about_SMSbox').find('.exit').trigger('vclick');
+        $('#page_aboutpasswordbox').find('.pasexit').trigger('vclick');
+        $('#pop_selecteCombo').find('.c-mask').trigger('vclick');
+        $('#setMutiPerf').find('.cancel').trigger('vclick');
+        $('.selected_membercard').find('.delete_sel_member').trigger('vclick');
+        $('.refundCard_popup').find('.popup_right_mask').trigger('vclick');
+        $('.cardfee_popup').find('.popup_right_mask').trigger('vclick');
+        $('.combo_popup').find('.popup_right_mask').trigger('vclick');
+        $('.shops_popup').find('.popup_right_mask').trigger('vclick');
+        $('#combo-card-item-selector').find('.close').trigger('vclick');
+        $('#combo-card-giftItem-selector').find('.close').trigger('vclick');
+        $('#maskBoard').find('.mask').trigger('vclick');
+        $('#auth').find('.close').trigger('vclick');
+        $('#selectServers').find('.close').trigger('vclick');
+        $('#seatQrcode').trigger('vclick');
+        $('#exchangeGoods').find('.exheadright').trigger('vclick');
+        $('.addremark_model,.card_model,.addqzone_model').find('.right_btn').trigger('vclick');
+        $('#withoutBillPayTip,#serviceItem,#promotionMadal').hide();
+        if($('.payConfirm').is(':visible')){
+            return;
+        }
+        am.page.billRecord && am.page.billRecord.searchHide();
+        am.shopSelect.show({
+            title: '选择需要切换的总部/门店系统',
+            callback: function(shops){
+                var userInfo = am.metadata.userInfo;
+                if(!userInfo){
+                    return;
+                }
+                if(am.metadata.userInfo.shopId==shops[0].shopId){
+                    return;
+                }
+                if(am.page.service){
+                    if(am.page.service.billItemSelector){
+                        delete am.page.service.billItemSelector.data
+                        delete am.page.service.billItemSelector.groupData
+                    }
+                    if(am.page.service.billServerSelector){
+                        delete am.page.service.billServerSelector.data
+                    }
+                    if(am.page.service.billMain){
+                        delete am.page.service.billMain.setting
+                        localStorage.removeItem(am.page.service.billMain.settingKey)
+                    }
+                }
+                if(am.page.product){
+                    if(am.page.product.billItemSelector){
+                        delete am.page.product.billItemSelector.data
+                        delete am.page.product.billItemSelector.groupData
+                    }
+                    if(am.page.product.billServerSelector){
+                        delete am.page.product.billServerSelector.data
+                    }
+                    if(am.page.product.billMain){
+                        delete am.page.product.billMain.setting
+                        localStorage.removeItem(am.page.product.billMain.settingKey)
+                    }
+                }
+                if(am.page.memberCard){
+                    if(am.page.memberCard.billItemSelector){
+                        delete am.page.memberCard.billItemSelector.data
+                        delete am.page.memberCard.billItemSelector.groupData
+                    }
+                    if(am.page.memberCard.billServerSelector){
+                        delete am.page.memberCard.billServerSelector.data
+                    }
+                    if(am.page.memberCard.billMain){
+                        delete am.page.memberCard.billMain.setting
+                        localStorage.removeItem(am.page.memberCard.billMain.settingKey)
+                    }
+                }
+                if(am.page.comboCard){
+                    if(am.page.comboCard.billItemSelector){
+                        delete am.page.comboCard.billItemSelector.data
+                        delete am.page.comboCard.billItemSelector.groupData
+                    }
+                    if(am.page.comboCard.billServerSelector){
+                        delete am.page.comboCard.billServerSelector.data
+                    }
+                    if(am.page.comboCard.billMain){
+                        delete am.page.comboCard.billMain.setting
+                        localStorage.removeItem(am.page.comboCard.billMain.settingKey)
+                    }
+                }
+
+                computingPerformance && delete computingPerformance.empList;
+
+                am.page.login.loginOtherShop(userInfo.mgjtouchtoken,shops[0].shopId);
+                am.page.reservation.toggleShopInitialized = 1;
+            }
+        });
+    });
+
+    $('#shopSelcetTip .closeShopSelcetTip').vclick(function(){
+        localStorage.setItem(am.metadata.userInfo.userId+'_shopSelcetTip',1);
+        $('#shopSelcetTip').hide();
     });
 
     // am.getBakUrl(function(){
@@ -1965,7 +2408,7 @@ function appStart() {
         var nowTime = new Date().getTime();
         timeArr.push(nowTime);
         var difference = compareTime(timeArr[0], nowTime);
-        if (difference < 4) {
+        if (difference < 15) {
             //时差在3秒内
             if (timeArr.length > 4) {
                 //点击了5次
@@ -1995,7 +2438,7 @@ function appStart() {
         var nowTime = new Date().getTime();
         timeArr.push(nowTime);
         var difference = compareTime(timeArr[0], nowTime);
-        if (difference < 4) {
+        if (difference < 15) {
             //时差在3秒内
             if (timeArr.length > 9) {
                 //点击了10次
@@ -2010,6 +2453,61 @@ function appStart() {
                     },
                     function() {
                         $.am.changePage(am.page.engineering, "");
+                    },
+                    function() {}
+                );
+            } else {
+                //$.am.changePage(am.page.workOrder, "");
+            }
+        } else {
+            //时差大于3秒
+            timeArr.length = 0;
+        }
+    });
+    $("#rollback").vclick(function() {
+        var nowTime = new Date().getTime();
+        timeArr.push(nowTime);
+        var difference = compareTime(timeArr[0], nowTime);
+        if (difference < 15) {
+            //时差在3秒内
+            if (timeArr.length > 9) {
+                //点击了10次
+                timeArr.length = 0;
+
+                atMobile.nativeUIWidget.confirm(
+                    {
+                        caption: "回退",
+                        description: "是否回退到上一个版本？",
+                        okCaption: "确认",
+                        cancelCaption: "取消"
+                    },
+                    function() {
+                        localStorage.clear();
+                        $.am.debug.log("clearLocalStorage:succ");
+                        setTimeout(function() {
+                            navigator.appplugin.removeAppInfo(function(msgCode) {
+                                $.am.debug.log("resetConfig:succ");
+                                setTimeout(function() {
+                                    navigator.appplugin.changeAppInfo({
+                                        "appid": "n_touchPad_rollback",
+                                        "masserver": "http://mas.reeli.cn",
+                                        "tenantid": "",
+                                    }, function(msgCode) {
+                                        $.am.debug.log("changeAppInfo:succ");
+                                        alert("设置成功，干掉APP再打开！");
+                                        try {
+                                            navigator.app.exitApp();
+                                        }catch(e){
+
+                                        }
+                                    }, function(msg) {
+                                        alert(msg);
+                                    });
+                                }, 100);
+                            }, function(msg) {
+                                alert(msg);
+                            });
+                        }, 100);
                     },
                     function() {}
                 );

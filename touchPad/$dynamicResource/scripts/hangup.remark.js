@@ -91,6 +91,7 @@ var popup = {
             var number = $(this).data("number");
             ret.name   = data.name; 
             ret.id     = data.id;
+            ret.itemid = data.itemid;
             ret.tpd    = data.tpd;
             ret.number = number;
             res.push(ret);
@@ -157,7 +158,9 @@ var popup = {
                 validity:types[i].validity,
                 validitycheck:types[i].validitycheck,
                 cashshopids:types[i].cashshopids,
-                itemid: types[i].id.toString()
+                itemid: types[i].id.toString(),
+                hasStoped:types[i].hasStoped,// 套餐包含停用项目
+                hasDeleted:types[i].hasDeleted// 套餐包含删除项目
             };
             categorys.push(type);
         }
@@ -197,10 +200,14 @@ var remark = {
         this.$card       = this.$.find(".c-openCard");
         this.$recharge   = this.$.find(".c-recharge");
         this.$buypackage = this.$.find(".c-buypackage");
-        this.$textarea   = this.$.find("textarea");
+        this.$textarea   = this.$.find("textarea").focus(function(){
+            _this.$.find('.c-remark-item.active').removeClass('active');
+        });
 
         this.$ul = this.$buypackage.find(".c-packagebox ul");
         this.$li = this.$ul.find("li:first").remove();
+        this.$remarksUl=this.$.find('.c-remarks-ul');
+        this.$remarkLi = this.$remarksUl.find("li:first").remove();
         popup.init();
 
         this.ScrollView= new $.am.ScrollView({
@@ -212,6 +219,17 @@ var remark = {
 
         this.$.on("vclick",".c-close,.cancel",function(){
             _this.hide();
+        }).on("vclick",".saveAsCommon",function(){
+            var val=_this.$textarea.val();
+            if(am.isNull(val)){
+                return am.msg('理由不能为空')
+            }
+            _this.saveToRemarkList(val);
+        }).on("vclick",".c-remark-item",function(e){
+            e.stopPropagation();
+            console.log($(this).text())
+            $(this).siblings().removeClass('active').end().addClass('active');
+            _this.$textarea.val('');
         }).on("vclick",".ok",function(){
             var data = _this.getVal();
             if(data.checkData){
@@ -321,6 +339,13 @@ var remark = {
             _this.showOpenCard();
         }).on("vclick",".c-recharge .value",function(){
             _this.showOpenRechage();
+        }).on('vclick','.remarkSetWrap',function(){
+            _this.hide();
+            $.am.changePage(am.page.about, "slideup");
+            setTimeout(function(){
+                $("#about_tab").find("li:last").trigger("vclick");
+                $('.sysSet .secTabsWrap').find("span").eq(3).trigger("vclick");
+            },200);
         });
     },
     getCardData:function(){
@@ -565,6 +590,10 @@ var remark = {
             delete res.checkData;
         }
         res.textarea = this.$textarea.val();
+        var txt=this.$.find('.c-remark-item.active').text();
+        if(am.isNull(res.textarea)){
+            res.textarea=txt;
+        }
         return res;
     },
     reset:function(){
@@ -589,6 +618,24 @@ var remark = {
         this.reset();
         this.openTextarea();
         this.$textarea.val(this.opt.value);
+        // render common remarks
+        this.$remarksUl.empty();
+        
+        var submitBillRemarks = JSON.parse(am.metadata.configs.submitBillRemarks || "[]");// 门店配置
+        if(!(submitBillRemarks && submitBillRemarks.length)){
+            submitBillRemarks = JSON.parse(am.metadata.configs.submitBill || "[]");// 总部配置
+        }
+        if(submitBillRemarks && submitBillRemarks.length){
+            for(var s=0,len=submitBillRemarks.length;s<len;s++){
+                var $remarkLi=this.$remarkLi.clone(true,true);
+                $remarkLi.find('.c-remark-text').text(submitBillRemarks[s]);
+                if(submitBillRemarks[s]==this.opt.value){
+                    $remarkLi.addClass('active');
+                    this.$textarea.val('');
+                }
+                this.$remarksUl.append($remarkLi);
+            }
+        }
         //数据回写
         
         if(opt.billData.memId && opt.billData.memId!=-1){
@@ -614,6 +661,39 @@ var remark = {
             this.renderRemark(opt.billData);
         }      
         this.$.show();
+        this.ScrollView.refresh();
+    },
+    saveToRemarkList:function(val){
+        var reason = JSON.parse(am.metadata.configs.submitBillRemarks|| "[]");
+        var saveReason=[];
+        if(!am.isNull(reason) && reason.indexOf(val)>-1){
+            // 常用已包含
+            am.msg(val+'已存在，请修改后再保存');
+			return;
+        }else if(!am.isNull(reason) && reason.indexOf(val)==-1){
+            // 常用未包含
+            saveReason = reason.concat([val]);
+        }else if(am.isNull(reason)){
+            // 没有常用
+            saveReason = [val];
+        }
+        this.hide();
+        am.loading.show();
+        am.api.saveNormalConfig.exec({
+            parentshopid: am.metadata.userInfo.parentShopId+'', 
+            configkey: 'submitBillRemarks',
+            configvalue: JSON.stringify(saveReason),
+            shopid: am.metadata.userInfo.shopId+'',
+            setModuleid: 14
+        },function(ret){
+            am.loading.hide();
+            if(ret && ret.code==0){
+               am.metadata.configs.submitBillRemarks=JSON.stringify(saveReason);
+               am.msg('【'+val+'】'+'已保存为常用收银理由');
+            }else {
+                am.msg('保存失败');
+            }
+        });
     },
     checkRechargeCard:function(content){
         //检验这些卡是否能充值

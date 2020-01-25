@@ -473,8 +473,17 @@
 		}
 		if (animating)
 			return;
-		if (obj == activePage)
+		if (obj == activePage){
+			if(para && para.FORCEREFRESH){
+				if (obj.beforeShow && typeof (obj.beforeShow) == 'function') {
+					obj.beforeShow(para);
+				}
+				if (obj.afterShow && typeof (obj.afterShow) == 'function') {
+					obj.afterShow(para);
+				}
+			}
 			return;
+		}
 		param = para;
 
 		obj.$.show();

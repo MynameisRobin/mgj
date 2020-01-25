@@ -1,6 +1,11 @@
 @charset "utf-8";
 /* 文字颜色 ***********************/
 /* c0* 为黑白灰色系 */
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 /* CSS Document */
 body {
   font-family: "Helvetica", "微软雅黑", "华文细黑", "黑体";
@@ -111,10 +116,11 @@ input {
   bottom: 0;
   background: rgba(0, 0, 0, 0.5);
   display: none;
+  z-index: 100;
 }
 .modalDialog.comFee .inner {
-  width: 600px;
-  margin: -300px 0 0 -300px;
+  width: 800px;
+  margin: -300px 0 0 -400px;
 }
 .modalDialog.comFee .inner ul {
   margin: 5px 0;
@@ -146,18 +152,21 @@ input {
   border-right: none;
 }
 .modalDialog.comFee .inner ul li div:nth-child(1) {
-  width: 15%;
+  width: 10%;
 }
 .modalDialog.comFee .inner ul li div:nth-child(2) {
-  width: 25%;
-}
-.modalDialog.comFee .inner ul li div:nth-child(3) {
   width: 20%;
 }
+.modalDialog.comFee .inner ul li div:nth-child(3) {
+  width: 15%;
+}
 .modalDialog.comFee .inner ul li div:nth-child(4) {
-  width: 25%;
+  width: 20%;
 }
 .modalDialog.comFee .inner ul li div:nth-child(5) {
+  width: 20%;
+}
+.modalDialog.comFee .inner ul li div:nth-child(6) {
   width: 15%;
 }
 .modalDialog .inner {
@@ -407,9 +416,25 @@ input {
   background-size: 19px 19px;
   left: 15px;
   right: 15px;
+}
+.addMoreRemark .c-content .c-title .c-title-text {
+  display: inline-block;
+  vertical-align: top;
+  height: 65px;
   line-height: 65px;
   font-size: 17px;
   color: #222222;
+}
+.addMoreRemark .c-content .c-title .remarkSetWrap {
+  display: inline-block;
+  vertical-align: top;
+  width: 15px;
+  height: 15px;
+  margin-top: 25px;
+}
+.addMoreRemark .c-content .c-title .remarkSetWrap .titleSetIcon {
+  width: 15px;
+  height: 15px;
 }
 .addMoreRemark .c-content .c-content-box {
   position: absolute;
@@ -569,13 +594,41 @@ input {
   top: -5px;
   right: -5px;
 }
+.addMoreRemark .c-content .c-content-box .c-remarks-wrap .c-remarks-ul li {
+  height: 40px;
+  position: relative;
+  padding-left: 36px;
+}
+.addMoreRemark .c-content .c-content-box .c-remarks-wrap .c-remarks-ul li span {
+  position: absolute;
+  left: 0;
+  top: 10px;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+}
+.addMoreRemark .c-content .c-content-box .c-remarks-wrap .c-remarks-ul li p {
+  height: 40px;
+  font-size: 14px;
+  color: #222;
+  line-height: 40px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.addMoreRemark .c-content .c-content-box .c-remarks-wrap .c-remarks-ul li.active span {
+  background: #555 url(../images/selectReason.png) no-repeat center center;
+  background-size: 12px 8px;
+  border: none;
+}
 .addMoreRemark .c-content .c-content-box .c-textarea-box {
   width: 100%;
-  height: 105px;
+  height: 50px;
   padding: 14px;
   font-size: 14px;
   background-color: #f7f7f7;
-  margin-top: 20px;
+  margin-top: 6px;
   border-radius: 3px;
 }
 .addMoreRemark .c-content .c-content-box .c-textarea-box textarea {
@@ -591,6 +644,17 @@ input {
 .addMoreRemark .c-content .c-content-box .c-textarea-box textarea:-webkit-placeholder {
   color: #999999;
 }
+.addMoreRemark .c-content .c-content-box .saveAsCommon {
+  height: 35px;
+  color: #12B8EE;
+  font-size: 12px;
+}
+.addMoreRemark .c-content .c-content-box .saveAsCommon .saveAsCommonIcon {
+  width: 12px;
+  height: 12px;
+  vertical-align: baseline;
+  margin: 6px 6px 0 0;
+}
 .addMoreRemark .c-content .c-footer-box {
   position: absolute;
   bottom: 0;
@@ -601,6 +665,7 @@ input {
   text-align: center;
   line-height: 100px;
   background-color: #fff;
+  border-radius: 5px;
 }
 .addMoreRemark .c-content .c-footer-box span {
   height: 43px;
@@ -931,7 +996,7 @@ input {
   position: absolute;
   top: 17px;
   left: 50%;
-  width: 328px;
+  width: 360px;
   margin-left: -164px;
   padding: 16px 19px;
   background: #ffffff;
@@ -1049,7 +1114,7 @@ input {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 999;
+  z-index: 1001;
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
@@ -1160,4 +1225,75 @@ input {
 }
 #goItemPayConfirm .close.am-clickable-active {
   opacity: 0.8;
+}
+.videoHelpWrap {
+  display: inline-block;
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  height: 24px;
+  line-height: 24px;
+  font-size: 12px;
+  color: #00B7EE;
+}
+.videoHelpWrap svg {
+  display: inline-block;
+  width: 20px;
+  height: 16px;
+  vertical-align: -3px;
+}
+.videoHelpWrap.am-clickable-active {
+  opacity: 0.6;
+}
+.pswp__ui.pswp__ui--fit .pswp__button--arrow--left:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  color: #fff;
+  width: 60px;
+  height: 90px;
+  background: url(../images/left-arrow.png) center center no-repeat;
+  background-size: 45px;
+}
+.pswp__ui.pswp__ui--fit .pswp__button--arrow--right:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  color: #fff;
+  width: 60px;
+  height: 90px;
+  background: url(../images/right-arrow.png) center center no-repeat;
+  background-size: 45px;
+}
+#autoWrap {
+  position: relative;
+}
+#autoWrap .content {
+  position: absolute;
+  width: 100%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+#autoWrap .content .img {
+  width: 105px;
+  height: 105px;
+  background: url(../images/autopay.gif) no-repeat center center;
+  margin: 0 auto;
+  border-radius: 50%;
+  background-size: 100% 100%;
+  background-color: #fff;
+}
+#autoWrap .content .tip {
+  font-size: 20px;
+  color: #fff;
+  text-align: center;
+  margin-top: 20px;
+  width: 100%;
 }

@@ -46,6 +46,19 @@
 
             this.$uesrname = this.$.find('.uesrname').blur(function () {
                 $(this).val($(this).val().replace(/[\s\r\n\\\/\'\"\‘\’\“\”]/g, ''))
+                $('body').removeClass('fixTop');
+            }).focus(function(){
+                if(device2.android()){
+                    $('body').addClass('fixTop');
+                }
+            });
+
+            this.$page_textarea = this.$.find('.page_textarea').blur(function () {
+                $('body').removeClass('fixBottom');
+            }).focus(function(){
+                if(device2.android()){
+                    $('body').addClass('fixBottom');
+                }
             });
 
             this.$input = this.$.find(".addMember_list .addphone");
@@ -63,8 +76,25 @@
                         if (value.toString().length > 11) {
                             value = value.substring(0, 11);
                         }
-                        self.$input.val(value.replace(/[\s\r\n\\\/\'\"\‘\’\“\”]/g, ''));
-                        self.checkPhone(value.replace(/[\s\r\n\\\/\'\"\‘\’\“\”]/g, ''));
+                        var value = value.replace(/[\s\r\n\\\/\'\"\‘\’\“\”]/g, '');
+                        self.$input.val(value);
+                        if (value){
+                            if(amGloble.metadata.userInfo.operatestr.indexOf('MGJR,') == -1){
+                                if(value.toString().length==11){
+                                    self.$.find(".cm_mobile_phone .tips").removeClass('show');
+                                    self.$.find(".cm_mobile_phone .addphone").removeClass('warn');
+                                    self.checkPhone(value);
+                                }else{
+                                    self.$.find(".cm_mobile_phone .tips").addClass('show').text("请输入11位正确的手机号");
+                                    self.$.find(".cm_mobile_phone .addphone").addClass('warn');
+                                }
+                            }else{
+                                self.checkPhone(value);
+                            }
+                        }else{
+                            self.$.find(".cm_mobile_phone .tips").removeClass('show');
+                            self.$.find(".cm_mobile_phone .addphone").removeClass('warn');
+                        }
                         // setTimeout(function(){
                         // 	self.$.find(".addMember_list .uesrname,.addMember_list .page_textarea").removeAttr("readonly");
                         // },500);
@@ -126,6 +156,7 @@
             this.$.on("vclick", ".addMember_box .input_clear", function () {
                 self.$.find(".addphone").val("");
                 self.$.find(".cm_mobile_phone .tips").removeClass('show');
+                self.$.find(".cm_mobile_phone .addphone").removeClass('warn');
             }).on("vclick", ".changesource .changebox", function () {
                 $(this).addClass("selected").siblings().removeClass("selected");
                 var sourceId = $(this).find('.change_words').attr('data-val');
@@ -205,6 +236,15 @@
             this.$uploadMemberImg.find('.uploadBtn').vclick(function () {
                 if (self.uploadMemberImgCallback) self.uploadMemberImgCallback();
             });
+            this.$uploadMemberImg.find('.ignoreUploadMemberImg').vclick(function () {
+                if($(this).hasClass('active')){
+                    $(this).removeClass('active');
+                    localStorage.removeItem('ignoreUploadMemberImg_'+am.metadata.userInfo.userId);
+                }else {
+                    $(this).addClass('active');
+                    localStorage.setItem('ignoreUploadMemberImg_'+am.metadata.userInfo.userId,1);
+                }
+            });
             this.$addPhone = this.$.find('.addphone');
         },
         checkPhone: function (phone) {
@@ -216,9 +256,11 @@
                 // am.loading.hide();
                 console.log(res);
                 if (res.code == 13001) {
-                    self.$.find(".cm_mobile_phone .tips").addClass('show').text("注：手机号码已经被使用，请换一个输入");
+                    self.$.find(".cm_mobile_phone .tips").addClass('show').text("手机号码已经被使用，请换一个输入");
+                    self.$.find(".cm_mobile_phone .addphone").addClass('warn');
                 } else if (res.code == 0) {
                     self.$.find(".cm_mobile_phone .tips").removeClass('show');
+                    self.$.find(".cm_mobile_phone .addphone").removeClass('warn');
                 } else {
                     am.msg("手机号码校验失败！");
                 }
@@ -237,10 +279,17 @@
                 am.msg("请输入会员姓名！");
                 return false;
             }
-            if (!mobile || mobile.toString().length < 4) {
-                am.msg("手机号码必须大于4位！");
-                return false;
-            }
+            if(amGloble.metadata.userInfo.operatestr.indexOf('MGJR,') == -1){
+                if (!mobile || mobile.toString().length != 11) {
+                    am.msg("请输入11位正确的手机号！");
+                    return false;
+                }
+            }else{
+                if (!mobile || mobile.toString().length < 4) {
+                    am.msg("手机号码必须大于4位！");
+                    return false;
+                }
+            }            
             if (!sourceId && sourceId != 0) {
                 am.msg("请选择顾客来源！");
                 return false;
@@ -297,6 +346,7 @@
             this.paras = paras;
             this.$introducer.hide().find('.addintroducer').val('');
             self.$.find(".cm_mobile_phone .tips").removeClass('show');
+            self.$.find(".cm_mobile_phone .addphone").removeClass('warn');
             //由大众点评券创建客户时会隐藏
             var $dpInput = this.$.find('.cm_form.cm_mobile_phone,.cm_form.source').show();
             this.$.find('.dptips').hide();
@@ -451,6 +501,7 @@
 			var metadata=am.metadata;
 			am.loading.show("正在创建会员,请稍候...");
 			am.api[self.submit].exec($.extend({
+                "optName": am.metadata.userInfo.userName,
 			    "shopId":am.metadata.userInfo.shopId,
 			    "parentShopId":am.metadata.userInfo.parentShopId
 			},data), function(res) {
@@ -462,7 +513,7 @@
 			    		if(callback){
 							callback && callback(res.content[0]);
 						}else if(self.submit=="editMember"){
-
+                            am.msg('修改成功');
 							var arr = [];
 							for(var i=0;i<$.am.history.length;i++){
 								if($.am.history[i].id!='page_addMember' && $.am.history[i].id!='page_searchMember'){
@@ -492,7 +543,14 @@
 										  member:data
 									});
 							    }
-							    $.am.history.pop();
+                                var arr = [];
+                                for (var i = 0; i < $.am.history.length; i++) {
+                                    if ($.am.history[i].id != 'page_addMember' && $.am.history[i].id != 'page_searchMember') {
+                                        arr.push($.am.history[i]);
+                                    }
+                                }
+                                $.am.history = arr;
+                                $.am.page.back("slidedown");
 							});
 						}
 
@@ -509,7 +567,19 @@
         uploadImg: function (member, callback) {
             this.uploadMemberImgCallback = callback;
             this.uploadMemberImgData = member;
-            this.$uploadMemberImg.show();
+
+            var ignoreUploadMemberImg = localStorage.getItem('ignoreUploadMemberImg_'+am.metadata.userInfo.userId);
+            if(ignoreUploadMemberImg){
+                am.msg('用户资料创建成功');
+                this.uploadMemberImgCallback && this.uploadMemberImgCallback();
+            }else {
+                this.$uploadMemberImg.show();
+                if(ignoreUploadMemberImg){
+                    this.$uploadMemberImg.find('.ignoreUploadMemberImg').addClass('active');
+                }else {
+                    this.$uploadMemberImg.find('.ignoreUploadMemberImg').removeClass('active');
+                }
+            }
         },
         takePhoto: function (memberId, callback) {
             am.photoManager.takePhoto("customer", {

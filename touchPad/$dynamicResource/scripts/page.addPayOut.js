@@ -5,6 +5,7 @@
             $.am.page.back("slidedown");
         },
         init: function(){
+			var self=this;
             this.$depUlOut = this.$.find('.payoutDep'),
 			this.$depLi = this.$depUlOut.find('li');
 			this.$depUlOut.empty();
@@ -33,16 +34,33 @@
 				    }
 				});
             });
-            
+            this.$imgWrap = this.$.find('.img-wrap').on('vclick', '.delImg', function (e) {
+            	$(this).parents('.imgWrapper').remove();
+            	var $wrappers = $(this).parents('.img-wrap').find('.imgWrapper');
+            	if ($wrappers && $wrappers.length < 9) {
+            		self.$uploadVoucher.show();
+            	} else {
+            		self.$uploadVoucher.hide();
+            	}
+            });
             this.$uploadVoucher = this.$.find('.upload').vclick(function(){
                 var _this = $(this);
                 amGloble.photoManager.takePhoto("voucher", {
                     parentShopId: am.metadata.userInfo.parentShopId,
                 }, function(res) {
-                    _this.prev().html(am.photoManager.createImage("voucher", {
-                        parentShopId: am.metadata.userInfo.parentShopId,
-                    }, res, 's'));
-                    _this.data('img',res);
+					var img = am.photoManager.createImage("voucher", {
+						parentShopId: am.metadata.userInfo.parentShopId,
+					}, res, 's');
+					var imgItem = '<div class="imgWrapper"><span class="delImg am-clickable"></span></div>';
+					_this.before(imgItem);
+					_this.parents('.img-wrap').find('.imgWrapper:last').append(img);
+					_this.parents('.img-wrap').find('.imgWrapper:last .delImg').data('img',res);
+					var $wrappers=_this.parents('.img-wrap').find('.imgWrapper');
+					if($wrappers && $wrappers.length>=9){
+						_this.hide();
+					}else{
+						_this.show();
+					}
                 }, function() {
                     console.log("fail");
                 });
@@ -53,6 +71,10 @@
             });
         },
         beforeShow: function(){
+			this.$payoutSmt.removeClass('am-disabled');
+			this.$uploadVoucher.removeData().show();
+			this.$uploadVoucher.parent('.img-wrap').find('img').remove();
+			this.$imgWrap.find('.imgWrapper').remove();
             //收入支出部门
 			if(!this.$depUlOut.find('li').length){
 				var dep = am.metadata.deparList;
@@ -65,15 +87,17 @@
 			this.$depUlOut.find('li').removeClass('active');
 
 			// 收入支出类型
-			if(!this.$ExpendTypeUlOut.find('li').length){
-				var dayExpendTypeList = am.metadata.dayExpendTypeList;
-					for(var i=0;i<dayExpendTypeList.length;i++){
-						if(dayExpendTypeList[i].dayexpendtypeid!=5){
-							var $li = this.$ExpendTypeLi.clone();
-							$li.data('data',dayExpendTypeList[i]).find('p').html(dayExpendTypeList[i].name);
-							this.$ExpendTypeUlOut.append($li);
-						}
+			if (!this.$ExpendTypeUlOut.find('li').length) {
+				var dayExpendTypeList = am.metadata.dayExpendTypeList.filter(function (value) {
+					return value.visible == 1;
+				});
+				for (var i = 0; i < dayExpendTypeList.length; i++) {
+					if (dayExpendTypeList[i].dayexpendtypeid != 5) {
+						var $li = this.$ExpendTypeLi.clone();
+						$li.data('data', dayExpendTypeList[i]).find('p').html(dayExpendTypeList[i].name);
+						this.$ExpendTypeUlOut.append($li);
 					}
+				}
 			}
 			if(!this.$ExpendTypeUlOut.find('li').length){
 				this.$ExpendTypeUlOut.html('未设置');
@@ -100,13 +124,18 @@
 				dayExpendType = this.$.find('.payoutType .active').data('data') && this.$.find('.payoutType .active').data('data').id,
 				seFlag = this.$.find('.payoutMethod .active').index()==0?1:0,
 				price = this.$payoutPrice.val(),
-				profile = this.$uploadVoucher.data('img'),
 				intro = this.$payoutIntro.val();
+				var imgNamesArr=[];
+				var $imgs=this.$.find('.delImg');
+				$.each($imgs,function(i,v){
+					imgNamesArr.push($(this).data('img'));
+				})
+				profile=imgNamesArr.join(',');
 			if(!this.$.find('.payoutType .active').data('data')){
 				am.msg('未设置支出类型,请前往系统设置');
 				return;
 			}
-			if(!price){
+			if(!(price*1)){
 				am.msg('请输入支出金额');
 				return;
 			}
@@ -123,6 +152,10 @@
 			
         },
         addExps: function(data){
+			if(this.$payoutSmt.hasClass('am-disabled')){
+				return;
+			}
+			this.$payoutSmt.addClass('am-disabled');
 			am.loading.show();
 			am.api.addExps.exec({
 				parentShopId:  am.metadata.userInfo.realParentShopId,
@@ -143,6 +176,7 @@
 					am.msg('保存成功');
 					$.am.changePage(am.page.about,'slidedown','refreshPayOut');
 				}else if(ret && ret.code == -1){
+					self.$payoutSmt.removeClass('am-disabled');
 					atMobile.nativeUIWidget.confirm({
                         caption: '网络异常',
                         description: '数据保存失败，是否立即重试？',
@@ -153,6 +187,9 @@
                     }, function(){
                         
                     });
+				}else {
+					self.$payoutSmt.removeClass('am-disabled');
+					am.msg(ret.mesage || '保存失败');
 				}
 			});		
 		}

@@ -26,6 +26,19 @@
 	right: 0;
 	z-index: 1;
 	line-height: 42px;
+	overflow: hidden;
+	&::after{
+		content: "";
+		display: none;
+		position: absolute;
+		left:0;
+		top: 0;
+		bottom: 0;
+		right: 0;
+	}
+	&.memberLoading::after{
+		display: block;
+	}
 	.billNo{
 		padding-left: 10px;
 		float: left;
@@ -94,6 +107,17 @@
 	background-color: #333;
 	z-index: 1;
 	color: @c05;
+	&.memberLoading{
+		&::after{
+			content: " ";
+			display: block;
+			position: absolute;
+			left:0;
+			top: 0;
+			bottom: 0;
+			right: 0;
+		}
+	}
 	li{
 		padding: 2px 0 0 0;
 		height: 56px;

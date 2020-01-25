@@ -1,0 +1,519 @@
+#page_billDetail {
+
+	.content {
+		position: absolute;
+		top: 50px;
+		left: 0;
+		right: 0;
+		bottom: 0;
+
+		// 签名
+		.showpic {
+			position: absolute;
+			height: auto;
+			background: #fff;
+			display: none;
+			min-height: 220px;
+			left: 35%;
+			top: 50%;
+			transform: translate(0, -50%);
+			border-radius: 5px;
+			z-index: 2;
+			min-width: 340px;
+			box-shadow: 0px 1px 10px 0px rgba(0, 0, 0, 0.08);
+
+			p {
+				padding: 10px 0px 10px;
+				text-indent: 20px;
+				border-bottom: 1px solid #efefef;
+				font-size: 12px;
+				color: #303133;
+			}
+
+			img {
+				width: 100%;
+				position: absolute;
+				z-index: 2;
+			}
+
+			.closeq {
+				margin: 8px;
+				position: absolute;
+				right: 0px;
+				top: -8px;
+				height: 30px;
+				width: 30px;
+				border-radius: 5px;
+				cursor: pointer;
+				z-index: 2;
+				font-size: 30px;
+				font-weight: lighter;
+				color: #909090;
+			}
+
+			.tips {
+				position: absolute;
+				z-index: 1;
+				left: 43%;
+				top: 40%;
+				margin-left: -40px;
+			}
+
+		}
+
+		.hidden {
+			display: none;
+		}
+
+		.back {
+			cursor: pointer;
+		}
+
+		.head {
+			position: relative;
+			margin-top: 22px;
+			margin-bottom: 20px;
+
+			strong {
+				font-size: 14px;
+				margin-left: 20px;
+			}
+
+			i {
+				height: 18px;
+				width: 18px;
+				border-radius: 2px;
+				background: url(../img/basismd_return.png) no-repeat center center;
+				position: absolute;
+				left: 10px;
+				top: 50%;
+				margin: -7px 0 0 0;
+			}
+		}
+
+		.main {
+			padding-top: 20px;
+			font-size: 12px;
+			overflow: hidden;
+
+			.rightborder {
+				border-right: 1px solid #ecebeb;
+			}
+
+			.form {
+			}
+
+			.top-box {
+				width: 22%;
+				top: 1px;
+				left: 0;
+				bottom: 0;
+				float: left;
+				font-size: 12px;
+				padding-top: 20px;
+				position: absolute;
+				background: #fafafa;
+				border-right: 1px solid #ecebeb;
+
+				ul {
+					overflow: hidden;
+				}
+			}
+
+			.leftborder {
+				border-left: 1px solid #ecebeb;
+			}
+
+			.rightbox {
+				overflow: hidden;
+				float: left;
+				width: 78%;
+				padding: 0 20px;
+				box-sizing: border-box;
+				margin-left: 22%;
+			}
+
+			.center-box {
+				margin: 0px;
+				width: 100%;
+
+				.titleTr {
+					background: #fff;
+					border: none;
+
+					.mealname {
+						width: 80px;
+					}
+				}
+			}
+
+			.bottom-box {
+				overflow: hidden;
+				font-size: 12px;
+
+				.moneyBox {
+					display: inline-block;
+					height: 20px;
+					line-height: 20px;
+					font-size: 14px;
+
+					.cost {
+						color: #ee3232;
+					}
+				}
+
+				.item{
+					.form-group{
+						overflow: hidden;
+						.label{
+							float: left;
+							line-height:20px;
+							margin-left: 0;
+						}
+						.field{
+							float: left;
+							line-height:20px;
+						}
+					}
+				}
+
+				.left {
+					width: 30%;
+					float: left;
+					line-height: 20px;
+					padding-top: 18px;
+					margin-right: 30%;
+
+					.payDetail {
+						overflow: hidden;
+					}
+				}
+
+				.right {
+					width: 30%;
+					line-height: 20px;
+					float: left;
+					padding-top: 20px;
+				}
+			}
+
+			.list {
+				li {
+					width: 100%;
+					float: left;
+					margin-top: 0px;
+					color: #909090;
+					line-height: 22px;
+					&.red {
+						.label,.field {
+							color: #ee3232;
+						}
+					}
+					.label {
+						width: 70px;
+					}
+
+					.field {
+						color: #333;
+					}
+
+					.softgenre {
+						color: #83C0FF;
+						&.am-disabled {
+							color: #bdbdbd;
+							opacity: 0.3;
+						}
+					}
+
+				}
+
+				.order,
+				.dianpinLi {
+					margin-top: 25px;
+				}
+			}
+		}
+
+		.form-group {
+			display: inline-block;
+			margin-top: 0px;
+			font-size: 0;
+
+			.label {
+				font-size: 13px;
+				width: 80px;
+				overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+				vertical-align: -5px;
+				margin-left: 20px;
+				text-align: left;
+				display: inline-block;
+				float: left;
+				color: #909090;
+				padding: 0;
+
+				&.post {
+					margin-left: 0;
+					width: 50px;
+				}
+
+				&.moneyBox{
+					color: #222;
+				}
+			}
+
+			.field {
+				font-size: 13px;
+				float: left;
+				display: inline-block;
+				text-align: left;
+				color: #333;
+
+				&.red {
+					width: 90px;
+					color: #ee3232;
+				}
+			}
+
+			.billno,
+			.consumetime,
+			.sex {
+				display: inline-block;
+				height: 20px;
+				width: 110px;
+				display: inline-block;
+				height: 20px;
+				text-overflow: ellipsis;
+				overflow: hidden;
+			}
+		}
+
+		.payDetail {
+
+			.form-group {
+				display: block;
+				// width: 175px;
+
+				.field {
+					color: #333;
+					padding: 1px;
+					display: inline-block;
+					.multiSpan{
+						color: #fff;
+						background: #ee3232;
+						font-size: 12px;
+						padding: 2px;
+						width: 14px;
+						height: 14px;
+						line-height: 14px;
+						margin-left: 3px;
+						text-align: center;
+						display: inline-block;
+						transform: scale(0.68,0.68);
+						border-radius: 2px;
+					}
+					.checkCardList{
+						font-size: 12px;
+    					color: #999;
+					}
+				}
+			}
+
+			.form-group:nth-of-type(2) {
+				.label {
+					margin-left: 20px;
+				}
+			}
+		}
+
+		.cur {
+			cursor: pointer;
+		}
+
+		.item {
+			.distance {
+				padding-top: 17.5px;
+			}
+
+			.xf {
+				width: 70%;
+
+				.costBox {
+					display: inline-block;
+					height: 20px;
+					line-height: 20px;
+
+					.chen {
+						width: 50px;
+						margin: 0px;
+					}
+
+					.cost {
+						color: #ee3232;
+					}
+				}
+			}
+
+			.form-group {
+				.ru {
+					margin-left: 3px;
+					width: 50px;
+					height: 20px;
+					line-height: 20px;
+				}
+			}
+		}
+
+		.tbody {
+			width: 100%;
+			max-height: 400px;
+			overflow: hidden;
+		}
+
+		.billTbody {
+			border-bottom: 1px solid #f1f1f1;
+
+			tr {
+				height: 32px;
+			}
+		}
+
+		table {
+			margin: 0;
+			padding: 0;
+			border: 0;
+			vertical-align: baseline;
+			border-collapse: collapse;
+			border-spacing: 0;
+			width: 100%;
+			height: 100%;
+			table-layout: fixed;
+			word-wrap: break-word;
+			display: table;
+
+			&.serviceTable{
+				.serverNo {
+					width: 60px;
+				}
+
+				.mealcutname {
+					width: 120px;
+				}
+				
+				.moneyTh,
+				.moneyTd,
+				.pointflagTh,
+				.pointflagTd,
+				.feeTh,
+				.feeTd{
+					width: 70px;
+				}
+
+				.depotNameTh,
+				.depotNameTd{
+					width:80px;
+				}
+
+			}
+
+			.titleTr {
+				background: #fff;
+			}
+
+			tbody {
+				border-bottom: 1px solid #f1f1f1;
+				width: 100%;
+			}
+
+			tr {
+				min-height: 50px;
+				border-bottom: 1px solid #e8e8e8;
+				&.evenTr{
+					background: #FBFBFB;
+				}
+				.refundTh{
+					width: 150px;
+				}
+			}
+
+			td {
+				text-align: left;
+				vertical-align: middle;
+				font-size: 13px;
+				padding: 10px 5px;
+				font-weight: normal;
+				height: 40px;
+				line-height: 20px;
+				border-bottom: 1px solid #e8e8e8;
+				&.refundTd{
+					width: 150px;
+					.red {
+						color: #ee3232;
+					}
+				}
+			}
+
+			th {
+				text-align: left;
+				vertical-align: middle;
+				font-size: 12px;
+				font-weight: normal;
+				min-height: 40px;
+				border-bottom: 1px solid #e8e8e8;
+				color: rgba(144, 144, 144, 0.85);
+				padding: 0px 5px 5px;
+			}
+
+			.link-td {
+				color: #683838;
+			}
+		}
+	}
+
+	.foot {
+		position: absolute;
+		top: 7px;
+		right: 30px;
+
+		.btn {
+			width: 70px;
+			padding: 8px 10px;
+			color: #fff;
+			margin-right: 8px;
+			font-size: 12px;
+			border-radius: 3px;
+			float: left;
+			text-align: center;
+			cursor: pointer;
+
+			&.btn-blue {
+				background: #0ae;
+			}
+
+			&.btn-green {
+				background: #22cc77;
+			}
+
+			&.btn-red {
+				background: #f00;
+			}
+
+			&.btn-purple {
+				background: #701e74;
+			}
+		}
+	}
+
+	.mt10 {
+		margin-top: 10px;
+	}
+
+	.mb10 {
+		margin-bottom: 10px;
+	}
+
+	.content table tr {
+		height: 32px;
+	}
+}

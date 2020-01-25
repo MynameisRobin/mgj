@@ -1,5 +1,10 @@
 /* 文字颜色 ***********************/
 /* c0* 为黑白灰色系 */
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .boxSinzig {
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -67,7 +72,11 @@
   background: #555;
   color: #fff;
   border-radius: 4px;
-  margin: 25px auto 0;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
 }
 #page_workOrder .workOrder .qq-btn input {
   width: 90px;
@@ -305,7 +314,7 @@
 }
 #page_workOrder .workOrder .content .table .table-content-list tr th:nth-child(6),
 #page_workOrder .workOrder .content .table .table-content-list tr td:nth-child(6) {
-  width: 5%;
+  width: 9%;
 }
 #page_workOrder .workOrder .content .table .table-content-list tr th:nth-child(7),
 #page_workOrder .workOrder .content .table .table-content-list tr td:nth-child(7) {

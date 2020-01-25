@@ -19,6 +19,7 @@
             }).on("focus",function(){
                 am.keyboard.hide();
             }).on("blur",function(){
+				// $(".prepayContent .searchnumber_box").show();
                 am.keyboard.hide(true);
 			});
 			
@@ -369,7 +370,7 @@
 					beforeClose: function(data,callback){
 						if(data && (data.status!=3 || data.status == 3 && data.payStatus == "refund")){
 							var confirmData = {
-								caption: "关闭将取消京东钱包支付",
+								caption: "关闭将取消京东支付",
 								description: "支付尚未完成，确认关闭吗？",
 								okCaption: "确认",
 								cancelCaption: "取消"

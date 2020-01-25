@@ -38,6 +38,7 @@
     right: 0;
     //z-index: -1;
     line-height: 42px;
+    overflow: hidden;
     .setting {
         float: left;
         font-size: 12px;
@@ -185,9 +186,10 @@
             width: 40px;
             height: 20px;
             margin: 0 auto;
-            background-color: #595959;
+            background-color: #eee;
             border-radius: 20px;
             position: relative;
+            box-shadow: rgba(0, 0, 0, 0.1) 1px 1px 3px inset;
             .icon {
                 position: absolute;
                 width: 16px;
@@ -217,7 +219,8 @@
         }
         &.on {
             .toggle {
-                background-color: #42a2de;
+                background-color: #555;
+                box-shadow: rgba(0, 0, 0, 0.2) 1px 0 2px;
                 .icon {
                     left: auto;
                     right: 2px;
@@ -884,7 +887,18 @@
         left: 0;
         position: absolute;
         width: 60px;
-    }
+	}
+
+	// .memberDialog{
+	// 	position: fixed;
+	// 	left: 60px;
+	// 	right: 0;
+	// 	top: 0;
+	// 	bottom: 0;
+	// 	background: 0;
+	// 	display: none;
+	// }
+
     .memberInfo {
         .abs(@left:60px; @bottom:57px);
         width: 300px;
@@ -892,6 +906,25 @@
         //padding: 5px;
         //overflow: hidden;
         display: none;
+        // &:before{
+        //     content: '点击任意位置可关闭弹窗';
+        //     background: #ececec;
+        //     border-radius: 2px;
+        //     position: absolute;
+        //     top: -18.5px;
+        //     right: 0;
+        //     font-size: 12px;
+        //     color: #999;
+        //     height: 18.5px;
+        //     line-height: 18.5px;
+        //     padding: 0 3px;
+        // }
+        // &.show{
+        //     -webkit-animation: animation_memberInfoShow 1 linear 0.2s;
+        // }
+        // &.hide{
+        //     -webkit-animation: animation_memberInfoHide 1 linear 0.2s;
+        // }
         .highlight {
             color: @c11;
         }
@@ -1024,6 +1057,13 @@
                     font-size: @fs2;
                     color: @c03;
                     line-height: 20px;
+                }
+                .discountRuleBtn{
+                    font-size: @fs2;
+                    color: #00b7ee;
+                    &.am-clickable-active{
+                        opacity: 0.6;
+                    }
                 }
                 .discount {
                     font-size: @fs2;
@@ -1707,4 +1747,13 @@
             opacity: 0.8;
         }
     }
+}
+
+.memberLoading::after{
+    content: "";
+    position: absolute;
+    left:0;
+    top: 0;
+    bottom: 0;
+    right: 0;
 }

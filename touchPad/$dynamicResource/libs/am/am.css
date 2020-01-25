@@ -257,7 +257,7 @@ a {
 	left: 10px;
 	right: 10px;
 	text-align: center;
-	z-index: 999;
+	z-index: 1001;
 	height: 0;
 	display: none;
 }
@@ -290,4 +290,44 @@ a {
 
 .nativeUIWidget-showPopupMenu .inner li.keypad_select {
     background: rgba(255,189,2,0.24);
+}
+
+.am-partLoading {
+	position: fixed;
+    height: 30px;
+    max-width: 80%;
+	left: 50%;
+	transform: translateX(-50%);
+	overflow: hidden;
+	display: none;
+}
+.page-partLoading-inner {
+	height: 30px;
+	overflow: hidden;
+	background: rgba(0,0,0,0.3);
+	padding: 0 10px 0 40px;
+	border-radius: 5px;
+	z-index: 999;
+	box-sizing: content-box;
+	-webkit-box-sizing: content-box;
+}
+.page-partLoading-inner .loading {
+	position: absolute;
+	width: 20px;
+	height: 20px;
+	left: 10px;
+	top: 5px;
+    background:url('images/loading.png') no-repeat center center;
+    background-size: 20px;
+    -webkit-animation: animation-loading infinite linear 1.2s;
+}
+.page-partLoading-inner .text{
+	display: block;
+	font-size: 14px;
+	color: #fff;
+	line-height: 30px;
+	height: 30px;
+	overflow: hidden;
+	white-space: nowrap;
+    text-overflow: ellipsis;
 }

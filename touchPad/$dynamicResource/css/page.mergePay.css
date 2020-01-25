@@ -1,0 +1,157 @@
+.page_mergePay .payContent .left .billsDetail {
+  max-height: 45%;
+  width: 100%;
+  overflow: hidden;
+  border-bottom: 1px solid #ececec;
+}
+.page_mergePay .payContent .left .billsDetail .scollBills ul {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+.page_mergePay .payContent .left .billsDetail .scollBills ul li {
+  width: 100%;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  position: relative;
+  padding: 20px 54px 20px 22px;
+}
+.page_mergePay .payContent .left .billsDetail .scollBills ul li:last-of-type::after {
+  border: none;
+}
+.page_mergePay .payContent .left .billsDetail .scollBills ul li:hover {
+  background-color: #f7f7f7;
+}
+.page_mergePay .payContent .left .billsDetail .scollBills ul li::after {
+  content: '';
+  border-bottom: 1px solid #ececec;
+  position: absolute;
+  bottom: 0px;
+  left: 22px;
+  right: 22px;
+}
+.page_mergePay .payContent .left .billsDetail .scollBills ul li .hangup-right {
+  position: absolute;
+  right: 22px;
+  bottom: 0px;
+  width: 32px;
+  height: 100%;
+  cursor: pointer;
+}
+.page_mergePay .payContent .left .billsDetail .scollBills ul li .hangup-right img {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  left: 50%;
+  top: 50%;
+  transform: translate(0, -10px);
+}
+.page_mergePay .payContent .left .billsDetail .scollBills ul li > div {
+  height: 30px;
+  line-height: 30px;
+}
+.page_mergePay .payContent .left .billsDetail .scollBills ul li > div .detailLeft {
+  float: left;
+  height: 30px;
+  position: relative;
+}
+.page_mergePay .payContent .left .billsDetail .scollBills ul li > div .detailMiddle {
+  float: left;
+  left: 200px;
+  height: 30px;
+  position: absolute;
+}
+.page_mergePay .payContent .left .billsDetail .scollBills ul li > div .detailRight {
+  float: right;
+  height: 30px;
+}
+.page_mergePay .payContent .left .billsDetail .scollBills ul li > div .name {
+  margin-left: 2px;
+  margin-right: 18px;
+  font-weight: 500;
+  vertical-align: middle;
+}
+.page_mergePay .payContent .left .billsDetail .scollBills ul li > div .pen::before {
+  position: absolute;
+  left: auto;
+  right: -15px;
+  top: 8px;
+  bottom: auto;
+  content: "";
+  width: 10px;
+  height: 14px;
+  background: url(../images/card_edit_white_icon.png) no-repeat center center;
+  background-size: 10px 12px;
+}
+.page_mergePay .payContent .left .billsDetail .scollBills ul li > div .memberCount {
+  color: #dfdfdf;
+  font-size: 13px;
+}
+.page_mergePay .payContent .left .billsDetail .scollBills ul li > div .memberCount::before {
+  content: "";
+  float: left;
+  width: 15px;
+  height: 15px;
+  border: 1px solid #dfdfdf;
+  border-radius: 3px;
+  margin: 6px;
+}
+.page_mergePay .payContent .left .billsDetail .scollBills ul li > div .memberCount.checked {
+  color: #222;
+}
+.page_mergePay .payContent .left .billsDetail .scollBills ul li > div .memberCount.checked::before {
+  border-color: #6D6D6D;
+  background: url(../images/icons_sprite/check_box_checked.png) no-repeat -3px -3px;
+  background-size: 21px 21px;
+}
+.page_mergePay .payContent .left .billsDetail .scollBills ul li > div b {
+  font-size: 16px;
+  line-height: 30px;
+  font-weight: normal;
+  color: #222222;
+}
+.page_mergePay .payContent .left .billsDetail .scollBills ul li > div .billCost {
+  font-size: 18px;
+}
+.page_mergePay .payContent .left .billsDetail .scollBills ul li > div .billNo {
+  font-family: 'displayIdFont';
+  font-size: 20px;
+  vertical-align: middle;
+}
+.page_mergePay .payContent .left .billsDetail .scollBills ul li > div i {
+  font-size: 13px;
+  font-style: normal;
+  color: #999999;
+  line-height: 30px;
+}
+.page_mergePay .payContent .left .billsDetail .scollBills ul li > div span {
+  font-size: 13px;
+  line-height: 30px;
+}
+.page_mergePay .payContent .left .billsDetail .scollBills ul li > div .red {
+  color: red;
+}
+.page_mergePay .payContent .left .mergeMoney {
+  height: 52px;
+  width: 100%;
+  padding-left: 22px;
+  padding-right: 22px;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  border-bottom: 1px solid #ececec;
+}
+.page_mergePay .payContent .left .mergeMoney .title {
+  height: 52px;
+  float: left;
+  font-size: 14px;
+  color: #666;
+  line-height: 52px;
+}
+.page_mergePay .payContent .left .mergeMoney .totalMoney {
+  float: right;
+  height: 52px;
+  font-size: 30px;
+  color: #e82742;
+  line-height: 52px;
+}

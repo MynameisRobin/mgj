@@ -197,8 +197,8 @@ am.keyboard.show({
 						if(_this.opt&&_this.opt.hidecb){//0015757
 							_this.opt.hidecb && _this.opt.hidecb();
 						}
-					},200);
-				},300);
+					},100);
+				},100);
             }
             if(this.opt && this.opt.price){
                 var $choose = this.$dom.find('.btngroupLeft span.selected'),
@@ -224,6 +224,9 @@ am.keyboard.show({
 			}else{
 				$("#maskBoard").find(".toggleBox").hide();
 			}
+			$("#maskBoard").css({
+				zIndex: self.opt.zIndex || '10'
+			});
 			if(opt.$){//行内键盘
 				opt.$.append($html);
 				$html.off("vtouchstart").on("vtouchstart",".key,.rect",function(){
@@ -235,7 +238,8 @@ am.keyboard.show({
 			}else{
 				$.am.getActivePage().$.find("input:not([readonly='readonly']),textarea:not([readonly='readonly'])").not("[disabled='true']").attr("disabled",true).attr("isdisabled",1);
 				$.am.getActivePage().$.find("[isdisabled=1]").each(function(){
-					$(this).blur();
+					var e = $.Event("blur", {onlyBlur: 1});
+					$(this).trigger(e);
 				});
 				if(opt.onKeyup){
 					this.$dom=$("#open_keyboard_box");
@@ -365,17 +369,13 @@ am.keyboard.show({
 								am.msg("您目前没有权限关闭，如果想关闭请联系管理员！");
 							}
 							else{
-								self.hide();
-								self.opt.cancel && self.opt.cancel();
+								var notHide = false;
+								if(opt.cancel) notHide = opt.cancel();
+								!notHide && self.hide();
 							}
 						});
 						this.$dom.find(".mask,.cancel").off("vclick").on("vclick",function(){
 							self.hide();
-							if($.am.getActivePage().id=='page_searchMember'){
-								setTimeout(function(){
-									am.page.searchMember.showkeyboard();
-								},300)
-							}
 						});
 					}else {
 						this.$dom.find(".title .close").remove();

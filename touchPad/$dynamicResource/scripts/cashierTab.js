@@ -7,6 +7,11 @@ am.cashierTab = {
 
 		this.showWorkStation.init();
 
+		//由于项目卖品合并买单，卖品/cashierTab重置需要同步；
+		$.am.on('page.serivce.reseted',function(){
+			self.reset();
+		});
+
 		// 修改底部备注
 		this.$editRemark = this.$t.find(".editRemark").vclick(function(){
 			var data = self.billData;
@@ -27,19 +32,23 @@ am.cashierTab = {
 						instorecomment:remark,
 						parentShopId:am.metadata.userInfo.parentShopId,
 						shopId:am.metadata.userInfo.shopId,
-						serviceNO:data.serviceNOBak?data.serviceNOBak:(data.serviceNO?data.serviceNO:'')
+						serviceNO:data.serviceNOBak?data.serviceNOBak:(data.serviceNO?data.serviceNO:''),
+						version: data.version
 					}, function(ret){
 						am.loading.hide();
 						if(ret && ret.code===0){
 							am.msg("修改成功");
 							data.instorecomment = remark;
 							data.data = sendData;
+							data.version ++;
 							self.rendBillRemark(data,$this);
 							if(remark){
 								$info.html(remark);
 							}else {
 								$info.html('');
 							}  
+						}else if(ret && ret.code==11008){
+							am.billChangeToHangup();
 						} else {
 							am.msg("保存失败！");
 						}
@@ -49,8 +58,9 @@ am.cashierTab = {
 		});
 
 		this.$t.find(".editRemark").on("vclick",".remarkCardBox span",function(e){
+			var $this = $(this);
 			e.stopPropagation();
-			var data = $(this).data("item");
+			var data = am.clone($(this).data("item"));
 			var item = am.clone(self.billData);
 			var sdata = am.clone(am.page.hangup.getBillData(item)); 
 			var sname = $(this).data("sname");
@@ -67,26 +77,32 @@ am.cashierTab = {
 			}
 			am.confirm("提示",tips,"确定","取消",function(){
 				data.isbuy = !data.isbuy;
-				if(data.isbuy){
-					$this.addClass("selected");
-				}else{
-					$this.removeClass("selected");
-				}
 				if(sname == 'package'){
 					sdata.billRemark.buypackage = data;
-					if(data.isbuy){
-						$this.addClass("selected").siblings(".package").addClass("selected");
-					}else{
-						$this.removeClass("selected").siblings(".package").removeClass("selected");
-					}
 				}else{
                     sdata.billRemark[sname] = data;
 				}
 				var temp = item;
 				item.data = JSON.stringify(sdata);
-				am.page.hangup.saveBill(item);
-				temp.data = sdata;
-				self.billData = temp; 
+				am.page.hangup.saveBill(item,function(){
+					if(data.isbuy){
+						$this.addClass("selected");
+					}else{
+						$this.removeClass("selected");
+					}
+					if(sname == 'package'){
+						if(data.isbuy){
+							$this.addClass("selected").siblings(".package").addClass("selected");
+						}else{
+							$this.removeClass("selected").siblings(".package").removeClass("selected");
+						}
+					}
+					$this.data("item",data);
+
+					item.version ++;
+					temp.data = sdata;
+					self.billData = temp; 
+				});
 			});
 		})
 
@@ -102,7 +118,9 @@ am.cashierTab = {
 			}else{
 			   self.getOpt(function (opt) {
 					self.getDisplayId(opt,function(items){
-						am.billOriginData = items;
+						if(self.billData && self.billData.version){
+							items.version = self.billData.version;
+						}
 						$.am.changePage(am.page.openbill, "",{rowdata:items,source:"service"});//source:"service",
 					});
 				});
@@ -198,7 +216,15 @@ am.cashierTab = {
 				if(isPayItem){
 					isItemPay=isPayItem;
 				}
+				console.log(self.billData)
+				
 				var prodsInfo = am.page.product.submit();
+				if(prodsInfo){
+					if(self.checkPayOtherFirst()===0 && am.checkContainedServers(prodsInfo)===0){
+						am.msg('请选择卖品服务员工!');
+						return;
+					}
+				}
 				var numObj = am.page.product.numObj; //商品库存数据
 				if (numObj && prodsInfo && prodsInfo.option && prodsInfo.option.products && prodsInfo.option.products.depots.length) {
 					var prods = prodsInfo.option.products.depots;
@@ -232,9 +258,19 @@ am.cashierTab = {
 					self.submitEvent(isItemPay);
 				}
 			}
+			if(sessionStorage._autoPay1214 == 'autoPay'){
+				self.submitEvent();
+				return;
+			}
 			// 是否包含赠金不可用项目
 			var disableUseItemsStr='';
 			var itemsObj=am.page.service.submit();
+			if(itemsObj){
+				if(self.checkPayOtherFirst()===0 && am.checkContainedServers(itemsObj)===0){
+					am.msg('请选择项目服务员工!');
+					return;
+				}
+			}
 			//选择了会员卡并且要购买服务项目
 			if(itemsObj.member && itemsObj.member.cardTypeId && itemsObj.option && itemsObj.option.serviceItems && itemsObj.option.serviceItems.length){
 				var checkedServiceItems=itemsObj.option.serviceItems;
@@ -444,10 +480,29 @@ am.cashierTab = {
 		this.$total = this.$t.find('.totalPrice');
 
 		this.$memberInfo = this.$.find('.memberInfo');
+		// this.$memberDialog = this.$.find(".memberDialog").vclick(function(){
+		// 	self.hideMemberInfo(1);
+		// 	self.$card.removeClass('selected');
+		// }).css({
+		// 	width: $("body").width(),
+		// 	height: $("body").height()
+		// });
+		// this.$memberInfo = this.$.find('.memberInfo').vclick(function(e){
+		// 	e.stopPropagation();
+		// }).bind("webkitAnimationEnd",function(evt){
+		// 	//console.log(evt);
+		// 	if(evt.originalEvent && evt.originalEvent.animationName == "animation_memberInfoHide"){
+		// 		self.hideMemberInfo();
+		// 	}else if(evt.originalEvent && evt.originalEvent.animationName == "animation_memberInfoFadeout"){
+		// 		self.hideMemberInfo();
+		// 	}
+		// });
 		this.$close = this.$memberInfo.find(".infoclose").vclick(function(){
 			self.$memberInfo.hide();
+			// self.hideMemberInfo(1);
 			self.$card.removeClass('selected');
 		});
+
 		this.$memberInfo.find(".recharge").vclick(function(){
 			var cardtype = am.metadata.cardTypeList.filter(function(a){
 				return a.cardtypeid == self.member.cardTypeId;
@@ -462,6 +517,11 @@ am.cashierTab = {
 				member:self.member,
 			});
 			return false;
+		});
+		this.$memberInfo.find('.discountRuleBtn').vclick(function(e){
+			e.stopPropagation();
+			var newCardRule = $(this).data('newCardRule');
+			am.timeDiscountModal.show(newCardRule);
 		});
 
 		this.$memberInfo.find(".renewal").vclick(function(){
@@ -575,22 +635,30 @@ am.cashierTab = {
 				$.am.changePage(am.page.service, "","freezing");
 			}
 			var shopFlag = true;
+			// if(data.cashshopids){
+			// 	var cashshopids = data.cashshopids;
+			// 	cashshopids = cashshopids.split(',');
+			// 	var targetCashshopids = [];
+			// 	for (var i = 0; i < cashshopids.length; i++) {
+			// 		var element = cashshopids[i];
+			// 		if(!element) continue;
+			// 		targetCashshopids.push(element);
+			// 	}
+			// 	var currentShop = amGloble.metadata.userInfo.shopId;
+			// 	if(targetCashshopids[0]==-99&&data.shopid!=currentShop){
+			// 		shopFlag = false;
+			// 	}
+			// 	if(targetCashshopids.length&&targetCashshopids.indexOf(currentShop+'')==-1&&targetCashshopids[0]!=-99){
+			// 		shopFlag = false;
+			// 	}
+			// }
 			if(data.cashshopids){
-				var cashshopids = data.cashshopids;
-				cashshopids = cashshopids.split(',');
-				var targetCashshopids = [];
-				for (var i = 0; i < cashshopids.length; i++) {
-					var element = cashshopids[i];
-					if(!element) continue;
-					targetCashshopids.push(element);
+				var obj={
+					shopIdsStr:data.cashshopids,// ',r,234,43,'
+					targetShopId:amGloble.metadata.userInfo.shopId,
+					itemShopId:data.shopid
 				}
-				var currentShop = amGloble.metadata.userInfo.shopId;
-				if(targetCashshopids[0]==-99&&data.shopid!=currentShop){
-					shopFlag = false;
-				}
-				if(targetCashshopids.length&&targetCashshopids.indexOf(currentShop+'')==-1&&targetCashshopids[0]!=-99){
-					shopFlag = false;
-				}
+				shopFlag= am.checkShopAvailable(obj)===0?false:true;
 			}
 			if(!item && !mitu.length){
 				am.msg('当前门店不存在该项目！');
@@ -645,7 +713,7 @@ am.cashierTab = {
 			var billRemark = JSON.parse(billData.data).billRemark;
 			var remarkCallback = function (members) {
 				var _data = am.clone(billData);
-				var sendData = am.clone(billData.data);
+				var sendData = am.clone(JSON.parse(billData.data));
 				if (members) {
 					sendData.cid = members.cid;
 					sendData.memGender = members.sex;
@@ -656,7 +724,7 @@ am.cashierTab = {
 				}
 				sendData.billRemark.recharge.isbuy = true;
 				_data.data = JSON.stringify(sendData);
-				am.page.hangup.saveBill(_data);
+				return _data.data;
 			}
 			var checkRemark = am.page.hangup.checkRemark(billData, function (res) {
 				if (res.code == 1) { //开卡
@@ -678,7 +746,20 @@ am.cashierTab = {
 					}
 				};
 				if (res.code == 2) { //充值
+					var cardtype = am.metadata.cardTypeList.filter(function (a) {
+                        return a.cardtypeid == billRemark.recharge.cardTypeId;
+                    });
+                    if (cardtype && cardtype[0] && cardtype[0].mgj_stopNoRecharge && cardtype[0].newflag == '0') {
+                        amGloble.msg('【' + cardtype[0].cardtypename + '】已停止办理，无法继续充值！');
+                        return;
+                    }
 					am.searchMember.getMemberById(billData.memId, billRemark.recharge.id, function (content) {
+						if (content) {
+							if (content.status == 1) {
+								am.msg('会员卡退卡中，无法进行此操作');
+								return false;
+							}
+						}
 						if(amGloble.metadata.configs.typePasswordtToSelectMember == 'true'){
 							am.pw.check(content, function (verifyed) {
 								if (verifyed) {
@@ -735,9 +816,9 @@ am.cashierTab = {
 					for(var i=0;i<billRemark.buypackage.data.length;i++){
 						var itemj = billRemark.buypackage.data[i];
 						if(itemj.number){
-							var $span0 = $('<span class="am-clickable package">'+itemj.name+"*"+itemj.number+'</span>');
+							var $span0 = $('<span class="am-clickable package">'+(itemj.name || itemj.itemName)+"*"+itemj.number+'</span>');
 						}else{
-							var $span0 = $('<span class="am-clickable package">'+itemj.name + '</span>');
+							var $span0 = $('<span class="am-clickable package">'+(itemj.name || itemj.itemName) + '</span>');
 						}
 						$span0.data("sname","package");
 						$span0.data("item",billRemark.buypackage);
@@ -796,6 +877,7 @@ am.cashierTab = {
 			if(res.shampooFinishTime){
 				data.shampooFinishTime = res.shampooFinishTime;
 			}
+			_this.billData.version = res.version;
 			_this.operatehair(data);
 		});
 	},
@@ -861,11 +943,35 @@ am.cashierTab = {
 		}
 	},
 	jumpAccount: function (isItemPay) {
+		var _this = this;
 		am.cashierTab.getOpt(function (opt) {
 			if (opt) {
-				if(isItemPay){
-					$.am.changePage(am.page.itemPay, "slideup", opt);
-				}else {
+				if(_this.billData && _this.billData.version){
+					opt.instoreServiceVersion = _this.billData.version;
+				}
+				if (isItemPay) {
+					if(localStorage.getItem('mgjMultiCardPayDisabled') == "1"){
+						if (opt.member) {
+							am.popupMenu("请选择", [{ name: "按项目选择付款", page: "itemPay" }, { name: "多卡合并付款", page: "multiCardPay" }], function (item) {
+								if (item.page == 'itemPay') {
+									$.am.changePage(am.page.itemPay, "slideup", opt);
+								} else {
+									if(opt.member.cardtype == 2){
+										am.msg('资格卡无法进行多卡合并付款，请重新选择会员卡！')
+									}else if(opt.member.cardtype==1&&opt.member.timeflag==1){
+										am.msg('计次卡无法进行多卡合并付款，请重新选择会员卡！')
+									}else{
+										$.am.changePage(am.page.multiCardPay, "slideup", opt);
+									}
+								}
+							});
+						} else {
+							$.am.changePage(am.page.itemPay, "slideup", opt);
+						}
+					}else{
+						$.am.changePage(am.page.itemPay, "slideup", opt);
+					}
+				} else {
 					$.am.changePage(am.page.pay, "slideup", opt);
 				}
 			}
@@ -888,6 +994,10 @@ am.cashierTab = {
 	submit: function (isItemPay) {
 		var member = this.member;
 		var _this = this;
+		if(this.billData && this.billData.data && this.billData.data.settlementPayDetail){
+			this.jumpAccount(isItemPay);
+			return;
+		}
 		if (member) {
 			this.getPackageFlag();
 			if (member.cardtype == 1 && member.cardTypeId != "20151212" && member.cardTypeId != "20161012" && (member.timeflag == 0 || member.timeflag == 2) && !this.shutDownSubmit && this.packageFlag) {
@@ -1065,15 +1175,33 @@ am.cashierTab = {
 			this.$memberInfo.find('.price').hide();
 			this.$memberInfo.find('.bonus').text('现金消费卡');
 		}
-
-		var discount = [];
-		if(member.discount && member.discount<10){
-			discount.push('项目'+ member.discount+'折');
+		
+		var discountRules = am.timeDiscount.hasNewCardRule(member.cardTypeId);
+		var newCardRule = am.timeDiscount.dateCheck(discountRules);
+		if (am.isNull(newCardRule)) {
+			// 没新规则显示老规则 不显示折扣规则按钮
+			this.$memberInfo.find('.discountRuleBtn').hide();
+			var discount = [];
+			if (member.discount && member.discount < 10) {
+				discount.push('项目' + member.discount + '折');
+			}
+			if (member.buydiscount && member.buydiscount < 10) {
+				discount.push('卖品' + member.buydiscount + '折');
+			}
+			this.$memberInfo.find('.discount').show().text(discount.length ? discount.join(",") : "无折扣");
+		} else {
+			// 有新规则 不显示老规则
+			this.$memberInfo.find('.discountRuleBtn').show().data('newCardRule', newCardRule);
+			this.$memberInfo.find('.discount').hide();
 		}
-		if(member.buydiscount && member.buydiscount<10){
-			discount.push('卖品'+ member.buydiscount+'折');
-		}
-		this.$memberInfo.find('.discount').text(discount.length?discount.join(","):"无折扣");
+		// var discount = [];
+		// if(member.discount && member.discount<10){
+		// 	discount.push('项目'+ member.discount+'折');
+		// }
+		// if(member.buydiscount && member.buydiscount<10){
+		// 	discount.push('卖品'+ member.buydiscount+'折');
+		// }
+		// this.$memberInfo.find('.discount').text(discount.length?discount.join(","):"无折扣");
 		var setting_total = am.page.service.billMain.getSetting().setting_total;
 		if(setting_total){
 			var total = Math.round((member.balance + member.gift)*100)/100;
@@ -1162,6 +1290,7 @@ am.cashierTab = {
 			this.$memberInfo.find('.renewal').hide();
 		}
 		if(member.comboitems && member.comboitems.length){
+			var allowedUseOverDueFlag = am.operateArr.indexOf("a47") > -1; //允许消耗过期套餐项目
 			var comboitemsObj = {};
 			for(var i=0;i<member.comboitems.length;i++){
 				if(!comboitemsObj[member.comboitems[i].shopid]){
@@ -1202,7 +1331,7 @@ am.cashierTab = {
 					// if(item.itemid && item.itemid!=-1 && !item.itemname && !serviceCodeMap[item.itemid] && !stopServiceCodeMap[item.itemid]){
 					// 	itemName = '项目已删除';
 					// }
-					$li.append('<div class="itemName">'+ (item.treattype==1?'<span class="highlight">[赠] </span>':'')+(item.itemname||'项目已删除')+'</div>');
+					$li.append('<div class="itemName">'+ (item.treattype==1 || item.treattype == 2?'<span class="highlight">[赠] </span>':'')+(item.itemname||'项目已删除')+'</div>');
 					// if($li.find('.itemName').text() && $li.find('.itemName').text().trim().indexOf('项目已删除')>-1){
 					// 	$li.addClass('am-disabled');
 					// }
@@ -1215,7 +1344,9 @@ am.cashierTab = {
 						ts.setMilliseconds(0);
 						var x = item.validdate-ts.getTime();
 						if(x<0){
-							$li.addClass('am-disabled');
+							if(!allowedUseOverDueFlag){
+								$li.addClass('am-disabled');
+							}
 							$date.text('已过期');
 						}else if(x < 7*24*3600*1000){
 							$date.addClass('highlight');
@@ -1255,10 +1386,35 @@ am.cashierTab = {
 
 		this.$card.addClass('selected');
 		this.$memberInfo.show();
+		// this.$memberDialog.show();
+		// // 录单模式兼容样式
+		// if (am.metadata.shopPropertyField && am.metadata.shopPropertyField.mgjBillingType == 0) {
+		// 	this.$memberDialog.css({
+		// 		left: 135
+		// 	});
+		// }
+		// this.$memberInfo.addClass("show").removeClass("hide");
 		this.comboItemScroll.refresh();
 		this.comboItemScroll.scrollTo("top");
 		this.upperScroll.refresh();
 		this.upperScroll.scrollTo("top");
+	},
+	checkPayOtherFirst:function(){
+		var needed=0;
+		var data = this.billData && this.billData.data;
+		var deepData,billRemark;
+		if(data && typeof(data)==='string'){
+			deepData=JSON.parse(data);
+			billRemark=deepData.billRemark;
+		}else if(data && typeof(data)==='object'){
+			billRemark=data.billRemark;
+		}
+		if(billRemark){
+			if((billRemark['opencard'] && !billRemark['opencard']['isbuy']) || (billRemark['recharge'] && !billRemark['recharge']['isbuy']) || (billRemark['buypackage'] && !billRemark['buypackage']['isbuy'])){
+				needed=1;
+			}
+		}
+		return needed;
 	},
 	changeSeat:function(id){
 		var _this = this;
@@ -1282,15 +1438,19 @@ am.cashierTab = {
 				tableId: id,
 				parentShopId:am.metadata.userInfo.parentShopId,
 				shopId:am.metadata.userInfo.shopId,
+				version: data.version
 			}, function(ret){
 				am.loading.hide();
 				if(ret && ret.code===0){
 					am.msg("座位设置成功");
 					data.tableId = id;
+					data.version ++;
 					var info = _this.getSeatInfo(id);
 					_this.$openWorkStation.find('.spaceName').text(info.name);
 					_this.$openWorkStation.find('.seatName').text(info.tableName).removeClass('noSeat');
 					_this.showWorkStation.hide();
+				}else if(ret && ret.code==11008){
+					am.billChangeToHangup();
 				} else {
 					am.msg("座位设置成功失败！");
 				}
@@ -1519,7 +1679,7 @@ am.cashierTab = {
 				"memId": param.member ? param.member.id : -1, //顾客id，散客-1
 				"memName": param.member ? param.member.name : "", //顾客姓名，散客为空
 				"memPhone": param.member ? param.member.mobile : "", //顾客手机号
-				"data": JSON.stringify($.extend((this.billData && this.billData.data) || {},{//以前直接丢失了相关信息  现在修复
+				"data": JSON.stringify($.extend({},(this.billData && this.billData.data) || {},{//以前直接丢失了相关信息  现在修复
 					"mgjIsHighQualityCust":(param.member && param.member.mgjIsHighQualityCust)?1:0,
 					"cid":param.member ? param.member.cid : "",
 					"cardTypeId":param.member ? param.member.cardTypeId : "",
@@ -1578,6 +1738,11 @@ am.cashierTab = {
 				data.serviceNO = this.billData.serviceNO;
 				
 			}
+
+			if(this.billData && this.billData.version){
+				data.version = this.billData.version;
+			}
+
 			if(this.billData){
 				data.shampooStartTime = this.billData.shampooStartTime || null;
 				data.shampooFinishTime= this.billData.shampooFinishTime || null;
@@ -1603,24 +1768,40 @@ am.cashierTab = {
 		}
 		return str1 == str2;
 	},
-	hangupSave:function(data,notBack,callback,backSave){
+	getSaveDataIsChanged: function(data){
 		var hasChanged = 0;
-		if(am.billOriginData){
-			for(var key in data){
-				if(key=='data'){
-					if(data[key]!=am.billOriginData[key]){
-						hasChanged ++;
-						break;
-					}
-				}else {
-					if(!this.stringCompare(JSON.stringify(data[key]),JSON.stringify(am.billOriginData[key]),key) && key !='channel' && key !='order'){
-						hasChanged ++;
-						break;
-					}
+		if(am.page.hangup.cachedata && am.page.hangup.cachedata.content && am.page.hangup.cachedata.content.length){
+			var bills = am.page.hangup.cachedata.content;
+			var bill = null;
+			for(var i=0;i<bills.length;i++){
+				if(bills[i].id==data.id){
+					bill = bills[i];
+					break;
 				}
 			}
+			if(bill){
+				for(var key in data){
+					if(key=='data'){
+						if(data[key]!=JSON.stringify(bill[key])){
+							hasChanged ++;
+							break;
+						}
+					}else {
+						if(!this.stringCompare(JSON.stringify(data[key]),JSON.stringify(bill[key]),key) && key !='channel' && key !='order'){
+							hasChanged ++;
+							break;
+						}
+					}
+				}
+				return hasChanged;
+			}else {
+				return 1;
+			}
+		}else {
+			return 1;
 		}
-
+	},
+	hangupSave:function(data,notBack,callback,backSave){
 		var saveSuccess = function(){
 			if(am.cashierTab.needDeletedWaitedBillId){
 				am.page.hangup.deleteWaitedBills([am.cashierTab.needDeletedWaitedBillId],'已开单单据选取待开单顾客作为会员后删除',function(){
@@ -1640,19 +1821,16 @@ am.cashierTab = {
 			am.cashierTab.hide();
 			callback && callback();
 		}
-
+		var hasChanged = this.getSaveDataIsChanged(data);
 		if(!backSave){
 			this.$user.removeClass("good");
 			this.$card.parent().removeClass("good");
 		}
-		
-		if(!hasChanged && am.billOriginData){
+		if(!hasChanged){
 			saveSuccess();
 			return;
 		}
 		console.log('------------单据发生改变----------------');
-		// 性能监控点
-		monitor.startTimer('M03')
 		if(!backSave){
 			am.loading.show();
 		}
@@ -1681,17 +1859,18 @@ am.cashierTab = {
                 // 性能监控点
                 monitor.stopTimer('M03', 0)
                 
-				var gotoHangup = function () {
-					$.am.changePage(am.page.hangup,"",{openbill:1,setting_washTime:am.page.service.billMain.getSetting().setting_washTime});
-				};
-				am.confirm('单据已变更','由于其它终端的操作，此单状态已改变！','知道了','返回',gotoHangup,gotoHangup);
+				am.billChangeToHangup();
+			}else if(ret.code==20160801){
+				// 写失败
+				am.msg(ret.message || '服务器写入异常，请稍后再试');
+				am.goBackToInitPage();// 跳到初始页面
 			}else{
                 // 性能监控点
                 monitor.stopTimer('M03', 1)
 
 				am.confirm('保存失败','保存单据时异常！','重试','返回',function(){
 					am.cashierTab.hangupSave(data,notBack,callback);
-				},gotoHangup);
+				},am.goBackToInitPage());
 			}
 			console.log(ret);
 		});
@@ -1767,26 +1946,20 @@ am.cashierTab = {
         }
         this.hideSubmitBtn();
 		this.$li.find('.num').hide().text("");
-		if(i){
-			am.page.service.needReset = 1;
-		}else{
-			am.page.product.reset();
-			am.page.product.needReset = 1;
-		}
 		this.servicePrice = 0;
 		this.productPrice = 0;
 		this.$total.text('￥0');
 		this.billData = null;
 	},
 	setPrice:function (opt) {
-		if(opt.num){
-			this.$li.eq(opt.type).find('.num').show().text('￥'+toFloat(opt.totalPrice));
+		if(opt && opt.num){
+			this.$li.eq(opt.type).find('.num').show().text('￥'+Math.round(opt.totalPrice*100)/100);
 			if(opt.type){
 				this.productPrice = opt.totalPrice;
 			}else{
 				this.servicePrice = opt.totalPrice;
 			}
-		}else{
+		}else if(opt){
 			this.$li.eq(opt.type).find('.num').hide();
 			if(opt.type){
 				this.productPrice = 0;
@@ -1794,8 +1967,11 @@ am.cashierTab = {
 				this.servicePrice = 0;
 			}
 		}
-
-		this.$total.text('￥'+toFloat(this.productPrice+this.servicePrice));
+		this.$total.text('￥'+(Math.round((this.productPrice+this.servicePrice)*100)/100) || 0);
+	},
+	clearPrice:function(){
+		this.$total.text('￥0');
+		this.$li.find('.num').hide();
 	},
 	setMember:function (member,pass,card,notOpenBill) {
 		if(member){
@@ -1810,6 +1986,10 @@ am.cashierTab = {
 			this.needDeletedWaitedBillId = member.needDeletedWaitedBillId;
 		}
 		if(card){
+			if (card.status == 1) {
+				am.msg('会员卡退卡中，无法进行此操作');
+				return false;
+			}
 			this.cardInfo = card;
 			if(member){
 				member.mgjIsHighQualityCust = card.mgjIsHighQualityCust;
@@ -1885,12 +2065,17 @@ am.cashierTab = {
 			am.page.service.member = null;
 			am.page.product.member = null;
 			//this.$billNo.val('').removeClass('error');
+
+			this.setPrice();
 		}
 	},
 	goToSearch:function () {
 		var self = this;
 		$.am.changePage(am.page.searchMember, "",{
 			onSelect:function(item){
+				if (self.billData&&self.billData.data){
+					self.billData.data = self.sourceRemove(self.billData.data);
+				}
 				self.cardInfo = item;
 				var page;
 				if(self.$li.filter('.selected').index()){
@@ -1904,6 +2089,13 @@ am.cashierTab = {
 				});
 			},
 		});
+	},
+	sourceRemove:function(data){
+		var data = JSON.parse(data);
+		if (data.sourcedata){
+			delete data.sourcedata
+		}
+		return JSON.stringify(data)
 	},
 	visible:function (v) {
 		if(v){
@@ -1919,19 +2111,28 @@ am.cashierTab = {
 		this.$t.removeClass('show');
 
 		this.$memberInfo.hide();
+		// this.$memberDialog.hide();
 		this.$card.removeClass('selected');
 
 		this.showWorkStation.hide();
 	},
 	feedBill:function (bill,openbill,getBill) {
+		var self = this;
 		$.am.changePage(am.page.service,'',{
 			bill:bill,
 			openbill:openbill,
-			getBill:getBill
+			getBill:getBill,
+			FORCEREFRESH: 1
 		});
-		am.page.product.reset({
-			bill:bill
-		});
+		setTimeout(function(){
+			am.page.product.reset({
+				bill:bill
+			});
+			self.feedBillAsync(bill);
+		},25);
+	},
+	feedBillAsync:function(bill){
+		var self = this;
 		this.billData = bill;
 		//渲染单号
 		if(this.billData && this.billData.serviceNO){
@@ -1942,79 +2143,141 @@ am.cashierTab = {
 			this.$editRemark.find(".info").html(this.billData.instorecomment || "");
 			this.rendBillRemark(this.billData,this.$editRemark);
 		}
-		
-		var self = this;
 		if(bill.memId && bill.memId!=-1){
-			am.loading.show();
-			am.api.queryMemberById.exec({
-				memberid:bill.memId
-			},function(ret){
-				am.loading.hide();
-				if(ret && ret.code==0 && ret.content && ret.content.length){
-					var length = ret.content.length;
-					//to do 选择会员卡
-					if(ret.content.length==1){
-						ret.content[0].cardNum = length;
-						self.setMember(ret.content[0]);
-					}else if(ret.content.length>1){
-						var data;
-						try{
-							data = JSON.parse(bill.data);
-						}catch(e){
-							$.am.debug.log(data);
-						}
-						if(data && data.cid){
-							for (var i = 0; i < ret.content.length; i++) {
-								if(ret.content[i].cid == data.cid){
-									ret.content[i].cardNum = length;
-									self.setMember(ret.content[i]);
-									break;
-								}
-							}
-						}else{
-							var arr = [];
-							for(var i=0;i<ret.content.length;i++){
-								var item = ret.content[i];
-								var cardName = item.cardName;
-								var balanceFee = item.balance;
-								if(item.cardtype == 1 && item.timeflag==0 && balanceFee){
-									cardName+='(余额:￥'+balanceFee.toFixed(0)+')';
-								}
-								arr.push({
-									name:cardName,
-									data:item
-								});
-							}
-							self.popupMenu(arr,bill);
-							return;
-						}
-					}
+			this.findMemberById(bill,function(member){
+				if(member){
+					self.setMember(member);
+					self.feedMain(bill);
 				}else{
-                    // 性能监控点
-                    monitor.stopTimer('M04', 1
-                )
-					am.msg("用户信息读取失败~");
+					am.confirm('网络异常','由于网络问题，用户数据读取失败，请检查网格后重试！','重试','返回',function(){
+						self.findMemberById(bill,cb);
+					},function(){
+						$.am.changePage(am.page.hangup, "",{
+							openbill:am.metadata.shopPropertyField.mgjBillingType,
+                    		setting_washTime:am.page.service.billMain.getSetting().setting_washTime
+						});
+					});
 				}
-				self.feedMain(bill);
+				
 			});
 		}else{
 			self.feedMain(bill);
 		}
 	},
-	popupMenu: function(arr,bill){
+	memberLoading:function(type){
+		if(type === 'show'){
+			this.$.addClass('memberLoading');
+			this.$t.addClass('memberLoading');
+		}else{
+			this.$.removeClass('memberLoading');
+			this.$t.removeClass('memberLoading');
+		}
+	},
+	findMemberById:function(bill,cb){
+		var self=this;
+		this.memberLoading('show');
+		am.api.queryMemberById.exec({
+			memberid:bill.memId
+		},function(ret){
+			self.memberLoading('hide');
+			if(ret && ret.code==0 && ret.content && ret.content.length){
+				var length = ret.content.length;
+				if(ret.content.length==1){
+					ret.content[0].cardNum = length;
+					if (self.isOverdue(ret.content[0])) {
+						return;
+					}
+					cb(ret.content[0]);
+				}else if(ret.content.length>1){
+					var data;
+					try{
+						data = JSON.parse(bill.data);
+					}catch(e){
+						$.am.debug.log(data);
+					}
+					if(data && data.cid){
+						for (var i = 0; i < ret.content.length; i++) {
+							//找到单据中选择的卡；
+							if(ret.content[i].cid == data.cid){
+								ret.content[i].cardNum = length;
+								cb(ret.content[i]);
+								break;
+							}
+						}
+					}else{
+						var arr = [];
+						for(var i=0;i<ret.content.length;i++){
+							ret.content[i].cardNum = length;
+							var item = ret.content[i];
+							var cardName = item.cardName;
+							var balanceFee = item.balance;
+							if(item.cardtype == 1 && item.timeflag==0 && balanceFee){
+								cardName+='(余额:￥'+balanceFee.toFixed(0)+')';
+							}
+							arr.push({
+								name:cardName,
+								data:item
+							});
+						}
+						self.popupMenu(arr,function(selected){
+							cb(selected || ret.content[0]);
+						});
+						return;
+					}
+				}
+			}else if(ret && ret.code === -1){
+				// 性能监控点
+				cb();
+			}
+		});
+	},
+	popupMenu: function(arr,cb){
 		var self = this;
 		am.popupMenu("请选择会员卡", arr, function (ret) {
-			ret.data.cardNum = length;
 			if (!(ret.data.allowkd*1) && ret.data.shopId != am.metadata.userInfo.shopId) {
 				am.msg('此会员卡不允许跨店消费！');
-				self.popupMenu(arr,bill);
+				self.popupMenu(arr);
 				return;
 			}
-			self.setMember(ret.data);
-			self.feedMain(bill);
+			if (self.isOverdue(ret.data)) {
+				self.popupMenu(arr);
+				return;
+			}
+			cb(ret.data);
 		},null,null,function(){
-			self.setMember(ret.content[0]);
+			cb();
 		});
+	},
+	// 是否过期
+	isOverdue: function(data) {
+		if (data.status == 1) {
+			am.msg('会员卡退卡中，无法进行此操作');
+			return true;
+		}
+		if(data.invaliddate){
+			var ts = new Date( data.invaliddate*1 || data.invaliddate );
+			var now = new Date();
+			ts.setDate(ts.getDate() + 1);
+			if(ts){
+				// 已过期
+				if( now.getTime() > ts.getTime() ){
+					var cardData = data;
+					// 本店
+					if (data.shopId == am.metadata.userInfo.shopId) {
+						cardData = am.metadata.cardTypeMap[data.cardTypeId];
+					}
+					if(cardData && cardData.expiredpayflag == "0" && am.operateArr.indexOf('U') == -1){
+						//过期后不允许使用
+						am.confirm('已过期','此会员卡已过期，无法继续使用','知道了','返回');
+						return true;
+					}else{
+						am.msg('此会员卡已过期！');
+					}
+				}
+				return false;
+			}
+		}
+		return false;
 	},
 	feedMain:function (bill) {
 		/*am.page.product.reset({
@@ -2022,7 +2285,7 @@ am.cashierTab = {
         });*/
         
         // 性能监控点
-        monitor.stopTimer('M04', 0)
+        monitor.stopTimer('M04', 0);
 	},
 	renderTabMember:function(bill){
 		this.$memberUl.empty();
@@ -2099,6 +2362,14 @@ am.cashierTab = {
         });
 		return url;
 	},
+	// hideMemberInfo:function(ani){
+	// 	if (ani) {
+	// 		this.$memberInfo.removeClass("show").addClass("hide");
+	// 	} else {
+	// 		this.$memberInfo.removeClass("show").removeClass("hide");
+	// 		this.$memberDialog.hide();
+	// 	}
+	// }
 };
 
 $(function () {

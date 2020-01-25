@@ -9,6 +9,7 @@
 					"top":0,
 					"bottom":0,
 					"right":0,
+					"z-index": 999,
 					"background":"rgba(0,0,0,0.3)",
 					"display":"-webkit-box",
 					"-webkit-box-pack":"center",
@@ -21,9 +22,9 @@
 					"position":"relative"
 				}).find("h1").css({
 					"font-size":"1rem",
-					"line-height":"3rem",
-					"padding":"0 1rem",
-					"color":"#555"
+					"line-height":"1.5rem",
+					"padding":"1rem 1rem",
+					"color":"#999"
 				}).end().find(".radioBox").css({
 					"position": "absolute",
 					"top": "0",
@@ -70,7 +71,7 @@
 				this.$cbText=this.$radioBox.find(".cbText");
 				this.$radio=this.$radioBox.find(".iconfont");
 				this.$ul = $dom.find("ul").on("vclick", "li", function () {
-					var allowed = amGloble.metadata.shopPropertyField.depotNumGt0; //0 允许  1 不允许  是否允许售卖库存不足商品
+					var allowed = amGloble.metadata && amGloble.metadata.shopPropertyField && amGloble.metadata.shopPropertyField.depotNumGt0; //0 允许  1 不允许  是否允许售卖库存不足商品
 					if ($(this).find('.empty').length && allowed) {
 						// 库存不足 不允许售卖库存为0的商品
 						am.msg('商品无库存！');

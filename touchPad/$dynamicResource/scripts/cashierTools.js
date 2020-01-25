@@ -40,6 +40,11 @@
         } 
         _this.render(data,false,opt.flag);
         _this.onTouch && _this.onTouch(1,$(this));
+        _this.filterScroll.refresh();
+        try {
+          _this.filterScroll.scrollTo("top");
+        } catch (err) {
+        };
       });
       this.tabScroll = new $.am.ScrollView({
         $wrap: this.$tab,
@@ -47,6 +52,12 @@
         direction: [true, false],
         hasInput: false,
         bubble: 1
+      });
+      this.filterScroll = new $.am.ScrollView({
+        $wrap: this.$.find(".filterTab"),
+        $inner: this.$.find(".filterTab ul"),
+        direction: [true, false],
+        hasInput: false,
       });
     }
     if (opt.filter) {
@@ -210,6 +221,16 @@
       ) {
         var data;
         var addToBillMain = function(data){
+          if(data.hasDeleted && data.hasStoped){
+            am.msg(toastArr[2]);
+            return;
+          }else if(data.hasDeleted){
+            am.msg(toastArr[0]);
+            return;
+          }else if(data.hasStoped){
+            am.msg(toastArr[1]);
+            return;
+          }
           var $billMainTr1 = _this.onSelect(data, function(
             $billMainTr
           ) {
@@ -239,7 +260,7 @@
  
         if($this.hasClass('group')){
           var items = [],group = $this.data('group');
-          var title = '';
+          var title = '',tpCodeMap = am.metadata.tpCodeMap;
           for(var i in group.items){
             if(_this.groupKey=='SERVICE_ITEM_GROUP'){
               title = '请选择项目';
@@ -265,6 +286,17 @@
                 data:productItem
               });
             }else if(_this.groupKey=='COMBOCARD_ITEM_GROUP'){
+              // 重新处理items判断当前套餐包是否可以在本店使用
+              if(tpCodeMap[group.items[i]] && tpCodeMap[group.items[i]].applyShopIds){
+                var obj = {
+                  shopIdsStr: tpCodeMap[group.items[i]].applyShopIds, // ',r,234,43,'
+                  targetShopId: am.metadata.userInfo.shopId
+                }
+                var available = am.checkShopAvailable(obj);
+                if (!available) {
+                  continue;
+                }
+              }
               title = '请选择套餐'
               var comboWilder = am.page.comboCard.$.find('.cashierItems').hasClass('wider'),
                   comboPopWilder =  $('#pop_selecteCombo').find('.cashierItems').hasClass('wider'),
@@ -412,7 +444,7 @@
         if ((!filter || (typeFilter && this.typeFilterSelect && this.typeFilterSelect.needRenderPinYin))  && arrPinyin.indexOf(items[i].pinyin) == -1) {
           arrPinyin.push(items[i].pinyin);
         }
-
+        var tpCodeMap = am.metadata.tpCodeMap;
         //组渲染
         if(items[i].items){
           //以是否有items判断是否组数据
@@ -433,7 +465,29 @@
                   comboPopWilder =  $('#pop_selecteCombo').find('.cashierItems').hasClass('wider'),
                   comboPopupVisible = $('#pop_selecteCombo').is(':visible');
                 if((!comboPopupVisible && comboWilder) || (comboPopupVisible && comboPopWilder)){
-                  itemData = am.metadata.tpCodeMap[items[i].items[j]];
+                  itemData = tpCodeMap[items[i].items[j]];
+                  if(itemData){
+                    if (itemData.applyShopIds) {
+                      // 套餐包配置了使用门店
+                      var obj = {
+                        shopIdsStr: itemData.applyShopIds, // ',r,234,43,'
+                        targetShopId: am.metadata.userInfo.shopId
+                      }
+                      var available = am.checkShopAvailable(obj);
+                      if (!available) {
+                        continue;
+                      }
+                    }
+                    itemData.tdList = [];
+                    var tdList=am.metadata.tdList;
+                    if(tdList && tdList.length){
+                      for(var t=0,tlen=tdList.length;t<tlen;t++){
+                        var tdItem=tdList[t];
+                        if(tdItem && tdItem.treatid== itemData.id)
+                        itemData.tdList.push(tdItem);
+                      }
+                    }
+                  }
                 }else {
                   itemData = am.metadata.serviceCodeMap[items[i].items[j]];
                 }
@@ -483,12 +537,15 @@
         if(typeFilter && this.typeFilterSelect && this.typeFilterSelect.needRenderPinYin){
           this.typeFilterSelect.needRenderPinYin = false;
         }
-        for (var i = 0; i < arrPinyin.length; i++) {
+        var filterLen = arrPinyin.length;
+        var PWidth = $filterUl.find("li").eq(0).outerWidth();
+        for (var i = 0; i < filterLen; i++) {
           $filterUl.append(
             '<li class="am-clickable"><span>' + arrPinyin[i] + "</span></li>"
           );
         }
         $filterUl.find("li:first").addClass("selected all");
+        $filterUl.css("width",PWidth*(filterLen+1))
       }
 
       this.itemScroll.refresh();
@@ -688,24 +745,27 @@
     reset: function() {
       this.viewModel(localStorage.getItem("onlyText_" + this.page), 1);
       if (this.$tab) {
-        this.$tab.find("li:not(.keypadLi)").eq(0).trigger("vclick");
+        //触发重绘，回到第一个分类
+        var $li1st = this.$tab.find("li:not(.keypadLi)").eq(0);
+        if(!$li1st.hasClass('selected')) $li1st.trigger("vclick");
+        this.resetTab();
+      }
+    },
+    resetTab:function(){
+      //小于宽度要居中，大于宽度要滚动
+      var $ul = this.$tab.find("ul");
+      var $li = $ul.find("li"),
+        w = 0;
+      for (var i = 0; i < $li.length; i++) {
+        w += $li.eq(i).width() + 20;
+      }
+      if (w > this.$tab.width()) {
+        $ul.css({ width: w + "px", margin: "0" });
+        //this.tabScroll && this.tabScroll.refresh();
+      } else {
+        $ul.css({ width: "auto", margin: "auto" });
       }
       this.tabScroll && this.tabScroll.refresh();
-
-      if (this.$tab) {
-        var $ul = this.$tab.find("ul");
-        var $li = $ul.find("li"),
-          w = 0;
-        for (var i = 0; i < $li.length; i++) {
-          w += $li.eq(i).width() + 20;
-        }
-        if (w > this.$tab.width()) {
-          $ul.css({ width: w + "px", margin: "0" });
-          this.tabScroll && this.tabScroll.refresh();
-        } else {
-          $ul.css({ width: "auto", margin: "auto" });
-        }
-      }
     },
     initRender: function() {
       this.itemScroll.$inner.empty();
@@ -1296,7 +1356,9 @@ window.am.convertMemberDetailToSearch = function(optMember) {
       combinedUseFlag: optMember.card.combinedUseFlag,
       cardshopId: optMember.card.cardshopId,
       alarmfee: optMember.card.alarmfee,
-      mgjIsHighQualityCust: optMember.memberInfo.mgjIsHighQualityCust
+      mgjIsHighQualityCust: optMember.memberInfo.mgjIsHighQualityCust,
+      memberStage:optMember.memberInfo.memberstage,
+      status: optMember.card.status
     };
   }
 };

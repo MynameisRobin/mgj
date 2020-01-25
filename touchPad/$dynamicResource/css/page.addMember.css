@@ -1,5 +1,10 @@
 /* 文字颜色 ***********************/
 /* c0* 为黑白灰色系 */
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .boxSinzig {
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -45,17 +50,15 @@
   overflow: hidden;
 }
 .page_addMember .addMember_box .signature {
+  float: right;
   width: 420px;
   border: 2px dashed #BBBBBB;
+  margin: 40px 80px 0 0;
   height: 100%;
   background: #f7f7f7 url("../images/signature.png") no-repeat center 10px;
   background-size: 300px 30px;
   height: 530px;
-  position: absolute;
-  right: 80px;
-  top: 50%;
-  transform: translateY(-50%);
-  -webkit-transform: translateY(-50%);
+  position: relative;
 }
 .page_addMember .addMember_box .signature canvas {
   display: block;
@@ -103,13 +106,10 @@
   bottom: -37px;
 }
 .page_addMember .addMember_box .addMember_list {
+  float: left;
   width: 400px;
-  /* margin: 0 auto; */
-  position: absolute;
-  left: 100px;
-  top: 50%;
-  transform: translateY(-50%);
-  -webkit-transform: translateY(-50%);
+  margin: 0 auto;
+  padding: 30px 0 0 100px;
 }
 .page_addMember .addMember_box .addMember_list .cm_form {
   width: 100%;
@@ -131,9 +131,14 @@
 }
 .page_addMember .addMember_box .addMember_list .cm_form .tips {
   float: left;
-  margin-left: 10px;
-  color: red;
+  margin-left: 77px;
+  color: #e82724;
   display: none;
+  height: 36px;
+  line-height: 36px;
+  margin-top: -5px;
+  margin-bottom: -5px;
+  font-size: 12px;
 }
 .page_addMember .addMember_box .addMember_list .cm_form .tips.show {
   display: block;
@@ -162,8 +167,8 @@
   color: #FFF;
 }
 .page_addMember .addMember_box .addMember_list .cm_form .changesource-wrapper {
-  min-height: 180px;
-  max-height: 220px;
+  min-height: 135px;
+  max-height: 175px;
   min-width: 200px;
   max-width: 320px;
   overflow: hidden;
@@ -257,6 +262,9 @@
   width: 180px;
   display: block;
   float: left;
+}
+.page_addMember .addMember_box .addMember_list .cm_form .cm_form_input input.warn {
+  border: 1px solid #e82724;
 }
 .page_addMember .addMember_box .addMember_list .cm_form .cm_form_input > ul {
   display: block;
@@ -400,6 +408,48 @@
 }
 .page_addMember .uploadMemberImg .uploadBtn.am-clickable-active {
   background: #c90e28;
+}
+.page_addMember .uploadMemberImg .ignoreUploadMemberImg {
+  height: 30px;
+  overflow: hidden;
+  margin-top: 12px;
+  text-align: center;
+}
+.page_addMember .uploadMemberImg .ignoreUploadMemberImg .icon {
+  display: inline-block;
+  vertical-align: top;
+  margin: 7px;
+  width: 14px;
+  height: 14px;
+  border: 1px solid #a1a1a1;
+  border-radius: 2px;
+  position: relative;
+}
+.page_addMember .uploadMemberImg .ignoreUploadMemberImg .icon .iconfont {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  display: none;
+}
+.page_addMember .uploadMemberImg .ignoreUploadMemberImg .text {
+  display: inline-block;
+  vertical-align: top;
+  font-size: 14px;
+  color: #555;
+  line-height: 30px;
+  height: 30px;
+}
+.page_addMember .uploadMemberImg .ignoreUploadMemberImg.active .icon {
+  width: 16px;
+  height: 16px;
+  border: none;
+}
+.page_addMember .uploadMemberImg .ignoreUploadMemberImg.active .icon .iconfont {
+  display: block;
 }
 .open_keyboard_box {
   display: none;
@@ -782,4 +832,12 @@
   font-size: 14px;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+body.fixTop {
+  position: absolute;
+  top: 0;
+}
+body.fixBottom {
+  position: absolute;
+  bottom: 0;
 }

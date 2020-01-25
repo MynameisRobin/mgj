@@ -191,11 +191,10 @@
 			.billInfo {
 				position: absolute;
 				left: 80px;
-				right: 230px;
+				right: 370px;
 				height: 40px;
 				top: 7px;
 				border-left: 1px solid #ececec;
-				border-right: 1px solid #ececec;
 				.billno_box {
 					width: 30%;
 					height: 40px;
@@ -210,7 +209,7 @@
 						font-size: 12px;
 						overflow: hidden;
 				    	white-space: nowrap;
-				    	text-overflow: ellipsis;
+						text-overflow: ellipsis;
 					}
 					.wrapper {
 						height: 24px;
@@ -223,6 +222,7 @@
 				.remarkboxwrap {
 					width: 100%;
 					height: 40px;
+					border-right: 1px solid #ececec;						
 					float: left;
 					overflow: hidden;
 					&.edit {
@@ -324,15 +324,14 @@
 			.memberInfo {
 				position: absolute;
 				// width: 230px;
-				width: 264px;
+				width: 370px;
 				height: 40px;
 				top: 7px;
-				right: 0;
-				padding: 0 20px;
+				right: 0px;
+				padding: 0 15px;
 				.member {
 					// width: 110px;
-					width: 144px;
-					float: left;
+					float: right;
 					.header {
 						width: 40px;
 						height: 40px;
@@ -340,7 +339,7 @@
 						background-size: 100% 100%;
 						border-radius: 50%;
 						overflow: hidden;
-						float: left;
+						float: right;
 						img {
 							width: 100%;
 							height: 100%;
@@ -367,19 +366,22 @@
 						}
 					}
 					.name {
-						margin-left: 46px;
+						margin-left: 10px;
+						max-width: 80px;
 						height: 40px;
 						font-size: 16px;
 						color: #e82742;
 						line-height: 40px;
 						overflow: hidden;
 						white-space: nowrap;
-				    	text-overflow: ellipsis;
+						text-overflow: ellipsis;
+						float: right;
 					}
 				}
 				.sex {
 					width: 80px;
-					float: left;
+					float: right;
+					margin: 0 10px;
 					li {
 						width: 28px;
 						height: 28px;
@@ -401,6 +403,31 @@
 							// 	background-color: #333;
 							// }
 						}
+					}
+				}
+				.customerSource {
+					height: 40px;
+					top: 7px;
+					float: right;
+					width: 109px;
+					input{
+						border: 1px solid #dddddd;
+						cursor: pointer;
+						height: 30px;
+						margin: 5px 0;
+						width: 109px;
+						padding-left: 10px;
+						border-radius: 15px;
+						color: #555;
+						font-size: 12px;
+					}
+					.icon {
+						color: #999;
+						position: absolute;
+						right: 28px;
+						top: 12px;
+						width: 15px;
+						height: 15px;
 					}
 				}
 			}
@@ -553,7 +580,13 @@
 				overflow: hidden;
 				padding-left: 4px;
 			}
+			.wrap {
+				display: flex;
+				flex-wrap: wrap;
+			}
 			li {
+				flex-shrink: 0;
+				order: 1;
 				width: 78px;
 				height: 110px;
 				margin: 6px 6px 6px 0;
@@ -603,14 +636,14 @@
 					font-weight: bold;
 				}
 				.name {
-					position: absolute;
+					// position: absolute;
 					color:#fff;
 					left: 14px;
 					line-height: 12px;
 					width: 48px;
 					text-align: center;
 					font-size: 12px;
-					margin: 4px 2px 4px 0;
+					margin: 4px 2px 4px 15px;
 				}
 				.header {
 					position: absolute;
@@ -629,33 +662,43 @@
 						height: 100%;
 					}
 				}
+				.time {
+					z-index: 1;
+					position: absolute;
+					bottom: -1px;
+					left: 0;
+					width: 48px;
+					padding-left: 1px;
+					font-size: 10px;
+					height: 14px;
+				}
+				.status {
+					z-index: 1;
+					position: absolute;
+					bottom: -1px;
+					right: 1px;
+					width:28px;
+					font-size: 10px;
+					height: 14px;
+					text-align: center;
+					line-height: 14px;
+					&.bg{
+						background: rgba(0, 0, 0, 0.5);
+    					border-radius: 4px 4px 4px 4px;
+					}
+				}
 				.footer{
+					display: block;
 					position: absolute;
 					right: 0;
 					bottom: -1px;
-					max-width: 78px;
+					width: 78px;
 					height: 14px;
 					background: rgba(0, 0, 0, 0.5);
 					border-radius: 4px 4px 4px 4px;
-					// padding:0 2px;
 					color: #fff;
-					.time {
-						float: left;
-						// margin-top: 1px;
-						width: 48px;
-						padding-left: 1px;
-						font-size: 10px;
-						height: 14px;
-						// text-align: right;
-					}
-					.status {
-						width:28px;
-						float: right;
-						// padding:0 2px;
-						font-size: 10px;
-						height: 14px;
-						text-align: center;
-						line-height: 14px;
+					&.hide{
+						background: none;
 					}
 				}
 				.no,.name,.time,.status {
@@ -664,6 +707,7 @@
 				    text-overflow: ellipsis;
 				}
 				.inside {
+					z-index: 2;
 					position: absolute;
 					left: -1px;
 					top: 0;
@@ -801,6 +845,189 @@
 					.wash {
 						display: none;
 					}
+				}
+			}
+		}
+		&.smallView {
+			.list {
+				padding: 6px 6px 6px 10px;
+			}
+
+			.wrapper {
+				margin-top: 14px;
+				position: relative;
+
+				.loadingWrap {
+					position: absolute;
+					display: -webkit-box;
+					-webkit-box-pack: center;
+					-webkit-box-align: center;
+					left: 0;
+					top: 0;
+					right: 0;
+					bottom: 0;
+
+					.page-modalLoading-inner {
+						position: absolute;
+						top: 50%;
+						left: 50%;
+						transform: translate(-50%, -50%);
+						-webkit-transform: translate(-50%, -50%);
+					}
+				}
+			}
+
+			.type {
+				font-size: 12px;
+				color: #999;
+				line-height: 25px;
+				height: 25px;
+				overflow: hidden;
+				padding-left: 4px;
+			}
+
+			li {
+				position: relative;
+				width: 78px;
+				height: 110px;
+				margin: 6px 6px 6px 0;
+				float: left;
+				border-radius: 4px;
+				background: #5dae72;
+
+				&.am-clickable-active {
+					.mask {
+						position: absolute;
+						top: 0;
+						left: 0;
+						width: 78px;
+						height: 110px;
+						border-radius: 4px;
+						background: rgba(34, 34, 34, 0.1);
+					}
+				}
+
+				&.status4 {
+					background-color: #e59b37;
+
+					.time {
+						background: url(../images/openbill-time.png) no-repeat 52px center;
+						background-size: 11px 12px;
+					}
+				}
+
+				&.status2 {
+					background-color: #e82742;
+				}
+
+				&.status1 {
+					background-color: #5dae72;
+				}
+
+				&.status3 {
+					background-color: #555;
+				}
+
+				&.status5 {
+					background-color: #677DC4;
+				}
+
+				&.add {
+					background: #ececec url(../images/add-queue.png) no-repeat center center;
+					background-size: 41px 41px;
+				}
+
+				.no {
+					margin-top: 9px;
+					margin-left: 6px;
+					max-width: 68px;
+					height: unset;
+					background: unset;
+					border-radius: 0 0 5px 5px;
+					text-align: left;
+					font-size: 21px;
+					color: #fff;
+					font-weight: bold;
+				}
+				.name {
+					margin: 4px 2px 4px 6px;
+					color: #fff;
+					left: 14px;
+					line-height: 12px;
+					width: 60px;
+					text-align: unset;
+					/* padding-left: 6px; */
+					font-size: 12px;
+				}
+				.header {
+					position: absolute;
+					width: 26px;
+					height: 26px;
+					left: 6px;
+					top: 77px;
+					border-radius: 13px;
+					overflow: hidden;
+					background: #e2e2e2 url(../images/openbill-emp.png) no-repeat bottom center;
+					background-size: 16px 21px;
+					background-position: 5px 5px;
+					img {
+						width: 100%;
+						height: 100%;
+					}
+				}
+				.time {
+					position: absolute;
+					top: 55px;
+					left: 6px;
+					width: 65px;
+					font-size: 10px;
+					height: 14px;
+					line-height: 14px;
+					color: #fff;
+				}
+
+				.status {
+					position: absolute;
+					bottom: 6px;
+					right: 2;
+					padding: 0 2px;
+					// width: 42px;
+					height: 14px;
+					line-height: 14px;
+					text-align: left;
+					font-size: 10px;
+					color: #fff;
+					//  &::after {
+					// 	content: '';
+					// 	position: absolute;
+					// 	width: 12px;
+					// 	height: 12px;
+					// 	top: 1px;
+					// 	right: 2px;
+					// 	background: url(../images/queue-arrow.png);
+					// 	background-size: 100% 100%;
+					// } 
+				}
+				.footer {
+					display: none;
+					position: absolute;
+					left: 0;
+					right: 0;
+					bottom: 0;
+					padding-top: 1px;
+					width: 78px;
+					height: 15px;
+					background: rgba(0, 0, 0, 0.5);
+					border-radius: 4px 4px 4px 4px;
+					color: #fff;
+				}
+				.no,
+				.name,
+				.time,
+				.status {
+					overflow: hidden;
+					white-space: nowrap;
+					text-overflow: ellipsis;
 				}
 			}
 		}

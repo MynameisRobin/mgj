@@ -3,8 +3,10 @@ var themeSetting = {
     color: {
         standard: '#40c9c9',
         dark: '#24aca8',
-        light: '#37dbdb'
+        light: '#37dbdb',
+        hover: '#f8ffff'
     },
+    loadingUrl: '/images/theme/loading_timeplan.png',
     // start: function(){
     //     if(location.protocol.indexOf('http')==-1){
     //         try {
@@ -74,7 +76,10 @@ var themeSetting = {
             logoWords = loginPage.querySelector('.words'),
             downApp = loginPage.querySelector('.downApp'),
             foot = loginPage.querySelector('.foot');
-        logoImage.style.visibility = 'hidden';
+        var locLogo = localStorage.getItem('TP_logo');
+        if(!locLogo){
+            logoImage.style.visibility = 'hidden';
+        }
         logoWords.style.visibility = 'hidden';
         downApp.style.visibility = 'hidden';
         foot.style.visibility = 'hidden';
@@ -122,6 +127,8 @@ var themeSetting = {
         style = style.replace(RegExp(this.color.standard,'g'),this.themeConfig.color.standard);
         style = style.replace(RegExp(this.color.dark,'g'),this.themeConfig.color.dark);
         style = style.replace(RegExp(this.color.light,'g'),this.themeConfig.color.light);
+        style = style.replace(RegExp(this.color.hover,'g'),this.themeConfig.color.hover);
+        style = style.replace(RegExp(this.loadingUrl,'g'),this.themeConfig.loadingUrl);
         style = style.replace(/\$directory/g,'$dynamicResource');
         return style;
     }

@@ -61,10 +61,10 @@
                     var $tr=$('<tr>'+
                     '<td class="td-no"><div class="tdwrap">'+(item.code?item.code:'')+'</div></td>'+
                     '<td class="td-name"><div class="tdwrap">'+item.mallItemName+'</div></td>'+
-                    '<td class="td-price"><div class="tdwrap">'+item.price+'</div></td>'+
+                    '<td class="td-price"><div class="tdwrap">'+item.cashPay+'</div></td>'+
                     '<td class="td-price"><div class="tdwrap">'+item.itemNum+'</div></td>'+
                     '<td class="td-cust"><div class="tdwrap">'+item.memName+'</div></td>'+
-                    '<td class="td-status"><div class="tdwrap">'+(item.status==2?"未使用":"已使用")+'</div></td>'+
+                    '<td class="td-shop"><div class="tdwrap">'+item.memShop+'</div></td>'+
                     '<td class="td-bug"><div class="tdwrap">'+(item.createTime?new Date(item.createTime*1).format("yyyy-mm-dd"):'')+'</div></td>'+
                     '<td class="td-consume"><div class="tdwrap">'+(item.consumeTime?new Date(item.consumeTime*1).format("yyyy-mm-dd"):'')+'</div></td>'+
                     '<td class="td-getProduct"><div class="tdwrap">'+(item.distrType?(item.distrType=='1'?'到店取货':'物流配送'):'')+'</div></td>'+

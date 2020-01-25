@@ -1,5 +1,10 @@
 /* 文字颜色 ***********************/
 /* c0* 为黑白灰色系 */
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .page_queue {
   left: 136px;
 }
@@ -61,6 +66,58 @@
 .page_queue .head .nav .wrapper .item.active span {
   border-bottom: 4px solid #e82742;
   color: #e82742;
+}
+.page_queue .head .viewModeWrap {
+  position: absolute;
+  height: 44px;
+  right: 24px;
+  line-height: 44px;
+}
+.page_queue .head .viewModeWrap .modeLabel {
+  color: #999999;
+}
+.page_queue .head .viewModeWrap .modeRadio {
+  width: 44px;
+  height: 22px;
+  vertical-align: -6px;
+  display: inline-block;
+  background-color: #555555;
+  box-shadow: rgba(0, 0, 0, 0.1) 1px 1px 3px inset;
+  border-radius: 12px;
+  position: relative;
+  transition: background-color ease-in 0.2s;
+}
+.page_queue .head .viewModeWrap .modeRadio::before {
+  position: absolute;
+  right: 0;
+  top: 0;
+  line-height: 22px;
+  width: 20px;
+  content: "小";
+  font-size: 12px;
+  color: #ddd;
+}
+.page_queue .head .viewModeWrap .modeRadio::after {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  width: 18px;
+  height: 18px;
+  box-shadow: rgba(0, 0, 0, 0.2) 1px 0 2px;
+  border-radius: 10px;
+  background-color: #fff;
+  transition: left ease-in 0.2s;
+}
+.page_queue .head .viewModeWrap .modeRadio.checked::before {
+  left: 0;
+  right: auto;
+  content: "大";
+  text-align: right;
+  color: #fff;
+}
+.page_queue .head .viewModeWrap .modeRadio.checked::after {
+  left: 24px;
 }
 .page_queue .tip {
   position: absolute;
@@ -271,7 +328,32 @@
   width: 100%;
   height: 100%;
 }
+.page_queue .content li .time {
+  z-index: 1;
+  position: absolute;
+  bottom: 0px;
+  left: 1px;
+  width: 50px;
+  font-size: 10px;
+  padding-left: 2px;
+  height: 14px;
+  line-height: 14px;
+  color: #fff;
+}
+.page_queue .content li .status {
+  z-index: 1;
+  position: absolute;
+  bottom: 0px;
+  right: 1px;
+  padding: 0 2px;
+  width: 28px;
+  height: 14px;
+  font-size: 10px;
+  line-height: 14px;
+  color: #fff;
+}
 .page_queue .content li .footer {
+  display: block;
   position: absolute;
   left: 0;
   right: 0;
@@ -283,36 +365,188 @@
   border-radius: 4px 4px 4px 4px;
   color: #fff;
 }
-.page_queue .content li .footer .time {
-  float: left;
-  width: 50px;
-  font-size: 10px;
-  padding-left: 2px;
-  height: 14px;
-  line-height: 14px;
-}
-.page_queue .content li .footer .status {
-  float: right;
-  padding: 0 2px;
-  width: 28px;
-  height: 14px;
-  font-size: 10px;
-  line-height: 14px;
-  /* &::after {
-						content: '';
-						position: absolute;
-						width: 12px;
-						height: 12px;
-						top: 4px;
-						right: 2px;
-						background: url(../images/queue-arrow.png);
-						background-size: 100% 100%;
-					} */
-}
 .page_queue .content li .no,
 .page_queue .content li .name,
 .page_queue .content li .time,
 .page_queue .content li .status {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.page_queue .content.smallView {
+  position: absolute;
+  width: 100%;
+  top: 55px;
+  bottom: 0;
+  overflow: hidden;
+}
+.page_queue .content.smallView .list {
+  padding: 6px 6px 6px 10px;
+}
+.page_queue .content.smallView .wrapper {
+  margin-top: 14px;
+  position: relative;
+}
+.page_queue .content.smallView .wrapper .loadingWrap {
+  position: absolute;
+  display: -webkit-box;
+  -webkit-box-pack: center;
+  -webkit-box-align: center;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+}
+.page_queue .content.smallView .wrapper .loadingWrap .page-modalLoading-inner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+}
+.page_queue .content.smallView .type {
+  font-size: 12px;
+  color: #999;
+  line-height: 25px;
+  height: 25px;
+  overflow: hidden;
+  padding-left: 4px;
+}
+.page_queue .content.smallView li {
+  position: relative;
+  width: 78px;
+  height: 110px;
+  margin: 6px 6px 6px 0;
+  float: left;
+  border-radius: 4px;
+  background: #5dae72;
+}
+.page_queue .content.smallView li.am-clickable-active .mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 78px;
+  height: 110px;
+  border-radius: 4px;
+  background: rgba(34, 34, 34, 0.1);
+}
+.page_queue .content.smallView li.status4 {
+  background-color: #e59b37;
+}
+.page_queue .content.smallView li.status4 .time {
+  background: url(../images/openbill-time.png) no-repeat 52px center;
+  background-size: 11px 12px;
+}
+.page_queue .content.smallView li.status2 {
+  background-color: #e82742;
+}
+.page_queue .content.smallView li.status1 {
+  background-color: #5dae72;
+}
+.page_queue .content.smallView li.status3 {
+  background-color: #555;
+}
+.page_queue .content.smallView li.status5 {
+  background-color: #677DC4;
+}
+.page_queue .content.smallView li.add {
+  background: #ececec url(../images/add-queue.png) no-repeat center center;
+  background-size: 41px 41px;
+}
+.page_queue .content.smallView li .no {
+  margin-top: 9px;
+  margin-left: 6px;
+  width: 68px;
+  height: unset;
+  background: unset;
+  border-radius: 0 0 5px 5px;
+  text-align: left;
+  font-size: 21px;
+  color: #fff;
+  font-weight: bold;
+}
+.page_queue .content.smallView li .name-icon {
+  height: 12px;
+  line-height: 12px;
+  text-align: unset;
+  margin-top: 3px;
+  margin-left: 6px;
+}
+.page_queue .content.smallView li .name-icon .name {
+  display: inline-block;
+  max-width: 60px;
+  color: #fff;
+  font-size: 12px;
+}
+.page_queue .content.smallView li .name-icon .icon-xiala- {
+  display: none;
+  color: #fff;
+  margin-left: -6px;
+}
+.page_queue .content.smallView li .header {
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  left: 6px;
+  top: 77px;
+  border-radius: 13px;
+  overflow: hidden;
+  background: #e2e2e2 url(../images/openbill-emp.png) no-repeat bottom center;
+  background-size: 16px 21px;
+  background-position: 5px 5px;
+}
+.page_queue .content.smallView li .header img {
+  width: 100%;
+  height: 100%;
+}
+.page_queue .content.smallView li .time {
+  position: absolute;
+  top: 55px;
+  left: 6px;
+  width: 65px;
+  font-size: 10px;
+  height: 14px;
+  line-height: 14px;
+  color: #fff;
+}
+.page_queue .content.smallView li .status {
+  position: absolute;
+  bottom: 6px;
+  right: 2px;
+  padding: 0 2px;
+  width: 42px;
+  height: 14px;
+  font-size: 10px;
+  line-height: 14px;
+  color: #fff;
+}
+.page_queue .content.smallView li .status::after {
+  content: '';
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  top: 1px;
+  right: 2px;
+  background: url(../images/queue-arrow.png);
+  background-size: 100% 100%;
+}
+.page_queue .content.smallView li .footer {
+  display: none;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding-top: 1px;
+  max-width: 78px;
+  height: 15px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 4px 4px 4px 4px;
+  color: #fff;
+}
+.page_queue .content.smallView li .no,
+.page_queue .content.smallView li .name,
+.page_queue .content.smallView li .time,
+.page_queue .content.smallView li .status {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;

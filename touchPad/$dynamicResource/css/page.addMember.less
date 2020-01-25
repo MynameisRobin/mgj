@@ -42,19 +42,19 @@
         .abs(@top:50px,@bottom:50px,@left:0,@right:0);
         overflow: hidden;
 		.signature{
-			// float: right;
+			float: right;
 			width: 420px;
 			border: 2px dashed @bd07;
-			// margin: 40px 80px 0 0;
+			margin: 40px 80px 0 0;
 			height: 100%;
 			background:@bg06 url("@{path}signature.png") no-repeat center 10px;
 			background-size: 300px 30px;
 			height: 530px;
-			position: absolute;
-            right: 80px;
-            top: 50%;
-            transform:translateY(-50%);
-            -webkit-transform:translateY(-50%);
+			position: relative;
+            // right: 80px;
+            // top: 50%;
+            // transform:translateY(-50%);
+            // -webkit-transform:translateY(-50%);
 			canvas{
 				display: block;
 				position: absolute;
@@ -90,15 +90,15 @@
 			}
 		}
         .addMember_list {
-			// float: left;
+			float: left;
             width: 400px;
-            /* margin: 0 auto; */
-            // padding: 30px 0 0 100px;
-            position: absolute;
-            left: 100px;
-            top: 50%;
-            transform:translateY(-50%);
-            -webkit-transform:translateY(-50%);
+            margin: 0 auto;
+            padding: 30px 0 0 100px;
+            // position: absolute;
+            // left: 100px;
+            // top: 50%;
+            // transform:translateY(-50%);
+            // -webkit-transform:translateY(-50%);
             .cm_form {
                 width: 100%;
                 min-height: 45px;
@@ -119,9 +119,14 @@
                 }
                 .tips {
                     float: left;
-                    margin-left: 10px;
-                    color: red;
+                    margin-left: 77px;
+                    color: #e82724;
                     display: none;
+                    height: 36px;
+                    line-height: 36px;
+                    margin-top: -5px;
+                    margin-bottom: -5px;
+                    font-size: 12px;
                     &.show {
                         display: block;
                     }
@@ -148,8 +153,8 @@
                     // height: 90px;
                 }
                 .changesource-wrapper {
-					min-height: 180px;
-					max-height: 220px;
+					min-height: 135px;
+					max-height: 175px;
                     min-width: 200px;
 					max-width: 320px;
 					overflow: hidden;
@@ -224,6 +229,9 @@
                             width: 180px;
                             display:block;
                             float: left;
+                        }
+                        &.warn{
+                            border: 1px solid #e82724;
                         }
                         
                     }
@@ -363,6 +371,50 @@
             border-radius: 3px;
             &.am-clickable-active {
                 background: @bg07;
+            }
+        }
+        .ignoreUploadMemberImg {
+            height: 30px;
+            overflow: hidden;
+            margin-top: 12px;
+            text-align: center;
+            .icon {
+                display: inline-block;
+                vertical-align: top;
+                margin: 7px;
+                width: 14px;
+                height: 14px;
+                border: 1px solid #a1a1a1;
+                border-radius: 2px;
+                position: relative;
+                .iconfont {
+                    position: absolute;
+                    width: 20px;
+                    height: 20px;
+                    left: 50%;
+                    top: 50%;
+                    transform: translate(-50%,-50%);
+                    -webkit-transform: translate(-50%,-50%);
+                    display: none;
+                }
+            }
+            .text {
+                display: inline-block;
+                vertical-align: top;
+                font-size: 14px;
+                color: #555;
+                line-height: 30px;
+                height: 30px;
+            }
+            &.active {
+                .icon {
+                    width: 16px;
+                    height: 16px;
+                    border: none;
+                    .iconfont {
+                        display: block;
+                    }
+                }
             }
         }
     }
@@ -519,6 +571,7 @@
     left: 0;
     bottom: 0;
     right: 0;
+    // z-index: 1001;
     z-index: 10;
     display: none;
     .mask {
@@ -724,4 +777,12 @@
 			transform: translate(-50%,-50%);
 		}
     }
+}
+body.fixTop {
+    position: absolute;
+    top: 0;
+}
+body.fixBottom {
+    position: absolute;
+    bottom: 0;
 }

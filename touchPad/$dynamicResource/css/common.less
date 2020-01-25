@@ -117,10 +117,11 @@ input {
     bottom: 0;
     background: rgba(0, 0, 0, 0.5);
     display: none;
+    z-index: 100;
     &.comFee {
         .inner {
-            width: 600px;
-            margin: -300px 0 0 -300px;
+            width: 800px;
+            margin: -300px 0 0 -400px;
             ul {
                 margin: 5px 0;
                 border: 1px solid #999;
@@ -148,18 +149,21 @@ input {
                             border-right: none;
                         }
                         &:nth-child(1) {
-                            width: 15%;
+                            width: 10%;
                         }
                         &:nth-child(2) {
-                            width: 25%;
-                        }
-                        &:nth-child(3) {
                             width: 20%;
                         }
+                        &:nth-child(3) {
+                            width: 15%;
+                        }
                         &:nth-child(4) {
-                            width: 25%;
+                            width: 20%;
                         }
                         &:nth-child(5) {
+                            width: 20%;
+                        }
+                        &:nth-child(6) {
                             width: 15%;
                         }
                     }
@@ -427,9 +431,25 @@ input {
             background-size: 19px 19px;
             left: 15px;
             right: 15px;
-            line-height: 65px;
-            font-size: 17px;
-            color: #222222;
+            .c-title-text {
+                display: inline-block;
+                vertical-align: top;
+                height: 65px;
+                line-height: 65px;
+                font-size: 17px;
+                color: #222222;
+            }
+            .remarkSetWrap {
+                display: inline-block;
+                vertical-align: top;
+                width: 15px;
+                height: 15px;
+                margin-top: 25px;
+                .titleSetIcon {
+                    width: 15px;
+                    height: 15px;
+                }
+            }
         }
         .c-content-box {
             position: absolute;
@@ -599,13 +619,50 @@ input {
                     }
                 }
             }
+            .c-remarks-wrap{
+                .c-split-title{
+
+                }
+                .c-remarks-ul{
+                    li{
+                        height: 40px;
+                        position: relative;
+                        padding-left: 36px;
+                        span{
+                            position: absolute;
+                            left: 0;
+                            top: 10px;
+                            width: 20px;
+                            height: 20px;
+                            border: 1px solid #ddd;
+                            border-radius: 50%;
+                        }
+                        p{
+                            height: 40px;
+                            font-size: 14px;
+                            color: #222;
+                            line-height: 40px;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+                        }
+                        &.active{
+                            span{
+                                background: #555 url(../images/selectReason.png) no-repeat center center;
+                                background-size: 12px 8px;
+                                border: none;
+                            }
+                        }
+                    }
+                }
+            }
             .c-textarea-box {
                 width: 100%;
-                height: 105px;
+                height: 50px;
                 padding: 14px;
                 font-size: 14px;
                 background-color: #f7f7f7;
-                margin-top: 20px;
+                margin-top: 6px;
                 border-radius: 3px;
                 textarea {
                     color: #222222;
@@ -621,6 +678,17 @@ input {
                     }
                 }
             }
+            .saveAsCommon{
+                height: 35px;
+                color: #12B8EE;
+                font-size: 12px;
+                .saveAsCommonIcon{
+                    width: 12px;
+                    height: 12px;
+                    vertical-align: baseline;
+                    margin: 6px 6px 0 0;
+                }
+            }
         }
         .c-footer-box {
             position: absolute;
@@ -632,6 +700,7 @@ input {
             text-align: center;
             line-height: 100px;
             background-color: #fff;
+            border-radius: 5px;
             span {
                 height: 43px;
                 line-height: 43px;
@@ -980,7 +1049,7 @@ input {
         position: absolute;
         top: 17px;
         left: 50%;
-        width: 328px;
+        width: 360px;
         margin-left: -164px;
         padding: 16px 19px;
         background: #ffffff;
@@ -1106,7 +1175,8 @@ input {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 999;
+    z-index: 1001;
+    // z-index: 999;
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.5);
@@ -1222,4 +1292,75 @@ input {
             opacity: 0.8;
         }
     }
+}
+.videoHelpWrap{
+    display: inline-block;
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    height: 24px;
+    line-height: 24px;
+    font-size: 12px;
+    color: #00B7EE;
+    svg{
+        display: inline-block;
+        width: 20px;
+        height: 16px;
+        vertical-align: -3px;
+    }
+    &.am-clickable-active{
+        opacity: 0.6;
+    }
+}
+.pswp__ui.pswp__ui--fit .pswp__button--arrow--left:before{
+    content:'';
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    color:#fff;
+    width: 60px;
+    height: 90px;
+    background:url(../images/left-arrow.png) center center no-repeat;
+    background-size: 45px;
+}
+.pswp__ui.pswp__ui--fit .pswp__button--arrow--right:before{
+    content:'';
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    color:#fff;
+    width: 60px;
+    height: 90px;
+    background:url(../images/right-arrow.png) center center no-repeat;
+    background-size: 45px;
+}
+#autoWrap{
+	position: relative;
+	.content{
+		position: absolute;
+		width:100%;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
+		.img{
+			width: 105px;
+			height: 105px;
+			background: url(../images/autopay.gif) no-repeat center center;
+			margin: 0 auto;
+			border-radius: 50%;
+			background-size: 100% 100%;
+			background-color: #fff;
+		}
+		.tip{
+			font-size: 20px;
+			color: #fff;
+			text-align: center;
+			margin-top: 20px;
+			width: 100%;
+		}
+	}
 }

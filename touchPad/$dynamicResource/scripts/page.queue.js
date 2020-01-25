@@ -99,7 +99,42 @@
             this.$back = this.$.find('.back').vclick(function(){
                 am.goBackToInitPage();
             });
-		},
+            this.$content = this.$.find('.content');
+            this.$toggleMode = this.$.find('.viewModeWrap .modeRadio').vclick(function(){
+                var $this = $(this);
+                var checked = $this.hasClass('checked');
+                self.toggleMode(checked,function(){
+                    if(checked){
+                        $this.removeClass('checked');
+                        self.$content.addClass('smallView');
+                    }else {
+                        $this.addClass('checked');
+                        self.$content.removeClass('smallView');
+                    }
+                });
+                am.initSound();
+            });
+        },
+        getViewMode:function(){
+            return (am.metadata.userConfigs && am.metadata.userConfigs.queueSmallMode)||0;
+        },
+        toggleMode: function(checked,callback){
+            am.loading.show();
+			am.api.saveUserConfig.exec({
+                "shopId": am.metadata.userInfo.shopId+'', 
+                "userId": am.metadata.userInfo.userId+'', 
+                "configKey": 'queueSmallMode',
+                "configValue": checked?1:0,// 0 小头像， 1 大头像
+			}, function (ret) {
+                am.loading.hide();
+                if(ret && ret.code==0){
+                    self.isSmallViewMode = am.metadata.userConfigs.queueSmallMode = checked?1:0;
+                    callback && callback();
+                }else {
+                    am.msg('显示模式切换失败');
+                }
+			});
+        },
         backButtonOnclick: function () {
             if (amGloble.metadata.shopPropertyField.mgjBillingType == 1) {
                 $.am.changePage(am.page.hangup, "", {
@@ -116,6 +151,14 @@
                 this.$.removeClass('am-full');
             }else {
                 this.$.addClass('am-full');
+            }
+            this.isSmallViewMode = this.getViewMode();//0大头像 1 小头像
+            if(this.isSmallViewMode==1){
+                this.$content.addClass('smallView');
+                this.$toggleMode.removeClass('checked')
+            }else{
+                this.$content.removeClass('smallView');
+                this.$toggleMode.addClass('checked')
             }
 		},
 		afterShow:function(para){
@@ -329,8 +372,13 @@
                         if(emp){
                             $li.find('.no').html(emp.no);
                             $li.find('.name').html(emp.name);
+                            var updateTs = '';
+                            if(emp.mgjUpdateTime){
+                                updateTs = new Date(emp.mgjUpdateTime).getTime();
+                            }
                             $li.find('.header').html(am.photoManager.createImage('artisan', {
                                 parentShopId: am.metadata.userInfo.parentShopId,
+                                updateTs: updateTs
                             }, emp.id+'.jpg', 's'));
 
                             var now = new Date().getTime();
@@ -343,14 +391,9 @@
                                 $li.find('.time').html(item.statusTime);
                             }else {
                                 $li.find('.time').hide();
-                            }
-                            // 如果时间和轮牌状态不显示，则轮牌的footer不显示
-                            if(!$li.find('.status').html()&&!$li.find('.time').is(':visible')){
+                                $li.find('.status').hide();
                                 $li.find('.footer').hide();
-                            }else{
-                                $li.find('.footer').show();
-                            }
-                            
+                            }                    
                             $li.data('data',item);
                             $wrapper.find('ul').append($li)
                         }
@@ -388,7 +431,7 @@
                     var w = $(item[i]).outerWidth(true);
                     width += w;
                 }
-                this.$nav.css({"width":width+"px"});
+                this.$nav.css({"width":width+1+"px"});// fix bug 0024762，解决宽度误差
                 if(width>this.$nav.parent().width()){
                     this.$nav.css('margin',0);
                 }else {

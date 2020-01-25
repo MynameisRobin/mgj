@@ -1,6 +1,6 @@
 #qqModal,#autoStationTip,#withoutBillPayTip {
     text-align: center;
-    z-index: 2;
+    z-index: 100;
     .inner {
         z-index: 1;
         width: 610px;
@@ -394,6 +394,306 @@
             height: 44px;
             margin: 18px auto 0;
             line-height: 44px;
+        }
+    }
+}
+#swipeModal {
+    text-align: center;
+    z-index: 2;
+    background: transparent;
+    .inner {
+        z-index: 1;
+        width: 435px;
+        height: 272px;
+        margin-left: -230px;
+        margin-top: -136px;
+        padding: 20px;
+        background:rgba(255,255,255,1);
+        box-shadow:0px 1px 32px 0px rgba(0,0,0,0.5);
+        border-radius:4px;
+    }
+
+    .close {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        width: 35px;
+        height: 35px;
+
+        &::before {
+            content: "";
+            display: block;
+            width: 15px;
+            height: 15px;
+            margin: 10px;
+            background: url(../images/icons_sprite/close_employee.png) no-repeat 0px 0px;
+            background-size: 15px 15px;
+        }
+    }
+
+    .title {
+        margin-top: 40px;
+        line-height: 19px;
+
+        h2 {
+            color: #222;
+            font-size: 19px;
+            height: 19px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+
+        h3 {
+            margin-top: 10px;
+            color: #999;
+            font-size: 13px;
+        }
+    }
+
+    .content {
+        padding: 10px 15px 10px 15px;
+        text-align: center;
+
+        img {
+            width: 80%;
+            margin-top: 23px;
+        }
+    }
+}
+#billDetail {
+    display: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0);
+    z-index: 101;
+    -webkit-transition: background 0.25s ease-in;
+    &.dark {
+        background: rgba(0, 0, 0, 0.4);
+    }
+    .mask {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+    }
+    .content {
+        height: 100%;
+        width: 40%;
+        background: #FFF;
+        text-align: left;
+        position: absolute;
+        left: auto;
+        right: 0;
+        top: 0;
+        bottom: auto;
+        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        padding: 20px 23px 28px;
+        transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 500, 0, 0, 1);
+        -webkit-transition: transform 0.25s ease-in;
+        &.show {
+            display: block;
+            transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+        }
+        .title {
+            height:17px;
+            font-size:12px;
+            color:rgba(102,102,102,1);
+            line-height:17px;
+        }
+        .customer {
+            height: 60px;
+            line-height: 60px;
+            font-size:21px;
+            color:rgba(51,51,51,1);
+            border-bottom: 1px solid rgba(236,236,236,1);
+            .name{
+                margin-left: 3px;
+                vertical-align: middle;
+                font-weight: 500;
+            }
+            .sex {
+                font-size:16px;
+                font-weight:500;
+                color:rgba(153,153,153,1);
+                float: right;
+                vertical-align: middle;
+            }
+            .billNo{
+                font-family: 'displayIdFont';
+                font-size:27px;
+                vertical-align: middle;
+            }
+        }
+        .selectItem {
+            max-height: 400px;
+            border-bottom: 1px solid rgba(236,236,236,1);
+            padding-top: 13px;
+            padding-bottom: 20px;
+            overflow: hidden;
+            .scollItem {
+                &>ul{
+                    height: 100%;
+                    li {
+                        line-height: 34px;
+                        clear: both;
+                        &::before{
+                            content: "";
+                            display: inline-block;
+                        }
+                        .itemName {
+                            width: 200px;
+                            overflow: hidden;
+                            white-space: nowrap;
+                            text-overflow: ellipsis;
+                            float: left;
+                            height: 34px;
+                            &.isComboItem::after{
+                                content: "";
+                                display: inline-block;
+                                border-top: 5px solid #6D6D6D;
+                                border-left: 5px solid transparent;
+                                border-right: 5px solid transparent;
+                                border-bottom: none;
+                                margin-left: 5px;
+                                margin-bottom: 2px;
+                            }
+                        }
+                        .itemNum {
+                            color:rgba(153,153,153,1);
+                            text-align: right;
+                            float: right;
+                            display: inline-block;
+                        }
+                        .itemCost {
+                            float: right;
+                            font-size:14px;
+                            color:rgba(34,34,34,1);
+                            line-height:34px;
+                            height: 34px;
+                            width: 100px;
+                            text-align: right;
+                        }
+                        .package {
+                            width: 100%;
+                            background-color: #f7f7f7;
+                            border-radius: 3px;
+                            ul {
+                                padding: 0 20px;
+                                li{
+                                    height: 52px;
+                                    font-size: 13px;
+                                    color: #555;
+                                    line-height: 52px;
+                                    overflow: hidden;
+                                    text-overflow: ellipsis;
+                                    white-space: nowrap;
+                                    padding-left: 34px;
+                                    border-bottom: 1px solid rgba(236,236,236,1);
+                                    position: relative;
+                                    &:last-of-type {
+                                        border: none;
+                                    }
+                                    &::before{
+                                        content: "";
+                                        position: absolute;
+                                        left: 0;
+                                        top: 16px;
+                                        width: 20px;
+                                        height: 20px;
+                                        border: 1px solid #ddd;
+                                        border-radius: 50%;
+                                    }
+                                    &.selected::before{
+                                        background: #555555 url(../images/selectReason.png) no-repeat center center;
+                                        background-size: 12px 8px;
+                                        border: none;
+                                    }
+                                    .times {
+                                        padding-top: 7px;
+                                        float: right;
+                                        line-height: 20px;
+                                        font-size: 12px;
+                                        text-align: right;
+                                        span {
+                                            display: block;
+                                            line-height: 14px;
+                                            color: #bdbdbd;
+                                        }
+                                    }
+                                    .itemName1 {
+                                        padding-top: 5px;
+                                        line-height: 24px;
+                                        margin-right: 80px;
+                                    }
+                                    .invalidDate {
+                                        line-height: 14px;
+                                        font-size: 12px;
+                                        color: #bdbdbd;
+                                    }
+                                }
+        
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .remark {
+            margin-top: 16px;
+            .title {
+                height: 26px;
+                line-height: 26px;
+            }
+            .billRemark {
+                display: block;
+                box-sizing: border-box;
+                -webkit-box-sizing: border-box;
+                width: 100%;
+                font-size: 14px;
+                color: #222;
+                line-height: 20px;
+                padding: 6px 10px;
+                border-radius: 5px;
+                height: 68px;
+                border: 1px solid #ddd;
+                resize: none;
+            }
+        }
+        .footer {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            height: 60px;
+            padding: 10px 15px 0;
+            text-align: center;
+            .btn {
+                display: inline-block;
+                width: 40%;
+                height: 40px;
+                line-height: 40px;
+                margin: 0 8px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                text-align: center;
+            }
+            .ok {
+                height: 42px;
+                border: 1px solid #555;
+                background: #555;
+                color: #fff;
+            }
+            .cancle {
+                height: 42px;
+                border: 1px solid #ddd;
+                color: #555;
+            }
         }
     }
 }

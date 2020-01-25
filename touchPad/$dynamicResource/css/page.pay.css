@@ -73,6 +73,14 @@
   top: 0;
   right: 0;
 }
+.page_pay .keypadWrap .keypadBtnDiv,
+.page_itemPay .keypadWrap .keypadBtnDiv {
+  bottom: 180px;
+}
+.page_pay .keypadWrap .keypadInner,
+.page_itemPay .keypadWrap .keypadInner {
+  bottom: 160px;
+}
 .page_pay .keypadWrap .keypadInner .given li:nth-of-type(1) span,
 .page_itemPay .keypadWrap .keypadInner .given li:nth-of-type(1) span {
   width: 45px;
@@ -172,26 +180,32 @@
 .page_pay .left .checkboxes .checkbox.checked::before,
 .page_itemPay .left .checkboxes .checkbox.checked::before {
   border-color: #6D6D6D;
-  background: url("../images/icons_sprite/selected.png") no-repeat 0px 0px;
-  background-size: 15px 15px;
+  background: url(../images/icons_sprite/check_box_checked.png) no-repeat -3px -3px;
+  background-size: 21px 21px;
 }
 .page_pay .left .comment,
-.page_itemPay .left .comment {
+.page_itemPay .left .comment,
+.page_pay .left .customerSource,
+.page_itemPay .left .customerSource {
   position: absolute;
   left: 0;
   right: auto;
   top: auto;
   bottom: 86px;
-  width: 60%;
   box-sizing: border-box;
   line-height: 20px;
   min-height: 26px;
-  padding: 3px 15px 3px 65px;
+  padding: 3px 15px 3px 48px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-size: 12px;
   color: #888;
 }
 .page_pay .left .comment::before,
-.page_itemPay .left .comment::before {
+.page_itemPay .left .comment::before,
+.page_pay .left .customerSource::before,
+.page_itemPay .left .customerSource::before {
   content: "备注:";
   position: absolute;
   left: 16px;
@@ -200,10 +214,12 @@
   bottom: auto;
 }
 .page_pay .left .comment::after,
-.page_itemPay .left .comment::after {
+.page_itemPay .left .comment::after,
+.page_pay .left .customerSource::after,
+.page_itemPay .left .customerSource::after {
   position: absolute;
-  left: 48px;
-  right: auto;
+  left: auto;
+  right: 0;
   top: 5px;
   bottom: auto;
   content: "";
@@ -211,6 +227,30 @@
   height: 14px;
   background: url("../images/card_edit_white_icon.png") no-repeat center center;
   background-size: 11px 14px;
+}
+.page_pay .left .comment,
+.page_itemPay .left .comment {
+  left: 18%;
+  max-width: 40%;
+}
+.page_pay .left .comment.showleft,
+.page_itemPay .left .comment.showleft {
+  left: 0;
+  max-width: 58%;
+}
+.page_pay .left .customerSource,
+.page_itemPay .left .customerSource {
+  left: 0;
+  max-width: 18%;
+  padding: 3px 15px 3px 72px;
+}
+.page_pay .left .customerSource::before,
+.page_itemPay .left .customerSource::before {
+  content: "顾客来源:";
+}
+.page_pay .left .customerSource::after,
+.page_itemPay .left .customerSource::after {
+  right: 0;
 }
 .page_pay .left dt,
 .page_itemPay .left dt {
@@ -622,7 +662,9 @@
   background: #58d56d;
 }
 .page_pay .left .payTypes li.am-disabled,
-.page_itemPay .left .payTypes li.am-disabled {
+.page_itemPay .left .payTypes li.am-disabled,
+.page_pay .left .payTypes li.noJdSetting,
+.page_itemPay .left .payTypes li.noJdSetting {
   opacity: 0.3;
 }
 .page_pay .left .depPerfVal,
@@ -1033,6 +1075,16 @@
   text-align: center;
   margin: 0 auto 10px;
 }
+.page_pay .payConfirm .content .paySuccess .btn,
+.page_itemPay .payConfirm .content .paySuccess .btn {
+  background: #595959;
+  border-radius: 4px;
+  line-height: 40px;
+  text-align: center;
+  color: #FFF;
+  width: 165px;
+  margin: 0 auto;
+}
 .page_pay .redWrap,
 .page_itemPay .redWrap {
   display: none;
@@ -1227,7 +1279,7 @@
   top: 51px;
   left: 0;
   right: 0;
-  bottom: 82px;
+  bottom: 109px;
   overflow: hidden;
 }
 .page_itemPay .container .listContainer {
@@ -1579,7 +1631,8 @@
   background-size: 20px 20px;
   background-position: 10px 8px;
 }
-.page_itemPay .container .listWrapper .list .item .details .payTypes .payTypesWrapper .payItem.disabled {
+.page_itemPay .container .listWrapper .list .item .details .payTypes .payTypesWrapper .payItem.disabled,
+.page_itemPay .container .listWrapper .list .item .details .payTypes .payTypesWrapper .payItem.noJdSetting {
   opacity: 0.3;
 }
 .page_itemPay .container .listWrapper .list .item .details .payTypes .payTypesWrapper .payItem::after {
@@ -1814,19 +1867,21 @@
   left: 0;
   right: 0;
   bottom: 0;
-  height: 50px;
+  height: 88px;
   overflow: hidden;
-  padding: 16px 24px 16px 8px;
+  padding: 16px 24px 5px 8px;
 }
 .page_itemPay .footer .settings {
   position: absolute;
-  height: 50px;
+  height: 88px;
   top: 16px;
   left: 8px;
   right: 302px;
 }
 .page_itemPay .footer .settings .checkboxes {
   height: 36px;
+  position: absolute;
+  bottom: 0;
 }
 .page_itemPay .footer .settings .checkboxes .checkbox {
   float: left;
@@ -1848,19 +1903,26 @@
 }
 .page_itemPay .footer .settings .checkboxes .checkbox.checked::before {
   border-color: #6D6D6D;
-  background: url("../images/icons_sprite/selected.png") no-repeat 0px 0px;
-  background-size: 15px 15px;
+  background: url(../images/icons_sprite/check_box_checked.png) no-repeat -3px -3px;
+  background-size: 21px 21px;
 }
-.page_itemPay .footer .settings .comment {
+.page_itemPay .footer .settings .comment,
+.page_itemPay .footer .settings .customerSource {
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
+  position: absolute;
+  bottom: 36px;
   line-height: 20px;
   min-height: 26px;
-  padding: 3px 15px 3px 65px;
+  padding: 3px 15px 3px 48px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-size: 12px;
   color: #888;
 }
-.page_itemPay .footer .settings .comment::before {
+.page_itemPay .footer .settings .comment::before,
+.page_itemPay .footer .settings .customerSource::before {
   content: "备注:";
   position: absolute;
   left: 16px;
@@ -1868,10 +1930,11 @@
   top: 3px;
   bottom: auto;
 }
-.page_itemPay .footer .settings .comment::after {
+.page_itemPay .footer .settings .comment::after,
+.page_itemPay .footer .settings .customerSource::after {
   position: absolute;
-  left: 48px;
-  right: auto;
+  left: auto;
+  right: 0;
   top: 5px;
   bottom: auto;
   content: "";
@@ -1880,12 +1943,36 @@
   background: url("../images/card_edit_white_icon.png") no-repeat center center;
   background-size: 11px 14px;
 }
+.page_itemPay .footer .settings .comment {
+  left: 30%;
+  max-width: 65%;
+}
+.page_itemPay .footer .settings .comment.showleft {
+  left: 0;
+  max-width: 95%;
+}
+.page_itemPay .footer .settings .customerSource {
+  left: 0;
+  max-width: 30%;
+  padding: 3px 15px 3px 72px;
+}
+.page_itemPay .footer .settings .customerSource::before {
+  content: "顾客来源:";
+  position: absolute;
+  left: 16px;
+  right: auto;
+  top: 3px;
+  bottom: auto;
+}
+.page_itemPay .footer .settings .customerSource::after {
+  right: 0;
+}
 .page_itemPay .footer .submit {
   width: 270px;
   height: 50px;
   border-radius: 3px;
   position: absolute;
-  top: 16px;
+  bottom: 16px;
   right: 24px;
   left: auto;
 }

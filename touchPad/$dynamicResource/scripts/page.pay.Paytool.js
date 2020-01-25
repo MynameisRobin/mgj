@@ -10,7 +10,9 @@
         this.onQrpay = opt.qrpay;
         this.onComplete = opt.complete;
         this.$i=3;
-		this.$refundNum=0;
+        this.$refundNum=0;
+        // 设置轮询时间
+        this.setTime = 3000;
         this.$qx=function(){
          _this.cxsetTime();
         };
@@ -45,22 +47,29 @@
             }
         });
         this.$button = this.$inner.find(".paybutton").vclick(function() {
+			if (_this.$input.prop("disabled")) {
+				return;
+			}
             var dynamic = _this.$input.val().replace(/[\s\r\n\\\/\'\"\‘\’\“\”]/g,'');
-            _this.$input.val(dynamic);
+			_this.$input.val(dynamic).prop("disabled", true);
             if (!dynamic) {
-                am.msg("请输入支付条码！");
+				am.msg("请输入支付条码！");
+				_this.$input.prop("disabled", false);
                 return;
             }
             // 性能监控点
-            monitor.startTimer('M06')
-
-            
-            _this.render(1);
+            monitor.startTimer('M06', {
+				type: _this.type,
+				price: _this.price,
+				dynamic: dynamic,
+			})
+			_this.render(1);
             _this.onPay({
                 "price": _this.price,
                 "dynamic_id": dynamic,
                 "subject": (am.metadata.userInfo.shopName || "") + " " + (am.metadata.userInfo.osName || ""),
             }, function(ret) {
+				_this.$input.prop("disabled", false);
                 _this.payCallback(ret);
             });
 		});
@@ -424,7 +433,7 @@
                         },500);
                     }
                 }
-
+                _this.animateTimer = null;
 			}, 100);
 
 			//POS机支付成功点击申请退款关闭弹窗，打开后继续轮询
@@ -542,7 +551,9 @@
                     $('#refundVccode').hide();
                     //继续定时器,从而跳转页面
                     _this.cxsetTime();
-                    _this.getQrPay();
+					if(localStorage.getItem('notAutoShowCode') != 'true'){
+                    	_this.getQrPay();
+					}
                     //判断是否是退款
                     _this.$refundNum=1;
                     //移除取消按钮绑定事件
@@ -582,14 +593,14 @@
                 if (ret && ret.code == 0 && ret.content) {
                     _this.qrts = new Date().getTime();
                     _this.qrTradeData = ret.content.order;
-                    var $img = $('<img src="http://common.reeli.cn/component/genqr?message=' + encodeURIComponent(ret.content.qrcode) + '&width=300&height=300"/>');
+                    var $img = $('<img src="http://common.meiguanjia.net/component/genqr?message=' + encodeURIComponent(ret.content.qrcode) + '&width=300&height=300"/>');
                     $img.bind({
                         "load": function() {
 							$(this).show();
 							_this.$.find(".qrcodeimg").show();
                             _this.qrLoopTimer = setTimeout(function() {
                                 _this.startQrLoopQuery();
-                            }, 4 * 1000);
+                            }, _this.setTime || 3000);
                         },
                         "error": function() {
                             _this.$qrcode.empty();
@@ -598,9 +609,18 @@
 						}
                     });
                     _this.$qrcode.html($img);
-                    //_this.ssqrImgUrl = $img.attr('src');
-                    //console.log(_this.ssqrImgUrl)
+
                     _this.settingMediaScreenQr(_this.type,_this.price,$img.attr('src'));
+
+                    // _this.$qrcode.empty();
+
+                    // am.getLocalQrCode(_this.$qrcode,ret.content.qrcode,230,230);
+                    // _this.$.find(".qrcodeimg").show();
+                    // _this.qrLoopTimer = setTimeout(function() {
+                    //     _this.startQrLoopQuery();
+                    // }, _this.setTime || 3000);
+
+                    // _this.settingMediaScreenQr(_this.type,_this.price,_this.$qrcode.find('img').attr('src')); 
                 } else {
                     ret.message && am.msg(ret.message);
                     _this.$qrcode.empty();
@@ -608,6 +628,26 @@
 					_this.$.find(".qrcodeimg").hide();
                 }
             });
+        },
+        // 接受到支付推送
+        getSocketPush: function(data) {
+            if(data.paymode == 0 && data.id != this.tradeData.id){
+                return;
+            }
+            if(data.paymode == 1 && data.id != this.qrTradeData.id){
+                return;
+            }
+            var _this = this;
+            _this.qrLoopTimer && clearTimeout(_this.qrLoopTimer);
+            var ret = {
+                code: 0,
+                content: data
+            }
+            if(data.paymode == 0){
+                _this.payCallback(ret);
+            }else if (data.paymode == 1) {
+                _this.qrRender(ret);
+            }
         },
         startQrLoopQuery: function() {
             var _this = this;
@@ -628,6 +668,32 @@
             }, function(ret) {
 				_this.qrRender(ret);
             }, 1);
+		},
+		// B扫C轮询
+		startB2CLoopQuery: function(){
+			var _this = this;
+			var timer = setTimeout(function(){
+				_this.getB2C();
+				clearTimeout(timer);
+			}, _this.setTime || 3000);
+		},
+		// 获取B扫C的数据ajax
+		getB2C: function(){
+			var _this = this;
+			_this.$status.find(".complete").removeClass('am-disabled');
+			_this.onQuery({
+				"out_trade_no":  _this.tradeData.outtradeno
+			}, function(ret) {
+				if (ret.code == 0) {
+					// 性能监控点
+					monitor.stopTimer('M06', 0, ret);
+					if (ret.content.status == 1 || ret.content.status == 2) {
+						_this.startB2CLoopQuery();
+					} else {
+						_this.payCallback(ret);
+					}
+				}
+			});
 		},
 		//银联
 		startPosLoopQuery: function() {
@@ -674,7 +740,7 @@
 						//下单中继续loading
 						_this.qrLoopTimer = setTimeout(function() {
 							_this.startPosLoopQuery();
-						}, 4 * 1000);
+						}, _this.setTime || 3000);
 						return;
 					}
 				}
@@ -687,7 +753,7 @@
 					//下单中继续loading
 					_this.qrLoopTimer = setTimeout(function() {
 						_this.startPosLoopQuery();
-					}, 4 * 1000);
+					}, _this.setTime || 3000);
 				} else if (ret.content.status == 3) {
 					//支付成功;
 					if(_this.isNoPos){
@@ -731,7 +797,7 @@
 					}
 					_this.qrLoopTimer = setTimeout(function() {
 						_this.startPosLoopQuery();
-					}, 4 * 1000);
+					}, _this.setTime || 3000);
 				}
 			}else{
 				if(_this.isNoPos){
@@ -770,12 +836,14 @@
 			_this.qrLoopTimer && clearTimeout(_this.qrLoopTimer);
 			_this.qrLoopTimer = setTimeout(function() {
 				_this.startPosLoopQuery();
-			}, 4 * 1000);
+			}, _this.setTime || 3000);
 		},
 		//二维码
         qrRender: function(ret) {
             var _this = this;
             _this.$refundNum=0;
+            // 性能监控点
+            monitor.startTimer('M13');
             if (ret.code === 0) {
                 _this.qrTradeData = ret.content;
                 this.$qrSuccess.hide();
@@ -789,7 +857,7 @@
                     //已提交
                     _this.qrLoopTimer = setTimeout(function() {
                         _this.startQrLoopQuery();
-                    }, 5 * 1000);
+                    }, _this.setTime || 3000);
                 } else if (ret.content.status == 3) {
                     //支付成功;
 					//am.msg("支付成功！");
@@ -804,8 +872,8 @@
                     //隐藏弹框
                     $('#refundVccode').hide();
                     //继续定时器,从而跳转页面
-                    _this.cxsetTime();
-                    _this.getQrPay();
+					_this.cxsetTime();
+					_this.getQrPay();
                     //判断是否是退款
                     _this.$refundNum=1;
                     //移除取消按钮绑定事件
@@ -817,7 +885,7 @@
                 am.msg("网络连接异常，请检查网络连接状态！");
                 _this.qrLoopTimer = setTimeout(function() {
                     _this.startQrLoopQuery();
-                }, 4 * 1000);
+                }, _this.setTime || 3000);
             } else if(ret.code == 1){
                 am.msg(ret.message);
                 $('#vc_code').trigger('vclick');
@@ -825,7 +893,14 @@
                 am.msg(ret.message || "操作失败，请刷新条码后重试!");
                 _this.qrLoopTimer = setTimeout(function() {
                     _this.startQrLoopQuery();
-                }, 4 * 1000);
+                }, _this.setTime || 3000);
+            }
+            if(ret && ret.code==0 && ret.content){
+                monitor.stopTimer('M13',0,ret);
+            }else if(ret && ret.code==-1){
+                monitor.stopTimer('M13',2);
+            }else {
+                monitor.stopTimer('M13',1,ret);
             }
         },
         success: function($text) {
@@ -885,6 +960,9 @@
             }, 1000);
         },
         hide: function() {
+            if(this.animateTimer){
+                return;
+            }
             var _this = this,
                 payData;
             if (this.tradeData && this.tradeData.status == 3 && this.qrTradeData && this.qrTradeData.status == 3) {
@@ -913,6 +991,7 @@
             this.animateTimer && clearTimeout(this.animateTimer);
             this.animateTimer = setTimeout(function() {
                 _this.$.hide();
+                _this.animateTimer = null;
             }, 250);
 
             this.onComplete && this.onComplete(payData);
@@ -1000,6 +1079,7 @@
 							if(this.type !== "pos"){
 								this.$complete.show();
 								this.$cancel.show();
+								this.startB2CLoopQuery();
 							}
 						}
 					}
@@ -1238,6 +1318,7 @@
                 }*/
                 this.$list.append(this.bindData(this.$li.clone(), data[i]));
             }
+            console.log("------------render", this.$list.find('li'))
             var target = this.target?(this.target.length?this.target:$(this.target.selector)):null;
             if(target){
                 if(data.length){
@@ -1289,6 +1370,12 @@
                 }
             }
             this.onGetSingleUse && this.onGetSingleUse();
+            // 修复高级结算刷新红包后红包可用状态不正确
+            var currentPage = $.am.getActivePage();
+            if(currentPage.id=='page_itemPay'){   
+                var itemPageData = currentPage.$listWrapper.find('.item').eq(currentPage.editIndex || 0).data('data');
+                currentPage.checkAppointItem(itemPageData);
+            }
             var _this = this;
             setTimeout(function(){
                 _this.scrollview.$wrap.css({
@@ -1415,38 +1502,29 @@
                                         $li.removeClass('canUse').addClass('am-disabled').find(".status").text('仅在发送门店可使用');
                                     }
                                 }else if(appShopInfo.chosenShop==2){
-                                    // 指定门店可用
-                                    shopText="可用门店:";
-                                    var avaliable=0;
-                                    var shopMap=amGloble.metadata.shopMap,
-                                        checkedDirectShops=appShopInfo.checkedDirectShops,
-                                        checkedIndirectShops=appShopInfo.checkedIndirectShops;
-                                        if(checkedDirectShops && shopMap ){
-                                            for (var i = 0, dlen = checkedDirectShops.length; i < dlen; i++) {
-                                                var ditem = checkedDirectShops[i]; // 直属门店id
-                                                if(ditem && shopMap[ditem] && shopMap[ditem].osName){
-                                                    shopText +=shopMap[ditem].osName + '、';
-                                                }
-                                                if (ditem== currentShopId) {
-                                                    avaliable = 1;
-                                                }
-                                            }
-                                        }
-                                    if(checkedIndirectShops && shopMap){
-                                        for (var j = 0, ilen = checkedIndirectShops.length; j < ilen; j++) {
-                                            var iitem = checkedIndirectShops[j]; // 附属门店id
-                                            if(iitem && shopMap[iitem] && shopMap[iitem].osName){
-                                                shopText += shopMap[iitem].osName + '、';
-                                            }
-                                            if (iitem== currentShopId) {
-                                                avaliable = 1;
-                                            }
-                                        }
+                                    var shopText = am.sendRedPocketsDialog.getShopsStr(appShopInfo);
+                                    if (shopText.indexOf('仅在发送门店可使用') > -1 && appShopInfo.currentShop) {
+                                        shopText = '指定门店可使用：' + appShopInfo.currentShop.osName;
                                     }
-                                    shopText = shopText.substring(0, shopText.length - 1); // 去掉最后的、
+                                    var avaliable = 0,shopType = amGloble.metadata.userInfo.shopType;
+                                    var checkedDirectShops = appShopInfo.checkedDirectShops,
+                                        checkedIndirectShops = appShopInfo.checkedIndirectShops;
+                                    if (shopType == 2) {
+                                        // 直属
+                                        avaliable = am.checkShopAvailable({
+                                            shopIdsStr: checkedDirectShops.toString(),
+                                            targetShopId: currentShopId
+                                        });
+                                    } else if (shopType == 3) {
+                                        // 附属
+                                        avaliable = am.checkShopAvailable({
+                                            shopIdsStr: checkedIndirectShops.toString(),
+                                            targetShopId: currentShopId
+                                        })
+                                    }
                                     if (!avaliable) {
                                         appShopText = '该门店不可使用';
-                                        $li.addClass('am-disabled').find(".status").text(appShopText);
+                                        $li.removeClass('canUse').addClass('am-disabled').find(".status").text(appShopText);
                                     }
                                 }else{
                                     // 全部门店可用
@@ -1454,7 +1532,7 @@
                                 }
                             }
                         } else {
-                            $li.addClass('am-disabled').find(".status").text('不可店内消费');
+                            $li.removeClass('canUse').addClass('am-disabled').find(".status").text('不可店内消费');
                         }
                     } else if (data.status == 3 && !data._status) {
                         $li.addClass('am-disabled').find(".status").text("已使用");
@@ -1480,38 +1558,29 @@
                                     shopText = "仅在发送门店可使用:"+appShopInfo.currentShop.osName;
                                     // $li.find(".status").text('仅在发送门店可使用');
                                 }else if(appShopInfo.chosenShop==2){
-                                    // 指定门店可用
-                                    shopText="可用门店:";
-                                    var avaliable=0;
-                                    var shopMap=amGloble.metadata.shopMap,
-                                        checkedDirectShops=appShopInfo.checkedDirectShops,
-                                        checkedIndirectShops=appShopInfo.checkedIndirectShops;
-                                        if (shopMap && checkedDirectShops) {
-                                            for (var i = 0, dlen = checkedDirectShops.length; i < dlen; i++) {
-                                                var ditem = checkedDirectShops[i];
-                                                if (ditem && shopMap[ditem] && shopMap[ditem].osName) {
-                                                    shopText += shopMap[ditem].osName + '、';
-                                                }
-                                                if (ditem == currentShopId) {
-                                                    avaliable = 1;
-                                                }
-                                            }
-                                        }
-                                        if (shopMap && checkedIndirectShops) {
-                                            for (var j = 0, ilen = checkedIndirectShops.length; j < ilen; j++) {
-                                                var iitem = checkedIndirectShops[j];
-                                                if (iitem && shopMap[iitem] && shopMap[iitem].osName) {
-                                                    shopText += shopMap[iitem].osName + '、';
-                                                }
-                                                if (iitem == currentShopId) {
-                                                    avaliable = 1;
-                                                }
-                                            }
-                                        }
-                                    shopText = shopText.substring(0, shopText.length - 1); // 去掉最后的、
+                                    var shopText = am.sendRedPocketsDialog.getShopsStr(appShopInfo);
+                                    if (shopText.indexOf('仅在发送门店可使用') > -1) {
+                                        shopText = '指定门店可使用：' + appShopInfo.currentShop.osName;
+                                    }
+                                    var avaliable = 0,shopType = amGloble.metadata.userInfo.shopType;
+                                    var checkedDirectShops = appShopInfo.checkedDirectShops,
+                                        checkedIndirectShops = appShopInfo.checkedIndirectShops;
+									if (shopType == 2) {
+									    // 直属
+									    avaliable = am.checkShopAvailable({
+									        shopIdsStr: checkedDirectShops.toString(),
+									        targetShopId: currentShopId
+									    });
+									} else if (shopType == 3) {
+									    // 附属
+									    avaliable = am.checkShopAvailable({
+									        shopIdsStr: checkedIndirectShops.toString(),
+									        targetShopId: currentShopId
+									    })
+									}
                                     if (!avaliable) {
                                         appShopText = '该门店不可使用';
-                                        // $li.find(".status").text(appShopText);
+                                        // $li.addClass('am-disabled').find(".status").text(appShopText);
                                     }
                                 }else{
                                     // 全部门店可用
@@ -1523,10 +1592,14 @@
                     //9.11红包判断
                     function serverList (list) {
                         var str = '';
-                        $.each(list, function(i, item) {
-                            // console.log(item.name);
-                            return str += '<span class="" data-id="' + item.id +'">' + item.name + (i == (list.length-1) ? '' : '、' ) + '</span>'
-                        })
+                        if(am.metadata.serviceSubItems.length==list.length){
+                            str= '全部项目可用'
+                        }else{
+                            $.each(list, function(i, item) {
+                                // console.log(item.name);
+                                return str += '<span class="" data-id="' + item.id +'">' + item.name + (i == (list.length-1) ? '' : '、' ) + '</span>'
+                            })
+                        }
                         return str;
                     };
                     
@@ -1540,45 +1613,30 @@
                                 allowMallPay = rule.luckyMoneyRule.enableMallPay == true? rule.luckyMoneyRule.allowMallPay : null;
 
                                 if(rule.luckyMoneyRule.enableCashierPay) {
-                                    //是否启用店内消费抵扣
-                                    // $li.find('.explainDiv').append('<span class="tipsContent">店内抵扣 : 满' + allowCashierPay.consumptionAmount + '元可以抵扣现金，' + ( allowCashierPay.items && allowCashierPay.items.length > 0 ? ('指定可用项目' + serverList(allowCashierPay.items) ) : '') + '，' + rule.requiredShare + '人共享此红包</span>')
-                                    // $li.find('.explainDiv').append(
-                                    //     '<span class="tipsContent">店内抵扣' +
-                                    //         (allowCashierPay.consumptionAmount ? ' : 满' + allowCashierPay.consumptionAmount + '元可以抵扣现金' : '' ) +
-                                    //         (allowCashierPay.items && allowCashierPay.items.length > 0 ? (',指定可用项目' + serverList(allowCashierPay.items) ) : '') +
-                                    //         (rule.requiredShare && rule.requiredShare > 0 ? rule.requiredShare + '人共享此红包' : '') +
-                                    //     '</span>'
-                                    // )
-
                                     var textObj={};
                                         textObj.subtract=allowCashierPay.consumptionAmountFlag&&allowCashierPay.consumptionAmount?'满'+allowCashierPay.consumptionAmount+'元可以抵扣现金，':'';
-                                        textObj.memCard=allowCashierPay.memCard?'禁止同时使用会员卡(散客卡可以使用)，':'';
+                                        textObj.memCard=allowCashierPay.memCard?'仅允许散客使用（仅允许未在门店或线上办卡/充值/购买套餐的顾客使用），':'';
                                         textObj.otherRedPackage=allowCashierPay.otherRedPackage?'禁止同时使用其它红包，':'';
                                         //是否启用店内消费抵扣
-                                        // $(domS).find('.tips').append('<span class="tipsContent">店内抵扣 : 满' + allowCashierPay.consumptionAmount + '元可以抵扣现金，' + (allowCashierPay.items && allowCashierPay.items.length > 0 ? ('指定可用项目' + serverList(allowCashierPay.items)) : '') + '，' + data.requiredShare + '人共享此红包</span>')
-                                        if(textObj.subtract||textObj.memCard||textObj.otherRedPackage){
-                                            $li.find('.explainDiv').append('<span class="tipsContent">店内抵扣 :' + (textObj.subtract||'')+(textObj.memCard||'')+(textObj.otherRedPackage||'')+ (allowCashierPay.items && allowCashierPay.items.length > 0 ? ('指定可用项目' + serverList(allowCashierPay.items)) : '') +'</span>');
-                                        }else{
-                                            $li.find('.explainDiv').append('<span class="tipsContent">店内消费可用</span>');
+                                        var itemsStr=am.sendRedPocketsDialog.getItemsStr(allowCashierPay);
+                                        var treatsStr=am.sendRedPocketsDialog.getTreatsStr(allowCashierPay);
+                                        var depotsStr=am.sendRedPocketsDialog.getDepotsStr(allowCashierPay);
+                                        var itemsAndTreatsStr=itemsStr+treatsStr + depotsStr;
+                                        if(itemsAndTreatsStr.indexOf('全部项目可用')>-1 && itemsAndTreatsStr.indexOf('全部套餐包可用')>-1 && itemsAndTreatsStr.indexOf('全部卖品可用')>-1){
+                                            itemsAndTreatsStr = "店内消费可用"
                                         }
-
+                                        var cashierStr = textObj.subtract + textObj.memCard + textObj.otherRedPackage + itemsAndTreatsStr;
+                                        if (cashierStr.lastIndexOf('，') === cashierStr.length - 1) {
+                                            cashierStr = cashierStr.substring(0, cashierStr.length - 1);
+                                        }
+                                        $li.find('.explainDiv').append('<span class="tipsContent">店内消费 :'+cashierStr+'</span>');
                                 }else {}
                                 if(rule.luckyMoneyRule.enableMallPay) {
-                                    //是否启用商城购物抵扣
-                                    //$li.find('.explainDiv').append('<span class="tipsContent">商城抵扣 : 满' + allowMallPay.orderAmount + '元可以抵扣现金，' + ( allowMallPay.items && allowMallPay.items.length > 0 ? ('指定可用项目' +  serverList(allowMallPay.items) ) : '') + '，' + rule.requiredShare + '人共享此红包</span>')
-                                    // $li.find('.explainDiv').append(
-                                    //     '<span class="tipsContent">商城抵扣' +
-                                    //         (allowMallPay.orderAmount ? ' : 满' + allowMallPay.orderAmount + '元可以抵扣现金' : '' ) +
-                                    //         (allowMallPay.items && allowMallPay.items.length > 0 ? (',指定可用项目' + serverList(allowMallPay.items) ) : '') +
-                                    //         (rule.requiredShare && rule.requiredShare > 0 ? rule.requiredShare + '人共享此红包' : '') +
-                                    //     '</span>'
-                                    // )
-
                                     var objText={};
                                         objText.orderAmount=allowMallPay.orderAmountFlag&&allowMallPay.orderAmount?'订单金额满'+allowMallPay.orderAmount+'元可以用，':'';
                                         objText.onlineScore=allowMallPay.onlineScore?'禁止与线上积分同时使用，':'';
                                         objText.offlineScore=allowMallPay.offlineScore?'禁止与线下积分同时使用，':'';
-                                        objText.memCard=allowMallPay.memCard?'禁止同时使用会员卡(散客卡可以使用)，':'';
+                                        objText.memCard=allowMallPay.memCard?'仅允许散客使用（仅允许未在门店或线上办卡/充值/购买套餐的顾客使用），':'';
                                         if(objText.orderAmount||objText.onlineScore||objText.offlineScore||objText.memCard){
                                             $li.find('.explainDiv').append('<span class="tipsContent">商城抵扣 : ' + (objText.orderAmount||'')+(objText.onlineScore||'')+(objText.offlineScore||'') +(objText.memCard||'') + (allowMallPay.items && allowMallPay.items.length > 0 ? ('指定可用项目' + serverList(allowMallPay.items)) : '') +'</span>')
                                         }else{
@@ -1595,9 +1653,8 @@
                                 var textString=$(this).text().trim(),
                                 $this=$(this),
                                 len=$this.children('span').length;
-                                
-                                if(textString.lastIndexOf('，')!=-1&&len==0){
-                                    $this.text(textString.substring(0,textString.length-1));
+                                if (textString.lastIndexOf('，') == textString.length - 1 && len == 0) {
+                                    $this.text(textString.substring(0, textString.length - 1));
                                 }
                             });
                             if(rule.luckyMoneyRule.enableMallPay && !rule.luckyMoneyRule.enableCashierPay){
@@ -1612,9 +1669,9 @@
                     $li.find('.listLeft .line').show();
                     $li.find('.explainDiv').hide();
                     if(data._status==-2){
-                        $li.find('.time').text('使用时间：' + new Date(startTime*1).format('yyyy.mm.dd')+'-'+new Date(endTime*1).format('yyyy.mm.dd'));
+                        $li.find('.time').text('使用时间：' + new Date(startTime*1).format('yyyy.mm.dd HH:MM')+'-'+new Date(endTime*1).format('yyyy.mm.dd HH:MM'));
                     }else {
-                        $li.find('.time').text('到期时间：' + new Date(data.expiretime*1).format('yyyy.mm.dd'));
+                        $li.find('.time').text('到期时间：' + new Date(data.expiretime*1).format('yyyy.mm.dd HH:MM'));
                     }
                     
                     return $li;
@@ -1778,7 +1835,7 @@
                 },
                 bindData: function($li, data) {//渲染样式
                     var sum = 0;
-                    var payName = ["微信","支付宝","大众点评","银联支付","京东钱包"];//支付类型
+                    var payName = ["微信","支付宝","大众点评","银联支付","京东支付"];//支付类型
                     var payType=["美管加代收","自收","收钱吧","京东聚合支付"];//收款类型
                     $li.data('data', data);
                     // console.log(data)
@@ -1832,7 +1889,7 @@
                     return $li;
                 },
                 complete: function(data) {//回渲染的样式
-                    var payName = ["微信","支付宝","大众点评","银联支付","京东钱包"];//支付类型
+                    var payName = ["微信","支付宝","大众点评","银联支付","京东支付"];//支付类型
                     var payType=["美管加代收","自收","收钱吧","京东聚合支付"];//收款类型
                     if(data){
                         var sum = 0;
@@ -1842,7 +1899,7 @@
                             });
                         }
                         data.price = data.price - sum;
-                        var needPay = (am.page.pay.opt.option.billingInfo.total || 0) + (am.page.pay.opt.option.cost || 0);
+                        var needPay = (am.page.pay.needPay || 0);
                         if(data.price > needPay){
                             data.price = needPay-0;
                             am.msg("选择的金额大于消费金额");
@@ -2001,7 +2058,7 @@
                 beforeClose: function(data,callback){
 					if(data && (data.status!=3 || data.status == 3 && data.payStatus == "refund")){
 						var confirmData = {
-							caption: "关闭将取消京东钱包支付",
+							caption: "关闭将取消京东支付",
 							description: "支付尚未完成，确认关闭吗？",
 							okCaption: "确认",
 							cancelCaption: "取消"
@@ -2055,6 +2112,9 @@
                     return;
                 }
                 $this.addClass('am-disabled').prev().attr("disabled", true);
+                monitor.startTimer('M15',{
+                    dynamic_id: code
+                });
                 am.api.dpQueryCoupon.exec({
                     dynamic_id: code
                 }, function(ret) {
@@ -2081,6 +2141,7 @@
                             //     mobile:"15488742458"
                             // };
                             if (ret && ret.code == 0 && ret.content && ret.content.status == 2) {
+                                monitor.stopTimer('M15',0,ret);
                                 // $this.parent().addClass('payed');
                                 // $this.prev().attr("disabled", true).data('data', ret.content);
                                 am.page.pay.addDpCoupon(ret.content);
@@ -2091,11 +2152,13 @@
                                 am.msg('优惠券已关联！');
                                 am.page.pay.paytool.hide();
                             } else {
+                                monitor.stopTimer('M15',1,ret);
                                 $this.removeClass('am-disabled').prev().attr("disabled", false);
                                 am.msg(ret.message || '优惠券有误，请检查！');
                             }
                         });
                     } else {
+                        monitor.stopTimer('M15',1,ret);
                         am.msg(ret.message || '优惠券有误，请检查！');
                         $this.removeClass('am-disabled').prev().attr("disabled", false);
                     }
@@ -2221,6 +2284,9 @@
                     this.$.find(".mixPayButton").vclick(function() {
                         var $this = $(this),
                             $input = $this.prev();
+                        if($this.hasClass('noJdSetting')){
+                            return am.msg('没有配置京东支付的支付方式，请前往 基础系统>基础设置>自定义配置>自定义付款方式 进行配置');
+                        }
                         var type = $input.attr("name"),
                             price = $input.val()*1;
                         if ($this.text() == "支付") {
@@ -2667,8 +2733,15 @@
 
                     if(am.page.pay.jdSetting){
                         this.scrollview.$inner.find('.mixPayItem').filter('[paytype="JINGDONG"]').show();
+                        this.$input.filter('input[name=jd]').attr("disabled", false).next().removeClass('noJdSetting');
                     }else {
-                        this.scrollview.$inner.find('.mixPayItem').filter('[paytype="JINGDONG"]').hide();
+                        this.scrollview.$inner.find('.mixPayItem').filter('[paytype="JINGDONG"]').show();
+                        this.$input.filter('input[name=jd]').attr("disabled", true).next().addClass('noJdSetting');
+                    }
+                    if(am.metadata.configs.mgjOldFunctionEnable==1){
+                        this.scrollview.$inner.find('div[paytype=COOPERATION]').hide();
+                        this.scrollview.$inner.find('div[paytype=MALL]').hide();
+                        this.scrollview.$inner.find('div[paytype=VOUCHERFEE]').hide();
                     }
 
                     this.scrollview.refresh();
@@ -2739,16 +2812,18 @@
                     if ($paytype.hasClass("selected")) {
                         $paytype.addClass('payed').data('data', data);
                     } else {
-                        atMobile.nativeUIWidget.confirm({
-                            caption: "支付方式异常",
-                            description: "你在用户付款后选择了其它支付方式，是否要改回？",
-                            okCaption: "去退款",
-                            cancelCaption: "改回"
-                        }, function() {
-                            $paytype.trigger('vclick');
-                        }, function() {
-                            $paytype.addClass('selected').siblings().removeClass('selected');
-                        });
+                        if(sessionStorage._autoPay1214 != 'autoPay'){
+                            atMobile.nativeUIWidget.confirm({
+                                caption: "支付方式异常",
+                                description: "你在用户付款后选择了其它支付方式，是否要改回？",
+                                okCaption: "去退款",
+                                cancelCaption: "改回"
+                            }, function() {
+                                $paytype.trigger('vclick');
+                            }, function() {
+                                $paytype.addClass('selected').siblings().removeClass('selected');
+                            });
+                        }
                         return;
                     }
                 } else {
@@ -2775,7 +2850,421 @@
         },
         Paytool:Paytool
     };
+    am.page.mergePay.paytool = {
+        init: function() {
+            var _this = this;
+            this.pos = new Paytool({
+                $: $("#mergePosPayDetail"),
+                pay: function(opt, cb) {
+                    am.api.posPrecreate.exec(opt, cb);
+                },
+                query: function(opt, cb) {
+                    am.api.posQuery.exec(opt, cb);
+                },
+                cancel: function(opt, cb) {
+                },
+                refund: function(opt, cb) {
+                    am.api.posRefund.exec(opt, cb);
+                },
+                qrpay: function(opt, cb) {
+                },
+                complete: function(opt) {
+                    _this.payComplete(opt);
+                },
+                beforeClose: function(data,callback){
+                    var posThis = this;
+                    if(data && (data.status!=3 || data.status == 3 && data.payStatus == "refund")){
+                        var confirmData = {
+							caption: "关闭将取消银联支付",
+							description: "支付尚未完成，确认关闭吗？",
+							okCaption: "确认",
+							cancelCaption: "取消"
+						};
+						if(data.status == 3 && data.payStatus == "refund"){
+							confirmData.caption = "提示";
+						}
+						atMobile.nativeUIWidget.confirm(confirmData, function() {
+							callback && callback();
+						}, function() {});
+                    }else {
+                        callback && callback();
+                    }
+                }
+            });
+            this.wechat = new Paytool({
+                $: $("#mergeWechatPayDetail"),
+                pay: function(opt, cb) {
+                    am.api.wechatPay.exec(opt, cb);
+                },
+                query: function(opt, cb) {
+                    am.api.wechatQuery.exec(opt, cb);
+                },
+                cancel: function(opt, cb) {
+                    am.api.wechatCancel.exec(opt, cb);
+                },
+                refund: function(opt, cb) {
+                    am.api.wechatRefund.exec(opt, cb);
+                },
+                qrpay: function(opt, cb) {
+                    am.api.wechatQrpay.exec(opt, cb);
+                },
+                complete: function(opt) {
+                    _this.payComplete(opt);
+                },
+                beforeClose: function(data,callback){
+					if(data && (data.status!=3 || data.status == 3 && data.payStatus == "refund")){
+                        var confirmData = {
+							caption: "关闭将取消微信支付",
+							description: "支付尚未完成，确认关闭吗？",
+							okCaption: "确认",
+							cancelCaption: "取消"
+						};
+						if(data.status == 3 && data.payStatus == "refund"){
+							confirmData.caption = "提示";
+						}
+						atMobile.nativeUIWidget.confirm(confirmData, function() {
+							callback && callback();
+						}, function() {});
+                    }else {
+                        callback && callback();
+                    }
+                }
+            });
+            this.alipay = new Paytool({
+                $: $("#mergeAlipayPayDetail"),
+                pay: function(opt, cb) {
+                    am.api.alipayPay.exec(opt, cb);
+                },
+                query: function(opt, cb, isQrcode) {
+                    if (isQrcode) {
+                        //支付宝特殊处理，没有扫码时支付宝不会生成订单，会报error
+                        opt.qrcode = 1;
+                    }
+                    am.api.alipayQuery.exec(opt, cb);
+                },
+                cancel: function(opt, cb) {
+                    am.api.alipayCancel.exec(opt, cb);
+                },
+                refund: function(opt, cb) {
+                    am.api.alipayRefund.exec(opt, cb);
+                },
+                qrpay: function(opt, cb) {
+                    am.api.alipayQrpay.exec(opt, cb);
+                },
+                complete: function(opt) {
+                    _this.payComplete(opt);
+                },
+                beforeClose: function(data,callback){
+					if(data && (data.status!=3 || data.status == 3 && data.payStatus == "refund")){
+						var confirmData = {
+							caption: "关闭将取消支付宝支付",
+							description: "支付尚未完成，确认关闭吗？",
+							okCaption: "确认",
+							cancelCaption: "取消"
+						};
+						if(data.status == 3 && data.payStatus == "refund"){
+							confirmData.caption = "提示";
+						}
+						atMobile.nativeUIWidget.confirm(confirmData, function() {
+							callback && callback();
+						}, function() {});
+                    }else {
+                        callback && callback();
+                    }
+                }
+            });
+            this.jd = new Paytool({
+                $: $("#mergeJdPayDetail"),
+                pay: function(opt, cb) {
+                    am.api.jdPay.exec(opt, cb);
+                },
+                query: function(opt, cb) {
+                    am.api.jdQuery.exec(opt, cb);
+                },
+                cancel: function(opt, cb) {
+                    am.api.jdCancel.exec(opt, cb);
+                },
+                refund: function(opt, cb) {
+                    am.api.jdRefund.exec(opt, cb);
+                },
+                qrpay: function(opt, cb) {
+                    am.api.jdQrpay.exec(opt, cb);
+                },
+                complete: function(opt) {
+                    _this.payComplete(opt);
+                },
+                beforeClose: function(data,callback){
+					if(data && (data.status!=3 || data.status == 3 && data.payStatus == "refund")){
+						var confirmData = {
+							caption: "关闭将取消京东支付",
+							description: "支付尚未完成，确认关闭吗？",
+							okCaption: "确认",
+							cancelCaption: "取消"
+						};
+						if(data.status == 3 && data.payStatus == "refund"){
+							confirmData.caption = "提示";
+						}
+						atMobile.nativeUIWidget.confirm(confirmData, function() {
+							callback && callback();
+						}, function() {});
+                    }else {
+                        callback && callback();
+                    }
+                }
+            });
+        },
+        reset: function() {
+            this.wechat.reset();
+            this.alipay.reset();
+            this.pos.reset();
+            this.jd.reset();
+        },
+        show: function(type) {
+            this.type = type;
+            this[type].show(am.page.mergePay.needPay,type);
+        },
+        hide: function() {
+            if (this.type) {
+                var error = this[this.type].hide();
+                if (!error) {
+                    //this.type = null;
+                }
+            }
+        },
+        payComplete: function (data) {
+            var page = am.page.mergePay;
+            if (data && data.status == 3) {
+                var $paytype = page.$payTypes.filter('.pay_' + this.type);
+                if ($paytype.hasClass("selected")) {
+                    $paytype.addClass('payed').data('data', data);
+                } else {
+                    atMobile.nativeUIWidget.confirm({
+                        caption: "支付方式异常",
+                        description: "你在用户付款后选择了其它支付方式，是否要改回？",
+                        okCaption: "去退款",
+                        cancelCaption: "改回"
+                    }, function () {
+                        $paytype.trigger('vclick');
+                    }, function () {
+                        $paytype.addClass('selected').siblings().removeClass('selected');
+                    });
+                    return;
+                }
+            } else {
+                page.$payTypes.filter('.pay_' + this.type).removeClass('payed').removeData('data');
+            }
+            //this.type = null;
 
+            //this.type = null;
+        },
+        Paytool:Paytool
+    };
+    am.page.multiCardPay.paytool = {
+        init: function() {
+            var _this = this;
+            this.pos = new Paytool({
+                $: $("#multiCardPosPayDetail"),
+                pay: function(opt, cb) {
+                    am.api.posPrecreate.exec(opt, cb);
+                },
+                query: function(opt, cb) {
+                    am.api.posQuery.exec(opt, cb);
+                },
+                cancel: function(opt, cb) {
+                },
+                refund: function(opt, cb) {
+                    am.api.posRefund.exec(opt, cb);
+                },
+                qrpay: function(opt, cb) {
+                },
+                complete: function(opt) {
+                    _this.payComplete(opt);
+                },
+                beforeClose: function(data,callback){
+                    var posThis = this;
+                    if(data && (data.status!=3 || data.status == 3 && data.payStatus == "refund")){
+                        var confirmData = {
+							caption: "关闭将取消银联支付",
+							description: "支付尚未完成，确认关闭吗？",
+							okCaption: "确认",
+							cancelCaption: "取消"
+						};
+						if(data.status == 3 && data.payStatus == "refund"){
+							confirmData.caption = "提示";
+						}
+						atMobile.nativeUIWidget.confirm(confirmData, function() {
+							callback && callback();
+						}, function() {});
+                    }else {
+                        callback && callback();
+                    }
+                }
+            });
+            this.wechat = new Paytool({
+                $: $("#multiCardWechatPayDetail"),
+                pay: function(opt, cb) {
+                    am.api.wechatPay.exec(opt, cb);
+                },
+                query: function(opt, cb) {
+                    am.api.wechatQuery.exec(opt, cb);
+                },
+                cancel: function(opt, cb) {
+                    am.api.wechatCancel.exec(opt, cb);
+                },
+                refund: function(opt, cb) {
+                    am.api.wechatRefund.exec(opt, cb);
+                },
+                qrpay: function(opt, cb) {
+                    am.api.wechatQrpay.exec(opt, cb);
+                },
+                complete: function(opt) {
+                    _this.payComplete(opt);
+                },
+                beforeClose: function(data,callback){
+					if(data && (data.status!=3 || data.status == 3 && data.payStatus == "refund")){
+                        var confirmData = {
+							caption: "关闭将取消微信支付",
+							description: "支付尚未完成，确认关闭吗？",
+							okCaption: "确认",
+							cancelCaption: "取消"
+						};
+						if(data.status == 3 && data.payStatus == "refund"){
+							confirmData.caption = "提示";
+						}
+						atMobile.nativeUIWidget.confirm(confirmData, function() {
+							callback && callback();
+						}, function() {});
+                    }else {
+                        callback && callback();
+                    }
+                }
+            });
+            this.alipay = new Paytool({
+                $: $("#multiCardAlipayPayDetail"),
+                pay: function(opt, cb) {
+                    am.api.alipayPay.exec(opt, cb);
+                },
+                query: function(opt, cb, isQrcode) {
+                    if (isQrcode) {
+                        //支付宝特殊处理，没有扫码时支付宝不会生成订单，会报error
+                        opt.qrcode = 1;
+                    }
+                    am.api.alipayQuery.exec(opt, cb);
+                },
+                cancel: function(opt, cb) {
+                    am.api.alipayCancel.exec(opt, cb);
+                },
+                refund: function(opt, cb) {
+                    am.api.alipayRefund.exec(opt, cb);
+                },
+                qrpay: function(opt, cb) {
+                    am.api.alipayQrpay.exec(opt, cb);
+                },
+                complete: function(opt) {
+                    _this.payComplete(opt);
+                },
+                beforeClose: function(data,callback){
+					if(data && (data.status!=3 || data.status == 3 && data.payStatus == "refund")){
+						var confirmData = {
+							caption: "关闭将取消支付宝支付",
+							description: "支付尚未完成，确认关闭吗？",
+							okCaption: "确认",
+							cancelCaption: "取消"
+						};
+						if(data.status == 3 && data.payStatus == "refund"){
+							confirmData.caption = "提示";
+						}
+						atMobile.nativeUIWidget.confirm(confirmData, function() {
+							callback && callback();
+						}, function() {});
+                    }else {
+                        callback && callback();
+                    }
+                }
+            });
+            this.jd = new Paytool({
+                $: $("#multiCardJdPayDetail"),
+                pay: function(opt, cb) {
+                    am.api.jdPay.exec(opt, cb);
+                },
+                query: function(opt, cb) {
+                    am.api.jdQuery.exec(opt, cb);
+                },
+                cancel: function(opt, cb) {
+                    am.api.jdCancel.exec(opt, cb);
+                },
+                refund: function(opt, cb) {
+                    am.api.jdRefund.exec(opt, cb);
+                },
+                qrpay: function(opt, cb) {
+                    am.api.jdQrpay.exec(opt, cb);
+                },
+                complete: function(opt) {
+                    _this.payComplete(opt);
+                },
+                beforeClose: function(data,callback){
+					if(data && (data.status!=3 || data.status == 3 && data.payStatus == "refund")){
+						var confirmData = {
+							caption: "关闭将取消京东支付",
+							description: "支付尚未完成，确认关闭吗？",
+							okCaption: "确认",
+							cancelCaption: "取消"
+						};
+						if(data.status == 3 && data.payStatus == "refund"){
+							confirmData.caption = "提示";
+						}
+						atMobile.nativeUIWidget.confirm(confirmData, function() {
+							callback && callback();
+						}, function() {});
+                    }else {
+                        callback && callback();
+                    }
+                }
+            });
+        },
+        reset: function() {
+            this.wechat.reset();
+            this.alipay.reset();
+            this.pos.reset();
+            this.jd.reset();
+        },
+        show: function(type) {
+            this.type = type;
+            this[type].show(am.page.multiCardPay.needPay,type);
+        },
+        hide: function() {
+            if (this.type) {
+                var error = this[this.type].hide();
+                if (!error) {
+                    //this.type = null;
+                }
+            }
+        },
+        payComplete: function (data) {
+            var page = am.page.multiCardPay;
+            if (data && data.status == 3) {
+                var $paytype = page.$payTypes.filter('.pay_' + this.type);
+                if ($paytype.hasClass("selected")) {
+                    $paytype.addClass('payed').data('data', data);
+                } else {
+                    atMobile.nativeUIWidget.confirm({
+                        caption: "支付方式异常",
+                        description: "你在用户付款后选择了其它支付方式，是否要改回？",
+                        okCaption: "去退款",
+                        cancelCaption: "改回"
+                    }, function () {
+                        $paytype.trigger('vclick');
+                    }, function () {
+                        $paytype.addClass('selected').siblings().removeClass('selected');
+                    });
+                    return;
+                }
+            } else {
+                page.$payTypes.filter('.pay_' + this.type).removeClass('payed').removeData('data');
+            }
+        },
+        Paytool:Paytool
+    };
     am.page.itemPay.paytool = {
         init: function() {
             var _this = this;
@@ -2830,195 +3319,7 @@
                     am.api.getLuckyMoney.exec(opt, cb);
                 },
                 bindData: function($li, data) {
-                    // console.log(111111111111, data);
-
-                    if(data.expiretime<new Date().getTime()){
-                        return;
-                    }
-
-                    $li.data('data', data);
-                    if(data.rule && JSON.parse(data.rule).content && JSON.parse(JSON.parse(data.rule).content).title){
-                        $li.find('.title').text(JSON.parse(JSON.parse(data.rule).content).title);
-                    }else{
-                        $li.find('.title').text(data.activityTitle);
-                    }
-                    if(data.money){
-                        $li.find('.price').text(data.money).show();
-                        $li.find('.discount').hide();
-                    }else {
-                        if(data.rule && JSON.parse(data.rule).useTemplate){
-                            var rule = JSON.parse(JSON.parse(JSON.parse(data.rule).content).rule);
-                            if(rule && rule.extraRule && rule.extraRule.type==2){
-                                $li.find('.discount').text(rule.extraRule.discount+'折').show();
-                                $li.find('.price').hide();
-                            }
-                        }
-                        
-                    }
-                    var startTime = 0 ,endTime = 0;
-                    if(data.rule && JSON.parse(data.rule).useTemplate){
-                        var rule = JSON.parse(JSON.parse(JSON.parse(data.rule).content).rule);
-                        if(rule && rule.validitymode==0){
-                            endTime = data.expiretime;
-                            startTime = data.createtime*1 + rule.days*24*60*60*1000;
-                        }else if(rule && rule.validitymode==1) {
-
-                            endTime = new Date(rule.endTime+' 23:59:59').getTime();
-                            startTime = new Date(rule.startTime).getTime();
-                        }
-                    }else {
-                        endTime = data.expiretime;
-                        startTime = data.createtime;
-                    }
-
-                    if(new Date().getTime()>endTime){
-                        data.status = -1;
-                    }else if(new Date().getTime()<startTime){
-                        data._status = -2;
-                    }
-
-                    if(data.atemplateid==7 && data.shops && data.shops.indexOf(amGloble.metadata.userInfo.shopId)==-1){
-                        data.status = -3;
-                    }
-
-                    if (data.status == 1) {
-                        if(data._status==-2){
-                            $li.addClass('am-disabled').find('.status').text("未到使用时间");
-                        }else {
-                            $li.addClass('am-disabled').find('.status').text("无法使用");
-                        }
-                        $li.find('.price,.discount').addClass('unopen').text(data.shareRequire ? "分享后领取" : "未拆");
-                    } else if (data.status == 2 && !data._status) {
-                        var useable = [];
-                        var allow = false;
-                        if(data.rule && JSON.parse(data.rule).useTemplate){
-                            var rule = JSON.parse(JSON.parse(JSON.parse(data.rule).content).rule);
-                            if(rule.luckyMoneyRule.enableCashierPay){
-                                allow = true;
-                            }
-                        }else {
-                            if(data.allowcashierpay){
-                                allow = true;
-                            }
-                        }
-                        if (allow) {
-                            $li.addClass('canUse').find(".status").text('可使用');
-                            console.log(data)
-
-
-                        } else {
-                            $li.addClass('am-disabled').find(".status").text('不可店内消费');
-
-
-                        }
-                    } else if (data.status == 3 && !data._status) {
-                        $li.addClass('am-disabled').find(".status").text("已使用");
-                    } else if (data.status == 4 && !data._status) {
-                        $li.find(".status").text("已使用，待关联"); //.addClass('am-disabled')
-                    } else if (data.status == -1 && !data._status) {
-                        $li.addClass('am-disabled').find(".status").text("已过期");
-                    }else if (data._status == -2) {
-                        $li.addClass('am-disabled').find(".status").text("未到使用时间");
-                    }else if (data.status == -3 && !data._status) {
-                        $li.addClass('am-disabled').find(".status").text("不可在本店使用");
-                    }
-
-
-                    //9.11红包判断
-                    function serverList (list) {
-                        var str = '';
-                        $.each(list, function(i, item) {
-                            // console.log(item.name);
-                            return str += '<span class="" data-id="' + item.id +'">' + item.name + (i == (list.length-1) ? '' : '、' ) + '</span>'
-                        })
-                        return str;
-                    };
-                    
-                    if(data.rule != undefined) {
-                        var dataRule = JSON.parse(data.rule);
-                        if(dataRule.useTemplate) {  //true 为新红包
-                            var rule = JSON.parse(JSON.parse(dataRule.content).rule);
-            
-                            if(rule != undefined && rule.luckyMoneyRule) {
-                                var allowCashierPay = rule.luckyMoneyRule.enableCashierPay == true ? rule.luckyMoneyRule.allowCashierPay : null,
-                                allowMallPay = rule.luckyMoneyRule.enableMallPay == true? rule.luckyMoneyRule.allowMallPay : null;
-
-                                if(rule.luckyMoneyRule.enableCashierPay) {
-                                    //是否启用店内消费抵扣
-                                    // $li.find('.explainDiv').append('<span class="tipsContent">店内抵扣 : 满' + allowCashierPay.consumptionAmount + '元可以抵扣现金，' + ( allowCashierPay.items && allowCashierPay.items.length > 0 ? ('指定可用项目' + serverList(allowCashierPay.items) ) : '') + '，' + rule.requiredShare + '人共享此红包</span>')
-                                    // $li.find('.explainDiv').append(
-                                    //     '<span class="tipsContent">店内抵扣' +
-                                    //         (allowCashierPay.consumptionAmount ? ' : 满' + allowCashierPay.consumptionAmount + '元可以抵扣现金' : '' ) +
-                                    //         (allowCashierPay.items && allowCashierPay.items.length > 0 ? (',指定可用项目' + serverList(allowCashierPay.items) ) : '') +
-                                    //         (rule.requiredShare && rule.requiredShare > 0 ? rule.requiredShare + '人共享此红包' : '') +
-                                    //     '</span>'
-                                    // )
-
-                                    var textObj={};
-                                        textObj.subtract=allowCashierPay.consumptionAmountFlag&&allowCashierPay.consumptionAmount?'满'+allowCashierPay.consumptionAmount+'元可以抵扣现金，':'';
-                                        textObj.memCard=allowCashierPay.memCard?'禁止同时使用会员卡(散客卡可以使用)，':'';
-                                        textObj.otherRedPackage=allowCashierPay.otherRedPackage?'禁止同时使用其它红包，':'';
-                                        //是否启用店内消费抵扣
-                                        // $(domS).find('.tips').append('<span class="tipsContent">店内抵扣 : 满' + allowCashierPay.consumptionAmount + '元可以抵扣现金，' + (allowCashierPay.items && allowCashierPay.items.length > 0 ? ('指定可用项目' + serverList(allowCashierPay.items)) : '') + '，' + data.requiredShare + '人共享此红包</span>')
-                                        if(textObj.subtract||textObj.memCard||textObj.otherRedPackage){
-                                            $li.find('.explainDiv').append('<span class="tipsContent">店内抵扣 :' + (textObj.subtract||'')+(textObj.memCard||'')+(textObj.otherRedPackage||'')+ (allowCashierPay.items && allowCashierPay.items.length > 0 ? ('指定可用项目' + serverList(allowCashierPay.items)) : '') +'</span>');
-                                        }else{
-                                            $li.find('.explainDiv').append('<span class="tipsContent">店内消费可用</span>');
-                                        }
-
-                                }else {}
-                                if(rule.luckyMoneyRule.enableMallPay) {
-                                    //是否启用商城购物抵扣
-                                    //$li.find('.explainDiv').append('<span class="tipsContent">商城抵扣 : 满' + allowMallPay.orderAmount + '元可以抵扣现金，' + ( allowMallPay.items && allowMallPay.items.length > 0 ? ('指定可用项目' +  serverList(allowMallPay.items) ) : '') + '，' + rule.requiredShare + '人共享此红包</span>')
-                                    // $li.find('.explainDiv').append(
-                                    //     '<span class="tipsContent">商城抵扣' +
-                                    //         (allowMallPay.orderAmount ? ' : 满' + allowMallPay.orderAmount + '元可以抵扣现金' : '' ) +
-                                    //         (allowMallPay.items && allowMallPay.items.length > 0 ? (',指定可用项目' + serverList(allowMallPay.items) ) : '') +
-                                    //         (rule.requiredShare && rule.requiredShare > 0 ? rule.requiredShare + '人共享此红包' : '') +
-                                    //     '</span>'
-                                    // )
-
-                                    var objText={};
-                                        objText.orderAmount=allowMallPay.orderAmountFlag&&allowMallPay.orderAmount?'订单金额满'+allowMallPay.orderAmount+'元可以用':'';
-                                        objText.onlineScore=allowMallPay.onlineScore?'禁止与线上积分同时使用，':'';
-                                        objText.offlineScore=allowMallPay.offlineScore?'禁止与线下积分同时使用，':'';
-                                        objText.memCard=allowMallPay.memCard?'禁止同时使用会员卡(散客卡可以使用)，':'';
-                                        if(objText.orderAmount||objText.onlineScore||objText.offlineScore||objText.memCard){
-                                            $li.find('.explainDiv').append('<span class="tipsContent">商城抵扣 : ' + (objText.orderAmount||'')+(objText.onlineScore||'')+(objText.offlineScore||'') +(objText.memCard||'') + (allowMallPay.items && allowMallPay.items.length > 0 ? ('指定可用项目' + serverList(allowMallPay.items)) : '') +'</span>')
-                                        }else{
-                                            $li.find('.explainDiv').append('<span class="tipsContent">商城可用</span>');
-                                        }
-
-                                }else {}
-
-                                $li.find(".status").addClass('am-clickable').append('<span class="explainBtn">,使用规则<i class="iconfont icon-icon-arrow-down"></i></span>');
-                            }else {}
-
-                            //清除红包规则描述最后一个逗号
-                            $('#luckyMoneyDetail span.tipsContent').each(function(){
-                                var textString=$(this).text().trim(),
-                                $this=$(this),
-                                len=$this.children('span').length;
-                                
-                                if(textString.lastIndexOf('，')!=-1&&len==0){
-                                    $this.text(textString.substring(0,textString.length-1));
-                                }
-                            });
-
-                        }else {}
-                          
-                    }else {}
-
-
-                    $li.find('.listLeft .line').show();
-                    $li.find('.explainDiv').hide();
-                    if(data._status==-2){
-                        $li.find('.time').text('使用时间：' + new Date(startTime*1).format('yyyy.mm.dd')+'-'+new Date(endTime*1).format('yyyy.mm.dd'));
-                    }else {
-                        $li.find('.time').text('到期时间：' + new Date(data.expiretime*1).format('yyyy.mm.dd'));
-                    }
-                    
-                    return $li;
+                    return am.page.pay.paytool.luckyMoney.bindData($li, data);
                 },
                 complete: function(data) {
                     if(data && data.length){
@@ -3138,7 +3439,7 @@
                         return;
                     }
                     var sum = 0;
-                    var payName = ["微信","支付宝","大众点评","银联支付","京东钱包"];//支付类型
+                    var payName = ["微信","支付宝","大众点评","银联支付","京东支付"];//支付类型
                     var payType=["美管加代收","自收","收钱吧","京东聚合支付"];//收款类型
                     $li.data('data', data);
                     console.log(data)
@@ -3354,7 +3655,7 @@
                 beforeClose: function(data,callback){
 					if(data && (data.status!=3 || data.status == 3 && data.payStatus == "refund")){
 						var confirmData = {
-							caption: "关闭将取消京东钱包支付",
+							caption: "关闭将取消京东支付",
 							description: "支付尚未完成，确认关闭吗？",
 							okCaption: "确认",
 							cancelCaption: "取消"
@@ -3421,6 +3722,9 @@
                     return;
                 }
                 $this.addClass('am-disabled').prev().attr("disabled", true);
+                monitor.startTimer('M15',{
+                    dynamic_id: code
+                });
                 am.api.dpQueryCoupon.exec({
                     dynamic_id: code
                 }, function(ret) {
@@ -3447,6 +3751,7 @@
                             //     mobile:"15488742458"
                             // };
                             if (ret && ret.code == 0 && ret.content && ret.content.status == 2) {
+                                monitor.stopTimer('M15',0,ret);
                                 am.page.itemPay.setPayItem('DIANPIN',ret.content);
                                 am.page.itemPay.getTicketsList('getkoubeiFlow',function (data) {
                                     console.log('渲染口碑列表数据',data);
@@ -3454,10 +3759,12 @@
                                 });
                                 am.page.itemPay.paytool.hide();
                             } else {
+                                monitor.stopTimer('M15',1,ret);
                                 am.msg(ret.message || '优惠券有误，请检查！');
                             }
                         });
                     } else {
+                        monitor.stopTimer('M15',1,ret);
                         am.msg(ret.message || '优惠券有误，请检查！');
                         $this.removeClass('am-disabled').prev().attr("disabled", false);
                     }

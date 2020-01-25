@@ -69,6 +69,11 @@ $(function() {
 	//报错时打印到log
 	window.onerror = function(msg, url, l) {
 		$.am.debug.log(msg + "\n" + url + "\n" + l);
+		monitor.addErrorMsg({
+			msg: msg,
+			url: url,
+			line: l
+		})
 	};
 	//解决触摸非input键盘不消失的问题
 	$("body").bind("touchstart", function(e) {
@@ -83,13 +88,6 @@ $(function() {
 	document.body.addEventListener('touchmove', function (e) {
         e.preventDefault(); //阻止默认的处理方式(阻止下拉滑动的效果)
     }, {passive: false}); //passive 参数不能省略，用来兼容ios和android
-
-	$('input,textarea').on('blur',function(){
-		$.am.debug.log('scrollTop:'+$('body').scrollTop());
-		if($('body').scrollTop()!=0){
-			$('body').scrollTop(0);
-		}
-	});
 
 	$.am.page && $.am.page.init();
 	$.am.events && $.am.events.init();
@@ -118,6 +116,33 @@ $(function() {
 					right:0,
 					top:0,
 					bottom:0,
+					background:'none'
+				});
+			}
+			this.$.find(".text").html(text || "请稍候...");
+			this.$.show();
+		},
+		hide : function() {
+			this.$.hide();
+		}
+	};
+
+	var html = "";
+	html += '<div class="am-partLoading" id="am-partLoading">';
+	html += '<div class="page-partLoading-inner">';
+	html += '<span class="loading"></span>';
+	html += '<span class="text">请稍候...</span>';
+	html += '</div>';
+	html += '</div>';
+
+	$.am.partLoading = {
+		$ : $(html).appendTo("body"),
+		show : function(text,area) {
+			if(area){
+				this.$.addClass('part').css(area);
+			}else{
+				this.$.removeClass('part').css({
+					top:'10%',
 					background:'none'
 				});
 			}
@@ -189,3 +214,26 @@ document.addEventListener("deviceready", function() {
 
 
 }, false);
+
+(function($){
+	var eventStorage = {};
+	$.am.on=function(eventName,callback){
+		if(!eventStorage[eventName]) eventStorage[eventName] = [];
+		eventStorage[eventName].push(callback);
+	}
+	$.am.trigger=function(eventName,arguments){
+		var callbacks = eventStorage[eventName];
+		if(callbacks && callbacks.length){
+			for(var i=0;i<callbacks.length;i++){
+				try{
+					callbacks[i](arguments);
+				}catch(e){
+					console.error(e);
+				}
+			}
+		}
+	}
+	$.am.clear=function(eventName){
+		delete eventStorage[eventName];
+	}
+})(jQuery);

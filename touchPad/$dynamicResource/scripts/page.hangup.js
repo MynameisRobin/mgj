@@ -19,6 +19,10 @@
             
             am.hangupRemark.init();
 
+            //收到推送事件事，更新数据
+            $.am.on('instoreServiceHasBeenChanged',function(){
+                am.page.hangup.startGetDate();
+            });
 
             this.$win = this.$.find('.search_wrap');
             if(this.isWin){
@@ -29,9 +33,11 @@
             var self = this;
             this.$root = $('#page_hangup');
             this.$warn = this.$.find('.warn');
+            this.$noticeTip = this.$.find('.noticeTip');
             this.$downloadtip = this.$.find('.downloadtip');
             this.$hangup_orderOverdueBig = this.$.find('#hangup_orderOverdueBig');
             this.$container = $('#content_wrap');
+            this.$swipeBtn = this.$.find('.swipe_btn');
 
             $('.member-seleced-mark').hide();
 
@@ -49,7 +55,8 @@
                 $wrap: this.$.find('.hangup_wrap'),
                 $inner: this.$container,
                 direction: [false, true],
-                hasInput: false,
+				hasInput: false,
+				bubble: true,
                 onScroll: function(pos){
                     // console.log('pos', pos[1]);
                     if(pos[1] < 0) {
@@ -67,6 +74,20 @@
             this.$operateWrap = $('#page_hangup .operate_wrap');
             this.$keywordPc = this.$operateWrap.find('.input_no');
             this.$keywordMb = this.$operateWrap.find('.no_box');
+            this.$swipeModal = this.$.find('#swipeModal');
+            this.$swipeModal.find(".close").vclick(function () {
+                self.$swipeModal.hide();
+                self.searchReset();
+                self.searchTheRes();
+            });
+            this.$swipeModal.find(".inner").vclick(function () {
+                return false;
+            });
+            this.$swipeModal.vclick(function () {
+                self.$swipeModal.hide();
+                self.searchReset();
+                self.searchTheRes();
+            });
             this.$withoutBillPayTip = this.$.find('#withoutBillPayTip').on('vclick', '.cancel,.close', function () {
                 self.$withoutBillPayTip.hide();
             }).on('vclick', '.OK', function () {
@@ -78,11 +99,35 @@
                 $.am.changePage(am.page.prepay, "slideup");
                 self.$withoutBillPayTip.hide();
             });
-            this.$.on('vclick', '.merge_btn', function() {
-                var items = []; // 弹窗
-                var ret = {}; // merge函数 的参数
+            this.$.on('vclick', '.merge_btn', function(e) {
+                e.stopPropagation();
                 var index = $('.hanup_wrapper .hangup_container:visible').index();
-                var fn = function(){
+                if(index==0){
+                    var $bills = self.$container.find('.hangup_inner .flag.selected');
+                    if ($bills && $bills.length > 1) {
+                        self.$.find('.selectBillTip').hide();
+                        if(amGloble.metadata.shopPropertyField.mgjBillingType == 1){
+                            self.$.find('.merge_type').show();
+                        }else{
+                            self.$.find('.merge_one span').trigger('vclick')
+                        }
+                    } else {
+                        am.msg("请先选中至少两个单据！");
+                    }
+                }else{
+                    var $bills = self.$spaceWrapper.find('.selected');
+                    if ($bills && $bills.length > 1) {
+                        self.$.find('.selectBillTip').hide();
+                        self.$.find('.merge_type').show();
+                    } else {
+                        am.msg("请先选中至少两个单据！");
+                    }
+                }
+            }).on('vclick','.merge_one span',function(e){
+                e.stopPropagation();
+                var items = self.getBillDataList();
+                var ret = {}; // merge函数 的参数
+                if(items){
                     am.popupMenu("合并至", items, function (item) {
                         console.log('合并至', item);
                         ret.firstSelected = item.data;
@@ -96,49 +141,148 @@
                         self.merge(ret);
                     });
                 }
-                if(index==0){
-                    var $bills = self.$container.find('.hangup_inner .flag.selected');
-                    if ($bills && $bills.length > 1) {
-                        $.each($bills, function (i, v) {
-                            var itemData = $(v).parents('.hangup_block').data('data');
-                            var item = {
-                                name: itemData.displayId + '-' + (itemData.memName||'散客'),
-                                data: itemData
-                            };
-                            items.push(item);
-                        });
-                        fn();
-                    } else {
-                        am.msg("请先选中至少两个单据！");
+                self.$noticeTip.removeClass('toOne account');
+                self.$.find('.merge_type').hide();
+            }).on('vclick','.merge_account span',function(e){
+                e.stopPropagation();
+                self.$noticeTip.removeClass('toOne account');
+                self.$.find('.merge_type').hide();
+                var items = self.getBillDataList();
+                var memberItems = [];
+                var newItems = [];
+                var flag = 0;
+                var memberData = {};
+                var requiredServer = am.operateArr.indexOf("a51") > -1 ? 1 : 0,noServerFlag=0;
+                if (items){
+                    $.each(items,function(i,v){
+                        if(requiredServer){
+                            var data=v.data.data;
+                            var depots = data.products && data.products.depots;
+                            var serviceItems = data.serviceItems;
+                            if(depots && depots.length){
+                                $.each(depots,function(index,depot){
+                                    if(!depot.servers || depot.servers.length == 0){
+                                        noServerFlag++;
+                                        return false;
+                                    }
+                                })
+                            }
+                            if(noServerFlag){
+                                am.msg('请为单据--'+v.name+'选择卖品服务员工!');
+                                return false;
+                            }
+                            if(serviceItems && serviceItems.length){
+                                $.each(serviceItems,function(index,serviceItem){
+                                    if(!serviceItem.servers || serviceItem.servers.length == 0){
+                                        noServerFlag++;
+                                        return false;
+                                    }
+                                })
+                            }
+                            if(noServerFlag){
+                                am.msg('请为单据--'+v.name+'选择项目服务员工!');
+                                return false;
+                            }
+                        }
+                        if(v.data.data.billRemark&&((v.data.data.billRemark.opencard&&v.data.data.billRemark.opencard.isbuy==false)
+                        ||(v.data.data.billRemark.buypackage&&v.data.data.billRemark.buypackage.isbuy==false)
+                        ||(v.data.data.billRemark.recharge&&v.data.data.billRemark.recharge.isbuy==false))){
+                            am.confirm("提醒", "您选择合并结算的流水中，包含有开卡、充值或购买套餐的操作，需要先完成开卡、充值或购买套餐后才可合并结算。", "知道了", "关闭");
+                            flag = 1;
+                            return false;
+                        }
+                        if(v.data.status==1||v.data.status==2){
+                            am.msg("您选择合并的流水单须包含顾客支付中或以自助结算单据！");
+                            flag = 1;
+                            return false;
+                        }
+                        if(v.data.data.products==null&&v.data.data.serviceItems.length==0){
+                            am.msg("您选择合并的流水单须包含项目或卖品！");
+                            flag = 1;
+                            return false;
+                        }
+                        if(v.data.memId != -1){
+                            if(!memberData[v.data.memId]){
+                                memberItems.push(v);
+                                memberData[v.data.memId] = v;
+                            }
+                        }
+                    })
+                    if(noServerFlag){
+                        return;
                     }
-                }else {
-                    var bills = self.$spaceWrapper.find('.selected');
-                    if(bills.length>1){
-                        $.each(bills, function (i, v) {
-                            var itemData = $(v).parent().data('data');
-                            itemData.data = JSON.parse(itemData.data);
-                            var seat = am.cashierTab.getSeatInfo(itemData.tableId);
-                            var item = {
-                                name: seat.name+'-'+ seat.tableName + '-' + itemData.displayId +  '-' + (itemData.memName||'散客') ,
-                                data: itemData
-                            };
-                            items.push(item);
+                    if (flag == 1){
+                        return false;
+                    }
+                    if (memberItems.length > 1) {
+                        am.popupMenu("您选择合并结算的流水单中包含多位会员,请选择其中一位会员进行付款", memberItems, function (item) {
+                            am.searchMember.getMemberById(item.data.memId, item.data.data.cid, function (member) {
+                                self.getComboItemsById(member.id,function (comboitems) {
+                                    var newItem;
+                                    $.each(items, function (i, v) {
+                                        newItem = am.discount.calc(v.data, am.metadata, member, am.timeDiscount);
+                                        newItems.push(newItem);
+                                    })
+                                    $.am.changePage(am.page.mergePay, "slideup", {
+                                        member: member,
+                                        items: newItems,
+                                        comboitems: comboitems
+                                    });
+                                });
+                            });
                         });
-                        fn();
-                    }else {
-                        am.msg("请先选中至少两个单据！");
+                    } else if (memberItems.length == 1) {
+                        // 直接跳转合并结算页面
+                        am.searchMember.getMemberById(memberItems[0].data.memId, memberItems[0].data.data.cid, function (member) {
+                            self.getComboItemsById(member.id,function(comboitems){
+                                var newItem;
+                                $.each(items, function (i, v) {
+                                    newItem = am.discount.calc(v.data, am.metadata, member, am.timeDiscount);
+                                    newItems.push(newItem);
+                                })
+                                $.am.changePage(am.page.mergePay, "slideup", {
+                                    member: member,
+                                    items: newItems,
+                                    comboitems: comboitems
+                                });
+                            });
+                        })
+                    } else {
+                        // 直接跳转合并结算页面
+                        var newItems = [];
+                        $.each(items, function (i, v) {
+                            newItems.push(v.data);
+                        })
+                        $.am.changePage(am.page.mergePay, "slideup", {
+                            member: -1,
+                            items: newItems,
+                            comboitems: []
+                        });
                     }
                 }
-                // self.$root.addClass('active');
-                // self.$warn.hide();
-                // self.$hangup_orderOverdueBig.hide();
-                // self.$.find('.hangup_inner table.up .tips').trigger('vclick');
+            }).on('vclick','.merge_common',function(e){
+                e.stopPropagation();
+            }).on('vclick','.merge_one .showTip',function(e){
+                e.stopPropagation();
+                self.$noticeTip.removeClass('account').addClass('toOne');
+                self.$noticeTip.text('合并为一单后选择的单据会合并到一起成为一个流水单，记一个客次');
+            }).on('vclick','.merge_account .showTip',function(e){
+                e.stopPropagation();
+                self.$noticeTip.removeClass('toOne').addClass('account');
+                self.$noticeTip.text('合并结算后选择的单据由一位顾客买单结算，记多个客次');
             }).on('vclick','.hangup_block .flag',function(){
                 if($(this).hasClass('selected')){
                     $(this).removeClass('selected');
                 }else {
                     $(this).addClass('selected');
                 }
+                self.billIds = [];
+                $(this).parents('.hangup_container').find('.hangup_block').each(function(){
+                    var id = $(this).attr('data-id');
+                    if($(this).find('.flag').hasClass('selected')){
+                        self.billIds.push(id);
+                    }
+                })
                 $(this).parents('.hangup_container').find('.selectBillTip').hide();
                 self.showSelectBillTipStep2();
             }).on('vclick', '.sure_btn', function() {
@@ -170,16 +314,31 @@
                     $(this).addClass('firstSelected');
                 }
             }).on('keyup', '.search_wrap .input_no', function(e) {//pc版 input 修改：每次输入后500毫秒之后自动搜索 
-                if (e.keyCode == 13) {
-                    self.searchTheRes(true);
-                }else{
-                    clearTimeout(self.searchTimer);
-                    self.searchTimer=null;
-                    if(!self.searchTimer){
-                        self.searchTimer = setTimeout(function(){
+                if (self.$swipeBtn.hasClass('active')) {
+                    self.searchTimer && clearTimeout(self.searchTimer);
+                    self.searchTimer = setTimeout(function () {
+                        self.searchTheRes();
+                        var index = $('.hanup_wrapper .hangup_container:visible').index();
+                        if (index == 0) {
+                            var $flags = $('.hanup_wrapper .hangup_container:visible').find(".content_wrap .hangup_block:visible .hangup_inner .flag")
+                            $flags.each(function(){
+                                if(!$(this).hasClass("selected")){
+                                    $(this).trigger("vclick");
+                                }
+                            })
+                        }
+                    }, 400);
+                    
+                } else {
+                    if (e.keyCode == 13) {
+                        self.searchTheRes(true);
+                    } else {
+                        self.searchTimer && clearTimeout(self.searchTimer);
+                        self.searchTimer = setTimeout(function () {
                             self.searchTheRes();
-                        },400);
+                        }, 400);
                     }
+                    
                 }
             }).on('vclick', '.search_wrap .search_icon', function() {
                 self.searchTheRes();
@@ -191,14 +350,11 @@
                     self.delete(data);
                 });
             }).on('vclick', '.hangup_cash_btn', function() {
-
-                self.autoGetData($(this).parents('.hangup_block'),function(data){
-                    if(data.status > 0) {
-                        return;
-                    }
-                    // 性能监控点
-                    monitor.startTimer('M04')
-
+                // 性能监控点
+                // TODO SOCKET连接异常时，需要更新数据；
+                monitor.startTimer('M04');
+                var $block = $(this).parents('.hangup_block');
+                self.getBillDataFromBlock($block,function(data){
                     var timer = data.shampooFinishTime - data.shampooStartTime;
                     if(timer && timer > 0){
                         var flag = "";
@@ -218,7 +374,6 @@
                             flag: flag
                         });
                     }
-
                     self.getBill(data,true);
                 });
             }).on('vclick', '.hangup_settle_btn', function() {
@@ -233,28 +388,12 @@
                 }
 
                 //结单
-
-                // var idx = $(this).closest('.hangup_block').attr('data-index'),
-                //     items = self.tempData[idx],
-                //     data = {
-                //         bill : items,
-                //         openbill : amGloble.metadata.shopPropertyField.mgjBillingType  //开单模式为 1
-                //     }
-                // $.am.changePage(am.page.pay, "slideup", data);
-                 
-                //自助结算遮罩
-                $('#autoWrap').show();
-                // 性能监控点
-                monitor.startTimer('M04')
-
-                var idx = $(this).closest('.hangup_block').attr('data-index');
-                if(self.$seatMoreBill.is(':visible')){
-                    var items = self.seatTempData[idx];
-                }else {
-                    var items = self.tempData[idx];
-                }
-                self.getBill(items,true);
-
+                self.autoGetData($(this).parents('.hangup_block'),function(data){
+                    if(data.status != 2) {
+                        return;
+                    }
+                    am.autoPay.checkBillData(data);
+                });
             }).on('vclick', '.wash-opt', function() {
                 var idx = $(this).closest('.hangup_block').attr('data-index');
                 if(self.$seatMoreBill.is(':visible')){
@@ -296,10 +435,7 @@
                 //优质客
                 am.goodModal.show();
             }).on("vclick",".openbill",function(){
-                // 性能监控点
-                monitor.startTimer('M01')
                 window.isIdInvoked = 0;
-                am.billOriginData = null;
                 $.am.changePage(am.page.searchMember, "slideup", {
                     openbill: 1,
                     onSelect: function (item) {
@@ -365,33 +501,41 @@
                 }
             }).on('vclick','.manualRefresh',function(){
                 if(!self.isRefreshing){
+                    self.billIds = [];
                     self.startGetDate();
                 }
             }).on("vclick",".remarkComboBox",function(e){
                 e.stopPropagation();
+                var $this = $(this);
+                var $hangup_block = $(this).closest('.hangup_block');
                 var idx = $(this).closest('.hangup_block').attr('data-index');
-                var data = $(this).data("item");
+                var data = am.clone($(this).data("item"));
                 var item  = am.clone(self.tempData[idx]);
                 var sdata = am.clone(self.getBillData(item)); 
-                var $this = $(this);
                 am.confirm("提示","确定要更改购买套餐状态吗？","确定","取消",function(){
                     data.isbuy = !data.isbuy;
-                    if(data.isbuy){
-                        $this.addClass("selected");
-                    }else{
-                        $this.removeClass("selected");
-                    }
                     sdata.billRemark.buypackage = data;
                     var temp = item;
                     item.data = JSON.stringify(sdata);
-                    self.saveBill(item);
-                    temp.data = sdata;
-                    self.tempData[idx] = temp;
+                    self.saveBill(item,function(){
+                        if(data.isbuy){
+                            $this.addClass("selected");
+                        }else{
+                            $this.removeClass("selected");
+                        }
+                        $this.data("item",data);
+
+                        item.version ++;
+                        temp.data = sdata;
+                        self.tempData[idx] = temp;
+                        $hangup_block.data('data',temp);
+                    });
                 });
             }).on('vclick',"tr.remark",function(event){
                 event.stopPropagation();
                 var _this = this;
-                self.autoGetData($(this).parents('.hangup_block'),function(data){
+                var $hangup_block = $(this).parents('.hangup_block');
+                self.autoGetData($hangup_block,function(data){
                     if(data.status > 0) {
                         return;
                     }
@@ -413,13 +557,18 @@
                                 instorecomment:remark,
                                 parentShopId:am.metadata.userInfo.parentShopId,
                                 shopId:am.metadata.userInfo.shopId,
-                                serviceNO:data.serviceNO
+                                serviceNO:data.serviceNO,
+                                version: data.version
                             }, function(ret){
                                 am.loading.hide();
                                 if(ret && ret.code===0){
                                     am.msg("修改成功");
                                     data.instorecomment = remark;
                                     data.data = sendData;
+                                    data.version ++;
+                                    var index = $(_this).parents('.hangup_block').index()-1;
+                                    self.tempData[index] = data;
+                                    $hangup_block.data('data',data);
                                     self.rendBillRemark(data,$this.parents(".gatherData"));
                                     if(remark){
                                         $this.text(remark);
@@ -428,6 +577,9 @@
                                         $this.text('');
                                         $this.parent().removeClass('has');
                                     }  
+                                }else if(ret.code == 11008){
+                                    am.msg('由于其它终端的操作，此单状态已改变！');
+                                    self.startGetDate();
                                 } else {
                                     am.msg("保存失败！");
                                 }
@@ -437,12 +589,13 @@
                 });
             }).on("vclick",".remarkCardBox span",function(event){
                 event.stopPropagation();
-                var data = $(this).data("item");
+                var $this = $(this);
+                var data = am.clone($(this).data("item"));
                 var sname = $(this).data("sname");
-                var idx = $(this).closest('.hangup_block').attr('data-index');
+                var $hangup_block =$(this).closest('.hangup_block');
+                var idx = $hangup_block.attr('data-index');
                 var item  = am.clone(self.tempData[idx]);
                 var sdata = am.clone(self.getBillData(item)); 
-                var $this = $(this);
                 var tips = "确定要更改状态吗？";
                 if(sname == 'opencard'){
                     tips = "确定要更改开卡状态吗？";
@@ -452,18 +605,22 @@
                 }
                 am.confirm("提示",tips,"确定","取消",function(){
                     data.isbuy = !data.isbuy;
-                    if(data.isbuy){
-                        $this.addClass("selected");
-                    }else{
-                        $this.removeClass("selected");
-                    }
                     sdata.billRemark[sname] = data;
                     var temp = item;
                     item.data = JSON.stringify(sdata);
-                    self.saveBill(item);
-                
-                    temp.data = sdata;
-                    self.tempData[idx] = temp;
+                    self.saveBill(item,function(){
+                        if(data.isbuy){
+                            $this.addClass("selected");
+                        }else{
+                            $this.removeClass("selected");
+                        }
+                        $this.data("item",data);
+
+                        item.version ++;
+                        temp.data = sdata;
+                        self.tempData[idx] = temp;
+                        $hangup_block.data("data",item);
+                    });
                 });
                 
             }).on('vclick','.content .name',function(){
@@ -492,12 +649,48 @@
                     localStorage.setItem('openBillMode_'+amGloble.metadata.userInfo.userId,'bill');
                     self.$.find('.hanup_wrapper .hangup_container').eq(index).show().siblings().hide();
                     self.renderBillMode(self.tempData);
+                    self.searchReset();
                 }else {
                     $(this).addClass('active');
                     index = 1;
                     localStorage.setItem('openBillMode_'+amGloble.metadata.userInfo.userId,'seat');
                     self.$.find('.hanup_wrapper .hangup_container').eq(index).show().siblings().hide();
                     self.renderSeatMode(self.tempData);
+                    self.searchReset();
+                }
+            }).on('vclick','.swipe_btn',function(){               
+                var $this = $(this);
+                if($this.hasClass('active')){
+                    self.searchReset();
+                    self.searchTheRes();
+                    $('.hanup_wrapper .hangup_container:visible').find(".content_wrap .hangup_block .hangup_inner .flag.selected").each(function(){
+                            $(this).trigger("vclick");
+                    })
+                }else{
+                    var index = $('.hanup_wrapper .hangup_container:visible').index();
+                    var val = "";
+                    if (index==0){
+                        $('.hanup_wrapper .hangup_container:visible').find(".content_wrap .hangup_block .hangup_inner .flag.selected").each(function(){
+                            val += $(this).parent().find(".title .no").text() + " ";
+                        })
+                    }
+                    self.$win.find("input").val(val).attr({
+                        'placeholder':"刷多张卡可快速操作并单或合并收款",
+                        'readonly':true
+                    });
+                    self.searchTheRes();
+                    $this.addClass('active').text("取消");
+                    self.$.find('.hangup-foot-list li').removeClass("selected");
+                    self.$win.find(".swipe_icon").show();
+                    self.$win.find(".search_icon").hide();
+                    self.$swipeModal.show();
+                }
+            });
+            this.$.vclick(function(){
+                if(self.$noticeTip.hasClass('toOne')||self.$noticeTip.hasClass('account')){
+                    self.$noticeTip.removeClass('toOne account');
+                }else{
+                    self.$.find('.merge_type').hide();
                 }
             });
 
@@ -540,10 +733,7 @@
 					});
                     return;
                 }
-                // 性能监控点
-                monitor.startTimer('M01')
                 window.isIdInvoked = 0;
-                am.billOriginData = null;
                 $.am.changePage(am.page.searchMember, "slideup", {
                     openbill: 1,
                     onSelect: function (item) {
@@ -551,7 +741,8 @@
                             member: item,
                             tableId: seat.id
                         });
-                    }
+                    },
+                    tableId: seat.id
                 });
             }).on('vclick','.waited',function(){
                 var data = $(this).data('data');
@@ -571,12 +762,8 @@
                                 am.confirm('网络断开','由于网络断开，无法进行后续操作！','知道了','返回', gotoHangup, gotoHangup);
                                 return;
                             }
-                            //自助结算遮罩
-                            $('#autoWrap').show();
-                            // 性能监控点
-                            monitor.startTimer('M04')
-                            data.data = JSON.parse(data.data);
-                            self.getBill(data,true);
+                            //自助结算
+                            am.autoPay.checkBillData(data);
                         }else {
                             // 性能监控点
                             monitor.startTimer('M04')     
@@ -605,7 +792,12 @@
                 }else {
                     $(this).addClass('selected');
                 }
+                self.billIds=[];
                 $(this).parents('.space').find('.selectBillTip').hide();
+                $(this).parents('.hangup_container').find('.select.selected').each(function(){
+                    var id = $(this).parent().data('data').id;
+                    self.billIds.push(JSON.stringify(id));
+                })
                 self.showSelectBillTipStep2();
             }).on('vhold','.seat',function(){
                 var data = $(this).data('data');
@@ -700,7 +892,7 @@
             }
             return sum;
         },
-        saveBill:function(item){
+        saveBill:function(item,scb){
             am.api.hangupSave.exec({
                 id:item.id,
                 data:item.data,
@@ -710,11 +902,19 @@
                 memcardid:item.memcardid,
                 parentShopId:am.metadata.userInfo.parentShopId,
                 shopId:am.metadata.userInfo.shopId,
-                serviceNO:item.serviceNOBak?item.serviceNOBak:(item.serviceNO?item.serviceNO:'')
+                serviceNO:item.serviceNOBak?item.serviceNOBak:(item.serviceNO?item.serviceNO:''),
+                version: item.version
             }, function(ret){
                 am.loading.hide();
                 if(ret && ret.code===0){
-                    
+                    scb && scb();
+                }else if(ret.code == 11008){
+                    if ($.am.getActivePage().id == "page_hangup"){
+                        am.msg('由于其它终端的操作，此单状态已改变！');
+                        self.startGetDate();
+                    }else {
+                        am.billChangeToHangup();
+                    }
                 } else {
                     am.msg("原单据信息更新失败！");
                 }
@@ -743,10 +943,64 @@
                 return false;
             }
         },
-        getBill:function(items,getBill){
-            var _data = JSON.parse(JSON.stringify(items));
-            _data.data = JSON.stringify(_data.data);
-            am.billOriginData = _data;
+        getBillDataList:function(){
+            var items = []; 
+            var index = $('.hanup_wrapper .hangup_container:visible').index();
+            if(index==0){
+                var $bills = self.$container.find('.hangup_inner .flag.selected');
+                if ($bills && $bills.length > 1) {
+                    $.each($bills, function (i, v) {
+                        var itemData = $(v).parents('.hangup_block').data('data');
+                        var item = {
+                            name: itemData.displayId + '-' + (itemData.memName||'散客'),
+                            data: itemData
+                        };
+                        items.push(item);
+                    });
+                    return items;
+                } else {
+                    am.msg("请先选中至少两个单据！");
+                    return false;
+                }
+            }else {
+                var bills = self.$spaceWrapper.find('.selected');
+                if(bills.length>1){
+                    $.each(bills, function (i, v) {
+                        var itemData = $(v).parent().data('data');
+                        itemData.data = JSON.parse(itemData.data);
+                        var seat = am.cashierTab.getSeatInfo(itemData.tableId);
+                        var item = {
+                            name: seat.name+'-'+ seat.tableName + '-' + itemData.displayId +  '-' + (itemData.memName||'散客') ,
+                            data: itemData
+                        };
+                        items.push(item);
+                    });
+                    return items
+                }else {
+                    am.msg("请先选中至少两个单据！");
+                    return false;
+                }
+            }
+        },
+        getComboItemsById: function (id, cb) {
+            //获取状态
+            var userInfo = am.metadata.userInfo;
+            am.api.itemOfCard.exec({
+                memberid: id,
+                parentShopId: userInfo.parentShopId,
+                shopId: userInfo.shopId,
+            },function(ret){
+                if (ret && ret.code == 0) {
+                    cb && cb(ret.content);
+                } else {
+                    am.msg(ret.message || "数据获取失败，请重试！");
+                }
+            });
+		},
+        getBill:function(items,getBill,updated){
+            // var data = JSON.stringify(items.data)
+            // data.billRemark = null;
+            // items.data = JSON.stringify(data);
             items.src = "hangup";
             var billData = self.getBillData(items);
             var billRemark = billData.billRemark;
@@ -763,7 +1017,7 @@
                 }
                 sendData.billRemark.recharge.isbuy = true;
                 _data.data = JSON.stringify(sendData);
-                self.saveBill(_data);
+                return _data.data;
             }
             var checkRemark = self.checkRemark(items,function(res){
                 items.serviceNOBak = items.serviceNO;
@@ -772,11 +1026,24 @@
                     am.cashierTab.feedBill(items,1,getBill);
                 }
                 if(res.code == 1){//开卡
+                    monitor.stopTimer('M04', 0);
                     $.am.changePage(am.page.memberCard,"",{billRemark:items});
                 }
                 if(res.code == 2){//充值
+                    var cardtype = am.metadata.cardTypeList.filter(function (a) {
+                        return a.cardtypeid == billRemark.recharge.cardTypeId;
+                    });
+                    if (cardtype && cardtype[0] && cardtype[0].mgj_stopNoRecharge && cardtype[0].newflag == '0') {
+                        amGloble.msg('【' + cardtype[0].cardtypename + '】已停止办理，无法继续充值！');
+                        return;
+                    }
+                    monitor.stopTimer('M04', 0);
                     am.searchMember.getMemberById(items.memId,billRemark.recharge.id,function(content){
                         if(content){
+							if (content.status == 1) {
+								am.msg('会员卡退卡中，无法进行此操作');
+								return false;
+							}
                             var fn=function(){
                                 $.am.changePage(am.page.pay, "slideup", {
                                     action: "recharge",
@@ -805,6 +1072,7 @@
                     
                 }
                 if(res.code == 3){//购买套餐
+                    monitor.stopTimer('M04', 0);
                     $.am.changePage(am.page.comboCard,"",{billRemark:items});
                 }
             });
@@ -869,9 +1137,21 @@
                 this.$.addClass('am-full').removeClass("half_page");
             }
         },
+        searchReset: function(){
+            this.$win.find("input").val("").attr({
+                'placeholder':"请输入服务号/顾客/服务者姓名查询，多个用空格分隔",
+                'readonly':false
+            });
+            this.$swipeBtn.removeClass('active').text("刷卡找单");
+            this.$win.find(".swipe_icon").hide();
+            this.$win.find(".search_icon").show();
+            this.$swipeModal.hide()
+        },
         beforeShow: function(paras) {
             this.$seatMoreBill.hide();
-            $('#autoWrap').hide();
+            this.searchReset();
+            var billIds = this.billIds;
+            this.billIds = [];
             //为解决 结算完单后 快速按+号触发开单出现英文服务号问题
             sessionStorage.cardPreventKeyB = 'prevent';
 
@@ -889,13 +1169,18 @@
                 this.changePageType(1);
                 am.tab.main.show().select(1);
                 this._billType = paras.openbill;
+                this.billIds = billIds;
             }
             else if(paras == "back"){
                 this.changePageType(1);
                 am.tab.main.show().select(1);
+                this.billIds = billIds;
             }
             else{
                 this.changePageType(0);
+            }
+            if(paras && paras.refresh==1){
+                this.billIds = [];
             }
             if(am.metadata){
                 am.hangupRemark.refresh();
@@ -909,6 +1194,8 @@
             }else {
                 this.$.find('.cards_btn').hide();
             }
+            this.$noticeTip.removeClass('toOne account');
+            this.$.find('.merge_type').hide();
             this.removeCheckedBIll();
 
             //小红点
@@ -941,9 +1228,6 @@
             this.$hangup_orderOverdueBig.hide();
         },
         afterShow: function() {
-    
-			sessionStorage.removeItem('_autoPay1214'); 
-
             //为解决 结算完单后 快速按+号触发开单出现英文服务号问题
             clearTimeout(time);
             var time = null;
@@ -970,6 +1254,10 @@
             }
         },
         startGetDate:function(){
+            //如果两次刷新之间的间隔小于200ms，直接跳过
+            var ts = new Date().getTime();
+            if(ts - this.startGetDateTs < 200) return;
+            this.startGetDateTs = ts;
             $('.member-seleced-mark').hide();
             this.$seatMoreBill.hide();
             this.isRefreshing = true;
@@ -1002,6 +1290,9 @@
             $('.hangup-foot-list').on('vclick', 'li', function() {
                 var _this = $(this);
                 var $memberSelect = $('.member-seleced-mark');
+                if(self.$swipeBtn.hasClass("active")){
+                    self.searchReset();
+                 };
                 if(!$(this).hasClass('seat')){
                     var selectImg = _this.find('img');
                     var $name = _this.attr('name');
@@ -1162,6 +1453,7 @@
                     data: JSON.stringify(data),
                     "parentShopId": firstSelected.parentShopId,//传parentShopId和shopId流水单号serviceNO才会正确生成
                     "shopId": firstSelected.shopId,
+                    "version": firstSelected.version,
                 };
                 if(firstSelected.serviceNO){
                     opt.serviceNO = firstSelected.serviceNO;
@@ -1185,6 +1477,7 @@
                                     am.loading.hide();
                                     if (ret.code == 0) {
                                         am.msg("操作成功");
+                                        self.searchReset();
                                         self.render(ret.content);
                                         // self.hangupScroll.refresh();
                                         // self.hangupScroll.scrollTo("top");
@@ -1198,6 +1491,9 @@
                                 am.msg(ret.message || "删除服务单失败，请重试！");
                             }
                         });
+                    }else if(ret.code == 11008){
+                        am.msg('由于其它终端的操作，此单状态已改变！');
+                        self.startGetDate();
                     } else {
                         am.msg("操作失败，请重试~");
                     }
@@ -1353,12 +1649,16 @@
                 tableId: id,
                 parentShopId:am.metadata.userInfo.parentShopId,
                 shopId:am.metadata.userInfo.shopId,
+                version: data.version
             }, function(ret){
                 am.loading.hide();
                 if(ret && ret.code===0){
                     am.msg("座位更换成功");
                     data.tableId = id;
                     self.renderSeatMode(self.tempData);
+                }else if(ret.code == 11008){
+                    am.msg('由于其它终端的操作，此单状态已改变！');
+                    self.startGetDate();
                 } else {
                     am.msg("座位更换失败！");
                 }
@@ -1444,11 +1744,13 @@
                     self.cachedata = ret;
                     self.cachedata.ts = new Date().getTime();
                     am.cashierTab.setHangUpNum(ret.count);
+                    $.am.trigger('instoreServiceHasBeenSynced',self.cachedata);
                 }
                 cb(ret);
             });
         },
         getBillData:function(item){
+            if(typeof item.data === 'object') return item.data;
             var sdata = item.data;
             var _data = {};
             try{
@@ -1473,10 +1775,10 @@
                     if(billRemark.buypackage.data && billRemark.buypackage.data.length){
                         for(var i=0;i<billRemark.buypackage.data.length;i++){
                             var itemj = billRemark.buypackage.data[i];
-                            if(itemj.number){
-                                var $span0 = $('<span class="am-clickable">'+itemj.name+"*"+itemj.number+'</span>');
+                            if(itemj.number || itemj.itemTimes){
+                                var $span0 = $('<span class="am-clickable">'+(itemj.name || itemj.itemName)+"*"+(itemj.number || itemj.itemTimes)+'</span>');
                             }else{
-                                var $span0 = $('<span class="am-clickable">'+itemj.name + '</span>');
+                                var $span0 = $('<span class="am-clickable">'+(itemj.name || itemj.itemName) + '</span>');
                             }
                             
                             $tfoot.find(".remarkComboBox").append($span0);
@@ -1675,13 +1977,20 @@
                 // $('.hangup-foot-list').off("vclick", "li", btnClick2);
                 for (var serversIndex = 0; serversIndex < markServer.length; serversIndex++) {
                     var $li = $('<li class="am-clickable"  name='+ markServer[serversIndex].name  +' no='+markServer[serversIndex].no+' displayId="'+ markServer[serversIndex].displayId +'"></li>');
+                    var emp = amGloble.metadata.empMap[markServer[serversIndex].id];
+                    var updateTs = '';
+                    if(emp && emp.mgjUpdateTime){
+                        updateTs = new Date(emp.mgjUpdateTime).getTime();
+                    }
                     var $img = am.photoManager.createImage("artisan", {
-                        parentShopId: am.metadata.userInfo.parentShopId
+                        parentShopId: am.metadata.userInfo.parentShopId,
+                        updateTs: updateTs
                     }, markServer[serversIndex].id + ".jpg", "s");
                     var _mark = '<div class="hangup-foot-target">'+markServer[serversIndex].mark +'</div>'
                     $li.append(_mark)
                     $li.append(am.photoManager.createImage("artisan", {
-                        parentShopId: am.metadata.userInfo.parentShopId
+                        parentShopId: am.metadata.userInfo.parentShopId,
+                        updateTs: updateTs
                     }, markServer[serversIndex].id + ".jpg", "s"))
         
                     var _html = '';
@@ -1856,6 +2165,7 @@
             }
         },
         renderBlock:function(data,$parent){
+            var self = this;
             var user = am.metadata.userInfo;
             var deleteOpt = user.operatestr.indexOf(',MGJZ6,') == -1;
             var setting_washTime = am.page.service.billMain.getSetting().setting_washTime;
@@ -1918,7 +2228,7 @@
                             '<div class="remarkWrap am-clickable">' +(item.instorecomment ? item.instorecomment : '') + '</div>'+
                         '</td>'+
                     '</tr>');
-                
+
                 self.rendBillRemark(item,$tfoot);
                
                 $billTb.append($tfoot);
@@ -2011,7 +2321,7 @@
                         $tr.find('.iteminPrice').text('￥'+toFloat(itemin.salePrice*itemin.number));
                         sumfee+= itemin.salePrice*itemin.number;
                     }else{
-                        sumfee += itemin.price || 0;
+                        sumfee += itemin.price*1 || 0;
                         $tr.find('.iteminNameWrap').text(itemin.name);
                         $tr.find('.iteminPrice').text('￥'+itemin.price);
                         if(!serverName.length){
@@ -2044,7 +2354,7 @@
                     
                 }
 
-                $sumFeeTr.find("span.num").text(toFloat(sumfee));
+                $sumFeeTr.find("span.num").text(Math.round(sumfee*100)/100);
                 //(!detail.sumfee)&&($sumFeeTr.find("span.num").text(sumfee.toFixed(1)));
                 //}
                 $billServers.append('<div class="line serversContent">'+ (serverName.join(" ")||"无") +'</div>');
@@ -2089,9 +2399,11 @@
                 }else if(item.status == '2') {
                     hangup_inner
                         .append('<div class="operation">' + '<span class="hangup_settle_btn am-clickable">结单</span></div>')
-                        .addClass('settle').append('<div class="settleModel"><img class="settleImg" src="$dynamicResource/images/hangup/ckeck_ok.png" alt="结算" /></div>');
+                        .addClass('settle').append('<div class="settleModel payed"><img class="settleImg" src="$dynamicResource/images/hangup/ckeck_ok.png" alt="结算" /></div>');
                 }
-
+                if(self.billIds&&self.billIds.indexOf(JSON.stringify(item.id))>-1){
+                    $block.find('.flag').addClass('selected');
+                }
                 $parent.append($block);
             });
         },
@@ -2161,12 +2473,13 @@
                 // }
                 this.$.addClass('empty'); 
                 $('#hangup_container .empty_wrap').show();
-            }
+            }         
             this.$hangup_orderOverdueBig.show();
             this.$keywordPc.val('');
             this.hangupScroll.refresh();
             this.hangupScroll.scrollTo("top");
             this.showSelectBillTipStep1();
+            this.showSelectBillTipStep2();
         },
         renderSeatMode: function(data){
             this.$warn.hide();
@@ -2185,7 +2498,7 @@
                 var needDeletedWaitedBills = [];
                 for(var i=0;i<data.length;i++){
                     if(data[i].tableId){
-                        if(data[i].status==3 && (new Date().getTime()-data[i].createDateTime)>(60*60*1000)){
+                        if(data[i].status==3 && (new Date().getTime()-data[i].createDateTime)>(3*60*60*1000)){
                             needDeletedWaitedBills.push(data[i].id);
                         }else {
                             if(!renderData[data[i].tableId]){
@@ -2294,6 +2607,9 @@
                                 $bill.addClass('active');
                             }
                             seat.find('.used').prepend($bill.data('data',_data[j]));
+                            if(self.billIds&&self.billIds.indexOf(JSON.stringify(_data[j].id))>-1){
+                                $bill.find('.select').addClass('selected');
+                            }
                         }
                     }
                 }
@@ -2301,6 +2617,7 @@
                 self.seatBillToggleMachine();
                 self.calSpaceSummary();
                 self.showSelectBillTipStep1(1);
+                self.showSelectBillTipStep2();
             });
         },
         renderSeats: function(callback){
@@ -2354,6 +2671,8 @@
             this.spaceScroll.refresh();
             this.spaceScroll.scrollTo('top');
             callback && callback();
+
+            
         },
         setSeatHeight: function(){
             var uls = this.$spaceWrapper.find('.list');
@@ -2434,11 +2753,17 @@
         },
         delete: function(data) {
             var self = this;
-            var reason = JSON.parse(am.metadata.configs.cancleBilling);
+            var reason = JSON.parse(am.metadata.configs.delBillRemarks || []);// 门店删单理由
+            var hqReason= [];
+            if(!(reason && reason.length)){
+                // 如果门店未配置删单理由则再取总部的配置
+                hqReason = JSON.parse(am.metadata.configs.cancleBilling);
+            }
+            var cancelReasons = (reason && reason.length ? reason : hqReason)|| [];
             am.selectCancleReason.show({
                 title: '请选择删单理由',
                 warn: '警告:请选择或输入明确的删单理由，以便财务和管理层审核',
-                reason: reason,
+                reason: cancelReasons,
                 callback: function(str){
                     am.api.hangupDelete.exec({
                         "ids": [data.id],
@@ -2463,6 +2788,36 @@
                             am.msg(ret.message || "删除服务单失败，请重试！");
                         }
                     });
+                },
+                saveToRemarkList:function(val){
+                    var saveReason=[];
+					if (!am.isNull(reason) && reason.indexOf(val) > -1) {
+					    // 常用已包含
+					    am.msg(val+'已存在，请修改后再保存');
+					    return;
+					} else if (!am.isNull(reason) && reason.indexOf(val) == -1) {
+					    // 常用未包含
+					    saveReason = reason.concat([val]);
+					} else if (am.isNull(reason)) {
+					    // 没有常用
+					    saveReason = [val];
+					}
+                    am.loading.show();
+                    am.api.saveNormalConfig.exec({
+                        parentshopid: am.metadata.userInfo.parentShopId+'', 
+                        configkey: 'delBillRemarks',
+                        configvalue: JSON.stringify(saveReason),
+                        shopid: am.metadata.userInfo.shopId+'',
+                        setModuleid: 15
+                    },function(ret){
+                        am.loading.hide();
+                        if(ret && ret.code==0){
+                           am.metadata.configs.delBillRemarks=JSON.stringify(saveReason);
+                           am.msg('【'+val+'】'+'已保存为常用删单理由')
+                        }else {
+                            am.msg('保存失败');
+                        }
+                    });
                 }
             });
         },
@@ -2470,7 +2825,8 @@
             var opt = {
                 "id": data.id,
                 "shopId": data.shopId,
-                "parentShopId": data.parentShopId
+                "parentShopId": data.parentShopId,
+                "version": data.version
             };
 			if(data.serviceNO) {
 				opt.serviceNO = data.serviceNO;
@@ -2510,6 +2866,7 @@
                             _tempData.shampooworkbay = ret.pos;
                         }
                         data.shampooworkbay = ret.pos;
+                        data.version ++;
                         self.washOpt($target, data,notBack,callback);
                     });
                 });
@@ -2518,56 +2875,9 @@
 			
             if ($target.hasClass('start')){
                 opt.shampooStartTime = am.getTime();
-                if($.am.getActivePage().id == "page_hangup"){//区分页面
-                    $target.text('结束洗发')
-                    _tempData.shampooStartTime = opt.shampooStartTime;
-                }
-                am.washTipModal.show({
-                    flag:"start"
-                });
             }  
             else if ($target.hasClass('finish')) {
-                var washPassTime = am.metadata.configs.washPassTime ? (am.metadata.configs.washPassTime - 0) * 60 * 1000 : 30 * 60 * 1000;
                 opt.shampooFinishTime = am.getTime();
-                var timer = am.getTime() - data.shampooStartTime;
-                if (!am.isNull(timer)) { //洗发时长
-                    var timeStr = new Date(timer).format("MM:ss").replace(":", "分") + '秒';
-                    if ((timer / 60000) > 60) { //如果超过1个小时
-                        timeStr = Math.floor(timer / 60000 / 60) + "小时" + timeStr;
-                    }
-                    var htmStr = '',
-                        styleStr = '',
-                        flag = '';
-                    if (timer > washPassTime) {
-                        flag = 'pass';
-                        htmStr = '洗发合格，时长' + timeStr;
-                        styleStr = "<style>#tab_cash .operatehair.disabled::before{height:auto;content:'洗发结束" + timeStr + "';}</style>";
-                        
-                    } else {
-                        flag = 'nopass';
-                        htmStr = '<span class="iconfont icon-shijianbiao red"></span>洗发不合格，时长' + timeStr;
-                        styleStr = "<style>#tab_cash .operatehair.disabled{color:red;} #tab_cash .operatehair.disabled::before{height:auto;content:'洗发结束" + timeStr + "';}</style>";
-                    }
-                    var jsonstr = JSON.stringify({
-                        washPassTime: timeStr,
-                        flag: flag
-                    });
-                    if ($.am.getActivePage().id == "page_hangup") { //区分页面
-                        $target.html(htmStr);
-                        $target.removeClass('wash-opt').addClass('finished');
-                        _tempData.shampooFinishTime = opt.shampooFinishTime;
-                        _tempData.jsonstr = jsonstr;
-                    } else if($.am.getActivePage().id == "page_service") {
-                        $target.html(styleStr);
-                    }
-                    if(am.isNull(localStorage.mgjSoundDisabled)){
-                        attendanceSoket.getAudio("洗发小助理洗发结束，时间为" + timeStr);
-                    }
-                    am.washTipModal.show({
-                        flag: flag,
-                        str: timeStr
-                    });
-                }
             }
             else
                 return;
@@ -2591,17 +2901,73 @@
                                 self.machineBox.push(twMachineNo);
                             }
                         }
+                        if($.am.getActivePage().id == "page_hangup"){//区分页面
+                            $target.text('结束洗发')
+                            _tempData.shampooStartTime = opt.shampooStartTime;
+                        }
+                        am.washTipModal.show({
+                            flag:"start"
+                        });
                     } else if ($target.hasClass('finish')) {
                         $target.removeClass('finish').addClass('disabled');
                         var $tw = $target.prev().find('.time_wash');
                         var machineNo = $tw.attr('data-machineno');
                         if (machineNo)
                             clearInterval(machineNo);
+                        var washPassTime = am.metadata.configs.washPassTime ? (am.metadata.configs.washPassTime - 0) * 60 * 1000 : 30 * 60 * 1000;
+                        var timer = am.getTime() - data.shampooStartTime;
+                        if (!am.isNull(timer)) { //洗发时长
+                            var timeStr = new Date(timer).format("MM:ss").replace(":", "分") + '秒';
+                            if ((timer / 60000) > 60) { //如果超过1个小时
+                                timeStr = Math.floor(timer / 60000 / 60) + "小时" + timeStr;
+                            }
+                            var htmStr = '',
+                                styleStr = '',
+                                flag = '';
+                            if (timer > washPassTime) {
+                                flag = 'pass';
+                                htmStr = '洗发合格，时长' + timeStr;
+                                styleStr = "<style>#tab_cash .operatehair.disabled::before{height:auto;content:'洗发结束" + timeStr + "';}</style>";
+                                
+                            } else {
+                                flag = 'nopass';
+                                htmStr = '<span class="iconfont icon-shijianbiao red"></span>洗发不合格，时长' + timeStr;
+                                styleStr = "<style>#tab_cash .operatehair.disabled{color:red;} #tab_cash .operatehair.disabled::before{height:auto;content:'洗发结束" + timeStr + "';}</style>";
+                            }
+                            var jsonstr = JSON.stringify({
+                                washPassTime: timeStr,
+                                flag: flag
+                            });
+                            if ($.am.getActivePage().id == "page_hangup") { //区分页面
+                                $target.html(htmStr);
+                                $target.removeClass('wash-opt').addClass('finished');
+                                _tempData.shampooFinishTime = opt.shampooFinishTime;
+                                _tempData.jsonstr = jsonstr;
+                            } else if($.am.getActivePage().id == "page_service") {
+                                $target.html(styleStr);
+                            }
+                            if(am.isNull(localStorage.mgjSoundDisabled)){
+                                attendanceSoket.getAudio("洗发小助理洗发结束，时间为" + timeStr);
+                            }
+                            am.washTipModal.show({
+                                flag: flag,
+                                str: timeStr
+                            });
+                        }
                     }
                     if(jsonstr){
                         ret.content.jsonstr = jsonstr;
                     }
+                    data.version ++;
+                    ret.content.version ++;
                     callback && callback(ret.content);
+                }else if(ret && ret.code == 11008){
+                    if ($.am.getActivePage().id == "page_hangup"){
+                        am.msg('由于其它终端的操作，此单状态已改变！');
+                        self.startGetDate();
+                    }else {
+                        am.billChangeToHangup();
+                    }
                 } else {
                     am.msg("操作失败，请重试~");
                 }
@@ -2615,7 +2981,7 @@
             }
             var self = this;           
             if (data) {
-                self.moreBillMachineBox = [];              
+                self.moreBillMachineBox = [];
                 $.each(data, function(i, item) {
                     // 服务时长
                     var sdtime=sdTime ? sdTime*3600*1000:3*3600*1000;
@@ -2841,7 +3207,7 @@
         },
         keyboardCtrl:function(keyCode){
             var ctrl = window.keyboardCtrl;
-            if($('.nativeUIWidget-confirm').is(':visible') || $('#autoStationTip').is(':visible') || $('#addMoreRemark').is(':visible')){
+            if($("#selectCancleReason").is(":visible") || $('.nativeUIWidget-confirm').is(':visible') || $('#autoStationTip').is(':visible') || $('#addMoreRemark').is(':visible') || $("#lockScreen").is(':visible')){
                 //触发会员弹窗问题
                 return;
             }else{
@@ -2899,6 +3265,23 @@
                     callback && callback(eleDataO);
                 }
             },null,3000);
+        },
+        getBillDataFromBlock:function($block,cb){
+            if(am.socketPush.getStatus() === 'open'){
+                cb($block.data('data'));
+            }else{
+                self.autoGetData($block,function(data){
+                    cb(data);
+                });
+            }
+        },
+        getBillByDisplayId:function(code){
+            if(this.cachedata && this.cachedata.content && this.cachedata.content.length){
+                var list = this.cachedata.content;
+                for(var i=0;i<list.length;i++){
+                    if(list[i].displayId === code) return list[i];
+                }
+            }
         }
     });
 })();

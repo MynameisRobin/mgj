@@ -56,9 +56,10 @@
 				var sendMessage=self.sendMessage || {};
 				sendMessage.itemid=(self.showtype==1?item.itemid:item.id);
 				sendMessage.newName=item.name;
-				if(self.showtype=="2"){
+				if(self.showtype=="2" || self.showtype=="3"){
 					sendMessage.newEmployeeNo=item.no;
 					sendMessage.newEmployeeDutyName=item.dutyName;
+					sendMessage.newEmployeeDutyType=item.dutyType;
 					sendMessage.newEmployeeName=item.name;
 				}
 				if(self.showtype==3){
@@ -189,11 +190,10 @@
 					title:"请输入数字",//可不传
 					hidedot:false,
 				    submit:function(value){
-				    	_this.val(value);
+						_this.val(value);
 				    }
 				});
   			});
-
   			//指定非指定
   			this.$changebox.vclick(function(){
 				if(amGloble.operateArr.indexOf('a1')==-1){
@@ -259,7 +259,7 @@
 								result = self.billFee;
 							}
 						}
-						if(currentFee>result){
+						if(currentFee>result && amGloble.metadata.shopPropertyField.notSharedPerformance!=1){
 							if(!self.empFeeLi || self.empFeeLi.fee!=value.fee){
 								am.msg('员工业绩之和不可超过总业绩：'+Number(result).toFixed(2)+'，当前业绩总和为：'+currentFee.toFixed(2)+'，请调整后保存。');
 								return false;
@@ -297,7 +297,6 @@
 			}else if(type==4){
 				this.fillDepartment(item);
 			}
-
 			this.btn = btn;
 			this.commissionType = item.commissionType;
 			if(btn){//需要显示业绩和提成相关DOM
@@ -341,15 +340,20 @@
 				if(item.commissionType == 0 || item.commissionType == 4  || item.commissionType == 6 || (item.commissionType==3 && (amGloble.metadata.configs.packageSpecial=='true'))){	//隐藏提成输入框
 					if(amGloble.metadata.shopPropertyField.handinto==1){
 						this.$commissionbox.show();
-						this.setCommissionVal(item);
-					}else {
-						this.$commissionbox.hide();
+						this.$commission.removeClass("am-disabled");
+						this.setCommissionVal(item,type,item.commissionType);
+					}else {	
+						// this.$commissionbox.hide();
+						this.$commissionbox.show();
+						this.$commission.addClass("am-disabled");
+						this.setCommissionVal(item,type);
 					}
 					this.$source.show();	//显示指定非指定(和提成互斥)
 					this.setSourceVal(item);	//给指定非指定赋值
 				}else{	//显示提成输入框
 					this.$commissionbox.show();
-					this.setCommissionVal(item);	//给提成赋值
+					this.$commission.removeClass("am-disabled");
+					this.setCommissionVal(item,type,item.commissionType);	//给提成赋值
 					this.$source.hide();	//隐藏指定非指定(和提成互斥)
 				}
 			}else{	//以前的逻辑
@@ -381,37 +385,44 @@
 			var paid = {};
 			paid.debtfee = this.currentBill.debtFee;
 			if(this.currentBill.cashList && this.currentBill.cashList.length){
-				var _cashList = this.currentBill.cashList[0];
-				paid.cooperation = _cashList.cooperation;
-				paid.coupon = _cashList.coupon;
-				paid.dianpin = _cashList.dianpin;
-				paid.luckymoney = _cashList.luckymoney;
-				paid.mall = _cashList.mall;
-				paid.otherfee1 = _cashList.otherfee1;
-				paid.otherfee2 = _cashList.otherfee2;
-				paid.otherfee3 = _cashList.otherfee3;
-				paid.otherfee4 = _cashList.otherfee4;
-				paid.otherfee5 = _cashList.otherfee5;
-				paid.otherfee6 = _cashList.otherfee6;
-				paid.otherfee7 = _cashList.otherfee7;
-				paid.otherfee8 = _cashList.otherfee8;
-				paid.otherfee9 = _cashList.otherfee9;
-				paid.otherfee10 = _cashList.otherfee10;
-				paid.pay = _cashList.pay;
-				paid.deductpoint = _cashList.pointfee;
-				paid.unionpay = _cashList.unionPay;
-				paid.voucherfee = _cashList.voucherFee;
-				paid.weixin = _cashList.weixin;
-				paid.cash = _cashList.cash;
-				paid.mdfee = _cashList.mdFee;
+				for(var i=0;i<this.currentBill.cashList.length;i++){
+					var _cashList = this.currentBill.cashList[i];
+					if(_cashList.depcode==-1){
+						paid.cooperation = _cashList.cooperation;
+						paid.coupon = _cashList.coupon;
+						paid.dianpin = _cashList.dianpin;
+						paid.luckymoney = _cashList.luckymoney;
+						paid.mall = _cashList.mall;
+						paid.otherfee1 = _cashList.otherfee1;
+						paid.otherfee2 = _cashList.otherfee2;
+						paid.otherfee3 = _cashList.otherfee3;
+						paid.otherfee4 = _cashList.otherfee4;
+						paid.otherfee5 = _cashList.otherfee5;
+						paid.otherfee6 = _cashList.otherfee6;
+						paid.otherfee7 = _cashList.otherfee7;
+						paid.otherfee8 = _cashList.otherfee8;
+						paid.otherfee9 = _cashList.otherfee9;
+						paid.otherfee10 = _cashList.otherfee10;
+						paid.pay = _cashList.pay;
+						paid.deductpoint = _cashList.pointfee;
+						paid.unionpay = _cashList.unionPay;
+						paid.voucherfee = _cashList.voucherFee;
+						paid.weixin = _cashList.weixin;
+						paid.cash = _cashList.cash;
+						paid.mdfee = _cashList.mdFee;
+					}
+				}
 			}
 			if(this.currentBill.cardList && this.currentBill.cardList.length){
-				var _cardList = this.currentBill.cardList[0];
-				paid.cardfee = _cardList.cardFee + _cardList.treatFee;
-				paid.dividefee = _cardList.divideFee;
-				paid.presentfee = _cardList.presentFee +  _cardList.treatPresentFee;
+				for(var i=0;i<this.currentBill.cardList.length;i++){
+					var _cardList = this.currentBill.cardList[i];
+					if(_cardList.depcode==-1){
+						paid.cardfee = _cardList.cardFee + _cardList.treatFee;
+						paid.dividefee = _cardList.divideFee;
+						paid.presentfee = _cardList.presentFee +  _cardList.treatPresentFee;
+					}
+				}
 			}
-
 			
 			var card = null;
 			if(this.currentBill.cardList && this.currentBill.cardList.length){
@@ -441,12 +452,15 @@
 				for(var j=0;j<this.currentBill.empList.length;j++){
 					var emp = this.currentBill.empList[j];
 					if(data.id == emp.detailId){
-						var empItem = {
-							no: emp.empNo,
-							dutytype: this.getDutyIdByNo(emp.empNo).dutyType,
-							dutyid: this.getDutyIdByNo(emp.empNo).dutyid
+						var _emp = this.getDutyIdByNo(emp.empNo)
+						if(_emp){
+							var empItem = {
+								no: _emp.no,
+								dutytype: _emp.dutyType,
+								dutyid: _emp.dutyid
+							}
+							item.empList.push(empItem);
 						}
-						item.empList.push(empItem);
 					}
 				}
 				itemList.push(item);
@@ -472,7 +486,24 @@
 				itemList:itemList
 			}
 
+			var _total = 0;
+			for(var key in paid){
+				_total += paid[key];
+			}
+
+			opt.rate = amGloble.metadata.configs.debtFlag*1?(_total?(1 - paid.debtfee/_total):1):1;
+
 			console.log(opt)
+
+			if(!computingPerformance.empList){
+				var itemList = [].concat(am.metadata.classes,(am.metadata.stopClasses || []));
+				computingPerformance.updataConfig({
+					empList: am.metadata.employeeList,
+					itemList: itemList,
+					payConfig: am.metadata.payConfigs
+				});
+			}
+
 			var data = computingPerformance.computing(opt);
 			console.log(data);
 			if(!data.length){
@@ -507,8 +538,16 @@
 			}
 			return no;
 		},
-		setCommissionVal:function(item){
-			this.$commission.val(item.gain);
+		setCommissionVal:function(item,type,commissionType){
+			if(item.automatic || type==3){
+				this.$commission.val('').attr('placeholder','提成自动算');
+				if(commissionType==1 || commissionType==2 || commissionType==3){
+					//1卖品  2 开充卡 3卖套餐
+					this.$commission.val('').attr('placeholder','请手动输入提成');
+				}
+			}else {
+				this.$commission.val(item.gain).attr('placeholder','');
+			}
 		},
 		setSourceVal:function(item){
 			var _pointFlag = item.pointFlag;
@@ -526,6 +565,8 @@
 			var self=this;
 			var value=self.$employeeValue.data("value");
 
+			// 将billId传出
+			value.detailId = self.currentBillItem && self.currentBillItem.id;
 			if(this.btn){	//需要业绩
 				value.fee = this.$totalperformance.val();	//总业绩
 				// 开启新业绩模式不获取卡金类、现金类、其他类业绩，不开启则获取
@@ -541,6 +582,11 @@
 					}
 				}else{	//需要提成
 					value.gain = this.$commission.val() || 0;	//提成
+				}
+				if(this.$commission.val()){
+					value.automatic = 0;
+				}else{
+					value.automatic = 1;
 				}
 			}
 
@@ -591,6 +637,7 @@
 			}
 			console.log(data);
 			this.sendMessage={
+				detailId:data.detailId,
 				name:data.empName,
 				itemid:data.empId,
 				billId:data.billId,
@@ -608,7 +655,7 @@
 				newEmployeeDutyName:data.dutyTypeName,
 				newEmployeeName:data.empName
 			};
-			var textName=data.empNo+"号 "+data.empName;
+			var textName=(data.empNo?(data.empNo+"号 "):'')+data.empName;
 			self.$employeeValue.val(textName).data("value",this.sendMessage);
 
 		},
@@ -872,6 +919,12 @@
 			
 			this.$billRecordContent=this.$.find(".billRecordContent");
 			this.$contentBox=this.$.find(".billRecordContent .common_tabBox");
+			this.$searchOrderWrap=this.$.find(".billRecordContent .common_tabBox .searchOrderWrap");
+			this.$scanCodeWrap=this.$.find(".billRecordContent .common_tabBox .searchOrderWrap .scanCodeWrap");
+			this.$tickeNum=this.$searchOrderWrap.find('.condition');
+			this.$keyword=this.$searchOrderWrap.find('.search_input');
+			this.$orderHighSearch=this.$.find(".orderHighSearch");
+			this.$footContent=this.$.find(".footcontent");
 			this.$watercourse=this.$.find(".billRecordContent .watercourse");
 			this.$waterResult=this.$watercourse.find(".result");
 			this.$tablebody=this.$watercourse.find(".tablebody");
@@ -942,6 +995,7 @@
 			});
 			this.$searchMask.vclick(function(){
 				self.searchHide();
+				self.orderSearchHide();
 			});
 			this.$billRecordMask.vclick(function(){
 				self.searchHide();
@@ -958,6 +1012,8 @@
 			this.$.on("vclick",".billRecordTab li",function(){
 				var idx=$(this).index();
 				$(this).addClass("selected").siblings().removeClass('selected');
+				self.$footContent.hide();
+				self.$faceTableBox.removeClass('orderTableBox');
 				if(idx==7){
 					idx = 0;
 				}
@@ -970,10 +1026,20 @@
 					self.$contentBox.eq(1).addClass('selected').siblings().removeClass('selected');
 					var $common_tableBox=self.$billRecordContent.find(".facepay .common_tableBox");
 					$common_tableBox.removeClass("selected").eq(0).addClass('selected');
+					self.$contentBox.find(".searchOrderWrap").hide();
+					self.$contentBox.find(".search_box").show();
 					if(idx==1){
 						self.$contentBox.find(".search_box .tips").show();
 					}else{
 						self.$contentBox.find(".search_box .tips").hide();
+					}
+					if (idx==3){
+						self.$faceTableBox.addClass('orderTableBox');
+						self.$contentBox.find(".search_box").hide();
+						self.$contentBox.find(".searchOrderWrap").show();
+						self.$tickeNum.val("");
+						self.$keyword.val("");
+						self.$.find(".searchOrderWrap .inputbox_icon").trigger("vclick");
 					}
 					if(idx==4||idx==5){
 						self.$verificationBox.show().find('.verification_input').val("");
@@ -1058,8 +1124,99 @@
 						self.Select[i].hide(true);
 					}
 				}
+				for(var i in self.mallSelect){
+					if(!self.mallSelect[i].$listbox.hasClass('disabled')){
+						self.mallSelect[i].hide(true);
+					}
+				}
 				//关闭修改删除弹层
 				self.$.find('.tdedit ul').hide();
+				self.$.find('.consumeTip').hide();
+				self.$scanCodeWrap.hide();
+				self.$tickeNum.val("");
+			}).on('vclick','.treatPackageName',function(){
+				console.log($(this));
+				var data = $(this).parents('tr').data('item');
+				if(data){
+					if(!(am.isNull(data.itemNo) && data.treatmentitemId && data.treatmentitemId>-1)){
+						return;
+					}
+					var opt={
+						"shopId":am.metadata.userInfo.shopId,
+						"billId":data.billId,
+						"billDetailId":data.id
+					}
+					self.getTreatPackageDetail(opt,function(list){
+						am.treatPackageDetail.show(list)
+					})
+				}
+			});
+			this.$consumeTip = this.$.find('.consumeTip').vclick(function(){
+        		$(this).hide();
+			});
+			
+			this.$consumeTipText = this.$consumeTip.find('.text');
+			this.$.on("vclick", ".more", function (e) {
+				e.stopPropagation();
+				var w = $(this).width(),
+				t = $(this).offset().top,
+				l = $(this).offset().left,
+				text = $(this).find('.tdwrap').html();
+				self.$consumeTipText.html(text)
+				self.$consumeTip.css({
+					'bottom': $('body').height() - t - 4 + 'px',
+					'right': $('body').width() - l - w + 'px'
+				});
+				self.$consumeTip.show();
+			});
+			this.$.find(".searchOrderWrap").on("vclick", ".toggleBtn", function () {
+				$.am.changePage(am.page.verifyRecord, "slideup");
+			}).on("vclick", ".scanCodeBtn", function () {
+				self.$scanCodeWrap.show();
+				self.$tickeNum.focus();
+			}).on("vclick", ".highSearchBtn", function () {
+				self.$scanCodeWrap.hide();
+				self.$tickeNum.val("");
+				self.orderSearchOpen();
+			}).on("vclick", ".inputbox_icon", function () {
+				self.countPerPage = 0;
+				self.highSearchFlag = false;
+				self.keyWordSearch(self.renderMallCallback);
+				self.$footContent.show();
+			}).on("vclick", function (e) {
+				e.stopPropagation();
+			});
+			this.$tickeNum.keyup(function (e) {//查询
+				if (e.keyCode == 13) {
+					self.toOrderDetail();
+				}
+				return false;
+			});	
+			this.$keyword.keyup(function (e) {//查询
+				if (e.keyCode == 13) {
+					self.$.find(".searchOrderWrap .inputbox_icon").trigger("vclick");
+				}
+				return false;
+			});	
+			this.$scanCodeWrap.vclick(function(e){
+				e.stopPropagation();
+			});
+			this.$scanCodeWrap.find(".scan").vclick(function(){
+				if(typeof(cordova)=='undefined'){
+					return;
+				}
+				cordova.plugins.barcodeScanner.scan(function(result) {
+					// $.am.debug.log("We got a barcode\n" + "Result: " + result.text + "\n" + "Format: " + result.format + "\n" + "Cancelled: " + result.cancelled);
+					if(result && result.text){
+						self.$tickeNum.val(result.text);
+						self.toOrderDetail();
+					}
+				}, function(error) {
+					amGloble.msg(error);
+				});
+			});
+			this.$scanCodeWrap.find(".scanCodeSearch").vclick(function(){
+				self.toOrderDetail();
 			});
 			// 核销按钮
 			this.$verificationBox=self.$billRecordContent.find('.verification_box').on('vclick','.verification_btn',function(){
@@ -1079,20 +1236,26 @@
 				}
 			});
 			this.$.find(".billRecordContent .header").on("vclick",".dateInput .pre",function(){
-				var ts = self.addTime(false);
-				var min = new Date();
-				min.setHours(0);
-				min.setMinutes(0);
-				min.setSeconds(0);
-				min.setMilliseconds(0);
-				if(min.setDate(min.getDate()-self.limitDays) > ts.getTime()){
-					return;
+				var value= self.$waterInput.val();
+				var ts = amGloble.now();
+				var user = amGloble.metadata.userInfo;
+				if(user.userType==0 && user.role==3){
+					//老板看一年
+					ts.setYear(ts.getFullYear()-1);
+				}else if(user.userType==0 && user.role==2){
+					//管理员看6个月
+					ts.setMonth(ts.getMonth()-6);
+				}else {
+					//操作员看2天
+					ts.setDate(ts.getDate()-1);
 				}
-				self.$waterInput.val(ts.format('yyyy/mm/dd'));
+				if (new Date(value).getTime() < new Date(ts).getTime()) return;
+
+				self.$waterInput.val(self.addTime(false));
 			}).on("vclick",".next",function(){
 				var val=self.$waterInput.val();
 				if(new Date(val).getTime()>=new Date().getTime()-86400000) return;
-				self.$waterInput.val(self.addTime(true).format('yyyy/mm/dd'));
+				self.$waterInput.val(self.addTime(true));
 			}).on("vclick",".btnOk",function(){
 				if(self.$header.hasClass('on')){  // 点击查询将页面初始化为最初状态 否则修改页面数据及排序不影响原来排序结果
 					// 搜索条件初始化 排序箭头初始化
@@ -1125,6 +1288,13 @@
 				    }
 				});
 			});
+			this.$.find(".facepay").on("vclick",".orderHighSearch .btnOk",function(){
+				self.countPerPage = 0;
+				self.highSearchFlag = true;
+				self.$footContent.show();
+				self.rendercommonReports();
+				self.orderSearchHide();
+			})
 			this.$.find(".facepay").on("vclick",".search_box .btnOk",function(){
 				self.rendercommonReports();
 			}).on("vclick",".refund",function(){
@@ -1207,6 +1377,11 @@
 					'left': l-(self.$introDetailText.outerWidth()-w)/2+'px'
 				});
 					
+			}).on("vclick",".table-content-list .orderDetails",function(){
+				var $this = $(this);
+				var $tr = $this.parents("tr");
+				var data = $tr.data("item");
+				self.getOrderInfo(data.code,1);		
 			});
 			this.$watercourse.on("vclick",".result .detail",function(){
 				// if(self.$watercourse.hasClass('showmoreresult')){
@@ -1221,6 +1396,7 @@
 				$('#tab_main ul p.h').parent('li').trigger('vclick');
 			}).on("vclick",".table-content-list .projectName a.editItem",function(){
 				var childtrItem=$(this).parents(".childtr").data("item");
+				if( self.refundCardFlag(childtrItem) ) return;
 				if( !self.auditingFlag(childtrItem) ) return;
 				if( !self.modifyPermissions() ) return;
 				if( !self.timePermissions($(this)) ) return;
@@ -1240,17 +1416,21 @@
 					self.updateId = _this.parents('.childtr').data('item').id;//记录当前修改的id
 					self.updateWater("1",data,function(res){
 						_this.text(data.newName);
+						var depName = self.getDepName(depDate.newVal);
 						var newVal=$.extend({},item,{
 							itemName:data.newName,
 							itemNo:data.newVal,
+							depcode:depDate.newVal,
+							depName:depName
 						});
 						_this.parent(".projectName").data("item",newVal);
 						if(depDate.newVal==depDate.oldVal){
-							self.$.find(".btnOk").trigger('vclick');
+							// self.$.find(".btnOk").trigger('vclick');
 						}else {
 							//修改项目更新部门
 							self.upd(5,depDate,function(){
-								self.$.find(".btnOk").trigger('vclick');
+								_this.parent(".projectName").find('.editDep').text(depName);
+								// self.$.find(".btnOk").trigger('vclick');
 							});
 						}
 						
@@ -1258,6 +1438,7 @@
 				});
 			}).on("vclick",".table-content-list .projectName a.editDep",function(){
 				var childtrItem=$(this).parents(".childtr").data("item");
+				if( self.refundCardFlag(childtrItem) ) return;
 				if( !self.auditingFlag(childtrItem) ) return;
 				if( !self.modifyPermissions() ) return;
 				if( !self.timePermissions($(this)) ) return;
@@ -1271,43 +1452,58 @@
 						return;
 					}
 					self.upd(5,data,function(){
-						self.$.find(".btnOk").trigger('vclick');
+						// self.$.find(".btnOk").trigger('vclick');
+						_this.text(data.newName);
+						item.depcode = data.newVal;
+						item.depName = data.newName;
 					});
 				});
 			}).on("vclick",".table-content-list .changeEmployee a",function(){
 				var childtrItem=$(this).parents(".childtr").data("item");
+				if( self.refundCardFlag(childtrItem) ) return;
 				if( !self.auditingFlag(childtrItem) ) return;
 				if( !self.modifyPermissions() ) return;
 				if( !self.timePermissions($(this)) ) return;
 
 				var idx=$(this).parents("tr").index();
 				var item=$(this).parents("tbody").data("item");
+				if( self.refundCardFlag(item) ) return;
 				if( !self.auditingFlag(item) ) return;
-				var sendData=$.extend(item["empList"]?item["empList"][idx]:{},item["other"]);
+				var sendData=$.extend(item["empList"]?item["empList"][idx]:{},am.clone(item["other"]));
 				var _this=$(this);
 				console.log(sendData);
 				$.am.selectEmployee.show("修改员工",2,sendData,function(data){
 					self.updateId = _this.parents('.childtr').data('item').id;//记录当前修改的id
 					self.updateWater("2",data,function(res){
 
-						// console.log(data);
-						// _this.text(data.newEmployeeNo+"号"+data.newEmployeeDutyName+"("+data.newEmployeeName+")");
-						// item["other"]=$.extend({},item["empList"][idx],{
-						// 	dutyTypeName:data.newEmployeeDutyName,
-						// 	empNo:data.newEmployeeNo,
-						// 	empName:data.newEmployeeName
-						// });
-						// _this.parents("tbody").data("item",item);
+						console.log(data);
+						if(data.newEmployeeNo){
+							_this.text(data.newEmployeeNo+"号"+data.newEmployeeDutyName+"("+data.newEmployeeName+")");
+						}else {
+							_this.text("("+data.newEmployeeName+")");
+						}
+						var newEmpData = {
+							dutyType: data.newEmployeeDutyType,
+							dutyTypeName:data.newEmployeeDutyName,
+							empId: data.itemid,
+							empName:data.newEmployeeName,
+							empNo:data.newEmployeeNo
+							
+						}
+						item["empList"][idx] = $.extend(item["empList"][idx],newEmpData)
+						_this.parents("tbody").data("item",item);
 
-						self.$.find(".btnOk").trigger('vclick');
+						// self.$.find(".btnOk").trigger('vclick');
 					});
 				});
 			}).on("vclick",".consumetime",function(ev){
 				ev.stopPropagation();
 				var item = $(this).parents('tr').data('item');
+				if( self.refundCardFlag(item) ) return am.msg("会员卡退卡中，无法进行此操作");
 				if( !self.auditingFlag(item) ) return am.msg("已对单不能修改");
 				if( !self.modifyDatePermissions() ) return;
 				if( !self.timePermissions($(this)) ) return;
+				self.updComsumeTime($(this),item);
 			}).on("vclick",".addcustomer",function(ev){
 				ev.stopPropagation();
 				var _item = $(this).parents('tr').data('item');
@@ -1334,7 +1530,7 @@
 				if(relateBillInfo && relateBillInfo.cashList && relateBillInfo.cashList.length){
 					var cashList=relateBillInfo.cashList;
 					var facePayMap={};
-					// 微信1  支付宝2 银联6 京东钱包7
+					// 微信1  支付宝2 银联6 京东支付7
 					for(var i=0,len=cashList.length;i<len;i++){
 						var cashItem=cashList[i];
 						if(cashItem.weixin>0){
@@ -1382,6 +1578,9 @@
 
 			}).on("vclick",".table-content-list .revoke",function(ev){
 				ev.stopPropagation();
+				if ($(this).hasClass("refundCard")) {
+					return am.msg("会员卡退卡流水单，不可撤销");
+				}
 				if($(this).hasClass("disabled")) return;
 
 				// if( !self.modifyPermissions() ) return;
@@ -1395,16 +1594,53 @@
 
 				var _this=$(this);
 				var item=$(this).parents('.childtr').prev('.basictr').data("item");
-				var reason = JSON.parse(am.metadata.configs.cancleBilled);
+				var reason = JSON.parse(am.metadata.configs.revokeBillRemarks || []);// 门店删单理由
+				var hqReason = [];
+				if(!(reason && reason.length)){
+					// 如果门店未配置删单理由则再取总部的配置
+					hqReason = JSON.parse(am.metadata.configs.cancleBilled);
+				}
+				var revokeRemarks = (reason && reason.length ? reason : hqReason) || [];
 				am.selectCancleReason.show({
 					title: '请选择撤单理由',
 					warn: '警告:请选择或输入明确的撤单理由，以便财务和管理层审核',
-					reason: reason,
+					reason: revokeRemarks,
+					type:2,// 撤单
 					callback: function(str){
 						self.cancelProject(item,str,function(res){
 							//_this.find("b").text("已销单");
 							self.$.find(".btnOk").trigger('vclick');
 							self.checkIsbilRemark(item);
+						});
+					},
+					saveToRemarkList:function(val){
+						var saveReason=[];
+						if(!am.isNull(reason) && reason.indexOf(val)>-1){
+							// 常用已包含
+							am.msg(val+'已存在，请修改后再保存');
+							return;
+						}else if(!am.isNull(reason) && reason.indexOf(val)==-1){
+							// 常用未包含
+							saveReason = reason.concat([val]);
+						}else if(am.isNull(reason)){
+							// 没有常用
+							saveReason = [val];
+						}
+						am.loading.show();
+						am.api.saveNormalConfig.exec({
+							parentshopid: am.metadata.userInfo.parentShopId+'', 
+							configkey: 'revokeBillRemarks',
+							configvalue: JSON.stringify(saveReason),
+							shopid: am.metadata.userInfo.shopId+'',
+							setModuleid: 15
+						},function(ret){
+							am.loading.hide();
+							if(ret && ret.code==0){
+							   am.metadata.configs.revokeBillRemarks=JSON.stringify(saveReason);
+							   am.msg('【'+val+'】'+'已保存为常用撤单理由')
+							}else {
+								am.msg('保存失败');
+							}
 						});
 					}
 				});
@@ -1422,12 +1658,14 @@
 					shopId: am.metadata.userInfo.shopId,
 					parentShopId: am.metadata.userInfo.parentShopId,
 					billId: item.id,
+					parentId: am.metadata.userInfo.realParentShopId
 				},
 				userToken=JSON.parse(localStorage.getItem("userToken")),
 				url=config.calcServerUrl+'/empFee/billCalc' + "?" + $.param({
 					shopId:userToken? userToken.shopId : null,
                     parentShopId: userToken? userToken.parentShopId : null,
 					token:userToken ? userToken.mgjtouchtoken : null,
+					parentId: am.metadata.userInfo.realParentShopId
                 });
 				am.loading.show("正在获取数据,请稍候...");
 				$.ajax({
@@ -1459,13 +1697,15 @@
 					shopid:am.metadata.userInfo.shopId,
 					parentShopId:am.metadata.userInfo.parentShopId,
 					billid:item.id,
-					recalculation: true
+					recalculation: true,
+					parentId: am.metadata.userInfo.realParentShopId
 				},
 				userToken=JSON.parse(localStorage.getItem("userToken")),
 				url=config.calcServerUrl+'/empGain/billCalc' + "?" + $.param({
 					shopId:userToken? userToken.shopId : null,
                     parentShopId: userToken? userToken.parentShopId : null,
 					token:userToken ? userToken.mgjtouchtoken : null,
+					parentId: am.metadata.userInfo.realParentShopId
                 });
 				am.loading.show("正在获取数据,请稍候...");
 				$.ajax({
@@ -1514,6 +1754,16 @@
 	                }
 	            );
 			}).on('vclick','tr.basictr',function(){	//展开隐藏
+				if(!$(this).next().hasClass('childtr')){
+					var item = $(this).data('item');
+					var _totleFee = $(this).data('_totleFee');
+					var $monetary = $(this).data('$monetary');
+					var $monetary2 = $(this).data('$monetary2');
+					var paymentmethodArr = $(this).data('paymentmethodArr');
+					var containedFacePay = $(this).data('containedFacePay');
+					var $childtr = self.getChildTr(item,_totleFee,$monetary,$monetary2,paymentmethodArr,containedFacePay);
+					$(this).after($childtr);
+				}
 				var btn = $(this).find('td').eq(0).hasClass('on');
 				var $nexttr = $(this).next();
 				if(btn){	//隐藏操作
@@ -1535,6 +1785,7 @@
 				ev.stopPropagation();
 				self.$.find('.tdedit ul').hide();
 				var item=$(this).parents(".childtr").data("item");
+				if( self.refundCardFlag(item) ) return;
 				if( !self.auditingFlag(item) ) return;
 				if( !self.modifyPermissions() ) return;
 				if( !self.timePermissions($(this)) ) return;
@@ -1549,13 +1800,14 @@
 				var _this = $(this);
 				var billFeeStr = _this.parents('.col3').prev().find('dt p').html();
 				$.am.selectEmployee.billFee = billFeeStr.substring(1,billFeeStr.length);
+				var childtritem = $(this).parents('.childtr').data('item');
 				console.log($.am.selectEmployee.billFee)
 				if(_index == 0){
 					//修改
 					$(this).parent().hide();
 					var idx=$(this).parents("tr").index();
 					var item=$(this).parents("tbody").data("item");
-					var sendData=$.extend(item["empList"]?item["empList"][idx]:{},item["other"]);
+					var sendData=$.extend(item["empList"]?item["empList"][idx]:{},am.clone(item["other"]));
 					sendData.commissionType = $(this).parents('.childtr').data('item').type;
 					var _this=$(this);
 					console.log(sendData);
@@ -1569,7 +1821,20 @@
 						console.log(data);
 						self.updateId = _this.parents('.childtr').data('item').id;//记录当前修改的id
 						self.updateWater("3",data,function(res){
-							self.$.find(".btnOk").trigger('vclick');
+							self.updateWaterCallback(data,function(){
+								var newEmpFee = {
+									automatic: data.automatic,
+									cardfee: data.cardfee,
+									cashfee: data.cashfee,
+									otherfee: data.otherfee,
+									fee: data.fee,
+									gain: data.gain,
+									pointFlag: data.pointFlag
+								}
+								item["empList"][idx] = $.extend(item["empList"][idx],newEmpFee)
+								_this.parents("tbody").data("item",item);
+								_this.parents("tr").eq(0).html(self.getEmpTrInnerHTML(item["empList"][idx],childtritem.type,childtritem.consumeType));
+							});
 						});
 					},true);
 				}else if(_index == 1){
@@ -1577,14 +1842,18 @@
 					$(this).parent().hide();
 					var idx=$(this).parents("tr").index();
 					var item=$(this).parents("tbody").data("item");
-					var sendData=$.extend(item["empList"]?item["empList"][idx]:{},item["other"]);
+					var sendData=$.extend(item["empList"]?item["empList"][idx]:{},am.clone(item["other"]));
 					sendData.commissionType = $(this).parents('.childtr').data('item').type;
 					var _this=$(this);
 					console.log(sendData);
 					self.updateId = $(this).parents('.childtr').data('item').id;//记录当前修改的id
 					sendData.subId = sendData.id;
 					self.updateWater("5",sendData,function(res){
-						self.$.find(".btnOk").trigger('vclick');
+						item["empList"].splice(idx,1);
+						_this.parents("tr").eq(0).remove();
+						_this.parents("tbody").data("item",item);
+						self.watercourseScroll.refresh();
+						// self.$.find(".btnOk").trigger('vclick');
 					});
 				}
 			}).on('vclick','.table-content-list .addcust div',function(){
@@ -1613,12 +1882,40 @@
 					item.id = detailtritem.id;
 					item.billtype = detailtritem.type;
 					item.itemNo = detailtritem.itemNo;
+					item.salePrice = detailtritem.price;
 				}
 				$.am.selectEmployee.show("添加员工",3,item,function(data){
 					console.log(data);
+					data.voidFee = item.salePrice;
 					self.updateId = _this.parents('.childtr').data('item').id;//记录当前修改的id
 					self.updateWater("4",data,function(res){
-						self.$.find(".btnOk").trigger('vclick');
+						self.updateWaterCallback(data,function(){
+							if(res.content && res.content.subId){
+								var newEmp = {
+									billId: data.billId,
+									detailId: data.detailId,
+									automatic: data.automatic,
+									cardfee: data.cardfee,
+									cashfee: data.cashfee,
+									otherfee: data.otherfee,
+									fee: data.fee,
+									gain: data.gain,
+									pointFlag: data.pointFlag,
+									empId: data.itemid,
+									empName: data.newName,
+									empNo: data.newEmployeeNo,
+									dutyTypeName: data.newEmployeeDutyName,
+									dutyType: data.newEmployeeDutyType,
+									id: res.content.subId
+								}
+								item["empList"].push(newEmp);
+								_this.parents('.addcustTr').before($('<tr>'+self.getEmpTrInnerHTML(newEmp,childtritem.type,childtritem.consumeType)+'</tr>'));
+								_this.parents("tbody").data("item",item);
+								self.watercourseScroll.refresh();
+							}else {
+								self.$.find(".btnOk").trigger('vclick');
+							}
+						});
 					});
 				},true);
 			}).on("vclick",".signature",function(){
@@ -1641,9 +1938,11 @@
 				});
 			}).on('vclick','.billnoBox a',function(e){
 				e.stopPropagation();
+				var $that=$(this);
 				if( !self.modifyPermissions() ) return;
 				if( !self.timePermissions($(this)) ) return;
 				var item = $(this).parents('tr').data('item');
+				if( self.refundCardFlag(item) ) return;
 				if( !self.auditingFlag(item) ) return;
 				var oldVal = $(this).html();
 				item.oldVal = oldVal;
@@ -1655,7 +1954,8 @@
 						if(!value) return;
 						item.newVal = value;
 						self.upd(0,item,function(){
-							self.$.find(".btnOk").trigger('vclick');
+							// self.$.find(".btnOk").trigger('vclick');
+							$that.text(value);
 						});
                     },
                     hidecb: function() {}
@@ -1666,6 +1966,7 @@
 				if( !self.modifyPermissions() ) return;
 				if( !self.timePermissions($(this)) ) return;
 				var item = $(this).parents('tr').data('item');
+				if( self.refundCardFlag(item) ) return;
 				if( !self.auditingFlag(item) ) return;
 				var _this = $(this);
 				var oldClient = _this.html(),
@@ -1681,6 +1982,7 @@
 				if( !self.modifyPermissions() ) return;
 				if( !self.timePermissions($(this)) ) return;
 				var item = $(this).parents('tr').data('item');
+				if( self.refundCardFlag(item) ) return;
 				if( !self.auditingFlag(item) ) return;
 				var _this = $(this);
 				var oldSex = _this.html(),
@@ -1725,11 +2027,27 @@
 			// 		self.rendercommonReports();
 			// 	}
 			// });
+			this.countPerPage = 0;
+			this.pager=new $.am.Paging({
+				$:self.$.find(".footcontent"),
+				showNum: 12,//每页显示的条数
+				total:12,//总数
+				action:function(_this,index){
+					if(self.countPerPage==index) return;
+					self.countPerPage=index;
+					if(self.highSearchFlag){
+						self.rendercommonReports();
+					}else{
+						self.keyWordSearch(self.renderMallCallback)
+					}
+				}
+			});
 			this.facepayScroll = new $.am.ScrollView({
 			    $wrap : this.$.find(".facepay .table-content-list"),
 			    $inner : this.$.find(".facepay .table-content-list table"),
 			    direction : [false, true],
-			    hasInput: false
+				hasInput: false,
+				bubble: true
 
 			});
 			this.watercourseScroll = new $.am.ScrollView({
@@ -1737,6 +2055,7 @@
 			    $inner : this.$.find(".watercourse .table-content-list table"),
 			    direction : [false, true],
 			    hasInput: false,
+				bubble: true,
 			    touchTopcallback:function(){
 			    	self.render(true);
 			    },
@@ -1762,6 +2081,20 @@
 			    }
 			}).mobiscroll('getInst');
 			*/
+			this.mallSelectData={
+				saleCategory_form:[
+				{"name":"全部类别","value":null},
+				{"name":"服务类","value":"1"},
+				{"name":"商品类","value":"2"}],
+				saleStatus_form:[
+				{"name":"有效状态","value":null},
+				{"name":"未使用","value":"2"},
+				{"name":"已使用","value":"3"},
+				{"name":"已退款","value":"-2"},
+				{"name":"退款失败","value":"-3"}
+				]
+			};
+			this.mallSetSelect(this.mallSelectData);
 			
 			this.selectData={
 				depcodeselect_form:[{"name":"全部","value":""},{"name":"美发部1","value":1},{"name":"美容部2","value":2}],
@@ -1787,14 +2120,16 @@
 				{"name":"微信支付","value":8},
 				{"name":"支付宝","value":9},
 				{"name":"代金券","value":10},
-				{"name":"积分","value":11},
-
+				{"name":"线上积分","value":11},
+				{"name":"线下积分","value":19},	
 				{"name":"大众点评","value":12},
 				{"name":"欠款","value":13},
 				{"name":"免单","value":14},
 				{"name":"红包","value":15},
 				{"name":"优惠券","value":16},
-				{"name":"自定义","value":17}],
+				{"name":"自定义","value":17},
+				{"name":"商城订单","value":18}
+				],
 				acrossselect_form:[{"name":"全部","value":0},{"name":"跨店","value":1}],
 				operatorselect_form:[{"name":"全部","value":0},{"name":"一店","value":1}],
 				serverselect_form:[{'name':'1234张三','value':''}],
@@ -1899,6 +2234,15 @@
 			}
 			return name || '部门：无';
 		},
+		// 退卡审核中
+		refundCardFlag: function(item) {
+			if (am.isNull(item.jsonstr)) return false;
+			var jsonstr = JSON.parse(item.jsonstr);
+			if(jsonstr && jsonstr.refundFlag){
+				return true;
+			}
+			return false;
+		},
 		auditingFlag: function(item){
 			if(!item.auditingFlag || (item.auditingFlag == 1 && am.operateArr.indexOf('F') > -1)){
 				return true;
@@ -1961,6 +2305,14 @@
 			this.$billRecordMask.hide();
 			this.$searchMask.hide();
 		},
+		orderSearchOpen: function(){
+			this.$orderHighSearch.addClass('on');
+			this.$searchMask.show();
+		},
+		orderSearchHide: function(){
+			this.$orderHighSearch.removeClass('on');
+			this.$searchMask.hide();
+		},
 		hideRelatePay:function(){
 			this.$relatePay.removeClass('on');
 			this.$payMask.hide();
@@ -1994,12 +2346,17 @@
 					var data=res.content;
 				}
 				if(data && data.length){
-					self.renderTableHeader(idx+1);
-					self[renderList[idx]](res.content);
-					// self.pager.refresh(res.pageIndex,res.totalCount);
 					self.$billRecordContent.removeClass('empty error normal');
+					self.renderTableHeader(idx+1);
+					if(idx==1){
+						self[renderList[idx]](res);
+					}else{
+						self[renderList[idx]](res.content);
+					}
+					// self.pager.refresh(res.pageIndex,res.totalCount);
 				}else{
 					self.$billRecordContent.removeClass('normal error').addClass("empty");
+					self.$footContent.hide();
 				}
 
 			});
@@ -2023,10 +2380,11 @@
 			self.facepayScroll.refresh();
 			self.facepayScroll.scrollTo("top");
 		},
-		renderMallReport:function(data){
+		renderMallReport:function(res){
+			var data = res.content;
 			for(var i=0;i<data.length;i++){
 				var item=data[i];
-				var classStyle=(item.status==4?"MGJ_highlight":"");
+				// var classStyle=(item.status==4?"MGJ_highlight":"");
 				var payName = ["微信","支付宝","免费领取","会员卡支付"];
 
 				var luckyMoneyPay = "";
@@ -2039,19 +2397,47 @@
 				}else if(item.cashPay){
 					payText = payName[item.payType]+':<span class="MGJ_highlight">'+item.cashPay+'</span>';
 				}
-				var $html=$('<tr class='+classStyle+'>'+
-				'<td style="width:12%"><div class="tdwrap">'+item.code+'</div></td>'+
-				'<td style="width:15%"><div class="tdwrap">'+item.mallItemName+'</div></td>'+
-				'<td style="width:8%"><div class="tdwrap">'+item.price+'</div></td>'+
-				'<td style="width:10%"><div class="tdwrap">'+(payText+luckyMoneyPay)+'</div></td>'+
+				var statusHtml = '';
+				var tuanStatus = {
+            		"1":"团购中",
+                    "2":"已成团,可使用",
+                    "3":"等待退款",
+            	}
+				if (item.status == "2" && item.isgroupbuying == 1) {
+					if (item.refundTimes > 10 && item.groupbuyingstatus != 4) {
+						statusHtml = '<td style="width:11%"><div class="tdwrap red">退款失败,到期未成团</div></td>'
+					} else if(item.groupbuyingstatus == 4) {
+						statusHtml = '<td style="width:11%"><div class="tdwrap red">已退款</div></td>'
+					}else {
+						statusHtml = '<td style="width:11%"><div class="tdwrap green">' + tuanStatus[item.groupbuyingstatus] + '</div></td>'
+					}
+				} else if (item.status == "2" && item.isgroupbuying != 1) {
+					statusHtml = '<td style="width:11%"><div class="tdwrap green">未使用</div></td>'
+				} else if (item.status == "-2") {
+					statusHtml = '<td style="width:11%"><div class="tdwrap red">已退款</div></td>'
+				} else if (item.status == "-3") {
+					statusHtml = '<td style="width:11%"><div class="tdwrap red">退款失败</div></td>'
+				} else {
+					statusHtml = '<td style="width:11%"><div class="tdwrap">已使用</div></td>'
+				};
+				// var $html=$('<tr class='+classStyle+'>'+
+				var $html=$('<tr>'+
+				'<td style="width:14%"><div class="tdwrap">'+item.mallItemName+'</div></td>'+
+				'<td style="width:8%"><div class="tdwrap">'+(item.category==1?"服务类":"商品类")+'</div></td>'+
 				'<td style="width:10%"><div class="tdwrap">'+item.memName+'</div></td>'+
-				'<td style="width:10%"><div class="tdwrap">'+(item.status==3?"已使用":"待再次核销")+'</div></td>'+
-				'<td style="width:10%"><div class="tdwrap">'+(item.displayId || "")+'</div></td>'+
-				'<td style="width:15%"><div class="tdwrap">'+(new Date(item.consumeTime*1).format("yyyy/mm/dd HH:MM"))+'</div></td>'+
-				'<td style="width:10%"><div class="tdwrap">'+(item.operatorName || item.memName || '--')+'</div></td>'+
+				'<td style="width:11%"><div class="tdwrap">'+(item.memMobile || "")+'</div></td>'+
+				'<td style="width:12%"><div class="tdwrap">'+item.memShop+'</div></td>'+
+				'<td style="width:8%"><div class="tdwrap">'+item.mallItemNum+'</div></td>'+
+				'<td style="width:8%"><div class="tdwrap red">'+("￥"+item.cashPay)+'</div></td>'+
+				'<td style="width:10%"><div class="tdwrap">'+(new Date(item.createTime*1).format("yyyy/mm/dd"))+'</div></td>'+
+				statusHtml+
+				'<td style="width:8%"><div class="tdwrap operate">'+
+					'<span class="orderDetails am-clickable">详情</span>'+
+	            '</div></td>'+
 				'</tr>').data("item",item);
 				self.$faceTable.append($html);
 			}
+			self.pager.refresh(self.countPerPage,res.count);
 			self.facepayScroll.refresh();
 			self.facepayScroll.scrollTo("top");
 		},
@@ -2103,11 +2489,16 @@
 				var $html=$('<tr>'+
 				'<td style="width:12%"><div class="tdwrap">'+(item.displayId || "")+'</div></td>'+
 				'<td style="width:10%"><div class="tdwrap">'+(item.name || "散客")+mobile+'</div></td>'+
-				'<td style="width:50%"><div class="tdwrap">'+('支付宝：'+(item.pay).toFixed(2)+'　微信：'+(item.weixin).toFixed(2) + '　点评：' + (item.mall).toFixed(2) +'　消费金额：'+(item.eafee).toFixed(2))+'</div></td>'+
+				'<td style="width:50%" class="moreflag"><div class="tdwrap">'+('支付宝：'+(item.pay).toFixed(2)+'　微信：'+(item.weixin).toFixed(2) + '　点评：' + (item.mall).toFixed(2) +'　银联：' + (item.unionPay).toFixed(2) +'　京东：' + (item.jdPay).toFixed(2) +'　消费金额：'+(item.consumefee).toFixed(2))+'</div></td>'+
 				'<td style="width:18%"><div class="tdwrap">'+item.consumetime+'</div></td>'+
 				'<td style="width:10%"><div class="tdwrap">'+item.operatiorid+'</div></td>'+
 				'</tr>').data("item",item);
 				self.$faceTable.append($html);
+				if ($html.find(".moreflag .tdwrap")[0].offsetWidth < $html.find(".moreflag .tdwrap")[0].scrollWidth) {
+					$html.find(".moreflag").addClass("more am-clickable");
+				} else {
+					$html.find(".moreflag").removeClass("more am-clickable");
+				}
 			}
 			self.facepayScroll.refresh();
 			self.facepayScroll.scrollTo("top");
@@ -2119,6 +2510,46 @@
 				month:nowTime.getMonth()+1,
 				day:nowTime.getDate()
 			}
+		},
+		toOrderDetail: function () {
+			var val = self.$tickeNum.val().replace(/[\s\r\n\\\/\'\"\‘\’\“\”]/g, '');
+			self.$tickeNum.val(val)
+			if (self.checkCode(val)) {
+				self.getOrderInfo(val);
+			} else {
+				am.msg('请输入正确的券号!');
+			}
+		},
+		checkCode:function(num){
+			var reg = /^[0-9]*$/;//^\d{m,n}$
+			if(reg.test(num.toString().replace(/\s/g,''))&&num.toString()){
+				return true;
+			}else{
+				return false;
+			}
+		},
+		getOrderInfo : function(num,hideflag){
+			var opt={
+				"code":num
+			};
+			am.loading.show("正在获取,请稍候...");
+			am.api.queryOrder.exec(opt, function (res) {
+				am.loading.hide();
+				if (res.code == 0 && res.content) {
+					if(res.content){
+						if(hideflag&&hideflag==1){
+							res.content.hideflag = hideflag;
+							$.am.changePage(am.page.mallOrderDetail,"slideup",res.content);
+						}else{
+							$.am.changePage(am.page.mallOrderDetail,"slideup",res.content)
+						}
+					}
+				} else if(res.code == 0 && !res.content){
+					am.msg('请输入准确的券号!');
+				}else{
+					am.msg(res.message || "数据获取失败,请检查网络!");
+				}
+			});
 		},
 		createPicker:function(){
 			/*var now = am.now();
@@ -2172,6 +2603,24 @@
 			var e=new Date(s1.format("yyyy/mm/dd")+" 23:59:59").getTime();
 			return s+"_"+e;
 		},
+		getOrderTime: function(){
+			var sd = new Date(self.$orderHighSearch.find(".startTime_form .startTime").val());
+			var ed = new Date(self.$orderHighSearch.find(".endTime_form .endTime").val());
+			var st = new Date(sd.format("yyyy-mm-dd")+" 00:00:00").getTime();
+			var et = new Date(ed.format("yyyy-mm-dd")+" 23:59:59").getTime();
+			return st+"_"+et;
+		},
+		renderMallCallback:function (res) {
+			self.$faceTable.empty();
+			if (res.content && res.content.length) {
+				self.$billRecordContent.removeClass('empty error normal');
+				self.renderTableHeader(2);
+				self.renderMallReport(res);
+			} else {
+				self.$billRecordContent.removeClass('normal error').addClass("empty");
+				self.$footContent.hide();
+			}
+		},
 		renderDate:function(){
 			var range = this.$datePicker.mobiscroll('getVal');
 			var $datePicker = this.$datePicker;
@@ -2185,17 +2634,17 @@
 		addTime:function(flag){
 			var value=this.$waterInput.val();
 			var d=new Date(value).getTime();
-			if(flag){
-				var n=new Date(d+86400000);
-			}else{
-				var n=new Date(d-86400000);
+			if (flag) {
+				var n = new Date(d + 86400000).format('yyyy/mm/dd');
+			} else {
+				var n = new Date(d - 86400000).format('yyyy/mm/dd');
 			}
 			return n;
 		},
 		renderTableHeader:function(idx){
 			var headlist=[[{key:"类型",value:"8%"},{key:"交易号",value:"15%"},{key:"金额",value:"8%"},{key:"时间",value:"15%"},{key:"收款类型",value:"8%"},{key:"流水单号",value:"11%"},{key:"核销金额",value:"8%"},{key:"备注",value:"8%"},{key:"状态",value:"7%"},{key:"操作",value:"12%"}],
 			[{key:"活动",value:"19%"},{key:"金额",value:"20%"},{key:"客户",value:"17%"},{key:"状态",value:"10%"},{key:"流水单号",value:"14%"},{key:"使用时间",value:"20%"}],
-			[{key:"单号",value:"12%"},{key:"名称",value:"15%"},{key:"购买价",value:"8%"},{key:"支付方式",value:"10%"},{key:"客户",value:"10%"},{key:"状态",value:"10%"},{key:"流水单号",value:"10%"},{key:"兑换时间",value:"15%"},{key:"操作人",value:"10%"}],
+			[{key:"商品名称",value:"14%"},{key:"订单类型",value:"8%"},{key:"顾客",value:"10%"},{key:"手机号",value:"11%"},{key:"顾客门店",value:"12%"},{key:"数量",value:"8%"},{key:"实付金额",value:"8%"},{key:"购买时间",value:"10%"},{key:"订单状态",value:"11%"},{key:"操作",value:"8%"}],
 			[{key:"券号",value:"20%"},{key:"名称",value:"15%"},{key:"顾客手机号",value:"15%"},{key:"价格",value:"20%"},{key:"流水单号",value:"10%"},{key:"消费日期",value:"20%"}],
 			[{key:"券号",value:"20%"},{key:"名称",value:"15%"},{key:"价格",value:"20%"},{key:"流水单号",value:"25%"},{key:"消费日期",value:"20%"}],
 			[{key:"单号",value:"12%"},{key:"客户",value:"10%"},{key:"消费金额",value:"50%"},{key:"消费时间",value:"18%"},{key:"操作人",value:"10%"}]
@@ -2215,7 +2664,7 @@
 				var data=res.content;
 				self.$faceTable.empty();
 				self.renderTableHeader(0);
-				var payName = ["微信","支付宝","大众点评","银联支付","京东钱包"];//支付类型
+				var payName = ["微信","支付宝","大众点评","银联支付","京东支付"];//支付类型
 				var payType=["美管加代收","自收","收钱吧","京东聚合支付"];//收款类型
 				if(data && data.length){
 					for(var i=0;i<data.length;i++){
@@ -2344,7 +2793,7 @@
 			}, function(res) {
 			    am.loading.hide();
 			    if (res.code == 0) {
-                    var payName = ["微信","支付宝","大众点评","银联支付","京东钱包"];//支付类型
+                    var payName = ["微信","支付宝","大众点评","银联支付","京东支付"];//支付类型
                     var extMsg = ''
                     if (res.content && res.content.status) {
                         var tradeNo = data.payType == 2|| data.payType == 3 ? data.outtradeno : data.tradeno || res.content.transactionid
@@ -2402,15 +2851,20 @@
 			if(!this.limitDays){
 				var ts = amGloble.now();
 				var user = amGloble.metadata.userInfo;
-				this.limitDays=1;
 				if(user.userType==0 && user.role==3){
 					//老板看一年
-					this.limitDays=365;
+					ts.setYear(ts.getFullYear()-1);
 				}else if(user.userType==0 && user.role==2){
 					//管理员看6个月
-					this.limitDays=150;
+					ts.setMonth(ts.getMonth()-6);
+				}else {
+					//操作员看2天
+					ts.setDate(ts.getDate()-1);
 				}
-				ts.setDate(ts.getDate()-this.limitDays);
+				if([855680,1132625].indexOf(amGloble.metadata.userInfo.parentShopId)!=-1){
+					ts = null;
+				}
+				this.limitDays = 1;
 				this.calendarInstance = this.$waterInput.val(new Date().format("yyyy/mm/dd")).mobiscroll().calendar({
 				    theme: 'mobiscroll',
 				    lang: 'zh',
@@ -2425,8 +2879,34 @@
 				        console.log(valueText);
 				    }
 				});
+				this.calendarInstanceStart = this.$orderHighSearch.find(".startTime_form .startTime").val(new Date().format("yyyy-mm-dd")).mobiscroll().calendar({
+					theme: 'mobiscroll',
+					lang: 'zh',
+					display: 'bottom',
+					months: "auto",
+					min:ts,
+					dateFormat: 'yy-mm-dd',
+					max: amGloble.now(),
+					setOnDayTap: true,
+					endYear: amGloble.now().getFullYear()+50,
+				});
+				this.calendarInstanceEnd = this.$orderHighSearch.find(".endTime_form .endTime").val(new Date().format("yyyy-mm-dd")).mobiscroll().calendar({
+					theme: 'mobiscroll',
+					lang: 'zh',
+					display: 'bottom',
+					months: "auto",
+					min:ts,
+					dateFormat: 'yy-mm-dd',
+					max: amGloble.now(),
+					setOnDayTap: true,
+					endYear: amGloble.now().getFullYear()+50,
+				});
 			}
-
+			
+			this.mallSelect["saleCategory_form"].setValue(0);
+			this.mallSelect["saleStatus_form"].setValue(0);
+			this.$keyword.val("");
+			this.$tickeNum.val("");
 	        am.page.billRecord.initHeader();
 			self.$billRecordContent.removeClass('empty error').addClass("normal");
 			if(!(typeof paras == 'object' && paras.form && paras.form=='prepay')){//从收款页面跳转过来
@@ -2439,6 +2919,12 @@
 				this.$.find(".acrossSelect").show();
 			}
 			this.selectLotteryActivityConfig();
+		},
+		getCalacAjax:function(params,url,sc){
+			am.page.pay.getCalacAjax.call(this,params,url,sc);
+		},
+		getGainAndVoidFee:function(type,cb){
+			am.page.pay.getGainAndVoidFee.call(this,type,cb);
 		},
 		afterShow : function(paras) {
 			am.tab.main.show();
@@ -2482,6 +2968,19 @@
 				Select[i].hide(true);
 			}
 			this.$madal.hide();
+		},
+		getTreatPackageDetail: function (opt, cb) {
+			am.loading.show("获取中,请稍候...");
+			am.api.treatPackageDetail.exec(opt, function (ret) {
+				am.loading.hide();
+				if (ret && ret.code == 0) {
+					console.log(ret);
+					cb && cb(ret.content);
+					// am.treatPackageDetail.show(ret.content)
+				} else {
+					am.msg(ret.message || '获取失败！')
+				}
+			});
 		},
 		getoperate:function(){
 			var metaData=am.metadata;
@@ -2598,6 +3097,26 @@
 				self.$billselect_formBox.hide(200);
 			}else{
 				self.$billselect_formBox.show(200);
+			}
+		},
+		mallSetSelect: function(mallSelectData){
+			var $dom=this.$.find(".billRecordContent .orderHighSearch");
+			this.mallSelect={};
+			for(var i in mallSelectData){
+				var opt={
+					$:$dom.find("."+i),
+					startWidth:0,
+					data:mallSelectData[i],
+					key:i,
+					vclickcb:function(key){
+						for(var j in self.mallSelectData){
+							if(key != j){
+								self.mallSelect[j].hide(true);
+							}
+						}
+					}
+				};
+				this.mallSelect[i]=new $.am.Select(opt);
 			}
 		},
 		setSelect:function(selectData){
@@ -2787,7 +3306,8 @@
 				consumeTime : item.consumeTime,
 				cardType : item.cardType,
 				billingInfo : {},
-				gender:item.sex
+				gender:item.sex,
+				jsonstr: item.jsonstr
 			};
 			if(item.cashList && item.cashList.length){
 				var _cashList = item.cashList[0];
@@ -2852,7 +3372,8 @@
 							salePrice:detail.price,
 							consumeId: detail.treatmentitemId,
 							servers:[],
-							itemNo: detail.itemNo
+							itemNo: detail.itemNo,
+							originalPrice: detail.money
 						};
 						detail.consumeType==1 && (obj.isComboConsume = 1);
 						var employeeList=self.getEmployeeById(item.empList,detail.id);
@@ -2926,6 +3447,18 @@
 					}
 				}
 			}else if(item.type == 2 || item.type == 5){	//2:开卡充值,续卡充值, 5:年卡充值
+				// var jsonstr = opt.jsonstr,
+				// 	refundFlag = false;
+				// if (jsonstr) {
+				// 	jsonstr = JSON.parse(jsonstr);
+				// 	refundFlag = jsonstr.refundFlag;
+				// }
+				// if (refundFlag) {
+				// 	//退卡中不处理卡金,不显示现金
+				// 	opt.billingInfo.cashFee = 0;
+				// } else {
+				// 	opt.billingInfo.cardFee = 0;	//卡充值:统一处理为0
+				// }
 				opt.billingInfo.cardFee = 0;	//卡充值:统一处理为0
 
 				if(item.type == 2){
@@ -3129,8 +3662,9 @@
 					};
 					for(var detailIdx=0;detailIdx<item.detailList.length;detailIdx++){
 						var detail=item.detailList[detailIdx];
+						var itemName = self.getTreatPackageName(detail,null,1);
 						treatment.serviceItems.push({
-							name:detail.itemName,
+							name:itemName,
 							times:detail.num,
 							money:detail.money
 						});
@@ -3202,58 +3736,576 @@
 			}
 			return list.slice(size,size+l);
 		},
-		renderDetailsData:function(data){
+		updComsumeTime:function($this,item){
+			var day = '';
+			for(var di=0;di<am.operateArr.length;di++){
+				if(am.operateArr[di].indexOf('MGJZ10') != -1){
+					day = am.operateArr[di].split('MGJZ10')[1];
+				}	
+			}
+			//改日期
+			if( am.operateArr.indexOf('N') != -1 && (day=='' || (new Date().getTime()-item.consumeTime*1)/(1000*60*60*24)<day)){
+				var ts = amGloble.now();
+				var user = amGloble.metadata.userInfo;
+				if(user.userType==0 && user.role==3){
+					//老板看一年
+					ts.setYear(ts.getFullYear()-1);
+				}else if(user.userType==0 && user.role==2){
+					//管理员看6个月
+					ts.setMonth(ts.getMonth()-6);
+				}else {
+					//操作员看2天
+					ts.setDate(ts.getDate()-1);
+				}
+				if([855680,1132625].indexOf(amGloble.metadata.userInfo.parentShopId)!=-1){
+					ts = null;
+				}
+				$this.mobiscroll().calendar({	
+					theme: 'mobiscroll',
+					lang: 'zh',
+					display: 'bottom',
+					months: "auto",
+					min:ts,
+					max: amGloble.now(),
+					//controls: ['calendar', 'time'],
+					setOnDayTap: true,
+					buttons: [],
+					endYear: amGloble.now().getFullYear()+50,
+					onSet: function(valueText, inst) {
+						var _valueText = valueText.valueText;
+						var _tr = $(this).parents('tr');
+						var _childtr = _tr.next('.childtr');
+						var _item = _tr.data('item');
+						console.log(_valueText);
+						console.log(_item);
+
+						var _d = {
+							"parentShopId" : am.metadata.userInfo.parentShopId,
+							"shopId" : am.metadata.userInfo.shopId,
+							'updType' : 1,
+							'id' : _item.id,
+							'newVal' : new Date(_valueText).getTime() + '',
+							'oldVal' : _item.consumeTime,
+							'operator' : amGloble.metadata.userInfo.userName,
+							'billNo' : _item.billNo
+						};
+						console.log(_d);
+						var _n=new Date(_d.newVal*1),
+							_o=new Date(_d.oldVal*1);
+						if(_n.getFullYear()==_o.getFullYear() && _n.getMonth()==_o.getMonth() && _n.getDate()==_o.getDate()){
+							return;
+						}
+						am.loading.show("修改中,请稍候...");
+						am.api.billUpd.exec(_d, function(res) {
+							am.loading.hide();
+							console.log(res);
+							if (res.code == 0) {
+								/*  暂时不支持修改具体时间  所以更新方法暂时屏蔽  */
+								//var _date = new Date(_d.newVal - 0).format("mm/dd HH:MM");
+								//_tr.find('.consumetime').text(_date);
+
+								//_item.consumeTime = _d.newVal;
+
+								//_tr.data('item',_item);
+								am.msg('修改成功');
+								if(_n.getFullYear()!=_o.getFullYear() || _n.getMonth()!=_o.getMonth() || _n.getDate()!=_o.getDate()){
+									_tr.remove();
+									_childtr.remove();
+								}
+							}else {
+								am.msg(res.message || "数据获取失败,请检查网络!");
+							}
+						});
+					}
+				});
+			}
+		},
+		getChildTr:function(item,_totleFee,$monetary,$monetary2,paymentmethodArr,containedFacePay){
 			var nowTime=new Date().getTime();
+			var enabledNewBonusModel = amGloble.metadata.enabledNewBonusModel&&amGloble.metadata.enabledNewBonusModel == 1
+			var enabledNewPerfModel = amGloble.metadata.enabledNewPerfModel == 1
+			var jsonstrObj = item.jsonstr ? JSON.parse(item.jsonstr) : {};
+			var calcBillWageSuccess = jsonstrObj.calcBillWageSuccess;
+			var billDateTime = new Date(Number(item.consumeTime)).getTime();
+			var oldBillDateTime = new Date('2019/11/28 01:00:00').getTime();
+			// 如果订单时间小于 20191128 上线时间，且无计算提成的标记，则默认为成功
+			if (calcBillWageSuccess === undefined && oldBillDateTime - billDateTime > 0) {
+				calcBillWageSuccess = 1;
+			}
+			var memberCardRefundFlag = jsonstrObj.refundFlag;
+			var empList = item.empList && item.empList.length
+			var notAutomaticEmpList = item && item.empList.filter(function(emp){
+				return emp.automatic === 0
+			})
+			var isAllNotAutomatic = notAutomaticEmpList.length == empList
+			// 退款为true,计算成功为1，员工为空以及所有员工为手给提成，不显示提示
+		
+			//详情tr
+			var $childTr = $('<tr class="childtr">' +
+								'<td colspan="9" class="bbnone">' +
+									'<div class="tdchildren">' +
+										'<table width="100%" cellpadding="0" cellspacing="0" class="cm_table childtable">' +
+											'<tbody>' +
+												'<tr>' +
+													'<td class="col1" style="width:13%"></td>' +
+													'<td class="col2" style="width:24%"></td>' +
+												'</tr>' +
+											'</tbody>' +
+										'</table>' +
+									'</div>' +
+								'</td>' +
+							'</tr>').data("item",item);
+			//冻结/对单
+			if(item.auditingFlag == 1){
+				if(am.operateArr.indexOf('F') > -1){
+					$childTr.removeClass("freezeTr");
+				}else{
+					$childTr.addClass("freezeTr");
+				}
+			}else{
+				$childTr.removeClass("freezeTr");
+			}
+
+			if (self.refundCardFlag(item)) {
+				$childTr.addClass("refundTr");
+			} else {
+				$childTr.removeClass("freezeTr");
+			}
+			
+			//col1
+			if(item.memberId == 0){	//散客
+				$childTr.find('.col1').append('<dl><dt>散客</dt><dd></dd></dl><dl><dt>操作人</dt><dd>'+ item.operatorName +'</dd></dl>');
+			}else{
+				// var $phonecard = $('<dl><dt>会员手机</dt><dd>'+ (item.mobile ? am.processPhone(item.mobile) : '无') +'</dd></dl><dl><dt>'+ (self.getCardTypeById(item.cardTypeId)!=undefined?'('+self.getCardTypeById(item.cardTypeId)+')':'') +'</dt><dd>'+ (item.cardId == "null" ? '' : item.cardId) +'</dd></dl><dl><dt class="dt_red">'+ (item.memberShopName ? item.memberShopName : '') +'</dt></dl><dl><dt>操作人</dt><dd>'+ item.operatorName +'</dd></dl>');
+				var mobileText=''
+				if(am.operateArr.indexOf("MGJP") !=-1){// 敏感权限 //手机号隐藏中间四位
+					mobileText=am.processPhone(item.mobile);
+				}else{
+					mobileText=item.mobile;
+				}
+				var $phonecard = $('<dl><dt>会员手机</dt><dd>'+ (mobileText ? mobileText : '无') +'</dd></dl><dl><dt>'+ (self.getCardTypeById(item.cardTypeId)!=undefined?'('+self.getCardTypeById(item.cardTypeId)+')':'') +'</dt><dd>'+ (item.cardId == "null" ? '' : item.cardId) +'</dd></dl><dl><dt class="dt_red">'+ (item.memberShopName ? item.memberShopName : '') +'</dt></dl><dl><dt>操作人</dt><dd>'+ item.operatorName +'</dd></dl>');
+				$childTr.find('.col1').append( $phonecard );
+			}
+
+			var comentDOM;
+			if(item.detail){
+				comentDOM = '<br/><div class="comment iconfont icon-comments am-clickable"><div class="comment-content">'+item.detail+'</div></div>';
+			}else{
+				comentDOM = '<br/><div class="comment iconfont icon-comments am-clickable am-disabled"></div>';
+			}
+			//col2
+			var rewardDom = '';
+			//开通了小程序
+			if(am.metadata.shopPropertyField != undefined && am.metadata.shopPropertyField.openSmallProgram) {			
+				//有抽奖活动
+				if((typeof this.lcardValue!='undefined'&&this.lcardEndTime>nowTime)||(typeof this.lconsumeValue!='undefined'&&this.lconsumeEndTime>nowTime)){
+					var flag=item.lotteryType;
+					var mobile=item.mobile;
+					if(flag){
+						rewardDom='<div class="reward am-clickable" data-index="'+flag+'" data-mobile="'+mobile+'"><svg class="icon" aria-hidden="true" ><use xlink:href="#icon-lipin"></use></svg>抽奖</div>'
+					}
+				}
+				// lotteryStatus: 0未使用 1已使用 2资格已清空
+				if (item.lotteryStatus == 1) {
+					rewardDom='<div class="reward disabled"><svg class="icon" aria-hidden="true" ><use xlink:href="#icon-lipin"></use></svg>已抽奖</div>'
+				}
+			}
+			
+			var $dl = $('<dl><dt>'+rewardDom+'<p></p><span>消费总额</span>'+comentDOM+'</dt><dd></dd></dl>');
+
+			if(
+				$monetary == '套餐消费' ||
+				($monetary.indexOf("消费") != -1 && (paymentmethodArr.indexOf("卡金")!=-1 || paymentmethodArr.indexOf("赠金")!=-1 || paymentmethodArr.indexOf("套餐卡金")!=-1 || paymentmethodArr.indexOf("套餐赠金")!=-1))
+			){
+				//作弊，判断到含消费字眼的，就显示这个
+				$childTr.find('.col1').append('<div class="signature am-clickable">查看签名</div>');
+			}
+
+			$dl.find('dt p').html('¥'+self.myAdd(_totleFee));
+			$dl.find('dd').append($monetary2);
+			$childTr.find('.col2').append( $dl );
+			//洗发显示时长
+			console.info(item.jsonstr);
+			if(item.jsonstr){
+				var jsonstr = JSON.parse(item.jsonstr);
+				var $washDiv = $('<div class="washStr"></div>');
+				if(jsonstr.flag == "pass"){
+					$washDiv.html('<span class="iconfont icon-shijianbiao"></span>洗发合格，时长' + jsonstr.washPassTime + (jsonstr.empNo?'<br/>(' + jsonstr.empNo + '&nbsp;&nbsp;' + jsonstr.empName + ')':''));
+				}
+				else if(jsonstr.flag == "nopass"){
+					$washDiv.html('<span class="iconfont icon-shijianbiao red"></span>洗发不合格，时长' + jsonstr.washPassTime + (jsonstr.empNo?'<br/>(' + jsonstr.empNo + '&nbsp;&nbsp;' + jsonstr.empName + ')':''));
+				}
+				$childTr.find('.col2').append( $washDiv );
+			}
+
+			//显示部门业绩
+			this.renderDeptPerf($childTr.find('.col2'),item);
+
+
+			//项目,售价,店内业绩,工位/业绩
+			var projectArr = [];				
+			if(item.type == 0 || item.type == 4 || (item.type == 6 && item.consumeType != 6)){	//0:项目消费, 4:套餐消费, 6:年卡消费
+				var $col3 = $('<td class="col3">' +
+							'<table width="100%" cellpadding="0" cellspacing="0" class="cm_table col3table">' +
+								'<thead>' +
+									'<tr>' +
+										'<td style="width:40%"><div class="tdwrap">项目</div></td>' +
+										'<td style="width:8%"><div class="tdwrap">价格</div></td>' +
+										'<td style="width:52%"><div class="tdwrap">工位/业绩</div></td>' +
+									'</tr>' +
+								'</thead>' +
+								'<tbody></tbody>' +
+							'</table>' +
+						'</td>');
+				$childTr.find('.childtable > tbody > tr').append($col3);
+				if(item.detailList && item.detailList.length>0){
+					for(var detailIdx=0;detailIdx<item.detailList.length;detailIdx++){
+						var detail=item.detailList[detailIdx];
+						var $detailMore=$('<tr class="detailtr"></tr>').data("item",detail);
+
+						$detailMore.append('<td><div class="tdwrap sale"></div></td>');
+						$detailMore.append('<td><div class="tdwrap price">¥'+Math.round(detail.price*100)/100+'</div></td>');
+
+						var $sale=$detailMore.find(".sale");
+						if((item.type == 0 || item.type == 4 || (item.type == 6 && item.consumeType != 6)) && detail.consumeType != 1 && detail.consumeType != 4){//只有项目能修改
+							$sale.append($('<span class="projectName"><a href="javascript:void(0)" class="am-clickable editDep">'+this.getDepName(detail.depcode)+'</a><a href="javascript:void(0)" class="am-clickable editItem">'+detail.itemName+'</a></span>').data("item",$.extend(detail,{billNo:item.billNo,operatorId:item.operatorId,billtype:item.type})));
+						}else{
+							$sale.append($('<span class="projectName"><a href="javascript:void(0)" class="am-clickable editDep">'+this.getDepName(detail.depcode)+'</a><a href="javascript:void(0)" class="noclick">'+detail.itemName+'</a></span>').data("item",$.extend(detail,{billNo:item.billNo,operatorId:item.operatorId,billtype:item.type})));
+						}
+						if((item.type == 0 || item.type == 4 || (item.type == 6 && item.consumeType != 6)) || item.type == 1){
+						}else {
+							$sale.find('.editDep').hide();
+						}
+						$sale.append($('<span class="num">x '+ detail.num +'</span>'));
+						projectArr.push(detail.itemName);
+
+						//工位/业绩
+						if(item.type == 1 || item.type == 3 || item.consumeType == 6){//不显示指定非指定
+							if(item.empList && item.empList.length){
+								$detailMore.append($('<td class="employeeTable"><table class="table"><tbody></tbody></table></td>'));
+								var $employeeTable=$detailMore.find(".employeeTable tbody");
+
+								for(var employeeId=0;employeeId<item.empList.length;employeeId++){
+									var emp=item.empList[employeeId];
+									if(emp.empNo != null || 1){
+										var $employee="";
+										//添加员工
+										$employee = ('<tr>'+
+											'<td class="changeEmployee" data-id='+emp.empId+'><div class="tdwrap"><a class="am-clickable" href="javascript:void(0)">'+(emp.empNo+'号'+emp.dutyTypeName+'('+emp.empName+')')+'</a></div></td>'+
+											'<td><div class="am-clickable tdedit">业绩:¥'+ emp.fee +'<ul><li class="am-clickable updateli">修改</li><li class="am-clickable delli">删除</li></ul></div></td>' +
+										'</tr>');
+										$employeeTable.append($employee);
+										var otherSendMessage={billNo:item.billNo,operatorId:item.operatorId,billtype:item.type,itemNo:(detail?detail.itemNo:""),itemName:(detail?detail.itemName:"")};
+										$employeeTable.data("item",{empList:item.empList,other:otherSendMessage});
+										//添加员工DOM
+										if(employeeId == item.empList.length - 1){
+											$employeeTable.append($('<tr class="addcustTr"><td class="am-clickable addcust" colspan="2"><div class="am-clickable"></div></td></tr>'));
+										}
+									}
+								}
+							}else{
+								$detailMore.append($('<td class="employeeTable"><table class="table"><tbody></tbody></table></td>'));
+							}
+						}else{//显示指定非指定
+							//添加员工
+							$detailMore.append($('<td class="employeeTable"><table class="table"><tbody></tbody></table></td>'));
+							var $employeeTable=$detailMore.find(".employeeTable tbody");
+							var employeeList=self.getEmployeeById(item.empList,detail.id);
+
+							var $employee=self.renderEmployee(employeeList,item.type,item.consumeType);
+							var otherSendMessage={billNo:item.billNo,operatorId:item.operatorId,billtype:item.type,itemNo:(detail?detail.itemNo:""),itemName:(detail?detail.itemName:"")};
+							$employeeTable.data("item",{empList:employeeList,other:otherSendMessage});
+							$employeeTable.append($employee);
+							//添加员工DOM
+							$employeeTable.append($('<tr class="addcustTr"><td class="am-clickable addcust" colspan="3"><div class="am-clickable"></div></td></tr>'));
+						}
+
+						$childTr.find('.col3 .col3table > tbody').append( $detailMore );
+					}
+				}
+			}else if(item.type == 1){	//1:卖品消费
+				var $col3 = $('<td class="col3">' +
+							'<table width="100%" cellpadding="0" cellspacing="0" class="cm_table col3table">' +
+								'<thead>' +
+									'<tr>' +
+										'<td style="width:30%"><div class="tdwrap">卖品</div></td>' +
+										'<td style="width:10%"><div class="tdwrap">数量</div></td>' +
+										'<td style="width:10%"><div class="tdwrap">价格</div></td>' +
+										'<td style="width:50%"><div class="tdwrap">工位/提成</div></td>' +
+									'</tr>' +
+								'</thead>' +
+								'<tbody></tbody>' +
+							'</table>' +
+						'</td>');
+				$childTr.find('.childtable > tbody > tr').append($col3);
+				if(item.detailList && item.detailList.length>0){
+					for(var detailIdx=0;detailIdx<item.detailList.length;detailIdx++){
+						var detail=item.detailList[detailIdx];
+						var $detailMore=$('<tr class="detailtr"></tr>').data("item",detail);
+
+						$detailMore.append('<td><div class="tdwrap sale"></div></td>');
+						$detailMore.append('<td><div class="tdwrap salenum">'+ (detail.num== -99?"不限":detail.num) +'</div></td>');
+
+						var _money = detail.money/detail.num;
+						if(_money.toString().indexOf('.') != -1){	//如果是小数
+							if(_money.toString().split('.')[1].length == 1){
+								//一位小数
+								_money = _money.toFixed(1);
+							}else{
+								_money = _money.toFixed(2);
+							}
+						}
+						$detailMore.append('<td><div class="tdwrap money">¥'+_money+'</div></td>');
+
+						var $sale=$detailMore.find(".sale");
+						if((item.type == 0 || item.type == 4 || (item.type == 6 && item.consumeType != 6)) && detail.consumeType != 1 && detail.consumeType != 4){//只有项目能修改
+							$sale.append($('<span class="projectName"><a href="javascript:void(0)" class="am-clickable editDep">'+this.getDepName(detail.depcode)+'</a><a href="javascript:void(0)" class="am-clickable editItem">'+detail.itemName+'</a></span>').data("item",$.extend(detail,{billNo:item.billNo,operatorId:item.operatorId,billtype:item.type})));
+						}else{
+							$sale.append($('<span class="projectName"><a href="javascript:void(0)" class="am-clickable editDep">'+this.getDepName(detail.depcode)+'</a><a href="javascript:void(0)" class="noclick">'+detail.itemName+'</a></span>').data("item",$.extend(detail,{billNo:item.billNo,operatorId:item.operatorId,billtype:item.type})));
+						}
+						if((item.type == 0 || item.type == 4 || (item.type == 6 && item.consumeType != 6)) || item.type == 1){
+						}else {
+							$sale.find('.editDep').hide();
+						}
+						projectArr.push(detail.itemName);
+						if(item.empList && ((item.empList.length && item.empList[0].detailId > 0)|| !item.empList.length)){
+							//新数据 detailId>0 或者没有选择员工
+							this.matchNewEmpListWithBill(item);
+							this.setDepotsEmpsAndDom($detailMore,item,detail,"isNew");
+						}else{
+							// 老数据员工只渲染一次
+							if(detailIdx == 0){
+								this.setDepotsEmpsAndDom($detailMore,item,detail);
+							}
+						}
+						$childTr.find('.col3 .col3table > tbody').append( $detailMore );
+					}
+				}
+			}else if(item.type == 2 || item.type == 5){	//2:开卡充值,续卡充值, 5:年卡充值
+				var detail = null;
+				if(item.type == 2){
+					if(item.consumeType==0){
+						//开卡充值
+						projectArr.push("开卡充值");
+					}else{
+						//续卡充值
+						projectArr.push("续卡充值");
+					}
+				}else if(item.type == 5){	//年卡充值
+					projectArr.push("年卡充值");
+				}
+
+				var $col3 = $('<td class="col3">' +
+							'<table width="100%" cellpadding="0" cellspacing="0" class="cm_table col3table">' +
+								'<thead>' +
+									'<tr>' +
+										'<td><div class="tdwrap">工位/提成</div></td>' +
+									'</tr>' +
+								'</thead>' +
+								'<tbody></tbody>' +
+							'</table>' +
+						'</td>');
+				$childTr.find('.childtable > tbody > tr').append($col3);
+				var $employeeTable=$('<tr><td class="employeeTable"><table class="table"><tbody></tbody></table></td></tr>');
+				var $employee = '';
+				if(item.empList && item.empList.length){
+					for(var employeeId=0;employeeId<item.empList.length;employeeId++){
+						var emp=item.empList[employeeId];
+						if(emp.empNo != null || 1){
+							$employee += '<tr>'+this.getEmpTrInnerHTML(emp,item.type,item.consumeType)+'</tr>';
+						}
+						//添加员工DOM
+						if(employeeId == item.empList.length - 1){
+							$employee += '<tr class="addcustTr"><td class="am-clickable addcust" colspan="2"><div class="am-clickable"></div></td></tr>';
+						}
+					}
+				}else{
+					$employee = '<tr class="addcustTr"><td class="am-clickable addcust" colspan="2"><div class="am-clickable"></div></td></tr>';
+				}
+				var otherSendMessage={billNo:item.billNo,operatorId:item.operatorId,billtype:item.type,itemNo:(detail?detail.itemNo:""),itemName:(detail?detail.itemName:"")};
+				$employeeTable.find("tbody").append($employee).data("item",{empList:item.empList,other:otherSendMessage});
+				$childTr.find('.col3 .col3table > tbody').append($employeeTable);
+			}else if(item.type == 3 || item.type == 7 || (item.type == 6 && item.consumeType == 6)){	//3:套餐购买, 7:套餐赠送, 6:年卡销售
+				var $col3 = $('<td class="col3">' +
+							'<table width="100%" cellpadding="0" cellspacing="0" class="cm_table col3table">' +
+								'<thead>' +
+									'<tr>' +
+										'<td style="width:30%"><div class="tdwrap">项目</div></td>' +
+										'<td style="width:10%"><div class="tdwrap">数量</div></td>' +
+										'<td style="width:10%"><div class="tdwrap">总价</div></td>' +
+										'<td style="width:50%"><div class="tdwrap">工位/提成</div></td>' +
+									'</tr>' +
+								'</thead>' +
+								'<tbody></tbody>' +
+							'</table>' +
+						'</td>');
+				$childTr.find('.childtable > tbody > tr').append($col3);
+				if(item.detailList && item.detailList.length>0){
+					for(var detailIdx=0;detailIdx<item.detailList.length;detailIdx++){
+						var detail=item.detailList[detailIdx];
+						var $detailMore=$('<tr class="detailtr"></tr>').data("item",detail);
+
+						$detailMore.append('<td><div class="tdwrap sale"></div></td>');
+						$detailMore.append('<td><div class="tdwrap salenum">'+ (detail.num== -99?"不限":detail.num) +'</div></td>');
+
+						var _money = detail.money;
+						if(_money.toString().indexOf('.') != -1){	//如果是小数
+							if(_money.toString().split('.')[1].length == 1){
+								//一位小数
+								_money = _money.toFixed(1);
+							}else{
+								_money = _money.toFixed(2);
+							}
+						}
+
+						$detailMore.append('<td><div class="tdwrap money">¥'+_money+'</div></td>');
+
+						var $sale=$detailMore.find(".sale");
+						if((item.type == 0 || item.type == 4 || (item.type == 6 && item.consumeType != 6)) && detail.consumeType != 1 && detail.consumeType != 4){//只有项目能修改
+							$sale.append($('<span class="projectName"><a href="javascript:void(0)" class="am-clickable editDep">'+this.getDepName(detail.depcode)+'</a><a href="javascript:void(0)" class="am-clickable editItem treatPackageName">'+this.getTreatPackageName(detail,'showDrop')+'</a></span>').data("item",$.extend(detail,{billNo:item.billNo,operatorId:item.operatorId,billtype:item.type})));
+						}else{
+							$sale.append($('<span class="projectName"><a href="javascript:void(0)" class="am-clickable editDep">'+this.getDepName(detail.depcode)+'</a><a href="javascript:void(0)" class="noclick am-clickable treatPackageName">'+this.getTreatPackageName(detail,'showDrop')+'</a></span>').data("item",$.extend(detail,{billNo:item.billNo,operatorId:item.operatorId,billtype:item.type})));
+						}
+						if(detail.treatmentitemId && detail.treatmentitemId>-1 && am.isNull(detail.itemNo)){
+							// 套餐包
+							$sale.find('.treatPackageName').addClass('real');
+						}
+						if((item.type == 0 || item.type == 4 || (item.type == 6 && item.consumeType != 6)) || item.type == 1){
+						}else {
+							$sale.find('.editDep').hide();
+						}
+						projectArr.push(this.getTreatPackageName(detail));
+
+						console.log(item,"------originItem");
+						
+						if(item.empList && ((item.empList.length && item.empList[0].detailId > 0)|| !item.empList.length)){
+							// 新数据
+							this.matchNewEmpListWithBill(item);
+							this.setServiceEmpsAndDom($detailMore,item,detail,"isNew");
+						}else{
+							// 老数据员工只渲染一次
+							if(detailIdx == 0){
+								this.setServiceEmpsAndDom($detailMore,item,detail);
+							}
+						}
+						$childTr.find('.col3 .col3table > tbody').append( $detailMore );
+					}
+				}
+			}
+			var jsonstr = item.jsonstr;
+			if (jsonstr) {
+				var autopay = JSON.parse(jsonstr)['autopay'];
+				if (autopay) {
+					var $autopay = $('<div class="autopayImg"></div>').text('自助结算');
+					if (autopay === 'opencard') {
+						$autopay.text('自助开卡');
+					} 
+					else if (autopay === 'recharge') {
+						$autopay.text('自助充值');
+					}
+					else if (autopay === 'buypackage') {
+						$autopay.text('自助买套餐');
+					}
+					$childTr.find('.col3').append($autopay);
+				}
+			}
+
+			//支付方式
+			// var _paymentmethod = paymentmethodArr.length == 1 ? paymentmethodArr[0] : '混合支付';
+			// $html.find('.paymentmethod').html(_paymentmethod);
+			var $recalctips = memberCardRefundFlag || calcBillWageSuccess == 1 || empList < 1 || (empList > 0 && isAllNotAutomatic) ? '' : '<div class="recalctips">该单提成还未计算成功，点击这里重算</div>'
+			var $operateBox=$('<div class="operate_box"></div>');
+			var $print_btn='<div class="am-clickable print"><span class="icon iconfont icon-dayinxiaopiao"></span>打印小票</div>';
+			var $revoke_btn='<div class="am-clickable revoke"><span class="icon iconfont icon-chedan"></span>撤单</div>';
+			var $realte_btn =containedFacePay>0?'<div class="am-clickable relate"><span class="icon iconfont icon-guanlianshoukuan"></span>关联收款</div>':'';
+			var $bonus_btn=enabledNewBonusModel&&'<div class="am-clickable bonus-btn"><span class="icon iconfont icon-jisuanticheng"></span>计算提成'+$recalctips+'</div>'||'';
+			var $perf_btn = enabledNewPerfModel == 1 && '<div class="am-clickable perf-btn"><span class="icon iconfont icon-jisuanyeji"></span>计算业绩</div>' || '';
+			$operateBox.html($realte_btn + $bonus_btn + $perf_btn + $print_btn + $revoke_btn);
+			$childTr.find('.tdchildren').append($operateBox)
+			var $revoke = $operateBox.find('.revoke');
+			if(item.type==0 || item.type==4 || (item.type==6 && item.consumeType!=6)){
+				//项目
+				$revoke.data("revoke","M0");
+			}else if(item.type==1){
+				//卖品
+				$revoke.data("revoke","M2");
+			}else if(item.type==2){
+				//开卡充值
+				$revoke.data("revoke","M1");
+			}else if(item.type==3){
+				//套餐购买
+				$revoke.data("revoke","M3");
+			}else if(item.type==5 || (item.type==6 && item.consumeType==6)){
+				//年卡销售
+				$revoke.data("revoke","M4");
+			}
+
+			if (self.refundCardFlag(item)) {
+				$revoke.addClass("disabled refundCard");
+			} else {
+				$revoke.removeClass("disabled refundCard");
+			}
+
+			return $childTr;
+		},
+		renderDetailsData:function(data){
+			var enabledNewBonusModel = amGloble.metadata.enabledNewBonusModel&&amGloble.metadata.enabledNewBonusModel == 1;
+			var enabledNewPerfModel = amGloble.metadata.enabledNewPerfModel == 1;
 			for(var i=0;i<data.length;i++){
 				var _class = i%2 == 0 ? 'odd' : '';
 				var item = data[i];
-				var $bonus_btn=amGloble.metadata.enabledNewBonusModel&&amGloble.metadata.enabledNewBonusModel==1&&'<div class="am-clickable bonus-btn">计算提成</div>'||'';
-				var $perf_btn = amGloble.metadata.enabledNewPerfModel == 1 && '<div class="am-clickable perf-btn">计算业绩</div>' || '';
+				var jsonstrObj = item.jsonstr ? JSON.parse(item.jsonstr) : {};
+				var calcBillWageSuccess = jsonstrObj.calcBillWageSuccess;
+				var billDateTime = new Date(Number(item.consumeTime)).getTime();
+				var oldBillDateTime = new Date('2019/11/28 01:00:00').getTime();
+				// 如果订单时间小于 20191128 上线时间，且无计算提成的标记，则默认为成功
+				if (calcBillWageSuccess === undefined && oldBillDateTime - billDateTime > 0) {
+					calcBillWageSuccess = 1;
+				}
+				var memberCardRefundFlag = jsonstrObj.refundFlag;
+				var empList = item.empList && item.empList.length
+				var notAutomaticEmpList = item && item.empList.filter(function(emp){
+					return emp.automatic === 0
+				})
+				var isAllNotAutomatic = notAutomaticEmpList.length == empList
+				// 退款为true,计算成功为1，员工为空以及所有员工为手给提成，不显示提示
 				var $html = $('<tr width="100%" class="basictr '+ _class +' am-clickable" billid="'+item.id+'">' +
-                                '<td style="width:14%" class="billno">' +
-                                    '<span class="freezeSpan am-clickable iconfont icon-gou"></span>' +
-                                    '<div class="tdwrap billnoBox am-clickable"></div>' +
-                                '</td>' +
-                                '<td style="width:10%">' +
-                                    '<div class="tdwrap">' +
-                                        '<span class="am-clickable consumetime">'+ (item.consumeTime ? (new Date(item.consumeTime-0).format("mm/dd HH:MM")) : "") +'</span>' +
-                                    '</div>' +
-                                '</td>' +
-                                '<td style="width:8%">' +
-                                    '<div class="tdwrap addcustomer am-clickable"></div>' +
-                                '</td>' +
-                                '<td style="width:8%">' +
-                                    '<div class="tdwrap client am-clickable"></div>' +
-                                '</td>' +
-                                '<td style="width:5%">' +
-                                    '<div class="tdwrap sextd"></div>' +
-                                '</td>' +
-                                '<td style="width:8%">' +
-                                    '<div class="tdwrap consumptiontype"></div>' +
-                                '</td>' +
-                                '<td style="width:33%">' +
-                                    '<div class="tdwrap consumptionamount">' +
-                                        '<dl><dt></dt><dd></dd></dl>' +
-                                    '</div>' +
-                                '</td>' +
-                                '<td style="width:7%">' +
-                                    '<div class="tdwrap jetd">' +
-                                       '<span></span>' +
-                                    '</div>' +
-                                '</td>' +
-                                '<td style="width:7%">' +
-                                    '<div class="tdwrap accountedfor">' +
-                                       '<span></span>' +
-                                    '</div>' +
-                                '</td>' +'</tr>').data("item",item);
-                                // '<td style="width:16%" class="brnone">' +
-								// 	'<div class="am-clickable print">打印小票</div>' +
-								// 	$perf_btn+
-								// 	$bonus_btn+
-                                //     '<div class="am-clickable revoke">撤单</div>' +
-                                // '</td>' +
-                            // '</tr>').data("item",item);
-
+					'<td style="width:14%" class="billno">' +
+						'<span class="freezeSpan am-clickable iconfont icon-gou"></span>' +
+						'<div class="tdwrap billnoBox am-clickable"></div>' +
+					'</td>' +
+					'<td style="width:10%">' +
+						'<div class="tdwrap">' +
+							'<span class="am-clickable consumetime">'+ (item.consumeTime ? (new Date(item.consumeTime-0).format("mm/dd HH:MM")) : "") +'</span>' +
+						'</div>' +
+					'</td>' +
+					'<td style="width:8%">' +
+						'<div class="tdwrap addcustomer am-clickable"></div>' +
+					'</td>' +
+					'<td style="width:8%">' +
+						'<div class="tdwrap client am-clickable"></div>' +
+					'</td>' +
+					'<td style="width:5%">' +
+						'<div class="tdwrap sextd"></div>' +
+					'</td>' +
+					'<td style="width:8%">' +
+						'<div class="tdwrap consumptiontype"></div>' +
+					'</td>' +
+					'<td style="width:33%">' +
+						'<div class="tdwrap consumptionamount">' +
+							'<dl><dt></dt><dd></dd></dl>' +
+						'</div>' +
+					'</td>' +
+					'<td style="width:7%">' +
+						'<div class="tdwrap jetd">' +
+							'<span></span>' +
+						'</div>' +
+					'</td>' +
+					'<td style="width:7%">' +
+						'<div class="tdwrap accountedfor">' +
+							'<span></span>' +
+						'</div>' +
+					'</td>' +'</tr>').data("item",item);
 				//客户
 				var _addcustomer = item.memberId == 0 ? "散客" : item.name;
 				var _sex = item.sex == "M" ? "man" : "women";
@@ -3274,12 +4326,7 @@
 				}else{
 					$billNo = (item.billNo || "");
 				}
-				// var $billNo = '';
-				// if(am.metadata.shopPropertyField.mgjBillingType == "1" && (item.type == "0" || item.type == "1")){
-				// 	$billNo = item.billNo || "";
-				// }else{
-				// 	$billNo = '<a href="javascript:void(0)" class="am-clickable">'+ (item.billNo || "") +'</a>';
-				// }
+
 				$html.find(".billnoBox").html($billNo);
 				if(item.mgjIsHighQualityCust == 1){
 					$html.find(".addcustomer").html('<p class="'+ _sex +'"><span class="name">'+ _addcustomer +'</span><span class="good am-clickable"></span></p>');
@@ -3294,7 +4341,13 @@
 					var client = item.customer.clientflag==1?'计客':'不计客';
 					$html.find(".client").html('<a href="javascript:void(0)" class="am-clickable">'+client+'</a>');
 				}
-				
+
+				if (enabledNewBonusModel) {
+					if (!(memberCardRefundFlag || calcBillWageSuccess == 1 || empList < 1 || (empList > 0 && isAllNotAutomatic))) {
+						$html.find('.consumptionamount dd').html( '<span class="ackRollIcon">!</span>' );
+					}
+				}
+
 				//消费类型
 				var $monetary = '';
 				var typeData = {0:"项目消费",1:"卖品消费",3:"套餐购买",4:"套餐消费",5:"年卡充值",7:"套餐赠送"};
@@ -3324,87 +4377,67 @@
 					$monetary += '(还款)';
 				}
 				$html.find(".consumptiontype").html($monetary);
-				//详情tr
-				var $childTr = $('<tr class="childtr">' +
-									'<td colspan="10" class="bbnone">' +
-										'<div class="tdchildren">' +
-											'<table width="100%" cellpadding="0" cellspacing="0" class="cm_table childtable">' +
-												'<tbody>' +
-													'<tr>' +
-														'<td class="col1" style="width:13%"></td>' +
-														'<td class="col2" style="width:18%"></td>' +
-													'</tr>' +
-												'</tbody>' +
-											'</table>' +
-										'</div>' +
-									'</td>' +
-								'</tr>').data("item",item);
+
 				//冻结/对单
 				if(item.auditingFlag == 1){
 					$html.find(".freezeSpan").css("display","inline-block");
 					if(am.operateArr.indexOf('F') > -1){
-						$childTr.removeClass("freezeTr");
 						$html.removeClass("freezeTr");
 					}else{
-						$childTr.addClass("freezeTr");
 						$html.addClass("freezeTr");
 						//已对单没权限不能修改时间
 						$html.find(".consumetime").removeClass("consumetime");
 					}
 				}else{
 					$html.find(".freezeSpan").hide();
-					$childTr.removeClass("freezeTr");
 					$html.removeClass("freezeTr");
 				}
-				
-				//col1
-				if(item.memberId == 0){	//散客
-					$childTr.find('.col1').append('<dl><dt>散客</dt><dd></dd></dl><dl><dt>操作人</dt><dd>'+ item.operatorName +'</dd></dl>');
-				}else{
-					// var $phonecard = $('<dl><dt>会员手机</dt><dd>'+ (item.mobile ? am.processPhone(item.mobile) : '无') +'</dd></dl><dl><dt>'+ (self.getCardTypeById(item.cardTypeId)!=undefined?'('+self.getCardTypeById(item.cardTypeId)+')':'') +'</dt><dd>'+ (item.cardId == "null" ? '' : item.cardId) +'</dd></dl><dl><dt class="dt_red">'+ (item.memberShopName ? item.memberShopName : '') +'</dt></dl><dl><dt>操作人</dt><dd>'+ item.operatorName +'</dd></dl>');
-					var mobileText=''
-					if(am.operateArr.indexOf("MGJP") !=-1){// 敏感权限 //手机号隐藏中间四位
-						mobileText=am.processPhone(item.mobile);
-					}else{
-						mobileText=item.mobile;
-					}
-					var $phonecard = $('<dl><dt>会员手机</dt><dd>'+ (mobileText ? mobileText : '无') +'</dd></dl><dl><dt>'+ (self.getCardTypeById(item.cardTypeId)!=undefined?'('+self.getCardTypeById(item.cardTypeId)+')':'') +'</dt><dd>'+ (item.cardId == "null" ? '' : item.cardId) +'</dd></dl><dl><dt class="dt_red">'+ (item.memberShopName ? item.memberShopName : '') +'</dt></dl><dl><dt>操作人</dt><dd>'+ item.operatorName +'</dd></dl>');
-					$childTr.find('.col1').append( $phonecard );
-				}
 
-				var comentDOM;
-				if(item.detail){
-					comentDOM = '<br/><div class="comment iconfont icon-comments am-clickable"><div class="comment-content">'+item.detail+'</div></div>';
-				}else{
-					comentDOM = '<br/><div class="comment iconfont icon-comments am-clickable am-disabled"></div>';
+				if (self.refundCardFlag(item)) {
+					$html.addClass("refundTr");
+					$html.find(".consumetime").removeClass("consumetime");
+				} else {
+					$html.removeClass("freezeTr");
 				}
-				//col2
-				var rewardDom = '';
-				//开通了小程序
-				if(am.metadata.shopPropertyField != undefined && am.metadata.shopPropertyField.openSmallProgram) {			
-					//有抽奖活动
-					if((typeof this.lcardValue!='undefined'&&this.lcardEndTime>nowTime)||(typeof this.lconsumeValue!='undefined'&&this.lconsumeEndTime>nowTime)){
-						var flag=item.lotteryType;
-						var mobile=item.mobile;
-						if(flag){
-							rewardDom='<div class="reward am-clickable" data-index="'+flag+'" data-mobile="'+mobile+'"><svg class="icon" aria-hidden="true" ><use xlink:href="#icon-lipin"></use></svg>抽奖</div>'
-						}
-					}
-				}
-				
-				var $dl = $('<dl><dt>'+rewardDom+'<p></p><span>消费总额</span>'+comentDOM+'</dt><dd></dd></dl>');
-
 
 				var _totleFee = [];
 				//<!-- 消费扣卡 -->
 				var $monetary2 = '';
 				var paymentmethodArr = [];
 				if(item.cardList && item.cardList.length){
+					var jsonstr = item.jsonstr,
+						refundFlag = false;
+					var $checkCardList = '',
+						$multi = '';
+					if (jsonstr) {
+						jsonstr = JSON.parse(jsonstr);
+						refundFlag = jsonstr.refundFlag;
+						var checkCards = jsonstr.checkCards;
+						if (checkCards) {
+							$multi = '<i class="multi">多</i>';
+							$.each(checkCards, function(i, v) {
+								$checkCardList += '<div class="checkCardList">' + '<span class="cardName">' + (v.cardName || '') + '</span><span>' + (v.cardFee || 0) + '</span></div>';
+							});
+						}
+					}
 					for(var cardId=0;cardId<item.cardList.length;cardId++){
 						var card=item.cardList[cardId];
 						if(card.depcode == -1 && card.consumeType != 4 && card.consumeType != 16){
+							if (refundFlag && card.cardFee <= 0) {
+								$monetary2+=('<span>'+card.cardFee+'<b class="c_red">(退卡金)</b></span>');
+								paymentmethodArr.push('卡金');
+								_totleFee.push(card.cardFee);	
+							}
+
+							if (refundFlag && card.presentFee <= 0) {
+								$monetary2+=('<span>'+card.presentFee+'<b class="c_red">(退赠金)</b></span>');
+								paymentmethodArr.push('赠金');
+								// _totleFee.push(card.presentFee);	
+							}
+
 							if(card.cardFee > 0 && item.type != 2 && item.type != 5){
-								$monetary2+=('<span>'+card.cardFee+'<b class="c_red">(卡金)</b></span>');
+								$monetary2+=('<span>'+card.cardFee+'<b class="c_red">(卡金)</b>'+ $multi +'</span>');
+								$monetary2+=$checkCardList;
 								paymentmethodArr.push('卡金');
 								_totleFee.push(card.cardFee);
 							}
@@ -3459,19 +4492,23 @@
 					}
 				}
 
-				if(
-					$monetary == '套餐消费' ||
-					($monetary.indexOf("消费") != -1 && (paymentmethodArr.indexOf("卡金")!=-1 || paymentmethodArr.indexOf("赠金")!=-1 || paymentmethodArr.indexOf("套餐卡金")!=-1 || paymentmethodArr.indexOf("套餐赠金")!=-1))
-				){
-					//作弊，判断到含消费字眼的，就显示这个
-					$childTr.find('.col1').append('<div class="signature am-clickable">查看签名</div>');
-				}
 				var containedFacePay=0; // 是否包含当面付
 				//<!-- 消费付现 -->
 				if(item.cashList && item.cashList.length){
+					var jsonstr = item.jsonstr,
+						refundFlag = false;
+					if (jsonstr) {
+						jsonstr = JSON.parse(jsonstr);
+						refundFlag = jsonstr.refundFlag;
+					}
 					for(var cashId=0;cashId<item.cashList.length;cashId++){
 						var cash=item.cashList[cashId];
 						if(cash.depcode == -1 && cash.consumeType != 2 && cash.consumeType != 3){
+							if (refundFlag && cash.cash <= 0) {
+								$monetary2+=('<span>'+cash.cash+'<b class="c_red">(退现金)</b></span>');
+								paymentmethodArr.push('现金');
+								// _totleFee.push(cash.cash);
+							}
 							if((item.cardType == 2 && cash.cash > 0) || cash.cash > 0){
 								$monetary2+=('<span>'+cash.cash+'<b class="c_red">(现金)</b></span>');
 								paymentmethodArr.push('现金');
@@ -3575,7 +4612,7 @@
 						var cardCost=item.cardList[cardCostIdx];
 						if(cardCost.depcode == -1 && cardCost.consumeType == 16){
 							if(cardCost.cardFee > 0 || cardCost.presentFee > 0){
-								$monetary2+=('<span style="margin-top:5px;">开卡成本</span>');
+								$monetary2+=('<span style="margin-top:5px;">套餐总成本</span>');
 								if(cardCost.cardFee > 0){
 									$monetary2+=('<span>'+cardCost.cardFee+'<b class="c_red">(卡金)</b></span>');
 									paymentmethodArr.push('卡金');
@@ -3652,8 +4689,8 @@
 									_totleFee.push(otherpaytypes[kk].value);
 								}
 								if($monetary2_temp){
-									if($monetary2.indexOf('开卡成本') == -1){
-										$monetary2+='<span style="margin-top:5px;">开卡成本</span>';
+									if($monetary2.indexOf('套餐总成本') == -1){
+										$monetary2+='<span style="margin-top:5px;">套餐总成本</span>';
 									}
 									$monetary2+=$monetary2_temp;
 								}
@@ -3740,194 +4777,30 @@
 						cashSumMoneyothers = self.myAdd(othersArr);
 						if(basisItem.consumeType != 2 && basisItem.consumeType != 3 && basisItem.depcode == -1){
 							//cashSumMoney+=(basisItem.cash + basisItem.unionPay + basisItem.cooperation + basisItem.mall + basisItem.weixin + basisItem.pay+ cashSumMoneyothers);
-							cashSumMoney = self.myAdd([basisItem.cash,basisItem.unionPay,basisItem.cooperation,basisItem.mall,basisItem.weixin,basisItem.pay,cashSumMoneyothers]);
+							cashSumMoney = self.myAdd([basisItem.cash,basisItem.unionPay,basisItem.cooperation,basisItem.mall,basisItem.weixin,basisItem.pay,basisItem.luckymoney,cashSumMoneyothers]);
 						}
 					}
 				}
 
-				$dl.find('dt p').html('¥'+self.myAdd(_totleFee));
-				$dl.find('dd').append($monetary2);
-				$childTr.find('.col2').append( $dl );
-				//洗发显示时长
-				console.info(item.jsonstr);
-				if(item.jsonstr){
-					var jsonstr = JSON.parse(item.jsonstr);
-					var $washDiv = $('<div class="washStr"></div>');
-					if(jsonstr.flag == "pass"){
-						$washDiv.html('<span class="iconfont icon-shijianbiao"></span>洗发合格，时长' + jsonstr.washPassTime + (jsonstr.empNo?'<br/>(' + jsonstr.empNo + '&nbsp;&nbsp;' + jsonstr.empName + ')':''));
-					}
-					else if(jsonstr.flag == "nopass"){
-						$washDiv.html('<span class="iconfont icon-shijianbiao red"></span>洗发不合格，时长' + jsonstr.washPassTime + (jsonstr.empNo?'<br/>(' + jsonstr.empNo + '&nbsp;&nbsp;' + jsonstr.empName + ')':''));
-					}
-					$childTr.find('.col2').append( $washDiv );
-				}
-
-				//显示部门业绩
-				this.renderDeptPerf($childTr.find('.col2'),item);
-
-
 				//项目,售价,店内业绩,工位/业绩
-				var projectArr = [];
-
+				var projectArr = [];				
 				if(item.type == 0 || item.type == 4 || (item.type == 6 && item.consumeType != 6)){	//0:项目消费, 4:套餐消费, 6:年卡消费
-					var $col3 = $('<td class="col3">' +
-								'<table width="100%" cellpadding="0" cellspacing="0" class="cm_table col3table">' +
-                                    '<thead>' +
-                                        '<tr>' +
-                                            '<td style="width:40%"><div class="tdwrap">项目</div></td>' +
-                                            '<td style="width:8%"><div class="tdwrap">价格</div></td>' +
-                                            '<td style="width:52%"><div class="tdwrap">工位/业绩</div></td>' +
-                                        '</tr>' +
-                                    '</thead>' +
-                                    '<tbody></tbody>' +
-                                '</table>' +
-							'</td>');
-					$childTr.find('.childtable > tbody > tr').append($col3);
 					if(item.detailList && item.detailList.length>0){
 						for(var detailIdx=0;detailIdx<item.detailList.length;detailIdx++){
 							var detail=item.detailList[detailIdx];
-							var $detailMore=$('<tr class="detailtr"></tr>').data("item",detail);
-
-							$detailMore.append('<td><div class="tdwrap sale"></div></td>');
-							$detailMore.append('<td><div class="tdwrap price">¥'+Math.round(detail.price*100)/100+'</div></td>');
-
-							var $sale=$detailMore.find(".sale");
-							if((item.type == 0 || item.type == 4 || (item.type == 6 && item.consumeType != 6)) && detail.consumeType != 1 && detail.consumeType != 4){//只有项目能修改
-								$sale.append($('<span class="projectName"><a href="javascript:void(0)" class="am-clickable editDep">'+this.getDepName(detail.depcode)+'</a><a href="javascript:void(0)" class="am-clickable editItem">'+detail.itemName+'</a></span>').data("item",$.extend(detail,{billNo:item.billNo,operatorId:item.operatorId,billtype:item.type})));
-							}else{
-								$sale.append($('<span class="projectName"><a href="javascript:void(0)" class="am-clickable editDep">'+this.getDepName(detail.depcode)+'</a><a href="javascript:void(0)" class="noclick">'+detail.itemName+'</a></span>').data("item",$.extend(detail,{billNo:item.billNo,operatorId:item.operatorId,billtype:item.type})));
-							}
-							if((item.type == 0 || item.type == 4 || (item.type == 6 && item.consumeType != 6)) || item.type == 1){
-							}else {
-								$sale.find('.editDep').hide();
-							}
-							$sale.append($('<span class="num">x '+ detail.num +'</span>'));
+							
 							projectArr.push(detail.itemName);
 
-							//工位/业绩
-							if(item.type == 1 || item.type == 3 || item.consumeType == 6){//不显示指定非指定
-								if(item.empList && item.empList.length){
-									$detailMore.append($('<td class="employeeTable"><table class="table"><tbody></tbody></table></td>'));
-									var $employeeTable=$detailMore.find(".employeeTable tbody");
-
-									for(var employeeId=0;employeeId<item.empList.length;employeeId++){
-										var emp=item.empList[employeeId];
-										if(emp.empNo != null){
-											var $employee="";
-											//添加员工
-											$employee = ('<tr>'+
-												'<td class="changeEmployee" data-id='+emp.empId+'><div class="tdwrap"><a class="am-clickable" href="javascript:void(0)">'+(emp.empNo+'号'+emp.dutyTypeName+'('+emp.empName+')')+'</a></div></td>'+
-												'<td><div class="am-clickable tdedit">业绩:¥'+ emp.fee +'<ul><li class="am-clickable updateli">修改</li><li class="am-clickable delli">删除</li></ul></div></td>' +
-											'</tr>');
-		                                    $employeeTable.append($employee);
-		                                    var otherSendMessage={billNo:item.billNo,operatorId:item.operatorId,billtype:item.type,itemNo:(detail?detail.itemNo:""),itemName:(detail?detail.itemName:"")};
-		                                    $employeeTable.data("item",{empList:item.empList,other:otherSendMessage});
-		                                    //添加员工DOM
-		                                    if(employeeId == item.empList.length - 1){
-		                                    	$employeeTable.append($('<tr class="addcustTr"><td class="am-clickable addcust" colspan="2"><div class="am-clickable"></div></td></tr>'));
-		                                    }
-										}
-									}
-								}else{
-									$detailMore.append($('<td class="employeeTable"><table class="table"><tbody></tbody></table></td>'));
-								}
-							}else{//显示指定非指定
-								//添加员工
-								$detailMore.append($('<td class="employeeTable"><table class="table"><tbody></tbody></table></td>'));
-								var $employeeTable=$detailMore.find(".employeeTable tbody");
-								var employeeList=self.getEmployeeById(item.empList,detail.id);
-
-								var $employee=self.renderEmployee(employeeList);
-								var otherSendMessage={billNo:item.billNo,operatorId:item.operatorId,billtype:item.type,itemNo:(detail?detail.itemNo:""),itemName:(detail?detail.itemName:"")};
-								$employeeTable.data("item",{empList:employeeList,other:otherSendMessage});
-								$employeeTable.append($employee);
-								//添加员工DOM
-								$employeeTable.append($('<tr class="addcustTr"><td class="am-clickable addcust" colspan="3"><div class="am-clickable"></div></td></tr>'));
-							}
-
-							$childTr.find('.col3 .col3table > tbody').append( $detailMore );
 						}
 					}
 				}else if(item.type == 1){	//1:卖品消费
-					var $col3 = $('<td class="col3">' +
-								'<table width="100%" cellpadding="0" cellspacing="0" class="cm_table col3table">' +
-                                    '<thead>' +
-                                        '<tr>' +
-                                            '<td style="width:30%"><div class="tdwrap">卖品</div></td>' +
-                                            '<td style="width:10%"><div class="tdwrap">数量</div></td>' +
-                                            '<td style="width:10%"><div class="tdwrap">价格</div></td>' +
-                                            '<td style="width:50%"><div class="tdwrap">工位/提成</div></td>' +
-                                        '</tr>' +
-                                    '</thead>' +
-                                    '<tbody></tbody>' +
-                                '</table>' +
-							'</td>');
-					$childTr.find('.childtable > tbody > tr').append($col3);
+					
 					if(item.detailList && item.detailList.length>0){
 						for(var detailIdx=0;detailIdx<item.detailList.length;detailIdx++){
 							var detail=item.detailList[detailIdx];
-							var $detailMore=$('<tr class="detailtr"></tr>').data("item",detail);
-
-							$detailMore.append('<td><div class="tdwrap sale"></div></td>');
-							$detailMore.append('<td><div class="tdwrap salenum">'+ (detail.num== -99?"不限":detail.num) +'</div></td>');
-
-							var _money = detail.money/detail.num;
-							if(_money.toString().indexOf('.') != -1){	//如果是小数
-								if(_money.toString().split('.')[1].length == 1){
-									//一位小数
-									_money = _money.toFixed(1);
-								}else{
-									_money = _money.toFixed(2);
-								}
-							}
-							$detailMore.append('<td><div class="tdwrap money">¥'+_money+'</div></td>');
-
-							var $sale=$detailMore.find(".sale");
-							if((item.type == 0 || item.type == 4 || (item.type == 6 && item.consumeType != 6)) && detail.consumeType != 1 && detail.consumeType != 4){//只有项目能修改
-								$sale.append($('<span class="projectName"><a href="javascript:void(0)" class="am-clickable editDep">'+this.getDepName(detail.depcode)+'</a><a href="javascript:void(0)" class="am-clickable editItem">'+detail.itemName+'</a></span>').data("item",$.extend(detail,{billNo:item.billNo,operatorId:item.operatorId,billtype:item.type})));
-							}else{
-								$sale.append($('<span class="projectName"><a href="javascript:void(0)" class="am-clickable editDep">'+this.getDepName(detail.depcode)+'</a><a href="javascript:void(0)" class="noclick">'+detail.itemName+'</a></span>').data("item",$.extend(detail,{billNo:item.billNo,operatorId:item.operatorId,billtype:item.type})));
-							}
-							if((item.type == 0 || item.type == 4 || (item.type == 6 && item.consumeType != 6)) || item.type == 1){
-							}else {
-								$sale.find('.editDep').hide();
-							}
+							
 							projectArr.push(detail.itemName);
 
-							//工位/提成
-							if(detailIdx == 0){
-								if(item.empList && item.empList.length){
-									$detailMore.append($('<td class="employeeTable" rowspan="'+ item.detailList.length +'"><table class="table"><tbody></tbody></table></td>'));
-									var $employeeTable=$detailMore.find(".employeeTable tbody");
-
-									for(var employeeId=0;employeeId<item.empList.length;employeeId++){
-										var emp=item.empList[employeeId];
-										if(emp.empNo != null){
-											var $employee="";
-											//添加员工
-											var $empGain=emp.automatic===0?'<span>¥'+emp.gain+'</span>':'¥'+emp.gain;
-											$employee = ('<tr>'+
-												'<td class="changeEmployee" data-id='+emp.empId+'><div class="tdwrap"><a class="am-clickable" href="javascript:void(0)">'+(emp.empNo+'号'+emp.dutyTypeName+'('+emp.empName+')')+'</a></div></td>'+
-												'<td><div class="am-clickable tdedit">业绩:¥'+ emp.fee +',提成:'+$empGain +'<ul><li class="am-clickable updateli">修改</li><li class="am-clickable delli">删除</li></ul></div></td>' +
-											'</tr>');
-		                                    $employeeTable.append($employee);
-		                                    var otherSendMessage={billNo:item.billNo,operatorId:item.operatorId,billtype:item.type,itemNo:(detail?detail.itemNo:""),itemName:(detail?detail.itemName:"")};
-		                                    $employeeTable.data("item",{empList:item.empList,other:otherSendMessage});
-										}
-										//添加员工DOM
-	                                    if(employeeId == item.empList.length - 1){
-	                                    	$employeeTable.append($('<tr class="addcustTr"><td class="am-clickable addcust" colspan="2"><div class="am-clickable"></div></td></tr>'));
-	                                    }
-									}
-								}else{
-									$detailMore.append($('<td class="employeeTable" rowspan="'+ item.detailList.length +'"><table class="table"><tbody><tr class="addcustTr"><td class="am-clickable addcust" colspan="2"><div class="am-clickable"></div></td></tr></tbody></table></td>'));
-									var $employeeTable=$detailMore.find(".employeeTable tbody");
-									var otherSendMessage={billNo:item.billNo,operatorId:item.operatorId,billtype:item.type,itemNo:(detail?detail.itemNo:""),itemName:(detail?detail.itemName:"")};
-		                            $employeeTable.data("item",{empList:item.empList,other:otherSendMessage});
-								}
-							}
-
-							$childTr.find('.col3 .col3table > tbody').append( $detailMore );
 						}
 					}
 				}else if(item.type == 2 || item.type == 5){	//2:开卡充值,续卡充值, 5:年卡充值
@@ -3944,135 +4817,37 @@
 						projectArr.push("年卡充值");
 					}
 
-					var $col3 = $('<td class="col3">' +
-								'<table width="100%" cellpadding="0" cellspacing="0" class="cm_table col3table">' +
-                                    '<thead>' +
-                                        '<tr>' +
-                                            '<td><div class="tdwrap">工位/提成</div></td>' +
-                                        '</tr>' +
-                                    '</thead>' +
-                                    '<tbody></tbody>' +
-                                '</table>' +
-							'</td>');
-					$childTr.find('.childtable > tbody > tr').append($col3);
-					var $employeeTable=$('<tr><td class="employeeTable"><table class="table"><tbody></tbody></table></td></tr>');
-					var $employee = '';
-					if(item.empList && item.empList.length){
-						for(var employeeId=0;employeeId<item.empList.length;employeeId++){
-							var emp=item.empList[employeeId];
-							if(emp.empNo != null){
-								var $empGain=emp.automatic===0?'<span>¥'+emp.gain+'</span>':'¥'+emp.gain;
-								$employee += ('<tr>'+
-									'<td class="changeEmployee" data-id='+emp.empId+'><div class="tdwrap"><a class="am-clickable" href="javascript:void(0)">'+(emp.empNo+'号'+emp.dutyTypeName+'('+emp.empName+')')+'</a></div></td>'+
-									'<td><div class="am-clickable tdedit">业绩:¥'+ emp.fee +',提成:'+ $empGain +'<ul><li class="am-clickable updateli">修改</li><li class="am-clickable delli">删除</li></ul></div></td>' +
-								'</tr>');
-							}
-							//添加员工DOM
-                            if(employeeId == item.empList.length - 1){
-                            	$employee += '<tr class="addcustTr"><td class="am-clickable addcust" colspan="2"><div class="am-clickable"></div></td></tr>';
-                            }
-						}
-					}else{
-						$employee = '<tr class="addcustTr"><td class="am-clickable addcust" colspan="2"><div class="am-clickable"></div></td></tr>';
-					}
-					var otherSendMessage={billNo:item.billNo,operatorId:item.operatorId,billtype:item.type,itemNo:(detail?detail.itemNo:""),itemName:(detail?detail.itemName:"")};
-					$employeeTable.find("tbody").append($employee).data("item",{empList:item.empList,other:otherSendMessage});
-					$childTr.find('.col3 .col3table > tbody').append($employeeTable);
+					
 				}else if(item.type == 3 || item.type == 7 || (item.type == 6 && item.consumeType == 6)){	//3:套餐购买, 7:套餐赠送, 6:年卡销售
-					var $col3 = $('<td class="col3">' +
-								'<table width="100%" cellpadding="0" cellspacing="0" class="cm_table col3table">' +
-                                    '<thead>' +
-                                        '<tr>' +
-                                            '<td style="width:30%"><div class="tdwrap">项目</div></td>' +
-                                            '<td style="width:10%"><div class="tdwrap">数量</div></td>' +
-                                            '<td style="width:10%"><div class="tdwrap">总价</div></td>' +
-                                            '<td style="width:50%"><div class="tdwrap">工位/提成</div></td>' +
-                                        '</tr>' +
-                                    '</thead>' +
-                                    '<tbody></tbody>' +
-                                '</table>' +
-							'</td>');
-					$childTr.find('.childtable > tbody > tr').append($col3);
+					
 					if(item.detailList && item.detailList.length>0){
 						for(var detailIdx=0;detailIdx<item.detailList.length;detailIdx++){
 							var detail=item.detailList[detailIdx];
-							var $detailMore=$('<tr class="detailtr"></tr>').data("item",detail);
+							projectArr.push(this.getTreatPackageName(detail));
 
-							$detailMore.append('<td><div class="tdwrap sale"></div></td>');
-							$detailMore.append('<td><div class="tdwrap salenum">'+ (detail.num== -99?"不限":detail.num) +'</div></td>');
-
-							var _money = detail.money;
-							if(_money.toString().indexOf('.') != -1){	//如果是小数
-								if(_money.toString().split('.')[1].length == 1){
-									//一位小数
-									_money = _money.toFixed(1);
-								}else{
-									_money = _money.toFixed(2);
-								}
-							}
-
-							$detailMore.append('<td><div class="tdwrap money">¥'+_money+'</div></td>');
-
-							var $sale=$detailMore.find(".sale");
-							if((item.type == 0 || item.type == 4 || (item.type == 6 && item.consumeType != 6)) && detail.consumeType != 1 && detail.consumeType != 4){//只有项目能修改
-								$sale.append($('<span class="projectName"><a href="javascript:void(0)" class="am-clickable editDep">'+this.getDepName(detail.depcode)+'</a><a href="javascript:void(0)" class="am-clickable editItem">'+detail.itemName+'</a></span>').data("item",$.extend(detail,{billNo:item.billNo,operatorId:item.operatorId,billtype:item.type})));
-							}else{
-								$sale.append($('<span class="projectName"><a href="javascript:void(0)" class="am-clickable editDep">'+this.getDepName(detail.depcode)+'</a><a href="javascript:void(0)" class="noclick">'+detail.itemName+'</a></span>').data("item",$.extend(detail,{billNo:item.billNo,operatorId:item.operatorId,billtype:item.type})));
-							}
-							if((item.type == 0 || item.type == 4 || (item.type == 6 && item.consumeType != 6)) || item.type == 1){
-							}else {
-								$sale.find('.editDep').hide();
-							}
-							projectArr.push(detail.itemName);
-
-							//工位/提成
-							if(detailIdx == 0){
-								if(item.empList && item.empList.length){
-									$detailMore.append($('<td class="employeeTable" rowspan="'+ item.detailList.length +'"><table class="table"><tbody></tbody></table></td>'));
-									var $employeeTable=$detailMore.find(".employeeTable tbody");
-
-									for(var employeeId=0;employeeId<item.empList.length;employeeId++){
-										var emp=item.empList[employeeId];
-										if(emp.empNo != null){
-											var $employee="";
-											//添加员工
-											var $empGain=emp.automatic===0?'<span>¥'+emp.gain+'</span>':'¥'+emp.gain;
-											if(item.type==3 && amGloble.metadata.configs.packageSpecial=='true'){
-												$employee = ('<tr>'+
-												'<td class="changeEmployee" data-id='+emp.empId+'><div class="tdwrap"><a class="am-clickable" href="javascript:void(0)">'+(emp.empNo+'号'+emp.dutyTypeName+'('+emp.empName+')')+'</a></div></td>'+
-												'<td><div class="tdwrap"><span>'+(emp.pointFlag?'指定':'非指定')+'</span></div></td><td><div class="am-clickable tdedit">业绩:¥'+ emp.fee +',提成:'+ $empGain +'<ul><li class="am-clickable updateli">修改</li><li class="am-clickable delli">删除</li></ul></div></td>' +
-											'</tr>');
-											}else {
-												$employee = ('<tr>'+
-												'<td class="changeEmployee" data-id='+emp.empId+'><div class="tdwrap"><a class="am-clickable" href="javascript:void(0)">'+(emp.empNo+'号'+emp.dutyTypeName+'('+emp.empName+')')+'</a></div></td>'+
-												'<td><div class="am-clickable tdedit">业绩:¥'+ emp.fee +',提成:'+ $empGain +'<ul><li class="am-clickable updateli">修改</li><li class="am-clickable delli">删除</li></ul></div></td>' +
-												'</tr>');
-											}
-											
-		                                    $employeeTable.append($employee);
-		                                    var otherSendMessage={billNo:item.billNo,operatorId:item.operatorId,billtype:item.type,itemNo:(detail?detail.itemNo:""),itemName:(detail?detail.itemName:"")};
-		                                    $employeeTable.data("item",{empList:item.empList,other:otherSendMessage});
-										}
-										//添加员工DOM
-	                                    if(employeeId == item.empList.length - 1){
-	                                    	$employeeTable.append($('<tr class="addcustTr"><td class="am-clickable addcust" colspan="2"><div class="am-clickable"></div></td></tr>'));
-	                                    }
-									}
-								}else{
-									$detailMore.append($('<td class="employeeTable" rowspan="'+ item.detailList.length +'"><table class="table"><tbody><tr class="addcustTr"><td class="am-clickable addcust" colspan="2"><div class="am-clickable"></div></td></tr></tbody></table></td>'));
-									var $employeeTable=$detailMore.find(".employeeTable tbody");
-									var otherSendMessage={billNo:item.billNo,operatorId:item.operatorId,billtype:item.type,itemNo:(detail?detail.itemNo:""),itemName:(detail?detail.itemName:"")};
-		                            $employeeTable.data("item",{empList:item.empList,other:otherSendMessage});
-								}
-							}
-
-							$childTr.find('.col3 .col3table > tbody').append( $detailMore );
+							
 						}
 					}
 				}
+				
+				$html.find('.consumptionamount dt').html( '<span class="xfnr">' + projectArr.join('</span><span class="xfnr">') + '</span>' );
+				// 给套餐包增加背景样式
+				var $xfnrs = $html.find('.consumptionamount dt').find('.xfnr');
+				$.each($xfnrs,function(){
+					if($(this).find('.icon-package_icon').length){
+						$(this).addClass('treatPackageName')
+					}
+				});
 
 				$html.find('.consumptionamount dt').html( '<span class="xfnr">' + projectArr.join('</span><span class="xfnr">') + '</span>' );
-				//$html.find('.consumptionamount dd').html( '¥'+_totleFee );
+				// 给套餐包增加背景样式
+				var $xfnrs = $html.find('.consumptionamount dt').find('.xfnr');
+				$.each($xfnrs,function(){
+					if($(this).find('.icon-package_icon').length){
+						$(this).addClass('treatPackageName')
+					}
+				});
+
 				if(item.debtBillId){
 					_totleFee = [item.consumeFee];
 				}
@@ -4089,120 +4864,182 @@
 				//支付方式
 				// var _paymentmethod = paymentmethodArr.length == 1 ? paymentmethodArr[0] : '混合支付';
 				// $html.find('.paymentmethod').html(_paymentmethod);
-				var $operateBox=$('<div class="operate_box"></div>');
-				var $print_btn='<div class="am-clickable print"><span class="icon iconfont icon-dayinxiaopiao"></span>打印小票</div>';
-				var $revoke_btn='<div class="am-clickable revoke"><span class="icon iconfont icon-chedan"></span>撤单</div>';
-				var $realte_btn =containedFacePay>0?'<div class="am-clickable relate"><span class="icon iconfont icon-guanlianshoukuan"></span>关联收款</div>':'';
-				var $bonus_btn=amGloble.metadata.enabledNewBonusModel&&amGloble.metadata.enabledNewBonusModel==1&&'<div class="am-clickable bonus-btn"><span class="icon iconfont icon-jisuanticheng"></span>计算提成</div>'||'';
-				var $perf_btn = amGloble.metadata.enabledNewPerfModel == 1 && '<div class="am-clickable perf-btn"><span class="icon iconfont icon-jisuanyeji"></span>计算业绩</div>' || '';
-				$operateBox.html($realte_btn + $bonus_btn + $perf_btn + $print_btn + $revoke_btn);
-				$childTr.find('.tdchildren').append($operateBox)
-				var $revoke = $operateBox.find('.revoke');
-				if(item.type==0 || item.type==4 || (item.type==6 && item.consumeType!=6)){
-					//项目
-					$revoke.data("revoke","M0");
-				}else if(item.type==1){
-					//卖品
-					$revoke.data("revoke","M2");
-				}else if(item.type==2){
-					//开卡充值
-					$revoke.data("revoke","M1");
-				}else if(item.type==3){
-					//套餐购买
-					$revoke.data("revoke","M3");
-				}else if(item.type==5 || (item.type==6 && item.consumeType==6)){
-					//年卡销售
-					$revoke.data("revoke","M4");
-				}
-
-				self.$table.append($html).append($childTr);
-				var day = '';
-				for(var di=0;di<am.operateArr.length;di++){
-					if(am.operateArr[di].indexOf('MGJZ10') != -1){
-						day = am.operateArr[di].split('MGJZ10')[1];
-					}	
-				}
-				//改日期
-				if( am.operateArr.indexOf('N') != -1 && (day=='' || (new Date().getTime()-item.consumeTime*1)/(1000*60*60*24)<day)){
-					var ts = amGloble.now();
-					var user = amGloble.metadata.userInfo;
-					var limitDays=1;
-					if(user.userType==0 && user.role==3){
-						//老板看一年
-						limitDays=180;
-					}else if(user.userType==0 && user.role==2){
-						//管理员看6个月
-						limitDays=4;
-					}
-					ts.setDate(ts.getDate()-limitDays);
-					self.$table.find(".basictr .consumetime").mobiscroll().calendar({	
-					    theme: 'mobiscroll',
-					    lang: 'zh',
-					    display: 'bottom',
-					    months: "auto",
-						min:ts,
-					    max: amGloble.now(),
-					    //controls: ['calendar', 'time'],
-					    setOnDayTap: true,
-						buttons: [],
-						endYear: amGloble.now().getFullYear()+50,
-					    onSet: function(valueText, inst) {
-					        var _valueText = valueText.valueText;
-					        var _tr = $(this).parents('tr');
-					        var _childtr = _tr.next('.childtr');
-					        var _item = _tr.data('item');
-					        console.log(_valueText);
-					        console.log(_item);
-
-					        var _d = {
-					        	"parentShopId" : am.metadata.userInfo.parentShopId,
-								"shopId" : am.metadata.userInfo.shopId,
-					        	'updType' : 1,
-					        	'id' : _item.id,
-					        	'newVal' : new Date(_valueText).getTime() + '',
-					        	'oldVal' : _item.consumeTime,
-					        	'operator' : amGloble.metadata.userInfo.userName,
-					        	'billNo' : _item.billNo
-					        };
-					        console.log(_d);
-					        am.loading.show("修改中,请稍候...");
-							am.api.billUpd.exec(_d, function(res) {
-							    am.loading.hide();
-							    console.log(res);
-							    if (res.code == 0) {
-							    	/*  暂时不支持修改具体时间  所以更新方法暂时屏蔽  */
-							    	//var _date = new Date(_d.newVal - 0).format("mm/dd HH:MM");
-							    	//_tr.find('.consumetime').text(_date);
-
-							    	//_item.consumeTime = _d.newVal;
-
-							    	//_tr.data('item',_item);
-
-							    	var _n=new Date(_d.newVal*1),
-							    		_o=new Date(_d.oldVal*1);
-							    	if(_n.getFullYear()!=_o.getFullYear() || _n.getMonth()!=_o.getMonth() || _n.getDate()!=_o.getDate()){
-							    		_tr.remove();
-							    		_childtr.remove();
-							    	}
-							    }else {
-							        am.msg(res.message || "数据获取失败,请检查网络!");
-							    }
-							});
-					    }
-					});
-				}
+				$html.data('_totleFee',_totleFee)
+				$html.data('$monetary',$monetary)
+				$html.data('$monetary2',$monetary2)
+				$html.data('paymentmethodArr',paymentmethodArr);
+				$html.data('containedFacePay',containedFacePay);
+				self.$table.append($html);
 			}
-
 			if(self.updateId != -1){
 				self.updateIdVclick();
 			}
 			self.watercourseScroll.refresh();
 			self.$billRecordContent.removeClass('empty error normal');
 			self.watercourseScroll.closeBottomLoading();
+		},
+		getTreatPackageName: function (detail,showDrop,onlyText) {
+			// 获取套餐包名称
+			var tpMap = am.metadata.tpMap,
+			tpExpireMap = am.metadata.tpExpireMap;
+			var name = "";
+			if (!detail.itemNo || detail.itemNo!="null") {
+				// 组合套餐项目显示项目名称
+				name = detail.itemName
+			} else if (detail.treatmentitemId && detail.treatmentitemId>-1) {
+				// 套餐包名称
+				name = tpMap[detail.treatmentitemId] ? tpMap[detail.treatmentitemId].packName : (tpExpireMap[detail.treatmentitemId] ? tpExpireMap[detail.treatmentitemId].packName : "套餐包已删除");
+				if (name && !onlyText) {
+					var drop='';
+					if(showDrop){
+						drop='<svg class="icon svg-icon" aria-hidden="true"><use xlink:href="#icon-bill_arrow_icon_b-copy"></use></svg>';
+					}
+					name = '<span class="icon iconfont icon-package_icon"></span>'+name+drop;
+				}
+			}
+			return name;
+		},
+		setServiceEmpsAndDom: function ($detailMore, item, detail, isNew) {
+			// 判断新老数据
+			var empList = [];
+			var rowspanProperty = "";
+			if (isNew) {
+				empList = detail.empList;
+			} else {
+				empList = item.empList;
+				rowspanProperty = "rowspan=" + item.detailList.length;
+			}
+			if (empList && empList.length) {
+				console.log(detail, '===========');
+				$detailMore.append($('<td class="employeeTable"' + (rowspanProperty || "") + '><table class="table"><tbody></tbody></table></td>'));
+				var $employeeTable = $detailMore.find(".employeeTable tbody");
 
+				for (var employeeId = 0; employeeId < empList.length; employeeId++) {
+					var emp = empList[employeeId];
+					if (emp.empNo != null || 1) {
+						var $employee = "<tr>"+this.getEmpTrInnerHTML(emp,item.type,item.consumeType)+"</tr>";
+						$employeeTable.append($employee);
+						var otherSendMessage = {
+							billNo: item.billNo,
+							operatorId: item.operatorId,
+							billtype: item.type,
+							itemNo: (detail ? detail.itemNo : ""),
+							itemName: (detail ? detail.itemName : "")
+						};
+						$employeeTable.data("item", {
+							empList: empList,
+							other: otherSendMessage
+						});
+					}
+					//添加员工DOM
+					//添加员工DOM
+					if (employeeId == empList.length - 1) {
+						$employeeTable.append($('<tr class="addcustTr"><td class="am-clickable addcust" colspan="2"><div class="am-clickable"></div></td></tr>'));
+						var otherSendMessage = {
+							billNo: item.billNo,
+							operatorId: item.operatorId,
+							billtype: item.type,
+							itemNo: (detail ? detail.itemNo : ""),
+							itemName: (detail ? detail.itemName : "")
+						};
+						$employeeTable.data("item", {
+							empList: empList,
+							other: otherSendMessage
+						});
+					}
+				}
+			} else {
+				$detailMore.append($('<td class="employeeTable"><table class="table"><tbody><tr class="addcustTr"><td class="am-clickable addcust" colspan="2"><div class="am-clickable"></div></td></tr></tbody></table></td>'));
+				var $employeeTable = $detailMore.find(".employeeTable tbody");
+				var otherSendMessage = {
+					billNo: item.billNo,
+					operatorId: item.operatorId,
+					billtype: item.type,
+					itemNo: (detail ? detail.itemNo : ""),
+					itemName: (detail ? detail.itemName : "")
+				};
+				$employeeTable.data("item", {
+					empList: detail.empList,
+					other: otherSendMessage
+				});
+			}
+		},
+		setDepotsEmpsAndDom: function ($detailMore, item, detail, isNew) {
+			var empList = [];
+			var rowspanProperty = "";
+			if (isNew) {
+				// 新数据
+				empList = detail.empList;
+			} else {
+				empList = item.empList;
+				rowspanProperty = "rowspan=" + item.detailList.length;
+			}
+			if (empList && empList.length) {
+				$detailMore.append($('<td class="employeeTable"' + (rowspanProperty || "") + '><table class="table"><tbody></tbody></table></td>'));
+				var $employeeTable = $detailMore.find(".employeeTable tbody");
+				for (var employeeId = 0; employeeId < empList.length; employeeId++) {
+					var emp = empList[employeeId];
+					if (emp.empNo != null || 1) {
+						var $employee = "<tr>"+this.getEmpTrInnerHTML(emp,item.type,item.consumeType)+"</tr>";
+						$employeeTable.append($employee);
+						var otherSendMessage = {
+							billNo: item.billNo,
+							operatorId: item.operatorId,
+							billtype: item.type,
+							itemNo: (detail ? detail.itemNo : ""),
+							itemName: (detail ? detail.itemName : "")
+						};
+						$employeeTable.data("item", {
+							empList: empList,
+							other: otherSendMessage
+						});
+					}
+					//添加员工DOM
+					if (employeeId == empList.length - 1) {
+						$employeeTable.append($('<tr class="addcustTr"><td class="am-clickable addcust" colspan="2"><div class="am-clickable"></div></td></tr>'));
+						var otherSendMessage = {
+							billNo: item.billNo,
+							operatorId: item.operatorId,
+							billtype: item.type,
+							itemNo: (detail ? detail.itemNo : ""),
+							itemName: (detail ? detail.itemName : "")
+						};
+						$employeeTable.data("item", {
+							empList: empList,
+							other: otherSendMessage
+						});
+					}
+				}
+			} else {
+				$detailMore.append($('<td class="employeeTable"><table class="table"><tbody><tr class="addcustTr"><td class="am-clickable addcust" colspan="2"><div class="am-clickable"></div></td></tr></tbody></table></td>'));
+				var $employeeTable = $detailMore.find(".employeeTable tbody");
+				var otherSendMessage = {
+					billNo: item.billNo,
+					operatorId: item.operatorId,
+					billtype: item.type,
+					itemNo: (detail ? detail.itemNo : ""),
+					itemName: (detail ? detail.itemName : "")
+				};
+				$employeeTable.data("item", {
+					empList: empList,
+					other: otherSendMessage
+				});
+			}
+		},
+		matchNewEmpListWithBill: function (item) {
+			var empList = item.empList,
+				detailList = item.detailList;
+			$.each(detailList, function (i, v) {
+				v.empList = [];
+				$.each(empList, function (index, value) {
+					if (value.detailId == v.id) {
+						v.empList.push(value);
+					}
+				})
+			});
 		},
 		renderRelatePay:function(data){
-			var payName = ["微信","支付宝","大众点评","银联支付","京东钱包"];//支付类型
+			var payName = ["微信","支付宝","大众点评","银联支付","京东支付"];//支付类型
 			var payType=["美管加代收","自收","收钱吧","京东聚合支付"];//收款类型
 			var $list=this.$payList.empty();
 			var _this=this;
@@ -4791,14 +5628,12 @@
 			}
 			return res;
 		},
-		renderEmployee:function(item,num){
-			var $employee="";
-			for(var employeeId=0;employeeId<item.length;employeeId++){
-				var emp=item[employeeId];
-				var employeeName="";
-				if(emp.empNo != null){
-					employeeName=(emp.empNo+'号'+emp.dutyTypeName);
-				}
+		getEmpTrInnerHTML:function(emp,_type,_consumeType){
+			var employeeName="";
+			if(emp.empNo != null){
+				employeeName=(emp.empNo+'号'+emp.dutyTypeName);
+			}
+			if(_type==0 || _type==4 || (_type==6 && _consumeType!=6)){
 				var $text="";
 				if(emp.pointFlag == 1){
 					$text+=('<span>指定</span>');
@@ -4811,22 +5646,44 @@
 				// 	$text+=('<span>自动算</span>');
 				// }
 				var $gain = '';
-				if(amGloble.metadata.shopPropertyField.handinto==1){
+				// if(amGloble.metadata.shopPropertyField.handinto==1){
 					var $empGain = emp.automatic===0?'<span>¥'+emp.gain+'</span>':'¥'+emp.gain;
-					if(emp.gain>0){
+					if(emp.gain>0 || emp.automatic===0){
 						$gain = ',提成:'+ $empGain;
 					}else if(amGloble.metadata.enabledNewBonusModel&&amGloble.metadata.enabledNewBonusModel==1&&(emp.gain==0||emp.gain<0)){
 						$gain = ',提成:'+ $empGain;
 					}else{
 						$gain = ',提成自动算'
 					}
+				// }
+				var $trInnerHTML = '<td class="changeEmployee" width="30%" colspan="1"><div class="tdwrap"><a class="am-clickable" href="javascript:void(0)">'+(employeeName+'('+emp.empName+')')+'</a></div></td>'+
+					'<td style="width:20%"><div class="tdwrap">'+$text+'</div></td>'+
+					'<td><div class="am-clickable tdedit">业绩:¥'+ emp.fee + $gain +'<ul><li class="am-clickable updateli">修改</li><li class="am-clickable delli">删除</li></ul></div></td>';
+			}else if(_type==1 || _type==2 || _type==5){
+				//添加员工
+				var $empGain = emp.automatic === 0 ? '<span>¥' + emp.gain + '</span>' : '¥' + emp.gain;
+				var $trInnerHTML = ('<td class="changeEmployee" data-id=' + emp.empId + '><div class="tdwrap"><a class="am-clickable" href="javascript:void(0)">' + (employeeName+'('+emp.empName+')') + '</a></div></td>' +
+					'<td><div class="am-clickable tdedit">业绩:¥' + emp.fee + ',提成:' + $empGain + '<ul><li class="am-clickable updateli">修改</li><li class="am-clickable delli">删除</li></ul></div></td>');
+			}else if(_type==3 || _type==7 || (_type==6 && _consumeType==6)){
+				//添加员工
+				var $empGain = emp.automatic === 0 ? '<span>¥' + emp.gain + '</span>' : '¥' + emp.gain;
+				if (_type == 3 && amGloble.metadata.configs.packageSpecial == 'true') {
+					var $trInnerHTML = '<td width="30%" class="changeEmployee" data-id=' + emp.empId + '><div class="tdwrap"><a class="am-clickable" href="javascript:void(0)">' + (employeeName+'('+emp.empName+')') + '</a></div></td>' +
+						'<td width="20%"><div class="tdwrap"><span>' + (emp.pointFlag ? '指定' : '非指定') + '</span></div></td><td><div class="am-clickable tdedit">业绩:¥' + emp.fee + ',提成:' + $empGain + '<ul><li class="am-clickable updateli">修改</li><li class="am-clickable delli">删除</li></ul></div></td>';
+				} else {
+					var $trInnerHTML = '<td class="changeEmployee" data-id=' + emp.empId + '><div class="tdwrap"><a class="am-clickable" href="javascript:void(0)">' + (employeeName+'('+emp.empName+')') + '</a></div></td>' +
+						'<td><div class="am-clickable tdedit">业绩:¥' + emp.fee + ',提成:' + $empGain + '<ul><li class="am-clickable updateli">修改</li><li class="am-clickable delli">删除</li></ul></div></td>';
 				}
-				$employee+=('<tr>'+
-					'<td class="changeEmployee" width="35%" colspan='+(num?num:"1")+'><div class="tdwrap"><a class="am-clickable" href="javascript:void(0)">'+(employeeName+'('+emp.empName+')')+'</a></div></td>'+
-                    '<td style="width:'+(num==3?"12%":"20%")+'"><div class="tdwrap">'+$text+'</div></td>'+
-                    '<td><div class="am-clickable tdedit">业绩:¥'+ emp.fee + $gain +'<ul><li class="am-clickable updateli">修改</li><li class="am-clickable delli">删除</li></ul></div></td>'+
-                    // '<td style="width:'+(num==3?"12%":"19%")+'"><div class="tdwrap">业绩:¥'+emp.fee+'</div></td>'+
-                '</tr>');
+			}
+			
+			return $trInnerHTML;
+		},
+		renderEmployee:function(item,_type,_consumeType){
+			var $employee="";
+			for(var employeeId=0;employeeId<item.length;employeeId++){
+				var emp=item[employeeId];
+				var $tr = '<tr>'+this.getEmpTrInnerHTML(emp,_type,_consumeType)+'</tr>';
+				$employee += $tr;
 			}
 			return $employee;
 		},
@@ -4968,8 +5825,19 @@
 				"pageSize":self.facePageSize,
 				"period":period
 			}
-			if(apiName=="getMallOrder" || apiName=="getLuckyMoney"){
+			if(apiName=="getLuckyMoney"){
 				sendMessage.status="3,4";
+			}
+			if (apiName=="getMallOrder") {
+				var opt = {
+					"flag": 1,
+					"pageNumber":self.countPerPage,
+					"pageSize": 12,
+					"category":self.mallSelect["saleCategory_form"].getValue(),
+					"status":self.mallSelect["saleStatus_form"].getValue(),
+					"period":self.getOrderTime()
+				}
+				$.extend(sendMessage,opt)
 			}
 			if(apiName=="getdianpingFlow") sendMessage.status="2";
 			am.loading.show("正在获取数据,请稍候...");
@@ -4978,12 +5846,35 @@
 			    if (res.code == 0) {
 			    	callback && callback(res);
 			    }else {
-			    	self.$billRecordContent.removeClass('normal empty').addClass("error");
+					self.$billRecordContent.removeClass('normal empty').addClass("error");
+					self.$footContent.hide();
 			    	// self.pager.refresh(0,0);
 			        am.msg(res.message || "数据获取失败,请检查网络!");
 			    }
 			});
 
+		},
+		keyWordSearch: function(cb){
+			var metadata=am.metadata;
+			var sendMessage={
+				"flag": 1,
+				"parentShopId":metadata.userInfo.parentShopId,
+				"shopId":metadata.userInfo.shopId,
+				"pageNumber":self.countPerPage,
+				"pageSize": 12,
+				"keyword":self.$keyword.val().trim()
+			}
+			am.loading.show("正在获取数据,请稍候...");
+			am.api.getMallOrder.exec(sendMessage, function(res) {
+			    am.loading.hide();
+			    if (res.code == 0) {
+			    	cb && cb(res);
+			    }else {
+			    	self.$billRecordContent.removeClass('normal empty').addClass("error");
+					self.$footContent.hide();
+			        am.msg(res.message || "数据获取失败,请检查网络!");
+			    }
+			});
 		},
 		getfaceData:function(callback){
 			var metadata=am.metadata;
@@ -5057,6 +5948,19 @@
 			    }
 			});
 		},
+		updateWaterCallback:function(data,noRefreshCallback){
+			var enabledNewPerfModel = amGloble.metadata.enabledNewPerfModel,
+			enabledNewBonusModel = amGloble.metadata.enabledNewBonusModel;
+			if(0 && enabledNewPerfModel == 1 || enabledNewBonusModel == 1){
+				this.billId = data.billId;
+				this.billIds = [{id:data.billId}];
+				this.getGainAndVoidFee(null,function(){
+					self.$.find(".btnOk").trigger('vclick');
+				});
+			}else{
+				noRefreshCallback && noRefreshCallback();
+			}
+		},
 		//操作水单
 		updateWater:function(type,data,callback){
 			var metadata=am.metadata;
@@ -5100,6 +6004,18 @@
 				};
 				var cardList = currentBill.type == 2 ? [] : currentBill.cardList;
 				var cashList = currentBill.cashList;
+				for(var i=0;i<cardList.length;i++){
+					if(cardList[i].depcode==-1){
+						cardList = [cardList[i]];
+						break;
+					}
+				}
+				for(var i=0;i<cashList.length;i++){
+					if(cashList[i].depcode==-1){
+						cashList = [cashList[i]];
+						break;
+					}
+				}
 				var total = 0;
 				var totalFee = data.fee;
 				var payDetail = {};
@@ -5127,16 +6043,33 @@
 				
 				var perfPctObj = am.page.pay.getPayFeePctObj({payDetail: payDetail, total: total, isNotProject: !isProjectOrder});
 				var perfDetail = {};
+				// 如果是项目消费且是添加员工，则增加虚业绩
+				if (isProjectOrder && type == 4) {
+					perfDetail.voidFee = data.voidFee;
+				}
 				for (var perfKey in perfPctObj) {
 					var pct = perfPctObj[perfKey];
 					if (pct > 0) {
 						perfDetail[perfKey] = totalFee * pct;
 					}
 				}
-				var payCategoryPctObj = am.page.pay.getPayMoneyCategoryPctObj({payDetail: payDetail, total: total});
-				data.cashfee = totalFee * payCategoryPctObj['cash'];
-				data.cardfee = totalFee * payCategoryPctObj['card'];
-				data.otherfee = totalFee * payCategoryPctObj['other'];
+				if(total>0){
+					var payCategoryPctObj = am.page.pay.getPayMoneyCategoryPctObj({payDetail: payDetail, total: total});
+					data.cashfee = totalFee * payCategoryPctObj['cash'];
+					data.cardfee = totalFee * payCategoryPctObj['card'];
+					data.otherfee = totalFee * payCategoryPctObj['other'];
+				}else{
+					if(cashList.length>0){
+						data.cashfee = totalFee;
+						data.cardfee = 0;
+						data.otherfee = 0;
+					}
+					if(cardList.length>0){
+						data.cashfee = 0;
+						data.cardfee = totalFee;
+						data.otherfee = 0;
+					}
+				}
 			}
 			// 修改类型(0 单号，1 日期，2 入账金额，3 客户性别，4 服务项目，5 部门，6 项目业绩 7 员工，8 员工业绩 9 提成，10 指定类型，11 是否计客次，12 是否计入日常开支，13 新增单据服务/提成员工，14 工本费，15 外创员工业绩，16 现金消费金额，17 划卡业绩，18 现金业绩，19 卡金消费金额，注：com.sentree.hairv3.manage.bill.web.BillAction.upd())
 			if(type=="1"){//项目
@@ -5155,6 +6088,7 @@
 				pushData.newEmployeeDutyName=data.newEmployeeDutyName;
 				pushData.newEmployeeName=data.newEmployeeName;
 			}else if(type=="3"){//修改业绩/提成
+				pushData.automatic=data.automatic;// 是否自动计算提成
 				pushData.updType=8;
 				pushData.newVal = data.fee;
 				pushData.cashFee = data.cashfee;
@@ -5167,9 +6101,11 @@
 				pushData.newEmployeeName=data.newEmployeeName;
 				pushData.perfDetail = perfDetail;
 			}else if(type=="4"){//添加员工
+				pushData.automatic=data.automatic;// 是否自动计算提成
 				pushData.updType=13;
 				pushData.newVal = data.fee;
 				pushData.cashFee = data.cashfee;
+				pushData.percent = 100;
 				pushData.cardFee = data.cardfee;
 				pushData.otherFee = data.otherfee;
 				pushData.gain = data.gain;
@@ -5181,7 +6117,10 @@
 				pushData.updType=20;
 				pushData.subId = data.subId;
 			}
+			// 将detailId传入
+			pushData.detailId = data.detailId;
 			am.api.updataproject.exec($.extend({
+				detailId:data.detailId,
 			    shopId:metadata.userInfo.shopId, //门店id
 			    parentShopId:metadata.userInfo.parentShopId,
 		        id:data.billId,//水单id
@@ -5197,6 +6136,7 @@
 			    am.loading.hide();
 				console.log(res);
 			    if (res.code == 0) {
+					am.msg('修改成功');
 					callback && callback(res);
 					// 如果是修改员工业绩、提成或者是添加员工，且是项目消费的时候则重算业绩
 					if (amGloble.metadata.enabledNewPerfModel == 1 && [3, 4].indexOf(parseInt(type)) > -1 && isProjectOrder ) {
@@ -5253,6 +6193,7 @@
 			    am.loading.hide();
 			    console.log(res);
 			    if (res.code == 0) {
+					am.msg('修改成功');
 			    	callback && callback()
 			    }else {
 			        am.msg(res.message || "数据获取失败,请检查网络!");
@@ -5274,6 +6215,7 @@
 			    am.loading.hide();
 			    console.log(res);
 			    if (res.code == 0) {
+					am.msg('撤单成功');
 			    	callback && callback(res);
 			    }else {
 			        am.msg(res.message || "数据获取失败,请检查网络!");
@@ -5316,6 +6258,12 @@
 				return;
 			}
 			var $dl = $('<dl class="deptPerf"><dt class="edit deptPerfEdit am-clickable">部门业绩<span class="iconfont icon-qianming1"></span></dt><dd></dd></dl>');
+			if (self.refundCardFlag(item)) {
+				$dl.find(".deptPerfEdit").removeClass("am-clickable").end().find(".icon-qianming1").hide();
+			} 
+			else {
+				$dl.find(".deptPerfEdit").addClass("am-clickable").end().find(".icon-qianming1").show();
+			}
 			var dept = am.metadata.deparList;
 			var cashList = item.cashList,cardList = item.cardList;
 			var $dd = $dl.children('dd');
@@ -5528,14 +6476,15 @@
 				'<div class="mask"></div>'+
 				'<div class="content">'+
 					'<div class="close"></div>'+
-					'<p class="title"></p>'+
+					'<div class="titleWrap"><p class="title"></p><span class="am-clickable remarkSetWrap"><svg class="icon svg-icon titleSetIcon" aria-hidden="true"><use xlink:href="#icon-peizhiguanli"></use></svg></span></div>'+
 					'<div class="wrapper">'+
 						'<div class="wrap">'+
 							'<ul>'+
 								'<li class="am-clickable"><span></span><p>撤单理由</p></li>'+
 							'</ul>'+
 							'<div class="selfInput"><span></span><p>手动输入</p></div>'+
-							'<div class="textareaWrap"><textarea maxlength="50" placeholder="请输入理由..."></textarea></div>'+
+							'<div class="textareaWrap"><textarea maxlength="50" placeholder="请输入理由..."></textarea>'+
+							'<div class="saveAsCommon am-clickable"><svg class="icon svg-icon saveAsCommonIcon" aria-hidden="true"><use xlink:href="#icon-baocun"></use></svg><span class="saveAsCommonBtn">保存为常用理由</span></div></div>'+
 						'</div>'+
 					'</div>'+
 					'<p class="warn">警告:请选择或输入明确的撤单理由，以便财务和管理层审核</p>'+
@@ -5543,8 +6492,15 @@
 				'</div>'+
 			'</div>');
 			$('body').append($dom)
-            this.$ = $dom;
-
+			this.$ = $dom;
+			this.$remarkSetWrap=this.$.find(".remarkSetWrap").on("vclick",function(){
+				self.hide();
+				$.am.changePage(am.page.about, "slideup");
+				setTimeout(function(){
+					$("#about_tab").find("li:last").trigger("vclick");
+					$('.sysSet .secTabsWrap').find("span").eq(self.type).trigger("vclick");
+				},200);
+			});
             this.$textareaWrap = this.$.find('.textareaWrap');
             this.$textarea = this.$textareaWrap.find('textarea').blur(function(){
             	var val = $(this).val();
@@ -5553,7 +6509,14 @@
             	}else {
         			self.$sure.addClass('disabled');
         		}
-            });
+			});
+			this.$saveAsCommon=this.$.find('.saveAsCommon').on('vclick',function(){
+				var val = self.$textarea.val();
+				if(am.isNull(val)){
+					return am.msg('理由不能为空')
+				}
+				self.saveToRemarkList && self.saveToRemarkList(val);
+			});
             this.$textarea = this.$.find('textarea');
             this.$showSelfInput = this.$.find('.selfInput').vclick(function(){
             	if(!self.hasSetDate){
@@ -5622,10 +6585,13 @@
 			});
 		},
 		show:function(opt){
+			// opt.type 1 删单 ；2 撤单  3 收银 ，不传默认删单
             if(!this.$){
                 this.init();
-            }
-            this.callback = opt.callback;
+			}
+			this.type=opt.type||1;
+			this.callback = opt.callback;
+			this.saveToRemarkList =  opt.saveToRemarkList;
             this.$ul.empty();
             this.$textarea.val('');
             this.$sure.addClass('disabled');
@@ -5635,8 +6601,11 @@
             	for(var i=0;i<opt.reason.length;i++){
             		var $item = this.$li.clone();
 	                $item.find('p').html(opt.reason[i]);
-	                this.$ul.append($item);
-	            	}
+					this.$ul.append($item);
+					if (opt.currentValue && opt.currentValue == opt.reason[i]) {
+						$item.addClass("active");
+					}
+				}
             	this.$textareaWrap.hide();
             	this.$showSelfInput.removeClass('show');
             	this.hasSetDate = true;
@@ -5654,4 +6623,50 @@
         }
 	}
 	am.selectCancleReason = selectCancleReason;
+	// 流水套餐包详情
+	am.treatPackageDetail = {
+		init: function () {
+			var _this = this;
+			this.$ = $('#treatPackageDetail').on('vclick', '.close,.treatPackageDetailMask', function (e) {
+				e.stopPropagation();
+				_this.hide();
+			});
+			this.$title=this.$.find('.title');
+			this.$listWrap = this.$.find('.listWrap');
+			this.$listWrapper = this.$listWrap.find('.listWrapper');
+			this.$detailItem = this.$listWrapper.find('.detailItem').remove();
+			this.$detailScrollView = new $.am.ScrollView({
+				$wrap: this.$listWrap,
+				$inner: this.$listWrapper,
+				direction: [false, true],
+			});
+		},
+		render: function (list) {
+			this.$listWrapper.empty();
+			for (var i = 0, len = list.length; i < len; i++) {
+				var $li = this.$detailItem.clone(true, true);
+				var item = list[i];
+				$li.find('.name').text(item.itemname || '组合项目');
+				$li.find('.times').text(item.sumtimes != '-99' ? item.sumtimes : '不限次');
+				$li.find('.price').text("￥" + (item.summoney || '0'));
+				this.$listWrapper.append($li.data('data', item));
+			}
+			this.$title.text(list[0].treatPackageName || list[0].itemname);
+			this.$detailScrollView.refresh();
+		},
+		show: function (list) {
+			if (list && list.length) {
+				this.render(list);
+				this.$.show();
+			} else {
+				console.log('套餐包不包含服务项目');
+				am.msg('套餐包不包含服务项目')
+			}
+		},
+		hide: function () {
+			this.$.hide();
+		}
+	}
+	am.treatPackageDetail.init();
+
 })();

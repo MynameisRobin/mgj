@@ -1,0 +1,97 @@
+#page_multiCardPay {
+    .totalprice {
+        height: 52px;
+        line-height: 52px;
+        .leftTit {
+            float: left;
+            height: 52px;
+            line-height: 52px;
+            color: #666;
+            .total {
+                font-weight: 500;
+                font-size: 18px;
+                color: #222;
+                vertical-align: middle;
+            }
+        }
+        .rightTit {
+            float: right;
+            height: 52px;
+            line-height: 52px;
+
+            .discountMoney {
+                font-weight: 500;
+                font-size: 18px;
+                color: #222;
+                vertical-align: middle;
+            }
+        }
+    }
+    .comboitemPay {
+        border-bottom: 1px solid #ececec;
+        height: 44px;
+        line-height: 44px;
+    }
+    .multiCard {
+        height: auto;
+        padding-right: 0;
+        .multiCardWrap {
+            overflow: hidden;
+            max-height: 200px;
+            ul {
+                li {
+                    border-bottom: 1px solid #ececec;
+                    padding-right: 20px;
+                    height: 44px;
+                    line-height: 44px;
+                    position: relative;
+                    &:last-of-type {
+                        border: none;
+                    }
+                    .leftLi {
+                        float: left;
+                        padding-left: 28px;
+                        .cardDel {
+                            position: absolute;
+                            left: 0;
+                            top: 12px;
+                            background: url(../images/card_del.png) no-repeat left center;
+                            background-size: 20px 20px;
+                            width: 20px;
+                            height: 20px;
+                        }
+                        .cardInfo {
+                            color: #999;
+                        }
+                        .cardName {
+                            margin-right: 5px;
+                        }
+                    }
+                    .rightLi {
+                        float: right;
+                        .costCardFee {
+                            border: 1px solid #DDDDDD;
+                            background: #FFF;
+                            border-radius: 3px;
+                            display: inline-block;
+                            width: 80px;
+                            height: 30px;
+                            line-height: 30px;
+                            text-align: right;
+                            padding-right: 14px;
+                        }
+                    }
+                }
+            }
+        }
+        .addCard {
+            border-top: 1px solid #ececec;
+            height: 43px;
+            line-height: 44px;
+            padding-left: 28px;
+            background: url(../images/card_add.png) no-repeat left center;
+            background-size: 22px 22px;
+            color: #00B7EE;
+        }
+    }
+}

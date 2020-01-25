@@ -1,6 +1,11 @@
 @charset "utf-8";
 /* 文字颜色 ***********************/
 /* c0* 为黑白灰色系 */
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .page_service,
 .page_product {
   left: 136px;
@@ -36,6 +41,7 @@
   bottom: 0;
   right: 0;
   line-height: 42px;
+  overflow: hidden;
 }
 .cashierTotalPanel.fullTab {
   left: 60px;
@@ -186,9 +192,10 @@
   width: 40px;
   height: 20px;
   margin: 0 auto;
-  background-color: #595959;
+  background-color: #eee;
   border-radius: 20px;
   position: relative;
+  box-shadow: rgba(0, 0, 0, 0.1) 1px 1px 3px inset;
 }
 .cashierTotalPanel .scanToSale .toggle .icon {
   position: absolute;
@@ -217,7 +224,8 @@
   top: 0;
 }
 .cashierTotalPanel .scanToSale.on .toggle {
-  background-color: #42a2de;
+  background-color: #555;
+  box-shadow: rgba(0, 0, 0, 0.2) 1px 0 2px;
 }
 .cashierTotalPanel .scanToSale.on .toggle .icon {
   left: auto;
@@ -957,6 +965,13 @@
   color: #999;
   line-height: 20px;
 }
+.tab_cash .memberInfo .content .card .discountRuleBtn {
+  font-size: 12px;
+  color: #00b7ee;
+}
+.tab_cash .memberInfo .content .card .discountRuleBtn.am-clickable-active {
+  opacity: 0.6;
+}
 .tab_cash .memberInfo .content .card .discount {
   font-size: 12px;
   line-height: 20px;
@@ -1620,4 +1635,12 @@
 }
 .goItemPayConfirm .close.am-clickable-active {
   opacity: 0.8;
+}
+.memberLoading::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
 }

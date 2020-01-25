@@ -1,0 +1,165 @@
+.page_mergePay {
+    .payContent {
+        .left {
+            .billsDetail {
+                max-height: 45%;
+                width: 100%;
+                overflow: hidden;
+                border-bottom: 1px solid rgba(236,236,236,1);
+                .scollBills{
+                    ul {
+                        width: 100%;
+                        height: 100%;
+                        box-sizing: border-box;
+                        -webkit-box-sizing: border-box;
+                        li {
+                            width: 100%;
+                            box-sizing: border-box;
+                            -webkit-box-sizing: border-box;
+                            position: relative;
+                            padding: 20px 54px 20px 22px;
+                            &:last-of-type::after {
+                                border: none;
+                            }
+                            &:hover {
+                                background-color: #f7f7f7;
+                            }
+                            &::after{
+                                content: '';
+                                border-bottom: 1px solid rgba(236,236,236,1);
+                                position: absolute;
+                                bottom: 0px;
+                                left: 22px;
+                                right: 22px;
+                            }
+                            .hangup-right {
+                                position: absolute;
+                                right: 22px;
+                                bottom: 0px;
+                                width: 32px;
+                                height: 100%;
+                                cursor: pointer;
+                              }
+                              .hangup-right img {
+                                position: absolute;
+                                width: 20px;
+                                height: 20px;
+                                left: 50%;
+                                top: 50%;
+                                transform: translate(0, -10px);
+                              }
+                            &>div {
+                                height: 30px;
+                                line-height: 30px;
+                                .detailLeft {
+                                    float: left;
+                                    height: 30px;
+                                    position: relative;
+                                }
+                                .detailMiddle {
+                                    float: left;
+                                    left: 200px;
+                                    height: 30px;
+                                    position: absolute;
+                                }
+                                .detailRight {
+                                    float: right;
+                                    height: 30px;
+                                }
+                                .name {
+                                    margin-left: 2px;
+                                    margin-right: 18px;
+                                    font-weight: 500;
+                                    vertical-align: middle;
+                                }
+                                .pen::before {
+                                    position: absolute;
+                                    left: auto;
+                                    right: -15px;
+                                    top: 8px;
+                                    bottom: auto;
+                                    content: "";
+                                    width: 10px;
+                                    height: 14px;
+                                    background: url(../images/card_edit_white_icon.png) no-repeat center center;
+                                    background-size: 10px 12px;
+                                }
+                                .memberCount {
+                                    color: #dfdfdf;
+                                    font-size: 13px;
+                                    &::before{
+                                        content: "";
+                                        float: left;
+                                        width: 15px;
+                                        height: 15px;
+                                        border: 1px solid #dfdfdf;
+                                        border-radius: 3px;
+                                        margin: 6px;
+                                    }
+                                    &.checked{
+                                        color: #222;
+                                        &::before{
+                                            border-color: #6D6D6D;
+                                            background: url(../images/icons_sprite/check_box_checked.png) no-repeat -3px -3px;
+                                            background-size: 21px 21px;
+                                        }
+                                    }
+                                }
+                                b {
+                                    font-size:16px;
+                                    line-height: 30px;
+                                    font-weight:normal;
+                                    color:rgba(34,34,34,1);
+                                }
+                                .billCost {
+                                    font-size:18px;
+                                }
+                                .billNo{
+                                    font-family: 'displayIdFont';
+                                    font-size:20px;
+                                    vertical-align: middle;
+                                }
+                                i {
+                                    font-size:13px;
+                                    font-style: normal;
+                                    color:rgba(153,153,153,1);
+                                    line-height:30px;
+                                }
+                                span{
+                                    font-size:13px;
+                                    line-height: 30px;
+                                }
+                                .red{
+                                    color: red;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            .mergeMoney {
+                height: 52px;
+                width: 100%;
+                padding-left: 22px;
+                padding-right: 22px;
+                box-sizing: border-box;
+                -webkit-box-sizing: border-box;
+                border-bottom: 1px solid rgba(236,236,236,1);
+                .title{
+                    height:52px;
+                    float: left;
+                    font-size:14px;
+                    color:#666;
+                    line-height:52px;
+                }
+                .totalMoney {
+                    float: right;
+                    height:52px;
+                    font-size:30px;
+                    color:rgba(232,39,66,1);
+                    line-height:52px;
+                }
+            }
+        }
+    }
+}

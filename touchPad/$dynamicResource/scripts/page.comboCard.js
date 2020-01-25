@@ -1,4 +1,267 @@
 (function() {
+    giftSelect = {
+        init: function () {
+            var _this = this;
+            this.$ = $("#combo-card-giftItem-selector");
+            this.serviceItemScroll = new $.am.ScrollView({
+                $wrap: _this.$.find(".serviceItemGiftWarp"),
+                $inner: _this.$.find(".serviceItemGiftWarp .serviceWrap"),
+                direction: [false, true],
+                hasInput: false
+            });
+            this.productScroll = new $.am.ScrollView({
+                $wrap: _this.$.find(".productItemGiftWrap"),
+                $inner: _this.$.find(".productItemGiftWrap .productWrap"),
+                direction: [false, true],
+                hasInput: false
+            });
+            this.$.find(".close").vclick(function () {
+                _this.$.hide();
+            });
+            this.$.find(".inner").vclick(function (e) {
+                e.stopPropagation();
+            })
+            this.$.vclick(function () {
+                _this.$.hide();
+            });
+            this.$.find(".cancel").vclick(function () {
+                _this.$.hide();
+            });
+            this.$.find(".save").vclick(function () {
+                var serviceItem = [];
+                var productItem = [];
+                var flag = 0;
+                _this.$.find('.content .serviceLi.selected').each(function(){
+                    var data = $(this).data('data');
+                    if(data.itemTimes==0||data.itemTimes==""){
+                        flag = 1;
+                    }else{
+                        serviceItem.push(data);
+                    }
+                });
+                _this.$.find('.content .productli.selected').each(function(){
+                    var data = $(this).data('data');
+                    if(data.amount==0||data.amount==""){
+                        flag = 1;
+                    }else{
+                        productItem.push(data);
+                    }
+                });
+                if(flag==1){
+                    am.msg('次数不能为空！');
+                    return;
+                }
+                if(serviceItem.length>0||productItem.length>0){
+                    _this.opt.itemSave && _this.opt.itemSave({
+                        serviceItem:serviceItem,
+                        productItem:productItem
+                    });
+                }
+                _this.$.hide();
+            });
+            this.$.find('.content').on("vclick", ".name", function () {
+                var $li = $(this).parent();
+                if($li.hasClass('selected')){
+                    $li.removeClass('selected')
+                }else{
+                    $li.addClass("selected");
+                }
+            }).on("vclick", ".icon-juxingkaobei", function () {
+                var $parentLi = $(this).parent();
+                var currentTpd = $parentLi.data('data');
+                if (currentTpd.timesItemNOs) {
+                    var timesItemNOList = currentTpd.timesItemNOs.split(',');
+                    if (currentTpd.itemId == -1 && timesItemNOList.length > 1) {
+                        self.initComboCardItemSelector();
+                        self.ComboCardItemSelectorMaxCount = currentTpd.itemTimes;
+                        self.ComboCardItemSelectorCallBack = function(newTpd) {
+                            for(var i=0;i<newTpd.length;i++){
+                                if(newTpd[i].itemTimes==-99){
+                                    var $li = $('<li class="serviceLi"><span class="name am-clickable">'+ newTpd[i].itemName +'</span><div class="unlimit am-clickable">不限次</div></li>')
+                                }else{
+                                    var $li = $('<li class="serviceLi"><span class="name am-clickable">'+ newTpd[i].itemName +'</span><div class="num"><input type="text" class="number" value="'+ newTpd[i].itemTimes +'"></div></li>')
+                                }
+                                $parentLi.before($li);
+                                $li.data('data',newTpd[i])
+                            }
+                            $parentLi.remove();
+                            if (navigator.userAgent.indexOf("Windows") === -1) {
+                                _this.$.find('.content .number').prop('readonly',true).addClass('am-clickable');
+                            }
+                            self.comboCardItemSelector.hide();
+                            _this.serviceItemScroll.refresh();
+                            _this.serviceItemScroll.scrollTo('top');
+                        }
+                        var dialogTitleEl = self.comboCardItemSelector.find('.title'),
+                            dialogContentEl = self.comboCardItemSelector.find('.scrollInner');
+                        var itemTimesLabel = currentTpd.itemTimes == -99 ? '不限' : currentTpd.itemTimes + '次';
+                        dialogTitleEl.find('h4 > span').remove();
+                        if(am.metadata.userInfo.operatestr.indexOf("a52") == -1){
+                            dialogTitleEl.find('h4').append('<span>('+itemTimesLabel+')</span>');
+                        }else{
+                            dialogTitleEl.find('h4').append('<span>(无次数限制)</span>');
+                        }
+						dialogContentEl.html('');
+						
+						if (currentTpd.itemTimes == -99) {
+							self.comboCardItemSelector.find('.save').addClass('unlimited');
+						} else {
+							self.comboCardItemSelector.find('.save').removeClass('unlimited');
+						}
+
+                        var tpdTamplate = am.clone(currentTpd);
+                        $.each(timesItemNOList, function(index, item) {
+                            var paramObj={
+                                showStopedItem:1,
+                                showFixedStopName:1,
+                                onlyShowValidName:0
+                            }
+                            // var currentName = self.getItemNamesByNos(item,'',1,1)[0];
+                            var currentName = self.getItemNamesByNos(item,'',paramObj)[0];
+                            tpdTamplate.itemName = currentName;
+                            tpdTamplate.timesItemNOs = null;
+                            tpdTamplate.itemId = item;
+                            tpdTamplate.itemTimes = currentTpd.itemTimes == -99 ? -99 : 0;
+                            var itemEl = $(self.renderComboCardSelectorItem(tpdTamplate)).data('data', am.clone(tpdTamplate));
+                            dialogContentEl.append(itemEl);
+                        });
+
+                        self.comboCardItemSelector.show();
+
+                        if(self.comboCardItemSelectorScroll){
+                            self.comboCardItemSelectorScroll.refresh();
+                            self.comboCardItemSelectorScroll.scrollTo('top');
+                        }else {
+                            self.comboCardItemSelectorScroll = new $.am.ScrollView({
+                                $wrap : self.comboCardItemSelector.find('.content'),
+                                $inner :  self.comboCardItemSelector.find('.scrollInner'),
+                                direction : [false, true],
+                                hasInput: false
+                            });
+                        }
+                    }
+                }
+            });
+            if (navigator.userAgent.indexOf("Windows") === -1) {
+                this.$.find('.content').on('vclick','.number',function () {
+                    if(am.metadata.userInfo.operatestr.indexOf("a52") == -1){
+                        am.msg('您没有修改次数的权限！')
+                    }else{
+                        var $this = $(this);
+                        am.keyboard.show({
+                            "title":'修改赠送内容次数',
+                            "submit":function(value){
+                                value = value.replace(/[^\d.]/g,"");
+                                value = value.replace(/\./g,"");
+                                value = value * 1;
+                                if(value==0){
+                                    am.msg("次数不能为空或0！");
+                                    return;
+                                }
+                                $this.val(value);
+                                var data = $this.parents('li').data('data');
+                                var newData = am.clone(data);
+                                if($this.parents('li').hasClass('serviceLi')){
+                                    newData.itemTimes = value;
+                                }else{
+                                    newData.amount = value;
+                                }
+                                $this.parents('li').data('data',newData);
+                            }
+                        });
+                    }
+                });
+            }else{
+                this.$.find('.content').on('keyup keypress','.number',function () {
+                    var $this = $(this);
+                    var value = $this.val();
+                    var data = $this.parents('li').data('data');
+                    if(am.metadata.userInfo.operatestr.indexOf("a52") == -1){
+                        if($this.parents('li').hasClass('serviceLi')){
+                            $this.val(data.itemTimes);
+                        }else{
+                            $this.val(data.amount);
+                        }
+                        am.msg('您没有修改次数的权限！');
+                    }else{
+                        var newData = am.clone(data);
+                        value = value.replace(/[^\d.]/g,"");
+                        value = value.replace(/^0/g,"");
+                        value = value.replace(/\./g,"");
+                        value = value?value * 1:"";
+                        $this.val(value);
+                        if($this.parents('li').hasClass('serviceLi')){
+                            newData.itemTimes = value;
+                        }else{
+                            newData.amount = value;
+                        }
+                        $this.parents('li').data('data',newData);
+                    }
+                });
+            }
+        },
+        render:function(data){
+            var tpd=[];
+            var tdList = data.tdList;
+            for(var m=0;m<data.tpd.length;m++){
+                if(data.tpd[m].treatType==1 || data.tpd[m].treatType == 2){
+                    tpd.push(data.tpd[m]);
+                }
+            }
+            this.$.find('.productWrap').empty();
+            this.$.find('.serviceWrap').empty();
+            if(tpd&&tpd.length>0){
+                this.$.find('.serviceItemGift').show()
+                for(var i=0;i<tpd.length;i++){
+                    if(tpd[i].timesItemNOs){
+                        var itemname = am.page.comboCard.getItemNamesByNos(tpd[i].timesItemNOs).join("，");
+                        if(tpd[i].itemTimes==-99){
+                            var $li = $('<li class="serviceLi"><span class="name am-clickable">'+ itemname +'</span><div class="unlimit am-clickable">不限次</div><i class="iconfont icon-juxingkaobei am-clickable"></i></li>')
+                        }else{
+                            var $li = $('<li class="serviceLi"><span class="name am-clickable">'+ itemname +'</span><div class="num"><input type="text" class="number" value="'+ tpd[i].itemTimes +'"></div><i class="iconfont icon-juxingkaobei am-clickable"></i></li>')
+                        }
+                    }else{
+                        if(tpd[i].itemTimes==-99){
+                            var $li = $('<li class="serviceLi"><span class="name am-clickable">'+ tpd[i].itemName +'</span><div class="unlimit am-clickable">不限次</div></li>')
+                        }else{
+                            var $li = $('<li class="serviceLi"><span class="name am-clickable">'+ tpd[i].itemName +'</span><div class="num"><input type="text" class="number" value="'+ tpd[i].itemTimes +'"></div></li>')
+                        }
+                    }
+                    this.$.find('.serviceWrap').append($li);
+                    $li.data('data',tpd[i])
+                }
+            }else{
+                this.$.find('.serviceItemGift').hide()
+            }
+            if(tdList&&tdList.length>0){
+                this.$.find('.productItemGift').show()
+                for(var i=0;i<tdList.length;i++){
+                    var $li = $('<li class="productli"><span class="name am-clickable">'+ tdList[i].name +'</span><div class="num"><input type="text" class="number" value="'+  tdList[i].amount +'"></div></li>')
+                    this.$.find('.productWrap').append($li);
+                    $li.data('data',tdList[i]);
+                }
+            }else{
+                this.$.find('.productItemGift').hide()
+            }
+            if (navigator.userAgent.indexOf("Windows") === -1) {
+                this.$.find('.content .number').prop('readonly',true).addClass('am-clickable');
+            }
+        },
+        show: function (opt) {
+            if (!this.$){
+                this.init();
+            }
+            this.opt = opt;
+            this.render(opt&&opt.data);
+            this.serviceItemScroll.refresh();
+            this.serviceItemScroll.scrollTo('top');
+            this.productScroll.refresh();
+            this.productScroll.scrollTo('top');
+            this.$.show();
+            var innerHeight = this.$.find(".inner").outerHeight();
+            this.$.find(".inner").css("margin-top",-innerHeight/2);
+        }
+    };
     var $tempDateTarget;
     var self = am.page.comboCard = new $.am.Page({
         id: "page_comboCard",
@@ -15,7 +278,7 @@
                 typeFilter: 1,
                 groupKey: 'COMBOCARD_ITEM_GROUP',
                 onSelect: function(data) {
-                    return _this.billMain.addItem(data);
+                    return _this.billMain.addItem(data,null,null,'isNewAdd');
                 },
                 onTouch: function(isVclick) {
 					self.billMain.hideMemberInfo(1);
@@ -53,11 +316,20 @@
                     className: "center"
                 }, {
                     name: "套餐内容",
+                }, {
+                    name: "销售",
+                    width: "100px",
+					// className:"center"
                 }],
                 onSelect: function($item,t) {
-                    self.billServerSelector.rise(0,t);
+                    console.log($item,t)
+					self.billServerSelector.reset($item);
+                    // self.billServerSelector.rise(0,t);
 				},
-                onAddItem: function(data, $container) {
+                onAddItem: function(data, $container,isAutoFill,comboItem,isNewAdded) {
+                    if(data.hasStoped || data.hasDeleted){
+                        return;
+                    }
                     var $tr;
 					var data = am.clone(data);
 
@@ -66,28 +338,49 @@
 					}
                     if(data.tpd){
                         $tr = $('<tr class="am-clickable show"></tr>');
-                        $tr.append('<td><div class="am-clickable delete"></div><span class="server" style="display:none"></span></td>');
+                        $tr.append('<td><div class="am-clickable delete"></div><span class="server_" style="display:none"></span></td>');
                         $tr.append('<td>' + data.name + '</td>');
 	                    var spanClass='';
-	                    if(am.operateArr.indexOf("H2")!=-1){
+	                    if(am.operateArr.indexOf("H2")!=-1 && am.metadata.userInfo.operatestr.indexOf("a49") == -1){
 		                    spanClass = 'am-disabled';
 						}
-                        $tr.append('<td class="center"><span class="price am-clickable '+spanClass+'">' + ((data.nowPrice === undefined)? data.price : data.nowPrice) + '</span></td>');
+                        $tr.append('<td class="center"><span class="price oncePerformance totalPrice am-clickable '+spanClass+'">' + ((data.nowPrice === undefined)? data.price : data.nowPrice) + '</span></td>');
     					var tpds = [];
                         // if(data.costMoney){
                         //     tpds.push('<span class="comboCardItem">成本:￥'+data.costMoney+'</span>');
                         // }
 
-
-    					for(var i=0;i<data.tpd.length;i++){
-                            tpds.push(self.renderComboCardItem(data.tpd[i], i));
-                        }
-                        var tdList=data.tdList;
-                        if(tdList&& tdList.length){
-                            for(var t=0,tlen=tdList.length;t<tlen;t++){
-                                var tdItem=tdList[t];
-                               var span= '<span class="comboCardItem" style="background:#FFF5DA">'+tdItem.name +'<i class="comboCardItem-times">x'+tdItem.amount+(tdItem.unit||'')+'</i></span>';
-                               tpds.push(span);
+                        var oldData = am.clone(data);
+    					var manualgift = data.manualgift||0;
+                        if(manualgift==1){
+                            var newtpd = [];
+                            var hasGiftTpd = 0;
+                            var index = 0;
+                            for(var i=0;i<data.tpd.length;i++){
+                                if(data.tpd[i].treatType==0){
+                                    newtpd.push(data.tpd[i]);
+                                    tpds.push(self.renderComboCardItem(data.tpd[i], index));
+                                    index += 1;
+                                }else{
+                                    hasGiftTpd = 1;
+                                }
+                            }
+                            if(hasGiftTpd==1||data.tdList.length>0){
+                                tpds.unshift('<span class="giftItem am-clickable"></span>')
+                            }
+                            data.tpd = newtpd;
+                            data.tdList = [];
+                        }else{
+                            for(var i=0;i<data.tpd.length;i++){
+                                tpds.push(self.renderComboCardItem(data.tpd[i], i));
+                            }
+                            var tdList=data.tdList;
+                            if(tdList&& tdList.length){
+                                for(var t=0,tlen=tdList.length;t<tlen;t++){
+                                    var tdItem=tdList[t];
+                                   var span= '<span class="comboCardItem" style="background:#FFF5DA">赠：'+tdItem.name +'<i class="comboCardItem-times">x'+tdItem.amount+(tdItem.unit||'')+'</i></span>';
+                                   tpds.push(span);
+                                }
                             }
                         }
                         // for(var i=0;i<data.originTpd.length;i++){
@@ -113,12 +406,14 @@
                         // }
                         
                         $tr.append('<td style="font-size:12px;">'+tpds.join("")+'</td>');
+                        $tr.append('<td class=""><div class="server am-clickable"></div></td>');
                         $container.eq(0).append($tr.data("data", data)).parent().show();
+                        $tr.data("oldData", oldData);
                         if($container.eq(1).is(":empty")){
                             $container.eq(1).parent().hide();
                         }
                     }else{
-                        var $children = $container.find("tr");
+                        var $children = $container.find("tr").removeClass("selected");
                         for (var i = 0; i < $children.length; i++) {
     						var $etr = $children.eq(i);
     						if($etr.data("data") == data){
@@ -126,87 +421,314 @@
     							return $etr.addClass("show1");
     						}
     					}
-    					var ts = am.now();
-                        ts.setFullYear(ts.getFullYear()+1);
-
-                        var feedNum = data.feedNum || 1;
-
-                        $tr = $('<tr class="am-clickable show"></tr>');
-                        $tr.append('<td><div class="am-clickable delete"></div><span class="server" style="display:none"></span></td>');
-                        $tr.append('<td><span class="comboSelectItemNames">' + data.name + '</span><span class="comboItemSetting am-clickable">设置</span></td>');
-                        $tr.append('<td class="center"><span class="cost price am-clickable noDiscount">' + ((data.nowPrice === undefined)? (data.price||0) : data.nowPrice) + '</span></td>');
-                        $tr.append('<td class="center numberTouch am-touchable"><div class="numberWrap"><div class="numberScroller"><div class="number"><span class="reduce am-clickable am-disabled"></span><span class="value am-clickable">'+feedNum+'</span><span class="plus am-clickable"></span></div><div class="unlimitText">不限次</div></div></div></td>');
-	                    $tr.append('<td class="center"><span class="sItemPrice price am-clickable noDiscount">' + ((data.nowPrice === undefined)? data.price : data.nowPrice) + '</span></td>');
-                        $tr.append('<td class="center"><div class="number date am-clickable">'+ts.format('yyyy/mm/dd')+'</div></td>');
-                        $tr.append('<td class="center"><span class="gift checkbox am-clickable">赠送</span></td>');
+                        $tr = _this.renderTable(data);                            
                         $container.eq(1).append($tr.data("data", data)).parent().show();
-                        if($container.eq(0).is(":empty")){
+                        if ($container.eq(0).is(":empty")) {
                             $container.eq(0).parent().hide();
                         }
-                        setTimeout(function(){//动画正在运行  获取的位置不准确 必须异步！！ 
+                        if(self.$.find(".scanToCost").hasClass("on")){
+                            self.$.find(".comboitem .costFlagOpen").show();
+                            self.$.find(".comboitem .costFlagClose").hide();
+                            $container.find(".productCostTd,.oncePerformanceTd").each(function(){
+                                $(this).show();
+                            });
+                        }else{
+                            self.$.find(".comboitem .costFlagOpen").hide();
+                            self.$.find(".comboitem .costFlagClose").show();
+                            $container.find(".productCostTd,.oncePerformanceTd").each(function(){
+                                $(this).hide();
+                            });
+                        }
+                        setTimeout(function () {//动画正在运行  获取的位置不准确 必须异步！！ 
                             am.tips.unlimitComboItem($tr.find(".numberTouch"));
-                        },500);
-	                    
+                        }, 500);
                     }
                     return $tr;
                 },
                 onPriceChange: function($ptr) {
-                    var totalPrice = 0,costSum=0;
+                    var totalPrice = 0,costSum=0,totalproductCost=0;
                     if(!this.$list.find("tr").length){
                         _this.$costEdit.removeClass('modifyed').html(0);
                     }
                     this.$list.find("tr").each(function() {
                         var $tr = $(this);
-						var data = $tr.data("data");
-                        var $price = $tr.find(".price:not(.cost)");
-						var money = $price.text()*1 || 0;
+                        var data = $tr.data("data");
+                        var costConfig = JSON.parse(data.costConfig);
+                        var costFlag = data.costFlag;
+                        var $price = $tr.find(".totalPrice");
+                        var $productCost = $tr.find(".productCost");
+                        var $oncePerformance = $tr.find(".oncePerformance");
+                        var $cost = $tr.find(".cost");//单价
+                        if(costFlag && costConfig && data.groupSaleFlag==1){
+                            var $num = $tr.find(".numberSelect")
+                        }else{
+                            var $num = $tr.find("div.number .value")
+                        }
+                        var num = $num.text()*1 || 0;
+                        var money = $price.text()*1 || 0;
+                        var onceMoney = $cost.text()*1 || 0;
+                        var productCost = $productCost.text()*1 || 0;
+                        var oncePerformance = $oncePerformance.text()*1 || 0;
+                        var costRatio = 0
+                        var sumMoney = Math.round(onceMoney* num*100)/100; //算出来的钱
                         if($ptr && $ptr[0]===this && $price.hasClass("sItemPrice")){
                             //自选项目
-	                        var $num = $tr.find("div.number .value");
 	                        if(!$num.parent().parent().hasClass("unlimit")){
 	                            //如果不限次，爱怎么卖怎么卖, 限次要检查钱
-		                        var $cost = $tr.find(".cost");//单次业绩
-                                var onceMoney = $cost.text()*1 || 0;
-                                var num = $num.text()*1 || 0;
-		                        var sumMoney = Math.round(onceMoney* num*100)/100; //算出来的钱
-		                        $tr.data("cost",0);
-		                        if($price.hasClass("modifyed") && $cost.hasClass("modifyed")){
-		                            //手动改过售价
-			                        // if(money<sumMoney){
-				                       //  //售价小了，报error，自动填算出来的钱
-				                       //  //am.msg('项目售价不能小于单次业绩x次数！')
-				                       //  atMobile.nativeUIWidget.showMessageBox({
-					                      //   title: "提示",
-					                      //   content: '限次项目的售卖价格不能小于单次业绩x次数！'
-				                       //  });
-				                       //  money=sumMoney;
-				                       //  $price.text(sumMoney);
-			                        // }else if(money>sumMoney){
-				                       //  //售价多了，提示用户，超出来的钱算进成本
-				                       //  //am.msg('项目售价大于单次业绩x次数,！');
-				                       //  atMobile.nativeUIWidget.showMessageBox({
-					                      //   title: "增加成本",
-					                      //   content: '您输入的售卖价格(￥'+money+')超出单次业绩x次数(￥'+onceMoney+'x'+num+')，超出￥'+Math.round((money-sumMoney)*100)/100+'将计入套餐成本'
-				                       //  });
-				                       //  $tr.data("cost",(money-sumMoney));
-                           //          }
-		                        }else if($cost.hasClass("modifyed")){
-                                    $cost.removeClass("modifyed");
-                                    $price.text(Math.round(onceMoney*num*100)/100);
-                                    money=sumMoney;
-                                }else if($price.hasClass("modifyed")) {
-                                    $price.removeClass("modifyed");
-			                        $cost.text(Math.floor((money/num)*10000)/10000);
-		                        }else{
-		                            //没改过，用算出来的钱自动填进去
-			                        money=sumMoney;
-			                        $price.text(sumMoney);
-		                        }
+                                $tr.data("cost",0);
+                                if (costFlag && !data.isXCX){
+                                    if($cost.hasClass("modifyed")){
+                                        $cost.removeClass("modifyed");
+                                        $price.text(Math.round(onceMoney*num*100)/100);
+                                        money=sumMoney;
+                                        if(costConfig){
+                                            var hasCostFlag = 0;
+                                            $.each(costConfig, function (i, item) {
+                                                if (item.times == num) {
+                                                    hasCostFlag = 1;
+                                                    if(data.fixedRatioFlag == 1){
+                                                        costRatio = data.fixedRatio
+                                                    }else{
+                                                        costRatio = item.costRatio
+                                                    }
+                                                    $productCost.text(Math.round(costRatio * $price.text())/100)
+                                                }
+                                            })
+                                            if(hasCostFlag==0){
+                                                if(data.fixedRatioFlag == 1){
+                                                    costRatio = data.fixedRatio
+                                                }else{
+                                                    costRatio = false;
+                                                }
+                                                if(costRatio==false){
+                                                    if($price.text()-$productCost.text()<0){
+                                                        am.msg("总价小于产品成本，产品成本自动置为0！")
+                                                        $productCost.text(0);
+                                                    }
+                                                }else{
+                                                    $productCost.text(Math.round(costRatio * $price.text())/100)
+                                                }
+                                            }
+                                            $oncePerformance.text(Math.round(($price.text()-$productCost.text())/num*100)/100)
+                                        }
+                                    }else if($price.hasClass("modifyed")) {
+                                        $price.removeClass("modifyed");
+                                        $cost.text(Math.round((money/num)*1000)/1000);
+                                        if(costConfig){
+                                            var hasCostFlag = 0;
+                                            $.each(costConfig, function (i, item) {
+                                                if (item.times == num) {
+                                                    hasCostFlag = 1;
+                                                    if(data.fixedRatioFlag == 1){
+                                                        costRatio = data.fixedRatio
+                                                    }else{
+                                                        costRatio = item.costRatio
+                                                    }
+                                                    $productCost.text(Math.round(costRatio * $price.text())/100)
+                                                }
+                                            })
+                                            if(hasCostFlag==0){
+                                                if(data.fixedRatioFlag == 1){
+                                                    costRatio = data.fixedRatio
+                                                }else{
+                                                    costRatio = false;
+                                                }
+                                                if(costRatio==false){
+                                                    if($price.text()-$productCost.text()<0){
+                                                        am.msg("总价小于产品成本，产品成本自动置为0！")
+                                                        $productCost.text(0);
+                                                    }
+                                                }else{
+                                                    $productCost.text(Math.round(costRatio * $price.text())/100)
+                                                }
+                                            }
+                                            $oncePerformance.text(Math.round(($price.text()-$productCost.text())/num*100)/100)
+                                        }
+                                    }else if($productCost.hasClass("modifyed")) {
+                                        $productCost.removeClass("modifyed");
+                                        $oncePerformance.text(Math.round(($price.text()-$productCost.text())/num*100)/100)
+                                    }else if($oncePerformance.hasClass("modifyed")) {
+                                        $oncePerformance.removeClass("modifyed");
+                                        var productMoney = Math.round(($price.text()-$oncePerformance.text()*num)*100)/100;
+                                        if(productMoney<0){
+                                            $productCost.text(0);
+                                        }else{
+                                            $productCost.text(productMoney);
+                                        }
+                                    }else{
+                                        //没改过，用算出来的钱自动填进去
+                                        if(data.fixedRatioFlag == 1){
+                                            costRatio = data.fixedRatio
+                                        }else{
+                                            costRatio = money==0?0:productCost/money*100;
+                                        }
+                                        money=sumMoney;
+                                        $price.text(sumMoney);
+                                        $productCost.text(Math.round(money*costRatio)/100);
+                                        $oncePerformance.text(Math.round(($price.text()-$productCost.text())/num*100)/100);
+                                        if ($cost.data("flag") == 1 && !$tr.find('.gift').hasClass('checked')) {
+                                            $cost.text(data.price||0);
+                                            money = $cost.text()*num;
+                                            $price.text(money);
+                                            $productCost.text(Math.round(money*costRatio)/100);
+                                            $oncePerformance.text($cost.text());
+                                            $cost.data("flag",0)
+                                        }
+                                        if(costConfig && !$tr.find('.gift').hasClass('checked')){
+                                            $.each(costConfig, function (i, item) {
+                                                if (item.times == num) {
+                                                    $price.text(item.totalPrice);
+                                                    $cost.text(Math.round(item.totalPrice / num*1000)/1000);
+                                                    $cost.data("flag",1)
+                                                    if(data.fixedRatioFlag == 1){
+                                                        costRatio = data.fixedRatio
+                                                    }else{
+                                                        costRatio = item.costRatio
+                                                    }
+                                                    $productCost.text(Math.round(costRatio * $price.text())/100);
+                                                    $oncePerformance.text(Math.round((($price.text()-costRatio * $price.text()/100))/num*100)/100);
+                                                    money = Number(item.totalPrice);
+                                                    return false;
+                                                }
+                                            })
+                                        }
+                                    }
+                                }else{
+                                    if($cost.hasClass("modifyed")){
+                                        $cost.removeClass("modifyed");
+                                        $price.text(Math.round(onceMoney*num*100)/100);
+                                        money=sumMoney;
+                                        if($price.text()-$productCost.text()<0){
+                                            am.msg("总价小于产品成本，产品成本自动置为0！")
+                                            $productCost.text(0);
+                                        }
+                                        $oncePerformance.text(Math.round(($price.text()-$productCost.text())/num*100)/100);
+                                    }else if($price.hasClass("modifyed")) {
+                                        $price.removeClass("modifyed");
+                                        $cost.text(Math.round((money/num)*1000)/1000);
+                                        if($price.text()-$productCost.text()<0){
+                                            am.msg("总价小于产品成本，产品成本自动置为0！")
+                                            $productCost.text(0);
+                                        }
+                                        $oncePerformance.text(Math.round(($price.text()-$productCost.text())/num*100)/100);
+                                    }else if($productCost.hasClass("modifyed")) {
+                                        $productCost.removeClass("modifyed");
+                                        $oncePerformance.text(Math.round(($price.text()-$productCost.text())/num*100)/100);
+                                    }else if($oncePerformance.hasClass("modifyed")) {
+                                        $oncePerformance.removeClass("modifyed");
+                                        var productMoney = Math.round(($price.text()-$oncePerformance.text()*num)*100)/100;
+                                        if(productMoney<0){
+                                            $productCost.text(0);
+                                        }else{
+                                            $productCost.text(productMoney);
+                                        }
+                                    }else{
+                                        //没改过，用算出来的钱自动填进去
+                                        costRatio = money==0?0:productCost/money*100;
+                                        money=sumMoney;
+                                        $price.text(sumMoney);
+                                        $productCost.text(Math.round(money*costRatio)/100);
+                                        $oncePerformance.text(Math.round(($price.text()-$productCost.text())/num*100)/100);
+                                    }
+                                }
+		                        
                             }else{
-		                        $tr.data("cost",0);
+                                $cost.text(0)
+                                $tr.data("cost",0);
+                                if(costFlag && !data.isXCX && costConfig && !$tr.find('.gift').hasClass('checked')){
+                                    var hasCostFlag = 0;
+                                    $.each(costConfig, function (i, item) {
+                                        if (item.times == -99) {
+                                            hasCostFlag = 1;
+                                            if(data.fixedRatioFlag == 1){
+                                                costRatio = data.fixedRatio
+                                            }else{
+                                                costRatio = item.costRatio
+                                            }
+                                            if($cost.hasClass("modifyed")){
+                                                $cost.removeClass("modifyed");
+                                            }else if($price.hasClass("modifyed")) {
+                                                $price.removeClass("modifyed");
+                                                $productCost.text(Math.round(costRatio * $price.text())/100)
+                                                $oncePerformance.text(data.price||0)
+                                            }else if($productCost.hasClass("modifyed")) {
+                                                $productCost.removeClass("modifyed");
+                                                $oncePerformance.text(data.price||0)
+                                            }else if($oncePerformance.hasClass("modifyed")) {
+                                                $oncePerformance.removeClass("modifyed");
+                                            }else{
+                                                //没改过，用算出来的钱自动填进去
+                                                $price.text(item.totalPrice);
+                                                money = Number(item.totalPrice);
+                                                $productCost.text(Math.round(costRatio * $price.text())/100)
+                                                $oncePerformance.text(data.price||0)
+                                            }
+                                        }
+                                    })
+                                    if(hasCostFlag==0){
+                                        if(data.fixedRatioFlag == 1){
+                                            costRatio = data.fixedRatio
+                                        }else{
+                                            costRatio = false;
+                                        }
+                                        if($cost.hasClass("modifyed")){
+                                            $cost.removeClass("modifyed");
+                                        }else if($price.hasClass("modifyed")) {
+                                            $price.removeClass("modifyed");
+                                            if(costRatio==false){
+                                                if($price.text()-$productCost.text()<0){
+                                                    am.msg("总价小于产品成本，产品成本自动置为0！")
+                                                    $productCost.text(0);
+                                                }
+                                            }else{
+                                                $productCost.text(Math.round(costRatio * $price.text())/100)
+                                            }
+                                        }else if($productCost.hasClass("modifyed")) {
+                                            $productCost.removeClass("modifyed");
+                                        }else if($oncePerformance.hasClass("modifyed")) {
+                                            $oncePerformance.removeClass("modifyed");
+                                        }else{
+                                            //没改过，用算出来的钱自动填进去
+                                            $productCost.text(Math.round(costRatio * $price.text())/100)
+                                            $oncePerformance.text(data.price||0)
+                                        }
+                                    }
+                                }else if(!costFlag && !data.isXCX && !$tr.find('.gift').hasClass('checked')){
+                                    if($cost.hasClass("modifyed")){
+                                        $cost.removeClass("modifyed");
+                                    }else if($price.hasClass("modifyed")) {
+                                        $price.removeClass("modifyed");
+                                        if(money < $productCost.text()){
+                                            am.msg("总价小于产品成本，产品成本自动置为0！")
+                                            $productCost.text(0);
+                                        }
+                                    }else if($productCost.hasClass("modifyed")) {
+                                        $productCost.removeClass("modifyed");
+                                    }else if($oncePerformance.hasClass("modifyed")) {
+                                        $oncePerformance.removeClass("modifyed");
+                                    }else{
+                                        //没改过，用算出来的钱自动填进去
+                                        $productCost.text(0)
+                                        $oncePerformance.text(data.price||0)
+                                    }
+                                }
                             }
                         }
-						totalPrice += money;
+                        totalPrice += money;
+                        if($tr.parents("table").hasClass("comboitem")){
+                            totalproductCost += ($productCost.text()*1||0);
+                        }else{
+                            var itemCost = 0;
+                            if(data.price==0){
+                                itemCost = 0;
+                            }else{
+                                $.each(data.tpd,function(i,item){
+                                    itemCost +=  Math.round(money * (item.itemMoney / data.price) * item.costRatio)/100;
+                                })
+                            }
+                            $tr.data('itemCost',itemCost)
+                            totalproductCost += itemCost
+                        }
                         if(data && data.costMoney){
 							if(self.member){
 								if(data.nowCostMoney === undefined){
@@ -227,8 +749,12 @@
                     }
                     //this.$.find('span.costMoney').text();
                     var txt = '<span style="font-size: 14px">总计：</span>￥';
-                    if(costSum){
-	                    txt= '<span style="font-size: 14px;color:#555;padding-right:10px;">套餐金额:￥'+toFloat(totalPrice)+'</span>总计:￥';
+                    if(costSum||totalproductCost){
+                        txt = '总计:￥';
+                        if(totalPrice - 0){
+                            txt = '<span style="font-size: 14px;color:#555;padding-right:10px;">服务费:￥'+toFloat(totalPrice-totalproductCost)+'</span>总计:￥';
+                        }
+                        // txt= '<span style="font-size: 14px;color:#555;padding-right:10px;">套餐金额:￥'+toFloat(totalPrice)+'</span>总计:￥';
                     }
                     _this.$costEdit.text(costSum)
                     this.totalPrice = toFloat(totalPrice);
@@ -237,14 +763,41 @@
                 settingKey: "setting_seller",
                 defaultSetting: null,
                 dispatchSetting: function(settings) {
-                    _this.billServerSelector.dispatchSetting(settings);
+                    _this.billServerSelector.dispatchSetting(settings,0,1);//bill头 工位  是否销售
                 },
                 onSubmit: function() {
-                    _this.submit();
+                    var $tr = this.$list.find("tr");
+                    var hasComboitem = 0;
+                    for(var i = 0; i < $tr.length; i++){
+                        if($tr.eq(i).parents("table").hasClass("comboitem")){
+                            hasComboitem = 1;
+                            break;
+                        }
+                    }
+                    if(self.settlementPayDetail != undefined){
+                        // 自助结算流程
+                        _this.submit();
+                    } else {
+                        if (hasComboitem == 1 && amGloble.operateArr.indexOf('a50') == -1) {
+                            if (amGloble.metadata.userInfo.mgjVersion == 1) {
+                                return;
+                            }
+                            if (!amGloble.metadata.shopPropertyField.authorizationCard) {
+                                am.msg('没有权限操作或没有设置授权卡');
+                                return;
+                            }
+                            am.auth.show({
+                                anthSuccess: function () {
+                                    _this.submit();
+                                }
+                            });
+                        } else {
+                            _this.submit();
+                        }
+                    }
                 },
                 changekbtab:true
             });
-
             this.billMain.$list.on("vclick",".checkbox",function(){
                 var $this = $(this);
                 var $tr = $this.parent().parent();
@@ -284,8 +837,21 @@
                             for(var i = 0; i < tpd.length; i ++){
                                 newTpdElList.push(self.renderComboCardItem(tpd[i], i));
                             }
-                            $parentTd.html(newTpdElList.join(''));
                             itemData.tpd = tpd;
+
+                            // 卖品
+                            var tdList = itemData.tdList;
+                            if(tdList && tdList.length){
+                                for(var t = 0,tlen = tdList.length;t<tlen;t++){
+                                    var tdItem = tdList[t];
+                                    var span = '<span class="comboCardItem" style="background:#FFF5DA">赠：'+tdItem.name +'<i class="comboCardItem-times">x'+tdItem.amount+(tdItem.unit||'')+'</i></span>';
+                                    newTpdElList.push(span);
+                                }
+                            }
+                            if($parentTd.find('.giftItem').length>0){
+                                newTpdElList.unshift('<span class="giftItem am-clickable"></span>')
+                            }
+                            $parentTd.html(newTpdElList.join(''));
                             $parentTr.data('data', itemData);
                             self.comboCardItemSelector.hide();
                         }
@@ -293,8 +859,18 @@
                             dialogContentEl = self.comboCardItemSelector.find('.scrollInner');
                         var itemTimesLabel = currentTpd.itemTimes == -99 ? '不限' : currentTpd.itemTimes + '次';
                         dialogTitleEl.find('h4 > span').remove();
-                        dialogTitleEl.find('h4').append('<span>('+itemTimesLabel+')</span>');
-                        dialogContentEl.html('');
+                        if(am.metadata.userInfo.operatestr.indexOf("a52") != -1 && currentTpd.treatType == 1){
+                            dialogTitleEl.find('h4').append('<span>(无次数限制)</span>');
+                        }else{
+                            dialogTitleEl.find('h4').append('<span>('+itemTimesLabel+')</span>');
+                        }
+						dialogContentEl.html('');
+						
+						if (currentTpd.itemTimes == -99) {
+							self.comboCardItemSelector.find('.save').addClass('unlimited');
+						} else {
+							self.comboCardItemSelector.find('.save').removeClass('unlimited');
+						}
 
                         var tpdTamplate = am.clone(currentTpd);
                         $.each(timesItemNOList, function(index, item) {
@@ -347,6 +923,41 @@
             }).on("vclick",".date",function(){
                 self.showCalendar($(this));
                 return false;
+            }).on("vclick",".giftItem",function(){
+                var $parentTd = $(this).parent()
+                var $parentTr = $parentTd.parent();
+                var oldData = $(this).parents('tr').data('oldData');
+                var data = $(this).parents('tr').data('data');
+                var tpd=[],tdList;
+                giftSelect.show({
+                    data:oldData,
+                    itemSave:function(opt){
+                        for(var i=0;i<data.tpd.length;i++){
+                            tpd.push(data.tpd[i]);
+                        }
+                        for(var i=0;i<opt.serviceItem.length;i++){
+                            tpd.push(opt.serviceItem[i]);
+                        }
+                        tdList = opt.productItem;
+                        var newTpdElList = [];
+                        for(var i = 0; i < tpd.length; i ++){
+                            newTpdElList.push(self.renderComboCardItem(tpd[i], i));
+                        }
+                        oldData.tpd = tpd;
+                        oldData.tdList = tdList;
+                        if(tdList && tdList.length){
+                            for(var t = 0,tlen = tdList.length;t<tlen;t++){
+                                var tdItem = tdList[t];
+                                var span = '<span class="comboCardItem" style="background:#FFF5DA">赠：'+tdItem.name +'<i class="comboCardItem-times">x'+tdItem.amount+(tdItem.unit||'')+'</i></span>';
+                                newTpdElList.push(span);
+                            }
+                        }
+
+                        $parentTd.html(newTpdElList.join(''));
+                        $parentTr.removeClass('warn');
+                        $parentTr.data('data', oldData);
+                    }
+                })
             }).on("vclick",".comboItemSetting",function(){
 	            var $this = $(this);
 	            var $tr = $this.parent().parent();
@@ -406,8 +1017,39 @@
                 }else{
 		            _this.$numberScroller.removeClass('unlimit');
                 }
-	            _this.$numberScroller.addClass('transition').setTransformPos(h,"y");
-	            changed && self.billMain.onPriceChange($(this).parent());
+                _this.$numberScroller.addClass('transition').setTransformPos(h,"y");
+                var $price = _this.$numberScroller.parents('tr').find('span.price');
+                if(_this.$numberScroller.hasClass('unlimit')){
+                    if(!_this.$numberScroller.parents('tr').find('.gift').hasClass('checked')){
+                        $price.each(function () {
+                            $(this).data('oldPrice',$(this).text());
+                        });
+                    }
+                    changed && self.billMain.onPriceChange($(this).parent());
+                }else{
+                    if(!_this.$numberScroller.parents('tr').find('.gift').hasClass('checked')){
+                        $price.each(function () {
+                            $(this).text($(this).data("oldPrice"));
+                        });
+                    }
+                    changed && self.billMain.onPriceChange($(this).parent());
+                    // var data = _this.$numberScroller.parents('tr').data('data')
+                    // if(_this.$numberScroller.parents('tr').find('.gift').hasClass('checked')){
+                    //     changed && self.billMain.onPriceChange($(this).parent());
+                    // }else{
+                    //     var $newTr = _this.renderTable(data);
+                    //     changed && _this.$numberScroller.parents('tr').html($newTr.html()) && self.billMain.onPriceChange($newTr);
+                    //     if(self.$.find(".scanToCost").hasClass("on")){
+                    //         $newTr.find(".productCostTd,.oncePerformanceTd").each(function(){
+                    //             $(this).show();
+                    //         });
+                    //     }else{
+                    //         $newTr.find(".productCostTd,.oncePerformanceTd").each(function(){
+                    //             $(this).hide();
+                    //         });
+                    //     }
+                    // }
+                }
 	            return false;
             });
 
@@ -447,22 +1089,120 @@
             this.billServerSelector = new cashierTools.BillServerSelector({
                 $: this.$,
                 onSelect: function(data) {
-                    self.selectedServer = data;
-	                if(this.$body.find('li.selected').length>0){
-		                am.tips.perfSetting(self.billServerSelector.$.find('li[serverid='+data.id+']'));
-	                }
+                    // 选择员工
+					var _this = this;
+					setTimeout(function () {
+						var emps = _this.getEmps();
+						self.billMain.setEmps(emps,null,"isSeller");// 员工 卖品行 是否销售
+					}, 50);
+					return false;
+                    // self.selectedServer = data;
+	                // if(this.$body.find('li.selected').length>0){
+		            //     am.tips.perfSetting(self.billServerSelector.$.find('li[serverid='+data.id+']'));
+	                // }
                 },
-                onRemove: function(){
+                onRemove: function(){// 删除员工
+					var _this = this;
+					setTimeout(function () {
+						var emps = _this.getEmps();
+						self.billMain.setEmps(emps,null,"isSeller");// 员工 卖品行 是否销售
+					}, 50);
+					return false;
                     self.selectedServer = null;
                 },
-	            muti:true,
+                muti:true,
+                // notSharedPerformance:amGloble.metadata.shopPropertyField.notSharedPerformance || 0,// 0/undefined  原来的  1 独享100%，2共享100%
 	            getTotalPerf:function () {
-                    if(am.metadata.configs.combNotCalIntoAchiev=='true'){
-                        return self.billMain.totalPrice;
-                    }else {
-                        return toFloat(self.billMain.totalPrice + self.$costEdit.text()*1);
+                    // 获取总业绩 待增加成本
+                    var total = -1,
+                        $selectedTr = self.billMain.$.find('tr.selected');
+                    if ($selectedTr && $selectedTr.length == 1) {
+                        if (am.metadata.configs.combNotCalIntoAchiev == 'true') {
+                            // 成本不算业绩
+                            total = $selectedTr.find('.totalPrice').text().trim() * 1;
+                        } else {
+                            // 成本算业绩
+                            var opt = self.submit('onlyGetPrice');
+                            var treatments = opt.comboCard.treatments;
+                            var currentItem = $selectedTr.data('data');
+                            var currentData = {};
+                            for (var i = 0, len = treatments.length; i < len; i++) {
+                                if (treatments[i].packageId != -1 && treatments[i].packageId == currentItem.id) {
+                                    // 套餐包
+                                    currentData = treatments[i];
+                                    break;
+                                } else if (treatments[i].packageId == -1) {
+                                    // 单个项目
+                                    var serviceItems = treatments[i].serviceItems;
+                                    var finded = 0;
+                                    for (var j = 0, length = serviceItems.length; j < length; j++) {
+                                        if (serviceItems[j].itemId == currentItem.itemid) {
+                                            currentData = serviceItems[j];
+                                            finded++;
+                                            break;
+                                        }
+                                    }
+                                    if (finded) {
+                                        break;
+                                    }
+                                }
+                            }
+                            if (currentData.serviceItems) {
+                                // 套餐包
+                                total = currentData.price + currentData.treatsCost;
+                            } else {
+                                // 单个项目
+                                total = currentData.allPrice;
+                            }
+                        }
                     }
-	            }
+                    return total;
+
+                    // return self.billMain.$.find('tr.selected') && self.billMain.$.find('tr.selected').find('.totalPrice').text().trim()*1;
+					// // return -1;
+                    // if(am.metadata.configs.combNotCalIntoAchiev=='true'){
+                    //     return self.billMain.totalPrice;
+                    // }else {
+                    //     return toFloat(self.billMain.totalPrice + self.$costEdit.text()*1);
+                    // }
+                },
+                onSetEmpPer: function(emp, per,perf,gain) {
+					// 拖动或者手动计算业绩的回调
+					var $server = self.billMain.$list.find("tr.selected .server");//销售dom
+					var $service = self.billMain.$list.find("tr.selected");// 卖品dom
+					var data = $server.data("data");// 卖品员工
+					var serviceData = $service.data('data');// 卖品信息
+					if (serviceData) {
+						serviceData.manual = 1;
+					}
+					if (data) {
+						setTimeout(function () {
+							for (var i = 0; i < data.length; i++) {
+								if (data[i] && data[i].empId === emp.id) {
+									data[i].per = per;
+									data[i].perf = perf;
+									data[i].gain = gain;
+									break;
+								}
+							}
+						}, 51);
+					}
+					// return;
+                    // var $server = self.billMain.$list.find("tr.selected .server").eq(emp.pos);
+                    // var data = $server.data("data");
+                    // if (data) {
+                    //     setTimeout(function() {
+                    //         for (var i = 0; i < data.length; i++) {
+                    //             if (data[i] && data[i].empId === emp.id) {
+                    //                 data[i].per = per;
+                    //                 data[i].perf = perf;
+                    //                 data[i].gain = gain;
+                    //                 break;
+                    //             }
+                    //         }
+                    //     }, 51);
+                    // }
+                },
             });
 
             this.$costEdit = this.$.find('.cost-edit').vclick(function(){
@@ -476,15 +1216,103 @@
                     }
                 });
             });
-		},
+            this.$videoHelpWrap=this.$.find('.videoHelpWrap').on('vclick',function(){
+                console.log('视频帮助28');
+                am.getVideoHelp(this,"28");
+			});
+        },
+        renderTable: function(data){
+            var oncePrice = ((data.nowPrice === undefined)? (data.price||0) : data.nowPrice);
+            var times = data.feedNum || 1;
+            var totalPrice = Math.round(oncePrice * times * 100)/100;
+            var productCost = 0;
+            if(data.isXCX){
+                productCost = data.productCost;
+            }
+            var oncePerformance = Math.round((totalPrice - productCost) / times*100)/100;
+            var costFlag = data.costFlag;
+            var costConfig = JSON.parse(data.costConfig);
+            if (costFlag && !data.isXCX){
+                if(costConfig){
+                    if(data.groupSaleFlag==1){
+                        $.each(costConfig, function (i, item) {
+                            totalPrice = item.totalPrice;
+                            times = item.times;
+                            oncePrice = Math.round(totalPrice / times*100)/100;
+                            if(data.fixedRatioFlag == 1){
+                                costRatio = data.fixedRatio
+                            }else{
+                                costRatio = item.costRatio
+                            }
+                            productCost = Math.round(totalPrice * (costRatio/100)*100)/100;
+                            oncePerformance = Math.round((totalPrice - productCost) / times *100)/100;
+                            return false;
+                        })
+                    }else{
+                        $.each(costConfig, function (i, item) {
+                            if (item.times == 1) {
+                                totalPrice = item.totalPrice;
+                                times = item.times;
+                                oncePrice = Math.round(totalPrice / times*100)/100;
+                                if(data.fixedRatioFlag == 1){
+                                    costRatio = data.fixedRatio
+                                }else{
+                                    costRatio = item.costRatio
+                                }
+                                productCost = Math.round(totalPrice * (costRatio/100)*100)/100;
+                                oncePerformance = Math.round((totalPrice - productCost) / times *100)/100;
+                                return false;
+                            }
+                        })
+                    }
+                }
+            }
+            var ts = am.now();
+            if(data.isXCX){
+                if(data.days*1){
+                    ts.setDate(ts.getDate()+data.days*1)
+                }else if(data.validDate){
+                    ts = new Date(data.validDate.replace('-','/').replace('-','/'));
+                }else {
+					ts = false;
+                    // ts.setFullYear(ts.getFullYear()+1);
+                }
+            }else {
+                ts.setFullYear(ts.getFullYear()+1);
+            }
+            if(costFlag && costConfig && data.groupSaleFlag == 1){
+                var timestr = '<td class="center"><div><div><div><span class="numberSelect am-clickable">'+ times +'</span></div></div></div></td>';
+            }else{
+                if(times==1){
+                    var timestr = '<td class="center numberTouch am-touchable"><div class="numberWrap"><div class="numberScroller"><div class="number"><span class="reduce am-clickable am-disabled"></span><span class="value am-clickable">'+times+'</span><span class="plus am-clickable"></span></div><div class="unlimitText">不限次</div></div></div></td>'
+                }else{
+                    var timestr = '<td class="center numberTouch am-touchable"><div class="numberWrap"><div class="numberScroller"><div class="number"><span class="reduce am-clickable"></span><span class="value am-clickable">'+times+'</span><span class="plus am-clickable"></span></div><div class="unlimitText">不限次</div></div></div></td>'
+                }
+            }
+            $tr = $('<tr class="am-clickable show">'+
+            '<td><div class="am-clickable delete"></div><span class="server_" style="display:none"></span></td>'+
+            '<td><span class="comboSelectItemNames">' + data.name + '</span><span class="comboItemSetting am-clickable">设置</span></td>'+
+            '<td class="center"><span class="cost price changed am-clickable noDiscount">' + oncePrice + '</span></td>'+
+            timestr+
+            '<td class="center"><span class="sItemPrice price changed totalPrice am-clickable noDiscount">' + totalPrice + '</span></td>'+
+            '<td class="center productCostTd"><span class="sItemPrice productCost price changed am-clickable noDiscount">' + productCost + '</span></td>'+
+            '<td class="center oncePerformanceTd"><span class="sItemPrice oncePerformance price changed am-clickable noDiscount">' + oncePerformance + '</span></td>'+
+            '<td class="center"><div class="number date am-clickable">'+ (ts ? ts.format('yyyy/mm/dd') : '不限期') + '</div></td>'+
+            '<td class="center"><span class="gift checkbox am-clickable">赠送</span></td>'+
+            '<td class=""><div class="server am-clickable"></div></td></tr>'
+            );
+            return $tr;
+        },
 		renderItemTr: function () {
 			var self = this;
 			this.billMain.$list.find("tr").each(function (i,v) {
 				var data = $(this).data('data');
 				if(!data) return false;
-				var $price = $(this).find("span.price");
-				if ($price.hasClass("modifyed")) {
-					//如果手改过价格，不算折扣
+                var $price = $(this).find("span.price");
+                var $send = $(this).find(".checkbox");
+				if ($price.hasClass("modifyed") || $send.hasClass("checked") || $price.hasClass("changed") || data.isXCX) {
+                    //如果手改过价格，不算折扣  //赠送不算
+                    return true;
 				} else {
 					//如果没有手改过价格，算折扣
 					if(self.member){
@@ -492,9 +1320,10 @@
 						$price.text(data && data.nowPrice === undefined ? data.price : data && data.nowPrice);
 					}else{
 						$price.text(data.price || 0);
-					}
+                    }
+                    self.billMain.onPriceChange($(this));
 				}
-				self.billMain.onPriceChange($(this));
+				
 			});
 			self.billMain.onPriceChange();
 		},
@@ -627,7 +1456,25 @@
 	        return itemNames;
         },
         beforeShow: function(paras) {
-			var _this = this;
+            this.settlementPayDetail = null;
+			this.settlementServer = null;
+            var _this = this;
+            var scanToCostFlag = localStorage.getItem("scanToCostFlag");
+            if (scanToCostFlag==1) {
+                this.$.find(".scanToCost").addClass("on");
+                this.$.find(".comboitem .costFlagOpen").show();
+                this.$.find(".comboitem .costFlagClose").hide();
+                this.$.find(".productCostTd,.oncePerformanceTd").each(function () {
+                    $(this).show();
+                });
+            }else{
+                this.$.find(".scanToCost").removeClass("on");
+                this.$.find(".comboitem .costFlagOpen").hide();
+                this.$.find(".comboitem .costFlagClose").show();
+                this.$.find(".productCostTd,.oncePerformanceTd").each(function () {
+                    $(this).hide();
+                });
+            }
             if(paras && paras.afterRecharge && this.member){
 				var afterRecharge = paras.afterRecharge;
 				if(afterRecharge.memId){
@@ -675,13 +1522,11 @@
                 this.setMember(am.convertMemberDetailToSearch(paras.cardData));
             } else if (am.metadata) {
 				var employeeList = am.metadata.employeeList || [];
-				if(am.metadata.configs && am.metadata.configs['EMP_SORT']){
-					employeeList = JSON.parse(am.metadata.configs['EMP_SORT']);
-					employeeList = am.getConfigEmpSort(employeeList);
-				}
                 this.billItemSelector.dataBind(this.processData(am.metadata.tpList));
                 this.billItemSelector.setGroup(am.page.service.getGroupData.call(this));
-                this.billServerSelector.dataBind(employeeList, ["销售"]);
+                if(!this.billServerSelector.data){
+                    this.billServerSelector.dataBind(employeeList, ["第一工位","第二工位","第三工位"]);
+                }
 
                 this.billItemSelector.reset();
                 this.billServerSelector.reset();
@@ -724,13 +1569,14 @@
         },
         renderFeedRemark:function(sdata){
             var remark = sdata.billRemark.buypackage.data;
+            var isXCX = sdata.billRemark.buypackage.isXCX;
             var list   = this.processData(am.metadata.tpList);
             var package= list.shift();
             var single = list.shift();
             var res = [];
             for(var i=0;i<remark.length;i++){
-                var item = remark[i];
-                if(item.tpd){//套餐包
+				var item = remark[i];
+				if(item.tpd){//套餐包
                     for(var j=0;j<package.sub.length;j++){
                         var itemj = package.sub[j];
                         if(itemj.id == item.id){
@@ -740,9 +1586,22 @@
                 }else{//单个套餐
                     for(var n=0;n<single.sub.length;n++){
                         var itemn = single.sub[n];
-                        if(itemn.id == item.id){
-                            itemn.feedNum = item.number;
-                            res.push(itemn);
+                        if(isXCX){
+                            if(itemn.itemid == item.itemId){
+                                var _itemn = JSON.parse(JSON.stringify(itemn));
+                                _itemn.isXCX = isXCX;
+                                _itemn.feedNum = item.itemTimes;
+                                _itemn.nowPrice = item.itemMoney/item.itemTimes;
+								_itemn.days = item.days;
+                                _itemn.validDate = item.validDate;
+                                _itemn.productCost = Math.round(((item.itemMoney - (item.oncemoney || 0)*item.itemTimes))*100)/100;
+                                res.push(_itemn);
+                            }
+                        }else {
+                            if(itemn.id == item.id){
+                                itemn.feedNum = item.number;
+                                res.push(itemn);
+                            }
                         }
                     }
                 }
@@ -750,35 +1609,40 @@
             for(var k=0;k<res.length;k++){
                 this.billMain.addItem(res[k]);
             }
+            // 取单选中第一个
+            this.billMain.$.find("tbody tr:eq(0)").trigger('vclick');
 
         },
         afterShow: function(paras) {
-
+            //自动点击结算
+			if (amGloble.metadata.shopPropertyField.mgjBillingType == 1 && paras && paras.isXCX && paras.billRemark && paras.billRemark.data) {
+				var settlementPayDetail = paras.billRemark.data.settlementPayDetail;
+				if (settlementPayDetail != undefined) {
+					if(settlementPayDetail.payMoney && settlementPayDetail.payMoney.wechatOrder){
+                        settlementPayDetail = JSON.parse(JSON.stringify(settlementPayDetail));
+                        settlementPayDetail.payMoney.wechat = paras.billRemark.data.billRemark.buypackage.data[0].itemMoney * 1;
+                        settlementPayDetail.payMoney.wechatOrder.price = paras.billRemark.data.billRemark.buypackage.data[0].itemMoney * 1;
+                    }
+					sessionStorage._autoPay1214 = 'autoPay'; 
+					this.settlementPayDetail = {
+						payMoney: settlementPayDetail.payMoney,
+						payType: settlementPayDetail.payType
+					};
+					if(paras.server){
+						this.settlementServer = paras.server;
+					}
+					setTimeout(function () {
+                        am.autoPayCheck.setStep('trigger vclick to page.pay');
+                        $('canvas').trigger('vclick');
+						self.$.find('.submit').trigger('vclick');		
+					}, 3000)
+				} else {}
+			}
         },
         beforeHide: function(paras) {
             this.billMain.hideMemberInfo();
             this.billItemSelector.typeFilterSelect && this.billItemSelector.typeFilterSelect.hide();
             this.$.find('.typeFilterWrap .result .val').removeData('data').text('选择项目大类').removeClass('selected');
-        },
-        saveBill:function(item){
-            am.api.hangupSave.exec({
-                id:item.id,
-                data:item.data,
-                memId:item.memId,
-                memName:item.memName,
-                memPhone:item.memPhone,
-                memcardid:item.memcardid,
-                parentShopId:am.metadata.userInfo.parentShopId,
-                shopId:am.metadata.userInfo.shopId,
-                serviceNO:item.serviceNOBak?item.serviceNOBak:(item.serviceNO?item.serviceNO:'')
-            }, function(ret){
-                am.loading.hide();
-                if(ret && ret.code===0){
-                    
-                } else {
-                    am.msg("原单据信息更新失败！");
-                }
-            });
         },
         showCalendar:function($dom){
             $tempDateTarget = $dom;
@@ -878,7 +1742,7 @@
 			this.member = member;
             console.log(member)
             var cardName = this.member.cardName;
-            var balanceFee = this.member.balance-this.member.treatcardfee;
+            var balanceFee = this.member.balance;
             if(this.member.cardtype == 1 && this.member.timeflag==0 && balanceFee){
                 cardName+='(￥'+balanceFee.toFixed(0)+')';
             }
@@ -903,9 +1767,23 @@
         processData: function(types) {
             var categorys = [];
                 for (var i = 0; i < types.length; i++) {
-                    if(types[i].applyShopIds && types[i].applyShopIds.indexOf(am.metadata.userInfo.shopId) == -1){
-                        continue;
+                    // if(types[i].applyShopIds && types[i].applyShopIds.indexOf(am.metadata.userInfo.shopId) == -1){
+                    //     continue;
+                    // }
+                    if(types[i].applyShopIds){
+                        // 指定了门店
+                        var obj={
+                            shopIdsStr:types[i].applyShopIds,// ',r,234,43,'
+                            targetShopId:am.metadata.userInfo.shopId
+                        }
+                        var available= am.checkShopAvailable(obj);
+                        if(!available){
+                            continue;
+                        }
+                    }else{
+                        // 全部门店可用
                     }
+                    
                     var type = {
                         name: types[i].packName,
                         id: types[i].id,
@@ -915,6 +1793,9 @@
                         tdList:[],// 商品
                         allowedSellEmpty:types[i].allowedSellEmpty,
                         autoSellWithCombo:types[i].autoSellWithCombo,
+                        modifyEnable:types[i].modifyEnable,
+                        minPrice:types[i].minPrice,
+                        manualgift:types[i].manualgift,
                         costMoney: types[i].costMoney,
                         img:"$dynamicResource/images/card3.jpg",
                         isNewTreatment:types[i].isNewTreatment,
@@ -963,7 +1844,7 @@
                 }
             ];
         },
-        submit: function() {
+        submit: function(onlyGetPrice) {
             var _this = this;
             var user = am.metadata.userInfo;
             var opt = {
@@ -1015,7 +1896,8 @@
                     "eaFee": 0, //入账金额
                     "treatfee": 0,
                     "treatpresentfee": 0,
-                }
+                },
+                'jsonstr': this.billRemark?this.billRemark.jsonstr:''
             };
             if(this.billRemark){
                 opt.billNo = this.billRemark.serviceNO;
@@ -1030,12 +1912,28 @@
                 "serviceItems":[]
             };
             opt.cost = this.$costEdit.text()*1 || 0;
-            opt.billingInfo.total= this.billMain.totalPrice;
+            for(var i = 0; i < $tr.length; i++){
+                if($tr.eq(i).parents("table").hasClass("comboitem")){
+                    var $productCost = $tr.eq(i).find(".price.productCost");
+                    opt.cost += $productCost.text() * 1;
+                }else{
+                    var itemCost = $tr.eq(i).data('itemCost');
+                    opt.cost += itemCost;
+                    var data = $tr.eq(i).data("data");
+                    if(data.tpd.length==0){
+                        am.msg('请选择套餐内容（必须包含项目）');
+                        $tr.eq(i).addClass('warn');
+                        return false;
+                    }
+                }
+            }
+            var costEdit = this.$costEdit.text()*1 || 0;
+            opt.billingInfo.total= this.billMain.totalPrice - opt.cost + costEdit;
 
             var hasZeroPrice = 0;
             for(var i = 0; i < $tr.length; i++){
-                var $price = $tr.eq(i).find(".price");
-                var price = $price.eq(0).text() * 1;
+                var $price = $tr.eq(i).find(".price.totalPrice");
+                var price = $price.text() * 1;
                 if(price==0){
                     hasZeroPrice ++;
                 }
@@ -1043,11 +1941,16 @@
             for (var i = 0; i < $tr.length; i++) {
                 var data = $tr.eq(i).data("data");
                 var $price = $tr.eq(i).find(".price");
+                var $oncePerformance = $tr.eq(i).find(".oncePerformance");
+                var $productCost = $tr.eq(i).find(".productCost");
                 var price = $price.eq(0).text() * 1;
+                var servers = $tr.eq(i).find(".server").data("data") || [];
                 if(data.tpd){
-                    // opt.cost += data.costMoney*1||0;
+                    // costEdit += data.costMoney*1||0;
                     //opt.billingInfo.total += price;
                     var invaliddate = null;
+                    var itemCost = $tr.eq(i).data('itemCost');
+                    var trueprice = Math.round((price - itemCost)*100)/100;
                     if(data.validitycheck == 1 && data.validity){
                         //有效期
                         invaliddate = new Date();
@@ -1064,10 +1967,12 @@
                         "packageId":data.id,
                         "packageName":data.name,
                         "cashshopids":data.cashshopids,
-                        "price":price,
+                        "price":trueprice,
                         "serviceItems":[],
+                        "depots":[],
                         "allowedSellEmpty":data.allowedSellEmpty,
                         "autoSellWithCombo":data.autoSellWithCombo,
+                        "servers": servers // 销售
                     };
                     
                     for (var j = 0; j < data.tpd.length; j++) {
@@ -1083,16 +1988,16 @@
 	                    var money,cost;
                         if(data.price){
 							money = toFloat(data.tpd[j].itemMoney*price/data.price);
-                            cost = opt.cost*money/this.billMain.totalPrice;
+                            cost = costEdit*money/this.billMain.totalPrice;
                         }else{
 	                        money = toFloat(price/data.tpd.length);
-	                        cost = opt.cost*money/this.billMain.totalPrice;
+	                        cost = costEdit*money/this.billMain.totalPrice;
                         }
                         if(hasZeroPrice){
-                            var trCost =  opt.cost/$tr.length;
+                            var trCost = costEdit/$tr.length;
                             if(price){
                                 if(data.price){
-                                    cost = trCost*money/data.price;
+                                    cost = trCost*data.tpd[j].itemMoney/data.price;
                                 }else {
                                     cost =  trCost/data.tpd.length;
                                 }
@@ -1100,11 +2005,12 @@
                                 cost = trCost/data.tpd.length;
                             }
                         }
+                        var truemoney = toFloat((100-data.tpd[j].costRatio)*money/100)
                         //var itemnames = _this.getItemNamesByNos(data.tpd[i].timesItemNOs);
     					treatment.serviceItems.push({
 						    "itemId": data.tpd[j].itemId,
 						    "times": data.tpd[j].itemTimes,
-						    "money": money,
+						    "money": truemoney,
 						    "allPrice":cost+money,
 						    "name":data.tpd[j].itemName || (data.tpd[j].timesItemNOs ? this.getItemNamesByNos(data.tpd[j].timesItemNOs,1).join(","):' '),
 						    "invaliddate": itemInvalidDate ? itemInvalidDate.format('yyyy-mm-dd') : null,
@@ -1116,20 +2022,35 @@
 
 						    "itemRemark":"",
                             "packageRemark":"",
-                            "shopid": amGloble.metadata.userInfo.shopId
-					    });
+                            "shopid": amGloble.metadata.userInfo.shopId,
+                            // "servers": servers // 销售
+                        });
+                        if(!treatment.treatsCost){
+                            treatment.treatsCost = cost;
+                        }else{
+                            treatment.treatsCost += cost;
+                        }
+                    }
+                    treatment.treatsCost += itemCost;
+                    for (var k = 0; k < data.tdList.length; k++){
+                        treatment.depots.push({
+                            productid:data.tdList[k].depotid,
+                            number:data.tdList[k].amount,
+                            productName:data.tdList[k].name
+                        })
                     }
                     opt.comboCard.treatments.push(treatment);
                 }else{
-                    var $num = $tr.eq(i).find(".number .value");
+                    var $num = $tr.eq(i).find(".number .value").length?$tr.eq(i).find(".number .value"):$tr.eq(i).find(".numberSelect");
                     var num = -99;
                     if(!$num.parent().parent().hasClass('unlimit')){
 	                    num = $num.text()*1 || 0;
                     }
                     var invalidDate = $tr.eq(i).find(".date").text();
-                    var onceMoney = $price.eq(0).text()*1;
+                    var onceMoney = $oncePerformance.text()*1;
+                    var productCost = $productCost.text()*1;
 	                var setMoney = $price.eq(1).text()*1;
-                    var sMoney = num===-99 ? setMoney : Math.round(num*onceMoney*100)/100;
+                    var sMoney = setMoney-productCost;
                     // if(setMoney<sMoney){
                     //     //如果走到这里，说明前面的校验有漏洞
 	                   //  if(sMoney - setMoney > 0.1){
@@ -1141,26 +2062,28 @@
 	                   //  }
                     // }else if(setMoney>sMoney){
                     //     //如果售卖价超过计算价，超出部分加到cost
-	                   //  opt.cost+=setMoney-sMoney;
+	                   //  costEdit+=setMoney-sMoney;
                     // }
-                    var cost = opt.cost*sMoney/this.billMain.totalPrice;
+                    var cost = costEdit*setMoney/this.billMain.totalPrice;
                     if(hasZeroPrice){
-                        cost = opt.cost/$tr.length;
+                        cost = costEdit/$tr.length;
                     }
                     var singleItemData = {
 	                    "itemId": -1,
 	                    "times": num,
 	                    "money": sMoney,
-	                    "name":"",
+                        "name":"",
+                        "productCost": productCost,
 	                    "invaliddate": invalidDate==="不限期" ? null:invalidDate.replace(/\//g,"-"),
 	                    "isFree":$tr.eq(i).find("span.gift").hasClass("checked")?1:0,
-                        "allPrice": sMoney+cost,
+                        "allPrice": sMoney+cost+productCost,// 单个套餐项目allprice包含自身成本
 	                    "oncemoney":onceMoney,
 	                    "isNewTreatment":1,
 	                    "timesItemNOs":null,
 	                    "itemRemark":"",
                         "packageRemark":"",
-                        "shopid": amGloble.metadata.userInfo.shopId
+                        "shopid": amGloble.metadata.userInfo.shopId,
+                        "servers": servers //组合套餐的服务项目
                     };
 
 	                var mutiItem = $tr.eq(i).data("mutiItem");
@@ -1184,8 +2107,18 @@
 
             if(singleItemTreatment && singleItemTreatment.serviceItems && singleItemTreatment.serviceItems.length){
                 opt.comboCard.treatments.push(singleItemTreatment);
+                if(this.settlementServer){
+                    opt.comboCard.treatments[0].serviceItems[0].servers = [this.settlementServer];
+                }
             }
-
+            if(onlyGetPrice){
+                // 如果只是获取套餐包价格 则返回opt
+                return opt;
+            }
+            if(!this.settlementPayDetail && am.checkContainedServers(opt)===0){
+                am.msg('请选择服务员工!');
+                return;
+            }
             /*if (this.selectedServer) {
                 opt.comboCard.servers.push({
                     "empId": this.selectedServer.id,
@@ -1196,7 +2129,7 @@
                     "dutyid": this.selectedServer.dutyType
                 });
             }*/
-	        opt.comboCard.servers = this.billServerSelector.getEmps();
+	        // opt.comboCard.servers = this.billServerSelector.getEmps();
 
             opt.billingInfo.eaFee = opt.billingInfo.total;
             console.log(opt);
@@ -1215,9 +2148,20 @@
                     _data.memPhone=members.mobile;
                     _data.memcardid=members.cid;
                 }
+                if(sendData.billRemark.buypackage.isXCX){
+                    var serviceItems = sendData.serviceItems;
+                    var itemid = sendData.billRemark.buypackage.data[0].itemid;
+                    if(serviceItems && serviceItems.length){
+                        for(var i=0;i<serviceItems.length;i++){
+                            if(serviceItems[i].itemId==itemid && serviceItems[i].consumeType && !serviceItems[i].consumeId){
+                                serviceItems[i].consumeId = '$consumeId';
+                            }
+                        }
+                    }
+                }
                 sendData.billRemark.buypackage.isbuy = true;
                 _data.data = JSON.stringify(sendData);
-                _this.saveBill(_data);
+                return _data.data;
             }
             if (this.member) {
 				var member = this.member;
@@ -1254,7 +2198,8 @@
                                 member: member,
                                 billRemark:billRemark,
                                 remarkCallback:remarkCallback,
-                                from:"comboCard"
+                                from:"comboCard",
+                                settlementPayDetail: _this.settlementPayDetail
                             });
                         }
                     })
@@ -1295,13 +2240,15 @@
                         opt.memId = member.id;
                         opt.cardId = member.cid;
                         opt.gender = member.sex;
+                        self.setMember(member);
                         $.am.changePage(am.page.pay, "slideup", {
                             comboitem: [],
                             option: opt,
                             member: member,
                             billRemark:_this.billRemark,
                             remarkCallback:remarkCallback,
-                            from:"comboCard"
+                            from:"comboCard",
+                            settlementPayDetail: _this.settlementPayDetail
                         });
                     }
                 });
@@ -1365,9 +2312,31 @@
                 
             })
             self.comboCardItemSelector.find('.save').vclick(function(){
-                var itemEls = self.comboCardItemSelector.find('.combo_card_item_selector-item');
-                var newTpd = [];
-                    timesCount = 0;
+				var itemEls = self.comboCardItemSelector.find('.combo_card_item_selector-item');
+				// 不限次套餐组合选几个
+				if($(this).hasClass("unlimited")) {
+                    var newTpd = [];
+                    var len = itemEls.find('.title-span.selected').length || 1;
+					$.each(itemEls, function(i, v) {
+						var isSelect = $(v).find('.title-span').hasClass('selected');
+						if (isSelect) {
+                            var itemData = $(v).data('data');
+                            // 不限次价格平分
+                            itemData.itemMoney = Math.round( itemData.itemMoney/len*100 ) / 100;
+							newTpd.push(itemData);
+						}
+                    });
+                    if(newTpd.length === 0) {
+                        am.msg('请至少选择一个项目');
+                        return;
+                    }
+					self.ComboCardItemSelectorCallBack(newTpd);
+					return false;
+				}
+
+                var newTpd = [],
+                    timesCount = 0,
+                    treatType = 0;
                 for (var i =0; i < itemEls.length; i++) {
                     var item = itemEls.eq(i);
                     var isSelect = $(item).find('.combo_card_item_selector-times').val();
@@ -1378,6 +2347,7 @@
                             itemData.itemTimes = itemTimes || -99;
                             itemData.itemMoney = Math.round(itemTimes * itemData.oncemoney*100)/100;
                             timesCount += itemTimes;
+                            treatType = itemData.treatType;
                             newTpd.push(itemData);
                         } else {
                             am.msg('请输入正确的次数');
@@ -1390,13 +2360,17 @@
                     return;
                 }
                 if (self.ComboCardItemSelectorMaxCount !== -99) {
-                    if (timesCount !== -99) {
-                        if(timesCount > self.ComboCardItemSelectorMaxCount){
-                            am.msg('设置的次数大于总次数，请修改');
-                            return;
-                        }else if(timesCount < self.ComboCardItemSelectorMaxCount){
-                            am.msg('设置的次数小于总次数，请修改');
-                            return;
+                    if(am.metadata.userInfo.operatestr.indexOf("a52") != -1 && treatType==1){
+                        
+                    }else{
+                        if (timesCount !== -99) {
+                            if(timesCount > self.ComboCardItemSelectorMaxCount){
+                                am.msg('设置的次数大于总次数，请修改');
+                                return;
+                            }else if(timesCount < self.ComboCardItemSelectorMaxCount){
+                                am.msg('设置的次数小于总次数，请修改');
+                                return;
+                            }
                         }
                     }
                 }   
@@ -1427,7 +2401,17 @@
                     $(this).addClass('is_select');
                 }
                 // checkboxEl.prop('checked', !select);
-            })
+			})
+			
+			// 不限次选中
+            self.comboCardItemSelector.on('vclick', '.title-span', function() {
+				var select = $(this).hasClass('selected');
+                if (select) {
+                    $(this).removeClass('selected');
+                } else {
+                    $(this).addClass('selected');
+				}
+			});
         },
         
         isMultipleItem: function(itemData) {
@@ -1439,19 +2423,24 @@
             var classPrefix = "combo_card_item_selector";
             var createElementClass = function(name) {
                 return classPrefix + '-' + name;
-            }
+			}
+			var itemNumber = '',itemSelect = '';
             if(data.itemName==='项目已删除' || data.itemName==='项目已停用'){
                 var itemLabel = "<p class='"+ createElementClass('label') +"'>" + data.itemName + "</p>";
                 itemNumber = data.itemTimes == -99 ? '' : "<input placeholder='0次' name='itemTimes' disabled readonly class='am-clickable "+ createElementClass('times') +"'>";
             }else{
                 var itemLabel = "<p class='"+ createElementClass('label') +"'>" + data.itemName + "</p>";
                 itemNumber = data.itemTimes == -99 ? '' : "<input placeholder='次数' name='itemTimes' diaabled readonly class='am-clickable "+ createElementClass('times') +"'>";
-            }
-            // var itemCheckbox = "<span class='am-clickable " + createElementClass('checkbox') + "'><i class='iconfont icon-danxuan'></i><i class='iconfont icon-queren'></i></span>",
+			}
+			
+			if (data.itemTimes == -99) {
+				itemSelect = '<span class="am-clickable title-span"></span>';
+			}
+            // var itemCheckbox = "<span class='am-clickable " + createElementClass('checkbox') + "'><i class='iconfont icon-danxuan'></i><i class='iconfont icon-queren'></i></span>";
             // var itemLabel = "<p class='"+ createElementClass('label') +"'>" + data.itemName + "</p>";
             //     itemNumber = data.itemTimes == -99 ? '' : "<input placeholder='次数' name='itemTimes' diaabled readonly class='am-clickable "+ createElementClass('times') +"'>";
 
-            return "<div class='"+ createElementClass('item') +"'>"+ itemLabel + itemNumber +"</div>";
+            return "<div class='"+ createElementClass('item') +"'>" + itemSelect + itemLabel + itemNumber +"</div>";
         },
         renderComboCardItem: function(itemData, index, isMultiple,onlyShowValidName) {
             if (onlyShowValidName) {
@@ -1488,11 +2477,15 @@
                 }
                 // itemnames = self.getItemNamesByNos(timesItemNOs,'',1,'',1).join('、');
                 itemnames = self.getItemNamesByNos(timesItemNOs,'',paramObj).join('、');
-                if (treatType == 1) {
+                if (treatType == 1 || treatType == 2) {
                     itemnames = '赠：' + itemnames;
                 }
             } else {
-                itemnames = itemName || itemId;
+                if (treatType == 1 || treatType == 2) {
+                    itemnames = '赠：' + itemName || itemId;
+                }else{
+                    itemnames = itemName || itemId;
+                }
             }
             // 提醒
             if(timesItemNOs){

@@ -1,0 +1,219 @@
+/* 文字颜色 ***********************/
+/* c0* 为黑白灰色系 */
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.bs {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+#lockScreen {
+  display: none;
+  position: absolute;
+  z-index: 1000;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 100%;
+  background: url(../images/lock_bg.jpg) no-repeat center center;
+  background-size: cover;
+  text-align: center;
+  color: #fff;
+  font-size: 12px;
+}
+#lockScreen .wrapper {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+}
+#lockScreen .wrapper .head {
+  padding-top: 15px;
+}
+#lockScreen .wrapper .head .timeBox {
+  font-size: 14px;
+}
+#lockScreen .wrapper .content {
+  color: #fff;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+#lockScreen .wrapper .content .header {
+  width: 85px;
+  height: 85px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  background-color: #ececec;
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
+  padding: 6px;
+}
+#lockScreen .wrapper .content .header .crown {
+  display: none;
+}
+#lockScreen .wrapper .content .header.good {
+  position: relative;
+  background: #f7d467;
+}
+#lockScreen .wrapper .content .header.good .crown {
+  display: block;
+  width: 24px;
+  height: 20px;
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  margin-left: -12px;
+  background: url(../images/good.png) no-repeat;
+  background-size: 24px 20px;
+  cursor: pointer;
+}
+#lockScreen .wrapper .content .header.lock {
+  position: relative;
+}
+#lockScreen .wrapper .content .header.lock::after {
+  content: "\e690";
+  font-family: "iconfont" !important;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  line-height: 70px;
+  top: 4px;
+  left: 4px;
+  text-align: center;
+  font-size: 28px;
+  color: #fff;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+}
+#lockScreen .wrapper .content .header.lock::before {
+  content: "点击解锁";
+  position: absolute;
+  z-index: 2;
+  width: 100px;
+  height: 100px;
+  line-height: 130px;
+  top: 4px;
+  left: 4px;
+  text-align: center;
+  font-size: 12px;
+  color: #fff;
+}
+#lockScreen .wrapper .content .header .header_box {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
+  background: #e1e1e1 url(../images/icons_sprite/default_custmerIcon.png) no-repeat 0px 0px;
+  background-size: 72px 72px;
+}
+#lockScreen .wrapper .content .header img {
+  border: 0;
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
+  width: 100%;
+  height: 100%;
+}
+#lockScreen .wrapper .content .paying,
+#lockScreen .wrapper .content .success {
+  display: none;
+}
+#lockScreen .wrapper .content .header-default {
+  width: 106px;
+  height: 106px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  background-color: #656e81;
+  border-radius: 50%;
+  position: relative;
+}
+#lockScreen .wrapper .content .header-default .defaulImg {
+  width: 92px;
+  height: 92px;
+  border-radius: 50%;
+  position: absolute;
+  top: 7px;
+  left: 7px;
+  overflow: hidden;
+}
+#lockScreen .wrapper .content .header-default .defaulImg img {
+  width: 100%;
+  height: 100%;
+}
+#lockScreen .wrapper .content .info {
+  font-size: 14px;
+}
+#lockScreen .wrapper .content .info .tip {
+  font-size: 18px;
+  margin-top: 25px;
+  margin-bottom: 12px;
+}
+#lockScreen .wrapper .content .info .itemInfo .itemSpan {
+  margin-right: 20px;
+}
+#lockScreen .wrapper .content .info .countInfo {
+  margin-top: 6px;
+}
+#lockScreen .wrapper .content .info .loading {
+  margin-top: 25px;
+}
+#lockScreen .wrapper .content .info .loading .iconfont {
+  font-size: 19px;
+  display: inline-block;
+}
+#lockScreen .wrapper .footer {
+  width: 100%;
+  position: absolute;
+  bottom: 40px;
+}
+#lockScreen .wrapper .footer .unlock {
+  font-size: 14px;
+  margin-bottom: 30px;
+  color: rgba(255, 255, 255, 0.85);
+}
+#lockScreen .wrapper .footer .unlock .iconfont {
+  font-size: 27px;
+  display: inline-block;
+}
+#lockScreen .wrapper .footer .unlock .tip {
+  margin-top: 8px;
+}
+#lockScreen .wrapper .footer .forget .setPwdBtn {
+  display: none;
+  color: rgba(255, 255, 255, 0.85);
+}
+#lockScreen .wrapper .footer .forget .pwdBtn {
+  display: none;
+  color: rgba(255, 255, 255, 0.85);
+  border-bottom: 1px solid #fff;
+}
+#lockScreen .wrapper .fadeInUp {
+  animation: fadeInUp 2.5s infinite linear;
+}
+#lockScreen .wrapper .rotation {
+  animation: rotation 2.5s infinite linear;
+}
+@keyframes fadeInUp {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

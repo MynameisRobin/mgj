@@ -14,22 +14,24 @@
 		position: absolute;
 		left: 50%;
 		top: 50%;
-		height: 500px;
-		width: 700px;
+		height: 406px;
+		width: 518px;
 		border-radius: 5px;
 		background-color: #fff;
 		z-index: 999;
 		display: none;
 		transform: translate(-50%,-50%);
 		-webkit-transform: translate(-50%,-50%);
-		img{
-			width: 48px;;
-			height: 48px;;
+		.close_btn {
+			width: 32px;
+			height: 32px;
 			position: absolute;
 			right: 10px;
 			top: 10px;
 			cursor: pointer;
 			z-index: 1;
+			background: url(../images/icons_sprite/close_employee.png) no-repeat center center;
+			background-size: 15px 15px;
 		}
 		iframe{
 			opacity: 1;
@@ -72,11 +74,11 @@
 		}
 		.formbox{
 			width: 100%;
-			height:354px;
+			min-height:343px;
 			.boxSinzig;
 			background: @c01;
 			.borderRadius(10px);
-			margin-top: 25px;
+			margin-top: 20px;
 			padding: 28px;
 			&.changeLogin{
 				.inputList{
@@ -130,6 +132,9 @@
 						}
 					}
 				}
+				&.hidden {
+					visibility: hidden;
+				}
 			}
 			.inputList{
 				.boxSinzig;
@@ -144,6 +149,10 @@
 					width: 100%;
 					margin:14px 0;
 					border:1px solid @bd03;
+					position: relative;
+					&.vcCodeWrap {
+						display: none;
+					}
 					.borderRadius(3px);
 					.ty_input_ico{
 						width: 50px;
@@ -172,6 +181,17 @@
 								display: block;
 							}
 						}
+						&.vcCode_ico{
+							i{
+								margin:0 auto;
+								width: 16px;
+								height:16px;
+								margin-top: 16px;
+								background: url(../images/login-formIcon-vc.png) no-repeat center center;
+								background-size: 100% 100%;
+								display: block;
+							}
+						}
 					}
 					input{
 						width: 270px;
@@ -181,6 +201,86 @@
 						float: right;
 						color: @c02;
 						font-size: @fs1;
+						&.vcCode {
+							width: 170px;
+							float: left;
+						}
+						&.username {
+							width: 140px;
+							float: left;
+						}
+						&::-webkit-autofill,&::-webkit-autofill:hover,&::-webkit-autofill:focus {
+							box-shadow: 0 0 0px 10000px #000 inset;
+							-webkit-box-shadow: 0 0 0px 10000px #000 inset;
+						}
+					}
+					.vcCodeImg {
+						position: absolute;
+						width: 88px;
+						height: 38px;
+						top: 5px;
+						right: 5px;
+					}
+					.checkServer {
+						position: absolute;
+						width: 123px;
+						height: 38px;
+						top: 5px;
+						right: 5px;
+						.status {
+							position: absolute;
+							left: 0;
+							top: 0;
+							right: 0;
+							bottom: 0;
+							padding-right: 26px;
+							display: none;
+							.text {
+								font-size: 14px;
+								color: #999;
+								text-align: right;
+								line-height: 38px;
+								height: 38px;
+								overflow: hidden;
+							}
+							.icon {
+								position: absolute;
+								width: 14px;
+								height: 14px;
+								top: 12px;
+								right: 6px;
+								background-repeat: no-repeat;
+								background-position: center center;
+								background-size: 13px 13px;
+							}
+							&.status-checking {
+								.icon {
+									background-image: url(../images/cluster/user_tocluster_r.png);
+									-webkit-animation: animation-loading infinite linear 1.2s;
+								}
+							}
+							&.status-pass {
+								.text {
+									color: #F39800;
+								}
+								.icon {
+									background-image: url(../images/cluster/user_tocluster_o.png);
+								}
+							}
+							&.status-pass.all {
+								.text {
+									color: #58D56D;
+								}
+								.icon {
+									background-image: url(../images/cluster/user_tocluster_ok.png);
+								}
+							}
+							&.status-recheck {
+								.icon {
+									background-image: url(../images/cluster/user_tocluster_rs.png);
+								}
+							}
+						}
 					}
 				}
 				.tybutton{
@@ -194,6 +294,53 @@
 					line-height: 50px;
 					font-size: @fs4;
 					cursor: pointer;
+					&.am-disabled {
+						background-color: #888;
+						cursor: not-allowed;
+					}
+				}
+				.cluster {
+					margin: 14px 0;
+					position: relative;
+					display: none;
+					.cluster-l {
+						padding-right: 40px;
+						height: 18px;
+						overflow: hidden;
+						text-overflow: ellipsis;
+    					white-space: nowrap;
+						font-size: 0;
+						.cluster-info {
+							display: inline-block;
+							vertical-align: top;
+							padding: 0 5px 0 20px;
+							background: url('../images/cluster/cluster_icon.png') no-repeat 3px 3px;
+							background-size: 12px 12px;
+							font-size: 12px;
+							color: #999;
+							height: 18px;
+							line-height: 18px;
+						}
+						.cluster-shopname {
+							display: inline-block;
+							vertical-align: top;
+							font-size: 12px;
+							color: #999;
+							height: 18px;
+							line-height: 18px;
+						}
+					}
+					.cluster-reset {
+						position: absolute;
+						width: 40px;
+						height: 20px;
+						right: 0;
+						top: -1px;
+						font-size: 12px;
+						color: #222;
+						text-align: center;
+						line-height: 20px;
+					} 
 				}
 				.remind{
 					height:30px;
@@ -229,7 +376,7 @@
 	}
 	.downApp {
 		display: none;
-		padding-top: 27px;
+		padding-top: 20px;
 		text-align: center;
 		color: @c06;
 		font-size: 13px;
@@ -251,9 +398,182 @@
 	}
 	.foot{
 		/*.abs(@bottom:45px;@left: 0;@right: 0);*/
-		padding-top: 24px;
+		padding-top: 14px;
 		text-align: center;
 		color: @c06;
+	}
+	.modifyPasswordTip,.modifyPasswordTip .mask {
+		position: fixed;
+		left: 0;
+		top: 0;
+		right: 0;
+		bottom: 0;
+	}
+	.modifyPasswordTip {
+		z-index: 999;
+		display: none;
+	}
+	.modifyPasswordTip .mask {
+		background-color: rgba(0, 0, 0, .5);
+	}
+	.modifyPasswordTip {
+		.modifyPasswordTip-content {
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			height: 386px;
+			width: 518px;
+			border-radius: 5px;
+			background-color: #fff;
+			left: 50%;
+			top: 50%;
+			margin-left: -259px;
+			margin-top: -193px;
+			.modifyPasswordTip-close_btn {
+				width: 32px;
+				height: 32px;
+				position: absolute;
+				right: 10px;
+				top: 10px;
+				cursor: pointer;
+				z-index: 1;
+				background: url(../images/icons_sprite/close_employee.png) no-repeat center center;
+				background-size: 15px 15px;
+			}
+			.modifyPasswordTip-wrapper {
+				position: absolute;
+				width: 100%;
+				top: 50%;
+				transform: translateY(-50%);
+				-webkit-transform: translateY(-50%);
+				.warnIcon {
+					width: 68px;
+					height: 68px;
+					margin: 0 auto 28px;
+					background: url(../images/modifyPasswordTip.png) no-repeat center center;
+					background-size: 100% 100%;
+				}
+				.warnText {
+					font-size: 16px;
+					font-weight: bold;
+					color: #222;
+					text-align: center;
+					line-height: 20px;
+				}
+				.modifyNow {
+					width: 192px;
+					height: 50px;
+					background-color: #595959;
+					border-radius: 2px;
+					margin: 24px auto 5px;
+					font-size: 16px;
+					color: #fff;
+					text-align: center;
+					line-height: 50px;
+					cursor: pointer;
+				}
+				.modifyLater {
+					width: 192px;
+					height: 30px;
+					font-size: 12px;
+					color: #999;
+					text-align: center;
+					line-height: 30px;
+					margin: 0 auto;
+					cursor: pointer;
+				}
+			}
+		}
+	}
+	.linkJump {
+		position: fixed;
+		left: 0;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		display: none;
+		.mask {
+			position: absolute;
+			left: 0;
+			right: 0;
+			top: 0;
+			bottom: 0;
+			background: rgba(0, 0, 0, .5);
+		}
+		.wrapper {
+			position: absolute;
+			width: 400px;
+			height: 300px;
+			background-color: #fff;
+			border-radius: 4px;
+			left: 50%;
+			top: 50%;
+			margin-left: -200px;
+			margin-top: -150px;
+			.close {
+				position: absolute;
+				right: 10px;
+				top: 10px;
+				width: 35px;
+				height: 35px;
+				&::before {
+					content: "";
+					display: block;
+					width: 15px;
+					height: 15px;
+					margin: 10px;
+					background: url(../images/icons_sprite/close_employee.png) no-repeat;
+					background-size: 15px 15px;
+				}
+			}
+			.wrap {
+				position: absolute;
+				width: 100%;
+				top: 50%;
+				transform: translateY(-50%);
+				-webkit-transform: translateY(-50%);
+				margin-top: 15px;
+				.title {
+					font-size: 16px;
+					color: #222;
+					text-align: center;
+					line-height: 24px;
+					max-height: 72px;
+					overflow: hidden;
+					.icon {
+						display: inline-block;
+						vertical-align: top;
+						width: 24px;
+						height: 24px;
+						background: url(../images/cluster/cluster_icon.png) no-repeat center center;
+						background-size: 16px 16px;
+					}
+					.jump-info {
+						padding-right: 4px;
+					}
+				}
+				.tip {
+					font-size: 13px;
+					color: #999;
+					text-align: center;
+					line-height: 20px;
+					height: 40px;
+					overflow: hidden;
+					margin: 32px 0;
+				}
+				.jump {
+					width: 129px;
+					height: 44px;
+					background-color: #555;
+					font-size: 16px;
+					color: #fff;
+					text-align: center;
+					line-height: 44px;
+					border-radius: 3px;
+					margin: 0 auto;
+				}
+			}
+		}
 	}
 }
 body{

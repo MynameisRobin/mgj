@@ -42,9 +42,9 @@
                                 </li>
 
                                 <!--chali -->
-                                <li class="excbox  exchange am-clickable">
+                                <li class="excbox  exchange">
                                     <span class="value num">0</span>
-                                    <span class="ex_icon"></span>
+                                    <span class="ex_icon am-clickable"></span>
                                     <span class="key">门店消费积分</span>
                                 </li>
                                 <li class="onLineExchangeBox onLineExchange">
@@ -97,7 +97,7 @@
 						<li class="am-clickable">
 							<span>积分记录</span>
 						</li>
-                        <li class="am-clickable selected">
+                        <li class="am-clickable selected cardDetail">
                             <span>卡金变动流水</span>
                         </li>
                         <li class="am-clickable">
@@ -199,6 +199,7 @@
                                                 <div class="duedatewrap">
                                                     <span class="duedate">到期日：</span>
                                                     <span class="duedateedit" isdisabled="1" style="display: none;"></span>
+                                                    <span class="discountRuleBtn am-clickable">折扣规则</span>
                                                     <div class="clear"></div>
                                                 </div>
                                                 <div class="line"></div>
@@ -242,7 +243,7 @@
                                                     <li class="comboItem">
                                                         <div class="comboContent">
                                                             <div class="left">
-                                                                <p class="name">精油开背 x10次</p>
+                                                                <p class="name"><span class="nameText"></span><span class="totalTimes"></span></p>
                                                                 <p class="date">有效期至2019-08-01</p>
                                                                 <p class="remark">
                                                                     <span class="remarkLabel">备注:</span>
@@ -259,7 +260,7 @@
                                                     <li class="comboItemGoods">
                                                             <div class="comboContent">
                                                                 <div class="left">
-                                                                    <p class="name">套餐商品A x10瓶</p>
+                                                                    <p class="name"><span class="nameText"></span><span class="totalTimes"></span></p>
                                                                     <p class="date">精油10瓶</p>
                                                                 </div>
                                                                 <div class="right">
@@ -332,13 +333,13 @@
                                                 <!-- <td style="width:11%" class="">
                                                     <div class="tdwrap">消费类型</div>
                                                 </td> -->
-                                                <td style="width:11%" class="td-showMyk">
+                                                <td style="width:14%" class="td-showMyk">
                                                     <div class="tdwrap">消费日期</div>
                                                 </td>
                                                 <td style="width:12%" class="td-complete">
                                                     <div class="tdwrap">所在店</div>
                                                 </td>
-                                                <td style="width:13%">
+                                                <td style="width:10%">
                                                     <div class="tdwrap">服务者</div>
                                                 </td>
                                                 <td style="width:6%">
@@ -486,6 +487,7 @@
                                     <th>变动时间</th>
                                     <th>消费门店</th>
                                     <th>操作人</th>
+                                    <th>备注</th>
                                 </tr>
                             </thead>
                             <tbody class="card_cash_detail"></tbody>
@@ -531,6 +533,14 @@
                             <div class="radioBox am-clickable">
                                 <span class="iconfont icon-checkboxoutlineblank"></span>
                                 <span class="font12">仅查看有效红包</span>
+                            </div>
+                            <div class="videoHelpWrap am-clickable">
+                                <svg class="icon svg-icon" aria-hidden="true">
+                                    <use xlink:href="#icon-lan"></use>
+                                </svg>
+                                <span class="videoHelpText">
+                                    不会用？点这里
+                                </span>
                             </div>
                         </div>
                         <div class="content">
@@ -620,63 +630,194 @@
         </div>
     </div>
 
-
-
+	<!-- 会员卡退卡 start -->
+	<div class="refundCard_popup">
+        <div class="popup_right_mask am-clickable"></div>
+        <div class="popup_right cardfee">
+            <div class="popup_tit">会员卡退卡申请</div>
+            <div class="popup_content">
+				<div class="wrapper">
+					<div class="card_info">
+						<div class="info_left">
+							<div class="card_name"></div>
+							<div class="card_no"></div>
+						</div>
+						<div class="info_right">
+							<div class="card_discount"></div>
+							<div class="card_duedate"></div>
+						</div>
+					</div>
+					<div class="card_form">
+						<div class="form_item">
+							<div class="item_name">卡内余额</div>
+							<div class="item_content">
+								<span class="eafee"></span>
+								<span class="payment"></span>
+								<a href="javascript:;" class="am-clickable consumeDetail">消费明细</a>
+							</div>
+						</div>
+						<div class="form_item">
+							<div class="item_name">退卡类型<span class="badge">*</span></div>
+							<div class="item_content">
+								<div class="applicationType">
+									<ul>
+										<li class="am-clickable">
+											<span class="radio active" data-type="2"></span>
+											<span class="type_name">全部退卡</span>
+											<div class="type_info">顾客不可继续使用此会员卡</div>
+										</li>
+										<li class="am-clickable">
+											<span class="radio" data-type="1"></span>
+											<span class="type_name">部分退卡</span>
+											<div class="type_info">顾客可保留并继续使用此会员卡</div>
+											<div class="type_payment">
+												<div class="refundCardFee">
+													<div class="name">退卡金</div>
+													<input type="text" class="am-clickable refundCardFeeInput" value="0" readonly="readonly">
+													<span>元</span>
+												</div>
+												<div class="refundPresentFee">
+													<div class="name">退赠金</div>
+													<input type="text" class="am-clickable refundPresentFeeInput" value="0" readonly="readonly">
+													<span>元</span>
+												</div>
+											</div>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+						<div class="form_item">
+							<div class="item_name verticalMiddle">退款金额<span class="badge">*</span></div>
+							<div class="item_content">
+								<input type="text" class="refundFeeInput am-clickable" value="0" readonly="readonly">元
+							</div>
+						</div>
+						<div class="form_item">
+								<div class="item_name">扣部门业绩</div>
+								<div class="item_content">
+									<div class="depotTable">
+										<div class="head">
+											<ul>
+												<li>部门</li>
+												<li>扣业绩</li>
+											</ul>
+										</div>
+										<div class="depotList">
+										</div>
+									</div>
+									<div class="addDepot am-clickable">
+										<span class="iconfont icon-jia2"></span>
+										<span>选择部门</span>
+									</div>
+								</div>
+							</div>
+						<div class="form_item">
+							<div class="item_name">扣员工业绩</div>
+							<div class="item_content">
+								<div class="empTable">
+									<div class="head">
+										<ul>
+											<li>员工</li>
+											<li>扣业绩</li>
+											<li>扣提成</li>
+										</ul>
+									</div>
+									<div class="empList">
+									</div>
+								</div>
+								<div class="addEmp am-clickable">
+									<span class="iconfont icon-jia2"></span>
+									<span>选择员工</span>
+								</div>
+							</div>
+						</div>
+						<div class="form_item">
+							<div class="item_name verticalMiddle">退卡原因<span class="badge">*</span></div>
+							<div class="item_content">
+								<input type="text" class="refundInfo" placeholder="请输入退卡原因" maxlength="50">
+							</div>
+						</div>
+						<div class="form_item">
+							<div class="item_name verticalMiddle">退卡备注</div>
+							<div class="item_content">
+								<input type="text" class="refundNote" placeholder="请输入退卡备注" maxlength="50">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="foot_btns">
+				<div class="sure_btn am-clickable">确定</div>
+				<div class="btn_cancel am-clickable">取消</div>
+			</div>
+        </div>
+	</div>
+	<!-- 会员卡退卡 end -->
+	
     <div class="cardfee_popup">
         <div class="popup_right_mask am-clickable"></div>
         <div class="popup_right cardfee">
-            <div class="popup_tit">卡金转出</div>
-            <div class="card_from">
-                <div class="card_no">
-                    <span class="line_tit">转出卡卡号：</span>
-                    <span class="line_val"></span>
-                </div>
-                <div class="card_shop">
-                    <span class="line_tit">开卡门店：</span>
-                    <span class="line_val"></span>
-                </div>
-                <div class="card_fee">
-                    <span class="line_tit">卡金余额：</span>
-                    <span class="line_val"></span>
-                </div>
-                <div class="card_pfee">
-                    <span class="line_tit">赠送金余额：</span>
-                    <span class="line_val"></span>
-                </div>
-            </div>
-            <div class="toCard_tit">转入卡：</div>
-            <div class="card_to init">
-                <div class="toCard_card">
-                    <span class="init_class">
-                        暂未找到卡
-                    </span>
-                    <span class="text_wrap">
-                        <span class="card_name">会员卡</span>
-                        <span class="card_no">(2018181818)</span>
-                        <span class="card_fee">余额：100.1</span>
-                        <span class="card_pfee">余额：100.1</span>
-                        <span class="card_osName">开卡门店：一店</span>
-                    </span>
-                </div>
-                <div class="toCard_search">
-                    <input class="win_input" maxlength="30" placeholder="输入会员手机号或姓名或卡号搜索" type="text" />
-                    <span class="search_icon am-clickable"></span>
-                </div>
-            </div>
-            <div class="card_trans_total">
-                <div class="trans_fee">
-                    <p>转出卡金：</p>
-                    <input class="am-clickable" type="" name="" readonly="readonly" placeholder="0">元
-                </div>
-                <div class="trans_pfee">
-                    <p>转出赠送金：</p>
-                    <input class="am-clickable" type="" name="" readonly="readonly" placeholder="0">元
-                </div>
-            </div>
-            <div class="foot_btns">
-                <div class="sure_btn am-clickable">确定</div>
-                <div class="btn_cancel am-clickable">取消</div>
-            </div>
+			<div class="popup_tit">卡金转出</div>
+			<div class="popup_content">
+				<div class="wrapper">
+					<div class="card_from">
+						<div class="card_no">
+							<span class="line_tit">转出卡卡号：</span>
+							<span class="line_val"></span>
+						</div>
+						<div class="card_shop">
+							<span class="line_tit">开卡门店：</span>
+							<span class="line_val"></span>
+						</div>
+						<div class="card_fee">
+							<span class="line_tit">卡金余额：</span>
+							<span class="line_val"></span>
+						</div>
+						<div class="card_pfee">
+							<span class="line_tit">赠送金余额：</span>
+							<span class="line_val"></span>
+						</div>
+					</div>
+					<div class="toCard_tit">转入卡：</div>
+					<div class="card_to init">
+						<div class="toCard_card">
+							<span class="init_class">
+								暂未找到卡
+							</span>
+							<span class="text_wrap">
+								<span class="card_name">会员卡</span>
+								<span class="card_no">(2018181818)</span>
+								<span class="card_fee">余额：100.1</span>
+								<span class="card_pfee">余额：100.1</span>
+								<span class="card_osName">开卡门店：一店</span>
+							</span>
+						</div>
+						<div class="toCard_search">
+							<input class="win_input" maxlength="30" placeholder="输入会员手机号或姓名或卡号搜索" type="text" />
+							<span class="search_icon am-clickable"></span>
+						</div>
+					</div>
+					<div class="card_trans_total">
+						<div class="trans_fee">
+							<p>转出卡金：</p>
+							<input class="am-clickable" type="" name="" readonly="readonly" placeholder="0">元
+						</div>
+						<div class="trans_pfee">
+							<p>转出赠送金：</p>
+							<input class="am-clickable" type="" name="" readonly="readonly" placeholder="0">元
+						</div>
+					</div>
+					<div class="card_trans_remark">
+						<p>备注：</p>
+						<textarea maxlength="30" placeholder="请输入1-30个字符备注内容"></textarea>
+					</div>
+				</div>
+			</div>
+			<div class="foot_btns">
+				<div class="sure_btn am-clickable">确定</div>
+				<div class="btn_cancel am-clickable">取消</div>
+			</div>
         </div>
     </div>
     <div class="combo_popup">
@@ -748,7 +889,23 @@
     <div class="shops_popup">
             <div class="popup_right_mask am-clickable"></div>
             <div class="popup_right combo">
-                <div class="popup_tit">套餐可使用门店</div>
+                <div class="popup_tit">套餐使用门店</div>
+                <div class="switchWrap">
+                    <ul class="radioWrap">
+                        <li class="enableWrap am-clickable">
+                            <span class="radio"></span>
+                            可用
+                        </li>
+                        <li class="disableWrap am-clickable">
+                            <span class="radio"></span>
+                            禁用
+                        </li>
+                    </ul>
+                    <div class="switchTipWrap">
+                        <span class="icon iconfont icon-yduigantanhaokongxin"></span>
+                        <span class="tipText">“可用”表示勾选的门店可用</span>
+                    </div>
+                </div>
                 <div class="shops_content">
                     <div class="shops_left">
                         <ul class="shopAll">
@@ -1063,5 +1220,6 @@
 	<div class="am-comment">
 		<div class="title">红包使用规则</div>
 		<div class="info"></div>
+		<div class="arrow"></div>
 	</div>
 </div>

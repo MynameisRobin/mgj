@@ -1,5 +1,15 @@
 ﻿(function() {
     var self = (am.api = {
+        // 合并会员
+        mergeCustomer:new Api({
+            serviceName: "mgj-cashier/member/memberMerge"
+        }),
+        updateReservationComment:new Api({
+            serviceName: "mgj-cashier/reservation/updComment"
+        }),
+        getHelpVideo:new Api({
+            serviceName: "mgj-cashier/viewHelp/getVideo"
+        }),
         relatePay:new Api({
             serviceName: "mgj-cashier/bill/ContactPayOrderDetail"
         }),
@@ -12,14 +22,22 @@
         optimizeSearchCard:new Api({
             serviceName: "mgj-cashier/member/shopMemberCardSolr"
         }),
+        updMemberPoint:new Api({
+            serviceName: "mgj-cashier/member/updMemberPoint"
+        }),
         optimizeSearchCustomer:new Api({
             serviceName: "mgj-cashier/member/shopMemebersolr"
         }),
         getGoodsNum:new Api({
             serviceName: "mgj-cashier/storage/getNum"
         }),
+        // 核销红包
         verificationRedPocket: new Api({
             serviceName: "mgj-cashier/member/checkluckyMoney"
+        }),
+        // 撤回红包
+        revokeRedPocket: new Api({
+            serviceName: "mgj-cashier/member/revokeluckyMoney"
         }),
         addVacation: new Api({
             serviceName: "mgj-cashier/vacation/addVacation"
@@ -36,6 +54,9 @@
         }),
         metadata: new Api({
             serviceName: "mgj-cashier/metadata/list"
+        }),
+        getConfUpdTime: new Api({
+            serviceName: "mgj-cashier/user/getConfUpdTime"
         }),
         clobConfig: new Api({
             serviceName: "dashboard/configuration"
@@ -170,6 +191,9 @@
         }),
         repayDebt: new Api({
             serviceName: "mgj-cashier/member/repay"
+		}),
+		refundCard: new Api({
+            serviceName: "mgj-cashier/member/refundCard"
         }),
         checkBillNo: new Api({
             serviceName: "mgj-cashier/bill/checkBillNo",
@@ -177,6 +201,9 @@
         billCheck: new Api({
             serviceName: "mgj-cashier/bill/check",
             md5: 1
+        }),
+        treatPackageDetail: new Api({
+            serviceName: "mgj-cashier/bill/treatmentItemDetail",
         }),
         checkCardAboutCurrentDay: new Api({
             serviceName: "mgj-cashier/bill/checkCardAboutCurrentDay"
@@ -227,6 +254,9 @@
         }),
         billRecord: new Api({
             serviceName: "mgj-cashier/bill/billcheck"
+		}),
+		billDetail: new Api({
+            serviceName: "mgj-cashier/bill/detail"
         }),
         billRepeatRecord: new Api({
             serviceName: "mgj-cashier/bill/billcheckrepeat"
@@ -556,6 +586,10 @@
         // 设置normalConfig
         saveNormalConfig: new Api({
             serviceName: "mgj-cashier/normalConfig/insertOrUpdateConfig"
+        }),
+        // 设置userConfig
+        saveUserConfig: new Api({
+            serviceName: "mgj-cashier/userConfig/insertOrUpdateConfig"
         }),
         // 查询设置过期服务小红点
         instoreServiceCount: new Api({

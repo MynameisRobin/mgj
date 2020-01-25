@@ -1,5 +1,13 @@
 /* 文字颜色 ***********************/
 /* c0* 为黑白灰色系 */
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.createService {
+  z-index: 0;
+}
 .createService .bg {
   position: absolute;
   left: 0;

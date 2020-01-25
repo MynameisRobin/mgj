@@ -88,11 +88,7 @@
 
             //修改单号
             this.$billNo = this.$header.find(".billno input").on("vclick",function(){
-                if($(this).prop("readonly")){
-                    am.msg("开单模式下单号自动生成！");
-                    return;
-                }
-                if(am.metadata.shopPropertyField.mgjBillingType==1 && am.operateArr.indexOf('a37')==-1){
+                if(am.metadata.shopPropertyField.manualInputBillno != 1 && am.metadata.shopPropertyField.mgjBillingType==1 && am.operateArr.indexOf('a37')==-1){
                     am.msg("没有权限修改单号！");
                     return;
                 }
@@ -104,15 +100,14 @@
                         if(isNaN(value)){
                             am.msg('请输入正确的数值！');
                             return;
-                        }
-                        $this.val(value.substring(0,20));
-                        if(value.length>20){
-                            am.msg('单号长度超过20位数字已自动截取');
-                        }
-                        if(_this.opt.option.expenseCategory==0){
-                            _this.checkBillNo($this.val());
-                        }
-				    }
+						}
+						// 只有项目才校验单号重复
+						if (_this.opt.option.expenseCategory == 0) {
+							_this.checkBillNo(value);
+							return false;
+						}
+						$this.val(value.substring(0, 20));
+					}
 				});
             });
 
@@ -202,7 +197,21 @@
                     maxlength: 100
                 });
             });
-
+            this.$customerSource = this.$.find('.customerSource').vclick(function(){
+                var $this = $(this);
+                var mgjsourceid = _this.opt.option.mgjsourceid
+				am.sourceModal.show({
+					mgjsourceid: mgjsourceid,
+					sourceSave: function (data) {                       
+                        $this.text(data.mgjsourcename)
+                        if(_this.opt.servOption && _this.opt.prodOption){
+                            _this.opt.servOption.mgjsourceid = data.mgjsourceid;
+                        }else{
+                            _this.opt.option.mgjsourceid = data.mgjsourceid;
+                        }                        
+					}
+				})
+            })
             this.$container = this.$.find('.container');
             this.$footer = this.$.find('.footer');
             this.$listContainer = this.$container.find('.listContainer');
@@ -254,11 +263,15 @@
             this.payTips = am.page.pay.payTips;
             this.payTips.init();
 
-            this.$confirm = $('#itemPayConfirm').vclick(function () {
+			this.$confirm = $('#itemPayConfirm');
+            $('#itemPayConfirm .goBack').vclick(function () {
                 _this.paySuccess();
             });
 
             this.$.on('vclick','.payItem',function(){
+                if($(this).hasClass('noJdSetting')){
+                    return am.msg('没有配置京东支付的支付方式，请前往 基础系统>基础设置>自定义配置>自定义付款方式 进行配置');
+                }
                 if($(this).hasClass('disabled')){
                     return;
                 }
@@ -290,12 +303,15 @@
                 _this.setHeight();
             }).on('vclick','.payInfos .del',function(){
                 var type = $(this).parents('.payInfo').data('type');
-                if(type=='REDPAPER'){
-                    _this.delPaper($(this).parents('.payInfo'))
-                }else if(type=='MALLORDER' || type=='DIANPIN' || type=='KOUBEI') {
-                    _this.delItem(type,$(this).parents('.payInfo'))
-                }else if((type=='WEIXIN' || type=='PAY' || type=='UNIONPAY') && _this.prepayData){
-                    _this.delItem(['WEIXIN','PAY','UNIONPAY'],$(this).parents('.payInfo'))
+                var data = $(this).parents('.payInfo').data('data');
+                if(data){
+                    if(type=='REDPAPER'){
+                        _this.delPaper($(this).parents('.payInfo'))
+                    }else if(type=='MALLORDER' || type=='DIANPIN' || type=='KOUBEI') {
+                        _this.delItem(type,$(this).parents('.payInfo'))
+                    }else if(type=='WEIXIN' || type=='PAY' || type=='UNIONPAY' || type=='JINGDONG'){
+                        _this.delItem(['WEIXIN','PAY','UNIONPAY'],$(this).parents('.payInfo'))
+                    }
                 }
                 _this.reCalPrice($(this));
                 _this.editIndex = $(this).parents('.item').index();
@@ -507,18 +523,26 @@
                             price: value,
                             moreMoney: moreMoney || 0
                         }
+                        if(type=='DIANPIN' && item){
+                            payDetail.voucherFee = Math.round((item.marketprice - item.price)*(value/item.marketprice)*1000)/1000;
+                        }
+                        if(type=='KOUBEI' && item){
+                            payDetail.voucherFee = Math.round((item.originalprice - item.price*1)*(value/item.originalprice)*1000)/1000;
+                        }
                         if($payInfo.data('detail').beforeRedPaperDiscount){
                             payDetail.beforeRedPaperDiscount = $payInfo.data('detail').beforeRedPaperDiscount;
                         }
                         $payInfo.data('detail',payDetail);
-                        if(type=='REDPAPER'){
-                            _this.setPaperRemain();
-                        }
-                        if(type=='MALLORDER' || type=='DIANPIN' || type=='KOUBEI'){
-                            _this.setRemain([type],remain);
-                        }
-                        if(type=='WEIXIN' || type=='PAY' || type=='UNIONPAY' || type=='JINGDONG'){
-                            _this.setRemain(['WEIXIN','PAY','UNIONPAY','JINGDONG'],remain);
+                        if(item){
+                            if(type=='REDPAPER'){
+                                _this.setPaperRemain();
+                            }
+                            if(type=='MALLORDER' || type=='DIANPIN' || type=='KOUBEI'){
+                                _this.setRemain([type],remain);
+                            }
+                            if(type=='WEIXIN' || type=='PAY' || type=='UNIONPAY' || type=='JINGDONG'){
+                                _this.setRemain(['WEIXIN','PAY','UNIONPAY','JINGDONG'],remain);
+                            }
                         }
                         _this.change();
                         _this.display();
@@ -534,6 +558,12 @@
                     return;
                 }
                 if(!_this.checkCardLimit()){
+                    return;
+                }
+                if(!_this.checkCouponRelated('DIANPIN',_this.dianpinData)){
+                    return;
+                }
+                if(!_this.checkCouponRelated('KOUBEI',_this.koubeiData)){
                     return;
                 }
                 if(!_this.opt.member){
@@ -578,13 +608,24 @@
                 _this.paytool.luckyMoney.ajax();
             });
 
+            $.am.on('instoreServiceHasBeenChanged',function(data){
+				if($.am.getActivePage() == self){
+                    if(_this.opt && _this.opt.option && _this.opt.option.instoreServiceId == data.instoreServiceId){
+                        am.billChangeToHangup();
+                    }
+				}
+			});
+
         },
         beforeShow: function(paras){
             this.checkBillNoSuccess = true;
+            this.$comment.removeClass("showleft");
             this.payDetail = null;
 
             if(paras.member){
                 var member = paras.member;
+                this.$customerSource.hide();
+                this.$comment.addClass("showleft");
                 if(member.presentfeepayLimit===null){
                     member.presentfeepayLimit = 100;
                 }
@@ -603,7 +644,20 @@
                 if(member.buydiscount==0){
                     member.buydiscount = 10;
                 }
-            }
+            }else{
+                if(paras.option&&paras.option.mgjsourceid){
+                    this.$customerSource.text(paras.option.mgjsourcename)
+                    delete paras.option.mgjsourcename;
+                }else if(paras.option&&!paras.option.mgjsourceid){
+                    this.$customerSource.text("");
+                };
+                this.$customerSource.show();
+                if (paras.servOption&&paras.prodOption){
+                    delete paras.prodOption.mgjsourceid;
+                    delete paras.prodOption.mgjsourcename;
+                    delete paras.servOption.mgjsourcename;
+                };
+            };
             var printType = this.getPrintType();
             if (printType == "bt") {
                 this.$.find(".userPrintType li").removeClass("selected").eq(0).addClass("selected");
@@ -614,14 +668,7 @@
                 this.$.find(".userPrintType").addClass('web').find('.printType').hide();
             }else {
                 this.$.find(".userPrintType").removeClass('web').find('.printType').show();
-            }
-            this.$billNo.val('');
-
-            if(paras && paras.option){
-                this.$billNo.val(paras.option.billNo || "");
-            }else if(paras && paras.billRemark){
-                this.$billNo.val(paras.billRemark.serviceNO || "");
-            }
+			}
 
             if (paras == "back") {
                 
@@ -635,7 +682,22 @@
                     return;
                 }
                 this.setMediaShow(paras);
-            }
+			}
+			// 是否启动结单强制覆盖单号
+			if (am.metadata.shopPropertyField.manualInputBillno == 1) {
+				this.$billNo.val('');
+				if(this.opt.option) {
+					this.opt.option.billNo = '';
+				}
+			}else{
+				// 是否启动结单强制覆盖单号	
+				if(paras && paras.option){
+					this.$billNo.val(paras.option.billNo || "");
+					
+				}else if(paras && paras.billRemark){
+					this.$billNo.val(paras.billRemark.serviceNO || "");
+				}
+			}
             var configs = am.metadata.configs;
             if (configs && configs['mobileRepeat']) {
                 this.mbRepeatConfig = JSON.parse(configs['mobileRepeat']);
@@ -681,8 +743,8 @@
             }
             this.reset();
         },
-        checkBillNo: function(billNo){
-            am.page.pay.checkBillNo.call(this,billNo);
+        checkBillNo: function(billNo, cb){
+            am.page.pay.checkBillNo.call(this, billNo, cb);
         },
         getPrintType: function(){
             am.page.pay.getPrintType();
@@ -837,7 +899,7 @@
                 $payTypes.find('.KOUBEI').remove();
             }
             if(!this.jdDisplay()){
-                $payTypes.find('.JINGDONG').remove();
+                $payTypes.find('.JINGDONG').addClass('noJdSetting');
             }
             if(amGloble.metadata.configs.debtFlag*1){
                 $payTypes.find('.DEBTFEE').remove();
@@ -862,6 +924,11 @@
                 });
             }else {
                 $payTypes.find('.payItem').addClass('noDiscount');
+            }
+            if(am.metadata.configs.mgjOldFunctionEnable==1){
+                $payTypes.find('.VOUCHERFEE').remove();
+                $payTypes.find('.COOPERATION').remove();
+                $payTypes.find('.MALL').remove();
             }
             return $payTypes;
         },
@@ -902,7 +969,7 @@
                     var $item = this.$listItem.clone(true,true).data('data',item);
                     var salePrice = item.salePrice*(item.number || 1);
                     if(item.id){
-                        if(item.modifyed || item.cardDiscount){
+                        if(item.modifyed || item.cardDiscount || item.timeDiscount){
                             if(item.salePrice>item.oPrice){
                                 item.oPrice = item.salePrice;
                             }
@@ -910,8 +977,14 @@
                         }
                         $item.find('.info .itemName').text(item.itemName);
                         var originalPrice = 0;
-                        var _item = amGloble.metadata.serviceItemMap[item.id];
-                        if(!(_item.price*1)){
+                        var _item;
+                        if(item.productid){
+                            // 卖品
+                            _item = am.metadata.categoryCodeMap[item.no];
+                        }else{
+                            _item = amGloble.metadata.serviceItemMap[item.id]
+                        }
+                        if(!(_item && _item.price*1)){
                             originalPrice = item.salePrice;
                         }else {
                             originalPrice = item.oPrice;
@@ -935,7 +1008,7 @@
                         $item.find('.info .itemNum').text(item.number);
                         var originalPrice = 0;
                         var _item = amGloble.metadata.categoryItemMap[item.productid];
-                        if(!(_item.saleprice*1)){
+                        if(!(_item && _item.saleprice*1)){
                             originalPrice = item.salePrice*1;
                         }else {
                             originalPrice = item.price*1;
@@ -976,7 +1049,7 @@
                             $item.find('.details').find('.selectPayTip,.addPayType,.payTypes,.payInfo').remove().end().addClass('comboitem settled');
                             var $payInfoItem = this.$payInfoItem.clone(true,true);
                             $payInfoItem.find('.payName').text('套餐卡金');
-                            $payInfoItem.find('.payMoney').text(Math.round(combo.oncemoney*100/100));
+                            $payInfoItem.find('.payMoney').text(Math.round(combo.oncemoney*100)/100);
                             $payInfoItem.find('.payIntro').remove();
                             $payInfoItem.find('.del').css('visibility','hidden');
                             $item.find('.payInfos').append($payInfoItem);
@@ -1062,6 +1135,9 @@
             }
 
         },
+        getDepotsInBill:function(){
+            return am.page.pay.getDepotsInBill.call(this,this.opt);
+        },
         checkAppointItem:function(data){
             this.paytool.luckyMoney.redPackageArr = [];
             this.$.find('.luckyMoneyList li').removeClass('selected').find('.circular').removeClass('icon-queren');
@@ -1086,23 +1162,77 @@
                     if(red.templateId){
                         if(red.rule && JSON.parse(red.rule).content){
                             var rule = JSON.parse(JSON.parse(JSON.parse(red.rule).content).rule);
-                            if(rule.luckyMoneyRule.allowCashierPay.enableItems){
-                                var items = rule.luckyMoneyRule.allowCashierPay.items;
-                                var include = 0;
-                                for(var j=0;j<items.length;j++){
-                                    if(items[j].id==data.id){
+                            var include = 0;
+                            var enough = 0;
+                            var allowCashierPay = rule.luckyMoneyRule.enableCashierPay && rule.luckyMoneyRule.allowCashierPay;
+                            // 避免只勾选了店内消费抵扣
+                            if(rule.luckyMoneyRule.enableCashierPay || allowCashierPay){
+                                var consumptionAmount = allowCashierPay.consumptionAmount*1;
+                                if(allowCashierPay.enableItems && allowCashierPay.enableDepots!==true && data.productid===undefined){
+                                    var items = rule.luckyMoneyRule.allowCashierPay.items;
+                                    if(items.length==0){
+                                        // 全部项目可用
                                         include ++;
-                                        break;
+                                    }else{
+                                        for(var j=0;j<items.length;j++){
+                                            if(items[j].id==data.id){
+                                                include ++;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    if(isNaN(consumptionAmount) || data.salePrice>=consumptionAmount){
+                                        enough ++;
+                                    }
+                                }else if(allowCashierPay.enableTreats === undefined && allowCashierPay.enableDepots!==true){
+                                    // 历史红包仅勾选店内消费可用（默认全部项目可用）
+                                    include ++;
+                                }else if(data && data.productid!==undefined && allowCashierPay.enableDepots && allowCashierPay.enableItems!==true){
+                                    // 卖品 高级结算
+                                    var depotsInRule = allowCashierPay.depots;
+                                    if(depotsInRule){
+                                        var depotsArr = depotsInRule.split(',');
+                                        if(depotsArr[0]=='a'){
+                                            // 全部卖品可用
+                                            include ++;
+                                        }else if(depotsArr[0]=='r'){
+                                            // 指定卖品不能用
+                                            if(depotsArr.indexOf(data.no+'')==-1){
+                                                include ++;
+                                            }
+                                        }else{
+                                            // 指定卖品能用
+                                            if(depotsArr.indexOf(data.no)>-1){
+                                                include ++;
+                                            }
+                                        }
+                                    }
+                                    if(isNaN(consumptionAmount) || data.salePrice*data.number>=consumptionAmount){
+                                        enough++;
                                     }
                                 }
-                                if(!include){
+                                if(!include || !enough){
                                     $(lis[i]).addClass('notUseThisItem am-disabled').removeClass('canUse');
                                 }
+                                // 判断散客 
+                                var isTempMember = 1; // 1 散客,0 会员
+                                var memberStage = this.opt.member && (this.opt.member.memberstage || this.opt.member.memberStage);
+                                if (memberStage > 2) {
+                                    // memberstage :   1-新客 2-潜在会员 3-会员 4临界会员,默认1, 1 2都是散客
+                                    isTempMember = 0;
+                                }
+                                if(!(!rule.luckyMoneyRule.allowCashierPay.memCard || isTempMember)){
+                                    // 当前会员不可用(会员不能用散客红包)
+                                    $(lis[i]).addClass('notUseThisMem am-disabled').removeClass('canUse');
+                                }
+                                // 判断门店
+                            }else{
+                                $(lis[i]).addClass('notUseThisItem am-disabled').removeClass('canUse');// 不能店内抵扣
                             }
                         }
-                        if(itemData.productid){
-                            $(lis[i]).addClass('notUseThisItem am-disabled').removeClass('canUse');
-                        }
+                        // if(itemData.productid){
+                        //     $(lis[i]).addClass('notUseThisItem am-disabled').removeClass('canUse');
+                        // }
                     }
                     if(paperData && paperData.length){
                         for(var m=0;m<paperData.length;m++){
@@ -1208,6 +1338,9 @@
             var data = $payInfo.data('data');
             var hasDiscount = 0;
             for(var i=0;i<data.length;i++){
+                if(this.paperData[data[i].id].usedOnProd!==undefined){
+                    delete this.paperData[data[i].id].usedOnProd
+                }
                 if(data[i].money){
                     this.paperData[data[i].id].usedMoney -= data[i].usedMoney || 0;
                 }else {
@@ -1220,7 +1353,13 @@
                 var itemData = $payInfo.parents('.item').data('data');
                 var detail = $payInfo.data('detail');
                 var originalPrice = 0;
-                var _item = amGloble.metadata.serviceItemMap[itemData.id];
+                var _item ;
+                if(itemData.productid){
+                    // 卖品
+                    _item = am.metadata.categoryCodeMap[itemData.no];
+                }else{
+                    _item = amGloble.metadata.serviceItemMap[itemData.id];
+                }
                 if(!(_item.price*1)){
                     originalPrice = itemData.salePrice;
                 }else {
@@ -1244,6 +1383,7 @@
             this.editIndex = bacIndex;
             var $item = this.$listWrapper.find('.item').eq(bacIndex);
             var itemData = $item.data('data');
+            var isProduct = itemData.productid? 1 : 0;
             var $parent = $item.find('.payInfos');
             var payInfos = $parent.find('.payInfo');
             var $payInfoItem;
@@ -1275,10 +1415,10 @@
                         itemData.salePrice -= moreMoney;
                         this.opt.option.billingInfo.total -= moreMoney;
                         if(this.opt.servOption && itemData.id){
-                            this.opt.servOption.billingInfo.total -= itemData.moreMoney;
+                            this.opt.servOption.billingInfo.total -= moreMoney;
                         }
                         if(this.opt.prodOption && itemData.productid){
-                            this.opt.prodOption.billingInfo.total -= itemData.moreMoney;
+                            this.opt.prodOption.billingInfo.total -= moreMoney;
                         }
                         this.onPriceChange($item,0);
                         $payInfoItem.find('.payMoney').text(0);
@@ -1301,6 +1441,9 @@
                 for(var i=0;i<item.length;i++){
                     var $intro = this.$mallIntro.clone(true,true);
                     var data = item[i];
+                    if (isProduct) {
+                        data.usedOnProd = 1;
+                    }
                     if(data.rule && JSON.parse(data.rule).content && JSON.parse(JSON.parse(data.rule).content).title){
                        $intro.find('span:last-child').text(JSON.parse(JSON.parse(data.rule).content).title);
                     }else{
@@ -1344,7 +1487,13 @@
                     $item.find('.info .salePrice').text(Math.round(itemData.salePrice*100)/100);
                     this.$summaryWrapper.find('.total .amount').text('￥'+Math.round(this.opt.option.billingInfo.total*100)/100);
                     var originalPrice = 0;
-                    var _item = amGloble.metadata.serviceItemMap[itemData.id];
+                    var _item;
+                    if(itemData.productid){
+                        // 卖品
+                        _item = am.metadata.categoryCodeMap[itemData.no];
+                    }else{
+                        _item = amGloble.metadata.serviceItemMap[itemData.id]
+                    }
                     if(!(_item.price*1)){
                         originalPrice = itemData.salePrice;
                     }else {
@@ -1460,7 +1609,8 @@
                         $payInfoItem.data('data',item);
                         $payInfoItem.data('detail',{
                             price: fillMoney,
-                            moreMoney: moreMoney || 0
+                            moreMoney: moreMoney || 0,
+                            voucherFee: Math.round((item.marketprice - item.price)*(fillMoney/item.marketprice)*1000)/1000
                         });
 
                         remain = money-fillMoney;
@@ -1528,7 +1678,8 @@
                         $payInfoItem.data('data',item);
                         $payInfoItem.data('detail',{
                             price: fillMoney,
-                            moreMoney: moreMoney
+                            moreMoney: moreMoney,
+                            voucherFee: Math.round((item.originalprice - item.price*1)*(fillMoney/item.originalprice)*1000)/1000
                         });
 
                         remain = money-fillMoney;
@@ -1646,7 +1797,13 @@
                     if(money>0){
                         var $intro = this.$mallIntro.clone(true,true);
                         $intro.find('span:last-child').text(item.outtradeno);
-                        $intro.find('span:first-child').text(Math.round(item.price*100)/100);
+                        var sum = 0;
+                        if(!am.isNull(item.details)){
+                            $.each(item.details,function(k,v){
+                                sum += v.amount*1;
+                            });
+                        }
+                        $intro.find('span:first-child').text(Math.round((item.price-sum)*100)/100);
                         $payInfoItem.find('.noteWrap').prepend($intro);
 
                         var restMoney = this.getItemRestMoney($item);
@@ -1811,14 +1968,16 @@
             }
             $item.find('.payTypes').hide();
 
-            if(type=='REDPAPER'){
-                this.setPaperRemain();
-            }
-            if(type=='MALLORDER' || type=='DIANPIN' || type=='KOUBEI'){
-                this.setRemain([type],remain);
-            }
-            if((type=='WEIXIN' || type=='PAY' || type=='UNIONPAY' || type=='JINGDONG') && item){
-                this.setRemain(['WEIXIN','PAY','UNIONPAY','JINGDONG'],remain);
+            if(item){
+                if(type=='REDPAPER'){
+                    this.setPaperRemain();
+                }
+                if(type=='MALLORDER' || type=='DIANPIN' || type=='KOUBEI'){
+                    this.setRemain([type],remain);
+                }
+                if((type=='WEIXIN' || type=='PAY' || type=='UNIONPAY' || type=='JINGDONG')){
+                    this.setRemain(['WEIXIN','PAY','UNIONPAY','JINGDONG'],remain);
+                }
             }
             this.display();
             this.change();
@@ -1939,7 +2098,7 @@
                     giftDiscount = this.payed.PRESENTFEE || 0;
                 }
 
-                if(Math.round(member.balance*100)-Math.round(balanceDiscount*100) <  member.minfee * 100){
+                if(Math.round(member.balance*100)-Math.round(balanceDiscount*100) <  member.minfee * 100 && balanceDiscount){
                     am.msg('卡内最低卡金金额不能低于'+ member.minfee);
                     return false;
                 }
@@ -1962,6 +2121,43 @@
 
                 return true;
                 
+            }
+            return true;
+        },
+        checkCouponRelated: function(type,couponData){
+            if(!couponData){
+                return true;
+            }
+            var voucherFee = 0;
+            var list = this.$listWrapper.find('.item');
+            for(var i=0;i<list.length;i++){
+                var payInfo = $(list[i]).find('.payInfo');
+                for(var j=0;j<payInfo.length;j++){
+                    var info = $(payInfo[j]);
+                    var _type = info.data('type');
+                    var data = info.data('data');
+                    if(_type==type && data){
+                        var _voucherFee = info.data('detail')?info.data('detail').voucherFee * 1:0;
+                        voucherFee += _voucherFee;
+                    }
+                }
+            }
+            if(!voucherFee){
+                return true;
+            }
+            var total = 0;
+            var text = '';
+            if(type=='DIANPIN'){
+                total = couponData.marketprice - couponData.price;
+                text = '点评券';
+            }else if(type=='KOUBEI'){
+                total = couponData.originalprice - couponData.price;
+                text = '口碑券';
+            }
+            
+            if(Math.round(voucherFee*1000)/1000!=Math.round(total*1000)/1000){
+                am.msg(text+'金额未全部关联，请修改项目价格与'+text+'原价相等');
+                return false;
             }
             return true;
         },
@@ -2334,6 +2530,7 @@
             var payRelated = 0;
             var unionPayRelated = 0;
             var jdRelated = 0;
+            this.voucherFeeDiscount = 0;
             for(var i=0;i<list.length;i++){
                 var payInfo = $(list[i]).find('.payInfo');
                 for(var j=0;j<payInfo.length;j++){
@@ -2343,9 +2540,16 @@
                         continue;
                     }
                     var price = info.data('detail')?info.data('detail').price * 1:0,
+                        _voucherFee = info.data('detail')?(info.data('detail').voucherFee * 1 || 0):0,
                         data = info.data('data'),
                         related = info.data('related'+type) * 1;
                     if(price){
+                        price -= _voucherFee;
+                        if(!payed['VOUCHERFEE']){
+                            payed['VOUCHERFEE'] = _voucherFee;
+                        }else {
+                            payed['VOUCHERFEE'] += _voucherFee;
+                        }
                         if(!payed[type]){
                             payed[type] = price;
                         }else {
@@ -2417,6 +2621,13 @@
                         }
                         payed['UNIONPAY'] += this.onlineData[i].price;
                     }
+                    if(this.onlineData[i].type==5 && unpayed['JINGDONG']){
+                        unpayed['JINGDONG'] -= this.onlineData[i].price;
+                        if(!payed['JINGDONG']){
+                            payed['JINGDONG'] = 0;
+                        }
+                        payed['JINGDONG'] += this.onlineData[i].price;
+                    }
                 }
             }
             console.log(payed);
@@ -2433,7 +2644,15 @@
             if(!payed.KOUBEI){
                 this.koubeiData = null;
             }
-            
+
+            for(var key in payed){
+                payed[key] = Math.round(payed[key]*100)/100;
+            }
+
+            for(var key in unpayed){
+                unpayed[key] = Math.round(unpayed[key]*100)/100;
+            }
+               
             this.payed = payed;
             this.unpayed = unpayed;
             this.setSummary()
@@ -2477,6 +2696,9 @@
             if(data.status!=3){
                 return;
             }
+            if(this.checkOnlinePayRepeated(data)){
+                return;
+            }
             if(!this.payed[type]){
                 this.payed[type] = 0;
             }
@@ -2487,9 +2709,20 @@
                 this.onlineData = [];
             }
             this.onlineData.push(data);
-            this.payed[type] += data.price;
-            this.unpayed[type] -= data.price;
+            this.payed[type] = Math.round((this.payed[type] + data.price)*100)/100;
+            this.unpayed[type] = Math.round((this.unpayed[type] - data.price)*100)/100;
+            
             this.setSummary();
+        },
+        checkOnlinePayRepeated: function(data){
+            if(this.onlineData && this.onlineData.length){
+                for(var i=0;i<this.onlineData.length;i++){
+                    if(this.onlineData[i].id == data.id){
+                        return true;
+                    }
+                }
+            }
+            return false;
         },
         key: {
             'CARDFEE':'cardFee',
@@ -2567,19 +2800,33 @@
             });
             this.opt.option.orderDetail = [];
             if(am.operateArr.indexOf('a6') != -1){
-                if(this.unpayed['WEIXIN'] || this.unpayed['PAY'] || this.unpayed['JINGDONG']){
-                    return am.msg('收款未支付完成');
-                }
-                if(this.payed.DIANPIN && !this.dianpinData){
-                    return am.msg('点评支付未关联点评券');
-                }
-                if(this.payed.KOUBEI && !this.koubeiData){
-                    return am.msg('口碑支付未关联口碑券');
+                if(this.unpayed['JINGDONG']){
+                    return am.msg('京东钱包未支付完成');
                 }
             }
             if(am.operateArr.indexOf('a61') != -1){
                 if(this.unpayed['UNIONPAY']){
                     return am.msg('银联刷卡未支付完成');
+                }
+            }
+            if(am.operateArr.indexOf('a62') != -1){
+                if(this.unpayed['WEIXIN']){
+                    return am.msg('微信未支付完成');
+                }
+            }
+            if(am.operateArr.indexOf('a63') != -1){
+                if(this.unpayed['PAY']){
+                    return am.msg('支付宝未支付完成');
+                }
+            }
+            if(am.operateArr.indexOf('a64') != -1){
+                if(this.payed.DIANPIN && !this.dianpinData){
+                    return am.msg('点评支付未关联点评券');
+                }
+            }
+            if(am.operateArr.indexOf('a65') != -1){
+                if(this.payed.KOUBEI && !this.koubeiData){
+                    return am.msg('口碑支付未关联口碑券');
                 }
             }
             for(var key in this.unpayed){
@@ -2599,12 +2846,6 @@
             if (this.payed.DIANPIN) {
                 //商城卡支付加上 点评优惠券的钱
                 if(this.dianpinData){
-                    if(bill.dpFee<this.dianpinData.marketprice){
-                        bill.dpFee = this.dianpinData.price;
-                    }else {
-                        bill.dpFee -= (this.dianpinData.marketprice - this.dianpinData.price);  
-                    }
-                    bill.voucherFee += (this.dianpinData.marketprice - this.dianpinData.price);
                     bill.dpCouponId = this.dianpinData.id;
                 }else {
                     bill.dpCouponId = null;
@@ -2615,20 +2856,14 @@
 
             if (this.payed.KOUBEI) {
                 //商城卡支付加上 口碑优惠券的钱
+                bill[this.kbSetting.field.toLowerCase()] = this.payed.KOUBEI;
                 if(this.koubeiData){
-                    bill[this.kbSetting.field.toLowerCase()] += this.koubeiData.price*1;
-                    bill.voucherFee += (this.koubeiData.originalprice - this.koubeiData.price*1);
                     bill.kBOrderid = this.koubeiData.id;
                 }else {
-                    bill[this.kbSetting.field.toLowerCase()] += this.payed.KOUBEI;
                     bill.kBOrderid = null; 
                 }
             } else {
                 bill.kBOrderid = null;
-                if(bill.kb){
-                    bill[this.kbSetting.field.toLowerCase()] = bill.kb;
-                    delete bill.kb;
-                }
             }
 
             if(this.paperData){
@@ -2636,18 +2871,32 @@
                 for(var key in this.paperData){
                     var package = this.paperData[key];
                     var rule = JSON.parse(JSON.parse(JSON.parse(package.rule).content).rule);
-                    luckymoney.push({
-                        id: package.id,
-                        realMoney: package.usedMoney,
-                        money: package.money,
-                        discount: rule.extraRule.discount,
-                        activityTitle: JSON.parse(JSON.parse(package.rule).content).title
-                    })
+                    var type = rule.extraRule.type;
+                    if(type==2 || package.usedMoney*1){
+                        luckymoney.push({
+                            id: package.id,
+                            realMoney: package.usedMoney,
+                            money: package.money,
+                            discount: rule.extraRule.discount,
+                            type: rule.extraRule.type,
+                            activityTitle: JSON.parse(JSON.parse(package.rule).content).title,
+                            usedOnProd:package.usedOnProd
+                        })
+                    }
                 }
+                var serviceLuckMoneys=[],productLuckMoneys=[];
                 if(luckymoney && luckymoney.length){
                     var luckymoneyTotal = 0;
                     for(var i=0;i<luckymoney.length;i++){
-                        luckymoneyTotal += luckymoney[i].realMoney;
+                        var luckyMoneyItem=luckymoney[i];
+                        if(luckyMoneyItem.type!=2){
+                            luckymoneyTotal += luckyMoneyItem.realMoney;
+                        }
+                        if (luckyMoneyItem.usedOnProd && luckyMoneyItem.usedOnProd === 1) {
+                            productLuckMoneys.push(luckyMoneyItem);
+                        }else{
+                            serviceLuckMoneys.push(luckyMoneyItem);
+                        }
                     }
                     var realLuckyMoney = luckymoneyTotal;
                     if (bill.total < realLuckyMoney) {
@@ -2656,6 +2905,8 @@
                     bill.luckymoney = realLuckyMoney;
                     bill.luckyMoneyId = -1;
                     bill.luckMoneys = luckymoney;
+                    bill.productLuckMoneys=productLuckMoneys;
+                    bill.serviceLuckMoneys=serviceLuckMoneys;
                 }
             }
             
@@ -2751,6 +3002,13 @@
 			}
 			if(pw){
 				this.opt.option = this.paramsEdit();
+				var popupAgain = 0;
+				if(this.opt.settlementPayDetail || am.metadata.shopPropertyField.manualInputBillno != 1 || _this.$header.find(".billno input").val().trim()){
+					popupAgain = 0;
+				} else {
+					popupAgain = 1;
+				}
+				this.opt.member.popupAgain = popupAgain;
 				am.pw.check(this.opt.member,function(verifyed){
 					if(verifyed){
 						_this.submit();
@@ -2883,7 +3141,7 @@
                 realOption.smsflag = this.opt.option.smsflag;
                 realOption.billingInfo.onlineCredit = Math.ceil(servOption.billingInfo.onlineCreditPay  * (am.metadata.configs.onlineCreditPay || 1));
                 realOption.billingInfo.offlineCredit = Math.ceil(servOption.billingInfo.offlineCreditPay  * (am.metadata.configs.offlineCreditPay || 1));
-                realOption.billingInfo.luckMoneys = this.opt.option.billingInfo.luckMoneys;
+                realOption.billingInfo.luckMoneys = this.opt.option.billingInfo.serviceLuckMoneys;
 
                 if(_billNo){
                     realOption.billNo = _billNo;
@@ -2900,6 +3158,7 @@
                 realOption.smsflag = this.opt.option.smsflag;
                 realOption.billingInfo.onlineCredit = this.opt.option.billingInfo.onlineCredit - this.opt.servOption.billingInfo.onlineCredit;
                 realOption.billingInfo.offlineCredit = this.opt.option.billingInfo.offlineCredit - this.opt.servOption.billingInfo.offlineCredit;
+                realOption.billingInfo.luckMoneys = this.opt.option.billingInfo.productLuckMoneys;
                 if(_billNo){
                     realOption.billNo = _billNo;
                 }
@@ -2993,6 +3252,8 @@
                     }else if(ret.code == 1000){
                         am.msg('token失效');
                         $.am.changePage(am.page.login, "");
+                    }else if(ret.code == 1002034){
+                        am.billChangeToHangup();
                     } else {
                         _this.$submit.removeClass("am-disabled");
                         am.msg(ret.message || "结算失败！");
@@ -3018,6 +3279,9 @@
                     if(_this.opt.servOption.instoreServiceId && _this.opt.prodOption.instoreServiceId){
                         delete _this.opt.servOption.instoreServiceId;
                     }
+                    if(_this.opt.instoreServiceVersion){
+                        _this.opt.servOption.instoreServiceVersion = _this.opt.prodOption.instoreServiceVersion = _this.opt.instoreServiceVersion;
+                    }
                     am.api.mutiBillCheck.exec([_this.opt.servOption, _this.opt.prodOption], callback);
                 } else {
                     // 性能监控点
@@ -3028,6 +3292,9 @@
                     }
                     if(_this.opt.option.expenseCategory==1 && isNaN(_this.opt.option.billNo)){
                         delete _this.opt.option.billNo;
+                    }
+                    if(_this.opt.instoreServiceVersion){
+                        _this.opt.option.instoreServiceVersion = _this.opt.instoreServiceVersion;
                     }
                     am.api.billCheck.exec(_this.opt.option, callback);
                 }
@@ -3042,7 +3309,7 @@
                         } else {
                             _this.opt.option.autoModifyBillNo = 1;
                         }
-                        toPay();
+						_this.getBillNo(toPay);
                     }, function () {
                         am.msg("单号重复！");
                         return;
@@ -3052,7 +3319,7 @@
                     return;
                 }
             }else {
-                toPay();
+				_this.getBillNo(toPay);
             }
         },
         payTypeMap: am.page.pay.payTypeMap,
@@ -3124,9 +3391,10 @@
                     cardtypeid: this.opt.member.cardTypeId,
                     discount: this.opt.member.discount || 10,//折扣
                     treatcardfee: (billingInfo.treatfee || 0) + (this.unlimitTreatfee || 0),//(this.opt.member.treatcardfee ||0)+this.unlimitTreatfee,
-                    treatpresentfee: 0//this.opt.member.treatpresentfee||0
+                    treatpresentfee: billingInfo.treatpresentfee || 0
                 };
             }
+            opt.rate = 1;
             //006 计算业绩
             console.log('computingPerformance:', opt);
             console.log(JSON.stringify(opt));
@@ -3149,15 +3417,16 @@
                 var empper = ret[i].empper;
                 //店内业绩
                 items[i].storePerf = ret[i].shopper;
+                items[i].thirdCommission = ret[i].unshopper;
                 eaFee += ret[i].shopper;
                 //项目的支付方式拆分
                 items[i].payDetail = {};
                 for (var j in this.payTypeMap) {
                     var k = this.payTypeMap[j];
-                    if (items[i].consumeType === 1 && k === 'cardfee') {
+                    if (items[i].consumeType === 1 && k === 'treatcardfee') {
                         //套餐项目
                         items[i].payDetail.treatfee = payDetail[k] || 0;
-                    } else if (items[i].consumeType === 1 && k === 'presentfee') {
+                    } else if (items[i].consumeType === 1 && k === 'treatpresentfee') {
                         //套餐项目
                         items[i].payDetail.treatpresentfee = payDetail[k] || 0;
                     } else {
@@ -3227,62 +3496,69 @@
                 }
                 depots[i].payDetail = {};
                 for (var j in this.payTypeMap) {
-                    depots[i].payDetail[j] = _payDetail[j] || 0;
+                    var k = this.payTypeMap[j];
+                    depots[i].payDetail[j] = _payDetail[k] || 0;
                     //TODO
-                    if (j === 'onlineCreditPay') {
-                        depots[i].payDetail.onlineCredit = _payDetail[j] * am.metadata.configs.onlineCreditPay || 0;
-                    } else if (j === 'offlineCreditPay') {
-                        depots[i].payDetail.offlineCredit = _payDetail[j] * am.metadata.configs.offlineCreditPay || 0;
+                    if (k === 'onlineCreditPay') {
+                        depots[i].payDetail.onlineCredit = _payDetail[k] * am.metadata.configs.onlineCreditPay || 0;
+                    } else if (k === 'offlineCreditPay') {
+                        depots[i].payDetail.offlineCredit = _payDetail[k] * am.metadata.configs.offlineCreditPay || 0;
                     }
                 }
                 delete depots[i].paySetting;
             }
         },
         computePerSetPerf: function (type) {
-            //项目不算
             var isRepeat = this.opt.prodOption && this.opt.option;
-            var expenseCategory = isRepeat?this.opt.prodOption.expenseCategory:this.opt.option.expenseCategory;
+            var expenseCategory = isRepeat ? this.opt.prodOption.expenseCategory : this.opt.option.expenseCategory;
             if (expenseCategory) {
-                var billingInfo = isRepeat?this.opt.prodOption.billingInfo:this.opt.option.billingInfo;
-                var t = billingInfo.total - billingInfo.debtFee;
-                var servers;
+                var billingInfo = isRepeat ? this.opt.prodOption.billingInfo : this.opt.option.billingInfo;
+                var sellingItems = [];
                 if (expenseCategory === 1) {
-                    var currentOption = isRepeat?this.opt.prodOption.products:this.opt.option.products;
-                    servers = currentOption.servers;
+                    sellingItems = sellingItems.concat(isRepeat ? this.opt.prodOption.products.depots : this.opt.option.products.depots);
                 }
-                if (servers && servers.length) {
-                    var payDetail = JSON.parse(JSON.stringify(billingInfo));
-                    
-                    var payMoneyCategoryPctObj = this.getPayMoneyCategoryPctObj({total: t, payDetail: payDetail});
-                    var payFeePctObj = this.getPayFeePctObj({total: t, payDetail: payDetail, isNotProject: true});
-                    for (var i = 0; i < servers.length; i++) {
-						// 判断是否手动修改业绩
-						servers[i].automaticPerformance = servers[i].perf > 0 ? 0 : 1;
-                        if(!servers[i].perf){
-                            var perf;
-                            perf = servers[i].perf = toFloat(t * servers[i].per / 100);
-                            if ([1, 4].indexOf(expenseCategory) >= 0) {
-                                servers[i].cardfee = perf * payMoneyCategoryPctObj['card'];
-                                servers[i].cashfee = perf * payMoneyCategoryPctObj['cash'];
-                                servers[i].otherfee = perf * payMoneyCategoryPctObj['other'];
+                for (var d = 0, len = sellingItems.length; d < len; d++) {
+                    var servers = sellingItems[d].servers;
+                    if (servers && servers.length) {
+                        t = sellingItems[d].salePrice * sellingItems[d].number - (sellingItems[d].payDetail.debtFee || 0); // 每个卖品的实际售价 欠款不算业绩
+                        var payMoneyCategoryPctObj = this.getPayMoneyCategoryPctObj({
+                            total: t,
+                            payDetail: sellingItems[d].payDetail
+                        });
+                        var payFeePctObj = this.getPayFeePctObj({
+                            total: t,
+                            payDetail: sellingItems[d].payDetail,
+                            isNotProject: true
+                        });
+                        for (var i = 0; i < servers.length; i++) {
+                            // 判断是否手动修改业绩
+                            servers[i].automaticPerformance = servers[i].perf > 0 ? 0 : 1;
+                            if (!servers[i].perf) {
+                                var perf;
+                                perf = servers[i].perf = toFloat(t * servers[i].per / 100);
+                                if ([1, 4].indexOf(expenseCategory) >= 0) {
+                                    servers[i].cardfee = perf * payMoneyCategoryPctObj['card'];
+                                    servers[i].cashfee = perf * payMoneyCategoryPctObj['cash'];
+                                    servers[i].otherfee = perf * payMoneyCategoryPctObj['other'];
+                                }
+                            } else {
+                                if (expenseCategory === 4 && am.metadata.configs.combNotCalIntoAchiev != 'true') {
+                                    servers[i].perf *= (t - (this.opt.option.cost || 0)) / billingInfo.total;
+                                } else {
+                                    servers[i].perf *= t / billingInfo.total;
+                                }
+                                servers[i].cardfee = servers[i].perf * payMoneyCategoryPctObj['card'];
+                                servers[i].cashfee = servers[i].perf * payMoneyCategoryPctObj['cash'];
+                                servers[i].otherfee = servers[i].perf * payMoneyCategoryPctObj['other'];
                             }
-                        }else{
-                            if(expenseCategory === 4 && am.metadata.configs.combNotCalIntoAchiev!='true'){
-                                servers[i].perf *= (t-(this.opt.option.cost || 0)) / billingInfo.total;
-                            }else {
-                                servers[i].perf *= t / billingInfo.total;
+                            // 按每一种支付方式换算业绩
+                            var perfDetail = {};
+                            for (var payName in payFeePctObj) {
+                                var pct = payFeePctObj[payName];
+                                perfDetail[payName] = servers[i].perf * pct;
                             }
-                            servers[i].cardfee = servers[i].perf * payMoneyCategoryPctObj['card'];
-                            servers[i].cashfee = servers[i].perf * payMoneyCategoryPctObj['cash'];
-                            servers[i].otherfee = servers[i].perf * payMoneyCategoryPctObj['other'];
+                            servers[i].perfDetail = perfDetail;
                         }
-                        // 按每一种支付方式换算业绩
-                        var perfDetail = {};
-                        for (var payName in payFeePctObj) {
-                            var pct = payFeePctObj[payName];
-                            perfDetail[payName] = servers[i].perf * pct;
-                        }
-                        servers[i].perfDetail = perfDetail;
                     }
                 }
             }
@@ -3314,12 +3590,19 @@
         },
         getUniqueId:function(){
             return am.page.pay.getUniqueId();
+		},
+		getBillNo:function(cb){
+            am.page.pay.getBillNo.call(this, cb);
         },
-        getCalacAjax:function(params, url, sc){
-            am.page.pay.getCalacAjax.call(this,params, url, sc);
+        getCalacAjax:function(params, url, sc, item){
+            am.page.pay.getCalacAjax.call(this,params, url, sc, item);
+        },
+        recalcRoyalty:function(params, url, sc, item){
+            am.page.pay.recalcRoyalty.call(this,params, url, sc, item);
         },
         getGainAndVoidFee:function(){
-            am.page.pay.getGainAndVoidFee.call(this);
+            var type = this.opt && this.opt.option && this.opt.option.expenseCategory
+            am.page.pay.getGainAndVoidFee.call(this,type);
         },
         changeRedPackageStatus:function(data,lis){
             if(!data || !data.length){
@@ -3394,12 +3677,47 @@
         checkSingleUse:function(){
             am.page.pay.checkSingleUse.call(this);
         },
+        // 可用卖品
+        getUseableDepots:function(depotsInBill,depotsInRule){
+            var arr= [];
+            if(depotsInBill.length){
+                if(depotsInRule.length){
+                    var depotsArr=depotsInRule.split(',');
+                    if(depotsArr[0]=='a'){
+                        // 全部卖品可用
+                        arr=depotsInBill;
+                    }else if(depotsArr[0]=='r'){
+                        // 指定卖品不能用
+                        for(var j=0,jlen=depotsInBill.length;j<jlen;j++){
+                            if(depotsArr.indexOf(depotsInBill[j].no+'')==-1){
+                                arr.push(depotsInBill[j])
+                            }
+                        }
+                    }else{
+                        // 指定卖品能用
+                        for(var i=0,len=depotsArr.length;i<len;i++){
+                            for(var j=0,jlen=depotsInBill.length;j<jlen;j++){
+                                if(depotsArr[i]==depotsInBill[j].no){
+                                    arr.push(depotsInBill[j])
+                                }
+                            }
+                        }
+                    }
+                }else{
+                    arr=depotsInBill;
+                }
+            }
+            return arr;
+        },
         getAppointServiceItems:function(serviceItems,appointServiceItems){
             return am.page.pay.getAppointServiceItems(serviceItems,appointServiceItems);
         },
         getAppointServiceItemsTotal:function(appointServiceItems){
             return am.page.pay.getAppointServiceItemsTotal(appointServiceItems);
         }, 
+        getAppointTreatmentsTotal:function(treatmentsInBill){
+            return am.page.pay.getAppointServiceItemsTotal(treatmentsInBill);
+        },
         setMutiBillingInfo: function () {
             var bill = this.opt.option.billingInfo;
             var servBill = this.opt.servOption.billingInfo;
@@ -3487,6 +3805,7 @@
             var data = $item.data('data');
             var payDetail = {};
             var payInfos = $item.find('.payInfo');
+            var voucherFee = 0;
             for(var i=0;i<payInfos.length;i++){
                 var payInfo = $(payInfos[i]);
                 var type = payInfo.data('type'),
@@ -3498,8 +3817,14 @@
                     if(type=='JINGDONG'){
                         type = this.jdSetting.field.toUpperCase()
                     }
+                    var _voucherFee = detail.voucherFee || 0;
+                    detail.price = Math.round((detail.price-_voucherFee)*100)/100;
+                    voucherFee += _voucherFee;
                     payDetail[type] = detail.price;
                 }
+            }
+            if(voucherFee){
+                payDetail['VOUCHERFEE'] = Math.round(voucherFee*100)/100;
             }
             data.paySetting = payDetail;
             return payDetail;

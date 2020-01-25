@@ -3,6 +3,7 @@
 		this.$ = opt.$;
 		this.onSortEnd = opt.onSortEnd;
 		this.onNoSort = opt.onNoSort;
+		this.cancleFlag = opt.cancleFlag;
 		this.init();
 	};
 
@@ -64,7 +65,9 @@
 				}
 			});
 			this.$.on('vhold','li:not(.add)',function(){
-				self.begin();
+				if (!this.cancleFlag) {
+					self.begin();
+				}
 			});
 		},
 		interval: 500,
@@ -120,7 +123,9 @@
 			var _this = this;
 			clearInterval(_this.timer);
 			var lis = this.$.find('.mark');
-			this.cancle();
+			if (!this.cancleFlag) {
+				this.cancle();
+			}
 			if(lis.length){
 				if(this.sortMode=='insertBefore'){
 					this.target.insertBefore(this.$.find('li').eq(this.insertIndex));
@@ -139,11 +144,11 @@
 			}
 		},
 		begin: function(){
-			this.$.find('li').addClass('shake');
+			this.$.find('li').addClass('shake').addClass('am-touchable');
             this.$.find('li.add').css('visibility','hidden');
 		},
 		cancle: function(){
-			this.$.find('li').removeClass('shake mark');
+			this.$.find('li').removeClass('shake mark').removeClass('am-touchable');
             this.$.find('li.add').css('visibility','visible');
 		},
 		getMinIndexInArray:function(a){

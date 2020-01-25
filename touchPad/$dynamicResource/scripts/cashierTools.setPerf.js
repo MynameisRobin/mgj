@@ -56,8 +56,30 @@ am.setPerf = {
 			});
 		}
 	},
+	getOtherPosVal: function () {
+		if (this.getPerfMode() == 0) {
+			// 同工位共享100% 与其他工位无关
+			return 0;
+		} else {
+			// 获取其他工位设置的业绩值
+			var $currentServerList = this.$emps.parents('.serverList'),
+				$otherServerList = $currentServerList.siblings(),
+				otherPosPer = 0;
+			if ($otherServerList && $otherServerList.length) {
+				$.each($otherServerList, function (i, v) {
+					var $selected = $(v).find('.selected');
+					if ($selected && $selected.length) {
+						$.each($selected, function (index, value) {
+							otherPosPer += $(value).find('.perfNum').text() * 1;
+						})
+					}
+				})
+			}
+			return otherPosPer;
+		}
+	},
 	onValChange:function ($this) {
-
+		
 		var value = $this.val();
 		$this.val(this.fixNum(value));
 
@@ -65,10 +87,28 @@ am.setPerf = {
 		_this.$error.hide();
 		var name = $this.prop('name');
 		_this.modifingIndex = $this.parents('tr').index();
+		var notSharedPerformance = this.getPerfMode();
+		var originalValue = this.$list.data('originalValue');
+		var orignalPer = 100,
+			orignalPerf = this.total;
+		if (originalValue) {
+			orignalPer = originalValue.orignalPer;
+			orignalPerf = originalValue.orignalPerf;
+		}
+		// 0  undefined  原来的（原来就是共享100%,和2相同），即只有1 各独享100%，其他均为共享100%，本就不区分工位，与BillServerSelector不同，
+		// var notSharedPerformance=1;
+		var currentPage = $.am.getActivePage();
+		if (currentPage.id != "page_service" && this.$emps) {
+			var otherPosPer = this.getOtherPosVal()
+			if (otherPosPer) {
+				orignalPer = 100-otherPosPer;
+				orignalPerf = Math.round(this.total*(100-otherPosPer)/100*100)/100;
+			}
+		}
 
 		if(name === 'per'){
 			//改的是比例
-			if(am.operateArr.indexOf('MGJZ8')==-1){
+			if(am.operateArr.indexOf('MGJZ8')==-1 && notSharedPerformance!=1){
 				$this.parents('tr').removeClass('modified');
 
 				var otherModified = this.$list.find('.modified');
@@ -80,9 +120,9 @@ am.setPerf = {
 				if(isNaN(per) || per<0){
 					$this.val(0);
 					per = 0;
-				}else if(per>100 - otherPer){
-					$this.val(100 - otherPer);
-					per = 100 - otherPer;
+				}else if(per>orignalPer - otherPer){
+					$this.val(orignalPer - otherPer);
+					per = orignalPer - otherPer;
 				}
 
 				$this.parents('tr').addClass('modified');
@@ -100,7 +140,7 @@ am.setPerf = {
 					}
 				}
 
-				var lastPer = 100 - hasPer;
+				var lastPer = orignalPer - hasPer;
 				for(var i=0;i<notModified.length;i++){
 					$(notModified[i]).find('input[name=per]').val(Math.round(lastPer/notModified.length*100)/100);
 				}
@@ -133,18 +173,22 @@ am.setPerf = {
 			}
 		}else if(name=='perf'){
 
-			if(am.operateArr.indexOf('MGJZ8')==-1){
-				if(this.total<0){
+			if(am.operateArr.indexOf('MGJZ8')==-1 && notSharedPerformance!=1){
+				// 不允许超过100%
+				if (this.total < 0) {
 					var all = this.$list.find('tr');
-					for(var i=0;i<all.length;i++){
+					for (var i = 0; i < all.length; i++) {
 						$(all[i]).find('input[name=per]').val('');
 					}
-					var $tr = $('#page_service .cashierBox .body .selected'),
-						price = $tr.data('data').price,
-						soldPrice = $tr.find('.price').text()*1 || 0;
-					var perf = $this.val()*1,
-						basePrice = price>soldPrice?price:soldPrice;
-					if(perf>basePrice){
+					var $tr = $.am.getActivePage().$.find('.cashierBox .cashierMain .body .selected');
+					if(!$tr.length){
+						return;
+					}
+					var	price = $tr.data('data').price,
+						soldPrice = $tr.find('.price').text() * 1 || 0;
+					var perf = $this.val() * 1,
+						basePrice = price > soldPrice ? price : soldPrice;
+					if (perf > basePrice) {
 						$this.val(basePrice);
 					}
 					return;
@@ -165,6 +209,10 @@ am.setPerf = {
 					$this.val(_this.total - otherPer);
 					per = _this.total - otherPer;
 				}
+				if(orignalPerf && value>orignalPerf){
+					// 手改业绩大于当前工位配置业绩
+					$this.val(orignalPerf);
+				}
 	
 				$this.parents('tr').addClass('modified');
 	
@@ -181,7 +229,7 @@ am.setPerf = {
 					}
 				}
 	
-				var lastPer = _this.total - hasPer;
+				var lastPer = (orignalPerf || _this.total) - hasPer;
 				for(var i=0;i<notModified.length;i++){
 					$(notModified[i]).find('input[name=perf]').val(Math.round(lastPer/notModified.length*100)/100);
 				}
@@ -236,6 +284,14 @@ am.setPerf = {
 		});
 		return this.total===-1 ? true: sum<=this.total;
 	},
+	getPerfMode: function () {
+		if ($.am.getActivePage().id != "page_service") {
+			//默认为2 员工共享100%业绩 bug 0027015 后端觉得数据库设置默认值影响较大 不同意加 所以前端设置默认值 造成基础系统配置必须点击保存才真正数据库有值
+			return (amGloble.metadata.shopPropertyField && amGloble.metadata.shopPropertyField.notSharedPerformance || 0) * 1;
+		} else {
+			return 0;
+		}
+	},
 	show:function (opt) {
 		if(!this.$){
 			this.init();
@@ -249,6 +305,9 @@ am.setPerf = {
 		this.$emps = opt.$emps;
 		this.emps = opt.emps;
 		var $arr = opt.$emps;
+		var notSharedPerformance = this.getPerfMode();
+		// 0  undefined  原来的（原来就是共享100%,和2相同），即只有1 各独享100%，其他均为共享100%，本就不区分工位，与BillServerSelector不同，
+		// var notSharedPerformance=1;
 		if($arr){
 			if(!$arr.length){
 				am.msg('没有选择任何员工！');
@@ -279,9 +338,13 @@ am.setPerf = {
 				_this.$list.append($tr);
 			});
 			if(hasPercent && this.total<0){
-				var $trs = _this.$list.find('tr');
-				for(var i=0;i<$trs.length;i++){
-					$($trs[i]).find('input[name=perf]').val('');
+				var currentPage = $.am.getActivePage();
+				if(currentPage.id == "page_service"){
+					// 有比例不清空业绩值
+					var $trs = _this.$list.find('tr');
+					for(var i=0;i<$trs.length;i++){
+						$($trs[i]).find('input[name=perf]').val('');
+					}
 				}
 			}
 			if(!hasPercent && this.total<0){
@@ -291,7 +354,12 @@ am.setPerf = {
 				}
 			}
 		}else{
-			var per = Math.round(10000/opt.emps.length)/100;
+			var per;
+			if (notSharedPerformance == 1) {
+				per = 100;
+			}else{
+				per = Math.round(10000/opt.emps.length)/100;
+			}
 			for(var i=0;i<opt.emps.length;i++){
 				var $tr = _this.$tr.clone().removeClass('modified');
 				var $td = $tr.find('td');
@@ -335,6 +403,24 @@ am.setPerf = {
 			this.$.removeClass('noPerf');
 		}
 		this.$.show();
+		if($.am.getActivePage().id != "page_service" && this.getPerfMode()){
+			this.setOrignalValue();
+		}
+	},
+	setOrignalValue: function () {
+		console.log(this.opt);
+		var orignalPer = 0,
+			orignalPerf = 0,
+			$trs = this.$list.children('tr');
+		$.each($trs, function () {
+			var $tr = $(this);
+			orignalPer += $tr.find('input[name=per]').val() * 1;
+			orignalPerf += $tr.find('input[name=perf]').val() * 1;
+		});
+		this.$list.data('originalValue', {
+			"orignalPer": orignalPer,
+			"orignalPerf": orignalPerf
+		});
 	},
 	hide:function (submit) {
 		if(submit){

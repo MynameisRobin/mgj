@@ -19,9 +19,19 @@
         init: function() {
             this.$input = $("#page_searchMember .search_input");
             this.$btnGroup = this.$.find(".customerResult");
+            this.$videoHelpWrap = this.$.find('.videoHelpWrap').on('vclick',function(){
+                console.log('视频帮助46');
+                am.getVideoHelp(this,"46");
+            });
             this.$input
                 .on("keyup", function(e) {
+                    self.nextInputTimestamp = new Date().getTime();
+                    var isCardRead = (self.nextInputTimestamp - (self.lastInputTimestamp || 0) <= 100);
+                    self.lastInputTimestamp = self.nextInputTimestamp;
                     if (e.keyCode == 13) {
+                        if(!isCardRead && !e.isCardRead && am.operateArr && am.operateArr.indexOf('MGJL')!=-1){
+                            return am.msg('请刷卡或扫码！');
+                        }
                         self.searchKeywords = self.$.find(".search_input").val();
                         self.getData();
 
@@ -40,10 +50,15 @@
                     am.listSelect.hide();
                 })
                 .on("focus", function() {
+					self.showkeyboard();
                     am.keyboard.hide();
                 })
-                .on("blur", function() {
-                    am.keyboard.hide(true);
+                .on("blur", function(e) {
+					if(e.onlyBlur){
+						return;
+					}
+					self.showkeyboard();
+					am.keyboard.hide(true);
                 }).on("input",function(){
                     var $this = $(this),
                         val = $this.val();
@@ -108,16 +123,23 @@
                             return;
                         }
                         console.log("有允许锁定会员消费权限");
-                    }
+					}
+					if (item.status == 1) {
+						am.msg('会员卡退卡中，无法进行此操作');
+						return false;
+					}
                     self.paras.onSelect(item);
                     self.saveLastSelectMember(item, "s");
                 };
                 if (amGloble.metadata.configs.typePasswordtToSelectMember == 'true' && item) {
-                    am.pw.check(item, function (verifyed) {
-                        if (verifyed) {
-                            fn();
-                        }
-                    });
+					am.keyboard.hide();
+                    setTimeout(function(){
+						am.pw.check(item, function (verifyed) {
+							if (verifyed) {
+								fn();
+							}
+						});
+					},300);
                 } else {
                     fn();
                 }
@@ -149,6 +171,9 @@
             });
 
             this.$.on("vclick", ".searchinput .ty_inputbox_icon", function() {
+                if(am.operateArr && am.operateArr.indexOf('MGJL')!=-1){
+                    return am.msg('请刷卡或扫码！');
+                }
                 self.$.find(".tabIndex li")
                     .eq(0)
                     .trigger("vclick");
@@ -234,6 +259,9 @@
                 if(self.paras && self.paras.displayId){
                     opt.displayId = self.paras.displayId;
                 }
+                if(self.paras && self.paras.tableId){
+                    opt.tableId = self.paras.tableId;
+                }
                 $.am.changePage(am.page.reservation, "slideup", opt);
             });
             //点击最近的会员
@@ -241,11 +269,14 @@
                 // 校验密码
                 var member = $(this).data("data");
                 if(amGloble.metadata.configs.typePasswordtToSelectMember == 'true' && member){
-                    am.pw.check(member, function (verifyed) {
-                        if (verifyed) {
-                            self.queryMemberFn(member);
-                        }
-                    });
+					am.keyboard.hide();
+                    setTimeout(function(){
+						am.pw.check(member, function (verifyed) {
+							if (verifyed) {
+								self.queryMemberFn(member);
+							}
+						});
+					},300);
                 }else{
                     self.queryMemberFn(member);
                 }
@@ -305,7 +336,7 @@
 				if(am.metadata.userInfo.operatestr.indexOf("U,") == -1){
 					return am.msg("会员被锁定,请在会员详情解锁~");
 				}
-			}
+            }
             am.api.queryMemberById.exec({
                 memberid: member.id || member.memberid
             },function (ret) {
@@ -386,6 +417,10 @@
                         if(member.needDeletedWaitedBillId){
                             selectedCard.needDeletedWaitedBillId = member.needDeletedWaitedBillId;
                         }
+                        if (selectedCard.status == 1) {
+                            am.msg('会员卡退卡中，无法进行此操作');
+                            return false;
+                        }
                         self.paras && self.paras.onSelect(selectedCard);
                     } else {
                         am.msg("客户资料读取失败！");
@@ -452,7 +487,7 @@
         beforeShow: function(paras) {
             if(!(paras && paras.notNeedWaiting)){
                 this.waiting();
-            }
+			}
             if (paras == "back") return;
             this.showkeyboard();
             if (this.isWin) {
@@ -489,16 +524,18 @@
                         if (n.getTime() <= ts.getTime()) {
                             //(caption, description, okCaption, cancelCaption, scb, fcb)
                         } else {
-                            // am.confirm('已过期','此会员卡已过期，无法继续使用','知道了','返回');
-                            // return;
-                            var cardType = am.metadata.cardTypeMap[card.cardTypeId];
-                            if (cardType && cardType.expiredpayflag && cardType.expiredpayflag == "0" && am.operateArr.indexOf("U") == -1) {
-                                //过期后不允许使用
-                                am.confirm("已过期", "此会员卡已过期，无法继续使用", "知道了", "返回");
-                                return;
-                            } else {
-                                am.msg("此会员卡已过期！");
-                            }
+							var cardData = card;
+							// 本店
+							if (card.shopId == am.metadata.userInfo.shopId) {
+								cardData = am.metadata.cardTypeMap[card.cardTypeId];
+							}
+							if(cardData && cardData.expiredpayflag == "0" && am.operateArr.indexOf('U') == -1){
+								//过期后不允许使用
+								am.confirm('已过期','此会员卡已过期，无法继续使用','知道了','返回');
+								return;
+							}else{
+								am.msg('此会员卡已过期！');
+							}
                         }
                     }
                 }
@@ -574,6 +611,9 @@
                     self.$input.val(value);
                 },
                 onConfirm:function(){
+                    if(am.operateArr && am.operateArr.indexOf('MGJL')!=-1){
+                        return am.msg('请刷卡或扫码！');
+                    }
                     self.searchKeywords = self.$.find(".search_input").val();
                     self.getData();
                 },
@@ -588,8 +628,8 @@
                 })
             }
 
-            am.tab.main.hide();
-            setTimeout(function() {
+			am.tab.main.hide();
+			setTimeout(function() {
                 self.$.find("[isdisabled=1]")
                     .attr("disabled", false)
                     .removeAttr("isdisabled");
@@ -643,7 +683,7 @@
                 var sdtime=amGloble.metadata.sdTime ? amGloble.metadata.sdTime*3600*1000:3*3600*1000;
                 for(var i=0;i<data.length;i++){
                     if(data[i].tableId){
-                        if((new Date().getTime()-data[i].createDateTime)>(60*60*1000)){
+                        if((new Date().getTime()-data[i].createDateTime)>(3*60*60*1000)){
                             continue;
                         }
                         var $item = this.$waitingItem.clone(true,true);
@@ -654,7 +694,7 @@
                             updateTs: data[i].lastphotoupdatetime || ""
                         }, data[i].memId + ".jpg", "s",data[i].photopath||''));
                         $item.find('.bill .name').text(data[i].memId==-1?'散客':data[i].memName);
-                        var rate = 1 - ((new Date().getTime()-data[i].createDateTime)/(60*60*1000));
+                        var rate = 1 - ((new Date().getTime()-data[i].createDateTime)/(3*60*60*1000));
                         $item.css('opacity',0.7+0.3*rate);
                         this.$waiting.find('.list').append($item.data('data',data[i]));
                         var item = data[i];

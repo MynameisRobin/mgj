@@ -63,6 +63,7 @@ am.comboItemSet = {
 		if(!this.$){
 			this.init();
 		}
+		this.$.find('.itemTypeName.checked').removeClass('checked');
 		this.$.find('li.checked').removeClass("checked");
 		this.resultIds = [];
 		if(opt.ids){

@@ -115,9 +115,10 @@
   line-height: 38px;
   left: 0;
 }
-.page_addPayOut .form-wrap .right .img-wrap {
-  width: 100px;
-  height: 100px;
+.page_addPayOut .form-wrap .right .img-wrap .upload {
+  display: inline-block;
+  width: 84px;
+  height: 84px;
   border: 1px dashed #ddd;
   border-radius: 5px;
   background: url('../images/payout-upload-bg.png') no-repeat center center;
@@ -125,15 +126,26 @@
   position: relative;
   overflow: hidden;
 }
-.page_addPayOut .form-wrap .right .img-wrap .img,
-.page_addPayOut .form-wrap .right .img-wrap .upload {
-  position: absolute;
-  width: 100%;
-  height: 100%;
+.page_addPayOut .form-wrap .right .img-wrap .imgWrapper {
+  position: relative;
+  display: inline-block;
+  width: 84px;
+  height: 84px;
+  margin-right: 12px;
 }
-.page_addPayOut .form-wrap .right .img-wrap img {
-  width: 100%;
-  height: 100%;
+.page_addPayOut .form-wrap .right .img-wrap .imgWrapper .delImg {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: -5px;
+  right: -5px;
+  background: url(../images/error.png) no-repeat 0px 0px;
+  background-size: 100% 100%;
+}
+.page_addPayOut .form-wrap .right .img-wrap .imgWrapper img {
+  width: 84px;
+  height: 84px;
+  border-radius: 5px;
 }
 .page_addPayOut .form-wrap .right textarea {
   display: block;
@@ -155,6 +167,9 @@
   text-align: center;
   line-height: 38px;
   border-radius: 5px;
+}
+.page_addPayOut .form-wrap .right .smt.am-disabled {
+  background-color: #999;
 }
 .page_addPayOut .mt {
   margin-top: 15px;

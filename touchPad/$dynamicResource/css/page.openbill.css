@@ -1,5 +1,10 @@
 /* 文字颜色 ***********************/
 /* c0* 为黑白灰色系 */
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .page_openbill *,
 .page_openbill:after,
 .page_openbill:before {
@@ -159,11 +164,10 @@
 .page_openbill .head .mid .billInfo {
   position: absolute;
   left: 80px;
-  right: 230px;
+  right: 370px;
   height: 40px;
   top: 7px;
   border-left: 1px solid #ececec;
-  border-right: 1px solid #ececec;
 }
 .page_openbill .head .mid .billInfo .billno_box {
   width: 30%;
@@ -193,6 +197,7 @@
 .page_openbill .head .mid .billInfo .remarkboxwrap {
   width: 100%;
   height: 40px;
+  border-right: 1px solid #ececec;
   float: left;
   overflow: hidden;
 }
@@ -229,15 +234,14 @@
 }
 .page_openbill .head .mid .memberInfo {
   position: absolute;
-  width: 264px;
+  width: 370px;
   height: 40px;
   top: 7px;
-  right: 0;
-  padding: 0 20px;
+  right: 0px;
+  padding: 0 15px;
 }
 .page_openbill .head .mid .memberInfo .member {
-  width: 144px;
-  float: left;
+  float: right;
 }
 .page_openbill .head .mid .memberInfo .member .header {
   width: 40px;
@@ -246,7 +250,7 @@
   background-size: 100% 100%;
   border-radius: 50%;
   overflow: hidden;
-  float: left;
+  float: right;
 }
 .page_openbill .head .mid .memberInfo .member .header img {
   width: 100%;
@@ -273,7 +277,8 @@
   background: rgba(0, 0, 0, 0.5);
 }
 .page_openbill .head .mid .memberInfo .member .name {
-  margin-left: 46px;
+  margin-left: 10px;
+  max-width: 80px;
   height: 40px;
   font-size: 16px;
   color: #e82742;
@@ -281,10 +286,12 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  float: right;
 }
 .page_openbill .head .mid .memberInfo .sex {
   width: 80px;
-  float: left;
+  float: right;
+  margin: 0 10px;
 }
 .page_openbill .head .mid .memberInfo .sex li {
   width: 28px;
@@ -301,6 +308,31 @@
 .page_openbill .head .mid .memberInfo .sex li.active {
   color: #fff;
   background-color: #555;
+}
+.page_openbill .head .mid .memberInfo .customerSource {
+  height: 40px;
+  top: 7px;
+  float: right;
+  width: 109px;
+}
+.page_openbill .head .mid .memberInfo .customerSource input {
+  border: 1px solid #dddddd;
+  cursor: pointer;
+  height: 30px;
+  margin: 5px 0;
+  width: 109px;
+  padding-left: 10px;
+  border-radius: 15px;
+  color: #555;
+  font-size: 12px;
+}
+.page_openbill .head .mid .memberInfo .customerSource .icon {
+  color: #999;
+  position: absolute;
+  right: 28px;
+  top: 12px;
+  width: 15px;
+  height: 15px;
 }
 .page_openbill .head .right {
   position: absolute;
@@ -420,7 +452,7 @@
   height: 4px;
   margin-left: -24px;
   background: #FFC424;
-  box-shadow: 0 0 15px 0#FFC424;
+  box-shadow: 0 0 15px 0 #FFC424;
   border-radius: 5px;
 }
 .page_openbill .content .list .wrapper li.am-disabled {
@@ -434,7 +466,13 @@
   overflow: hidden;
   padding-left: 4px;
 }
+.page_openbill .content .list .wrap {
+  display: flex;
+  flex-wrap: wrap;
+}
 .page_openbill .content .list li {
+  flex-shrink: 0;
+  order: 1;
   width: 78px;
   height: 110px;
   margin: 6px 6px 6px 0;
@@ -484,14 +522,13 @@
   font-weight: bold;
 }
 .page_openbill .content .list li .name {
-  position: absolute;
   color: #fff;
   left: 14px;
   line-height: 12px;
   width: 48px;
   text-align: center;
   font-size: 12px;
-  margin: 4px 2px 4px 0;
+  margin: 4px 2px 4px 15px;
 }
 .page_openbill .content .list li .header {
   position: absolute;
@@ -509,30 +546,44 @@
   width: 100%;
   height: 100%;
 }
-.page_openbill .content .list li .footer {
+.page_openbill .content .list li .time {
+  z-index: 1;
   position: absolute;
-  right: 0;
   bottom: -1px;
-  max-width: 78px;
-  height: 14px;
-  background: rgba(0, 0, 0, 0.5);
-  border-radius: 4px 4px 4px 4px;
-  color: #fff;
-}
-.page_openbill .content .list li .footer .time {
-  float: left;
+  left: 0;
   width: 48px;
   padding-left: 1px;
   font-size: 10px;
   height: 14px;
 }
-.page_openbill .content .list li .footer .status {
+.page_openbill .content .list li .status {
+  z-index: 1;
+  position: absolute;
+  bottom: -1px;
+  right: 1px;
   width: 28px;
-  float: right;
   font-size: 10px;
   height: 14px;
   text-align: center;
   line-height: 14px;
+}
+.page_openbill .content .list li .status.bg {
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 4px 4px 4px 4px;
+}
+.page_openbill .content .list li .footer {
+  display: block;
+  position: absolute;
+  right: 0;
+  bottom: -1px;
+  width: 78px;
+  height: 14px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 4px 4px 4px 4px;
+  color: #fff;
+}
+.page_openbill .content .list li .footer.hide {
+  background: none;
 }
 .page_openbill .content .list li .no,
 .page_openbill .content .list li .name,
@@ -543,6 +594,7 @@
   text-overflow: ellipsis;
 }
 .page_openbill .content .list li .inside {
+  z-index: 2;
   position: absolute;
   left: -1px;
   top: 0;
@@ -673,6 +725,159 @@
 }
 .page_openbill .content .list li.notWash .inside .inside-content .option .wash {
   display: none;
+}
+.page_openbill .content.smallView .list {
+  padding: 6px 6px 6px 10px;
+}
+.page_openbill .content.smallView .wrapper {
+  margin-top: 14px;
+  position: relative;
+}
+.page_openbill .content.smallView .wrapper .loadingWrap {
+  position: absolute;
+  display: -webkit-box;
+  -webkit-box-pack: center;
+  -webkit-box-align: center;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+}
+.page_openbill .content.smallView .wrapper .loadingWrap .page-modalLoading-inner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+}
+.page_openbill .content.smallView .type {
+  font-size: 12px;
+  color: #999;
+  line-height: 25px;
+  height: 25px;
+  overflow: hidden;
+  padding-left: 4px;
+}
+.page_openbill .content.smallView li {
+  position: relative;
+  width: 78px;
+  height: 110px;
+  margin: 6px 6px 6px 0;
+  float: left;
+  border-radius: 4px;
+  background: #5dae72;
+}
+.page_openbill .content.smallView li.am-clickable-active .mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 78px;
+  height: 110px;
+  border-radius: 4px;
+  background: rgba(34, 34, 34, 0.1);
+}
+.page_openbill .content.smallView li.status4 {
+  background-color: #e59b37;
+}
+.page_openbill .content.smallView li.status4 .time {
+  background: url(../images/openbill-time.png) no-repeat 52px center;
+  background-size: 11px 12px;
+}
+.page_openbill .content.smallView li.status2 {
+  background-color: #e82742;
+}
+.page_openbill .content.smallView li.status1 {
+  background-color: #5dae72;
+}
+.page_openbill .content.smallView li.status3 {
+  background-color: #555;
+}
+.page_openbill .content.smallView li.status5 {
+  background-color: #677DC4;
+}
+.page_openbill .content.smallView li.add {
+  background: #ececec url(../images/add-queue.png) no-repeat center center;
+  background-size: 41px 41px;
+}
+.page_openbill .content.smallView li .no {
+  margin-top: 9px;
+  margin-left: 6px;
+  max-width: 68px;
+  height: unset;
+  background: unset;
+  border-radius: 0 0 5px 5px;
+  text-align: left;
+  font-size: 21px;
+  color: #fff;
+  font-weight: bold;
+}
+.page_openbill .content.smallView li .name {
+  margin: 4px 2px 4px 6px;
+  color: #fff;
+  left: 14px;
+  line-height: 12px;
+  width: 60px;
+  text-align: unset;
+  /* padding-left: 6px; */
+  font-size: 12px;
+}
+.page_openbill .content.smallView li .header {
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  left: 6px;
+  top: 77px;
+  border-radius: 13px;
+  overflow: hidden;
+  background: #e2e2e2 url(../images/openbill-emp.png) no-repeat bottom center;
+  background-size: 16px 21px;
+  background-position: 5px 5px;
+}
+.page_openbill .content.smallView li .header img {
+  width: 100%;
+  height: 100%;
+}
+.page_openbill .content.smallView li .time {
+  position: absolute;
+  top: 55px;
+  left: 6px;
+  width: 65px;
+  font-size: 10px;
+  height: 14px;
+  line-height: 14px;
+  color: #fff;
+}
+.page_openbill .content.smallView li .status {
+  position: absolute;
+  bottom: 6px;
+  right: 2;
+  padding: 0 2px;
+  height: 14px;
+  line-height: 14px;
+  text-align: left;
+  font-size: 10px;
+  color: #fff;
+}
+.page_openbill .content.smallView li .footer {
+  display: none;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding-top: 1px;
+  width: 78px;
+  height: 15px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 4px 4px 4px 4px;
+  color: #fff;
+}
+.page_openbill .content.smallView li .no,
+.page_openbill .content.smallView li .name,
+.page_openbill .content.smallView li .time,
+.page_openbill .content.smallView li .status {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .page_openbill .submit {
   position: absolute;

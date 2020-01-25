@@ -331,6 +331,28 @@
 .page_memberDetails .memberdetailsbox .pageLeft .listbox .list ul li:nth-child(6) span {
   line-height: 28px;
 }
+.page_memberDetails .memberdetailsbox .pageLeft .listbox .list ul li.exchange {
+  text-align: left;
+}
+.page_memberDetails .memberdetailsbox .pageLeft .listbox .list ul li.exchange span.num {
+  width: 80px;
+  margin-right: 10px;
+  padding-left: 4px;
+}
+.page_memberDetails .memberdetailsbox .pageLeft .listbox .list ul li.exchange span.num.modify {
+  position: relative;
+}
+.page_memberDetails .memberdetailsbox .pageLeft .listbox .list ul li.exchange span.num.modify:before {
+  content: "";
+  background: url(../images/card_edit_white_icon.png) no-repeat center center;
+  background-size: 11px 14px;
+  width: 11px;
+  height: 14px;
+  display: inline-block;
+  position: relative;
+  left: -5px;
+  top: 1px;
+}
 .page_memberDetails .memberdetailsbox .pageLeft .listbox .list ul li span {
   display: inline-block;
   height: 20px;
@@ -347,6 +369,7 @@
   height: 21px;
 }
 .page_memberDetails .memberdetailsbox .pageLeft .listbox .list ul li span.key {
+  width: 100%;
   font-size: 12px;
   color: #999;
 }
@@ -878,6 +901,8 @@
   border: 1px solid #BBBBBB;
   border-radius: 10px;
   -webkit-border-radius: 10px;
+  border-radius: 10px 10px 0 0;
+  -webkit-border-radius: 10px 10px 0 0;
   margin-bottom: 25px;
   border-bottom: 0;
   padding-bottom: 0;
@@ -971,9 +996,8 @@
 											*/
 }
 .page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .leftCard .cardBox .list ul li.type_two {
-  /* ×Ê¸ñ¿¨ */
   background: url("../images/card_bg1.png") no-repeat;
-  background-size: 100% 100%;
+  background-size: cover;
 }
 .page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .leftCard .cardBox .list ul li.type_two .free .value.pay .payBtn {
   background-color: #805018;
@@ -982,7 +1006,7 @@
 .page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .leftCard .cardBox .list ul li.type_one {
   /* ´¢Öµ¿¨ */
   background: url("../images/card_bg2.png") no-repeat;
-  background-size: 100% 100%;
+  background-size: cover;
 }
 .page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .leftCard .cardBox .list ul li.type_one .free .value.pay .payBtn {
   background-color: #181818;
@@ -991,7 +1015,7 @@
 .page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .leftCard .cardBox .list ul li.type_zero {
   /* Ì×²Í¿¨ */
   background: url("../images/card_bg3.png") no-repeat;
-  background-size: 100% 100%;
+  background-size: cover;
 }
 .page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .leftCard .cardBox .list ul li.type_zero .free .value.pay .payBtn {
   background-color: #48397e;
@@ -999,6 +1023,11 @@
 }
 .page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .leftCard .cardBox .list ul li.am-clickable-active {
   opacity: 0.9;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .leftCard .cardBox .list ul li.am-clickable-active.type_zero::after,
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .leftCard .cardBox .list ul li.am-clickable-active.type_one::after,
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .leftCard .cardBox .list ul li.am-clickable-active.type_two::after {
+  opacity: 0;
 }
 .page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .leftCard .cardBox .list ul li.addcard {
   background-color: #fff;
@@ -1054,6 +1083,46 @@
   background: -o-linear-gradient(0deg, #f0f0f0, #fff);
   background: linear-gradient(0deg, #f0f0f0, #fff);
   opacity: 0.7;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .leftCard .cardBox .list ul li.refundCardLock.am-clickable-active.type_two:after,
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .leftCard .cardBox .list ul li.refundCardLock.am-clickable-active.type_zero:after,
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .leftCard .cardBox .list ul li.refundCardLock.am-clickable-active.type_one:after {
+  opacity: 0.8;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .leftCard .cardBox .list ul li.refundCardLock:after {
+  content: "\e700";
+  font-family: "iconfont" !important;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  position: absolute;
+  top: 50%;
+  transform: translate(-95px, -13px);
+  left: 50%;
+  height: 0;
+  z-index: 3;
+  opacity: 0.8;
+  line-height: 24px;
+  color: #E82742;
+  font-size: 26px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .leftCard .cardBox .list ul li.refundCardLock:before {
+  content: "会员卡退卡办理中";
+  font-family: "iconfont" !important;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 3;
+  width: 100%;
+  height: 100px;
+  line-height: 100px;
+  background: #fff;
+  border-radius: 9px 9px 0px 0px;
+  opacity: 0.8;
+  text-align: center;
+  color: #E82742;
+  font-size: 16px;
 }
 .page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .leftCard .cardBox .list ul li .card_base_info {
   padding: 8px 10px 0 18px;
@@ -1162,6 +1231,14 @@
   background: url("../images/card_edit_icon.png") no-repeat center center;
   background-size: 11px 14px;
   position: relative;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .leftCard .cardBox .list ul li .duedatewrap .discountRuleBtn {
+  position: absolute;
+  right: 10px;
+  top: 0;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .leftCard .cardBox .list ul li .duedatewrap .discountRuleBtn.am-clickable-active {
+  opacity: 0.6;
 }
 .page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .leftCard .cardBox .list ul li .line {
   width: 100%;
@@ -1430,7 +1507,7 @@
   position: relative;
   width: 100%;
   overflow: hidden;
-  border-bottom: 1px solid#ECECEC;
+  border-bottom: 1px solid #ECECEC;
   padding-bottom: 11px;
   margin-top: 6px;
 }
@@ -1465,11 +1542,31 @@
 .page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list .wrapperUl .comboBoxLi .comboItemGoods .comboContent .left .name {
   font-size: 14px;
   color: #222222;
-  padding-right: 100px;
+  padding-right: 80px;
   max-width: 100%;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list .wrapperUl .comboBoxLi .comboItem .comboContent .left .name .nameText,
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list .wrapperUl .comboBoxLi .comboItemGoods .comboContent .left .name .nameText {
+  display: inline-block;
+  margin: 0;
+  max-width: 80%;
+  font-size: 14px;
+  color: #222222;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list .wrapperUl .comboBoxLi .comboItem .comboContent .left .name .totalTimes,
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list .wrapperUl .comboBoxLi .comboItemGoods .comboContent .left .name .totalTimes {
+  display: inline-block;
+  margin: 0;
+  margin-left: 6px;
+  width: 20%;
+  font-size: 14px;
+  color: #222222;
 }
 .page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list .wrapperUl .comboBoxLi .comboItem .comboContent .left .date,
 .page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.comboBox .rightcombo .combobox .list .wrapperUl .comboBoxLi .comboItemGoods .comboContent .left .date {
@@ -1649,6 +1746,13 @@
   bottom: 72px;
   border: 1px solid #ececec;
 }
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.recordBox .recordContent .contentbox .treatPackageName {
+  color: #00b7ee;
+  cursor: pointer;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.recordBox .recordContent .contentbox .treatPackageName.am-clickable-active {
+  opacity: 0.6;
+}
 .page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.recordBox .recordContent .contentbox table {
   table-layout: fixed;
 }
@@ -1724,7 +1828,7 @@
 }
 .page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.recordBox .recordContent .contentbox .table-content-list td .signature {
   color: #00b7ee;
-  text-align: center;
+  text-align: left;
   line-height: 36px;
   font-size: 12px;
   cursor: pointer;
@@ -1738,7 +1842,7 @@
 }
 .page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.recordBox .recordContent .contentbox .table-content-list td .comment {
   color: #00b7ee;
-  text-align: center;
+  text-align: left;
   line-height: 36px;
   font-size: 18px;
   cursor: pointer;
@@ -1816,6 +1920,9 @@
 .page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.recordBox .recordContent .contentbox .table-content-list td .tdwrap.operate span.del:after {
   background: url("../images/icons_sprite/del_icon.png") no-repeat 0px 0px;
   background-size: 15px 15px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.recordBox .recordContent .contentbox .table-content-list .billDetail {
+  color: #00b7ee;
 }
 .page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.recordBox .recordContent .contentbox .table-content-head {
   line-height: 32px;
@@ -2062,6 +2169,9 @@
 .page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.pointBox .pointContent .body .contentbox .table_detail .negative {
   color: #e82742;
 }
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.pointBox .pointContent .body .contentbox .table_detail .billDetail {
+  color: #00b7ee;
+}
 .page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.pointBox .pointContent .body .point_page_num {
   height: 72px;
   position: absolute;
@@ -2202,16 +2312,16 @@
   font-size: 12px;
   font-weight: 400;
   color: #999;
-  padding: 8px 12px;
+  padding: 8px 8px;
   border: 1px solid #ebebeb;
   border-bottom: none;
   border-top: 1px solid #dadada;
 }
 .page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.cardCashBox .card_cash .table_detail td {
   min-height: 36px;
-  padding: 10px 12px;
+  padding: 10px 4px;
   border-left: 1px solid #ebebeb;
-  font-size: 13px;
+  font-size: 12px;
 }
 .page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.cardCashBox .card_cash .table_detail tbody tr td:last-child {
   border-right: 1px solid #ebebeb;
@@ -2227,6 +2337,9 @@
 }
 .page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.cardCashBox .card_cash .table_detail .negative {
   color: #4DB27A;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.cardCashBox .card_cash .table_detail .billDetail {
+  color: #00b7ee;
 }
 .page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.cardCashBox .card_cash .empty_box {
   position: relative;
@@ -2302,7 +2415,7 @@
   text-align: center;
   margin: 0 6px;
   box-sizing: border-box;
-  transition: border .3s;
+  transition: border 0.3s;
 }
 .page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.arrearsBox .arrears_table {
   width: 100%;
@@ -2423,7 +2536,7 @@
   text-align: center;
   margin: 0 6px;
   box-sizing: border-box;
-  transition: border .3s;
+  transition: border 0.3s;
 }
 .page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.redPocketBox .redPocketContent .header {
   margin-top: 13px;
@@ -2453,10 +2566,11 @@
   font-size: 12px;
 }
 .page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.redPocketBox .redPocketContent .header .radioBox {
-  float: right;
+  float: left;
+  margin-left: 10px;
   height: 28px;
   line-height: 28px;
-  margin-top: -6px;
+  margin-top: -8px;
   margin-right: 15px;
 }
 .page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.redPocketBox .redPocketContent .header .radioBox .iconfont {
@@ -2465,6 +2579,16 @@
 .page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.redPocketBox .redPocketContent .header .radioBox .font12 {
   vertical-align: 2px;
   font-size: 12px;
+}
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.redPocketBox .redPocketContent .header .videoHelpWrap {
+  float: right;
+  position: relative;
+  top: 0;
+  left: 0;
+  height: 28px;
+  line-height: 28px;
+  margin-top: -5px;
+  margin-right: 15px;
 }
 .page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.redPocketBox .redPocketContent .content {
   display: none;
@@ -2539,17 +2663,20 @@
 .page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.redPocketBox .redPocketContent .content .body table tbody tr td:nth-of-type(2) {
   color: #e82742;
 }
-.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.redPocketBox .redPocketContent .content .body table tbody tr td .verificationBtn {
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.redPocketBox .redPocketContent .content .body table tbody tr td .verificationBtn,
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.redPocketBox .redPocketContent .content .body table tbody tr td .revokeBtn {
   display: inline-block;
   margin-left: 10px;
   border: 1px solid #BBBBBB;
-  border-radius: 6px;
+  border-radius: 4px;
   padding: 3px 5px;
 }
-.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.redPocketBox .redPocketContent .content .body table tbody tr td .verificationBtn.am-clickable-active {
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.redPocketBox .redPocketContent .content .body table tbody tr td .verificationBtn.am-clickable-active,
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.redPocketBox .redPocketContent .content .body table tbody tr td .revokeBtn.am-clickable-active {
   background: #BBBBBB;
 }
-.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.redPocketBox .redPocketContent .content .body table tbody tr td .verificationBtn.disable {
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.redPocketBox .redPocketContent .content .body table tbody tr td .verificationBtn.disable,
+.page_memberDetails .memberdetailsbox .pageRight .rightBody .commonBox.redPocketBox .redPocketContent .content .body table tbody tr td .revokeBtn.disable {
   opacity: 0.3;
   background: #BBBBBB;
 }
@@ -2720,14 +2847,78 @@
   display: none;
 }
 .page_memberDetails .shops_popup.show .popup_right_mask,
+.page_memberDetails .refundCard_popup.show .popup_right_mask,
 .page_memberDetails .cardfee_popup.show .popup_right_mask,
 .page_memberDetails .combo_popup.show .popup_right_mask {
   display: inline-block;
 }
 .page_memberDetails .shops_popup.show .popup_right,
+.page_memberDetails .refundCard_popup.show .popup_right,
 .page_memberDetails .cardfee_popup.show .popup_right,
 .page_memberDetails .combo_popup.show .popup_right {
   right: 0;
+}
+.page_memberDetails .cardfee_popup .popup_content {
+  position: absolute;
+  top: 130px;
+  bottom: 116px;
+  right: 0;
+  left: 0;
+  overflow: hidden;
+  padding: 0 35px;
+}
+.page_memberDetails .shops_popup .switchWrap {
+  margin-top: -20px;
+  margin-bottom: 18px;
+  padding-bottom: 9px;
+  border-bottom: 1px solid #ECECEC;
+}
+.page_memberDetails .shops_popup .switchWrap .radioWrap .enableWrap,
+.page_memberDetails .shops_popup .switchWrap .radioWrap .disableWrap {
+  position: relative;
+  display: inline-block;
+  height: 30px;
+  line-height: 30px;
+  padding-left: 38px;
+}
+.page_memberDetails .shops_popup .switchWrap .radioWrap .enableWrap .radio::before,
+.page_memberDetails .shops_popup .switchWrap .radioWrap .disableWrap .radio::before {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 0;
+  display: block;
+  width: 18px;
+  height: 18px;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+  border: 1px solid #555555;
+}
+.page_memberDetails .shops_popup .switchWrap .radioWrap .enableWrap.checked .radio::after,
+.page_memberDetails .shops_popup .switchWrap .radioWrap .disableWrap.checked .radio::after {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 5px;
+  top: 9px;
+  width: 10px;
+  height: 10px;
+  background-color: #555555;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+}
+.page_memberDetails .shops_popup .switchWrap .radioWrap .disableWrap {
+  margin-left: 45px;
+}
+.page_memberDetails .shops_popup .switchWrap .switchTipWrap {
+  margin-top: -2px;
+  font-size: 12px;
+  color: #999999;
+}
+.page_memberDetails .shops_popup .switchWrap .switchTipWrap .iconfont {
+  vertical-align: -1px;
 }
 .page_memberDetails .shops_popup .shops_content {
   display: flex;
@@ -2764,20 +2955,265 @@
   background: #555555 url(../images/selectReason.png) no-repeat center center;
   background-size: 12px 8px;
   border: none;
+  width: 20px;
+  height: 20px;
 }
 .page_memberDetails .shops_popup .shops_content ul li:before {
   content: "";
   position: absolute;
   left: 0;
   top: 10px;
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   border: 1px solid #ddd;
   border-radius: 50%;
+}
+.page_memberDetails .shops_popup .shops_content ul li.am-disabled {
+  opacity: 0.6;
 }
 .page_memberDetails .combo_popup .popup_right .card_from {
   padding: 10px 0;
   line-height: 21px;
+}
+.page_memberDetails .refundCard_popup .popup_content {
+  position: absolute;
+  top: 130px;
+  bottom: 116px;
+  right: 0;
+  left: 0;
+  overflow: hidden;
+  padding: 0 35px;
+}
+.page_memberDetails .refundCard_popup .popup_content .card_info {
+  overflow: hidden;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #ECECEC;
+}
+.page_memberDetails .refundCard_popup .popup_content .card_info .info_left {
+  float: left;
+}
+.page_memberDetails .refundCard_popup .popup_content .card_info .info_left .card_name {
+  font-size: 16px;
+  color: #222;
+  margin-bottom: 5px;
+  height: 20px;
+  line-height: 20px;
+  font-weight: 500;
+}
+.page_memberDetails .refundCard_popup .popup_content .card_info .info_left .card_no {
+  color: #999;
+  font-size: 12px;
+  height: 20px;
+  line-height: 20px;
+}
+.page_memberDetails .refundCard_popup .popup_content .card_info .info_right {
+  float: right;
+  color: #999;
+  font-size: 12px;
+}
+.page_memberDetails .refundCard_popup .popup_content .card_info .info_right .card_discount {
+  margin-bottom: 5px;
+  height: 20px;
+  line-height: 20px;
+}
+.page_memberDetails .refundCard_popup .popup_content .card_info .info_right .card_duedate {
+  text-align: right;
+  height: 20px;
+  line-height: 20px;
+}
+.page_memberDetails .refundCard_popup .popup_content .card_form .form_item {
+  overflow: hidden;
+  margin-top: 18px;
+}
+.page_memberDetails .refundCard_popup .popup_content .card_form .form_item:last-child {
+  padding-bottom: 25px;
+}
+.page_memberDetails .refundCard_popup .popup_content .card_form .form_item .item_name {
+  width: 90px;
+  font-size: 14px;
+  color: #222;
+  float: left;
+}
+.page_memberDetails .refundCard_popup .popup_content .card_form .form_item .item_name .badge {
+  color: #E82742;
+}
+.page_memberDetails .refundCard_popup .popup_content .card_form .form_item .item_name.verticalMiddle {
+  line-height: 40px;
+}
+.page_memberDetails .refundCard_popup .popup_content .card_form .form_item .item_content {
+  width: 250px;
+  float: left;
+}
+.page_memberDetails .refundCard_popup .popup_content .card_form .form_item .item_content .eafee {
+  font-size: 14px;
+  color: #222;
+}
+.page_memberDetails .refundCard_popup .popup_content .card_form .form_item .item_content .payment {
+  color: #999;
+  font-size: 12px;
+  margin-right: 5px;
+}
+.page_memberDetails .refundCard_popup .popup_content .card_form .form_item .item_content .consumeDetail {
+  color: #00B7EE;
+  font-size: 12px;
+  display: inline-block;
+}
+.page_memberDetails .refundCard_popup .popup_content .card_form .form_item .item_content .applicationType ul li {
+  margin-bottom: 15px;
+}
+.page_memberDetails .refundCard_popup .popup_content .card_form .form_item .item_content .applicationType ul li .radio {
+  font-size: 0;
+  width: 18px;
+  height: 18px;
+  line-height: 18px;
+  text-align: center;
+  display: inline-block;
+  vertical-align: middle;
+  border-radius: 50%;
+  margin-right: 3px;
+  border: 1px solid #ddd;
+}
+.page_memberDetails .refundCard_popup .popup_content .card_form .form_item .item_content .applicationType ul li .radio.active {
+  background: #555;
+  border: 1px solid #555;
+}
+.page_memberDetails .refundCard_popup .popup_content .card_form .form_item .item_content .applicationType ul li .radio.active:before {
+  content: "";
+  display: inline-block;
+  vertical-align: middle;
+  width: 6px;
+  height: 6px;
+  background-color: #fff;
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
+}
+.page_memberDetails .refundCard_popup .popup_content .card_form .form_item .item_content .applicationType ul li .type_name {
+  color: #222;
+  font-size: 14px;
+}
+.page_memberDetails .refundCard_popup .popup_content .card_form .form_item .item_content .applicationType ul li .type_info {
+  color: #999;
+  font-size: 12px;
+  margin-left: 26px;
+}
+.page_memberDetails .refundCard_popup .popup_content .card_form .form_item .item_content .applicationType ul li .type_payment {
+  background: #F7F7F7;
+  padding: 10px;
+  font-size: 12px;
+  overflow: hidden;
+  margin-top: 8px;
+  margin-left: 23px;
+}
+.page_memberDetails .refundCard_popup .popup_content .card_form .form_item .item_content .applicationType ul li .type_payment .refundCardFee,
+.page_memberDetails .refundCard_popup .popup_content .card_form .form_item .item_content .applicationType ul li .type_payment .refundPresentFee {
+  width: 50%;
+  float: left;
+}
+.page_memberDetails .refundCard_popup .popup_content .card_form .form_item .item_content .applicationType ul li .type_payment .refundCardFee .name,
+.page_memberDetails .refundCard_popup .popup_content .card_form .form_item .item_content .applicationType ul li .type_payment .refundPresentFee .name {
+  color: #999;
+  margin-bottom: 8px;
+}
+.page_memberDetails .refundCard_popup .popup_content .card_form .form_item .item_content .applicationType ul li .type_payment .refundCardFee input,
+.page_memberDetails .refundCard_popup .popup_content .card_form .form_item .item_content .applicationType ul li .type_payment .refundPresentFee input {
+  width: 50px;
+  height: 30px;
+  margin-right: 10px;
+  border-radius: 3px;
+  padding-left: 10px;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+.page_memberDetails .refundCard_popup .popup_content .card_form .form_item .item_content .refundFeeInput {
+  width: 135px;
+  height: 40px;
+  line-height: 40px;
+  border-radius: 3px;
+  border: 1px solid #ddd;
+  margin-right: 10px;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  padding-left: 14px;
+  font-size: 14px;
+}
+.page_memberDetails .refundCard_popup .popup_content .card_form .form_item .item_content .depotTable,
+.page_memberDetails .refundCard_popup .popup_content .card_form .form_item .item_content .empTable {
+  margin-bottom: 8px;
+  background: #F7F7F7;
+  padding: 10px;
+  font-size: 12px;
+}
+.page_memberDetails .refundCard_popup .popup_content .card_form .form_item .item_content .depotTable .head,
+.page_memberDetails .refundCard_popup .popup_content .card_form .form_item .item_content .empTable .head {
+  margin-bottom: 8px;
+  color: #999;
+}
+.page_memberDetails .refundCard_popup .popup_content .card_form .form_item .item_content .depotTable .empList,
+.page_memberDetails .refundCard_popup .popup_content .card_form .form_item .item_content .empTable .empList {
+  color: #222;
+}
+.page_memberDetails .refundCard_popup .popup_content .card_form .form_item .item_content .depotTable ul,
+.page_memberDetails .refundCard_popup .popup_content .card_form .form_item .item_content .empTable ul {
+  margin-bottom: 8px;
+}
+.page_memberDetails .refundCard_popup .popup_content .card_form .form_item .item_content .depotTable ul li,
+.page_memberDetails .refundCard_popup .popup_content .card_form .form_item .item_content .empTable ul li {
+  display: inline-block;
+  vertical-align: middle;
+}
+.page_memberDetails .refundCard_popup .popup_content .card_form .form_item .item_content .depotTable ul li:nth-child(1),
+.page_memberDetails .refundCard_popup .popup_content .card_form .form_item .item_content .empTable ul li:nth-child(1) {
+  width: 35%;
+}
+.page_memberDetails .refundCard_popup .popup_content .card_form .form_item .item_content .depotTable ul li:nth-child(2),
+.page_memberDetails .refundCard_popup .popup_content .card_form .form_item .item_content .empTable ul li:nth-child(2) {
+  width: 28%;
+}
+.page_memberDetails .refundCard_popup .popup_content .card_form .form_item .item_content .depotTable ul li.name,
+.page_memberDetails .refundCard_popup .popup_content .card_form .form_item .item_content .empTable ul li.name {
+  vertical-align: middle;
+}
+.page_memberDetails .refundCard_popup .popup_content .card_form .form_item .item_content .depotTable ul li input,
+.page_memberDetails .refundCard_popup .popup_content .card_form .form_item .item_content .empTable ul li input {
+  width: 50px;
+  height: 30px;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  padding-left: 10px;
+  border-radius: 3px;
+}
+.page_memberDetails .refundCard_popup .popup_content .card_form .form_item .item_content .depotTable ul li input .gain,
+.page_memberDetails .refundCard_popup .popup_content .card_form .form_item .item_content .empTable ul li input .gain {
+  margin-right: 5px;
+}
+.page_memberDetails .refundCard_popup .popup_content .card_form .form_item .item_content .depotTable ul li .icon-shanchu,
+.page_memberDetails .refundCard_popup .popup_content .card_form .form_item .item_content .empTable ul li .icon-shanchu {
+  color: #8D8D8D;
+  display: inline-block;
+  cursor: pointer;
+  width: 20px;
+  height: 30px;
+  text-align: right;
+  margin-top: 0px;
+  vertical-align: middle;
+  line-height: 30px;
+}
+.page_memberDetails .refundCard_popup .popup_content .card_form .form_item .item_content .addEmp,
+.page_memberDetails .refundCard_popup .popup_content .card_form .form_item .item_content .addDepot {
+  color: #00B7EE;
+}
+.page_memberDetails .refundCard_popup .popup_content .card_form .form_item .item_content .refundInfo,
+.page_memberDetails .refundCard_popup .popup_content .card_form .form_item .item_content .refundNote {
+  width: 100%;
+  height: 40px;
+  border-radius: 3px;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  padding-left: 14px;
+  font-size: 14px;
+  border: 1px solid #ddd;
 }
 .page_memberDetails .popup_right {
   position: absolute;
@@ -2796,6 +3232,7 @@
   font-size: 27px;
   color: #222222;
   padding: 40px 0;
+  font-weight: 500;
 }
 .page_memberDetails .popup_right .card_from {
   box-sizing: border-box;
@@ -2953,35 +3390,36 @@
 }
 .page_memberDetails .popup_right .card_to .toCard_search {
   margin-top: 10px;
-  display: inline-block;
   vertical-align: middle;
-  width: 280px;
   border: 1px solid #dddddd;
   border-radius: 3px;
   -webkit-border-radius: 3px;
   font-size: 0px;
+  position: relative;
+  padding-right: 30px;
 }
 .page_memberDetails .popup_right .card_to .toCard_search .win_input {
-  display: inline-block;
+  display: block;
+  width: 100%;
   vertical-align: middle;
   background-color: transparent;
   -webkit-box-sizing: border-box;
   border: 0;
-  width: 240px;
   height: 32px;
-  padding-left: 14px;
+  padding: 0 14px;
   font-size: 14px;
 }
 .page_memberDetails .popup_right .card_to .toCard_search .search_icon {
-  display: inline-block;
-  vertical-align: middle;
+  position: absolute;
+  top: 2px;
+  right: 2px;
   width: 28px;
   height: 28px;
   background: url("../images/icons_sprite/searchMember_serch.png") no-repeat 0px 0px;
   background-size: 29px 29px;
 }
 .page_memberDetails .popup_right .card_trans_total {
-  margin-top: 40px;
+  margin-top: 25px;
 }
 .page_memberDetails .popup_right .card_trans_total::after {
   content: "";
@@ -3005,7 +3443,7 @@
   display: inline-block;
   vertical-align: middle;
   border: none;
-  width: 100px;
+  width: 110px;
   height: 40px;
   line-height: 40px;
   text-align: left;
@@ -3015,7 +3453,7 @@
   border-radius: 3px;
   -webkit-border-radius: 3px;
   border: 1px solid #dddddd;
-  margin: 10px 10px 10px 0;
+  margin: 10px 20px 10px 0;
   padding: 0 10px;
 }
 .page_memberDetails .popup_right .card_trans_total .trans_fee input::-webkit-input-placeholder,
@@ -3030,7 +3468,28 @@
   float: left;
 }
 .page_memberDetails .popup_right .card_trans_total .trans_pfee {
-  float: right;
+  margin-left: 40px;
+  float: left;
+}
+.page_memberDetails .popup_right .card_trans_remark {
+  margin-top: 15px;
+}
+.page_memberDetails .popup_right .card_trans_remark textarea {
+  display: inline-block;
+  vertical-align: middle;
+  border: none;
+  width: 100%;
+  height: 63px;
+  font-size: 14px;
+  text-align: left;
+  background-color: transparent;
+  -webkit-box-sizing: border-box;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border: 1px solid #dddddd;
+  margin: 10px 10px 10px 0;
+  padding: 10px;
+  font-family: "Helvetica", "微软雅黑", "华文细黑", "黑体";
 }
 .page_memberDetails .popup_right .foot_btns {
   position: absolute;
@@ -3872,11 +4331,11 @@
   background: #fff;
   box-shadow: 0px 1px 12px 0px rgba(168, 168, 168, 0.5);
 }
-.page_memberDetails .am-comment::after {
-  content: "";
+.page_memberDetails .am-comment .arrow {
   display: block;
   bottom: -8px;
-  left: 20px;
+  right: 16%;
+  left: auto;
   width: 0;
   height: 0;
   border-top: 6px solid #fff;
@@ -3887,6 +4346,29 @@
   transform: translateX(50%);
   -webkit-transform: translateX(50%);
 }
+.page_memberDetails .am-comment.luckMoneyComment .arrow {
+  left: 16%;
+  right: auto;
+}
+.page_memberDetails .am-comment.cardFeeComment .arrow {
+  right: 36%;
+  left: auto;
+}
+@media only screen and (max-width: 1366px) {
+  .page_memberDetails .am-comment.cardFeeComment .arrow {
+    right: 22%;
+  }
+}
+@media only screen and (max-width: 1280px) {
+  .page_memberDetails .am-comment.cardFeeComment .arrow {
+    right: 20%;
+  }
+}
+@media only screen and (max-width: 1024px) {
+  .page_memberDetails .am-comment.cardFeeComment .arrow {
+    right: 15%;
+  }
+}
 .page_memberDetails .am-comment .title {
   color: #999;
 }
@@ -3895,16 +4377,13 @@
   color: #222;
   overflow: hidden;
 }
-.page_memberDetails .am-comment .info .red {
-  color: #E82742;
-}
 .addremark_model {
   position: fixed;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: 100;
+  z-index: 101;
 }
 .addremark_model.hide {
   display: none;
@@ -3957,27 +4436,30 @@
   position: absolute;
   border: 1px solid #000;
   border-radius: 15px;
-  width: 18px;
-  height: 18px;
-  left: -1px;
+  width: 17px;
+  height: 17px;
+  left: 0;
 }
 .addremark_model .model_conttent .addremark_model-header span.left_btn label:before {
   content: " ";
-  height: 14px;
+  height: 13px;
   width: 1px;
   background: #000;
   position: absolute;
-  left: 9px;
+  left: 8px;
   top: 2px;
 }
 .addremark_model .model_conttent .addremark_model-header span.left_btn label:after {
   content: " ";
   height: 1px;
-  width: 14px;
+  width: 13px;
   background: #000;
   position: absolute;
   left: 2px;
-  top: 9px;
+  top: 8px;
+}
+.addremark_model .model_conttent .addremark_model-header span.left_btn .addremark_title {
+  padding-left: 5px;
 }
 .addremark_model .model_conttent .addremark_model-header span.right_btn {
   float: right;
@@ -4005,6 +4487,7 @@
   display: block;
   box-sizing: border-box;
   position: relative;
+  margin-top: 10px;
 }
 .addremark_model .model_conttent .addremark_model-body textarea {
   border: 0;
@@ -4945,7 +5428,7 @@
 }
 .selected_membercard li.type_one {
   background: url("../images/card_bg2.png") no-repeat;
-  background-size: 100% 100%;
+  background-size: cover;
 }
 .selected_membercard li.type_zero {
   background: url("../images/card_bg3.png") no-repeat;
@@ -5055,6 +5538,12 @@
   min-height: 100%;
   padding-bottom: 44px;
   background: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+}
+#redPocketsDialogWrap .mask {
+  position: absolute;
+  width: 100%;
+  height: 100%;
 }
 #redPocketsDialogWrap .sendPocketdialog {
   display: block;
@@ -5062,20 +5551,71 @@
   z-index: 110;
   top: 50%;
   left: 50%;
-  width: 570px;
-  max-height: 445px;
+  width: 670px;
+  height: 561px;
+  overflow: hidden;
   background-color: #fff;
   transform: translate(-50%, -50%);
   border-radius: 4px;
 }
-#redPocketsDialogWrap .sendPocketdialog .title {
-  margin: 12px 0 0 25px;
+#redPocketsDialogWrap .sendPocketdialog .emptyBox {
+  position: absolute;
+  left: 50%;
+  top: 40%;
+  transform: translate(-50%, -40%);
+  width: 100%;
+  height: 216px;
+  background: url(../images/empty.png) no-repeat center center;
+  background-size: 131px 145px;
 }
-#redPocketsDialogWrap .sendPocketdialog .title .titleContent {
-  font-weight: bold;
-  font-size: 16px;
+#redPocketsDialogWrap .sendPocketdialog .emptyBox .tip {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  color: #909090;
+  font-size: 12px;
+}
+#redPocketsDialogWrap .sendPocketdialog .sortableBtn {
+  position: absolute;
+  right: 20px;
+  top: 10px;
+  height: 30px;
+  line-height: 30px;
+  width: 66px;
+  text-align: center;
+  border-radius: 3px;
+  border: 1px solid #ddd;
+  color: #909090;
+}
+#redPocketsDialogWrap .sendPocketdialog .sortableBtn:active {
+  background: #DDDDDD;
+}
+#redPocketsDialogWrap .sendPocketdialog .sortableBtn .icon-sort {
+  font-size: 12px;
+  margin-right: 5px;
+}
+#redPocketsDialogWrap .sendPocketdialog .headerWrap .headerWrapper {
+  width: 100%;
+  height: 48px;
+  line-height: 50px;
+  border-bottom: 1px solid #ECECEC;
+  text-align: center;
+}
+#redPocketsDialogWrap .sendPocketdialog .headerWrap .headerWrapper span {
+  display: inline-block;
+  width: 56px;
+  height: 45px;
+  line-height: 48px;
+  font-size: 14px;
   color: #333333;
-  text-align: left;
+}
+#redPocketsDialogWrap .sendPocketdialog .headerWrap .headerWrapper span:first-of-type {
+  margin-right: 13px;
+}
+#redPocketsDialogWrap .sendPocketdialog .headerWrap .headerWrapper span.selected {
+  color: #E82742;
+  border-bottom: 3px solid #E82742;
 }
 #redPocketsDialogWrap .sendPocketdialog .icon-guanbi2 {
   float: right;
@@ -5086,9 +5626,43 @@
 #redPocketsDialogWrap .sendPocketdialog .icon-guanbi2:active {
   color: #282828;
 }
+#redPocketsDialogWrap .sendPocketdialog .sortBtnBox {
+  height: 30px;
+  line-height: 30px;
+  text-align: right;
+  margin-top: 20px;
+  display: none;
+}
+#redPocketsDialogWrap .sendPocketdialog .sortBtnBox .sortTip {
+  color: #909090;
+  font-size: 12px;
+  margin-right: 47px;
+}
+#redPocketsDialogWrap .sendPocketdialog .sortBtnBox .sortCancel {
+  width: 80px;
+  border-radius: 3px;
+  border: 1px solid #ddd;
+  display: inline-block;
+  text-align: center;
+  margin-right: 10px;
+}
+#redPocketsDialogWrap .sendPocketdialog .sortBtnBox .sortCancel:active {
+  background: #DDDDDD;
+}
+#redPocketsDialogWrap .sendPocketdialog .sortBtnBox .sortSubmit {
+  width: 80px;
+  border-radius: 3px;
+  color: #fff;
+  background: #555;
+  border: 1px solid #555;
+  display: inline-block;
+  margin-right: 20px;
+  text-align: center;
+}
 #redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox {
-  margin: 22px 20px 20px 20px;
-  max-height: 300px;
+  margin: 0 20px 20px 20px;
+  padding-top: 20px;
+  height: 400px;
   overflow: hidden;
 }
 #redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem {
@@ -5096,28 +5670,173 @@
   padding: 10px;
   margin-bottom: 18px;
 }
+#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem.shake {
+  animation: none;
+  -webkit-animation: none;
+}
+#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem.shake.mark {
+  border: 1px solid rgba(0, 0, 0, 0.3);
+}
 #redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem:nth-child(odd) {
-  border: 1px solid #F2F2F2;
   border-radius: 4px;
+  border: 1px solid #F2F2F2;
 }
 #redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem:nth-child(even) {
-  background: #F6F6F6;
   border-radius: 4px;
+  border: 1px solid #F2F2F2;
 }
 #redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem .pocketCheckBox {
   position: absolute;
+  width: 40px;
+  height: 40px;
+  color: #999;
+  top: 0;
+  left: 0;
+}
+#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem .pocketCheckBox svg.icon {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+}
+#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem .pocketCheckBox .sortBtn {
+  cursor: pointer;
+}
+#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem .pocketCheckBox .icon-danxuan {
+  display: inline;
+  position: absolute;
+  left: 10px;
   width: 22px;
   height: 22px;
-  color: #999;
+  top: 10px;
 }
-#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem .pocketCheckBox .iconfont::before {
+#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem .pocketCheckBox .icon-danxuan:before {
+  content: "";
   font-size: 22px;
 }
+#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem .pocketCheckBox .icon-danxuan svg.icon {
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+}
 #redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem .pocketCheckBox .icon-queren {
-  color: #555;
+  display: none;
+  position: absolute;
+  left: 10px;
+  width: 22px;
+  height: 22px;
+  top: 10px;
+}
+#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem .pocketCheckBox .icon-queren:before {
+  content: "";
+  font-size: 22px;
+}
+#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem .pocketCheckBox .icon-queren svg.icon {
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+}
+#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem .pocketCheckBox .icon-seq_icon {
+  display: none;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  padding: 10px;
+  transform: translate(-50%, -50%);
+}
+#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem .pocketCheckBox .icon-seq_icon:before {
+  content: "";
+  font-size: 12px;
+}
+#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem .pocketCheckBox .icon-seq_icon svg.icon {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
 }
 #redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem .pocketContent {
   padding-left: 30px;
+}
+#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem .pocketContent .list-head {
+  overflow: hidden;
+}
+#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem .pocketContent .list-head .list-title {
+  float: left;
+}
+#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem .pocketContent .list-head .list-count {
+  float: right;
+  color: #909090;
+  font-size: 12px;
+}
+#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem .pocketContent .list-head .list-arrow {
+  width: 0;
+  height: 0;
+  margin-left: 5px;
+  display: inline-block;
+  border-right: 7px solid transparent;
+  border-left: 7px solid transparent;
+  border-bottom: 8px solid #909090;
+  transition: all 0.3s;
+}
+#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem .pocketContent .list-item {
+  overflow: hidden;
+  background: #F6F6F6;
+  padding: 10px;
+  margin-top: 8px;
+  font-size: 12px;
+  color: #909090;
+}
+#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem .pocketContent .list-item .leftContent {
+  width: 60%;
+  float: left;
+}
+#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem .pocketContent .list-item .rightContent {
+  width: 40%;
+  float: left;
+  text-align: right;
+  height: 20px;
+  line-height: 20px;
+}
+#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem .pocketContent .list-item .rightContent .iconfont {
+  color: #FF0039;
+  margin-right: 3px;
+  font-size: 13px;
+}
+#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem .pocketContent .list-item .tipsContent {
+  display: inline-block;
+}
+#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem .pocketContent .tips {
+  overflow: hidden;
+}
+#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem .pocketContent .tips .leftContent {
+  width: 60%;
+  float: left;
+}
+#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem .pocketContent .tips .rightContent {
+  width: 40%;
+  float: left;
+  text-align: right;
+  height: 20px;
+  line-height: 20px;
+  font-size: 12px;
+}
+#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem .pocketContent .tips .rightContent .iconfont {
+  color: #FF0039;
+  margin-right: 3px;
+  font-size: 13px;
+}
+#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem .pocketContent .tips .rightContent span {
+  color: #999;
+}
+#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem .pocketContent .tips .shopContent {
+  display: block;
+  font-size: 12px;
+  color: #999999;
+}
+#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem .pocketContent .tips .tipsContent {
+  display: block;
+  font-size: 12px;
+  color: #999999;
 }
 #redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem .pocketContent .baseInfo {
   text-align: left;
@@ -5137,14 +5856,30 @@
   font-size: 13px;
   color: #151515;
 }
-#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem .pocketContent .tipsContent {
-  display: block;
-  font-size: 12px;
-  color: #999999;
+#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem .tips {
+  margin-top: 8px;
 }
-#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem .pocketContent .tipsContent span {
-  color: #999;
-  font-weight: bold;
+#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem.active {
+  border: 0;
+  background: #F6F6F6;
+}
+#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem.active .pocketCheckBox .icon-danxuan {
+  display: inline;
+}
+#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem.active .pocketCheckBox .icon-seq_icon {
+  display: none;
+}
+#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem.active .pocketCheckBox .icon-queren {
+  display: none;
+}
+#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem.active .list-item {
+  display: none;
+}
+#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem.active .list-arrow {
+  transform: rotate(180deg);
+}
+#redPocketsDialogWrap .sendPocketdialog .sendPocketItemBox .pocketItem.active .tips {
+  display: none;
 }
 #redPocketsDialogWrap .sendPocketdialog .btnBox {
   text-align: center;

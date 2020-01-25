@@ -9,6 +9,7 @@ $(function(){
                     _this.upload();
                 });
                 this.$.find('div.clearCanvas').vclick(function(){
+                    _this.signaturePad.clear();
                     _this.renderStaticEle();
                     _this.renderBill();
                 });
@@ -22,6 +23,9 @@ $(function(){
                 this.signaturePad = new SignaturePad(this.$canvas[0]);
             }else{
                 this.$.show();
+                if(this.signaturePad){
+                    this.signaturePad.clear();
+                }
             }
 
             this.opt = opt;
@@ -84,47 +88,136 @@ $(function(){
             ctx.fillText('顾客签名:',10,125);
             ctx.fillText('手艺人签名:',this.size[0]/2+10,125);
         },
+        showCostContent:function(){
+            var serviceobj = {};
+            var productobj = {};
+            var comboItemObj = {};
+            if(this.opt.prodOption&&this.opt.servOption){
+                var serviceItems = this.opt.servOption.serviceItems
+                var productItems = this.opt.prodOption.products&&this.opt.prodOption.products.depots;
+            }else{
+                var serviceItems = this.opt.option.serviceItems
+                var productItems = this.opt.option.products&&this.opt.option.products.depots;
+            }
+            if(serviceItems&&serviceItems.length){
+                $.each(serviceItems, function (k, v) {
+                    if (v.consumeType == 0) {
+                        if (serviceobj[v.itemName]) {
+                            serviceobj[v.itemName]++;
+                        } else {
+                            serviceobj[v.itemName] = 1;
+                        }
+                    } else {
+                        if (comboItemObj[v.itemName]) {
+                            comboItemObj[v.itemName]++;
+                        } else {
+                            comboItemObj[v.itemName] = 1;
+                        }
+                    }
+                });
+            }
+            if(productItems&&productItems.length){
+                $.each(productItems, function (k, v) {
+                    if (productobj[v.productName]) {
+                        productobj[v.productName]+= v.number;
+                    } else {
+                        productobj[v.productName] = v.number;
+                    }
+                });
+            }
+            var showStr = '消费内容：';
+            if(JSON.stringify(comboItemObj) != "{}"){
+                for(key in comboItemObj){
+                    showStr += key + '×' + comboItemObj[key] + '次(套餐)  '
+                }
+            }
+            if(JSON.stringify(serviceobj) != "{}"){
+                for(key in serviceobj){
+                    showStr += key + '×' + serviceobj[key] + '次  '
+                }
+            }
+            if(JSON.stringify(productobj) != "{}"){
+                for(key in productobj){
+                    showStr += key + '×' + productobj[key] + '  '
+                }
+            }
+            return showStr
+            
+        },
         renderBill:function(){
             var text=[];
             var mdConfigs = {//结算后副屏配置
                 type : 1,
                 title: "",
                 text : ""
-            }
+			}
+			// 服务项目
             if(this.opt.action == "bill"){
                 //流水单中补签
                 //text[0] = "本次消费共支付:￥"+ this.opt.total;
                 text[0] = "于"+new Date().format("yyyy年mm月dd日 HH:MM")+"补签";
             }else{
 	            if(amGloble.metadata.configs && amGloble.metadata.configs.hidePriceOnSignature === "true") {
-		            //
+                   var showStr = this.showCostContent();
+                   text[0] = '';
+                   text.push(showStr);
 	            }else {
 		            //结算前签名
-		            text[0] = "本次消费共支付:￥" + this.opt.option.billingInfo.total;
+                    text[0] = "本次消费共支付:￥" + this.opt.option.billingInfo.total;
+                    var showStr = this.showCostContent();
+                    text.push(showStr);
 		            if (this.opt.option.billingInfo.cardFee || this.opt.option.billingInfo.presentFee) {
-			            var arrfee = [];
+                        var arrfee = [],balance=0,bonus=0;
 			            if (this.opt.option.billingInfo.cardFee) {
-				            var balance = this.opt.member.balance - this.opt.option.billingInfo.cardFee;
-				            arrfee.push("卡金￥" + this.opt.option.billingInfo.cardFee + "(扣减后余额:￥" + (Math.round(balance * 100) / 100) + ")");
-			            }
-			            if (this.opt.option.billingInfo.presentFee) {
-				            var bonus = this.opt.member.gift - this.opt.option.billingInfo.presentFee;
-				            arrfee.push("赠金￥" + this.opt.option.billingInfo.presentFee + "(扣减后余额:￥" + (Math.round(bonus * 100) / 100) + ")");
-			            }
-			            text.push('扣减' + arrfee.join(","));
-		            }
-                }
-                if (this.opt.comboitem && this.opt.comboitem.length) {
-                    var comboids = {}, combotxt = [];
-                    for (var i = 0; i < this.opt.comboitem.length; i++) {
-                        var item = this.opt.comboitem[i];
-                        if (!comboids[item.itemid] && item.sumtimes != -99) {
-                            comboids[item.itemid] = 1;
-                            combotxt.push(item.itemname + (item.tleavetimes - item.leavetimes) + '次(余:' + item.leavetimes + '次)');
+                            if(this.opt.option.multiCardPay==1){
+                                balance = this.opt.member.balance - this.opt.option.marjorCardFee;
+                                arrfee.push("卡金￥" + this.opt.option.marjorCardFee);
+                            }else{
+                                balance = this.opt.member.balance - this.opt.option.billingInfo.cardFee;
+                                arrfee.push("卡金￥" + this.opt.option.billingInfo.cardFee);
+                            }
                         }
+			            if (this.opt.option.billingInfo.presentFee) {
+                            bonus = this.opt.member.gift - this.opt.option.billingInfo.presentFee;
+                            arrfee.push("赠金￥" + this.opt.option.billingInfo.presentFee)
+				            // arrfee.push("赠金￥" + this.opt.option.billingInfo.presentFee + "(扣减后余额:￥" + (Math.round(bonus * 100) / 100) + ")");
+                        }
+                        // 卡内余额
+                        var remainFee ="卡内余额："+"卡金￥" + (Math.round((this.opt.option.billingInfo.cardFee?balance:this.opt.member.balance) * 100) / 100)+','+ "赠金￥" + (Math.round((this.opt.option.billingInfo.presentFee?bonus:this.opt.member.gift) * 100) / 100);
+			            text.push('扣减' + arrfee.join(",") + '(' + remainFee + ')');
                     }
-                    if (combotxt.length) {
-                        text.push('扣减套餐:' + combotxt.join(","));
+                    if (this.opt.comboitem && this.opt.comboitem.length) {
+					
+                        // 计算是否有重复的套餐次数统计
+                        var obj = {};
+                        $.each(this.opt.comboitem, function(k, v){
+                            v.times = 1;
+                            if (obj[v.itemid+v.consumeId]) {
+                                v.times++;
+                            } else{
+                                obj[v.itemid+v.consumeId] = 1;
+                            }
+                        });
+    
+                        var combotxt = [],
+                            comboitemMap = this.getComboitemMap();
+                        for (var k in comboitemMap) {
+                            var item = comboitemMap[k]
+                            if (item.sumtimes != -99) {
+                                combotxt.push(item.itemname + (item.times || 1) + '次(余:' + (item.leavetimes == -99 ? '不限' : item.leavetimes || 0) + '次)');
+                            }
+                        }
+                        // var comboids = {}, combotxt = [];
+                        // for (var i = 0; i < this.opt.comboitem.length; i++) {
+                        // 	var item = this.opt.comboitem[i];
+                        //     if (!comboids[item.itemid] && item.sumtimes != -99) {
+                        // 		comboids[item.itemid] = 1;
+                        //         combotxt.push(item.itemname + (item.times || 1) + '次(余:' + (item.leavetimes == -99 ? '不限' : item.leavetimes || 0) + '次)');
+                        //     }
+                        // }
+                        if (combotxt.length) {
+                            text.push('扣减套餐:' + combotxt.join(","));
+                        }
                     }
                 }
                 //副屏用卡金 赠金
@@ -158,6 +251,23 @@ $(function(){
                 console.log(txtSize);
                 ctx.fillText(text[i],this.size[0] - txtSize.width-30,top+i*24+15);
             }
+        },
+        getComboitemMap: function () {
+            var comboitems = this.opt.comboitem,
+                map = {};
+            $.each(comboitems, function (i, v) {
+                if (!map[v.itemid+v.consumeId]) {
+                    map[v.itemid+v.consumeId] = {
+                        itemname: v.itemname,
+                        times: 1,
+                        leavetimes: v.leavetimes,
+                        sumtimes: v.sumtimes
+                    }
+                } else {
+                    map[v.itemid+v.consumeId].times++;
+                }
+            });
+            return map;
         },
         hide:function(){
             this.$.hide();
@@ -272,7 +382,7 @@ $(function(){
                 "shopid":am.metadata.userInfo.shopId,
                 "billid":this.billId,
                 "commentlevel":ret,
-                "channel":2,
+                "channel":this.opt.feedbackComment && this.opt.feedbackComment.content ? 0 : 2,
                 "content": this.opt.feedbackComment && this.opt.feedbackComment.content ? this.opt.feedbackComment.content : "店内点评",
                 "label" : this.opt.feedbackComment && this.opt.feedbackComment.label ? this.opt.feedbackComment.label : null,
                 "memid":this.memid || -1,
@@ -345,24 +455,12 @@ $(function(){
             var memberId = opt.memberId,billId=opt.billId,bill=opt.bill,unresign = opt.unresign,storeId=opt.storeId,failed = opt.failed;
             //记数
             var complete = 0,param = [],_this=this;
-            //流水单签名
-            var $billSignature = am.photoManager.createImage("billSignature", {
-	            parentShopId: am.metadata.userInfo.parentShopId,
-                shopId: storeId || am.metadata.userInfo.shopId,
-	            updateTs: new Date().getTime()
-	        }, billId + ".jpg", "");
-
-            //用户签名
-            var $signature = am.photoManager.createImage("signature", {
-	            parentShopId: am.metadata.userInfo.parentShopId,
-	            updateTs: new Date().getTime()
-	        }, memberId + ".png", "");
 
             this.loading = true;
             var check = function(){
-                if($.am.getActivePage().id!='page_billRecord' && $.am.getActivePage().id!='page_memberDetails'){
+                if($.am.getActivePage().id!='page_billDetail' && $.am.getActivePage().id!='page_billRecord' && $.am.getActivePage().id!='page_memberDetails'){
                     return;
-                }
+				}
                 if(complete == 2){
                     setTimeout(function(){
                         _this.loading = false;
@@ -436,52 +534,80 @@ $(function(){
                         }
                     }
                 }
-            };
-            //用户签名
-            $signature.load(function(){
-                complete++;
-                // param[1] = {
-                //     src: $(this).attr('src'),
-                //     w: this.naturalWidth,
-                //     h: this.naturalHeight,
-                //     title: '顾客签名'  // used by Default PhotoSwipe UI
-                // };
-                var canvas = document.createElement("canvas");
-                canvas.width = this.naturalWidth;
-                canvas.height = this.naturalHeight;
-                var image = document.createElement("img");
-                image.src = $(this).attr('src');
-                var ctx = canvas.getContext("2d");
-                ctx.fillStyle = 'White';
-                ctx.fillRect(0,0,this.naturalWidth,this.naturalHeight);
-                ctx.drawImage(image, 0, 0);
-                var src = canvas.toDataURL("image/png");
-                param[1] = {
-                    src: src,
-                    w: this.naturalWidth,
-                    h: this.naturalHeight,
-                    title: '顾客签名'  // used by Default PhotoSwipe UI
-                };
-                check();
-			}).error(function(){
-                complete++;
-                check();
-			});
+			};
+			//用户签名
+			var signatureCount = 0;
+			var signatureFn = function(){
+				//用户签名
+				var $signature = am.photoManager.createImage("signature", {
+					parentShopId: am.metadata.userInfo.parentShopId,
+					updateTs: new Date().getTime()
+				}, memberId + ".png", "");
 
-            //流水单签名
-            $billSignature.load(function(){
-                complete++;
-                param[0] = {
-                    src: $(this).attr('src'),
-                    w: this.naturalWidth,
-                    h: this.naturalHeight,
-                    title: '流水单签名\n'  // used by Default PhotoSwipe UI
-                };
-                check();
-			}).error(function(){
-                complete++;
-                check();
-			});
+				$signature.load(function(){
+					var canvas = document.createElement("canvas");
+					canvas.width = this.naturalWidth;
+                    canvas.height = this.naturalHeight;
+                    var _this = this;                    
+                    var image = new Image();
+                    image.src = $(this).attr('src');
+                    image.onload = function(){
+                        var ctx = canvas.getContext("2d");
+                        ctx.fillStyle = 'White';
+                        ctx.fillRect(0,0,_this.naturalWidth,_this.naturalHeight);
+                        ctx.drawImage(image, 0, 0);
+                        var src = canvas.toDataURL("image/png");
+                        complete++;
+                        param[1] = {
+                            src: src,
+                            w: _this.naturalWidth,
+                            h: _this.naturalHeight,
+                            title: '顾客签名'
+                        };
+                        check();
+                    }
+				}).error(function(){
+					if(signatureCount){
+						complete++;
+						check();
+					}else {
+						signatureCount ++;
+						signatureFn();
+					}
+				});
+			}
+            signatureFn();
+
+			//流水单签名
+			var billSignatureCount = 0;
+			var billSignatureFn = function(){
+				//流水单签名
+				var $billSignature = am.photoManager.createImage("billSignature", {
+					parentShopId: am.metadata.userInfo.parentShopId,
+					shopId: storeId || am.metadata.userInfo.shopId,
+					updateTs: new Date().getTime()
+				}, billId + ".jpg", "");
+
+				$billSignature.load(function(){
+					complete++;
+					param[0] = {
+						src: $(this).attr('src'),
+						w: this.naturalWidth,
+						h: this.naturalHeight,
+						title: '流水单签名\n'
+					};
+					check();
+				}).error(function(){
+					if(billSignatureCount){
+						complete++;
+						check();
+					}else {
+						billSignatureCount ++;
+						billSignatureFn();
+					}
+				});
+			}
+			billSignatureFn();
         },
         gotoAddMember:function(memberId){
             am.loading.show();

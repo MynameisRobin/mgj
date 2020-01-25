@@ -10,6 +10,9 @@
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
 }
+.page_searchMember .videoHelpWrap {
+  display: none;
+}
 .page_searchMember .s-show {
   display: block;
 }
@@ -271,6 +274,7 @@
 }
 .page_searchMember .pagecontent .searchTit .searchinput .ty_inputbox {
   width: 240px;
+  padding-left: 1px;
   display: block;
   float: left;
   height: 100%;
@@ -1018,6 +1022,11 @@
   height: 29px;
   margin-left: 7px;
   margin-top: 7px;
+}
+.page_searchMember.openbillShow .videoHelpWrap {
+  display: block;
+  top: 13px;
+  right: 195px;
 }
 .page_searchMember.openbillShow .icon-tuandui {
   right: 110px;

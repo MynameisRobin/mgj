@@ -254,7 +254,7 @@
 				this._timer = null;
 			}
 
-			//this.onScrollStop && this.onScrollStop();
+			// this.onScrollStop && this.onScrollStop();
 
 			//var _this = this;
 			//if (_this._currentPos[1] == 0) {

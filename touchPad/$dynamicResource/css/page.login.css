@@ -1,5 +1,10 @@
 /* 文字颜色 ***********************/
 /* c0* 为黑白灰色系 */
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .boxSinzig {
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -8,8 +13,8 @@
   position: absolute;
   left: 50%;
   top: 50%;
-  height: 500px;
-  width: 700px;
+  height: 406px;
+  width: 518px;
   border-radius: 5px;
   background-color: #fff;
   z-index: 999;
@@ -17,14 +22,16 @@
   transform: translate(-50%, -50%);
   -webkit-transform: translate(-50%, -50%);
 }
-.page_login .auth_box img {
-  width: 48px;
-  height: 48px;
+.page_login .auth_box .close_btn {
+  width: 32px;
+  height: 32px;
   position: absolute;
   right: 10px;
   top: 10px;
   cursor: pointer;
   z-index: 1;
+  background: url(../images/icons_sprite/close_employee.png) no-repeat center center;
+  background-size: 15px 15px;
 }
 .page_login .auth_box iframe {
   opacity: 1;
@@ -69,7 +76,7 @@
 }
 .page_login .login_box .formbox {
   width: 100%;
-  height: 354px;
+  min-height: 343px;
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
   background: #FFF;
@@ -79,7 +86,7 @@
   border-bottom-right-radius: 10px;
   border-radius: 10px;
   -webkit-border-radius: 10px;
-  margin-top: 25px;
+  margin-top: 20px;
   padding: 28px;
 }
 .page_login .login_box .formbox.changeLogin .inputList {
@@ -133,6 +140,9 @@
   top: 12px;
   right: -4px;
 }
+.page_login .login_box .formbox .title.hidden {
+  visibility: hidden;
+}
 .page_login .login_box .formbox .inputList {
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -149,12 +159,16 @@
   width: 100%;
   margin: 14px 0;
   border: 1px solid #ddd;
+  position: relative;
   border-top-left-radius: 3px;
   border-top-right-radius: 3px;
   border-bottom-left-radius: 3px;
   border-bottom-right-radius: 3px;
   border-radius: 3px;
   -webkit-border-radius: 3px;
+}
+.page_login .login_box .formbox .inputList .ty_inputbox.vcCodeWrap {
+  display: none;
 }
 .page_login .login_box .formbox .inputList .ty_inputbox .ty_input_ico {
   width: 50px;
@@ -180,6 +194,15 @@
   background-size: 218px 158px;
   display: block;
 }
+.page_login .login_box .formbox .inputList .ty_inputbox .ty_input_ico.vcCode_ico i {
+  margin: 0 auto;
+  width: 16px;
+  height: 16px;
+  margin-top: 16px;
+  background: url(../images/login-formIcon-vc.png) no-repeat center center;
+  background-size: 100% 100%;
+  display: block;
+}
 .page_login .login_box .formbox .inputList .ty_inputbox input {
   width: 270px;
   height: 100%;
@@ -188,6 +211,80 @@
   float: right;
   color: #222;
   font-size: 14px;
+}
+.page_login .login_box .formbox .inputList .ty_inputbox input.vcCode {
+  width: 170px;
+  float: left;
+}
+.page_login .login_box .formbox .inputList .ty_inputbox input.username {
+  width: 140px;
+  float: left;
+}
+.page_login .login_box .formbox .inputList .ty_inputbox input::-webkit-autofill,
+.page_login .login_box .formbox .inputList .ty_inputbox input::-webkit-autofill:hover,
+.page_login .login_box .formbox .inputList .ty_inputbox input::-webkit-autofill:focus {
+  box-shadow: 0 0 0px 10000px #000 inset;
+  -webkit-box-shadow: 0 0 0px 10000px #000 inset;
+}
+.page_login .login_box .formbox .inputList .ty_inputbox .vcCodeImg {
+  position: absolute;
+  width: 88px;
+  height: 38px;
+  top: 5px;
+  right: 5px;
+}
+.page_login .login_box .formbox .inputList .ty_inputbox .checkServer {
+  position: absolute;
+  width: 123px;
+  height: 38px;
+  top: 5px;
+  right: 5px;
+}
+.page_login .login_box .formbox .inputList .ty_inputbox .checkServer .status {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  padding-right: 26px;
+  display: none;
+}
+.page_login .login_box .formbox .inputList .ty_inputbox .checkServer .status .text {
+  font-size: 14px;
+  color: #999;
+  text-align: right;
+  line-height: 38px;
+  height: 38px;
+  overflow: hidden;
+}
+.page_login .login_box .formbox .inputList .ty_inputbox .checkServer .status .icon {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  top: 12px;
+  right: 6px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 13px 13px;
+}
+.page_login .login_box .formbox .inputList .ty_inputbox .checkServer .status.status-checking .icon {
+  background-image: url(../images/cluster/user_tocluster_r.png);
+  -webkit-animation: animation-loading infinite linear 1.2s;
+}
+.page_login .login_box .formbox .inputList .ty_inputbox .checkServer .status.status-pass .text {
+  color: #F39800;
+}
+.page_login .login_box .formbox .inputList .ty_inputbox .checkServer .status.status-pass .icon {
+  background-image: url(../images/cluster/user_tocluster_o.png);
+}
+.page_login .login_box .formbox .inputList .ty_inputbox .checkServer .status.status-pass.all .text {
+  color: #58D56D;
+}
+.page_login .login_box .formbox .inputList .ty_inputbox .checkServer .status.status-pass.all .icon {
+  background-image: url(../images/cluster/user_tocluster_ok.png);
+}
+.page_login .login_box .formbox .inputList .ty_inputbox .checkServer .status.status-recheck .icon {
+  background-image: url(../images/cluster/user_tocluster_rs.png);
 }
 .page_login .login_box .formbox .inputList .tybutton {
   border-top-left-radius: 3px;
@@ -205,6 +302,53 @@
   line-height: 50px;
   font-size: 18px;
   cursor: pointer;
+}
+.page_login .login_box .formbox .inputList .tybutton.am-disabled {
+  background-color: #888;
+  cursor: not-allowed;
+}
+.page_login .login_box .formbox .inputList .cluster {
+  margin: 14px 0;
+  position: relative;
+  display: none;
+}
+.page_login .login_box .formbox .inputList .cluster .cluster-l {
+  padding-right: 40px;
+  height: 18px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0;
+}
+.page_login .login_box .formbox .inputList .cluster .cluster-l .cluster-info {
+  display: inline-block;
+  vertical-align: top;
+  padding: 0 5px 0 20px;
+  background: url('../images/cluster/cluster_icon.png') no-repeat 3px 3px;
+  background-size: 12px 12px;
+  font-size: 12px;
+  color: #999;
+  height: 18px;
+  line-height: 18px;
+}
+.page_login .login_box .formbox .inputList .cluster .cluster-l .cluster-shopname {
+  display: inline-block;
+  vertical-align: top;
+  font-size: 12px;
+  color: #999;
+  height: 18px;
+  line-height: 18px;
+}
+.page_login .login_box .formbox .inputList .cluster .cluster-reset {
+  position: absolute;
+  width: 40px;
+  height: 20px;
+  right: 0;
+  top: -1px;
+  font-size: 12px;
+  color: #222;
+  text-align: center;
+  line-height: 20px;
 }
 .page_login .login_box .formbox .inputList .remind {
   height: 30px;
@@ -236,7 +380,7 @@
 }
 .page_login .downApp {
   display: none;
-  padding-top: 27px;
+  padding-top: 20px;
   text-align: center;
   color: #b0b0b0;
   font-size: 13px;
@@ -258,9 +402,179 @@
 }
 .page_login .foot {
   /*.abs(@bottom:45px;@left: 0;@right: 0);*/
-  padding-top: 24px;
+  padding-top: 14px;
   text-align: center;
   color: #b0b0b0;
+}
+.page_login .modifyPasswordTip,
+.page_login .modifyPasswordTip .mask {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+}
+.page_login .modifyPasswordTip {
+  z-index: 999;
+  display: none;
+}
+.page_login .modifyPasswordTip .mask {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.page_login .modifyPasswordTip .modifyPasswordTip-content {
+  position: absolute;
+  height: 386px;
+  width: 518px;
+  border-radius: 5px;
+  background-color: #fff;
+  left: 50%;
+  top: 50%;
+  margin-left: -259px;
+  margin-top: -193px;
+}
+.page_login .modifyPasswordTip .modifyPasswordTip-content .modifyPasswordTip-close_btn {
+  width: 32px;
+  height: 32px;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  cursor: pointer;
+  z-index: 1;
+  background: url(../images/icons_sprite/close_employee.png) no-repeat center center;
+  background-size: 15px 15px;
+}
+.page_login .modifyPasswordTip .modifyPasswordTip-content .modifyPasswordTip-wrapper {
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+}
+.page_login .modifyPasswordTip .modifyPasswordTip-content .modifyPasswordTip-wrapper .warnIcon {
+  width: 68px;
+  height: 68px;
+  margin: 0 auto 28px;
+  background: url(../images/modifyPasswordTip.png) no-repeat center center;
+  background-size: 100% 100%;
+}
+.page_login .modifyPasswordTip .modifyPasswordTip-content .modifyPasswordTip-wrapper .warnText {
+  font-size: 16px;
+  font-weight: bold;
+  color: #222;
+  text-align: center;
+  line-height: 20px;
+}
+.page_login .modifyPasswordTip .modifyPasswordTip-content .modifyPasswordTip-wrapper .modifyNow {
+  width: 192px;
+  height: 50px;
+  background-color: #595959;
+  border-radius: 2px;
+  margin: 24px auto 5px;
+  font-size: 16px;
+  color: #fff;
+  text-align: center;
+  line-height: 50px;
+  cursor: pointer;
+}
+.page_login .modifyPasswordTip .modifyPasswordTip-content .modifyPasswordTip-wrapper .modifyLater {
+  width: 192px;
+  height: 30px;
+  font-size: 12px;
+  color: #999;
+  text-align: center;
+  line-height: 30px;
+  margin: 0 auto;
+  cursor: pointer;
+}
+.page_login .linkJump {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: none;
+}
+.page_login .linkJump .mask {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+.page_login .linkJump .wrapper {
+  position: absolute;
+  width: 400px;
+  height: 300px;
+  background-color: #fff;
+  border-radius: 4px;
+  left: 50%;
+  top: 50%;
+  margin-left: -200px;
+  margin-top: -150px;
+}
+.page_login .linkJump .wrapper .close {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  width: 35px;
+  height: 35px;
+}
+.page_login .linkJump .wrapper .close::before {
+  content: "";
+  display: block;
+  width: 15px;
+  height: 15px;
+  margin: 10px;
+  background: url(../images/icons_sprite/close_employee.png) no-repeat;
+  background-size: 15px 15px;
+}
+.page_login .linkJump .wrapper .wrap {
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+  margin-top: 15px;
+}
+.page_login .linkJump .wrapper .wrap .title {
+  font-size: 16px;
+  color: #222;
+  text-align: center;
+  line-height: 24px;
+  max-height: 72px;
+  overflow: hidden;
+}
+.page_login .linkJump .wrapper .wrap .title .icon {
+  display: inline-block;
+  vertical-align: top;
+  width: 24px;
+  height: 24px;
+  background: url(../images/cluster/cluster_icon.png) no-repeat center center;
+  background-size: 16px 16px;
+}
+.page_login .linkJump .wrapper .wrap .title .jump-info {
+  padding-right: 4px;
+}
+.page_login .linkJump .wrapper .wrap .tip {
+  font-size: 13px;
+  color: #999;
+  text-align: center;
+  line-height: 20px;
+  height: 40px;
+  overflow: hidden;
+  margin: 32px 0;
+}
+.page_login .linkJump .wrapper .wrap .jump {
+  width: 129px;
+  height: 44px;
+  background-color: #555;
+  font-size: 16px;
+  color: #fff;
+  text-align: center;
+  line-height: 44px;
+  border-radius: 3px;
+  margin: 0 auto;
 }
 body.loginBg {
   background: url("../images/login_bg.jpg") no-repeat;

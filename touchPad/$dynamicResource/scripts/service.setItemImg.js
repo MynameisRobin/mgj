@@ -86,7 +86,8 @@ am.setItemImg = {
         var self = this;
         // am.metadata.serviceCodeMap.mgjservicesetlogo = serviceSetLogo + ".jpg";
         self.getServiceSetLogo(data.id, serviceSetLogo);
-        am.loading.show();
+		am.loading.show();
+		self.hide();
         am.api.serviceItemPicSet.exec(
             {
                 id: data.id,
@@ -94,10 +95,9 @@ am.setItemImg = {
                 // serviceSetLogo: serviceSetLogo + ".jpg"
             },
             function(res) {
-                am.loading.hide();
+				am.loading.hide();
                 if (res && res.code == 0) {
                     am.msg("图片更换成功");
-                    self.hide();
                 } else if (res && res.code == -1) {
                     am.msg(res.message || "数据提交失败");
                 }

@@ -122,6 +122,10 @@
 .page_hangup .am-header .operate_wrap .merge_action .sure_btn {
     background-color: #40c9c9;
 }
+.page_hangup .am-header .operate_wrap .merge_btn.am-clickable-active,
+.page_hangup .am-header .operate_wrap .merge_action .sure_btn.am-clickable-active {
+    background-color: #24aca8;
+}
 .page_hangup .hangup_container .content_wrap .hangup_block .self_mask.firstSelected::before {
     background-color: #40c9c9;
 }
@@ -134,6 +138,9 @@
     background: #24aca8;
 }
 .page_hangup .hangup-foot-list .selected {
+    background-color: #40c9c9;
+}
+.page_member .mergeWrap .mergeCustomerBtn {
     background-color: #40c9c9;
 }
 .page_memberDetails .memberdetailsbox .pageRight .memberDetailsTab li.selected span {
@@ -152,6 +159,10 @@
 .page_pay .submit,
 .page_itemPay .submit {
     background-color: #40c9c9;
+}
+.page_pay .c_loading::before {
+    background: url($directory/images/theme/loading_timeplan.png) no-repeat center center;
+    background-size: 60px 60px;
 }
 #page_phoneCall .am-left .btn {
     background: #40c9c9;
@@ -181,6 +192,9 @@
   }
 .page_reservation .appointment-btn:hover {
     background-color: #24aca8;
+}
+.page_reservation .rv_reservation {
+    background-color: #f8ffff;
 }
 .page_searchMember .am-header .o-title span.active {
     color: #40c9c9;
@@ -264,6 +278,9 @@
 .signname .btns .btn {
     background-color: #24aca8;
 }
+.signname .btns .btn.ok.am-clickable-active {
+    background-color: #40c9c9;
+}
 .tab_main li.selected {
     background-color: #40c9c9;
 }
@@ -277,10 +294,23 @@
 .page_hangup .hangup_container #content_wrap .hangup_block.good span.hangup_cash_btn.am-clickable-active, .page_hangup .hangup_container .seatMoreBillContent .hangup_block.good span.hangup_cash_btn.am-clickable-active, .page_hangup .hangup_container #content_wrap .hangup_block.good span.hangup_settle_btn.am-clickable-active, .page_hangup .hangup_container .seatMoreBillContent .hangup_block.good span.hangup_settle_btn.am-clickable-active {
     background-color: #24aca8;
 }
-.page-modalLoading-inner .loading{
-	background: url($directory/images/loading_KA.png) no-repeat center center;
+.page_hangup.half_page .am-header .operate_wrap .swipe_btn.active {
+    background-color: #40c9c9;
+}
+.page_hangup.half_page .am-header .operate_wrap .swipe_btn.active.am-clickable-active {
+    background-color: #24aca8;
+}
+.page-modalLoading-inner .loading {
+	background: url($directory/images/theme/loading_timeplan.png) no-repeat center center;
     background-size: 60px 60px;
+}
+.page-partLoading-inner .loading {
+	background-image: url($directory/images/theme/loading_timeplan.png);
 }
 .page_openbill .submit{
 	background-color: #40c9c9;
+}
+#redPocketsDialogWrap .sendPocketdialog .headerWrap .headerWrapper span.selected {
+    color: #40c9c9;
+    border-bottom: 3px solid #40c9c9;
 }

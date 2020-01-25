@@ -30,28 +30,33 @@
                     name: "会员卡"
                 }, {
 	                name: "价格",
-	                width: "130px",
+	                width: "90px",
 	                className:"center"
                 }, {
                     name: "开卡成本",
-                    width: "130px",
+                    width: "70px",
 					className:"center cost"
                 }, {
                     name: "赠送金",
-                    width: "130px",
+                    width: "80px",
 					className:"center"
                 }, {
 	                name: "有效期",
-	                width: "130px",
+	                width: "106px",
 	                className:"center"
+                }, {
+                    name: "销售",
+                    width: "60px",
                 }],
                 onSelect: function($item,t) {
-                    self.billServerSelector.rise(0,t);
+					console.log($item,t)
+					self.billServerSelector.reset($item);
+                    // self.billServerSelector.rise(0,t);
                 },
                 onAddItem: function(data, $container) {
 					$container.empty();
                     var $tr = $('<tr class="am-clickable show"></tr>');
-					$tr.append('<td><div class="am-clickable delete"></div><span class="server" style="display:none"></span></td>');
+					$tr.append('<td><div class="am-clickable delete"></div><span class="server_" style="display:none"></span></td>');
 					$tr.append('<td>'+data.name+'</td>');
 
 					var p='';
@@ -71,7 +76,11 @@
                     }
 
 					if(data.cardtype==1){
-						$tr.append('<td class="center"><span class="price bonus am-clickable '+p+'">'+_this.getBonusRule(data,_price,1)+'</span></td>');
+						var bonus = _this.getBonusRule(data,_price,1);
+						if(data.feedbounsmoney){
+							bonus = data.feedbounsmoney
+						}
+						$tr.append('<td class="center"><span class="price bonus am-clickable '+p+'">'+bonus+'</span></td>');
 					}else{
 						$tr.append('<td class="center">--</td>');
 					}
@@ -85,7 +94,8 @@
 						//ts.setFullYear(ts.getFullYear()+1);
 					}
 	                $tr.append('<td class="center"><div class="number date am-clickable">'+expiryDateTxt+'</div></td>');
-                    $container.append($tr.data("data",data));
+					$tr.append('<td class=""><div class="server am-clickable"></div></td>');
+					$container.append($tr.data("data",data));
 					self.selectCard = data;
 					self.checkCardIdExists();
 					return $tr;
@@ -122,7 +132,7 @@
                 settingKey: "setting_seller",
                 defaultSetting: null,
                 dispatchSetting: function(settings) {
-					_this.billServerSelector.dispatchSetting(settings);
+					_this.billServerSelector.dispatchSetting(settings,0,1);
                 },
                 onSubmit:function(){
                     _this.submit();
@@ -169,18 +179,70 @@
             this.billServerSelector = new cashierTools.BillServerSelector({
                 $: this.$,
                 onSelect: function(data) {
-                    self.selectedServer = data;
-	                if(this.$body.find('li.selected').length>0){
-		                am.tips.perfSetting(self.billServerSelector.$.find('li[serverid='+data.id+']'));
-	                }
+					var _this = this;
+					setTimeout(function () {
+						var emps = _this.getEmps();
+						self.billMain.setEmps(emps,null,"isSeller");// 员工 卖品行 是否销售
+					}, 50);
+					return false;
+                    // self.selectedServer = data;
+	                // if(this.$body.find('li.selected').length>0){
+		            //     am.tips.perfSetting(self.billServerSelector.$.find('li[serverid='+data.id+']'));
+	                // }
                 },
                 onRemove: function(){
-                	self.selectedServer = null;
+					var _this = this;
+					setTimeout(function () {
+						var emps = _this.getEmps();
+						self.billMain.setEmps(emps,null,"isSeller");// 员工 卖品行 是否销售
+					}, 50);
+					return false;
+                	// self.selectedServer = null;
                 },
-	            muti:true,
+				muti:true,
+				// notSharedPerformance:amGloble.metadata.shopPropertyField.notSharedPerformance || 0,// 0/undefined  原来的  1 独享100%，2共享100%
 	            getTotalPerf:function () {
-		            return self.billMain.totalPrice;
-	            }
+					return self.billMain.$.find('tr.selected') && self.billMain.$.find('tr.selected').find('.price').eq(0).text().trim()*1;
+					// return -1;
+		            // return self.billMain.totalPrice;
+				},
+				onSetEmpPer: function(emp, per,perf,gain) {
+					// 拖动或者手动计算业绩的回调
+					var $server = self.billMain.$list.find("tr.selected .server");//销售dom
+					var $service = self.billMain.$list.find("tr.selected");// 卖品dom
+					var data = $server.data("data");// 卖品员工
+					var serviceData = $service.data('data');// 卖品信息
+					if (serviceData) {
+						serviceData.manual = 1;
+					}
+					if (data) {
+						setTimeout(function () {
+							for (var i = 0; i < data.length; i++) {
+								if (data[i] && data[i].empId === emp.id) {
+									data[i].per = per;
+									data[i].perf = perf;
+									data[i].gain = gain;
+									break;
+								}
+							}
+						}, 51);
+					}
+					// return;
+                    // var $server = self.billMain.$list.find("tr.selected .server").eq(emp.pos);
+                    // var data = $server.data("data");
+                    // if (data) {
+                    //     setTimeout(function() {
+                    //         for (var i = 0; i < data.length; i++) {
+                    //             if (data[i] && data[i].empId === emp.id) {
+                    //                 data[i].per = per;
+                    //                 data[i].perf = perf;
+                    //                 data[i].gain = gain;
+                    //                 break;
+                    //             }
+                    //         }
+                    //     }, 51);
+                    // }
+                },
             });
 
 			this.$billNo = this.$.find("input[name=billNo]")/*.attr('readonly',true)*/.keyup(function(e) {//干掉弹出式数字键盘 改用默认系统键盘
@@ -204,6 +266,8 @@
             });
 		},
 		beforeShow : function(paras) {
+			this.settlementPayDetail = null;
+			this.settlementServer = null;
 			var _this=this;
 			if(paras && paras.afterRecharge && this.member){
 				var afterRecharge = paras.afterRecharge;
@@ -248,12 +312,10 @@
                 this.setMember(am.convertMemberDetailToSearch(paras.cardData));
             }else if (am.metadata) {
 				var employeeList = am.metadata.employeeList || [];
-				if(am.metadata.configs && am.metadata.configs['EMP_SORT']){
-					employeeList = JSON.parse(am.metadata.configs['EMP_SORT']);
-					employeeList = am.getConfigEmpSort(employeeList);
+				this.billItemSelector.dataBind(this.processData(am.metadata.cardTypeList));
+				if(!this.billServerSelector.data){
+					this.billServerSelector.dataBind(employeeList,["第一工位","第二工位","第三工位"]);
 				}
-                this.billItemSelector.dataBind(this.processData(am.metadata.cardTypeList));
-                this.billServerSelector.dataBind(employeeList,["销售"]);
 
                 this.billItemSelector.reset();
                 this.billServerSelector.reset();
@@ -303,14 +365,42 @@
                 if(item.cardtypeid == remark.id){
 					var itemj   = am.clone(item);
 					itemj.feedmoney = remark.money;
+					itemj.feedbounsmoney = remark.givingAmount;
+					if (remark.isXCX) {
+						itemj.costs = 0;
+					}
 					this.billMain.addItem(itemj);
 				}
             }
-            
+            // 取单选中第一个
+            this.billMain.$.find("tbody tr:eq(0)").trigger('vclick');
 
         },
 		afterShow : function(paras) {
-
+			//自动点击结算
+			if (amGloble.metadata.shopPropertyField.mgjBillingType == 1 && paras && paras.isXCX && paras.billRemark && paras.billRemark.data) {
+				var settlementPayDetail = paras.billRemark.data.settlementPayDetail;
+				if (settlementPayDetail != undefined) {
+					
+					sessionStorage._autoPay1214 = 'autoPay'; 
+					this.settlementPayDetail = {
+						payMoney: settlementPayDetail.payMoney,
+						payType: settlementPayDetail.payType
+					};
+					if(paras.server){
+						this.settlementServer = paras.server;
+					}
+					setTimeout(function () {
+						am.autoPayCheck.setStep('trigger vclick to page.pay');
+						self.$.find('.submit').trigger('vclick');
+						setTimeout(function(){
+                            if ($('.nativeUIWidget-confirm').is(':visible')) {
+                                $('.nativeUIWidget-confirm .nUI-button').eq(0).trigger('vclick');
+                            }
+                        },1000);			
+					}, 3000)
+				} else {}
+			}
 		},
 		beforeHide : function(paras) {
 			this.billMain.hideMemberInfo();
@@ -449,6 +539,11 @@
 			var $tr = this.billMain.$list.find("tr");
 			var data = $tr.data("data");
 			var cardNo = this.$billNo.val();
+			var servers=this.billServerSelector.getEmps();
+			if(!this.settlementPayDetail && am.operateArr.indexOf("a51") > -1 && (!servers || servers.length==0)){
+    			am.msg('请选择服务员工!');
+                return;
+			}
 			if(!cardNo && !pass && data&&data.khflag=="0"){//1、确认 后 提交
 				atMobile.nativeUIWidget.confirm({
 					caption: "卡号未输入",
@@ -466,31 +561,11 @@
 					this.checkCardIdExists(function(){
 						self.submitStaff();
 					});
-				}else if(pass || data.khflag=="1"){//直接提交
+				}else if(pass || (data && data.khflag=="1")){//直接提交
 					this.submitStaff();
 				}
 			}
 		},
-		saveBill:function(item){
-            am.api.hangupSave.exec({
-                id:item.id,
-                data:item.data,
-                memId:item.memId,
-                memName:item.memName,
-                memPhone:item.memPhone,
-                memcardid:item.memcardid,
-                parentShopId:am.metadata.userInfo.parentShopId,
-				shopId:am.metadata.userInfo.shopId,
-				serviceNO:item.serviceNOBak?item.serviceNOBak:(item.serviceNO?item.serviceNO:'')
-            }, function(ret){
-                am.loading.hide();
-                if(ret && ret.code===0){
-                    
-                } else {
-                    am.msg("原单据信息更新失败！");
-                }
-            });
-        },
 		submitStaff:function(){
 			var cardNo = this.$billNo.val();
 			var $tr = this.billMain.$list.find("tr");
@@ -516,7 +591,8 @@
                     "eaFee": 0, //入账金额
 					"treatfee": 0,
 					"treatpresentfee": 0,
-                }
+				},
+				'jsonstr': this.billRemark?this.billRemark.jsonstr:''
 			};
 			if(this.billRemark){
                 opt.billNo = this.billRemark.serviceNO;
@@ -553,9 +629,16 @@
 			}*/
 			opt.card.servers = this.billServerSelector.getEmps();
 
+			if(this.settlementServer){
+				opt.card.servers = [this.settlementServer];
+			}
+			// if(am.checkContainedServers(opt)===0){
+            //     am.msg('请选择服务员工!');
+            //     return;
+            // }
             opt.billingInfo.eaFee = opt.billingInfo.total;
 
-			var remarkCallback = function(members,response){//备注买单完成回调
+			var remarkCallback = function(members){//备注买单完成回调
                 var _data = this.billRemark;
                 var sdata = _data.data;
                 var sendData = {};
@@ -563,16 +646,15 @@
                     sendData = JSON.parse(sdata);
                 }catch(e){}
                 if(members){
-                    sendData.cid = response.memCardId;
+					sendData.cid = '$memCardId';
                     sendData.memGender=members.sex;
                     _data.memId  = members.id;
                     _data.memName= members.name;
                     _data.memPhone=members.mobile;
-                    _data.memcardid=response.memCardId;
                 }
                 sendData.billRemark.opencard.isbuy = true;
                 _data.data = JSON.stringify(sendData);
-                self.saveBill(_data);
+				return _data.data;
             }
 
 			if(this.member){
@@ -626,7 +708,8 @@
 			                comboitem: [],
 			                option: opt,
 			                member: member
-			            });*/
+						});*/
+						self.setMember(member);
 						self.goto(opt,member,data.mgj_mustPassword,remarkCallback);
 					}
 	            });
@@ -640,12 +723,13 @@
 					member: member,
 					billRemark:self.billRemark,
 					remarkCallback:remarkCallback,
-					from:"memberCard"
+					from:"memberCard",
+					settlementPayDetail: self.settlementPayDetail
 				});
 			});
 		},
 		ifNeedSetPwd:function (mustPassword,member,cb) {
-			if(mustPassword && !member.passwd){
+			if(mustPassword && !member.passwd && !this.settlementPayDetail){
 				am.keyboard.show({
                     title: "必须为此会员设置密码",
                     ciphertext:true,
@@ -675,6 +759,41 @@
 								am.msg(res.message || "密码设置失败!");
 							}
 						});
+					}
+				});
+			}else if(!mustPassword && am.metadata.shopPropertyField.setCardPwd==1 && !member.passwd && !this.settlementPayDetail){
+				am.keyboard.show({
+                    title: "请为此会员设置密码",
+                    ciphertext:true,
+					submit: function (value) {
+						if (value.length>6) {
+							am.msg("您输入的6位以内数字密码!");
+							return true;
+						} else if (value == "") {
+							am.msg("请输入密码!");
+							return true;
+						}
+						var opt = {
+							passwd:value,
+							memId:member.id,
+							mobile:member.mobile,
+							name:member.name
+						};
+						am.loading.show("设置密码中,请稍候...");
+						am.api.setCardpw.exec(opt, function (res) {
+							am.loading.hide();
+							console.log(res);
+							if (res.code == 0) {
+								member.passwd = opt.passwd;
+								member.passwdNewSet = 1;
+								cb();
+							} else {
+								am.msg(res.message || "密码设置失败!");
+							}
+						});
+					},
+					cancel: function(){
+						cb();
 					}
 				});
 			}else{

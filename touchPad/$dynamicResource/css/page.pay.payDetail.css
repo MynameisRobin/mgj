@@ -995,7 +995,10 @@
 }
 .page_pay .payDetail .onlinePay.mix .mixPayButton.am-disabled,
 .page_prepay .payDetail .onlinePay.mix .mixPayButton.am-disabled,
-.page_addIncome .payDetail .onlinePay.mix .mixPayButton.am-disabled {
+.page_addIncome .payDetail .onlinePay.mix .mixPayButton.am-disabled,
+.page_pay .payDetail .onlinePay.mix .mixPayButton.noJdSetting,
+.page_prepay .payDetail .onlinePay.mix .mixPayButton.noJdSetting,
+.page_addIncome .payDetail .onlinePay.mix .mixPayButton.noJdSetting {
   opacity: 0.8;
   background: #595959;
   color: #b0b0b0;
@@ -1443,11 +1446,6 @@
   display: block;
   font-size: 12px;
   color: #999999;
-}
-.page_pay .payDetail .onlinePay.luckyMoney .list ul li .contentDiv .explainDiv .tipsContent span,
-.page_prepay .payDetail .onlinePay.luckyMoney .list ul li .contentDiv .explainDiv .tipsContent span,
-.page_addIncome .payDetail .onlinePay.luckyMoney .list ul li .contentDiv .explainDiv .tipsContent span {
-  color: #E82742;
 }
 .page_pay .payDetail .onlinePay.luckyMoney .list ul li .contentDiv .line,
 .page_prepay .payDetail .onlinePay.luckyMoney .list ul li .contentDiv .line,

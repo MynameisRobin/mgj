@@ -117,13 +117,14 @@
             self.$.find(".phoneNumber,.description").val("");
             self.$.find(".table-content").hide();
             self.$.find(".table-empty").show();
-            this.getCategory();
+            // this.getCategory();
+            this.$.find(".qq-info,.content").hide();
         },
         beforeHide: function () {},
         afterShow: function (data) {
-            this.getData(this.json, data);
+            // this.getData(this.json, data);
             this.getSueNum();
-            this.table.refresh();
+            // this.table.refresh();
         },
         afterHide: function () {},
         getTd: function (v, json) {
@@ -280,7 +281,7 @@
                     break;
             }
             if (d == 1 && remindSubmiter) {
-                status = "<span style='color:#00b7ee'>可结单</span>";
+                status = "<span style='color:#00b7ee'>点击工单号结单</span>";
             }
             return status;
         },

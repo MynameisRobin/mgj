@@ -24,6 +24,13 @@
 				if(currentPage.id=='page_itemPay'){
 					return;
 				}
+				if(currentPage.id=='page_multiCardPay'){
+					return;
+				}
+			}
+			// 判断是否视频播放弹窗
+			if(VideoPlayer && VideoPlayer.myPlayer){
+				return;
 			}
 			window.location.reload();
 		});

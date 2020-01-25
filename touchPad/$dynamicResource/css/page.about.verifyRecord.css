@@ -1,5 +1,10 @@
 /* 文字颜色 ***********************/
 /* c0* 为黑白灰色系 */
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .page_about_verifyrecord .dateWrap {
   position: absolute;
   top: 6px;
@@ -82,7 +87,7 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   vertical-align: middle;
-  text-align: center;
+  margin: 0 5px;
 }
 .page_about_verifyrecord .recordList .contentbox .table-content-list {
   box-sizing: border-box;
@@ -106,7 +111,7 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   vertical-align: middle;
-  text-align: center;
+  margin: 0 5px;
 }
 .page_about_verifyrecord .recordList .contentbox .table-content-list tr:nth-child(2n+1) {
   background-color: #f7f7f7;
@@ -225,10 +230,10 @@
   border-bottom-right-radius: 3px;
   border-radius: 3px;
   -webkit-border-radius: 3px;
-  border: 1px solid #dddddd;
+  border: 1px solid #ddd;
   line-height: 38px;
   font-size: 13px;
-  color: #666666;
+  color: #666;
   display: block;
   text-align: center;
   margin-top: 25px;

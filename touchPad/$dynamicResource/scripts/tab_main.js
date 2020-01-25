@@ -1,88 +1,88 @@
 am.tab.main = new $.am.Tab({
 	id : "tab_main",
 	items : [ {
-		onclick : function() {
-			if (am.tab.main._idx == 0) {
+		onclick : function(e) {
+			if (am.tab.main._idx == 0 && !e.FORCEREFRESH) {
 				return false;
 			}
-			$.am.changePage(am.page.reservation, "");
+			$.am.changePage(am.page.reservation, "", e.FORCEREFRESH?{FORCEREFRESH:e.FORCEREFRESH}:"");
 			return true;
 		}
 	}, {
-		onclick : function() {
-			if (am.tab.main._idx == 1) {
+		onclick : function(e) {
+			if (am.tab.main._idx == 1 && !e.FORCEREFRESH) {
 				return false;
 			}
 			if(amGloble.metadata.shopPropertyField.mgjBillingType){
-				$.am.changePage(am.page.hangup, "", {openbill:1});
+				$.am.changePage(am.page.hangup, "", {openbill:1,refresh:1,FORCEREFRESH:e.FORCEREFRESH});
 			}else{
-				$.am.changePage(am.page.service, "");
+				$.am.changePage(am.page.service, "", e.FORCEREFRESH?{FORCEREFRESH:e.FORCEREFRESH}:"");
 			}
 			
 			return true;
 		}
 	}, {
-		onclick : function() {
-			if (am.tab.main._idx == 2) {
+		onclick : function(e) {
+			if (am.tab.main._idx == 2 && !e.FORCEREFRESH) {
 				return false;
 			}
-			$.am.changePage(am.page.product, "");
+			$.am.changePage(am.page.product, "", e.FORCEREFRESH?{FORCEREFRESH:e.FORCEREFRESH}:"");
 			return true;
 		}
 	}, {
-		onclick : function() {
-			if (am.tab.main._idx == 3) {
+		onclick : function(e) {
+			if (am.tab.main._idx == 3 && !e.FORCEREFRESH) {
 				return false;
 			}
-			$.am.changePage(am.page.memberCard, "");
+			$.am.changePage(am.page.memberCard, "", e.FORCEREFRESH?{FORCEREFRESH:e.FORCEREFRESH}:"");
 			return true;
 		}
 	}, {
-	    onclick: function () {
-	        if (am.tab.main._idx == 4) {
+	    onclick: function (e) {
+	        if (am.tab.main._idx == 4 && !e.FORCEREFRESH) {
 	            return false;
 	        }
-			$.am.changePage(am.page.comboCard, "");
+			$.am.changePage(am.page.comboCard, "", e.FORCEREFRESH?{FORCEREFRESH:e.FORCEREFRESH}:"");
 	        return true;
 	    }
 	}, {
-	    onclick: function () {
-	        if (am.tab.main._idx == 5) {
+	    onclick: function (e) {
+	        if (am.tab.main._idx == 5 && !e.FORCEREFRESH) {
 	            return false;
 	        }
-	        $.am.changePage(am.page.member, "");
+	        $.am.changePage(am.page.member, "", e.FORCEREFRESH?{FORCEREFRESH:e.FORCEREFRESH}:"");
 	        return true;
 	    }
 	}, {
-	    onclick: function () {
-	        if (am.tab.main._idx == 6) {
+	    onclick: function (e) {
+	        if (am.tab.main._idx == 6 && !e.FORCEREFRESH) {
 	            return false;
 	        }
-	        $.am.changePage(am.page.billRecord, "");
+	        $.am.changePage(am.page.billRecord, "", e.FORCEREFRESH?{FORCEREFRESH:e.FORCEREFRESH}:"");
 	        return true;
 	    }
 	},{
-	    onclick: function () {
-	        if (am.tab.main._idx == 7) {
+	    onclick: function (e) {
+	        if (am.tab.main._idx == 7 && !e.FORCEREFRESH) {
 	            return false;
 	        }
-        	$.am.changePage(am.page.storage, "");
+        	$.am.changePage(am.page.storage, "", e.FORCEREFRESH?{FORCEREFRESH:e.FORCEREFRESH}:"");
 	        return true;
 	    }
 	}, {
-	    onclick: function () {
-	        if (am.tab.main._idx == 8) {
+	    onclick: function (e) {
+	        if (am.tab.main._idx == 8 && !e.FORCEREFRESH) {
 	            return false;
 	        }
-	        $.am.changePage(am.page.billStatistics, "");
+	        $.am.changePage(am.page.billStatistics, "", e.FORCEREFRESH?{FORCEREFRESH:e.FORCEREFRESH}:"");
 	        return true;
 	    }
 	}, {
-	    onclick: function () {
-	        if (am.tab.main._idx == 9) {
+	    onclick: function (e) {
+	        if (am.tab.main._idx == 9 && !e.FORCEREFRESH) {
 	            return false;
 	        }
-	        $.am.changePage(am.page.about, "");
+	        $.am.changePage(am.page.about, "", e.FORCEREFRESH?{FORCEREFRESH:e.FORCEREFRESH}:"");
 	        return true;
 	    }
 	}]

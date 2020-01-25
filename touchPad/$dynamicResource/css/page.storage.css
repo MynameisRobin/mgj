@@ -472,6 +472,11 @@
   color: #000;
   text-align: center;
   line-height: 24px;
+  position: relative;
+}
+.page_storage .content .action .right .container .title .videoHelpWrap {
+  top: 0;
+  right: 29px;
 }
 .page_storage .content .action .right .container .wrap {
   position: absolute;

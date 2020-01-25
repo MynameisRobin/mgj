@@ -55,7 +55,7 @@
                             }
                             console.log("登出成功");
                             localStorage.removeItem("userToken");
-                            localStorage.removeItem("METADATA_" + am.metadata.userInfo.userName);
+                            localStorage.removeItem("METADATA_" + am.metadata.userInfo.userId);
                             //$.am.changePage(am.page.login, "slideup");
                             window.location.reload();
                         }

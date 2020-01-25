@@ -97,7 +97,7 @@
 			var getPayNameArr = [];
 			var typeName = '消费';
 			if(am.isNull(self.opt.option)) return;
-			var option = self.opt.option;
+			var option = JSON.parse(JSON.stringify(self.opt.option));
 			var member = self.opt.member;
 			var products = option.products;
 			var serviceItem = option.serviceItems;
@@ -140,8 +140,8 @@
 					if(item.consumeId || item.isComboConsume){
 						var itemTimes = '';
 						if(item.leaveTimes){
-							itemTimes = item.leaveTimes;
-						}
+                            itemTimes=item.leaveTimes;
+                        }
 						if(item.totalTimes==-99){
 							itemTimes = item.totalTimes;
 						}
@@ -218,7 +218,7 @@
 			//选择的消费方式
 			$.each(billingInfo, function(i, v) {
 				if(v > 0){
-                	if (v != 0 && v != null && i != "luckyMoneyId" && i!= "kBOrderid" && i!= "luckMoneys" && i != "weixinId" && i != "payId" && i != "dpId" && i != "eaFee" && i != "total" && i != "mallId" && i != "mallNo" && i != "dpCouponId"  && i != "totalfeeanddebtfee" && i != "treatfee" && i != "treatpresentfee") {
+                	if (v != 0 && v != null && i != "luckyMoneyId" && i!= "kBOrderid" && i!= "luckMoneys" && i != "weixinId" && i != "payId" && i != "dpId" && i != "eaFee" && i != "total" && i != "mallId" && i != "mallNo" && i != "dpCouponId"  && i != "totalfeeanddebtfee" && i != "treatfee" && i != "treatpresentfee" && i != "onlineCredit" && i != "offlineCredit") {
 						if (i.indexOf('otherfee') != -1) {
                             var key = i.toUpperCase();
 							getPayNameArr.push(self.otherfeeNames[key] + "￥" + v);

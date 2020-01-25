@@ -41,11 +41,17 @@
             name: "新_触屏版_STA",
             value: "n_touchPad_staging",
         }, {
+            name: "新_触屏版_STA2",
+            value: "n_touchPad_staging2",
+        }, {
             name: "新_触屏版_TEST",
             value: "n_touchPad_test",
         }, {
             name: "新_触屏版_TEST1",
             value: "n_touchPad_test1",
+        }, {
+            name: "新_触屏版_TEST3",
+            value: "n_touchPad_test_shair",
         }, {
             name: "新_触屏版_DEV",
             value: "n_touchPad_develop",

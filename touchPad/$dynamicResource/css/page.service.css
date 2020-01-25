@@ -1,5 +1,10 @@
 /* 文字颜色 ***********************/
 /* c0* 为黑白灰色系 */
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .page_service.am-full {
   left: 60px;
 }
@@ -53,6 +58,19 @@
 }
 .page_service .cashierItems .cashierItemScroll {
   height: 335px;
+  display: block;
+}
+.page_service .cashierItems .cashierItemScroll.searching ul {
+  display: -webkit-flex;
+  /* Safari */
+  display: flex;
+  width: 100%!important;
+}
+.page_service .cashierItems .cashierItemScroll.searching ul li.searchingId {
+  order: 1;
+}
+.page_service .cashierItems .cashierItemScroll.searching ul li.searchingPrice {
+  order: 2;
 }
 .submit.keypadPC .text1 {
   margin-left: -22px;
@@ -146,6 +164,10 @@
   height: 40px;
   background-color: #FFF;
   position: relative;
+}
+.cashierFilter .filterTab {
+  width: 100%;
+  overflow: hidden;
 }
 .cashierFilter li {
   display: inline-block;
@@ -339,7 +361,7 @@
 }
 .cashierFilter.priceFilter,
 .cashierFilter.typeFilter {
-  padding-right: 162px;
+  padding-right: 170px;
 }
 .cashierFilter.priceFilter .priceFilterWrap,
 .cashierFilter.typeFilter .priceFilterWrap,
@@ -540,7 +562,7 @@
   height: 4px;
   margin-left: -24px;
   background: #FFC424;
-  box-shadow: 0 0 15px 0#FFC424;
+  box-shadow: 0 0 15px 0 #FFC424;
   border-radius: 5px;
 }
 .cashierItems .cashierItemScroll.onlyText {
@@ -627,6 +649,10 @@
 }
 .cashierItems .cashierItemScroll.onlyText ul li.am-clickable-active {
   transform: scale(1.1);
+}
+.page_memberCard .cashierItems .cashierItemScroll ul li .img img {
+  width: 100%;
+  height: 100%;
 }
 .page_comboCard .cashierItems .cashierItemScroll .group .img .imgItem,
 #pop_selecteCombo .cashierItems .cashierItemScroll .group .img .imgItem {
@@ -962,6 +988,49 @@
   margin: 8px 2px;
   opacity: 0.6;
 }
+.cashierMain .head .scanToCost {
+  float: right;
+  line-height: 38px;
+  color: #666;
+  font-size: 12px;
+  margin: 10px 20px;
+}
+.cashierMain .head .scanToCost.on .toggle {
+  background-color: #555;
+  box-shadow: rgba(0, 0, 0, 0.2) 1px 0 2px;
+}
+.cashierMain .head .scanToCost.on .toggle .icon {
+  left: auto;
+  right: 2px;
+}
+.cashierMain .head .scanToCost .toggle {
+  float: left;
+  width: 40px;
+  height: 20px;
+  margin: 0 auto;
+  background-color: #eee;
+  border-radius: 20px;
+  position: relative;
+  box-shadow: rgba(0, 0, 0, 0.1) 1px 1px 3px inset;
+}
+.cashierMain .head .scanToCost .toggle .icon {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: #fff;
+  top: 2px;
+  left: 2px;
+  right: auto;
+}
+.cashierMain .head .scanToCost .text {
+  float: right;
+  text-align: center;
+  line-height: 20px;
+  height: 20px;
+  position: relative;
+  padding-left: 6px;
+}
 .cashierMain .head .setting.am-clickable-active {
   color: #222;
 }
@@ -1001,7 +1070,7 @@
   height: 15px;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 150px;
+  max-width: 80px;
   margin-left: 38px;
 }
 .cashierMain .head .member .img {
@@ -1119,6 +1188,9 @@
   font-weight: normal;
   height: 32px;
 }
+.cashierMain table th:last-of-type {
+  padding-left: 5px;
+}
 .cashierMain table td {
   height: 40px;
 }
@@ -1156,6 +1228,7 @@
   display: block;
   color: #888;
   line-height: 12px;
+  padding-left: 10px;
 }
 .cashierMain table tbody tr {
   background: #FFF;
@@ -1166,14 +1239,11 @@
 .cashierMain table tbody tr.show1 {
   -webkit-animation: animation_addItem1 1 ease-in 1s;
 }
-.cashierMain table tbody tr.am-clickable .am-clickable:hover {
-  background-color: #e7e7e7!important;
-}
 .cashierMain table tbody tr .empty-td {
   display: none;
 }
 .cashierMain table tbody tr.empty {
-  background: #FFE8EB!important;
+  background: #FFE8EB !important;
 }
 .cashierMain table tbody tr.empty .empty-td {
   display: inline-block;
@@ -1206,6 +1276,9 @@
 .cashierMain table tbody tr .cost::before {
   content: "￥";
 }
+.cashierMain table tbody tr:hover {
+  background: #ececec;
+}
 .cashierMain table tbody tr.selected {
   background: #ececec;
 }
@@ -1224,6 +1297,28 @@
 }
 .cashierMain table tbody tr.selected .price.modifyed {
   border-color: #6D6D6D;
+}
+.cashierMain table tbody tr.selected .numberSelect {
+  line-height: 25px;
+  width: 70px;
+  background-color: #fff;
+  display: inline-block;
+  position: relative;
+  height: 25px;
+  border: 1px solid #BBBBBB;
+  border-radius: 2px;
+  text-align: center;
+  margin-top: 3px;
+}
+.cashierMain table tbody tr.selected .noclick {
+  border: 1px solid #BBBBBB;
+  border-radius: 2px;
+  display: inline-block;
+  width: 70px;
+  height: 25px;
+  line-height: 25px;
+  text-align: center;
+  background: #ddd;
 }
 .cashierMain table tbody tr.selected .number {
   border: 1px solid #BBBBBB;
@@ -1282,6 +1377,9 @@
 .cashierMain table tbody tr.selected .number .am-clickable-active {
   background: #f7f7f7;
   border-radius: 2px;
+}
+.cashierMain table tbody tr.warn {
+  background: #FFE8EA;
 }
 .cashierMain table tbody tr .number.date {
   font-size: 14px;
@@ -1362,7 +1460,7 @@
 }
 .cashierMain table .server.muti .after {
   position: absolute;
-  left: 2px;
+  left: 7px;
   right: auto;
   top: auto;
   bottom: 5px;
@@ -1408,6 +1506,7 @@
   height: 42px;
   line-height: 42px;
   border-top: 1px solid #ddd;
+  overflow: hidden;
 }
 .cashierMain .foot .hangup {
   float: right;
@@ -1452,7 +1551,6 @@
 }
 .cashierMain .foot .cost-edit-wrapper {
   position: absolute;
-  width: 128px;
   height: 42px;
   padding-left: 10px;
   left: 0;
@@ -1470,7 +1568,6 @@
 .cashierMain .foot .cost-edit-wrapper .cost-edit-wrap {
   display: inline-block;
   vertical-align: top;
-  width: 60px;
   height: 26px;
   border: 1px solid #ececec;
   border-radius: 26px;
@@ -1478,6 +1575,7 @@
   padding: 0 10px 0 20px;
   overflow: hidden;
   position: relative;
+  min-width: 40px;
 }
 .cashierMain .foot .cost-edit-wrapper .cost-edit-wrap span {
   position: absolute;
@@ -1729,6 +1827,7 @@
   z-index: 1;
 }
 .cashierSetting {
+  z-index: 100;
   position: absolute;
   left: 0;
   right: 0;
@@ -2032,4 +2131,16 @@
 #itemSelect .footer {
   transform: translate(-50%, 0);
   left: 50%;
+}
+.page_comboCard .cashierMain .body {
+  overflow: hidden;
+}
+.page_comboCard .cashierMain .body .bodyinner {
+  min-width: 810px;
+}
+.page_comboCard .cashierMain table .server,
+.page_product .cashierMain table .server,
+.page_memberCard .cashierMain table .server {
+  padding-left: 5px;
+  width: 70px;
 }

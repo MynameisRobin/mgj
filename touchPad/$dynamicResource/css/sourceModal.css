@@ -1,0 +1,97 @@
+.sourceModal {
+  font-size: 14px;
+  text-align: left;
+}
+.sourceModal .inner {
+  z-index: 1;
+  width: 531px;
+  margin-left: -265px;
+  padding: 20px;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+.sourceModal .inner .sourceTitle {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+.sourceModal .inner .close {
+  top: 10px;
+  right: 10px;
+}
+.sourceModal .inner .source {
+  width: 100%;
+  background: #f7f7f7;
+  border-radius: 3px;
+  padding: 0 18px;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+.sourceModal .inner .source .changesource-wrapper {
+  width: 100%;
+  overflow: hidden;
+  float: left;
+  max-height: 268px;
+  padding-bottom: 15px;
+}
+.sourceModal .inner .source .changesource-wrapper .changesource .changebox {
+  margin-top: 15px;
+  width: 32%;
+  display: inline-block;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+.sourceModal .inner .source .changesource-wrapper .changesource .changebox span {
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+}
+.sourceModal .inner .source .changesource-wrapper .changesource .changebox .change_icon {
+  width: 14px;
+  height: 14px;
+  vertical-align: middle;
+  border: 1px solid #ddd;
+  border-top-left-radius: 50%;
+  border-top-right-radius: 50%;
+  border-bottom-left-radius: 50%;
+  border-bottom-right-radius: 50%;
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
+  margin-right: 3px;
+}
+.sourceModal .inner .source .changesource-wrapper .changebox.selected .change_icon {
+  border-color: #555;
+}
+.sourceModal .inner .source .changesource-wrapper .changebox.selected .change_icon::after {
+  content: "";
+  width: 10px;
+  height: 10px;
+  background-color: #555;
+  border-top-left-radius: 50%;
+  border-top-right-radius: 50%;
+  border-bottom-left-radius: 50%;
+  border-bottom-right-radius: 50%;
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  display: block;
+}
+.sourceModal .inner .footer {
+  position: relative;
+  margin-top: 30px;
+}
+.sourceModal .inner .footer .btnOk {
+  width: 165px;
+  height: 44px;
+  border: 0;
+  background: #555;
+  color: #fff;
+}
+.sourceModal .inner .footer .btnCancer {
+  width: 163px;
+  height: 42px;
+  border: 1px solid #ddd;
+  color: #555;
+}

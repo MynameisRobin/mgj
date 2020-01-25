@@ -75,6 +75,20 @@
                 contentType: "application/json",
                 success: function(ret) {
                     $.am.debug.log(self.serviceName + " SUCCESS:" + (new NativeDate().getTime()-startTs));
+                    if(ret && ret.code==20160801){
+						try{
+                            if($.am.getActivePage().id === 'page_pay'){
+                                  am.page.pay.paying = 0;
+                            }
+                            if($(".addremark_model").is(':visible')){
+                                $(".addremark_model").hide();
+                            }
+                        }catch(e){}
+                        am.loading.hide();
+                        am.msg(ret.message || '系统数据异常，只能查询数据');
+                        am.goBackToInitPage();
+                        return false;
+                    }
                     //sc(ret);
                     if(ret.code==203009 || ret.code==200005){
                         sc({
@@ -83,7 +97,7 @@
                         });
                             // am.loading.hide();
                             // am.msg(ret.message);
-                            // $.am.changePage(am.page.login, "");
+							// $.am.changePage(am.page.login, "");
                             localStorage.removeItem('userToken');
                             location.reload();
                     }else {
@@ -137,6 +151,20 @@
                 var ret = event.data;
                 $.am.debug.log(self.serviceName + " scb: " + ret.code);
                 //sc(ret);
+                if(ret && ret.code==20160801){
+					try{
+						if($.am.getActivePage().id === 'page_pay'){
+							  am.page.pay.paying = 0;
+                        }
+                        if($(".addremark_model").is(':visible')){
+                            $(".addremark_model").hide();
+                        }
+					}catch(e){}
+                    am.loading.hide();
+                    am.msg(ret.message || '系统数据异常，只能查询数据');
+                    am.goBackToInitPage();
+                    return false;
+                }
                 if(ret.code==203009 || ret.code==200005){
                     sc({
                         code: -3,
@@ -144,7 +172,7 @@
                     });
                     // am.loading.hide();
                     // am.msg(ret.message);
-                    // $.am.changePage(am.page.login, "");
+					// $.am.changePage(am.page.login, "");
                     localStorage.removeItem('userToken');
                     location.reload();
                 }else {
@@ -233,51 +261,124 @@
             this.reset();
             this.ajax(config.ping[Math.floor(this.pingNumber/3)]);
         },
+        getReportOption: function(){
+            var servers = this.ping,
+                enableServers = [],
+                disableServers = [];
+            if(this.result && this.result.length){
+                enableServers = this.getProccessedUrl();
+                for(var i=0;i<servers.length;i++){
+                    var include = 0;
+                    for(var j=0;j<enableServers.length;j++){
+                        if(servers[i]==enableServers[j].url){
+                            include ++;
+                            break;
+                        }
+                    }
+                    if(!include){
+                        disableServers.push(servers[i]);
+                    }
+                }
+            }else {
+                disableServers = this.ping;
+            }
+            var userAgent = navigator.userAgent;
+			var platfrom = /(iOS)/i.test(userAgent) ? "iOS" : /(iPhone)/i.test(userAgent) ? "iPhone" : /(iPad)/i.test(userAgent) ? "iPad" : /(Android)/i.test(userAgent) ? "Android" : "PC";
+            var connType = navigator.connection && navigator.connection.type;
+            var userInfo = null;
+            if(am && am.metadata && am.metadata.userInfo){
+                var _userInfo = am.metadata.userInfo
+                userInfo = {
+                    userName: _userInfo.trueUserName,
+                    mobile: _userInfo.mobile || _userInfo.secondPhone,
+                    shopName: _userInfo.shopName + _userInfo.osName,
+                    shopId: _userInfo.shopId,
+                    address: _userInfo.address
+                }
+            }
+            return {
+                dbName: 'mgj-monitor',
+                collName: 'ping',
+                data: {
+                    servers: servers,
+                    enableServers: enableServers,
+                    disableServers: disableServers,
+                    userInfo: userInfo,
+                    platfrom: platfrom,
+					userAgent: userAgent,
+					connType: connType
+                }
+            }
+        },
+        report: function(callback){
+            var req = this.getReportOption();
+            $.ajax({
+                type: "post",
+                data: JSON.stringify(req),
+                url: this.getUrl(),
+                timeout: 6 * 1000,
+                dataType: "json",
+                contentType: "application/json",
+                success: function (ret) {
+                    callback && callback();
+                },
+                error: function (ret) {
+                    callback && callback();
+                }
+            });
+        },
         switchServer: function(){
             var url = this.getBestUrl();
             if(!url){
                 return;
             }
-            if(location.protocol == 'http:' || location.protocol == 'https:' ){
-                location.href = url + '/young';
-            }else {
-                //localStorage.removeItem('userToken');
-                config.gateway = config.mobile = url;
-                //$.am.changePage(am.page.login);
-            }
-            this.reset();
+            var _this = this;
+            this.report(function(){
+                if(location.protocol == 'http:' || location.protocol == 'https:' ){
+                    location.href = url + '/young';
+                }else {
+                    //localStorage.removeItem('userToken');
+                    config.gateway = config.mobile = url;
+                    //$.am.changePage(am.page.login);
+                }
+                _this.reset();
+            });
         },
         getBestUrl:function(){
             var url = '';
             if(this.result && this.result.length){
-                //去重取平均
-                var rets = [];
-                for(var i=0;i<this.result.length;i++){
-                    var obj = this.result[i];
-                    if(!rets[obj.url]){
-                        //如果属性里面没有对应的，第一次加入，times 1
-                        obj.times = 1;
-                        //map
-                        rets[obj.url] = obj;
-                        //加入到数组
-                        rets.push(obj);
-                    }else{
-                        //已加入，时间累计，次数增加
-                        rets[obj.url].ts += obj.ts;
-                        rets[obj.url].times++;
-                    }
-                }
-                //3次都成功才行
-                rets = rets.filter(function(o){
-                    return o.times === 3;
-                });
-                //3次都成功，且平均时间最短的
-                rets.sort(function(a,b){
-                    return a.ts - b.ts;
-                });
-                url = rets[0].url;
+                var rets = this.getProccessedUrl();
+                url = rets.length?rets[0].url:'';
             }
             return url;
+        },
+        getProccessedUrl: function(){
+            //去重取平均
+            var rets = [];
+            for(var i=0;i<this.result.length;i++){
+                var obj = this.result[i];
+                if(!rets[obj.url]){
+                    //如果属性里面没有对应的，第一次加入，times 1
+                    obj.times = 1;
+                    //map
+                    rets[obj.url] = obj;
+                    //加入到数组
+                    rets.push(obj);
+                }else{
+                    //已加入，时间累计，次数增加
+                    rets[obj.url].ts += obj.ts;
+                    rets[obj.url].times++;
+                }
+            }
+            //3次都成功才行
+            rets = rets.filter(function(o){
+                return o.times === 3;
+            });
+            //3次都成功，且平均时间最短的
+            rets.sort(function(a,b){
+                return a.ts - b.ts;
+            });
+            return rets;
         },
         success: function(url,ts){
             if(url === config.gateway){
@@ -308,6 +409,7 @@
                 if(this.result && this.result.length){
                     this.switchServer();
                 }else {
+                    this.report();
                     if(!this.loop){
                         this.loop = 0;
                     }
@@ -323,28 +425,38 @@
             }
         },
         ajax: function (url) {
-                var _this = this;
-                var startTs = new Date().getTime();
-                var ajaxObj = $.ajax({
-                    url: url + 'mgj-cashier/memcachSV/check/right',
-                    type: "GET",
-                    timeout: 3000,
-                    contentType: "application/json", //返回数据类型
-                    success: function (ret) {
-                        var endTs = new Date().getTime();
-                        var ts = endTs - startTs;
-                        _this.success(url, ts);
-                    },
-                    error: function (ret) {
-                    _this.error(url);
-                    }
-                });
-                if (!this.ajaxArr) {
-                    this.ajaxArr = [];
+            var _this = this;
+            var startTs = new Date().getTime();
+            var ajaxObj = $.ajax({
+                url: url + 'mgj-cashier/memcachSV/check/right',
+                type: "GET",
+                timeout: 3000,
+                contentType: "application/json", //返回数据类型
+                success: function (ret) {
+                    var endTs = new Date().getTime();
+                    var ts = endTs - startTs;
+                    _this.success(url, ts);
+                },
+                error: function (ret) {
+                     _this.error(url);
                 }
-                this.ajaxArr.push(ajaxObj);
+            });
+            if (!this.ajaxArr) {
+                this.ajaxArr = [];
+            }
+            this.ajaxArr.push(ajaxObj);
         },
+        getUrl: function(){
+            if(!this.url){
+                var url = 'https://ops.meiguanjia.net/monitor/commdata/save';
+                if(location.protocol === 'http:'){
+                    url = url.replace('https','http');
+                }
+                this.url = url;
+            }
+            return this.url;
         }
+    }
 
     /*
      * ApiCacheable类,实例化一个service对象,通过调用这个对象的exec方法执行一个service
@@ -483,6 +595,8 @@
             'mgj-cashier/member/editMemberCardId', //修改会员卡号,
             'mgj-cashier/member/udpTreatComment', //修改套餐备注
             'mgj-cashier/bill/updDeptPerf', //修改流水部门业绩
+            'mgj-cashier/member/memberMerge', //合并会员
+            'mgj-cashier/member/updMemberPoint', //修改会员店内积分
         ],
         init: function(){
             var _this = this;

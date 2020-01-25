@@ -78,7 +78,8 @@
 
             this.$type = this.$.find('.type').vclick(function(){
 				var _this = $(this);
-				am.popupMenu("请选择类型", self.dayExpendTypeList , function (ret) {
+				var dayExpendTypeListVisible = self.dayExpendTypeListFilter(self.dayExpendTypeList)
+				am.popupMenu("请选择类型", dayExpendTypeListVisible , function (ret) {
                     _this.find('.select').html(ret.name);
                     self.dayExpendType = ret.id;
                 });
@@ -134,6 +135,14 @@
             	self.closeProof();
             	self.closeEdit();
 			});
+			this.proofScroll = new $.am.ScrollView({
+	            $wrap: $(".editContainer .container"),
+	            $inner: $(".editContainer .wrapper"),
+	            direction: [false, true],
+	            hasInput: false,
+	            bubble:false
+	        });
+			this.proofScroll.refresh();
 			
 			this.$editContainer = am.page.about.$.find('.editContainer').on('vclick','.sure',function(){
 				var data = $(this).parents('.editContainer').data('data');
@@ -158,7 +167,14 @@
 				}else if(data.type==2){
 					var method = self.$editMethod.data('dayexpendtypeid');
 					var out = self.$editOut.data('seFlag');
-					var profile = self.$editProof.data('profile');
+					var imgNamesArr=[];
+					var $deImgs=self.$editProof.find('.delImg');
+					if($deImgs && $deImgs.length){
+						$.each($deImgs,function(i,v){
+							imgNamesArr.push($(this).data('data'));
+						})
+					}
+					var profile = imgNamesArr.join(',');
 					editDate = {
 						id: data.id,
 						depcode: depcode,
@@ -199,14 +215,18 @@
                 });
             });
 			this.$editMethod = this.$editContainer.find('.method').vclick(function(){
-				var arr = self.dayExpendTypeList.slice(1);
-				am.popupMenu("请选择类型", arr , function (ret) {
+				var dayExpendTypeList=self.getDayExpendList(2);
+				var arr = dayExpendTypeList.slice(1);
+				var dayExpendTypeListVisible = self.dayExpendTypeListFilter(arr)
+				am.popupMenu("请选择类型", dayExpendTypeListVisible , function (ret) {
                 	self.$editMethod.html(ret.name).data('dayexpendtypeid',ret.id);
                 });
             });
-			this.$editIncome = this.$editContainer.find('.income').vclick(function(){
-				var arr = self.dayExpendTypeList.slice(1);
-				am.popupMenu("请选择类型", arr , function (ret) {
+			this.$editIncome = this.$editContainer.find('.income').vclick(function(e){
+				var dayExpendTypeList=self.getDayExpendList(1);
+				var arr = dayExpendTypeList.slice(1);
+				var dayExpendTypeListVisible = self.dayExpendTypeListFilter(arr)
+				am.popupMenu("请选择类型", dayExpendTypeListVisible , function (ret) {
                 	self.$editIncome.html(ret.name).data('dayexpendtypeid',ret.id);
                 });
             });
@@ -225,25 +245,47 @@
 					title:"请输入数字",//可不传
 					hidedot:false,
 				    submit:function(value){
+						if(value==0){
+							return am.msg('金额不能为0');
+						}
 				    	amount.val(value);
 				    }
 				});
 	        });
-			this.$editProof = this.$editContainer.find('.proof .select').vclick(function(){
+			this.$editProof = this.$editContainer.find('.proof .imgsWrap');
+
+			this.$addProofImg=this.$editProof.find('.addImg').on('vclick',function(){
                 amGloble.photoManager.takePhoto("voucher", {
-                    parentShopId: am.metadata.userInfo.parentShopId,
-                }, function(res) {
-                    self.$editProof.html(am.photoManager.createImage("voucher", {
-                        parentShopId: am.metadata.userInfo.parentShopId,
-					}, res, 's')).data('profile',res).addClass('hasprofile');
-					self.$editDelProof.show();
-                }, function() {
-                    console.log("fail");
-                });
+                		parentShopId: am.metadata.userInfo.parentShopId,
+                	}, function (res) {
+                		var imgItem = '<div class="imgWrapper"><span class="delImg am-clickable"></span></div>';
+                		self.$editProof.find('.addImg').before(imgItem);
+                		var img = am.photoManager.createImage("voucher", {
+                			parentShopId: am.metadata.userInfo.parentShopId,
+                		}, res, 'm');
+
+                		self.$editProof.find('.imgWrapper:last').append(img);
+						self.$editProof.find('.imgWrapper:last').find('.delImg').data('data', res);
+					
+                		if (self.$editProof.find('.imgWrapper') && self.$editProof.find('.imgWrapper').length >= 9) {
+                			self.$addProofImg.hide();
+                		} else {
+                			self.$addProofImg.show();
+						}
+                	},
+                	function () {
+                		console.log("fail");
+                	});
 			});
-			this.$editDelProof = this.$editContainer.find('.proof .delProof').vclick(function(){
-				self.$editProof.html('').data('data','').removeClass('hasprofile');
-				$(this).hide();
+			this.$editContainer.on('vclick', '.delImg', function (e) {
+				e.stopPropagation();
+				$(this).parent('.imgWrapper').remove();
+				var $wrappers = $(this).parents('.imgsWrap').find('.imgWrapper');
+				if ($wrappers && $wrappers.length < 9) {
+					self.$addProofImg.show();
+				} else {
+					self.$addProofImg.hide();
+				}
 			});
 			this.$editDes = this.$editContainer.find('.des textarea');
 
@@ -404,6 +446,44 @@
 				id: null
 			})
 		},
+		getDayExpendList:function(type){
+			var dayExpendTypeList = [];
+			for(var i=0;i<am.metadata.dayExpendTypeList.length;i++){
+				if(type==2){
+					if(am.metadata.dayExpendTypeList[i].dayexpendtypeid!=5){
+						dayExpendTypeList.push(am.metadata.dayExpendTypeList[i]);
+					}
+				}else if(type==1){
+					if(am.metadata.dayExpendTypeList[i].dayexpendtypeid==5){
+						dayExpendTypeList.push(am.metadata.dayExpendTypeList[i]);
+					}
+				}
+			}
+			if(type==1){
+				dayExpendTypeList.unshift({
+					name:'特权卡开通',
+					id: -10086
+				});
+				dayExpendTypeList.unshift({
+					name:'特权卡续费',
+					id: -10087
+				})
+			}
+			dayExpendTypeList.unshift({
+				name:'全部',
+				id: null
+			})
+			return dayExpendTypeList
+		},
+		dayExpendTypeListFilter: function(arr){
+			var newArr = []
+			$.each(arr,function(index,item){
+				if(item.visible == 1 || item.name == '全部'|| item.name == '特权卡开通'|| item.name == '特权卡续费'){
+					newArr.push(item)
+				}
+			})
+			return newArr
+		},
 		getList:function(){
 			var self = this;
 			am.loading.show();
@@ -434,12 +514,16 @@
 		},
 		payTypes: ['现金','银联','微信','支付宝','大众点评'],
 		render:function(data){
+			var self = this;
 			this.$suggest.hide();
 			this.$summaryMask.hide();
 			this.$summary.removeClass('toggle open');
 			if(data.list.length){
 				//统计
-				var firstLine = '<div class="wrap"><p>总金额：<span>'+Number(data.totalMoney).toFixed(2)+'元</span></p><p>总笔数：<span>'+data.totalCount+'笔</span></p></div>';
+				var firstLine = '<div class="wrap"><p>总金额：<span class="mr10">'+Number(data.totalMoney).toFixed(2)+'元</span></p><p>总笔数：<span>'+data.totalCount+'笔</span></p></div>';
+				if(self.$.hasClass("payout")){
+					firstLine = '<div class="wrap"><p>总金额：<span class="mr10">'+Number(data.totalMoney).toFixed(2)+'元</span>从备用金支出：<span class="mr10">'+Number(data.imprest || 0).toFixed(2)+'元</span>从营收支出：<span class="mr10">'+Number(data.revenue || 0).toFixed(2)+'元</span></p><p>总笔数：<span>'+data.totalCount+'笔</span></p></div>';
+				}
 				var secondLine = '';
 				for(var i=0;i<data.typeList.length;i++){
 					secondLine += '<p>'+this.getDayExpendNameByType(data.typeList[i].dayExpendType)+'：<span>'+Number(data.typeList[i].price).toFixed(2)+'元</span></p>'
@@ -529,26 +613,33 @@
 				}
 			});
 		},
-		openProof:function(data){
+		openProof: function (data) {
 			// this.$proofMask.show();
 			// this.$proofDetail.addClass('active');
-			this.$proofDetail.html(am.photoManager.createImage("voucher", {
-                parentShopId: am.metadata.userInfo.parentShopId,
-			}, data.profile, 'l'));
-			var src = this.$proofDetail.find('img').attr('src');
-			var items = [];
-			var idx = 0;
-			items.push({
-				src: src,
-				w: 1024,
-				h: 1024
-			});
-			self.pswpTimer && clearTimeout(self.pswpTimer);
-			am.loading.show();
-			self.pswpTimer = setTimeout(function () {	
-				am.loading.hide();
-				am.pswp(items, idx);
-			}, 800);
+			if (data.profile) {
+				var imgNameArr = data.profile.split(',');
+				var items = [];
+				if (imgNameArr && imgNameArr.length) {
+					for (var i = 0, len = imgNameArr.length; i < len; i++) {
+						var imgItem = am.photoManager.createImage("voucher", {
+							parentShopId: am.metadata.userInfo.parentShopId,
+						}, imgNameArr[i], 'l');
+						items.push({
+							src: $(imgItem).attr('src'),
+							w: 1024,
+							h: 1024
+						});
+						this.$proofDetail.append(imgItem);
+					}
+				}
+				var idx = 0;
+				self.pswpTimer && clearTimeout(self.pswpTimer);
+				am.loading.show();
+				self.pswpTimer = setTimeout(function () {
+					am.loading.hide();
+					am.pswp(items, idx);
+				}, 800);
+			}
 		},
 		closeProof:function(){
 			this.$proofMask.hide();
@@ -557,9 +648,10 @@
 		},
 		openEdit:function(data){
 			this.$proofMask.show();
+			this.$editContainer.find('.sure').removeClass('am-disabled');
 			this.$editContainer.addClass('active').data('data',data);
 			this.$editDes.val('');
-			this.$editProof.html('').data('profile','');
+			this.$editProof.data('profile','').find('.imgWrapper').remove();
 			if(data.type==1){//收入
 				this.$editTitle.html('编辑收入');
 				this.$editMethod.parent().hide();
@@ -573,19 +665,33 @@
 				this.$editOut.parent().show().end().html(data.seFlag==0?'从备用金':'从营收').data('seFlag',data.seFlag);
 				this.$editProof.parent().show();
 				if(data.profile){
-					this.$editProof.html(am.photoManager.createImage("voucher", {
-						parentShopId: am.metadata.userInfo.parentShopId,
-					}, data.profile, 'm')).addClass('hasprofile').data('profile',data.profile);
-					this.$editDelProof.show();
+					var imgNameArr = data.profile.split(',');
+					if (imgNameArr && imgNameArr.length) {
+						for (var i = 0, len = imgNameArr.length; i < len; i++) {
+							var imgItem ='<div class="imgWrapper"><span class="delImg am-clickable"></span></div>';
+							this.$editProof.find('.addImg').before(imgItem);
+							var img = am.photoManager.createImage("voucher", {
+								parentShopId: am.metadata.userInfo.parentShopId,
+							}, imgNameArr[i], 'm');
+							this.$editProof.find('.imgWrapper').eq(i).append(img);
+							this.$editProof.find('.imgWrapper').eq(i).find('.delImg').data('data',imgNameArr[i]);
+						}
+					}
+					this.$editProof.addClass('hasprofile').data('profile',data.profile);
+					if(imgNameArr.length>=9){
+						this.$addProofImg.hide();
+					}else{
+						this.$addProofImg.show();
+					}
 				}else {
-					this.$editProof.removeClass('hasprofile');
-					this.$editDelProof.hide();
+					this.$addProofImg.show();
 				}
 			}
 			this.$editTime.html(new Date(data.operateDate*1).format('yyyy.mm.dd'));
 			this.$editMoney.val(data.price);
 			this.$editDepart.html(this.getDepNameByCode(data.depcode)).data('depcode',data.depcode);
 			this.$editDes.val(data.intro);
+			this.proofScroll.refresh();
 		},
 		closeEdit:function(){
 			this.$proofMask.hide();
@@ -627,6 +733,10 @@
 			return dateObj.getTime();
 		},
 		addExps: function(data){
+			if(this.$editContainer.find('.sure').hasClass('am-disabled')){
+				return;
+			}
+			this.$editContainer.find('.sure').addClass('am-disabled');
 			var self = this;
 			am.loading.show();
 			am.api.editExps.exec({
@@ -648,10 +758,13 @@
 			},function(ret){
 				am.loading.hide();
 				console.log(ret);
+				self.$editContainer.find('.sure').removeClass('am-disabled');
 				if(ret && ret.code == 0){
 					am.msg('保存成功');
 					self.closeEdit();
-					self.$search.trigger('vclick');
+					setTimeout(function(){
+						self.$search.trigger('vclick');
+					},100);
 				}else if(ret && ret.code == -1){
 					atMobile.nativeUIWidget.confirm({
                         caption: '网络异常',

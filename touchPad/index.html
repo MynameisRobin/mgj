@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 
@@ -254,51 +255,54 @@
 						</div>
 					</div>
 
-					<div class="memberInfo am-touchable">
-						<div class="infoclose am-clickable"></div>
-						<div class="content">
-							<div class="upperWrap am-touchable">
-								<div class="upperwrapper">
-									<div class="base">
-										<div class="membername"></div>
-										<div class="gender">积分:122</div>
-										<div class="tel">13811112222</div>
-										<div class="comment lineText">说明:我爱喝茶</div>
-									</div>
-									<div class="card">
-										<div class="right">
-											<div class="price">122</div>
-											<div class="bonus">赠送金:￥122</div>
+					<!-- <div class="memberDialog am-clickable"> -->
+						<div class="memberInfo am-touchable am-clickable">
+							<div class="infoclose am-clickable"></div>
+							<div class="content">
+								<div class="upperWrap am-touchable">
+									<div class="upperwrapper">
+										<div class="base">
+											<div class="membername"></div>
+											<div class="gender">积分:122</div>
+											<div class="tel">13811112222</div>
+											<div class="comment lineText">说明:我爱喝茶</div>
 										</div>
-										<div class="left">
-											<div class="name">xx金卡</div>
-											<div class="cardNo">卡号:12121</div>
-											<div class="discount">项目:7折，卖品:6折</div>
+										<div class="card">
+											<div class="right">
+												<div class="price">122</div>
+												<div class="bonus">赠送金:￥122</div>
+											</div>
+											<div class="left">
+												<div class="name">xx金卡</div>
+												<div class="cardNo">卡号:12121</div>
+												<div class="discountRuleBtn am-clickable">折扣规则</div>
+												<div class="discount">项目:7折，卖品:6折</div>
+											</div>
+											<div class="cardRemark lineText"></div>
+											<div class="button recharge am-clickable">充 值</div>
+											<div class="button renewal am-clickable">续 卡</div>
 										</div>
-										<div class="cardRemark lineText"></div>
-										<div class="button recharge am-clickable">充 值</div>
-										<div class="button renewal am-clickable">续 卡</div>
 									</div>
 								</div>
-							</div>
-							<div class="items am-touchable">
-								<div class="inner">
-									<div class="wrapper">
-										<div class="title"><p class="shopname">门店名称</p></div>
-										<ul>
-											<li>
-												<div class="times">余10次
-													<span>(总10次)</span>
-												</div>
-												<div class="itemName">湿洗</div>
-												<div class="invalidDate">2016-18-15到期</div>
-											</li>
-										</ul>
+								<div class="items am-touchable">
+									<div class="inner">
+										<div class="wrapper">
+											<div class="title"><p class="shopname">门店名称</p></div>
+											<ul>
+												<li>
+													<div class="times">余10次
+														<span>(总10次)</span>
+													</div>
+													<div class="itemName">湿洗</div>
+													<div class="invalidDate">2016-18-15到期</div>
+												</li>
+											</ul>
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-					</div>
+					<!-- </div> -->
 
 				</div>
 				<div class="selectWorkStation">
@@ -482,10 +486,10 @@
 			<!--  page_login start -->
 			<div class="am-page page_login am-full" id="page_login">
 				<div class="login_bg">
-					<div class="app_version" style="color:#666;padding-left:10px;font-size:10px;"></div>
+					<div id="rollback" class="app_version" style="color:#666;padding:10px;font-size:10px;"></div>
 				</div>
 				<div class="auth_box">
-					<img class="close_btn am-clickable" src="$dynamicResource/images/icons_sprite/close.png" />
+					<div class="close_btn am-clickable"></div>
 					<iframe src="" width="100%" height="100%"  frameborder="no" border="0" marginwidth="0" marginheight="0"></iframe>
 				</div>
 				<div class="login_box">
@@ -493,15 +497,28 @@
 					<div class="words"></div>
 					<div class="formbox changeLogin">
 						<div class="title">
-							<span class="title_words am-clickable">点击此处扫码登录</span>
-							<span class="title_icon codeIcon am-clickable"></span>
+							<span class="title_words am-clickable">点击此处帐号登录</span>
+							<span class="title_icon am-clickable"></span>
 						</div>
 						<div class="inputList">
 							<div class="ty_inputbox">
 								<span class="ty_input_ico username_ico">
 									<i></i>
 								</span>
-								<input type="text" id="page-login-username" placeholder="用户名" />
+								<input class="username" type="text" id="page-login-username" placeholder="用户名" />
+								<div class="checkServer">
+									<div class="status status-checking">
+										<p class="text">正在检测用户名</p>
+										<div class="icon"></div>
+									</div>
+									<div class="status status-pass">
+										<p class="text">检测完成</p>
+										<div class="icon"></div>
+									</div>
+									<div class="status status-recheck">
+										<div class="icon"></div>
+									</div>
+								</div>
 								<div class="clear"></div>
 							</div>
 							<div class="ty_inputbox">
@@ -511,7 +528,22 @@
 								<input type="password" id="page-login-password" placeholder="密码" />
 								<div class="clear"></div>
 							</div>
+							<div class="ty_inputbox vcCodeWrap">
+								<span class="ty_input_ico vcCode_ico">
+									<i></i>
+								</span>
+								<input class="vcCode" type="text" id="page-login-vcCode" placeholder="验证码" />
+								<img class="vcCodeImg">
+								<div class="clear"></div>
+							</div>
 							<div class="tybutton btnOk am-clickable">登录</div>
+							<div class="cluster">
+								<div class="cluster-l">
+									<div class="cluster-info">1</div>
+									<div class="cluster-shopname">正在登录到<span class="shopname">杜尚造型</span></div>
+								</div>
+								<div class="cluster-r cluster-reset">重置</div>
+							</div>
 							<!-- <div class="remind">忘记密码？</div> -->
 						</div>
 						<div class="codeLogin">
@@ -533,6 +565,30 @@
 				<div class="foot am-clickable" id="debug_test">美管加 — 让美业轻松运营</div>
 
 				<p class="mgjLogIdNum" id="mgjLogIdNum"></p>
+
+				<div class="modifyPasswordTip">
+					<div class="mask"></div>
+					<div class="modifyPasswordTip-content">
+						<div class="modifyPasswordTip-close_btn"></div>
+						<div class="modifyPasswordTip-wrapper">
+							<div class="warnIcon"></div>
+							<div class="warnText">你的密码设置过于简单，有泄漏风险，请立即修改密码</div>
+							<div class="modifyNow">立即修改</div>
+							<div class="modifyLater">暂不修改，冒险登录&gt;</div>
+						</div>
+					</div>
+				</div>
+				<div class="linkJump">
+					<div class="mask"></div>
+					<div class="wrapper">
+						<div class="close"></div>
+						<div class="wrap">
+							<div class="title">你将登录到<span class="jump-shopname">杜尚造型设计</span>， <br>属于<span class="icon"></span><span class="jump-info">2号</span>服务器组，将立即为您跳转</div>
+							<div class="tip">你还可以记录如下网址: <br><span class="jump-link">https:/ /young20.meiguanjia.net/young</span></div>
+							<div class="jump">前往</div>
+						</div>
+					</div>
+				</div>
 			</div>
 			<!--  page_login end -->
 
@@ -592,14 +648,20 @@
 							</div>
 						</div>
 						<div class="memberInfo">
-							<div class="member am-clickable">
-								<div class="header"></div>
-								<div class="name">散客</div>
+							<div class="customerSource">
+								<input class="am-clickable" type="text" placeholder="顾客来源" readonly>
+								<svg class="icon icon-juxingkaobei am-clickable" aria-hidden="true">
+									<use xlink:href="#icon-juxingkaobei"></use>
+								</svg>
 							</div>
 							<ul class="sex">
 								<li data-savevalue="0" class="active am-clickable">女</li>
 								<li data-savevalue="1" class="am-clickable">男</li>
 							</ul>
+							<div class="member am-clickable">
+								<div class="name">散客</div>
+								<div class="header"></div>
+							</div>							
 						</div>
 					</div>
 					<div class="right">
@@ -631,16 +693,15 @@
 					<div class="list">
 						<div class="wrapper">
 							<p class="type">美容护理</p>
-							<ul class="wrap clearfix">
+							<ul class="wrap">
 								<li>
 									<div class="outside am-clickable">
 										<p class="no"></p>
 										<p class="name"></p>
 										<div class="header"></div>
-										<div class="footer">
-											<p class="time"></p>
-											<div class="status"></div>
-										</div>
+										<p class="time"></p>
+										<div class="status"></div>
+										<div class="footer"></div>
 									</div>
 									<div class="inside am-clickable">
 										<div class="top"></div>
@@ -688,6 +749,10 @@
 							</div>
 						</div>
 					</div>
+					<div class="viewModeWrap">
+						<span class="modeLabel">轮牌头像模式</span>
+						<span class="modeRadio am-clickable checked"></span>
+					</div>
 				</div>
 				<div class="tip">
 					<span>!</span>
@@ -712,10 +777,9 @@
 										<i class="icon iconfont icon-xiala-"></i>
 									</p>
 									<div class="header"></div>
-									<div class="footer">
-										<p class="time timing"></p>
-										<div class="status am-clickable"></div>
-									</div>
+									<p class="time timing"></p>
+									<div class="status am-clickable"></div>
+									<div class="footer"></div>
 									<div class="mask"></div>
 								</li>
 							</ul>
@@ -726,13 +790,140 @@
 			<!--  page_queue end -->
 
 			<!--  page.reservation -- start -->
-			
+			<div class="am-page page_reservation" id="page_reservation">
+				<div class="am-header">
+					<div class="am-backbutton iconfont icon-guanbi"></div>
+					<p>选择预约</p>
+				</div>
+				<div class="rv_scroll">
+					<div class="rv_contaner">
+						<table cellpadding="0" border="0" cellspacing="0" class="rv_table" id="page-mainTable">
+							<thead>
+								<tr></tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td class="user">
+										<span class="iconfont icon-dian am-clickable"></span>
+										<div class="prefix-shift"></div>
+										<div class="header am-clickable"></div>
+										<div class="name"></div>
+										<div class="level">超级美发师</div>
+									</td>
+									<td class="am-clickable">
+									   <!--  <span class="rv_rest">今日<br />休假</span> -->
+										<span class="iconfont rv_rest">
+											<svg class="icon1" aria-hidden="true" >
+												<use xlink:href="#icon-xiujiaing-"></use>
+											</svg>
+											<svg class="icon2" aria-hidden="true" >
+												<use xlink:href="#icon-xiujiaing-1"></use>
+											</svg>
+										</span>
+										<span class="rv_holder am-clickable">
+											<span class="holded"></span>
+											<span class="high-holded"></span>
+										</span>
+										<div class="rv_remark am-clickable"></div>
+										<div class="rv_reservation">
+											<span class="to_holded am-clickable">占用</span>
+											<span class="to_appointment am-clickable">预约</span>
+										</div>
+										<div class="rv_show">
+											<div class="rv_item am-clickable am-touchable">
+												<div class="name">
+													<div class="rvname">
+														<!-- 阿信 -->
+													</div>
+												</div>
+												<div class="time">
+													<div class="rvtime">
+														<!-- 09:30 -->
+													</div>
+												</div>
+												<div class="comment"></div>
+												<div class="item">
+													<!-- 剪 -->
+												</div>
+												<div class="fromPhone"></div>
+												<div class="badge"></div>
+												<!-- <div class="seeItems">查看项目</div> -->
+												<div class="promise">
+													<svg class="icon" aria-hidden="true" >
+														<use xlink:href="#icon-deposit_s_icon1"></use>
+													</svg>
+													保证金
+												</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<div class="rv_timeline"></div>
+					</div>
+					<table cellpadding="0" border="0" cellspacing="0" class="rv_table" id="page-tableHeaderY">
+						<thead>
+							<tr>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+					<table cellpadding="0" border="0" cellspacing="0" class="rv_table" id="page-tableHeaderX">
+						<thead>
+							<tr></tr>
+						</thead>
+					</table>
+				</div>
+				<div class="rv_btns">
+					<span class="am-clickable left"></span>
+					<span class="am-clickable date">
+						<b class="time">2016-09-28</b>
+						<b class="week">星期一</b>
+					</span>
+					<span class="am-clickable right"></span>
+				</div>
+				<div class="appointment-btn">新建预约</div>
+				<div class="toggleMode">
+					<p>精简</p>
+					<span class="am-radio am-clickable"></span>
+				</div>
+				<div class="bgStatus">
+					<div class="item"><span class="unarrive"></span><p>未到店</p></div>
+					<div class="item"><span class="arrive"></span><p>已到店&已结算</p></div>
+					<div class="item"><span class="pass"></span><p>已逾期</p></div>
+				</div>
+				<div class="EmpScrollTipLeft iconfont icon-you"></div>
+				<div class="EmpScrollTipRight iconfont icon-you-copy"></div>
+				<div class="backCurrentTime">
+					<span class="iconfont">
+						<svg class="icon" aria-hidden="true" >
+							<use xlink:href="#icon-resdate_btn_icon"></use>
+						</svg>
+					</span>
+					<p class="text">回到当前时间</p>
+				</div>
+				<div class="toggleBarber">
+					<p>点击您要放置的位置，即可成功切换预约的手艺人</p>
+					<div class="cancel am-clickable">取消操作</div>
+				</div> 
+			</div>
 			<!--  page.reservation -- end -->
 
 			<div class="am-page am-full page_appointment empty" id="page_appointment">
 				<div class="am-header">
 					<div class="am-backbutton iconfont icon-guanbi"></div>
 					<p>创建预约</p>
+					<div class="videoHelpWrap am-clickable">
+						<svg class="icon svg-icon" aria-hidden="true">
+							<use xlink:href="#icon-lan"></use>
+						</svg>
+						<span class="videoHelpText">
+							不会用？点这里
+						</span>
+					</div>
 				</div>
 				<div class="search-wrap">
 					<ul class="depart radio" style="display:none;">
@@ -854,7 +1045,7 @@
 										</div>
 									</div>
 									<div class="form">
-										<span>姓别：</span>
+										<span>性别：</span>
 										<div class="right-part">
 											<ul class="selectSex radio">
 												<li>女</li>
@@ -977,11 +1168,13 @@
 					</div>
 				</div>
 				<div class="cashierFilter">
-					<ul>
-						<li class="selected">
-							<span>A</span>
-						</li>
-					</ul>
+					<div class="filterTab">
+						<ul>
+							<li class="selected">
+								<!-- <span>A</span> -->
+							</li>
+						</ul>
+					</div>
 					<div class="modelType"></div>
 				</div>
 				<div class="cashierItems">
@@ -1112,11 +1305,13 @@
 					</ul>
 				</div>
 				<div class="cashierFilter">
-					<ul>
-						<li class="selected">
-							<!-- <span>A</span> -->
-						</li>
-					</ul>
+					<div class="filterTab">
+						<ul>
+							<li class="selected">
+								<!-- <span>A</span> -->
+							</li>
+						</ul>
+					</div>
 					<div class="priceFilterWrap">
 						<div class="icon-search iconfont icon-sousuo"></div>
 						<input class="am-clickable" type="text" placeholder="按编号/价格筛选">
@@ -1353,12 +1548,22 @@
 						</li>
 					</ul>
 				</div>
+				<div class="videoHelpWrap am-clickable">
+					<svg class="icon svg-icon" aria-hidden="true">
+						<use xlink:href="#icon-lan"></use>
+					</svg>
+					<span class="videoHelpText">
+						不会用？点这里
+					</span>
+				</div>
 				<div class="cashierFilter typeFilter">
-					<ul>
-						<li class="selected">
-							<!-- <span>A</span> -->
-						</li>
-					</ul>
+					<div class="filterTab">
+						<ul>
+							<li class="selected">
+								<!-- <span>A</span> -->
+							</li>
+						</ul>
+					</div>
 					<div class="typeFilterWrap">
 						<div class="result">
 							<p class="val">选择项目大类</p>
@@ -1389,6 +1594,10 @@
 									<svg class="icon" aria-hidden="true">
 											<use xlink:href="#icon-setting1"></use>
 									</svg>销售配置</div>
+							<div class="scanToCost">
+								<div class="toggle"><div class="icon"></div></div>
+								<p class="text">产品成本/单次业绩</p>
+							</div>
 							<div class="memberInfoBtn"></div>
 							<div class="member am-clickable am-touchable">散客</div>
 							<div class="selectMember">选择会员</div>
@@ -1427,7 +1636,7 @@
 									</div>
 								</div>
 							</div>
-						</div>
+						</div>		
 						<div class="body">
 							<div class="bodyinner">
 								<table cellspacing="0" cellpadding="0" border="0">
@@ -1440,14 +1649,27 @@
 								</table>
 								<table cellspacing="0" cellpadding="0" border="0" class="comboitem">
 									<thead>
-										<tr>
-											<th style="width:40px"></th>
+										<tr class="costFlagClose">
+											<th style="width:30px"></th>
 											<th>自选项目</th>
-											<th style="width:90px" class="center">单次业绩</th>
+											<th style="width:90px" class="center">单价</th>
 											<th style="width:90px" class="center">次数</th>
 											<th style="width:90px" class="center">总价</th>
 											<th style="width:90px" class="center">有效期</th>
 											<th class="center" style="width:80px">是否赠送</th>
+											<th style="width:90px">销售</th>
+										</tr>
+										<tr class="costFlagOpen">
+											<th style="width:30px"></th>
+											<th>自选项目</th>
+											<th style="width:90px" class="center">单价</th>
+											<th style="width:90px" class="center">次数</th>
+											<th style="width:90px" class="center">总价</th>
+											<th style="width:90px" class="center cost">产品成本</th>
+											<th style="width:90px" class="center">单次业绩</th>
+											<th style="width:90px" class="center">有效期</th>
+											<th class="center" style="width:80px">是否赠送</th>
+											<th style="width:100px">销售</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -1614,7 +1836,7 @@
 							</dd>
 							<dt class="comboitemItem">
 								<div class="val combocost"></div>
-								<div class="label">套餐成本：</div>
+								<div class="label">套餐总成本：</div>
 							</dt>
 							<dt class="needPay">
 								<div class="val payTotal">￥687</div>
@@ -1692,6 +1914,7 @@
 							</ul>
 						</div>
 						<!-- <div class="keyboard"></div> -->
+						<div class="customerSource am-clickable"></div>
 						<div class="comment"></div>
 						<div class="checkboxes">
 							<div class="checkbox memberCount">计客次</div>
@@ -1995,7 +2218,7 @@
 						<div class="payqrcode">
 							<ul class="paySelect">
 								<li class="am-clickable act">
-									<span class="radio"></span>显示付款码
+									<span class="radio"></span>显示收款码
 								</li>
 								<li class="am-clickable" data-type="wechat">
 									<span class="radio"></span>发送到POS机
@@ -2043,7 +2266,7 @@
 									<svg class="iconfont" aria-hidden="true">
 										<use xlink:href="#icon-erweima"></use>
 									</svg>
-									<p>点击显示付款码</p>
+									<p>点击显示收款码</p>
 								</div>
 							</div>
 						</div>
@@ -2053,7 +2276,7 @@
 									<use xlink:href="#icon-checkbox"></use>
 								</svg>
 							</span>
-							<p class="text">每次自动显示付款码</p>
+							<p class="text">每次自动显示收款码</p>
 						</div>
 					</div>
 				</div>
@@ -2083,7 +2306,7 @@
 						<div class="payqrcode">
 							<ul class="paySelect">
 								<li class="am-clickable act">
-									<span class="radio"></span>显示付款码
+									<span class="radio"></span>显示收款码
 								</li>
 								<li class="am-clickable" data-type="alipay">
 									<span class="radio"></span>发送到POS机
@@ -2131,7 +2354,7 @@
 									<svg class="iconfont" aria-hidden="true">
 										<use xlink:href="#icon-erweima"></use>
 									</svg>
-									<p>点击显示付款码</p>
+									<p>点击显示收款码</p>
 								</div>
 							</div>
 						</div>
@@ -2141,7 +2364,7 @@
 									<use xlink:href="#icon-checkbox"></use>
 								</svg>
 							</span>
-							<p class="text">每次自动显示付款码</p>
+							<p class="text">每次自动显示收款码</p>
 						</div>
 					</div>
 				</div>
@@ -2219,7 +2442,7 @@
 									<svg class="iconfont" aria-hidden="true">
 										<use xlink:href="#icon-erweima"></use>
 									</svg>
-									<p>点击显示付款码</p>
+									<p>点击显示收款码</p>
 								</div>
 							</div>
 						</div>
@@ -2229,7 +2452,7 @@
 									<use xlink:href="#icon-checkbox"></use>
 								</svg>
 							</span>
-							<p class="text">每次自动显示付款码</p>
+							<p class="text">每次自动显示收款码</p>
 						</div>
 					</div>
 				</div>
@@ -2283,7 +2506,7 @@
 									<svg class="iconfont" aria-hidden="true">
 										<use xlink:href="#icon-erweima"></use>
 									</svg>
-									<p>点击显示付款码</p>
+									<p>点击显示收款码</p>
 								</div>
 							</div>
 						</div>
@@ -2293,7 +2516,7 @@
 									<use xlink:href="#icon-checkbox"></use>
 								</svg>
 							</span>
-							<p class="text">每次自动显示付款码</p>
+							<p class="text">每次自动显示收款码</p>
 						</div>
 
 						<div class="tickets-list">
@@ -2366,7 +2589,7 @@
 									<svg class="iconfont" aria-hidden="true">
 										<use xlink:href="#icon-erweima"></use>
 									</svg>
-									<p>点击显示付款码</p>
+									<p>点击显示收款码</p>
 								</div>
 							</div> -->
 						</div>
@@ -2385,7 +2608,7 @@
 									<use xlink:href="#icon-checkbox"></use>
 								</svg>
 							</span>
-							<p class="text">每次自动显示付款码</p>
+							<p class="text">每次自动显示收款码</p>
 						</div> -->
 					</div>
 				</div>
@@ -2501,9 +2724,10 @@
 						<div class="paySuccess">
 							<div class="icon"></div>
 							<div class="text">结算成功，
-								<strong>3</strong>秒后返回</div>
+								<strong>3</strong>秒后自动返回</div>
 							<div class="cardUpTip"></div>
-							<div class="tip">任意位置点击立即返回</div>
+							<div class="btn goBack am-clickable">立即返回</div>
+							<!-- <div class="tip">任意位置点击立即返回</div> -->
 						</div>
 					</div>
 					<!-- content -->
@@ -2650,6 +2874,7 @@
 				</div>
 				<div class="footer">
 					<div class="settings">
+						<div class="customerSource am-clickable"></div>
 						<div class="comment"></div>
 						<div class="checkboxes">
 							<div class="checkbox memberCount">计客次</div>
@@ -2797,7 +3022,7 @@
 						<div class="payqrcode">
 							<ul class="paySelect">
 								<li class="am-clickable act">
-									<span class="radio"></span>显示付款码
+									<span class="radio"></span>显示收款码
 								</li>
 								<li class="am-clickable" data-type="wechat">
 									<span class="radio"></span>发送到POS机
@@ -2845,7 +3070,7 @@
 									<svg class="iconfont" aria-hidden="true">
 										<use xlink:href="#icon-erweima"></use>
 									</svg>
-									<p>点击显示付款码</p>
+									<p>点击显示收款码</p>
 								</div>
 							</div>
 						</div>
@@ -2855,7 +3080,7 @@
 									<use xlink:href="#icon-checkbox"></use>
 								</svg>
 							</span>
-							<p class="text">每次自动显示付款码</p>
+							<p class="text">每次自动显示收款码</p>
 						</div>
 					</div>
 				</div>
@@ -2884,7 +3109,7 @@
 						<div class="payqrcode">
 							<ul class="paySelect">
 								<li class="am-clickable act">
-									<span class="radio"></span>显示付款码
+									<span class="radio"></span>显示收款码
 								</li>
 								<li class="am-clickable" data-type="alipay">
 									<span class="radio"></span>发送到POS机
@@ -2932,7 +3157,7 @@
 									<svg class="iconfont" aria-hidden="true">
 										<use xlink:href="#icon-erweima"></use>
 									</svg>
-									<p>点击显示付款码</p>
+									<p>点击显示收款码</p>
 								</div>
 							</div>
 						</div>
@@ -2942,7 +3167,7 @@
 									<use xlink:href="#icon-checkbox"></use>
 								</svg>
 							</span>
-							<p class="text">每次自动显示付款码</p>
+							<p class="text">每次自动显示收款码</p>
 						</div>
 					</div>
 				</div>
@@ -3082,7 +3307,7 @@
 									<svg class="iconfont" aria-hidden="true">
 										<use xlink:href="#icon-erweima"></use>
 									</svg>
-									<p>点击显示付款码</p>
+									<p>点击显示收款码</p>
 								</div>
 							</div>
 						</div>
@@ -3092,7 +3317,7 @@
 									<use xlink:href="#icon-checkbox"></use>
 								</svg>
 							</span>
-							<p class="text">每次自动显示付款码</p>
+							<p class="text">每次自动显示收款码</p>
 						</div>
 
 						<div class="tickets-list">
@@ -3164,7 +3389,7 @@
 									<svg class="iconfont" aria-hidden="true">
 										<use xlink:href="#icon-erweima"></use>
 									</svg>
-									<p>点击显示付款码</p>
+									<p>点击显示收款码</p>
 								</div>
 							</div> -->
 						</div>
@@ -3183,7 +3408,7 @@
 									<use xlink:href="#icon-checkbox"></use>
 								</svg>
 							</span>
-							<p class="text">每次自动显示付款码</p>
+							<p class="text">每次自动显示收款码</p>
 						</div> -->
 					</div>
 				</div>
@@ -3224,9 +3449,10 @@
 						<div class="paySuccess">
 							<div class="icon"></div>
 							<div class="text">结算成功，
-								<strong>3</strong>秒后返回</div>
+								<strong>3</strong>秒后自动返回</div>
 							<div class="cardUpTip"></div>
-							<div class="tip">任意位置点击立即返回</div>
+							<div class="btn goBack am-clickable">立即返回</div>
+							<!-- <div class="tip">任意位置点击立即返回</div> -->
 						</div>
 					</div>
 					<!-- content -->
@@ -3235,6 +3461,959 @@
 			</div>
 
 			<!--  page_itemPay end 支付-->
+
+			<!--  page_mergePay start 支付-->
+			<div class="am-page page_mergePay page_pay am-full" id="page_mergePay">
+				<!-- 快捷键提示 -->
+				<div class="keypadWrap">
+					<div class="keypadBtnDiv">
+						<span class="tip"></span>
+						<p class="keypadBtn">
+							<span class="iconfont icon-keyb_icon_a"></span>
+							<span class="iconfont icon-keyb_icon_b"></span>
+						</p>
+					</div>
+				
+					<div class="keypadInner">
+						<h2>小键盘说明</h2>
+						<!-- <li <p class="keyP1">任意小键盘数字键 = 筛选人员</p> -->
+						<ul class="keyUl given">
+							<li class="square"><span></span>= 切换支付方式</li>
+						</ul>
+						<div class="currencyDiv">
+							<p class="keyP2">通用按键</p>
+							<ul class="keyUl currency">
+								<li class="circular"><span></span>键 = 返回/关闭</li>
+								<li class="square"><span></span>= 确认</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="am-header">
+					<div class="am-backbutton iconfont icon-guanbi"></div>
+					<p>合并结算</p>
+				</div>
+				<div class="payContent">
+					<div class="left">
+						<div class="billsDetail">
+							<div class="scollBills">
+								<ul>
+									<li class="billInfoTemp am-clickable">
+										<div>
+											<div class="detailLeft">
+												<b class="billNo"></b>
+												<b class="name"></b>
+												<i class="sex"></i>
+											</div>
+											<div class="detailRight">
+												<b class="billCost"></b>
+											</div>
+										</div>
+										<div class="usedComboItems">
+											<div class="detailLeft">
+												<i>套餐扣减：</i>
+											</div>
+											<div class="detailRight">
+												<span></span>
+											</div>
+										</div>
+										<div>
+											<div class="detailLeft">
+												<span>单号：</span>
+												<span class="serviceNO pen am-clickable"></span>
+											</div>
+											<div class="detailMiddle">
+												<span>顾客来源：</span>
+												<span class="cusSource pen am-clickable"></span>
+											</div>
+											<div class="detailRight">
+												<div class="checkbox memberCount am-clickable checked">计客次</div>
+											</div>
+										</div>
+										<div class="hangup-right am-clickable">
+											<img src="$dynamicResource/images/hangup-right-arrow.png" alt="">
+										</div>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div class="mergeMoney">
+							<div class="title">合并支付金额：</div>
+							<div class="totalMoney">￥276</div>
+						</div>
+						<div class="payTypes">
+							<div class="title">选择支付方式：</div>
+							<ul>
+								<li class="pay_memberCard" paytype="CARDFEE">会员卡
+									<span></span>
+									<p></p>
+									<b>1</b>
+									<div class="whynot">
+										<svg class="icon" aria-hidden="true">
+											<use xlink:href="#icon-iconfontquestion"></use>
+										</svg>
+										<div class="text"></div>
+									</div>
+								</li>
+								<li class="pay_bonus" paytype="PRESENTFEE">赠送金
+									<span></span>
+									<p></p>
+									<b>2</b>
+									<div class="whynot">
+										<svg class="icon" aria-hidden="true">
+											<use xlink:href="#icon-iconfontquestion"></use>
+										</svg>
+										<div class="text"></div>
+									</div>
+								</li>
+								<li class="pay_cash" paytype="CASH">现金
+									<span></span>
+									<b>3</b>
+								</li>
+								<li class="pay_pos" paytype="UNIONPAY">银联
+									<span></span>
+									<b>4</b>
+								</li>
+								<li class="pay_jd" paytype="JINGDONG">京东钱包
+									<span></span>
+									<b>5</b>
+								</li>
+								<li class="pay_wechat" paytype="WEIXIN">微信
+									<span></span>
+									<b>6</b>
+								</li>
+								<li class="pay_alipay" paytype="PAY">支付宝
+									<span></span>
+									<b>7</b>
+								</li>
+							</ul>
+						</div>
+						<div class="checkboxes">
+							<div class="checkbox smsSendFlag">不发送短信和微信消息请打勾</div>
+						</div>
+					</div>
+				
+					<div class="right">
+						<div class="payTip cash">
+							<p class="lineGray">
+								您当前正使用
+							</p>
+							<p class="lineMain">
+								现金
+								<span class="highlight"></span>
+							</p>
+							<p class="lineSmall">
+								全额支付此单，请仔细收款找零
+							</p>
+						</div>
+						<div class="payTip pos">
+							<p class="lineGray">
+								您当前正使用
+							</p>
+							<p class="lineMain">
+								银联刷卡
+								<span class="highlight"></span>
+							</p>
+							<p class="lineSmall">
+								全额支付此单，请使用POS机收款!
+							</p>
+						</div>
+						<div class="payTip card">
+							<p class="lineGray">
+								本次消费正在使用此会员卡
+							</p>
+							<p class="lineMain">
+								<span class="balanceORbonus">卡金</span>结算
+								<span class="highlight"></span>
+							</p>
+							<div class="cardBg">
+								<p class="line1">
+									<span class="price"></span>
+									<span class="name"></span>
+								</p>
+								<p class="line2">
+									<span class="label">余额</span>
+									<span class="no"></span>
+								</p>
+								<p class="line3">
+									<span class="bonus"></span>
+								</p>
+							</div>
+							<div class="checkedItemsBox">
+								<p class="checkedItemsTitle"></p>
+								<div class="checkedItemsWrap am-touchable">
+									<div class="checkedItemsWrapper">
+										<div class="checkedItemsNames"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				
+					<div class="submit am-clickable">结 算</div>
+					<div class="submit keypadPC am-clickable">
+						<span class="text1">结 算</span>
+						<p class="text2"><span>回车键*3次</span></p>
+					</div>
+				</div>
+				<div class="payDetail" id="mergePosPayDetail">
+					<div class="mask"></div>
+					<div class="onlinePay pos">
+						<div class="paytitle">
+							<span>银联支付</span>
+							<strong class="price"></strong>
+						</div>
+						<div class="paycode pos">
+							<div class="statusBox">
+								<div class="loading">正在等待支付结果…</div>
+								<div class="success">
+									<span class="icon"></span>
+									<span class="text">支付成功</span>
+								</div>
+								<div class="error">
+									<span class="icon"></span>
+									<p class="text">支付失败</p>
+									<p class="info">支付网关无响应，您可以</p>
+								</div>
+								<div class="complete">完成</div>
+								<!-- <div class="cancel">取消支付</div> -->
+								<div class="refund">退 款</div>
+							</div>
+						</div>
+						<div class="posList">
+							<ul></ul>
+						</div>
+						<div class="posStatus">
+							<ul>
+								<li class="am-clickable refresh">刷新重试</li>
+								<li class="am-clickable reset">重新选择POS机</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="payDetail" id="mergeWechatPayDetail">
+					<div class="mask"></div>
+					<div class="onlinePay wechat">
+						<div class="paytitle">
+							<span>微信支付</span>
+							<strong class="price"></strong>
+						</div>
+						<div class="paycode">
+							<input type="text" class="debarInput" name="code" value="" placeholder="请扫码或输入付款码">
+							<div class="button paybutton">支付</div>
+							<div class="statusBox">
+								<div class="loading">支付中，请稍候</div>
+								<div class="success">
+									<span class="icon"></span>
+									<span class="text">支付成功</span>
+								</div>
+								<div class="complete">完成</div>
+								<div class="cancel">取消支付</div>
+								<div class="refund">退 款</div>
+							</div>
+							<div class="barcodeScan"></div>
+						</div>
+						<div class="payqrcode">
+							<ul class="paySelect">
+								<li class="am-clickable act">
+									<span class="radio"></span>显示收款码
+								</li>
+								<li class="am-clickable" data-type="wechat">
+									<span class="radio"></span>发送到POS机
+								</li>
+							</ul>
+							<div class="paycode pos">
+								<div class="statusBox">
+									<div class="loading">正在等待支付结果…</div>
+									<div class="success">
+										<span class="icon"></span>
+										<span class="text">支付成功</span>
+									</div>
+									<div class="error">
+										<span class="icon"></span>
+										<p class="text">支付失败</p>
+										<p class="info">支付网关无响应，您可以</p>
+									</div>
+									<div class="complete">完成</div>
+									<div class="refund">退 款</div>
+								</div>
+							</div>
+							<ul class="wechatPosList"></ul>
+							<div class="posStatus">
+								<ul>
+									<li class="am-clickable refresh">刷新重试</li>
+									<li class="am-clickable reset">重新选择POS机</li>
+								</ul>
+							</div>
+							<div class="qrSuccess">
+								<span class="icon"></span>
+								<span class="text">支付成功</span>
+								<div class="refund">退 款</div>
+							</div>
+							<div class="qrLoading">加载中，请稍候</div>
+							<div class="qrReload">
+								支付码加载失败，点击重试
+							</div>
+							<div class="qrcodeimg"></div>
+							<div class="paytip">扫码结算更便捷~</div>
+							<div class="clickToShowCode">
+								<svg class="corner" aria-hidden="true">
+									<use xlink:href="#icon-ziyuan35"></use>
+								</svg>
+								<div class="tips">
+									<svg class="iconfont" aria-hidden="true">
+										<use xlink:href="#icon-erweima"></use>
+									</svg>
+									<p>点击显示收款码</p>
+								</div>
+							</div>
+						</div>
+						<div class="showCode">
+							<span class="icon">
+								<svg class="iconfont" aria-hidden="true">
+									<use xlink:href="#icon-checkbox"></use>
+								</svg>
+							</span>
+							<p class="text">每次自动显示收款码</p>
+						</div>
+					</div>
+				</div>
+			
+				<div class="payDetail" id="mergeAlipayPayDetail">
+					<div class="mask"></div>
+					<div class="onlinePay alipay">
+						<div class="paytitle">
+							<span>支付宝</span>
+							<strong class="price"></strong>
+						</div>
+						<div class="paycode">
+							<input type="text" class="debarInput" name="code" value="" placeholder="请扫码或输入付款码">
+							<div class="button paybutton">支付</div>
+							<div class="statusBox">
+								<div class="loading">支付中，请稍候</div>
+								<div class="success">
+									<span class="icon"></span>
+									<span class="text">支付成功</span>
+								</div>
+								<div class="complete">完成</div>
+								<div class="cancel">取消支付</div>
+								<div class="refund">退 款</div>
+							</div>
+							<div class="barcodeScan"></div>
+						</div>
+						<div class="payqrcode">
+							<ul class="paySelect">
+								<li class="am-clickable act">
+									<span class="radio"></span>显示收款码
+								</li>
+								<li class="am-clickable" data-type="alipay">
+									<span class="radio"></span>发送到POS机
+								</li>
+							</ul>
+							<div class="paycode pos">
+								<div class="statusBox">
+									<div class="loading">正在等待支付结果…</div>
+									<div class="success">
+										<span class="icon"></span>
+										<span class="text">支付成功</span>
+									</div>
+									<div class="error">
+										<span class="icon"></span>
+										<p class="text">支付失败</p>
+										<p class="info">支付网关无响应，您可以</p>
+									</div>
+									<div class="complete">完成</div>
+									<div class="refund">退 款</div>
+								</div>
+							</div>
+							<ul class="alipayPosList"></ul>
+							<div class="posStatus">
+								<ul>
+									<li class="am-clickable refresh">刷新重试</li>
+									<li class="am-clickable reset">重新选择POS机</li>
+								</ul>
+							</div>
+							<div class="qrSuccess">
+								<span class="icon"></span>
+								<span class="text">支付成功</span>
+								<div class="refund">退 款</div>
+							</div>
+							<div class="qrLoading">加载中，请稍候</div>
+							<div class="qrReload">
+								支付码加载失败，点击重试
+							</div>
+							<div class="qrcodeimg"></div>
+							<div class="paytip">扫码结算更便捷~</div>
+							<div class="clickToShowCode">
+								<svg class="corner" aria-hidden="true">
+									<use xlink:href="#icon-ziyuan35"></use>
+								</svg>
+								<div class="tips">
+									<svg class="iconfont" aria-hidden="true">
+										<use xlink:href="#icon-erweima"></use>
+									</svg>
+									<p>点击显示收款码</p>
+								</div>
+							</div>
+						</div>
+						<div class="showCode">
+							<span class="icon">
+								<svg class="iconfont" aria-hidden="true">
+									<use xlink:href="#icon-checkbox"></use>
+								</svg>
+							</span>
+							<p class="text">每次自动显示收款码</p>
+						</div>
+					</div>
+				</div>
+			
+				<div class="payDetail" id="mergeJdPayDetail">
+					<div class="mask"></div>
+					<div class="onlinePay jd">
+						<div class="paytitle">
+							<span>京东钱包</span>
+							<strong class="price"></strong>
+						</div>
+						<div class="paycode">
+							<input type="text" class="debarInput" name="code" value="" placeholder="请扫码或输入付款码">
+							<div class="button paybutton">支付</div>
+							<div class="statusBox">
+								<div class="loading">支付中，请稍候</div>
+								<div class="success">
+									<span class="icon"></span>
+									<span class="text">支付成功</span>
+								</div>
+								<div class="complete">完成</div>
+								<div class="cancel">取消支付</div>
+								<div class="refund">退 款</div>
+							</div>
+							<div class="barcodeScan"></div>
+						</div>
+						<div class="payqrcode">
+							<div class="qrSuccess">
+								<span class="icon"></span>
+								<span class="text">支付成功</span>
+								<div class="refund">退 款</div>
+							</div>
+							<div class="qrLoading">加载中，请稍候</div>
+							<div class="qrReload">
+								支付码加载失败，点击重试
+							</div>
+							<div class="qrcodeimg"></div>
+							<div class="paytip">扫码结算更便捷~</div>
+							<div class="clickToShowCode">
+								<svg class="corner" aria-hidden="true">
+									<use xlink:href="#icon-ziyuan35"></use>
+								</svg>
+								<div class="tips">
+									<svg class="iconfont" aria-hidden="true">
+										<use xlink:href="#icon-erweima"></use>
+									</svg>
+									<p>点击显示收款码</p>
+								</div>
+							</div>
+						</div>
+						<div class="showCode">
+							<span class="icon">
+								<svg class="iconfont" aria-hidden="true">
+									<use xlink:href="#icon-checkbox"></use>
+								</svg>
+							</span>
+							<p class="text">每次自动显示收款码</p>
+						</div>
+					</div>
+				</div>
+				<div class="payConfirm" id="mergePayConfirm">
+					<div class="content">
+						<div class="paySuccess">
+							<div class="icon"></div>
+							<div class="text">结算成功，
+								<strong>3</strong>秒后自动返回</div>
+							<div class="cardUpTip"></div>
+							<div class="btn goBack am-clickable">立即返回</div>
+							<!-- <div class="tip">任意位置点击立即返回</div> -->
+						</div>
+					</div>
+					<!-- content -->
+				</div>
+			</div>
+			<!--  page_mergePay end 支付-->
+			
+			<!--  page_multiCardPay start 支付-->
+			<div class="am-page page_pay page_multiCardPay am-full" id="page_multiCardPay">
+				<!-- 提示卡升级规则 -->
+				<div class="ruleTag">
+					<span class="ruleSpan">本次充值满1000可</span>
+					<span class="red">升级为8折储值卡</span>哦~
+					<div class="close am-clickable iconfont icon-guanbi2"></div>
+				</div>
+				<!-- 快捷键提示 -->
+				<div class="keypadWrap">
+					<div class="keypadBtnDiv">
+						<span class="tip"></span>
+						<p class="keypadBtn">
+							<span class="iconfont icon-keyb_icon_a"></span>
+							<span class="iconfont icon-keyb_icon_b"></span>
+						</p>
+					</div>
+
+					<div class="keypadInner">
+						<h2>小键盘说明</h2>
+						<!-- <p class="keyP1">任意小键盘数字键 = 筛选人员</p> -->
+						<ul class="keyUl given">
+							<li class="square"><span></span>= 切换支付方式</li>
+						</ul>
+						<div class="currencyDiv">
+							<p class="keyP2">通用按键</p>
+							<ul class="keyUl currency">
+								<li class="circular"><span></span>键 = 返回/关闭</li>
+								<li class="square"><span></span>= 确认</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+
+			<div class="am-header">
+				<div class="am-backbutton iconfont icon-guanbi"></div>
+				<!-- <div class="print">打印小票</div> -->
+				<div class="userPrintType">
+					<div class="printType">
+						<ul>
+							<li class="selected">蓝牙打印</li>
+							<li>usb打印</li>
+						</ul>
+					</div>
+					<div class="icon print"></div>
+				</div>
+				<div class="billno"><input class="am-clickable" disabled="disabled" type="text" maxlength="20" placeholder="输入单号"></div>
+				<p>支付</p>
+			</div>
+			<div class="payContent">
+				<div class="left">
+					<dl class="payInfo">
+						<dt class="totalprice">
+							<div class="leftTit">
+								<span class="costLabel">消费总额：</span>
+								<span class="total">￥100</span>
+							</div>
+							<div class="rightTit">
+								<span class="discountLabel">折后价：</span>
+								<span class="discountMoney">￥100</span>
+							</div>
+						</dt>
+						<dd class="comboitemPay">
+							<div class="val">￥687</div>
+							<div class="label">套餐扣减：</div>
+						</dd>
+						<dd class="multiCard">
+							<div class="multiCardWrap">
+								<div style="height: 100%;">
+									<ul class="multiCardList">
+										<li class="multiCarcLi">
+											<div class="leftLi">
+												<span class="cardDel am-clickable"></span>
+												<span class="cardName">限时会员卡</span>
+												<span class="cardInfo">8折，余额：￥150</span>
+											</div>
+											<div class="rightLi">
+												<span class="costCardFee am-clickable">100</span>
+											</div>
+										</li>
+									</ul>
+								</div>
+								
+							</div>
+							
+							<div class="addCard am-clickable">增加付款卡</div>
+						</dd>
+						<dt class="otherNeedPay">
+							<div class="val payTotal">￥687</div>
+							<div class="label">仍需支付：</div>
+						</dt>
+					</dl>
+					<div class="payTypes">
+						<div class="title">选择支付方式：</div>
+						<ul>
+							<li class="pay_cash" paytype="CASH">现金
+								<span></span>
+								<b>3</b>
+							</li>
+							<li class="pay_pos" paytype="UNIONPAY">银联
+								<span></span>
+								<b>4</b>
+							</li>
+							<li class="pay_jd" paytype="JINGDONG">京东钱包
+								<span></span>
+								<b>5</b>
+							</li>
+							<li class="pay_wechat" paytype="WEIXIN">微信
+								<span></span>
+								<b>6</b>
+							</li>
+							<li class="pay_alipay" paytype="PAY">支付宝
+								<span></span>
+								<b>7</b>
+							</li>
+						</ul>
+					</div>
+					<!-- <div class="keyboard"></div> -->
+					<div class="customerSource am-clickable"></div>
+					<div class="comment"></div>
+					<div class="checkboxes">
+						<div class="checkbox memberCount">计客次</div>
+						<div class="checkbox signatureSwitch">结算签字</div>
+						<div class="checkbox printSwitch">自动打印小票</div>
+						<div class="checkbox smsSendFlag">不发送短信和微信消息请打勾</div>
+					</div>
+				</div>
+
+				<div class="right">
+					<div class="payTip cash">
+						<p class="lineGray">
+							您当前正使用
+						</p>
+						<p class="lineMain">
+							现金
+							<span class="highlight"></span>
+						</p>
+						<p class="lineSmall">
+							全额支付此单，请仔细收款找零
+						</p>
+					</div>
+					<div class="payTip pos">
+						<p class="lineGray">
+							您当前正使用
+						</p>
+						<p class="lineMain">
+							银联刷卡
+							<span class="highlight"></span>
+						</p>
+						<p class="lineSmall">
+							全额支付此单，请使用POS机收款!
+						</p>
+					</div>
+					<div class="payTip card">
+						<p class="lineGray">
+							本次消费正在使用此会员卡
+						</p>
+						<p class="lineMain">
+							<span class="balanceORbonus">卡金</span>结算
+							<span class="highlight"></span>
+						</p>
+						<div class="cardBg">
+							<p class="line1">
+								<span class="price"></span>
+								<span class="name"></span>
+							</p>
+							<p class="line2">
+								<span class="label">余额</span>
+								<span class="no"></span>
+							</p>
+							<p class="line3">
+								<span class="bonus"></span>
+							</p>
+						</div>
+						<div class="checkedItemsBox">
+							<p class="checkedItemsTitle"></p>
+							<div class="checkedItemsWrap am-touchable">
+								<div class="checkedItemsWrapper">
+										<div class="checkedItemsNames"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="submit">结 算</div>
+				<div class="submit keypadPC">
+					<span class="text1">结 算</span>
+					<p class="text2"><span>回车键*3次</span></p>
+				</div>
+			</div>
+			<div class="payDetail" id="multiCardPosPayDetail">
+				<div class="mask"></div>
+				<div class="onlinePay pos">
+					<div class="paytitle">
+						<span>银联支付</span>
+						<strong class="price"></strong>
+					</div>
+					<div class="paycode pos">
+						<div class="statusBox">
+							<div class="loading">正在等待支付结果…</div>
+							<div class="success">
+								<span class="icon"></span>
+								<span class="text">支付成功</span>
+							</div>
+							<div class="error">
+								<span class="icon"></span>
+								<p class="text">支付失败</p>
+								<p class="info">支付网关无响应，您可以</p>
+							</div>
+							<div class="complete">完成</div>
+							<!-- <div class="cancel">取消支付</div> -->
+							<div class="refund">退 款</div>
+						</div>
+					</div>
+					<div class="posList">
+						<ul></ul>
+					</div>
+					<div class="posStatus">
+						<ul>
+							<li class="am-clickable refresh">刷新重试</li>
+							<li class="am-clickable reset">重新选择POS机</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="payDetail" id="multiCardWechatPayDetail">
+				<div class="mask"></div>
+				<div class="onlinePay wechat">
+					<div class="paytitle">
+						<span>微信支付</span>
+						<strong class="price"></strong>
+					</div>
+					<div class="paycode">
+						<input type="text" class="debarInput" name="code" value="" placeholder="请扫码或输入付款码">
+						<div class="button paybutton">支付</div>
+						<div class="statusBox">
+							<div class="loading">支付中，请稍候</div>
+							<div class="success">
+								<span class="icon"></span>
+								<span class="text">支付成功</span>
+							</div>
+							<div class="complete">完成</div>
+							<div class="cancel">取消支付</div>
+							<div class="refund">退 款</div>
+						</div>
+						<div class="barcodeScan"></div>
+					</div>
+					<div class="payqrcode">
+						<ul class="paySelect">
+							<li class="am-clickable act">
+								<span class="radio"></span>显示收款码
+							</li>
+							<li class="am-clickable" data-type="wechat">
+								<span class="radio"></span>发送到POS机
+							</li>
+						</ul>
+						<div class="paycode pos">
+							<div class="statusBox">
+								<div class="loading">正在等待支付结果…</div>
+								<div class="success">
+									<span class="icon"></span>
+									<span class="text">支付成功</span>
+								</div>
+								<div class="error">
+									<span class="icon"></span>
+									<p class="text">支付失败</p>
+									<p class="info">支付网关无响应，您可以</p>
+								</div>
+								<div class="complete">完成</div>
+								<div class="refund">退 款</div>
+							</div>
+						</div>
+						<ul class="wechatPosList"></ul>
+						<div class="posStatus">
+							<ul>
+								<li class="am-clickable refresh">刷新重试</li>
+								<li class="am-clickable reset">重新选择POS机</li>
+							</ul>
+						</div>
+						<div class="qrSuccess">
+							<span class="icon"></span>
+							<span class="text">支付成功</span>
+							<div class="refund">退 款</div>
+						</div>
+						<div class="qrLoading">加载中，请稍候</div>
+						<div class="qrReload">
+							支付码加载失败，点击重试
+						</div>
+						<div class="qrcodeimg"></div>
+						<div class="paytip">扫码结算更便捷~</div>
+						<div class="clickToShowCode">
+							<svg class="corner" aria-hidden="true">
+								<use xlink:href="#icon-ziyuan35"></use>
+							</svg>								
+							<div class="tips">
+								<svg class="iconfont" aria-hidden="true">
+									<use xlink:href="#icon-erweima"></use>
+								</svg>
+								<p>点击显示收款码</p>
+							</div>
+						</div>
+					</div>
+					<div class="showCode">
+						<span class="icon">
+							<svg class="iconfont" aria-hidden="true">
+								<use xlink:href="#icon-checkbox"></use>
+							</svg>
+						</span>
+						<p class="text">每次自动显示收款码</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="payDetail" id="multiCardAlipayPayDetail">
+				<div class="mask"></div>
+				<div class="onlinePay alipay">
+					<div class="paytitle">
+						<span>支付宝</span>
+						<strong class="price"></strong>
+					</div>
+					<div class="paycode">
+						<input type="text" class="debarInput" name="code" value="" placeholder="请扫码或输入付款码">
+						<div class="button paybutton">支付</div>
+						<div class="statusBox">
+							<div class="loading">支付中，请稍候</div>
+							<div class="success">
+								<span class="icon"></span>
+								<span class="text">支付成功</span>
+							</div>
+							<div class="complete">完成</div>
+							<div class="cancel">取消支付</div>
+							<div class="refund">退 款</div>
+						</div>
+						<div class="barcodeScan"></div>
+					</div>
+					<div class="payqrcode">
+						<ul class="paySelect">
+							<li class="am-clickable act">
+								<span class="radio"></span>显示收款码
+							</li>
+							<li class="am-clickable" data-type="alipay">
+								<span class="radio"></span>发送到POS机
+							</li>
+						</ul>
+						<div class="paycode pos">
+							<div class="statusBox">
+								<div class="loading">正在等待支付结果…</div>
+								<div class="success">
+									<span class="icon"></span>
+									<span class="text">支付成功</span>
+								</div>
+								<div class="error">
+									<span class="icon"></span>
+									<p class="text">支付失败</p>
+									<p class="info">支付网关无响应，您可以</p>
+								</div>
+								<div class="complete">完成</div>
+								<div class="refund">退 款</div>
+							</div>
+						</div>
+						<ul class="alipayPosList"></ul>
+						<div class="posStatus">
+							<ul>
+								<li class="am-clickable refresh">刷新重试</li>
+								<li class="am-clickable reset">重新选择POS机</li>
+							</ul>
+						</div>
+						<div class="qrSuccess">
+							<span class="icon"></span>
+							<span class="text">支付成功</span>
+							<div class="refund">退 款</div>
+						</div>
+						<div class="qrLoading">加载中，请稍候</div>
+						<div class="qrReload">
+							支付码加载失败，点击重试
+						</div>
+						<div class="qrcodeimg"></div>
+						<div class="paytip">扫码结算更便捷~</div>
+						<div class="clickToShowCode">
+							<svg class="corner" aria-hidden="true">
+								<use xlink:href="#icon-ziyuan35"></use>
+							</svg>								
+							<div class="tips">
+								<svg class="iconfont" aria-hidden="true">
+									<use xlink:href="#icon-erweima"></use>
+								</svg>
+								<p>点击显示收款码</p>
+							</div>
+						</div>
+					</div>
+					<div class="showCode">
+						<span class="icon">
+							<svg class="iconfont" aria-hidden="true">
+								<use xlink:href="#icon-checkbox"></use>
+							</svg>
+						</span>
+						<p class="text">每次自动显示收款码</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="payDetail" id="multiCardJdPayDetail">
+				<div class="mask"></div>
+				<div class="onlinePay jd">
+					<div class="paytitle">
+						<span>京东钱包</span>
+						<strong class="price"></strong>
+					</div>
+					<div class="paycode">
+						<input type="text" class="debarInput" name="code" value="" placeholder="请扫码或输入付款码">
+						<div class="button paybutton">支付</div>
+						<div class="statusBox">
+							<div class="loading">支付中，请稍候</div>
+							<div class="success">
+								<span class="icon"></span>
+								<span class="text">支付成功</span>
+							</div>
+							<div class="complete">完成</div>
+							<div class="cancel">取消支付</div>
+							<div class="refund">退 款</div>
+						</div>
+						<div class="barcodeScan"></div>
+					</div>
+					<div class="payqrcode">
+						<div class="qrSuccess">
+							<span class="icon"></span>
+							<span class="text">支付成功</span>
+							<div class="refund">退 款</div>
+						</div>
+						<div class="qrLoading">加载中，请稍候</div>
+						<div class="qrReload">
+							支付码加载失败，点击重试
+						</div>
+						<div class="qrcodeimg"></div>
+						<div class="paytip">扫码结算更便捷~</div>
+						<div class="clickToShowCode">
+							<svg class="corner" aria-hidden="true">
+								<use xlink:href="#icon-ziyuan35"></use>
+							</svg>								
+							<div class="tips">
+								<svg class="iconfont" aria-hidden="true">
+									<use xlink:href="#icon-erweima"></use>
+								</svg>
+								<p>点击显示收款码</p>
+							</div>
+						</div>
+					</div>
+					<div class="showCode">
+						<span class="icon">
+							<svg class="iconfont" aria-hidden="true">
+								<use xlink:href="#icon-checkbox"></use>
+							</svg>
+						</span>
+						<p class="text">每次自动显示收款码</p>
+					</div>
+				</div>
+			</div>
+			<div class="payConfirm" id="multiCardPayConfirm">
+				<div class="content">
+					<div class="paySuccess">
+						<div class="icon"></div>
+						<div class="text">结算成功，
+							<strong>3</strong>秒后自动返回</div>
+						<div class="cardUpTip"></div>
+						<div class="btn goBack am-clickable">立即返回</div>
+						<!-- <div class="tip">任意位置点击立即返回</div> -->
+					</div>
+				</div>
+				<!-- content -->
+			</div>
+			<!-- 透明mask -->
+			<div class="transparentMask am-clickable"></div>
+		</div>
+			<!--  page_multiCardPay end 支付-->
 
 			<!-- payConfirm -->
 			<div class="signname" id="signname">
@@ -3422,7 +4601,7 @@
 								</div>
 							</div>
 							<div class="btnOk am-clickable">查询</div>
-						</div>
+						</div>				
 						<div class="result">
 							<span class="total">查询统计：共有
 								<b class="c_red">12</b>条记录</span>
@@ -3617,6 +4796,32 @@
 						</div>
 					</div>
 					<div class="facepay common_tabBox">
+						<div class="orderHighSearch">
+							<div class="header-tit">高级搜索</div>
+							<div class="search-scroll-wrap">
+								<div class="search-scroll-wrapper">
+									<div class="saleTime common_se cm_block">
+										<span>购买时间</span>
+										<div class="startTime_form common_select">
+											<input class="startTime am-clickable" readonly="readonly" type="text">
+										</div>
+										<p>至</p>
+										<div class="endTime_form common_select">
+											<input class="endTime am-clickable" readonly="readonly" type="text">
+										</div>
+									</div>
+									<div class="saleCategory common_se cm_block">
+										<span>分类</span>
+										<div class="saleCategory_form common_select"></div>
+									</div>
+									<div class="saleStatus common_se cm_block">
+										<span>状态</span>
+										<div class="saleStatus_form common_select"></div>
+									</div>
+								</div>
+							</div>
+							<div class="btnOk am-clickable">查询</div>
+						</div>
 						<div class="search_box">
 							<div class="date common_search am-clickable">
 								<span class="key">日期：</span>
@@ -3635,6 +4840,44 @@
 								<span class="verification_btn am-clickable">核销</span>
 							</div>
 
+						</div>
+						<div class="searchOrderWrap" style="display: none">
+							<div class="searchWrap">
+								<div class="scanCodeWrap" style="display: none">
+									<div class="scan">
+										<svg class="icon svg-icon" aria-hidden="true">
+											<use xlink:href="#icon-saoma-copy"></use>
+										</svg>
+									</div>
+									<input class="condition debarInput" type="text" placeholder="请扫码或输入券号查询">
+									<div class="scanCodeSearch am-clickable">查询</div>
+								</div>
+								<div class="searchinput">
+									<div class="inputbox">
+										<input class="search_input searchphone" maxlength="30" placeholder="输入姓名/手机号搜索"
+											type="text" />
+									</div>
+									<div class="inputbox_icon am-clickable">
+										<svg class="icon" aria-hidden="true">
+											<use xlink:href="#icon-sousuo1"></use>
+										</svg>
+									</div>
+								</div>
+								<div class="highSearchBtn am-clickable">高级搜索</div>
+								<div class="scanCodeBtn am-clickable">扫码核销</div>
+								<div class="orderTip">
+									<div class="tipIcon"></div>
+									<div class="tiptext">顾客通过美一客商城购买的订单在这里扫码核销</div>
+								</div>
+							</div>
+							<div class="toggleBtn am-clickable">
+								<div class="btnIcon">
+									<svg class="icon" aria-hidden="true">
+										<use xlink:href="#icon-yuanjiaojuxing"></use>
+									</svg>
+								</div>
+								<div class="btnText am-clickable">验券记录</div>
+							</div>
 						</div>
 						<div class="faceTableBox common_tableBox">
 							<div class="contentbox">
@@ -3694,7 +4937,7 @@
 								 <span class="btn am-clickable">刷新重试</span>
 							</div> -->
 						</div>
-						<!-- <div class="footcontent">分页</div> -->
+						<div class="footcontent"></div>
 					</div>
 					<div class="result_bg">
 						<div class="normal"></div>
@@ -3712,8 +4955,83 @@
 							<div class="up"></div>
 					</div>
 				</div>
+				<div class="consumeTip">
+					<div class="text"></div>
+				</div>
 			</div>
 			<!--  page_billRecord end -营业记录-->
+
+			<!--  page_mallOrderDetail start 商城订单详情-->
+			<div class="am-page am-full page_mallOrderDetail" id="page_mallOrderDetail">
+				<div class="am-header">
+					<div class="am-backbutton iconfont icon-guanbi"></div>
+					<p>订单详情</p>
+				</div>
+				<div class="container-wrap">
+					<div class="detailMode">
+						<div class="detailLf">
+							<div class="leftCon">
+								<div class="conImg">
+									<img src="">
+								</div>
+								<div class="conName">周大大</div>
+								<div class="conTel">15000000001</div>
+							</div>
+						</div>
+						<div class="detailRt">
+							<div class="productImg">
+								<div class="imgCenter"></div>
+							</div>
+							<div class="productDetail">
+								<div class="detailUp">
+									<div class="itemTit">清扬(CLEAR)去屑男士洗发露500ml</div>
+									<div class="itemRemark">好用才是硬道理</div>
+								</div>
+								<div class="detailDown">
+									<div class="attributeNickName">
+										<div class="item_name">属性:</div>
+										<div class="item_value">--</div>
+									</div>
+									<div class="itemStatus">
+										<div class="item_name">状态:</div>
+										<div class="item_value">可使用</div>
+									</div>
+									<div class="itemPrice">
+										<div class="item_name">购买价格:</div>
+										<div class="item_value">￥55</div>
+									</div>
+									<div class="itemBuyTime">
+										<div class="item_name">购买时间:</div>
+										<div class="item_value">2017.01.08</div>
+									</div>
+									<div class="itemPayType">
+										<div class="item_name">支付方式:</div>
+										<div class="item_value">红包支付</div>
+									</div>
+									<div class="distrType">
+										<div class="item_name">取货方式:</div>
+										<div class="item_value">物流配送</div>
+									</div>
+									<div class="verifyShop">
+										<div class="item_name">核销门店:</div>
+										<div class="item_value">2019.03.23 15:32</div>
+									</div>
+									<div class="verifyTime">
+										<div class="item_name">核销时间:</div>
+										<div class="item_value">2019.03.23 15:32</div>
+									</div>
+									<div class="showOperator">
+										<div class="item_name">操作人:</div>
+										<div class="item_value">陈小</div>
+									</div>
+								</div>
+								<div class="verifyBtn am-clickable">核销订单</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--  page_mallOrderDetail end -商城订单详情-->
 
 			<!--  page_billStatistics start 营业汇总 -->
 			<div class="am-page page_billStatistics" id="page_billStatistics">
@@ -3912,7 +5230,7 @@
 							<div class="label">支出凭证：</div>
 							<div class="right">
 								<div class="img-wrap">
-									<div class="img"></div>
+									<!-- <div class="img"></div> -->
 									<div class="upload am-clickable"></div>
 								</div>
 							</div>
@@ -4087,7 +5405,7 @@
 						<div class="payqrcode">
 							<ul class="paySelect">
 								<li class="am-clickable act">
-									<span class="radio"></span>显示付款码
+									<span class="radio"></span>显示收款码
 								</li>
 								<li class="am-clickable" data-type="wechat">
 									<span class="radio"></span>发送到POS机
@@ -4135,7 +5453,7 @@
 									<svg class="iconfont" aria-hidden="true">
 										<use xlink:href="#icon-erweima"></use>
 									</svg>
-									<p>点击显示付款码</p>
+									<p>点击显示收款码</p>
 								</div>
 							</div>
 						</div>
@@ -4145,7 +5463,7 @@
 									<use xlink:href="#icon-checkbox"></use>
 								</svg>
 							</span>
-							<p class="text">每次自动显示付款码</p>
+							<p class="text">每次自动显示收款码</p>
 						</div>
 					</div>
 				</div>
@@ -4174,7 +5492,7 @@
 						<div class="payqrcode">
 							<ul class="paySelect">
 								<li class="am-clickable act">
-									<span class="radio"></span>显示付款码
+									<span class="radio"></span>显示收款码
 								</li>
 								<li class="am-clickable" data-type="alipay">
 									<span class="radio"></span>发送到POS机
@@ -4222,7 +5540,7 @@
 									<svg class="iconfont" aria-hidden="true">
 										<use xlink:href="#icon-erweima"></use>
 									</svg>
-									<p>点击显示付款码</p>
+									<p>点击显示收款码</p>
 								</div>
 							</div>
 						</div>
@@ -4232,7 +5550,7 @@
 									<use xlink:href="#icon-checkbox"></use>
 								</svg>
 							</span>
-							<p class="text">每次自动显示付款码</p>
+							<p class="text">每次自动显示收款码</p>
 						</div>
 					</div>
 				</div>
@@ -4308,19 +5626,19 @@
 											<div class="tdwrap">券编号</div>
 										</td>
 										<td class="td-name">
-											<div class="tdwrap">券名</div>
+											<div class="tdwrap">名称</div>
 										</td>
 										<td class="td-price">
-											<div class="tdwrap">价值</div>
+											<div class="tdwrap">实际金额</div>
 										</td>
 										<td class="td-price">
 											<div class="tdwrap">购买数量</div>
 										</td>
 										<td class="td-cust">
-											<div class="tdwrap">客户</div>
+											<div class="tdwrap">顾客</div>
 										</td>
-										<td class="td-status">
-											<div class="tdwrap">状态</div>
+										<td class="td-shop">
+											<div class="tdwrap">顾客门店</div>
 										</td>
 										<td class="td-bug">
 											<div class="tdwrap">购买时间</div>
@@ -4410,6 +5728,14 @@
 					<div class="o-title o-show">
 						<span class="memberBill active am-clickable">会员开单</span>
 						<!-- <span class="autoBill am-clickable">自助开单</span> -->
+					</div>
+					<div class="videoHelpWrap am-clickable">
+						<svg class="icon svg-icon" aria-hidden="true">
+							<use xlink:href="#icon-lan"></use>
+						</svg>
+						<span class="videoHelpText">
+							不会用？点这里
+						</span>
 					</div>
 				</div>
 				<div class="pagecontent">
@@ -4790,6 +6116,14 @@
 					<div class="uploadtip">点击这里上传用户头像</div>
 					<div class="img"></div>
 					<div class="uploadBtn">以后再说</div>
+					<div class="ignoreUploadMemberImg">
+						<span class="icon">
+							<svg class="iconfont" aria-hidden="true">
+								<use xlink:href="#icon-checkbox"></use>
+							</svg>
+						</span>
+						<p class="text">以后都跳过此步骤</p>
+					</div>
 				</div>
 			</div>
 			<!--  page_addMember end 创建会员 -->
@@ -4834,9 +6168,23 @@
 								</svg>
 								<svg class="icon icon2 svg-icon" aria-hidden="true">
 									<use xlink:href="#icon-hebing2"></use>
-								</svg>并单
+								</svg>合并
 							</span>
+							
 						</div>
+						<div class="merge_type">
+							<div class="merge_one merge_common">
+								<span class="am-clickable">合并为一单</span>
+								<div class="showTip am-clickable">
+								</div>
+							</div>
+							<div class="merge_account merge_common am-clickable">
+								<span class="am-clickable">合并结算</span>
+								<div class="showTip am-clickable">
+								</div>
+							</div>
+						</div>
+						<div class="noticeTip">合并为一单后选择的单据会合并到一起成为一个流水单，记一个客次</div>
 						<div class="pay_btns c_left_btn am-clickable">
 								
 							<span>
@@ -4857,6 +6205,7 @@
 						</div>
 					</div>
 					<div class="operate_wrap">
+						<div class="swipe_btn am-clickable">刷卡找单</div>
 						<div class="merge_btn am-clickable">
 							并单
 						</div>
@@ -4869,6 +6218,11 @@
 							<span class="search_icon am-clickable">
 								<svg class="icon" aria-hidden="true">
 									<use xlink:href="#icon-sousuo1"></use>
+								</svg>
+							</span>
+							<span class="swipe_icon am-clickable">
+								<svg class="icon svg-icon" aria-hidden="true">
+									<use xlink:href="#icon-shuaka"></use>
 								</svg>
 							</span>
 						</div>
@@ -5107,7 +6461,20 @@
 						</div> -->
 					</div>
 				</div>
-
+				<!-- 刷卡并单提示start -->
+				<div class="modalDialog swipeModal" id="swipeModal">
+					<div class="inner">
+						<div class="close"></div>
+						<div class="title">
+							<h2>请刷卡找单</h2>
+							<h3>您可以通过刷多张卡找单、进行并单、收款及合并收款操作</h3>
+						</div>
+						<div class="content">
+							<img src="$dynamicResource/images/auth_tip1.png" alt="">
+						</div>
+					</div>
+				</div>
+				<!-- 刷卡并单提示end -->
 			</div>
 			<!--  page.hangup -- end -->
 			<div class="modalDialog goItemPayConfirm" id="goItemPayConfirm">
@@ -5126,7 +6493,45 @@
 					</div>
 				</div>
 			</div>
-
+			<div class="modalDialog treatPackageDetail" id="treatPackageDetail">
+				<div class="treatPackageDetailMask am-clickable"></div>
+				<div class="inner">
+					<div class="close am-clickable"></div>
+					<div class="detailHeader">
+						<span class="title">美俄么么么么</span> 详情
+					</div>
+					<div class="detailContent">
+						<div class="listHeader">
+							<span class="name">项目</span>
+							<span class="times">次数</span>
+							<span class="price">价格</span>
+						</div>
+						<div class="listWrap">
+							<ul class="listWrapper">
+								<li class="detailItem">
+									<span class="name">洗剪吹</span>
+									<span class="times">8</span>
+									<span class="price">￥80</span>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modalDialog timeDiscountModal am-clickable" id="timeDiscountModal">
+				<div class="inner">
+					<div class="close am-clickable"></div>
+					<div class="title ptitle">
+						【<span class="cardName"></span>】折扣规则
+					</div>
+					<div class="content pcontent">
+						<div class="ruleTitle">详细规则</div>
+						<div class="ruleWrap">
+							<div class="ruleList"></div>
+						</div>
+					</div>
+				</div>
+			</div>
 			
 			<div class="am-page page_workStationTip am-full" id="page_workStationTip">
 				<div class="am-header">
@@ -5261,7 +6666,7 @@
 									<use xlink:href="#icon-gou1"></use>
 								</svg>
 							</span>
-							<p class="text">大号（ 约10cm*16）</p>
+							<p class="text">大号（ 约7cm*10）</p>
 						</li>
 						<li class=" am-clickable">
 							<span class="icon">
@@ -5269,7 +6674,7 @@
 									<use xlink:href="#icon-gou1"></use>
 								</svg>
 							</span>
-							<p class="text">小号（ 约7cm*10）</p>
+							<p class="text">小号（ 约5.95cm*8.5）</p>
 						</li>
 					</ul>
 					<div class="all am-clickable">
@@ -5297,7 +6702,12 @@
 			</div>
 
 			<!-- 自助结算遮罩层start -->
-			<div id="autoWrap" class="autoWrap"></div>
+			<div id="autoWrap" class="autoWrap">
+				<div class="content">
+					<div class="img"></div>
+					<div class="tip">正在自助结算中...</div>
+				</div>
+			</div>
 			<!-- 自助结算遮罩层end -->
 
 			<!--  page_orderOverdue -- start 已过期服务 与 已删除服务 -->
@@ -5854,7 +7264,14 @@
 						</div>
 						<div class="right">
 							<div class="container">
-								<p class="title">盘点单</p>
+								<p class="title">盘点单 <span class="videoHelpWrap am-clickable">
+									<svg class="icon svg-icon" aria-hidden="true">
+										<use xlink:href="#icon-lan"></use>
+									</svg>
+									<span class="videoHelpText">
+										不会用？点这里
+									</span>
+								</span></p>
 								<div class="wrap">
 									<div class="slip header">
 										<div>编码</div>
@@ -6077,7 +7494,7 @@
 			<div class="am-page am-full page_workOrder" id="page_workOrder">
 				<div class="am-header">
 					<div class="am-backbutton iconfont icon-guanbi"></div>
-					<p>客服工单</p>
+					<p>联系客服</p>
 					<!-- <div id="UPLOADLOG" class="am-clickable">上传日志</div> -->
 					<span class="complain-info">对客服和销售不满意?</span>
 					<div class="complain-btn complain-btn_1">
@@ -6527,6 +7944,138 @@
 			</div>
 			<!--  page_complain end 投诉 -->
 
+			<!--  page_billDetail start 单据明细 -->
+			<div class="am-page am-full page_billDetail" id="page_billDetail">
+				<div class="am-header">
+					<div class="am-backbutton iconfont icon-guanbi"></div>
+					<p>单据明细</p>
+				</div>
+				<div class="content">
+					<div class="main">
+						<div class="form">
+							<div class="top-box">
+								<ul class="list">
+									<li>
+										<div class="form-group">
+											<div class="label">顾&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;客：</div>
+											<div class="field membername"></div>
+										</div>
+									</li>
+									<li>
+										<div class="form-group">
+											<div class="label">手&nbsp;&nbsp;机&nbsp;&nbsp;号：</div>
+											<div class="field mobile"></div>
+										</div>
+									</li>
+									<li>
+										<div class="form-group">
+											<div class="label">会&nbsp;&nbsp;员&nbsp;&nbsp;卡：</div>
+											<div class="field cardtypename"></div>
+										</div>
+									</li>
+									<li>
+										<div class="form-group">
+											<div class="label">卡&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号：</div>
+											<div class="field memcardid"></div>
+										</div>
+									</li>
+									<li class="red">
+										<div class="form-group">
+											<div class="label">开卡门店：</div>
+											<div class="field cardshop"></div>
+										</div>
+									</li>	
+									<li class="order">
+										<div class="form-group">
+											<div class="label">单&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号：</div>
+											<div class="field billno"></div>
+										</div>
+									</li>
+									<li class="">
+										<div class="form-group">
+											<div class="label">时&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;间：</div>
+											<div class="field consumetime"></div>
+										</div>
+									</li>
+									<li class="">
+										<div class="form-group">
+											<div class="label">性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别：</div>
+											<div class="field sex"></div>
+										</div>
+									</li>
+									<li class="clientflagLi">
+										<div class="form-group">
+											<div class="label">客&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;次：</div>
+											<div class="field clientflag"></div>
+										</div>
+									</li>
+									<li class="dianpinLi">
+										<div class="form-group">
+											<div class="label">点&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;评：</div>
+											<div class="field dianpin"></div>
+										</div>
+									</li>
+									<li class="">
+										<div class="form-group">
+											<div class="label">操&nbsp;&nbsp;作&nbsp;&nbsp;人：</div>
+											<div class="field operatorname"></div>
+										</div>
+									</li>
+									<li class="">
+										<div class="form-group">
+											<div class="label">消费门店：</div>
+											<div class="field consumeshop"></div>
+										</div>
+									</li>	
+									<li class="">
+										<div class="form-group distance cur">
+											<div class="label softgenre am-clickable">查看签名</div>
+										</div>
+									</li>	
+								</ul>
+							</div>
+							<div class="rightbox">
+								<div class="center-box">
+									<table cellpadding="0" cellspacing="0">
+										<thead>
+											<tr class="titleTr"> </tr>
+										</thead>
+									</table>
+									<div class="tbody">
+										<table cellpadding="0" cellspacing="0">
+											<tbody class="billTbody"> </tbody>
+										</table>
+									</div>
+								</div>
+								<div class="bottom-box">
+									<div class="item">
+										<div class="form-group distance xf">
+											<div class="label moneyBox">消费总额：</div>
+											<div class="field red money"></div>
+											<div class="label ru">入账：</div>
+											<div class="field red eafee"></div>
+											<div class="form-group costBox">
+												<div class="label chen">成本：</div>
+												<div class="field cost"></div>
+											</div>
+										</div>
+									</div>
+									<div class="left">
+										<div class="item payDetail">
+											<div class="form-group ">
+												<div class="label">套餐卡金：</div>
+												<div class="field cardfee"></div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--  page_billDetail end 单据明细 -->
+
 			<!-- complainDetail start 投诉详情-->
 			<div class="modalDialog" style="display: none;" id="complainDetail">
 				<div class="complaints_detail">
@@ -6679,7 +8228,60 @@
 			</div>
 		</div>
 	</div>
-
+	<div id="billDetail">
+		<div class="mask"></div>
+		<div class="content">
+			<div class="title">消费详情</div>
+			<div class="customer">
+				<span class="billNo">104</span>
+				<span class="name">周会很</span>
+				<span class="sex">男客</span>
+			</div>
+			<div class="selectItem">
+				<div class="scollItem">
+					<ul class="itemContent">
+						<!-- <li>
+							<span class="itemName">兰蔻精华护理</span>
+							<span class="itemNum">×1</span>
+							<span class="itemCost">￥98</span>
+						</li>
+						<li>
+							<span class="itemName">兰蔻滋养水</span>
+							<span class="itemNum"></span>
+							<span class="itemCost">￥559</span>
+							<div class="package">
+								<ul>
+									<li class="am-clickable selected">不使用套餐项目</li>
+									<li class="am-clickable">
+										<div class="times">余7次<span>(总8次)</span></div>
+										<div class="itemName1">威娜染发</div>
+										<div class="invalidDate">不限期</div>
+									</li>
+									<li class="am-clickable">
+										<div class="times">余7次<span>(总8次)</span></div>
+										<div class="itemName1">威娜染发</div>
+										<div class="invalidDate">不限期</div>
+									</li>
+								</ul>
+							</div>
+						</li> -->
+					</ul>
+					<div class="package">
+						<ul>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="remark">
+				<div class="title">备注</div>
+				<textarea maxlength="50" class="billRemark" placeholder="请输入1-30个字符备注内容"></textarea>
+			</div>
+			<div class="footer">
+				<div class="btn cancle am-clickable">取消</div>
+				<div class="btn dark ok am-clickable">确定</div>
+			</div>
+		</div>
+	</div>
 	<div class="modalDialog itemSelect" id="itemSelect">
 		<div class="inner">
 			<div class="title">请选择变价项目
@@ -6719,7 +8321,14 @@
 	<div class="addMoreRemark hide" id="addMoreRemark">
 		<div class="mask"></div>
 		<div class="c-content">
-			<div class="c-title">添加修改备注</div>
+			<div class="c-title">
+				<span class="c-title-text">添加修改备注</span>
+				<span class="am-clickable remarkSetWrap">
+					<svg class="icon svg-icon titleSetIcon" aria-hidden="true">
+						<use xlink:href="#icon-peizhiguanli"></use>
+					</svg>
+				</span>
+			</div>
 			<div class="c-content-box">
 				<div class="c-scroll">
 					<div class="c-more-box">
@@ -6793,8 +8402,21 @@
 							<div class="c-clear"></div>
 						</div>
 					</div>
+					<div class="c-remarks-wrap">
+						<div class="c-split-title">常用备注</div>
+						<ul class="c-remarks-ul">
+								<li class="c-remark-item am-clickable"><span></span><p class="c-remark-text">删单1</p></li>
+									<!-- <li>护理包*10</li> -->
+						</ul>
+					</div>
 					<div class="c-textarea-box">
 						<textarea maxlength="30" placeholder="请输入1-30个字符备注内容"></textarea>
+					</div>
+					<div class="saveAsCommon am-clickable">
+						<svg class="icon svg-icon saveAsCommonIcon" aria-hidden="true">
+								<use xlink:href="#icon-baocun"></use>
+						</svg>
+						<span class="saveAsCommonBtn">保存为常用理由</span>
 					</div>
 				</div>
 			</div>
@@ -7369,36 +8991,45 @@
 	<div class="popup_reservationDetail" id="popup_reservationDetail">
 		<div class="content">
 			<div class="title">已过期</div>
-			<div class="infoarea">
-				<div class="line1">
-					<span class="name">杨阳洋</span>
-					<span class="phone">13100000001</span>
+			<div class="resScrollWrap">
+				<div class="resScrollWrapper">
+						<div class="infoarea">
+								<div class="line1">
+									<span class="name">杨阳洋</span>
+									<span class="phone">13100000001</span>
+								</div>
+								<div class="line2">
+									<span class="number">2人</span>
+									<span class="category">洗剪吹</span>
+								</div>
+								<!-- <div class="comment">此处是备注，真的是备注，真的真的是备注。真 的真的是备注。</div> -->
+							</div>
+							<div class="itemarea">
+								<div class="itemline1">
+									<span>预约项目</span>
+								</div>
+								<div class="itemline2">
+									<div class="items"></div>
+								</div>
+								<!-- <div class="itemComment">此处是备注，真的是备注，真的真的是备注。真 的真的是备注。</div> -->
+							</div>
+							<div class="timearea">
+								<span class="time">9月27日 15:30</span>
+								<span class="modifyBtn am-clickable">修改</span>
+								<span class="promise">
+									<svg class="icon" aria-hidden="true" >
+										<use xlink:href="#icon-deposit_s_icon"></use>
+									</svg>
+									用户已缴纳预约保证金￥<b>10</b>元
+								</span>
+							</div>
+							<div class="commentWrap am-clickable">
+								<textarea class="commentTxt comment" readonly="true" maxlength="30" name="textarea" placeholder="请输入1-30个字符备注内容" rows="5" class="commentTxt"></textarea>
+							</div>
 				</div>
-				<div class="line2">
-					<span class="number">2人</span>
-					<span class="category">洗剪吹</span>
-				</div>
-				<div class="comment">此处是备注，真的是备注，真的真的是备注。真 的真的是备注。</div>
+				
 			</div>
-			<div class="itemarea">
-				<div class="itemline1">
-					<span>预约项目</span>
-				</div>
-				<div class="itemline2">
-					<div class="items"></div>
-				</div>
-				<div class="itemComment">此处是备注，真的是备注，真的真的是备注。真 的真的是备注。</div>
-			</div>
-			<div class="timearea">
-				<span class="time">9月27日 15:30</span>
-				<span class="modifyBtn am-clickable">修改</span>
-				<span class="promise">
-					<svg class="icon" aria-hidden="true" >
-						<use xlink:href="#icon-deposit_s_icon"></use>
-					</svg>
-					用户已缴纳预约保证金￥<b>10</b>元
-				</span>
-			</div>
+
 			<div class="action">
 				<span class="am-clickable button gotoCashier">去收银</span>
 				<span class="am-clickable button arrived">TA已到店</span>
@@ -7407,51 +9038,74 @@
 
 		</div>
 	</div>
-<!-- 发送红包弹窗 start -->
-<div class="redWrap" id="redPocketsDialogWrap">
-	<div class="sendPocketdialog">
-		<div class="title"><span class="titleContent">送红包</span><i class="icon iconfont icon-guanbi2 am-clickable"></i></div>
-		<div class="sendPocketItemBox">
-			<div class="scrollY">
-				<div class="pocketItem">
-					<div class="pocketCheckBox">
-						<i class="icon iconfont icon-danxuan am-clickable"></i>
-					</div>
-					<div class="pocketContent">
-						<div class="baseInfo">
-							<span class="name">
-								开卡或充值送红包
-							</span>
-							<div class="rightDesc">
-								<span class="category">
-										5-10元随机
-								</span>
-								<span class="cuttingLine">/</span>
-								<span class="availablePeriod">
-									7天有效期
-								</span>
-							</div>
-						</div>
-						<div class="tips">
-							<span class="tipsContent">
-								消费金额满100元可以抵扣现金，指定可用项目 <span>洗发烫染</span>，5人共享此红包
-							</span>
-						</div>  
-					</div>
+	<!-- 发送红包弹窗 start -->
+	<div class="redWrap" id="redPocketsDialogWrap" class="am-clickable">
+		<div class="mask am-clickable"></div>
+		<div class="sendPocketdialog am-clickable">
+			<div class="sortableBtn am-clickable"><i class="iconfont icon-sort"></i>排序</div>
+			<div class="headerWrap">
+				<div class="headerWrapper">
+					<span class="am-clickable selected" data-type="1">红包模板</span>
+					<span class="am-clickable" data-type="2">红包组合</span>
 				</div>
 			</div>
-		</div>
-		<div class="btnBox">
-			<span class="confirmBox am-clickable">
-				<span class="confirmText">确定</span>
-			</span>
-			<span class="cancelBox am-clickable">
-				<span class="cancelText">取消</span>
-			</span>
+			<div class="sortBtnBox">
+				<span class="sortTip">拖拽组合进行排序</span>
+				<span class="sortCancel am-clickable">放弃</span>
+				<span class="sortSubmit am-clickable">保存排序</span>
+			</div>
+			<div class="sendPocketItemBox">
+				<div class="emptyBox">
+					<div class="tip">请前往互联网运营>营销>私发红包页面配置</div>
+				</div>
+				<ul class="scrollY">
+					<li class="pocketItem am-clickable">
+						<div class="pocketCheckBox">
+							<i class="icon iconfont icon-danxuan am-clickable"></i>
+							<i class="icon iconfont icon-seq_icon am-clickable"></i>
+						</div>
+						<div class="pocketContent">
+							<div class="list-head am-clickable">
+								<div class="list-title">红包组合1</div>
+								<div class="list-count">共<span class="sumSpan">1</span>个红包<span class="list-arrow"></span></div>
+							</div>
+							<div class="list-box">
+								<div class="list-item">
+									<div class="baseInfo">
+										<span class="name">
+											开卡或充值送红包
+										</span>
+										<div class="rightDesc">
+											<span class="category">
+												5-10元随机
+											</span>
+											<span class="cuttingLine">/</span>
+											<span class="availablePeriod">
+												7天有效期
+											</span>
+										</div>
+									</div>
+									<span class="tipsContent">
+										消费金额满100元可以抵扣现金，指定可用项目 <span>洗发烫染</span>，5人共享此红包
+									</span>
+								</div>	
+							</div>
+							<div class="tips"></div>  
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div class="btnBox">
+				<span class="confirmBox am-clickable">
+					<span class="confirmText">确定</span>
+				</span>
+				<span class="cancelBox am-clickable">
+					<span class="cancelText">取消</span>
+				</span>
+			</div>
 		</div>
 	</div>
-</div>
-<!-- 发送红包 end -->
+	<!-- 发送红包 end -->
 	<!-- 优质客弹窗 start -->
 	<div class="modalDialog goodModal" id="goodModal">
 		<div class="inner">
@@ -7485,6 +9139,76 @@
 		</div>
 	</div>
 	<!-- 优质客弹窗 end -->
+	<!-- 顾客来源弹窗 start -->
+	<div class="modalDialog sourceModal" id="sourceModal">
+		<div class="inner">
+			<div class="close"></div>
+			<div class="sourceTitle">选择顾客来源</div>
+			<div class="cm_form source">
+				<div class="changesource-wrapper">
+					<div class="changesource">
+						<!-- <div class="changebox am-clickable selected">
+							<span class="change_icon"></span>
+							<span class="change_words" data-val="1">上门客人</span>
+						</div> -->
+					</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<div class="footer">
+				<div class="btn btnOk am-clickable">保存</div>
+				<div class="btn btnCancer am-clickable">取消</div>
+			</div>
+		</div>
+	</div>
+	<!-- 顾客来源弹窗 end -->
+	<!-- 员工选择弹窗 start -->
+	<div class="modalDialog selectServers" id="selectServers">
+		<div class="inner">
+			<div class="close"></div>
+			<div class="title">请选择销售</div>
+			<div class="serContent">
+				<div class="cashierServers">
+					<div class="head">
+						<div>第一工位</div>
+						<div>第二工位</div>
+						<div>第三工位</div>
+					</div>
+					<div class="body">
+						<div class="serverList">
+							<ul>
+								<li>
+									<span class="code">121</span>
+									<span class="name">郭小小</span>
+								</li>
+							</ul>
+						</div>
+						<div class="serverList">
+							<ul>
+								<li>
+									<span class="code">121</span>
+									<span class="name">郭小小</span>
+								</li>
+							</ul>
+						</div>
+						<div class="serverList">
+							<ul>
+								<li>
+									<span class="code">121</span>
+									<span class="name">郭小小</span>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="footer">
+				<div class="btn btnOk am-clickable">保存</div>
+				<div class="btn btnCancer am-clickable">取消</div>
+			</div>
+		</div>
+	</div>
+	<!-- 员工选择弹窗 end -->
 
 	<!--放大头像弹框-->
 	<div class="modalDialog" id="largeHeadImg">
@@ -7513,23 +9237,58 @@
 		</div>
 	</div>
 
-	<div id="locking">
+	<div id="lockScreen">
 		<div class="wrapper">
-			<div class="header">
+			<div class="head">
 				<div class="timeBox"></div>
 			</div>
 			<div class="content">
-				按时打算多
+				<div class="paying">
+					<div class="header am-clickable">
+						<div class="crown"></div>
+						<div class="payingImg"></div>
+					</div>
+					<div class="info">
+						<div class="tip"><span class="memName"></span>的订单正在结算中…</div>
+						<div class="itemInfo">
+							<span class="itemSpan"></span>
+							合计：￥<span class="sum"></span>
+						</div>
+						<!-- <div class="countInfo">共有15个订单进行中</div> -->
+						<div class="loading">
+							<span class="iconfont icon-jiazai rotation"></span>
+						</div>
+					</div>
+				</div>
+				<div class="success">
+					<div class="header am-clickable">
+						<div class="crown"></div>
+						<div class="successImg"></div>
+					</div>
+					<div class="info">
+						<div class="tip">订单自助结算成功</div>
+						<!-- <div>已好评</div> -->
+					</div>
+				</div>
+				<div class="default">
+					<div class="header-default">
+						<div class="defaulImg"></div>
+					</div>
+					<div class="info">
+						<div class="tip">HI，很高兴遇见你</div>
+					</div>
+				</div>
 			</div>
 			<div class="footer">
 				<div class="unlock">
 					<div class="icon">
-						<span class="iconfont icon-weizhi"></span>
+						<span class="iconfont icon-weizhi fadeInUp"></span>
 					</div>
-					<div class="tip">点击任意位置解锁</div>
+					<div class="tip">点击任意位置解锁，从屏幕右侧向左侧滑动实现锁屏</div>
 				</div>
 				<div class="forget">
-					<span class="pwdBtn am-clickable">忘记密码?</span>
+					<span class="setPwdBtn am-clickable">设置密码</span>
+					<span class="pwdBtn am-clickable">忘记密码？重新登录</span>
 				</div>
 			</div>
 		</div>
@@ -7613,6 +9372,91 @@
 				<span class="open">我要开通</span>
 			</dd>
 		</dl>
+	</div>
+	
+	<div id="shopSelect">
+		<div class="mask"></div>
+		<div class="wrapper">
+			<div class="title">门店选择</div>
+			<div class="content">
+				<div class="districtBar">
+					<ul class="district">
+						<li class="item am-clickable">朝阳区</li>
+					</ul>
+				</div>
+				<div class="shopContent">
+					<div class="searchContainer">
+						<input class="keywords" type="text" placeholder="输入首字母拼音或者关键字搜索门店">
+						<div class="search">
+							<svg class="icon" aria-hidden="true" >
+								<use xlink:href="#icon-shopSelect_search"></use>
+							</svg>
+						</div>
+						<div class="clear">
+							<svg class="icon" aria-hidden="true" >
+								<use xlink:href="#icon-shopSelect_clear"></use>
+							</svg>
+						</div>
+					</div>
+					<div class="shops">
+						<div class="shops-inner">
+							<div class="wrap">
+								<p class="district">总部</p>
+								<ul class="list clearfix">
+									<li class="item am-clickable">
+										<span class="shopType"></span>
+										<span class="shopName">卡伊总部</span>
+										<span class="check">
+											<svg class="icon" aria-hidden="true" >
+												<use xlink:href="#icon-shopSelect_check"></use>
+											</svg>
+										</span>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div class="empty">未搜索到相关门店</div>
+					</div>
+					<div class="btns">
+						<div class="selectAllShops">
+							<svg class="icon" aria-hidden="true" >
+								<use xlink:href="#icon-shopSelect_shop"></use>
+							</svg>
+							<svg class="icon check" aria-hidden="true" >
+								<use xlink:href="#icon-shopSelect_check"></use>
+							</svg>
+							<p class="text">全选门店</p>
+						</div>
+						<div class="selectAllDirectShops">
+							<svg class="icon" aria-hidden="true" >
+								<use xlink:href="#icon-shopSelect_shop"></use>
+							</svg>
+							<svg class="icon check" aria-hidden="true" >
+								<use xlink:href="#icon-shopSelect_check"></use>
+							</svg>
+							<p class="text">全部直属店</p>
+						</div>
+						<div class="selectedShops">已选择<span class="selectedShopNum">5</span>家门店</div>
+						<div class="submit">确认</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="shopSelcetBtn">
+		<svg class="iconfont" aria-hidden="true">
+			<use xlink:href="#icon-c_hq_shop"></use>
+		</svg>
+	</div>
+
+	<div id="shopSelcetTip">
+		<p class="text"><span class="text1">这里可以</span><span class="text2">切换总部系统或门店系统哦~</span></p>
+		<div class="closeShopSelcetTip am-clickable">
+			<svg class="iconfont" aria-hidden="true">
+				<use xlink:href="#icon-guanbi2"></use>
+			</svg>
+		</div>
 	</div>
 
 	<!-- 登出 -->
@@ -7717,6 +9561,42 @@
 			</div>
 		</div>
 	</div>
+	<!-- 赠送套餐项目选择 -->
+	<div class="modalDialog" id="combo-card-giftItem-selector">
+		<div class="inner">
+			<div class="close"></div>
+			<div class="title">
+				<h4>请选择需要赠送的内容</h4>
+			</div>
+			<div class="content">
+				<div class="scrollInner">
+					<div class="serviceItemGift">
+						<span class="serviceTitle">项目</span>
+						<div class="serviceItemGiftWarp">
+							<ul class="serviceWrap">
+								<li class="serviceLi"><span class="name">阿斯顿发射点</span><span class="num">×3</span></li>
+							</ul>
+						</div>
+					</div>
+					<div class="productItemGift">
+						<span class="productTitle">商品</span>
+						<div class="productItemGiftWrap">
+							<ul class="productWrap">
+								<li class="productli">
+									<span class="name">阿斯顿发射点</span>
+									<span class="num">×3</span>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="footer">
+				<div class="btn save">保存</div>
+				<div class="btn cancel">取消</div>
+			</div>
+		</div>
+	</div>
 	<!-- 一体机wifi提示弹窗 -->
 	<div class="wifiTips" id="wifiTips">
 		<div class="content">
@@ -7763,6 +9643,10 @@
 	/>
 	<link href="$dynamicResource/css/page.pay.css" rel="stylesheet" type="text/css" target="$dynamicResource/css/page_min.css"
 	/>
+	<link href="$dynamicResource/css/page.mergePay.css" rel="stylesheet" type="text/css" target="$dynamicResource/css/page_min.css"
+	/>
+	<link href="$dynamicResource/css/page.multiCardPay.css" rel="stylesheet" type="text/css" target="$dynamicResource/css/page_min.css"
+	/>
 	<link href="$dynamicResource/css/page.pay.payDetail.css" rel="stylesheet" type="text/css" target="$dynamicResource/css/page_min.css"
 	/>
 	<link href="$dynamicResource/css/page.addPayOut.css" rel="stylesheet" type="text/css" target="$dynamicResource/css/page_min.css"
@@ -7774,9 +9658,11 @@
 	/>
 	<link href="$dynamicResource/css/page.billRecord.css" rel="stylesheet" type="text/css" target="$dynamicResource/css/page_min.css"
 	/>
-	<link lazyhref="$dynamicResource/css/page.reservation.css" rel="stylesheet" type="text/css"
+	<link href="$dynamicResource/css/page.reservation.css" rel="stylesheet" type="text/css"  target="$dynamicResource/css/page_min.css"
 	/>
 	<link href="$dynamicResource/css/page.engineering.css" rel="stylesheet" type="text/css" target="$dynamicResource/css/page_min.css"
+	/>
+	<link href="$dynamicResource/css/page.mallOrderDetail.css" rel="stylesheet" type="text/css" target="$dynamicResource/css/page_min.css"
 	/>
 	<link href="$dynamicResource/css/page.hangup.css" rel="stylesheet" type="text/css" target="$dynamicResource/css/page_min.css"
 	/>
@@ -7826,7 +9712,11 @@
 	/>
 	<link href="$dynamicResource/css/goodModal.css" rel="stylesheet" type="text/css" target="$dynamicResource/css/page_min.css"
 	/>
+	<link href="$dynamicResource/css/sourceModal.css" rel="stylesheet" type="text/css" target="$dynamicResource/css/page_min.css"
+	/>
 	<link href="$dynamicResource/css/washTipModal.css" rel="stylesheet" type="text/css" target="$dynamicResource/css/page_min.css"
+	/>
+	<link href="$dynamicResource/css/timeDiscountModal.css" rel="stylesheet" type="text/css" target="$dynamicResource/css/page_min.css"
 	/>
 	<link href="$dynamicResource/css/qqModal.css" rel="stylesheet" type="text/css" target="$dynamicResource/css/page_min.css"
 	/>
@@ -7851,13 +9741,33 @@
 	/>
     <link href="$dynamicResource/css/page.workStationTip.css" rel="stylesheet" type="text/css" target="$dynamicResource/css/page.page_min.css"/>
     <link href="$dynamicResource/css/page.workStationSetting.css" rel="stylesheet" type="text/css" target="$dynamicResource/css/page.page_min.css"/>
-    <link href="$dynamicResource/css/locking.css" rel="stylesheet" type="text/css" target="$dynamicResource/css/page.page_min.css"/>
+    <link href="$dynamicResource/css/page.billDetail.css" rel="stylesheet" type="text/css" target="$dynamicResource/css/page.page_min.css"/>
+    <link href="$dynamicResource/css/lockScreen.css" rel="stylesheet" type="text/css" target="$dynamicResource/css/page.page_min.css"/>
+    <link href="$dynamicResource/css/shopSelect.css" rel="stylesheet" type="text/css" target="$dynamicResource/css/page.page_min.css"/>
+    <link href="$dynamicResource/css/serversModal.css" rel="stylesheet" type="text/css" target="$dynamicResource/css/page.page_min.css"/>
 	<!-- 页面样式区end -->
 
 	<script src="$dynamicResource/themeConfig.js"></script>
 	<script src="$dynamicResource/scripts/theme.js" target="$dynamicResource/scripts/page_min.js"></script>
 	<!-- <link href="$dynamicResource/css/theme.css" rel="stylesheet" type="text/css"/> -->
-	
+
+	<!-- video start --------------------------------->
+	<!-- plugins start -->
+	<script src="$dynamicResource/libs/videolist/aes.js" target="$dynamicResource/scripts/page_min.js"></script>
+	<link href="$dynamicResource/libs/videolist/plugins/video-js.min.css" rel="stylesheet" type="text/css" target="$dynamicResource/css/page.page_min.css"/>
+	<script src="$dynamicResource/libs/videolist/plugins/video.min.js" target="$dynamicResource/scripts/page_min.js"></script>
+     <!-- plugins end -->
+	<!-- videoList start -->
+	<link rel="stylesheet" href="$dynamicResource/libs/videolist/videoList/videoList.css" type="text/css" target="$dynamicResource/css/page.page_min.css">
+	<script src="$dynamicResource/libs/videolist/videoList/videoList.js" target="$dynamicResource/scripts/page_min.js"></script>
+	<!-- videoList end -->
+
+	<!-- videoPlayer start -->
+	<link rel="stylesheet" href="$dynamicResource/libs/videolist/videoPlayer/videoPlayer.css" type="text/css" target="$dynamicResource/css/page.page_min.css">
+	<script src="$dynamicResource/libs/videolist/videoPlayer/videoPlayer.js" target="$dynamicResource/scripts/page_min.js"></script>
+	<!-- videoPlayer end -->
+	<!-- video end --------------------------------->
+
 	<!--  libs script start -->
 	<!-- <script src="$dynamicResource/scripts/logServer.js" target="$dynamicResource/scripts/logServer.js"></script> -->
 	<script src="$dynamicResource/css/font/iconfont.js" target="$dynamicResource/css/font/iconfont.js"></script>
@@ -7881,6 +9791,7 @@
 	<script src="$dynamicResource/libs/am/am.elements.js" type="text/javascript" target="$dynamicResource/scripts/page_min.js"></script>
 	<script src="$dynamicResource/libs/am/am.showPopupMenu.js" type="text/javascript" target="$dynamicResource/scripts/page_min.js"></script>
 	<script src="$dynamicResource/libs/am/am.Sortable.js" type="text/javascript" target="$dynamicResource/scripts/page_min.js"></script>
+	<script src="$dynamicResource/libs/am/am.SortableNew.js" type="text/javascript" target="$dynamicResource/scripts/page_min.js"></script>
 	<script src="$dynamicResource/libs/am/am.lazyLoad.js" type="text/javascript" target="$dynamicResource/scripts/page_min.js"></script>
 	<script src="$dynamicResource/libs/am/am.wheel.js" type="text/javascript" target="$dynamicResource/scripts/page_min.js"></script>
 
@@ -7897,6 +9808,7 @@
 	<script src="$dynamicResource/libs/mobiscroll/mobiscroll.custom-3.0.0-beta.min.js" type="text/javascript"></script>
 	<script src="$dynamicResource/libs/md5.js" type="text/javascript"></script>
 	<script src="$dynamicResource/libs/jr-qrcode.js" type="text/javascript" target="$dynamicResource/scripts/page_min.js"></script>
+	<script src="$dynamicResource/libs/qrcode.js" type="text/javascript" target="$dynamicResource/scripts/page_min.js"></script>
 	<script src="$dynamicResource/scripts/keyboardCtrl.js" type="text/javascript" target="$dynamicResource/scripts/page_min.js"></script>
 	
 
@@ -7937,7 +9849,7 @@
 	<script src="$dynamicResource/scripts/cashierTools.searchMember.js" target="$dynamicResource/scripts/page_min.js"></script>
 	<script src="$dynamicResource/scripts/hangup.remark.js" target="$dynamicResource/scripts/page_min.js"></script>
 	<script src="$dynamicResource/scripts/phoneCall.js" target="$dynamicResource/scripts/page_min.js"></script>
-	<script lazysrc="$dynamicResource/scripts/page.reservation.js"></script>
+	<script src="$dynamicResource/scripts/page.reservation.js" target="$dynamicResource/scripts/page_min.js"></script>
 	<script src="$dynamicResource/scripts/page.service.js" target="$dynamicResource/scripts/page_min.js"></script>
 	<script src="$dynamicResource/scripts/page.product.js" target="$dynamicResource/scripts/page_min.js"></script>
 	<script src="$dynamicResource/scripts/page.memberCard.js" target="$dynamicResource/scripts/page_min.js"></script>
@@ -7948,8 +9860,13 @@
 	<script lazysrc="$dynamicResource/scripts/page.member.js"></script>
 	<script src="$dynamicResource/scripts/listSelect.js" target="$dynamicResource/scripts/page_min.js"></script>
 	<script src="$dynamicResource/scripts/page.sendRedPockets.js" target="$dynamicResource/scripts/page_min.js"></script>
+	<script src="$dynamicResource/scripts/timeDiscount.js" target="$dynamicResource/scripts/page_min.js"></script>
+	<script src="$dynamicResource/scripts/discount.js" target="$dynamicResource/scripts/page_min.js"></script>
+	<script src="$dynamicResource/scripts/timeDiscountModal.js" target="$dynamicResource/scripts/page_min.js"></script>
 	<script lazysrc="$dynamicResource/scripts/page.memberDetails.js"></script>
 	<script src="$dynamicResource/scripts/page.pay.js" target="$dynamicResource/scripts/page_min.js"></script>
+	<script src="$dynamicResource/scripts/page.mergePay.js" target="$dynamicResource/scripts/page_min.js"></script>
+	<script src="$dynamicResource/scripts/page.multiCardPay.js" target="$dynamicResource/scripts/page_min.js"></script>
 	<script src="$dynamicResource/scripts/page.itemPay.js" target="$dynamicResource/scripts/page_min.js"></script>
 	<script src="$dynamicResource/scripts/page.addIncome.js" target="$dynamicResource/scripts/page_min.js"></script>
 	<script src="$dynamicResource/scripts/page.pay.Paytool.js" target="$dynamicResource/scripts/page_min.js"></script>
@@ -7957,6 +9874,7 @@
 	<script src="$dynamicResource/scripts/page.addPayOut.js" target="$dynamicResource/scripts/page_min.js"></script>
 	<script lazysrc="$dynamicResource/scripts/page.about.js"></script>
 	<script src="$dynamicResource/scripts/page.billRecord.js" target="$dynamicResource/scripts/page_min.js"></script>
+	<script src="$dynamicResource/scripts/page.mallOrderDetail.js" target="$dynamicResource/scripts/page_min.js"></script>
 	<script src="$dynamicResource/scripts/page.engineering.js" target="$dynamicResource/scripts/page_min.js"></script>
 	<script src="$dynamicResource/scripts/page.hangup.js" target="$dynamicResource/scripts/page_min.js"></script>
 	<script src="$dynamicResource/scripts/page.storage.js" target="$dynamicResource/scripts/page_min.js"></script>
@@ -7965,6 +9883,7 @@
 	<script src="$dynamicResource/scripts/page.outinRecord.js" target="$dynamicResource/scripts/page_min.js"></script>
 	<script src="$dynamicResource/scripts/page.subbranch.js" target="$dynamicResource/scripts/page_min.js"></script>
 	<script src="$dynamicResource/scripts/page.about.verifyRecord.js" target="$dynamicResource/scripts/page_min.js"></script>
+	<script src="$dynamicResource/scripts/page.about.lockConfig.js" target="$dynamicResource/scripts/page_min.js"></script>
 	<script lazysrc="$dynamicResource/scripts/page.prepay.js"></script>
 	<script src="$dynamicResource/scripts/page.payoutAndIncome.js" target="$dynamicResource/scripts/page_min.js"></script>
 	<script src="$dynamicResource/scripts/page.openbill.js" target="$dynamicResource/scripts/page_min.js"></script>
@@ -7977,6 +9896,7 @@
 	<script src="$dynamicResource/scripts/workOrder.detail.js" target="$dynamicResource/scripts/page_min.js"></script>
 	<script src="$dynamicResource/scripts/viewImgModal.js" target="$dynamicResource/scripts/page_min.js"></script>
 	<script src="$dynamicResource/scripts/goodModal.js" target="$dynamicResource/scripts/page_min.js"></script>
+	<script src="$dynamicResource/scripts/sourceModal.js" target="$dynamicResource/scripts/page_min.js"></script>
 	<script src="$dynamicResource/scripts/washTipModal.js" target="$dynamicResource/scripts/page_min.js"></script>
 	<script src="$dynamicResource/scripts/qqModal.js" target="$dynamicResource/scripts/page_min.js"></script>
 	<script src="$dynamicResource/scripts/page.test.js" target="$dynamicResource/scripts/page_min.js"></script>
@@ -7987,7 +9907,12 @@
 	<script src="$dynamicResource/scripts/phoneCodeModal.js" target="$dynamicResource/scripts/page_min.js"></script>
 	<script src="$dynamicResource/scripts/page.workStationTip.js" target="$dynamicResource/scripts/page_min.js"></script>
 	<script src="$dynamicResource/scripts/page.workStationSetting.js" target="$dynamicResource/scripts/page_min.js"></script>
-	<script src="$dynamicResource/scripts/locking.js" target="$dynamicResource/scripts/page_min.js"></script>
+	<script src="$dynamicResource/scripts/page.billDetail.js" target="$dynamicResource/scripts/page_min.js"></script>
+	<script src="$dynamicResource/scripts/lockScreen.js" target="$dynamicResource/scripts/page_min.js"></script>
+	<script src="$dynamicResource/scripts/refundCard.js" target="$dynamicResource/scripts/page_min.js"></script>
+	<script src="$dynamicResource/scripts/shopSelect.js" target="$dynamicResource/scripts/page_min.js"></script>
+	<script src="$dynamicResource/scripts/autoCheck.js" target="$dynamicResource/scripts/page_min.js"></script>
+	<script src="$dynamicResource/scripts/serversModal.js" target="$dynamicResource/scripts/page_min.js"></script>
 	<!-- 页面js区end -->
 	<script src="$dynamicResource/scripts/mockdata.js" target="$dynamicResource/scripts/page_min.js"></script>
 </body>

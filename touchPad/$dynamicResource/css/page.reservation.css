@@ -10,6 +10,10 @@
 .page_reservation.am-full .rv_scroll {
   top: 50px;
 }
+.page_reservation.am-full .toggleMode,
+.page_reservation.am-full .bgStatus {
+  display: none !important;
+}
 .page_reservation .am-header {
   display: none;
 }
@@ -87,6 +91,135 @@
 .page_reservation .appointment-btn:hover {
   background-color: #C90E28;
 }
+.page_reservation .toggleMode {
+  position: absolute;
+  width: 96px;
+  height: 42px;
+  left: 0;
+  top: 1px;
+  z-index: 100;
+  text-align: center;
+  background: #fff;
+  border-left: 1px solid #bbb;
+}
+.page_reservation .toggleMode p {
+  display: inline-block;
+  vertical-align: top;
+  font-size: 12px;
+  color: #999;
+  line-height: 42px;
+}
+.page_reservation .toggleMode span {
+  vertical-align: top;
+  margin: 10px 5px;
+}
+.page_reservation .toggleMode span.checked {
+  background-color: #555;
+}
+.page_reservation .toggleMode span.checked::before {
+  content: '';
+}
+.page_reservation .toggleMode span::before {
+  content: '';
+}
+.page_reservation .bgStatus {
+  position: absolute;
+  width: 300px;
+  height: 52px;
+  left: 110px;
+  top: 0;
+  z-index: 100;
+  display: none;
+}
+.page_reservation .bgStatus .item {
+  height: 52px;
+  overflow: hidden;
+  float: left;
+  margin-right: 15px;
+}
+.page_reservation .bgStatus .item span {
+  display: inline-block;
+  vertical-align: top;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin: 21px 5px;
+}
+.page_reservation .bgStatus .item span.unarrive {
+  background-color: #555;
+}
+.page_reservation .bgStatus .item span.arrive {
+  background-color: #039966;
+}
+.page_reservation .bgStatus .item span.pass {
+  background-color: #E03850;
+}
+.page_reservation .bgStatus .item p {
+  display: inline-block;
+  vertical-align: top;
+  font-size: 12px;
+  color: #999;
+  line-height: 52px;
+}
+.page_reservation .EmpScrollTipLeft,
+.page_reservation .EmpScrollTipRight {
+  position: fixed;
+  content: '';
+  width: 44px;
+  height: 44px;
+  top: 53px;
+  font-size: 14px;
+  color: #ddd;
+  text-align: center;
+  line-height: 42px;
+  background: #fff;
+  display: none;
+  z-index: 100;
+}
+.page_reservation .EmpScrollTipLeft {
+  left: 0;
+  border-left: 1px solid #bbb;
+}
+.page_reservation .EmpScrollTipRight {
+  right: 0;
+  border-right: 1px solid #bbb;
+}
+.page_reservation .backCurrentTime {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  z-index: 100;
+  width: 120px;
+  height: 35px;
+  border-radius: 35px;
+  border: 1px solid #222;
+  font-size: 14px;
+  color: #222;
+  text-align: center;
+  line-height: 35px;
+  background: #fff;
+  box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.36);
+  display: none;
+}
+.page_reservation .backCurrentTime .iconfont {
+  display: inline-block;
+  vertical-align: top;
+  width: 16px;
+  height: 16px;
+  margin-top: 9px;
+  position: relative;
+}
+.page_reservation .backCurrentTime .iconfont .icon {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+.page_reservation .backCurrentTime .text {
+  display: inline-block;
+  vertical-align: top;
+}
 .page_reservation .toggleBarber {
   position: fixed;
   height: 48px;
@@ -94,7 +227,7 @@
   right: 0;
   background-color: rgba(27, 27, 27, 0.75);
   overflow: hidden;
-  z-index: 99;
+  z-index: 101;
   top: -48px;
   transition: all 0.1s;
   -webkit-transition: all 0.1s;
@@ -131,16 +264,18 @@
 }
 .page_reservation .rv_timeline {
   position: absolute;
+  left: auto;
+  right: auto;
   top: 0;
   bottom: 0;
   width: 1px;
+  height: ;
   background: #f00;
   z-index: 10;
 }
 .page_reservation .rv_table {
   border: 1px solid #bbbbbb;
   background: #fff;
-  table-layout: fixed;
 }
 .page_reservation .rv_table tr.rest {
   background: #f6f6f6;
@@ -178,12 +313,15 @@
   color: red;
 }
 .page_reservation .rv_table .user span.icon-dian {
-  float: right;
-  display: block;
-  margin: -10px 13px 0 0;
-  width: 13px;
-  height: 3px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 30px;
+  height: 30px;
   color: #bfbfbf;
+  z-index: 9;
+  text-align: center;
+  line-height: 30px;
 }
 .page_reservation .rv_table .user span.icon-dian:hover {
   color: #555555;
@@ -192,12 +330,16 @@
   color: #555555;
 }
 .page_reservation .rv_table .user span.icon-xiujia::before {
-  float: right;
-  display: block;
-  margin: -10px 10px 0 0;
-  width: 19px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  content: '休假';
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  font-size: 12px;
   color: #e82742;
-  height: 11px;
+  font-weight: bold;
 }
 .page_reservation .rv_table .rest_bg {
   opacity: 0.3;
@@ -209,8 +351,8 @@
 .page_reservation .rv_table td {
   border-left: 1px solid #ececec;
   border-top: 1px solid #ececec;
-  height: 110px;
-  width: 110px;
+  height: 95px;
+  width: 82px;
   vertical-align: bottom;
   position: relative;
 }
@@ -250,7 +392,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  width: 100px;
+  width: 86px;
   padding: 0 5px;
 }
 .page_reservation .rv_table td.user .level {
@@ -261,7 +403,7 @@
 .page_reservation .rv_table td .rv_show {
   position: relative;
   display: none;
-  height: 110px;
+  height: 95px;
 }
 .page_reservation .rv_table td .toggleItem {
   position: absolute;
@@ -312,7 +454,7 @@
 .page_reservation .rv_rest {
   display: none;
   position: absolute;
-  line-height: 110px;
+  line-height: 94px;
   top: 0;
   left: 0;
   right: 0;
@@ -321,18 +463,42 @@
   font-size: 55px;
   color: #555555;
 }
+.page_reservation .rv_rest .icon1,
+.page_reservation .rv_rest .icon2 {
+  width: 70%;
+  height: 70%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+}
+.page_reservation .rv_rest .icon2 {
+  display: none;
+}
 .page_reservation .rv_remark {
-  width: 90px;
-  height: 90px;
-  padding: 10px;
+  width: 83px;
+  height: 83px;
+  padding: 6px;
   overflow: hidden;
 }
-.page_reservation .rv_remark span {
+.page_reservation .rv_remark .comment {
   font-size: 12px;
+  text-indent: 20px;
+  display: inline-block;
+  margin-top: 5px;
+  line-height: 18px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
 }
-.page_reservation .rv_remark .iconfont {
-  font-size: 18px;
-  margin-right: 7px;
+.page_reservation .rv_remark .icon {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  top: 10px;
 }
 .page_reservation .rv_holder {
   display: block;
@@ -342,7 +508,7 @@
   left: 0;
   right: 0;
   z-index: 3;
-  line-height: 110px;
+  line-height: 95px;
   text-align: center;
   color: #fff;
 }
@@ -359,20 +525,20 @@
   display: none;
 }
 .page_reservation .rv_holder .holded::after {
-  background: url("../images/reservation/holder.png") no-repeat center 30px;
+  background: url("../images/reservation/holder.png") no-repeat center top;
   background-size: 34px 34px;
   content: "占用";
-  padding-top: 20px;
+  margin-top: 20px;
   color: #666666;
   text-align: center;
   font-size: 11px;
   display: block;
 }
 .page_reservation .rv_holder .high-holded::after {
-  background: url("../images/reservation/holder_bt.png") no-repeat center 30px;
+  background: url("../images/reservation/holder_bt.png") no-repeat center top;
   background-size: 34px 34px;
   content: "占用";
-  padding-top: 20px;
+  margin-top: 20px;
   color: rgba(255, 255, 255, 0.15);
   text-align: center;
   font-size: 11px;
@@ -382,20 +548,20 @@
   background-color: #e03850;
 }
 .page_reservation .rv_holder.red .holded::after {
-  background: url("../images/reservation/holder.png") no-repeat center 30px;
+  background: url("../images/reservation/holder.png") no-repeat center top;
   background-size: 34px 34px;
   content: "占用";
-  padding-top: 20px;
+  margin-top: 20px;
   color: #666666;
   text-align: center;
   font-size: 11px;
   display: none;
 }
 .page_reservation .rv_holder.red .high-holded::after {
-  background: url("../images/reservation/holder_bt.png") no-repeat center 30px;
+  background: url("../images/reservation/holder_bt.png") no-repeat center top;
   background-size: 34px 34px;
   content: "占用";
-  padding-top: 20px;
+  margin-top: 20px;
   color: rgba(255, 255, 255, 0.15);
   text-align: center;
   font-size: 11px;
@@ -405,20 +571,20 @@
   background-color: #009966;
 }
 .page_reservation .rv_holder.green .holded::after {
-  background: url("../images/reservation/holder.png") no-repeat center 30px;
+  background: url("../images/reservation/holder.png") no-repeat center top;
   background-size: 34px 34px;
   content: "占用";
-  padding-top: 20px;
+  margin-top: 20px;
   color: #666666;
   text-align: center;
   font-size: 11px;
   display: none;
 }
 .page_reservation .rv_holder.green .high-holded::after {
-  background: url("../images/reservation/holder_bt.png") no-repeat center 30px;
+  background: url("../images/reservation/holder_bt.png") no-repeat center top;
   background-size: 34px 34px;
   content: "占用";
-  padding-top: 20px;
+  margin-top: 20px;
   color: rgba(255, 255, 255, 0.15);
   text-align: center;
   font-size: 11px;
@@ -428,30 +594,87 @@
   background-color: #555;
 }
 .page_reservation .rv_holder.black .holded::after {
-  background: url("../images/reservation/holder.png") no-repeat center 30px;
+  background: url("../images/reservation/holder.png") no-repeat center top;
   background-size: 34px 34px;
   content: "占用";
-  padding-top: 20px;
+  margin-top: 20px;
   color: #666666;
   text-align: center;
   font-size: 11px;
   display: none;
 }
 .page_reservation .rv_holder.black .high-holded::after {
-  background: url("../images/reservation/holder_bt.png") no-repeat center 30px;
+  background: url("../images/reservation/holder_bt.png") no-repeat center top;
   background-size: 34px 34px;
   content: "占用";
-  padding-top: 20px;
+  margin-top: 20px;
   color: rgba(255, 255, 255, 0.15);
   text-align: center;
   font-size: 11px;
   display: block;
 }
+.page_reservation .rv_reservation {
+  display: block;
+  position: absolute;
+  text-align: center;
+  background-color: #fffafb;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  font-size: 12px;
+}
+.page_reservation .rv_reservation::after {
+  content: "";
+  position: absolute;
+  height: 1px;
+  width: 74px;
+  background-color: #ececec;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+}
+.page_reservation .rv_reservation .to_holded {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  padding-left: 24px;
+  padding-top: 16px;
+  display: block;
+  color: #555;
+  width: 100%;
+  height: 50%;
+  background: url(../images/appointment/appointment-icon3.png) no-repeat 28px 16px;
+  background-size: 18px 18px;
+}
+.page_reservation .rv_reservation .to_holded:hover {
+  background: url(../images/appointment/appointment-icon-copy3.png) no-repeat 28px 16px;
+  background-size: 18px 18px;
+  color: #333;
+}
+.page_reservation .rv_reservation .to_appointment {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  padding-left: 24px;
+  padding-top: 16px;
+  display: block;
+  color: #555;
+  width: 100%;
+  height: 50%;
+  background: url(../images/appointment/appointment-icon2.png) no-repeat 28px 16px;
+  background-size: 18px 18px;
+}
+.page_reservation .rv_reservation .to_appointment:hover {
+  background: url(../images/appointment/appointment-icon-copy2.png) no-repeat 28px 16px;
+  background-size: 18px 18px;
+  color: #333;
+}
 .page_reservation .rv_item {
   background: #555;
   padding: 0 5px;
   color: #fff;
-  height: 110px;
+  height: 95px;
   position: absolute;
   left: 0;
   right: 0;
@@ -459,36 +682,44 @@
   bottom: 0;
   overflow: hidden;
 }
-.page_reservation .rv_item .name {
-  font-size: 12px;
-  line-height: 22px;
-}
 .page_reservation .rv_item .comment {
   font-size: 11px;
   color: #fff;
   opacity: 0.6;
   margin-top: 3px;
-  overflow: hidden;
   line-height: 16px;
+  height: 16px;
+  overflow: hidden;
   text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  white-space: nowrap;
 }
 .page_reservation .rv_item .rvname {
   font-size: 13px;
   font-weight: bold;
-  margin-top: 18px;
+  margin-top: 22px;
+  height: 16px;
+  max-width: 100%;
+  display: inline-block;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  position: relative;
+  z-index: 1;
+}
+.page_reservation .rv_item .rvname.good {
+  padding-left: 20px;
 }
 .page_reservation .rv_item .rvname .good {
+  position: absolute;
   width: 16px;
   height: 15px;
   background: url(../images/good.png) no-repeat;
   background-size: cover;
-  display: inline-block;
   cursor: pointer;
-  vertical-align: -1px;
-  margin-left: 5px;
+  top: 0;
+  left: 0;
 }
 .page_reservation .rv_item .time {
   font-size: 12px;
@@ -543,13 +774,13 @@
 .page_reservation .rv_item .promise {
   position: absolute;
   height: 15px;
-  bottom: 2px;
-  left: 2px;
+  bottom: 3px;
+  left: 5px;
   border-radius: 2px;
   line-height: 15px;
   font-size: 11px;
-  padding: 2px;
   z-index: 1;
+  opacity: 0.6;
 }
 .page_reservation .rv_item .promise .icon {
   width: 12px;
@@ -566,11 +797,11 @@
 .page_reservation .rv_item.green {
   background: #009966;
 }
-.page_reservation .rv_item.payed::after {
+.page_reservation .rv_item.payed::before {
   content: '';
   position: absolute;
-  width: 58px;
-  height: 50px;
+  width: 62px;
+  height: 62px;
   right: 0;
   bottom: 0;
   background: url(../images/rv_payed.png);
@@ -580,6 +811,226 @@
   box-shadow: -5px 0 5px rgba(255, 156, 0, 0.5), 5px 0 5px rgba(255, 156, 0, 0.5), 0 -5px 5px rgba(255, 156, 0, 0.5), 0 5px 5px rgba(255, 156, 0, 0.5);
   z-index: 9;
 }
+.page_reservation.simple .toggleMode {
+  height: 52px;
+  top: 0;
+  border: none;
+}
+.page_reservation.simple .toggleMode p {
+  line-height: 52px;
+}
+.page_reservation.simple .toggleMode span {
+  margin: 15px 5px;
+}
+.page_reservation.simple .bgStatus {
+  display: block;
+}
+.page_reservation.simple .rv_scroll {
+  top: 52px;
+}
+.page_reservation.simple .rv_scroll #page-mainTable thead {
+  height: 44px;
+  display: block;
+  border-top: 1px solid;
+}
+.page_reservation.simple .rv_scroll #page-mainTable tbody {
+  display: block;
+  margin-left: 94px;
+}
+.page_reservation.simple .rv_scroll #page-mainTable tbody tr {
+  width: 96px;
+  float: left;
+}
+.page_reservation.simple .rv_scroll #page-mainTable tbody tr td {
+  display: block;
+  width: 100%;
+  height: 49px;
+}
+.page_reservation.simple .rv_scroll #page-mainTable tbody tr td.user {
+  display: none;
+}
+.page_reservation.simple .rv_scroll #page-tableHeaderX th {
+  display: block;
+  height: 50px;
+  line-height: 50px;
+}
+.page_reservation.simple .rv_scroll #page-tableHeaderX th:first-child {
+  height: 45px;
+}
+.page_reservation.simple .rv_scroll #page-tableHeaderY {
+  z-index: 51;
+}
+.page_reservation.simple .rv_scroll #page-tableHeaderY thead {
+  display: none;
+}
+.page_reservation.simple .rv_scroll #page-tableHeaderY tbody {
+  height: 44px;
+  overflow: hidden;
+  display: block;
+  margin-left: 94px;
+}
+.page_reservation.simple .rv_scroll #page-tableHeaderY tr {
+  width: 96px;
+  height: 44px;
+  float: left;
+}
+.page_reservation.simple .rv_scroll #page-tableHeaderY tr td.user {
+  width: 96px;
+  height: 42px;
+  overflow: hidden;
+}
+.page_reservation.simple .rv_scroll #page-tableHeaderY tr td.user .header,
+.page_reservation.simple .rv_scroll #page-tableHeaderY tr td.user .level {
+  display: none;
+}
+.page_reservation.simple .rv_scroll #page-tableHeaderY tr td.user .name {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  line-height: 42px;
+  width: 72px;
+  padding: 0 7px;
+}
+.page_reservation.simple .rv_scroll #page-tableHeaderY tr td.user .icon-dian {
+  transform: rotate(90deg);
+  -webkit-transform: rotate(90deg);
+  right: -5px;
+  top: 7px;
+}
+.page_reservation.simple .rv_scroll #page-tableHeaderY tr td.user .icon-xiujia {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  z-index: 9;
+  right: -3px;
+  top: 50%;
+  margin-top: -15px;
+}
+.page_reservation.simple .rv_scroll #page-tableHeaderY tr td.user .icon-xiujia::before {
+  top: 10px;
+  content: '休';
+  color: #fff;
+  font-weight: normal;
+  background-color: #555;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  top: 5px;
+  left: 5px;
+  line-height: 20px;
+  transform: scale(0.7);
+  -webkit-transform: scale(0.7);
+}
+.page_reservation.simple .rv_scroll #page-tableHeaderY tr td.user .prefix-shift {
+  display: none;
+}
+.page_reservation.simple .rv_scroll .rv_table td .user {
+  height: 49px;
+  overflow: hidden;
+}
+.page_reservation.simple .rv_scroll .rv_table .rv_remark {
+  width: 89px;
+  height: 37px;
+  padding: 3px;
+  overflow: hidden;
+}
+.page_reservation.simple .rv_scroll .rv_table .rv_remark .comment {
+  -webkit-line-clamp: 2;
+}
+.page_reservation.simple .rv_scroll .rv_table .rv_remark .icon {
+  top: 8px;
+}
+.page_reservation.simple .rv_scroll .rv_table .rv_holder {
+  width: 95px;
+  height: 49px;
+  line-height: 49px;
+  overflow: hidden;
+}
+.page_reservation.simple .rv_scroll .rv_table .rv_holder .holded::after,
+.page_reservation.simple .rv_scroll .rv_table .rv_holder .high-holded::after {
+  background-position: left 13px;
+  background-size: 22px 22px;
+  margin-top: 0;
+  text-align: left;
+  padding-left: 30px;
+  line-height: 49px;
+  margin-left: 20px;
+}
+.page_reservation.simple .rv_scroll .rv_table .rv_show {
+  height: 49px;
+}
+.page_reservation.simple .rv_scroll .rv_table .rv_show .rv_item {
+  height: 49px;
+}
+.page_reservation.simple .rv_scroll .rv_table .rv_show .rv_item .comment,
+.page_reservation.simple .rv_scroll .rv_table .rv_show .rv_item .item,
+.page_reservation.simple .rv_scroll .rv_table .rv_show .rv_item .fromPhone,
+.page_reservation.simple .rv_scroll .rv_table .rv_show .rv_item .seeItems,
+.page_reservation.simple .rv_scroll .rv_table .rv_show .rv_item .promise {
+  display: none !important;
+}
+.page_reservation.simple .rv_scroll .rv_table .rv_show .rv_item .badge {
+  transform: scale(0.8);
+  transform-origin: right top;
+}
+.page_reservation.simple .rv_scroll .rv_table .rv_show .rv_item .rvname {
+  margin-top: 10px;
+}
+.page_reservation.simple .rv_scroll .rv_table .rv_show .rv_item.payed::before {
+  transform: scale(0.8);
+  -webkit-transform: scale(0.8);
+  transform-origin: right bottom;
+  -webkit-transform-origin: right bottom;
+}
+.page_reservation.simple .rv_scroll .rv_table .rv_rest {
+  height: 49px;
+  overflow: hidden;
+}
+.page_reservation.simple .rv_scroll .rv_table .rv_rest .icon1 {
+  display: none;
+}
+.page_reservation.simple .rv_scroll .rv_table .rv_rest .icon2 {
+  display: block;
+}
+.page_reservation.simple .rv_scroll .rv_table .rv_reservation .to_holded,
+.page_reservation.simple .rv_scroll .rv_table .rv_reservation .to_appointment {
+  width: 50%;
+  height: 100%;
+  float: left;
+  background-position: 2px center;
+  padding-left: 16px;
+  background: none;
+  padding-left: 0;
+}
+.page_reservation.simple .rv_scroll .rv_table .rv_reservation::after {
+  width: 1px;
+  height: 36px;
+}
+.page_reservation.simple.am-full .rv_scroll {
+  top: 50px;
+}
+.page_reservation.simple.am-full .EmpScrollTipLeft,
+.page_reservation.simple.am-full .EmpScrollTipRight {
+  top: 51px;
+}
+.page_reservation.simple .appointment-btn,
+.page_reservation.simple .rv_btns {
+  top: 5px;
+}
+.page_reservation.simple .rv_timeline {
+  left: 0;
+  right: 0;
+  top: auto;
+  bottom: auto;
+  width: auto;
+  height: 1px;
+}
+.page_reservation.simple.EmpScrollTip .EmpScrollTipLeft,
+.page_reservation.simple.EmpScrollTip .EmpScrollTipRight {
+  display: block;
+}
 .popup_reservationDetail {
   display: none;
   position: fixed;
@@ -588,6 +1039,7 @@
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.5);
+  z-index: 100;
 }
 .popup_reservationDetail > .content {
   width: 400px;
@@ -599,12 +1051,23 @@
   color: #222222;
 }
 .popup_reservationDetail > .content > .title {
-  line-height: 160px;
+  line-height: 130px;
   font-size: 29px;
   padding: 0 40px;
 }
-.popup_reservationDetail > .content > .infoarea::before,
-.popup_reservationDetail > .content > .timearea::before {
+.popup_reservationDetail > .content > .resScrollWrap {
+  position: absolute;
+  top: 130px;
+  right: 0;
+  bottom: 185px;
+  left: 0;
+  overflow: hidden;
+}
+.popup_reservationDetail > .content > .resScrollWrap > .resScrollWrapper {
+  padding-bottom: 20px;
+}
+.popup_reservationDetail > .content > .resScrollWrap > .resScrollWrapper > .infoarea::before,
+.popup_reservationDetail > .content > .resScrollWrap > .resScrollWrapper > .timearea::before {
   content: "";
   display: block;
   position: absolute;
@@ -617,7 +1080,7 @@
   background-size: contain;
   background-color: #fff;
 }
-.popup_reservationDetail > .content > .itemarea::before {
+.popup_reservationDetail > .content > .resScrollWrap > .resScrollWrapper > .itemarea::before {
   content: "";
   display: block;
   position: absolute;
@@ -630,27 +1093,27 @@
   background-size: contain;
   background-color: #fff;
 }
-.popup_reservationDetail > .content > .infoarea {
+.popup_reservationDetail > .content > .resScrollWrap > .resScrollWrapper > .infoarea {
   position: relative;
   margin: 0 45px 0 50px;
   padding: 0 0 60px 36px;
   border-left: #dddddd 1px solid;
 }
-.popup_reservationDetail > .content > .infoarea.newInfoarea {
+.popup_reservationDetail > .content > .resScrollWrap > .resScrollWrapper > .infoarea.newInfoarea {
   padding: 0 0 10px 36px;
 }
-.popup_reservationDetail > .content > .infoarea::before {
+.popup_reservationDetail > .content > .resScrollWrap > .resScrollWrapper > .infoarea::before {
   background-image: url("../images/reservation/detailIcon1.png");
 }
-.popup_reservationDetail > .content > .infoarea > .line1 {
+.popup_reservationDetail > .content > .resScrollWrap > .resScrollWrapper > .infoarea > .line1 {
   line-height: 27px;
   color: #222222;
   font-size: 18px;
 }
-.popup_reservationDetail > .content > .infoarea > .line2 {
+.popup_reservationDetail > .content > .resScrollWrap > .resScrollWrapper > .infoarea > .line2 {
   padding: 5px 0;
 }
-.popup_reservationDetail > .content > .infoarea > .line2 > span {
+.popup_reservationDetail > .content > .resScrollWrap > .resScrollWrapper > .infoarea > .line2 > span {
   display: inline-block;
   line-height: 19px;
   padding: 0 10px;
@@ -660,15 +1123,15 @@
   color: #fff;
   font-size: 12px;
 }
-.popup_reservationDetail > .content > .infoarea > .line2 > span.category {
+.popup_reservationDetail > .content > .resScrollWrap > .resScrollWrapper > .infoarea > .line2 > span.category {
   background: #e82742;
 }
-.popup_reservationDetail > .content > .infoarea > .comment {
+.popup_reservationDetail > .content > .resScrollWrap > .resScrollWrapper > .infoarea > .comment {
   padding: 12px 0;
   font-size: 13px;
   color: #999999;
 }
-.popup_reservationDetail > .content > .itemarea {
+.popup_reservationDetail > .content > .resScrollWrap > .resScrollWrapper > .itemarea {
   position: relative;
   margin: 0 45px 0 50px;
   padding: 0 0 20px 36px;
@@ -677,21 +1140,20 @@
   color: #222222;
   font-size: 18px;
 }
-.popup_reservationDetail > .content > .itemarea .itemline2 {
+.popup_reservationDetail > .content > .resScrollWrap > .resScrollWrapper > .itemarea .itemline2 {
   overflow: hidden;
   background: #f1f1f1;
   border-radius: 2px;
   margin-top: 12px;
-  max-height: 150px;
 }
-.popup_reservationDetail > .content > .itemarea .itemline2 .items .itemP {
+.popup_reservationDetail > .content > .resScrollWrap > .resScrollWrapper > .itemarea .itemline2 .items .itemP {
   height: 40px;
   line-height: 40px;
   padding-left: 40px;
   background: url("../images/reservation/itemIcon.png") no-repeat 14px center;
   background-size: 11px 12px;
 }
-.popup_reservationDetail > .content > .itemarea .itemComment {
+.popup_reservationDetail > .content > .resScrollWrap > .resScrollWrapper > .itemarea .itemComment {
   padding: 12px 0;
   font-size: 13px;
   color: #999999;
@@ -701,10 +1163,10 @@
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
 }
-.popup_reservationDetail > .content > .itemarea::before {
+.popup_reservationDetail > .content > .resScrollWrap > .resScrollWrapper > .itemarea::before {
   background-image: url("../images/reservation/detailIcon3.png");
 }
-.popup_reservationDetail > .content > .timearea {
+.popup_reservationDetail > .content > .resScrollWrap > .resScrollWrapper > .timearea {
   position: relative;
   margin: 0 45px 0 50px;
   padding-left: 36px;
@@ -713,10 +1175,10 @@
   color: #222222;
   font-size: 18px;
 }
-.popup_reservationDetail > .content > .timearea::before {
+.popup_reservationDetail > .content > .resScrollWrap > .resScrollWrapper > .timearea::before {
   background-image: url("../images/reservation/detailIcon2.png");
 }
-.popup_reservationDetail > .content > .timearea > .modifyBtn {
+.popup_reservationDetail > .content > .resScrollWrap > .resScrollWrapper > .timearea > .modifyBtn {
   width: 58px;
   height: 25px;
   display: block;
@@ -730,36 +1192,65 @@
   background: url("../images/reservation/modifyBtnIcon.png") no-repeat 16px center;
   background-size: 12px 15px;
 }
-.popup_reservationDetail > .content > .timearea > .modifyBtn.am-clickable-active {
+.popup_reservationDetail > .content > .resScrollWrap > .resScrollWrapper > .timearea > .modifyBtn.am-clickable-active {
   background-color: #eee;
 }
-.popup_reservationDetail > .content > .timearea > .promise {
+.popup_reservationDetail > .content > .resScrollWrap > .resScrollWrapper > .timearea > .promise {
   display: block;
   font-size: 13px;
   color: #333;
   height: 20px;
   line-height: 20px;
 }
-.popup_reservationDetail > .content > .timearea > .promise .icon {
+.popup_reservationDetail > .content > .resScrollWrap > .resScrollWrapper > .timearea > .promise .icon {
   width: 12px;
   height: 12px;
   display: inline-block;
   vertical-align: top;
   margin-top: 4px;
 }
+.popup_reservationDetail > .content > .resScrollWrap > .resScrollWrapper > .commentWrap {
+  position: relative;
+  margin: 50px 45px 0 50px;
+  padding: 0 0 20px 36px;
+  line-height: 22px;
+  display: block;
+  color: #999999;
+}
+.popup_reservationDetail > .content > .resScrollWrap > .resScrollWrapper > .commentWrap:before {
+  content: '备注';
+  display: inline-block;
+  position: absolute;
+  left: 36px;
+  top: -24px;
+  font-size: 12px;
+}
+.popup_reservationDetail > .content > .resScrollWrap > .resScrollWrapper > .commentWrap .commentTxt {
+  box-sizing: border-box;
+  width: 100%;
+  height: 80px;
+  line-height: 25px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  padding: 10px;
+  font-size: 14px;
+  resize: none;
+  color: #222;
+}
 .popup_reservationDetail > .content > .action {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 0 58px;
+  padding: 0 45px 0 50px;
 }
 .popup_reservationDetail > .content > .action > span {
   line-height: 44px;
   height: 44px;
   display: block;
   overflow: hidden;
-  margin-bottom: 18px;
+  margin-bottom: 14px;
   border-radius: 3px;
   text-align: center;
   font-size: 15px;
@@ -790,4 +1281,8 @@
 }
 .popup_reservationDetail > .content.payed .gotoCashier {
   display: none;
+}
+body.fixBottom {
+  position: absolute;
+  bottom: 0;
 }

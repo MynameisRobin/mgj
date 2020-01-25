@@ -1,5 +1,10 @@
 /* 文字颜色 ***********************/
 /* c0* 为黑白灰色系 */
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .bs {
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -8,6 +13,35 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+.page_billRecord .consumeTip {
+  display: none;
+  position: absolute;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  max-width: 350px;
+  z-index: 2;
+  border-radius: 4px;
+  padding: 16px;
+  font-size: 14px;
+  background: #fff;
+  box-shadow: 0px 1px 12px 0px rgba(168, 168, 168, 0.5);
+}
+.page_billRecord .consumeTip .text {
+  color: #222222;
+}
+.page_billRecord .consumeTip::after {
+  content: "";
+  display: block;
+  bottom: -8px;
+  right: 20px;
+  width: 0;
+  height: 0;
+  border-top: 6px solid #fff;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  position: absolute;
+  top: 100%;
 }
 .page_billRecord .searchmask,
 .page_billRecord .paymask {
@@ -167,6 +201,161 @@
 .page_billRecord .billRecordContent .common_tabBox.selected {
   display: block;
 }
+.page_billRecord .billRecordContent .common_tabBox.facepay .orderHighSearch {
+  position: absolute;
+  right: -228px;
+  top: -45px;
+  bottom: 0;
+  width: 228px;
+  padding: 0 26px;
+  background: #fff;
+  z-index: 99;
+  transition: 0.4s all ease;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+.page_billRecord .billRecordContent .common_tabBox.facepay .orderHighSearch.on {
+  right: 0px;
+}
+.page_billRecord .billRecordContent .common_tabBox.facepay .orderHighSearch.on .searchopen {
+  background: url(../images/bill/searchopen2.png) no-repeat center center;
+  background-size: contain;
+}
+.page_billRecord .billRecordContent .common_tabBox.facepay .orderHighSearch .header-tit {
+  line-height: 50px;
+  padding-top: 20px;
+  font-size: 18px;
+}
+.page_billRecord .billRecordContent .common_tabBox.facepay .orderHighSearch .search-scroll-wrap {
+  overflow: hidden;
+}
+.page_billRecord .billRecordContent .common_tabBox.facepay .orderHighSearch .search-scroll-wrap .search-scroll-wrapper {
+  padding-bottom: 280px;
+}
+.page_billRecord .billRecordContent .common_tabBox.facepay .orderHighSearch .search-scroll-wrap .search-scroll-wrapper .subclassselect_form {
+  display: none;
+}
+.page_billRecord .billRecordContent .common_tabBox.facepay .orderHighSearch .search-scroll-wrap .search-scroll-wrapper .cm_block {
+  vertical-align: middle;
+  margin-top: 12px;
+}
+.page_billRecord .billRecordContent .common_tabBox.facepay .orderHighSearch .search-scroll-wrap .search-scroll-wrapper .cm_block span {
+  color: #999;
+}
+.page_billRecord .billRecordContent .common_tabBox.facepay .orderHighSearch .search-scroll-wrap .search-scroll-wrapper .cm_block p {
+  margin-bottom: -8px;
+  color: #999;
+  text-align: center;
+  font-size: 12px;
+}
+.page_billRecord .billRecordContent .common_tabBox.facepay .orderHighSearch .search-scroll-wrap .search-scroll-wrapper .cm_block.common_se.phoneselect .select_input {
+  vertical-align: middle;
+  height: 40px;
+  border: 1px solid #ddd;
+  padding: 0 12px;
+  margin-top: 10px;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
+.page_billRecord .billRecordContent .common_tabBox.facepay .orderHighSearch .search-scroll-wrap .search-scroll-wrapper .cm_block.common_se.phoneselect .select_input input {
+  border: 0;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.page_billRecord .billRecordContent .common_tabBox.facepay .orderHighSearch .search-scroll-wrap .search-scroll-wrapper .cm_block.common_se .common_select {
+  height: 40px;
+  vertical-align: middle;
+  margin-top: 10px;
+  position: relative;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+.page_billRecord .billRecordContent .common_tabBox.facepay .orderHighSearch .search-scroll-wrap .search-scroll-wrapper .cm_block.common_se .common_select input {
+  display: inline-block;
+  width: 100%;
+  height: 38px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  padding: 0 10px;
+  -webkit-border-radius: 3px;
+  vertical-align: middle;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+.page_billRecord .billRecordContent .common_tabBox.facepay .orderHighSearch .search-scroll-wrap .search-scroll-wrapper .cm_block.common_se .common_select .common_selectBox {
+  border: 1px solid #ddd;
+}
+.page_billRecord .billRecordContent .common_tabBox.facepay .orderHighSearch .search-scroll-wrap .search-scroll-wrapper .cm_block.common_se .common_select .common_selectBox .value {
+  padding: 0 12px;
+  width: 88%;
+}
+.page_billRecord .billRecordContent .common_tabBox.facepay .orderHighSearch .search-scroll-wrap .search-scroll-wrapper .cm_block.common_se .common_select .common_selectBox .icon {
+  width: 12%;
+}
+.page_billRecord .billRecordContent .common_tabBox.facepay .orderHighSearch .search-scroll-wrap .search-scroll-wrapper .cm_block.common_se .common_select .common_selectBox .listbox {
+  width: 175px;
+  padding: 5px;
+  max-height: 267px;
+}
+.page_billRecord .billRecordContent .common_tabBox.facepay .orderHighSearch .search-scroll-wrap .search-scroll-wrapper .cm_block.common_se .common_select .common_selectBox .listbox:before {
+  top: -15px;
+}
+.page_billRecord .billRecordContent .common_tabBox.facepay .orderHighSearch .search-scroll-wrap .search-scroll-wrapper .cm_block.common_se .common_select .common_selectBox .listbox:after {
+  top: -14px;
+}
+.page_billRecord .billRecordContent .common_tabBox.facepay .orderHighSearch .search-scroll-wrap .search-scroll-wrapper .cm_block.common_se .common_select .common_selectBox .listbox.atTop:before {
+  top: unset;
+}
+.page_billRecord .billRecordContent .common_tabBox.facepay .orderHighSearch .search-scroll-wrap .search-scroll-wrapper .cm_block.common_se .common_select .common_selectBox .listbox.atTop:after {
+  top: unset;
+}
+.page_billRecord .billRecordContent .common_tabBox.facepay .orderHighSearch .search-scroll-wrap .search-scroll-wrapper .cm_block.common_se .common_select .common_selectBox .listbox .inner {
+  width: 100%;
+  max-height: 255px;
+  padding: 0;
+}
+.page_billRecord .billRecordContent .common_tabBox.facepay .orderHighSearch .search-scroll-wrap .search-scroll-wrapper .cm_block.common_se .common_select .common_selectBox .listbox ul {
+  padding: 0;
+  overflow: hidden;
+}
+.page_billRecord .billRecordContent .common_tabBox.facepay .orderHighSearch .search-scroll-wrap .search-scroll-wrapper .cm_block.common_se .common_select .common_selectBox .listbox ul li {
+  line-height: 30px;
+}
+.page_billRecord .billRecordContent .common_tabBox.facepay .orderHighSearch .search-scroll-wrap .search-scroll-wrapper .cm_block.common_se .startTime_form::after,
+.page_billRecord .billRecordContent .common_tabBox.facepay .orderHighSearch .search-scroll-wrap .search-scroll-wrapper .cm_block.common_se .endTime_form::after {
+  content: "";
+  position: absolute;
+  vertical-align: middle;
+  top: 11px;
+  left: 145px;
+  width: 15px;
+  height: 15px;
+  background: url(../images/icons_sprite/calendar_icon.png) no-repeat 0px 0px;
+  background-size: 15px 15px;
+}
+.page_billRecord .billRecordContent .common_tabBox.facepay .orderHighSearch .btnOk {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  bottom: 0;
+  text-align: center;
+  background-color: #555;
+  height: 40px;
+  line-height: 40px;
+  display: inline-block;
+  vertical-align: middle;
+  color: #FFF;
+  font-size: 13px;
+  margin-top: 20px;
+}
+.page_billRecord .billRecordContent .common_tabBox.facepay .orderHighSearch .btnOk.am-clickable-active {
+  background-color: #282828;
+}
 .page_billRecord .billRecordContent .common_tabBox.facepay .search_box {
   position: relative;
   height: 36px;
@@ -260,6 +449,13 @@
 .page_billRecord .billRecordContent .common_tabBox.facepay .common_tableBox.selected {
   display: block;
 }
+.page_billRecord .billRecordContent .common_tabBox.facepay .orderTableBox {
+  position: absolute;
+  left: 15px;
+  right: 15px;
+  top: 56px;
+  bottom: 120px;
+}
 .page_billRecord .billRecordContent .common_tabBox.facepay .contentbox {
   position: absolute;
   left: 0;
@@ -292,6 +488,17 @@
 .page_billRecord .billRecordContent .common_tabBox.facepay .contentbox .table-content-list tr td:last-child {
   border-right: 0;
 }
+.page_billRecord .billRecordContent .common_tabBox.facepay .contentbox .table-content-list tr td.more::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 0;
+  height: 0;
+  border: 8px solid #555555;
+  border-top-color: transparent;
+  border-left-color: transparent;
+}
 .page_billRecord .billRecordContent .common_tabBox.facepay .contentbox .table-content-list td {
   height: 40px;
   position: relative;
@@ -306,6 +513,12 @@
   padding: 0 5px;
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
+}
+.page_billRecord .billRecordContent .common_tabBox.facepay .contentbox .table-content-list td .tdwrap.red {
+  color: #E82742;
+}
+.page_billRecord .billRecordContent .common_tabBox.facepay .contentbox .table-content-list td .tdwrap.green {
+  color: #4DB27A;
 }
 .page_billRecord .billRecordContent .common_tabBox.facepay .contentbox .table-content-list td .tdwrap.displayId span {
   margin-top: 2px;
@@ -338,6 +551,17 @@
 }
 .page_billRecord .billRecordContent .common_tabBox.facepay .contentbox .table-content-list td .tdwrap.operate span.refund {
   background-color: #e82742;
+}
+.page_billRecord .billRecordContent .common_tabBox.facepay .contentbox .table-content-list td .tdwrap.operate .orderDetails::after {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 5px;
+  width: 15px;
+  height: 15px;
+  background: url(../images/icons_sprite/details_icon.png) no-repeat 0px 0px;
+  background-size: 15px 15px;
 }
 .page_billRecord .billRecordContent .common_tabBox.facepay .contentbox .table-content-list td .tdwrap.addcustomer {
   line-height: 16px;
@@ -409,7 +633,7 @@
   left: 28px;
   right: 28px;
   top: auto;
-  bottom: 0;
+  bottom: 15px;
   line-height: 72px;
 }
 .page_billRecord .billRecordContent .common_tabBox.watercourse {
@@ -1013,6 +1237,36 @@
   text-align: right;
   margin: 10px;
 }
+.page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list tr.childtr td.bbnone .tdchildren .operate_box .bonus-btn {
+  position: relative;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list tr.childtr td.bbnone .tdchildren .operate_box .bonus-btn .recalctips {
+  position: absolute;
+  top: -60px;
+  left: -50%;
+  background: #fff;
+  color: #000;
+  padding: 10px;
+  border-radius: 3px;
+  width: 180px;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list tr.childtr td.bbnone .tdchildren .operate_box .bonus-btn .recalctips:before,
+.page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list tr.childtr td.bbnone .tdchildren .operate_box .bonus-btn .recalctips:after {
+  content: "";
+  display: block;
+  border-width: 10px;
+  position: absolute;
+  bottom: -13px;
+  left: 42%;
+  border-style: solid dashed dashed;
+  border-color: #fff transparent transparent;
+  font-size: 0;
+  line-height: 0;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list tr.childtr td.bbnone .tdchildren .operate_box .bonus-btn .recalctips:after {
+  bottom: -17px;
+  border-color: #FFF transparent transparent;
+}
 .page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list tr.childtr td.bbnone .tdchildren .operate_box .print,
 .page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list tr.childtr td.bbnone .tdchildren .operate_box .relate,
 .page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list tr.childtr td.bbnone .tdchildren .operate_box .revoke,
@@ -1047,6 +1301,9 @@
 .page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list tr.childtr td.bbnone .tdchildren .operate_box .perf-btn.am-clickable-active {
   background-color: #222;
   color: #fff;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list tr.detailtr:last-child td {
+  border-bottom: 0;
 }
 .page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list td {
   height: 50px;
@@ -1102,6 +1359,12 @@
   width: 16px;
   height: 16px;
   margin: 7px 3px;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list td.col2 dt .reward.disabled {
+  background-color: #999;
+}
+.page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list td.col2 dt .reward.disabled::after {
+  border-color: #999 transparent transparent transparent;
 }
 .page_billRecord .billRecordContent .common_tabBox.watercourse .tablebody .table-content-list td .tdwrap {
   width: 100%;
@@ -1378,8 +1641,194 @@
   color: #999;
   margin-left: 20px;
 }
+.page_billRecord .billRecordContent .common_tabBox .searchOrderWrap {
+  height: 36px;
+  margin: 10px 0;
+  padding: 0 15px;
+  line-height: 36px;
+  position: relative;
+}
+.page_billRecord .billRecordContent .common_tabBox .searchOrderWrap .searchWrap {
+  float: left;
+  height: 36px;
+}
+.page_billRecord .billRecordContent .common_tabBox .searchOrderWrap .searchWrap .orderTip {
+  margin-left: 10px;
+  display: inline-block;
+  position: relative;
+}
+.page_billRecord .billRecordContent .common_tabBox .searchOrderWrap .searchWrap .orderTip .tipIcon {
+  display: inline-block;
+  vertical-align: middle;
+  width: 16px;
+  height: 16px;
+  background: url(../images/tip_icon.png);
+  background-size: 100% 100%;
+}
+.page_billRecord .billRecordContent .common_tabBox .searchOrderWrap .searchWrap .orderTip .tiptext {
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 12px;
+  color: #999999;
+}
+.page_billRecord .billRecordContent .common_tabBox .searchOrderWrap .searchWrap .searchinput {
+  float: left;
+  height: 34px;
+  border: 1px solid #ddd;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  width: 274px;
+}
+.page_billRecord .billRecordContent .common_tabBox .searchOrderWrap .searchWrap .searchinput .inputbox {
+  width: 235px;
+  display: block;
+  float: left;
+  height: 36px;
+}
+.page_billRecord .billRecordContent .common_tabBox .searchOrderWrap .searchWrap .searchinput .inputbox .search_input {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  border: 0;
+  width: 100%;
+  height: 30px;
+  padding-left: 10px;
+  font-size: 14px;
+}
+.page_billRecord .billRecordContent .common_tabBox .searchOrderWrap .searchWrap .searchinput .inputbox_icon {
+  display: block;
+  float: right;
+  width: 36px;
+  height: 36px;
+}
+.page_billRecord .billRecordContent .common_tabBox .searchOrderWrap .searchWrap .searchinput svg {
+  width: 27px;
+  height: 27px;
+  margin-left: 3.5px;
+  margin-top: -3.5px;
+  vertical-align: middle;
+  display: inline-block;
+}
+.page_billRecord .billRecordContent .common_tabBox .searchOrderWrap .searchWrap .highSearchBtn {
+  display: inline-block;
+  height: 36px;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  background-color: #595959;
+  color: #FFF;
+  line-height: 36px;
+  padding: 0 10px 0 35px;
+  margin-left: 10px;
+  background-image: url(../images/search_btn_icon.png);
+  background-repeat: no-repeat;
+  background-position: 12px center;
+  background-size: 15px 15px;
+}
+.page_billRecord .billRecordContent .common_tabBox .searchOrderWrap .searchWrap .scanCodeBtn {
+  display: inline-block;
+  height: 36px;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  background-color: #595959;
+  color: #FFF;
+  line-height: 36px;
+  padding: 0 13px;
+  margin-left: 6px;
+}
+.page_billRecord .billRecordContent .common_tabBox .searchOrderWrap .searchWrap .scanCodeWrap {
+  width: 359px;
+  height: 36px;
+  padding: 20px;
+  position: absolute;
+  top: 36px;
+  left: 96px;
+  background: #ffffff;
+  box-shadow: 0px 3px 26px 0px rgba(0, 0, 0, 0.21);
+  border-radius: 3px;
+  z-index: 99;
+}
+.page_billRecord .billRecordContent .common_tabBox .searchOrderWrap .searchWrap .scanCodeWrap .scan {
+  position: absolute;
+  width: 36px;
+  height: 36px;
+  left: 20px;
+  top: 20px;
+}
+.page_billRecord .billRecordContent .common_tabBox .searchOrderWrap .searchWrap .scanCodeWrap .scan svg {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  left: 50%;
+  top: 50%;
+  margin-left: -10px;
+  margin-top: -10px;
+}
+.page_billRecord .billRecordContent .common_tabBox .searchOrderWrap .searchWrap .scanCodeWrap .condition {
+  float: left;
+  width: 200px;
+  height: 36px;
+  padding: 0 40px;
+  font-size: 14px;
+  background: #f7f7f7;
+  border-radius: 3px;
+  border: none;
+}
+.page_billRecord .billRecordContent .common_tabBox .searchOrderWrap .searchWrap .scanCodeWrap .scanCodeSearch {
+  display: inline-block;
+  height: 36px;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  background-color: #595959;
+  color: #FFF;
+  line-height: 36px;
+  padding: 0 20px;
+  margin-left: 10px;
+}
+.page_billRecord .billRecordContent .common_tabBox .searchOrderWrap .toggleBtn {
+  float: right;
+  text-align: center;
+  line-height: 36px;
+  width: 114px;
+  height: 34px;
+  border: 1px solid #dedede;
+  border-radius: 22px;
+}
+.page_billRecord .billRecordContent .common_tabBox .searchOrderWrap .toggleBtn .btnIcon {
+  display: inline-block;
+  vertical-align: middle;
+  width: 15px;
+  height: 16px;
+}
+.page_billRecord .billRecordContent .common_tabBox .searchOrderWrap .toggleBtn .btnIcon .icon {
+  vertical-align: top;
+  width: 15px;
+  height: 16px;
+}
+.page_billRecord .billRecordContent .common_tabBox .searchOrderWrap .toggleBtn .btnText {
+  margin-left: 8px;
+  display: inline-block;
+  vertical-align: top;
+  font-size: 14px;
+  color: #20b9eb;
+}
 .page_billRecord .consumptionamount {
   padding: 0 5px;
+  position: relative;
 }
 .page_billRecord .consumptionamount dt {
   width: 100%;
@@ -1395,6 +1844,30 @@
   padding: 4px 10px;
   border-radius: 15px;
   margin: 6px 8px 0px 0;
+}
+.page_billRecord .consumptionamount dt .xfnr.treatPackageName .iconfont {
+  display: inline-block;
+  height: 15px;
+  width: 15px;
+  line-height: 12px;
+  margin-right: 6px;
+  color: #fff;
+}
+.page_billRecord .consumptionamount dd .ackRollIcon {
+  width: 16px;
+  height: 16px;
+  color: #e82742;
+  border: 1px solid #e82742;
+  display: block;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 14px;
+  position: absolute;
+  top: 12px;
+  right: 8px;
+}
+.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list > table {
+  table-layout: fixed;
 }
 .page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .signature {
   padding-top: 3px;
@@ -1415,15 +1888,25 @@
   color: #555;
   font-size: 12px;
 }
+.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .basictr td:last-child {
+  border-right: 0;
+}
 .page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .basictr.freezeTr td .tdwrap > span.consumetime,
-.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .basictr.freezeTr td .tdwrap a {
+.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .basictr.refundTr td .tdwrap > span.consumetime,
+.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .basictr.freezeTr td .tdwrap a,
+.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .basictr.refundTr td .tdwrap a {
   color: #222;
   text-decoration: none;
 }
 .page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .basictr.freezeTr td .perf-btn,
+.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .basictr.refundTr td .perf-btn,
 .page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .basictr.freezeTr td .bonus-btn,
-.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .basictr.freezeTr td .revoke {
+.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .basictr.refundTr td .bonus-btn {
   display: none;
+}
+.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .basictr.freezeTr td .revoke,
+.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .basictr.refundTr td .revoke {
+  background: #999;
 }
 .page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr {
   background: #777777;
@@ -1431,16 +1914,32 @@
   box-shadow: 5px 5px 5px #716e6e inset;
 }
 .page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr.freezeTr .addcustTr,
+.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr.refundTr .addcustTr,
 .page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr.freezeTr .signature,
+.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr.refundTr .signature,
 .page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr.freezeTr .icon-comments,
-.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr.freezeTr .deptPerf {
+.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr.refundTr .icon-comments {
   display: none;
 }
-.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr.freezeTr .col3 tbody .tdedit {
+.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr.freezeTr .col3 tbody .tdedit,
+.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr.refundTr .col3 tbody .tdedit {
   background: 0;
 }
-.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr.freezeTr .col3 tbody .tdwrap a {
+.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr.freezeTr .col3 tbody .tdwrap a,
+.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr.refundTr .col3 tbody .tdwrap a {
   text-decoration: none;
+}
+.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr.freezeTr .operate_box .relate,
+.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr.refundTr .operate_box .relate,
+.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr.freezeTr .operate_box .bonus-btn,
+.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr.refundTr .operate_box .bonus-btn,
+.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr.freezeTr .operate_box .perf-btn,
+.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr.refundTr .operate_box .perf-btn {
+  display: none !important;
+}
+.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr.freezeTr .operate_box .revoke,
+.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr.refundTr .operate_box .revoke {
+  background: #999 !important;
 }
 .page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr td {
   border-right: 1px solid #949494;
@@ -1450,6 +1949,41 @@
   vertical-align: top;
   font-size: 12px;
   border-right: 0px;
+  position: relative;
+}
+.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr .col3 .autopayImg {
+  position: absolute;
+  width: 24px;
+  right: 10px;
+  top: 0;
+  background: #E82742;
+  font-size: 12px;
+  text-align: center;
+  padding: 4px;
+}
+.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr .col3 .autopayImg:after {
+  content: '';
+  position: absolute;
+  left: -6px;
+  bottom: -5px;
+  width: 0;
+  height: 0;
+  border-width: 6px;
+  border-style: solid;
+  border-color: transparent #E82742 transparent transparent;
+  transform: rotate(45deg);
+}
+.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr .col3 .autopayImg:before {
+  content: '';
+  position: absolute;
+  right: -6px;
+  bottom: -5px;
+  width: 0;
+  height: 0;
+  border-width: 6px;
+  border-style: solid;
+  border-color: transparent #E82742 transparent transparent;
+  transform: rotate(135deg);
 }
 .page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr .col3 thead td {
   color: #b5b5b5;
@@ -1474,6 +2008,27 @@
 .page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr .col3 tbody .tdwrap.sale .projectName a:last-child {
   padding-left: 10px;
 }
+.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr .col3 tbody .tdwrap.sale .projectName .treatPackageName.real {
+  position: relative;
+}
+.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr .col3 tbody .tdwrap.sale .projectName .treatPackageName.real.am-clickable-active {
+  opacity: 0.6;
+}
+.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr .col3 tbody .tdwrap.sale .projectName .treatPackageName.real .iconfont {
+  display: inline-block;
+  height: 12px;
+  width: 12px;
+  line-height: 10px;
+  margin-right: 8px;
+  color: #fff;
+  vertical-align: -2px;
+}
+.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr .col3 tbody .tdwrap.sale .projectName .treatPackageName.real svg {
+  display: inline-block;
+  margin-left: 8px;
+  width: 6px;
+  height: 6px;
+}
 .page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr .col3 tbody .tdwrap.sale .num {
   display: inline-block;
   line-height: 24px;
@@ -1489,11 +2044,8 @@
 }
 .page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr .col3 tbody .tdedit {
   position: relative;
-  height: 30px;
   padding-left: 24px;
-  line-height: 30px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  line-height: 24px;
   background: url(../images/bill/editmodification.png) no-repeat 5px center;
   background-size: 13px 15px;
 }
@@ -1531,7 +2083,7 @@
   background-size: 17px 17px;
 }
 .page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr .col2 dt {
-  width: 45%;
+  width: 40%;
   display: inline-block;
   vertical-align: middle;
   text-align: center;
@@ -1580,6 +2132,7 @@
   line-height: 16px;
   text-align: left;
   word-break: break-all;
+  z-index: 1;
 }
 .page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr .col2 .comment .comment-content::before {
   position: absolute;
@@ -1601,6 +2154,7 @@
   width: 55%;
   padding: 10px 0 10px 10px;
   border-left: 1px solid #949494;
+  text-align: left;
 }
 .page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr .col2 dd span {
   display: block;
@@ -1609,6 +2163,35 @@
 }
 .page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr .col2 dd span b {
   font-weight: normal;
+}
+.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr .col2 dd span .multi {
+  color: #fff;
+  font-style: normal;
+  background: #ee3232;
+  font-size: 12px;
+  padding: 2px;
+  width: 16px;
+  height: 16px;
+  line-height: 14px;
+  margin-left: 3px;
+  text-align: center;
+  display: inline-block;
+  transform: scale(0.875, 0.875);
+}
+.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr .col2 dd .checkCardList {
+  font-size: 12px;
+  color: #b5b5b5;
+  line-height: 20px;
+}
+.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr .col2 dd .checkCardList span {
+  display: inline-block;
+  vertical-align: middle;
+}
+.page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr .col2 dd .checkCardList .cardName {
+  width: 60%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 .page_billRecord .billRecordContent .watercourse .tablebody .table-content-list .childtr .col2 ul.deptPerf {
   display: -webkit-box;
@@ -1819,7 +2402,6 @@
   height: 100%;
   display: block;
   float: left;
-  padding: 0 0 0 15px;
 }
 #selectEmployee .employeeBox .selectBox .commonselectBox .formbox.selecte {
   position: relative;
@@ -1948,6 +2530,13 @@
   border-radius: 3px;
   -webkit-border-radius: 3px;
   background: none;
+  padding-left: 15px;
+}
+#selectEmployee .employeeBox .selectBox .commonselectBox .formbox input.am-disabled {
+  background-color: #ebebe4;
+}
+#selectEmployee .employeeBox .selectBox .commonselectBox.commissionbox {
+  position: relative;
 }
 #selectEmployee .employeeBox .selectBox .commonselectBox .labelbox {
   float: none;
@@ -2121,13 +2710,23 @@
   background: url("../images/icons_sprite/close_employee.png") no-repeat 0px 0px;
   background-size: 15px 15px;
 }
-#selectCancleReason .content .title {
+#selectCancleReason .content .titleWrap .title {
+  display: inline;
   font-size: 16px;
   color: #222;
   height: 60px;
   line-height: 60px;
   font-weight: bold;
   overflow: hidden;
+}
+#selectCancleReason .content .titleWrap .remarkSetWrap .titleSetIcon {
+  width: 15px;
+  height: 15px;
+  vertical-align: middle;
+  margin-left: 5px;
+}
+#selectCancleReason .content .titleWrap .remarkSetWrap.am-clickable-active {
+  opacity: 0.6;
 }
 #selectCancleReason .content .wrapper {
   height: 266px;
@@ -2191,7 +2790,7 @@
   border: none;
 }
 #selectCancleReason .content .wrapper .textareaWrap {
-  height: 60px;
+  height: 80px;
   padding-left: 36px;
   display: none;
 }
@@ -2211,6 +2810,16 @@
 }
 #selectCancleReason .content .wrapper .textareaWrap textarea:focus::-webkit-input-placeholder {
   opacity: 0;
+}
+#selectCancleReason .content .wrapper .textareaWrap .saveAsCommon {
+  color: #12B8EE;
+  font-size: 12px;
+}
+#selectCancleReason .content .wrapper .textareaWrap .saveAsCommon .saveAsCommonIcon {
+  width: 12px;
+  height: 12px;
+  vertical-align: baseline;
+  margin: 6px 6px 0 0;
 }
 #selectCancleReason .content .warn {
   font-size: 12px;
@@ -2245,4 +2854,71 @@
 }
 #selectCancleReason .content .sure.disabled {
   opacity: 0.3;
+}
+.treatPackageDetail {
+  z-index: 2;
+}
+.treatPackageDetail .treatPackageDetailMask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+.treatPackageDetail .inner {
+  padding: 5px 20px 30px 20px;
+  width: 480px;
+}
+.treatPackageDetail .inner .close.am-clickable-active {
+  opacity: 0.8;
+}
+.treatPackageDetail .inner .detailHeader {
+  position: relative;
+  color: #222222;
+  height: 22px;
+  font-size: 16px;
+  font-weight: bold;
+}
+.treatPackageDetail .inner .detailHeader .title {
+  padding: 0;
+}
+.treatPackageDetail .inner .detailContent {
+  margin-top: 18px;
+}
+.treatPackageDetail .inner .detailContent .listHeader {
+  height: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #999999;
+  line-height: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #EDEDED;
+}
+.treatPackageDetail .inner .detailContent .listWrap {
+  max-height: 650px;
+  overflow: hidden;
+}
+.treatPackageDetail .inner .detailContent .listWrap .listWrapper {
+  list-style: none;
+}
+.treatPackageDetail .inner .detailContent .listWrap .listWrapper li {
+  line-height: 30px;
+  height: 30px;
+  font-size: 14px;
+  color: #222222;
+}
+.treatPackageDetail .inner .detailContent span {
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.treatPackageDetail .inner .detailContent .name {
+  width: 250px;
+}
+.treatPackageDetail .inner .detailContent .times {
+  width: 120px;
+}
+.treatPackageDetail .inner .detailContent .price {
+  width: 100px;
 }

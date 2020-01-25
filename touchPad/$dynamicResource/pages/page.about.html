@@ -3,7 +3,7 @@
         <li class="am-clickable selected">
             <span>考勤</span>
         </li>
-        <li class="am-clickable">
+        <li class="am-clickable" style="display:none;">
             <span>商城订单验券</span>
         </li>
         <li class="am-clickable" style="display:none;">
@@ -32,10 +32,13 @@
         </li>
         <li class="am-clickable">
             <span>支持</span>
+        </li>
+        <li class="am-clickable">
+			<span>系统设置</span>
 		</li>
-		<li class="am-clickable">
+		<!-- <li class="am-clickable">
 			<span>员工排序</span>
-		</li>
+		</li> -->
     </ul>
     <ul class="about_content" id="about_content">
         <li class="page_attendance" style="display: block;">
@@ -140,6 +143,10 @@
                                 <div class="itemRemark">好用才是硬道理</div>
                             </div>
                             <div class="detailDown">
+                                <div class="attributeNickName">
+                                    <div class="item_name">属性:</div>
+                                    <div class="item_value">--</div>
+                                </div>
                                 <div class="itemStatus">
                                     <div class="item_name">状态:</div>
                                     <div class="item_value">可使用</div>
@@ -547,19 +554,19 @@
                 </div>
             </div> -->
             <div class="tabdiv">
-            <div class="odd_tr">
+            <div class="tabItem">
                 <div class="tr_left">门店名称</div>
                 <div class="tr_right shop_name"></div>
             </div>
-            <div class="even_tr">
+            <div class="tabItem">
                 <div class="tr_left">门店编号</div>
                 <div class="tr_right shopid"></div>
             </div>
-            <div class="odd_tr">
+            <div class="tabItem">
                 <div class="tr_left">总部编号</div>
                 <div class="tr_right parent_shopid"></div>
             </div>
-            <div class="even_tr">
+            <div class="tabItem">
                 <div class="tr_left">短信余量</div>
                 <div class="tr_right">
                     <span class="SMSnum"></span>
@@ -568,48 +575,55 @@
 
                 </div>
             </div>            
-            <div class="odd_tr">
+            <div class="tabItem">
                 <div class="tr_left">登录用户</div>
                 <div class="tr_right">
                     <span class="user_account"></span>
                     <span class="prompt mm am-clickable">如何修改密码?</span>
                 </div>
             </div>
-            <div class="even_tr">
+            <div class="tabItem">
                 <div class="tr_left"></div>
                 <div class="tr_right"></div>
             </div>            
-            <div class="odd_tr">
+            <div class="tabItem">
                 <div class="tr_left">版本</div>
                 <div class="tr_right version"></div>
             </div>
-            <div class="even_tr">
+            <div class="tabItem">
                 <div class="tr_left">到期时间</div>
                 <div class="tr_right due_time"></div>
             </div>            
-            <div class="odd_tr">
+            <div class="tabItem">
                 <div class="tr_left"></div>
                 <div class="tr_right"></div>
             </div>
-            <div class="even_tr">
+            <div class="tabItem">
+                <div class="tr_left">开启顾客自助结算</div>
+                <div class="tr_right autopay">
+                    <span class="am-radio"></span>
+                    <span class="tr_tip">顾客扫码使用小程序自助付款时本设备将中断操作优先结算自助买单的流水单</span>
+                </div>
+            </div>
+            <div class="tabItem">
                 <div class="tr_left">操作提示音</div>
                 <div class="tr_right clickSound">
                     <span class="am-radio"></span>
                 </div>
             </div>
-            <div class="odd_tr">
+            <div class="tabItem">
                 <div class="tr_left">收款提示音</div>
                 <div class="tr_right paySound">
                     <span class="am-radio"></span>
                 </div>
             </div>
-            <div class="even_tr">
+            <div class="tabItem">
                 <div class="tr_left">考勤提示音</div>
                 <div class="tr_right attendanceSound">
                     <span class="am-radio"></span>
                 </div>
             </div>
-            <div class="odd_tr">
+            <div class="tabItem attendanceAccess">
                 <div class="tr_left">考勤二维码刷新间隔时间</div>
                 <div class="tr_right attendanceInterval">
                     <div class="items">
@@ -619,22 +633,55 @@
                     </div>
                 </div>
             </div>
-            <div class="even_tr">
+            <div class="tabItem">
+                <div class="tr_left">套餐消费打印项目原价</div>
+                <div class="tr_right treatPrintOriginalPrice">
+                    <span class="am-radio"></span>
+                </div>
+            </div>
+            <div class="tabItem">
+                <div class="tr_left">套餐消费打印单次金额</div>
+                <div class="tr_right treatPrintOnceMoney">
+                    <span class="am-radio"></span>
+                </div>
+            </div>
+            <div class="tabItem">
+                <div class="tr_left">开启多卡结算</div>
+                <div class="tr_right multiCardPayFlag">
+                    <span class="am-radio"></span>
+                </div>
+            </div>
+            <div class="tabItem">
                 <div class="tr_left">蓝牙读卡器</div>
                 <div class="tr_right btScanner">
                     <span class="am-radio"></span>
                 </div>
             </div>
-            <div class="even_tr">
+            <div class="tabItem">
                 <div class="tr_left">锁屏设置</div>
-                <div class="tr_right paySound">
-                    <span class="am-radio"></span>
+                <div class="tr_right lockConfig">
+                    <div class="btn selectLockBtn am-clickable">
+                        <div class="default">
+                            <span class="">永不锁屏</span>
+                            <span class="icon"></span>
+                        </div>
+                        <div class="normal">
+                            <span class="time">5分钟</span>
+                            <span class="tip">无操作锁屏</span>
+                            <span class="icon"></span>
+                        </div>
+                    </div>
+                    <div class="lockRight">
+                        <div class="btn clearBtn am-clickable">清除密码</div>
+                        <div class="btn setPwdBtn am-clickable">设置锁屏密码</div>
+                        <div class="btn editPwdBtn am-clickable">修改锁屏密码</div>
+                    </div>
                 </div>
             </div>
-            <div class="odd_tr">
+            <div class="tabItem">
                 <div class="tr_left">手势锁屏</div>
-                <div class="tr_right paySound">
-                    <span>从屏幕右侧边向左滑动可快速锁屏<i class="iconfont"></i></span>
+                <div class="tr_right">
+                    <span>从屏幕右侧边向左滑动可快速锁屏<i class="iconfont icon-shiyi"></i></span>
                 </div>
             </div>
         </div>
@@ -660,8 +707,77 @@
                     </dd>
                 </dl>
             </div>
-		</li>
-		<li class="empSort">
+        </li>
+        <li class="sysSet">
+            <div class="secTabsWrap">
+                <span class="empTab am-clickable">员工排序</span>
+                <span class="delBillTab am-clickable">删单理由</span>
+                <span class="revokeBillTab am-clickable">撤单理由</span>
+                <span class="submitBillTab am-clickable">收银备注</span>
+            </div>
+            <div class="contentWrap">
+                <div class="remarksWrap">
+                        <div class="remarksHeader">
+                            <span class="remarksTitle">
+                                撤单理由
+                            </span>
+                            <span class="remarksTip">
+                                (已结算的单据)
+                            </span>
+                        </div>
+                        <div class="am-touchable scrollWrap">
+                            <div class="scrollInner">
+                                <div class="inputWrap">
+                                    <input type="text" class="remarkInput">
+                                    <span class="icon iconfont icon-shanchu del-icon am-clickable"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="btnsWrap">
+                            <span class="addBtn am-clickable">增加</span>
+                            <span class="saveBtn am-clickable">保存</span>
+                        </div>
+                </div>
+                <div class="empSortWrap">
+                    <div class="empSort">
+                        <div class="container">
+                            <div class="item">
+                                <div class="title">
+                                    <span class="name">第一工位</span>
+                                    <span class="opearte">操作</span>
+                                </div>
+                                <div class="warp item1">
+                                    <ul class="pos pos1"></ul>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="title">
+                                    <span class="name">第二工位</span>
+                                    <span class="opearte">操作</span>
+                                </div>
+                                <div class="warp item2">
+                                    <ul class="pos pos2"></ul>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="title">
+                                    <span class="name">第三工位</span>
+                                    <span class="opearte">操作</span>
+                                </div>
+                                <div class="warp item3">
+                                    <ul class="pos pos3"></ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="footer">
+                            <div class="btn submit am-clickable">保存</div>
+                            <div class="btn cancel am-clickable">重置</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+		<!-- <li class="empSort">
 			<div class="container">
 				<div class="item">
 					<div class="title">
@@ -695,7 +811,7 @@
 				<div class="btn submit am-clickable">保存</div>
 				<div class="btn cancel am-clickable">重置</div>
 			</div>
-		</li>
+		</li> -->
     </ul>
     <div class="mask"></div>
     <div class="proofDetail"></div>
@@ -734,8 +850,11 @@
                 </div>
                 <div class="wrap proof">
                     <div class="label">支出凭证</div>
-                    <div class="select"></div>
-                    <div class="delProof"></div>
+                    <div class="imgsWrap">
+                        <div class="addImg am-clickable">
+                        </div>
+                    </div>
+                    <!-- <div class="delProof"></div> -->
                 </div>
                 <div class="wrap des">
                     <div class="label">支出备注</div>

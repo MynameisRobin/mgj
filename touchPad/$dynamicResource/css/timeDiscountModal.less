@@ -1,0 +1,38 @@
+#timeDiscountModal {
+    z-index: 1;
+
+    .title {
+        &.ptitle {
+            height: 23px;
+            font-size: 16px;
+            font-weight: bold;
+            color: rgba(34, 34, 34, 1);
+        }
+    }
+
+    .content {
+        &.pcontent {
+            background: #F7F7F7;
+            margin: 18px 24px;
+            padding-bottom: 18px;
+
+            .ruleTitle {
+                color: #999999;
+                margin-bottom: 8px;
+            }
+
+            .ruleWrap {
+                max-height: 240px;
+                overflow: hidden;
+                .ruleList{
+                    height:100%;
+                    pre{
+                        white-space: pre-wrap;
+                        word-wrap: break-word;
+                    }
+                }
+
+            }
+        }
+    }
+}

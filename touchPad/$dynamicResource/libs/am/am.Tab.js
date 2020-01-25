@@ -27,9 +27,9 @@
 		componentInit : function() {
 			var self = this;
 			this.$ = $("#" + this.id);
-			this._$items = this.$.find("li").vclick(function() {
+			this._$items = this.$.find("li").vclick(function(e) {
 				var idx = self._$items.index(this);
-				if (self.items[idx].onclick.call(this)) {
+				if (self.items[idx].onclick.call(this,e)) {
 					self.select(idx);
 				}
 			});

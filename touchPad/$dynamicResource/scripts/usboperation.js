@@ -22,9 +22,10 @@ window.am.cardNumberController = {
 					data.data = JSON.parse(data.data);
 					if(data.data.settlementPayDetail) {
 						//自助结算遮罩
-						$('#autoWrap').show();
+						am.autoPay.checkBillData(data);
+					}else {
+						am.page.hangup.getBill(data);
 					}
-					am.page.hangup.getBill(data);
 				}
 			}else{//开单
 				var rowdata = {source:"hangup"};
@@ -64,7 +65,7 @@ window.am.cardNumberController = {
 	},
 	getUserData:function(code,cb){
 		var self = this;
-		this.getData(function(ret){
+		this.getData(code,function(ret){
 			if(ret.code==0){
 				var data = self.getOwnerData(code,ret.content);
 				cb && cb(data);
@@ -73,15 +74,20 @@ window.am.cardNumberController = {
 			}
 		});
 	},
-	getData:function(cb){
-		if (am && am.metadata) {
-			var self = this;
-			var user = am.metadata.userInfo;
+	getData:function(code,cb){
+		if(am.socketPush.getStatus() === 'open'){
+			cb(am.page.hangup.cachedata);
+		}else if (am && am.metadata) {
+			var self = this,user = am.metadata.userInfo,id,bill = am.page.hangup.getBillByDisplayId(code);
+			if(bill){
+				id = bill.id;
+			}
 			am.loading.show("获取数据中，请稍后...");
 			am.api.hangupList.exec({
 				"shopId": user.shopId,
 				"pageSize": 99999, //可选，如果有则分页，否则不分页
-				"channel": 1
+				"channel": 1,
+				"id":id
 			}, function (ret) {
 				am.loading.hide();
 				if (ret.code == 0) {
@@ -94,6 +100,10 @@ window.am.cardNumberController = {
 }
 // 读卡器取单/开单
 window.cardNumberRead = function(msg){
+	// 锁屏界面不走刷卡开取单
+	if($('#lockScreen').is(':visible')){
+		return false;
+	}
 	msg = msg.replace(/[\s\r\n\\\/\'\"\‘\’\“\”]/g, "")
 	if($('#auth').is(":visible")){
 		am.auth.checkAuth(msg);
@@ -127,7 +137,7 @@ window.cardNumberRead = function(msg){
     {
     	if(isFocus){   		
 			var $target = $('input[type="text"].debarInput:focus'),
-			e = $.Event("keyup", {keyCode: 13});
+			e = $.Event("keyup", {keyCode: 13,isCardRead: 1});
 			if(activePage.id == 'page_storage'){
 				var index = am.page.storage.$.find('.nav .active').index();
 				if(index==1){
@@ -183,7 +193,28 @@ window.cardNumberRead = function(msg){
 		am.msg("此功能只在开单模式下生效！");
 		return;
 	}
-    $.am.debug.log("msg："+ msg );
+	$.am.debug.log("msg："+ msg );
+	if(activePage.id == "page_hangup" && $id.find('.swipe_btn').hasClass('active')){
+		if($id.find('.toggleMode').hasClass('active')){
+			$id.find('.toggleMode').removeClass('active');
+			localStorage.setItem('openBillMode_'+amGloble.metadata.userInfo.userId,'bill');
+			$id.find('.hanup_wrapper .hangup_container').eq(0).show().siblings().hide();
+			am.page.hangup.renderBillMode(am.page.hangup.tempData);
+		};
+		$id.find('#swipeModal').hide();
+		var e = $.Event("keyup", {keyCode: 13});
+		var code = msg.toString().substring(msg.toString().length - 3);
+		var value = $id.find('.input_no').val();
+		var valList = value.split(" ");
+		valList.pop();
+		var flag = valList.some(function(item){
+			return item == code;
+		})
+		if(!flag){
+			$id.find('.input_no').val(value+code+" ").trigger(e);
+		}
+		return ;
+	};
 	if(msg){
 		if(msg.toString().length!=10){
 			$.am.debug.log('手牌号长度不为10------'+msg);
@@ -221,7 +252,7 @@ window.addEventListener("cardNumberResult",cardNumberResult,true);
 
 			nextCode = e.which;	
 	        nextTime = new Date().getTime();
-	        if(lastCode != null && lastTime != null && nextTime - lastTime <= 30) {
+	        if(lastCode != null && lastTime != null && nextTime - lastTime <= 100) {
 
 				//当触发扫码器时阻止 快捷键模式
 				sessionStorage.cardPreventKeyB = 'prevent';
@@ -237,7 +268,7 @@ window.addEventListener("cardNumberResult",cardNumberResult,true);
 				code += String.fromCharCode(lastCode); 
 				$.am.debug.log("触发web keydown,code为："+ code );
 				
-	        } else if(lastCode != null && lastTime != null && nextTime - lastTime > 100){
+	        } else if(lastCode != null && lastTime != null && nextTime - lastTime > 200){
 	            code = "";
 			}
 	        lastCode = nextCode;

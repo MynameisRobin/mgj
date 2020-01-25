@@ -270,49 +270,14 @@
   margin: 71px 71px;
   border-bottom: 1px solid #ececec;
 }
-.about_content li.account .tabdiv .odd_tr {
+.about_content li.account .tabdiv .tabItem {
   height: 46px;
   background: rgba(236, 236, 236, 0.38);
 }
-.about_content li.account .tabdiv .odd_tr .tr_left {
-  width: 22%;
-  text-align: center;
-  height: 46px;
-  line-height: 46px;
-  font-size: 14px;
-  color: #999999;
-  float: left;
-  border-right: 1px solid #eeeeee;
-}
-.about_content li.account .tabdiv .odd_tr .tr_right {
-  width: 76%;
-  text-align: left;
-  padding-left: 31px;
-  box-sizing: border-box;
-  line-height: 46px;
-  font-size: 14px;
-  color: #222222;
-  float: left;
-  position: relative;
-}
-.about_content li.account .tabdiv .odd_tr .tr_right .prompt {
-  font-size: 12px;
-  color: #00B7EE;
-  position: absolute;
-  left: 150px;
-}
-.about_content li.account .tabdiv .odd_tr .tr_right .prompt:hover {
-  color: #04a1d0;
-}
-.about_content li.account .tabdiv .odd_tr .tr_right .SMSnum,
-.about_content li.account .tabdiv .odd_tr .tr_right .username {
-  width: 150px;
-}
-.about_content li.account .tabdiv .even_tr {
-  height: 46px;
+.about_content li.account .tabdiv .tabItem:nth-child(2n) {
   background: #ffffff;
 }
-.about_content li.account .tabdiv .even_tr .tr_left {
+.about_content li.account .tabdiv .tabItem .tr_left {
   width: 22%;
   text-align: center;
   height: 46px;
@@ -322,30 +287,228 @@
   float: left;
   border-right: 1px solid #eeeeee;
 }
-.about_content li.account .tabdiv .even_tr .tr_right {
+.about_content li.account .tabdiv .tabItem .tr_right {
   width: 76%;
   text-align: left;
   padding-left: 31px;
   box-sizing: border-box;
-  height: 46px;
   line-height: 46px;
   font-size: 14px;
   color: #222222;
   float: left;
   position: relative;
+  overflow: hidden;
 }
-.about_content li.account .tabdiv .even_tr .tr_right .prompt {
+.about_content li.account .tabdiv .tabItem .tr_right .prompt {
   font-size: 12px;
   color: #00B7EE;
   position: absolute;
   left: 150px;
 }
-.about_content li.account .tabdiv .even_tr .tr_right .prompt:hover {
+.about_content li.account .tabdiv .tabItem .tr_right .prompt:hover {
   color: #04a1d0;
 }
-.about_content li.account .tabdiv .even_tr .tr_right .SMSnum,
-.about_content li.account .tabdiv .even_tr .tr_right .username {
+.about_content li.account .tabdiv .tabItem .tr_right .tr_tip {
+  font-size: 12px;
+  color: #222;
+  position: absolute;
+  left: 150px;
+  right: 20px;
+  line-height: 20px;
+  max-height: 40px;
+  overflow: hidden;
+  top: 50%;
+  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+}
+.about_content li.account .tabdiv .tabItem .tr_right .SMSnum,
+.about_content li.account .tabdiv .tabItem .tr_right .username {
   width: 150px;
+}
+.about_content li.account .tabdiv .tabItem .tr_right .icon-shiyi {
+  font-size: 30px;
+  color: #C4C4C4;
+  margin-left: 15px;
+  vertical-align: middle;
+}
+.about_content li.account .tabdiv .tabItem .tr_right.lockConfig .btn {
+  height: 38px;
+  font-size: 14px;
+  margin-top: 3px;
+  border-radius: 5px;
+  line-height: 38px;
+  text-align: center;
+  display: inline-block;
+  border: 1px solid #DDDDDD;
+}
+.about_content li.account .tabdiv .tabItem .tr_right.lockConfig .selectLockBtn {
+  width: 172px;
+  float: left;
+}
+.about_content li.account .tabdiv .tabItem .tr_right.lockConfig .selectLockBtn .normal {
+  display: none;
+  overflow: hidden;
+}
+.about_content li.account .tabdiv .tabItem .tr_right.lockConfig .selectLockBtn .default {
+  overflow: hidden;
+  padding-left: 10px;
+  text-align: left;
+}
+.about_content li.account .tabdiv .tabItem .tr_right.lockConfig .selectLockBtn .tip {
+  margin-left: 6px;
+  color: #99999B;
+}
+.about_content li.account .tabdiv .tabItem .tr_right.lockConfig .selectLockBtn .icon {
+  float: right;
+  margin-right: 10px;
+}
+.about_content li.account .tabdiv .tabItem .tr_right.lockConfig .selectLockBtn .icon:before {
+  content: "";
+  width: 6px;
+  height: 5px;
+  display: inline-block;
+  vertical-align: middle;
+  background: url(../images/icons_sprite/select_icon.png) no-repeat 0px 0px;
+  background-size: 6px 5px;
+}
+.about_content li.account .tabdiv .tabItem .tr_right.lockConfig .lockRight {
+  float: right;
+  width: 50%;
+  text-align: right;
+}
+.about_content li.account .tabdiv .tabItem .tr_right.lockConfig .clearBtn {
+  width: 102px;
+  margin-right: 10px;
+}
+.about_content li.account .tabdiv .tabItem .tr_right.lockConfig .editPwdBtn,
+.about_content li.account .tabdiv .tabItem .tr_right.lockConfig .setPwdBtn {
+  width: 125px;
+  border: 1px solid #555555;
+  background: #555555;
+  color: #fff;
+}
+.about_content li.account .tabdiv .more_set {
+  margin-top: 40px;
+  margin-bottom: 15px;
+  font-size: 14px;
+  color: #222222;
+}
+.about_content li.account .tabdiv .remark_wrap {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+.about_content li.account .tabdiv .remark_wrap .remark_left {
+  position: relative;
+  width: 22%;
+  text-align: center;
+  height: 44px;
+  font-size: 14px;
+  color: #99999B;
+  float: left;
+  border-right: 1px solid #eeeeee;
+}
+.about_content li.account .tabdiv .remark_wrap .remark_left .remark_title_wrap {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.about_content li.account .tabdiv .remark_wrap .remark_left .remark_title_wrap .remark_tips {
+  color: #CCCCCC;
+  font-size: 11px;
+}
+.about_content li.account .tabdiv .remark_wrap .remark_right {
+  float: left;
+  width: 66%;
+  line-height: 44px;
+  text-align: left;
+  padding-left: 31px;
+  padding-top: 3px;
+  box-sizing: border-box;
+  color: #222222;
+}
+.about_content li.account .tabdiv .remark_wrap .remark_right .input_wrap {
+  display: inline-block;
+  padding-top: 2px;
+  margin: 0 6px 6px 0;
+  height: 38px;
+  line-height: 38px;
+  width: 335px;
+}
+.about_content li.account .tabdiv .remark_wrap .remark_right .input_wrap input {
+  width: 300px;
+  height: 36px;
+  line-height: 36px;
+  padding-left: 10px;
+  border: 1px solid #DDDDDD;
+  border-radius: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.about_content li.account .tabdiv .remark_wrap .remark_right .input_wrap .del-icon {
+  color: #898989;
+  height: 38px;
+  line-height: 38px;
+}
+.about_content li.account .tabdiv .remark_wrap .remark_right .input_wrap .del-icon.am-clickable-active {
+  opacity: 0.6;
+}
+.about_content li.account .tabdiv .remark_wrap .remark_add {
+  position: relative;
+  float: right;
+  height: 44px;
+  line-height: 44px;
+  text-align: left;
+  padding-left: 31px;
+  padding-top: 3px;
+  box-sizing: border-box;
+  color: #222222;
+}
+.about_content li.account .tabdiv .remark_wrap .remark_add .add_input {
+  display: inline-block;
+  width: 125px;
+  height: 38px;
+  line-height: 38px;
+  text-align: center;
+  background: #555555;
+  border-radius: 5px;
+  color: #fff;
+}
+.about_content li.account .tabdiv .remark_wrap .remark_add .add_input.am-clickable-active {
+  opacity: 0.6;
+}
+.about_content li.account .tabdiv .remark_wrap.del_bill,
+.about_content li.account .tabdiv .remark_wrap.submit_bill {
+  background: rgba(236, 236, 236, 0.38);
+}
+.about_content li.account .tabdiv .btns_wrap {
+  margin-top: 4px;
+  width: 100%;
+  height: 88px;
+  line-height: 88px;
+  text-align: center;
+  background: #F8F8F8;
+}
+.about_content li.account .tabdiv .btns_wrap .btns_wrapper .btn {
+  display: inline-block;
+  width: 146px;
+  height: 44px;
+  line-height: 44px;
+  text-align: center;
+  font-size: 13px;
+  color: #fff;
+  background: #555;
+  border-radius: 3px;
+}
+.about_content li.account .tabdiv .btns_wrap .btns_wrapper .btn.cancel_btn {
+  margin-left: 20px;
+  color: #222;
+  background: #fff;
+}
+.about_content li.account .tabdiv .btns_wrap .btns_wrapper .btn.am-clickable-active {
+  opacity: 0.6;
 }
 .about_content li.mallOrderHandel {
   padding: 16px 20px;
@@ -777,10 +940,10 @@
 .about_content li.payout .container .summary .wrap p span,
 .about_content li.income .container .summary .wrap p span {
   color: #222;
+  margin-right: 10px;
 }
 .about_content li.payout .container .summary .wrap:first-child,
 .about_content li.income .container .summary .wrap:first-child {
-  width: 160px;
   float: left;
 }
 .about_content li.payout .container .summary .wrap:first-child p,
@@ -799,10 +962,6 @@
   padding: 0 45px 0 15px;
   overflow: hidden;
   position: relative;
-}
-.about_content li.payout .container .summary .wrap:last-child p,
-.about_content li.income .container .summary .wrap:last-child p {
-  width: 160px;
 }
 .about_content li.payout .container .summary .wrap:last-child.toggle::before,
 .about_content li.income .container .summary .wrap:last-child.toggle::before {
@@ -1103,11 +1262,11 @@
 }
 .about_content li.payout .container .item > div:nth-child(9),
 .about_content li.income .container .item > div:nth-child(9) {
-  width: 7%;
+  width: 6%;
 }
 .about_content li.payout .container .item > div:nth-child(10),
 .about_content li.income .container .item > div:nth-child(10) {
-  width: 15%;
+  width: 16%;
 }
 .about_content li.payout .container .item:last-child > div,
 .about_content li.income .container .item:last-child > div {
@@ -1133,7 +1292,7 @@
 }
 .about_content li.payout .container .form.income .item > div:nth-child(7),
 .about_content li.income .container .form.income .item > div:nth-child(7) {
-  width: 25%;
+  width: 24%;
 }
 .about_content li.payout .container .form.income .item > div .proof,
 .about_content li.income .container .form.income .item > div .proof {
@@ -1194,67 +1353,202 @@
   color: #20b9eb;
   line-height: 36px;
 }
-.about_content li.empSort {
+.about_content li.sysSet {
   margin: 20px;
 }
-.about_content li.empSort .tip {
+.about_content li.sysSet .secTabsWrap {
+  width: 100%;
+  height: 30px;
+  font-size: 0;
+}
+.about_content li.sysSet .secTabsWrap span {
+  display: inline-block;
+  margin-right: 10px;
+  width: 69px;
+  text-align: center;
+  height: 28px;
+  line-height: 28px;
+  font-size: 12px;
+  border: 1px solid #DDDDDD;
+  border-radius: 3px;
+  color: #222222;
+  background: #fff;
+}
+.about_content li.sysSet .secTabsWrap span.selected {
+  background: #555555;
+  color: #fff;
+  border: 1px solid #555555;
+}
+.about_content li.sysSet .secTabsWrap span.selected.am-clickable-active {
+  opacity: 1;
+}
+.about_content li.sysSet .secTabsWrap span.am-clickable-active {
+  opacity: 0.6;
+}
+.about_content li.sysSet .contentWrap {
+  height: 80%;
+}
+.about_content li.sysSet .contentWrap .remarksWrap {
+  position: relative;
+  height: 100%;
+}
+.about_content li.sysSet .contentWrap .remarksWrap .remarksHeader {
+  margin-top: 20px;
+  font-size: 0;
+}
+.about_content li.sysSet .contentWrap .remarksWrap .remarksHeader .remarksTitle {
+  color: #99999B;
+  font-size: 12px;
+}
+.about_content li.sysSet .contentWrap .remarksWrap .remarksHeader .remarksTip {
+  color: #CCCCCC;
+  font-size: 12px;
+}
+.about_content li.sysSet .contentWrap .remarksWrap .noReamrks {
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  top: 40%;
+  transform: translate(-50%, -40%);
+  display: block;
+  width: 176px;
+  height: 216px;
+  background: url(../images/empty.png) no-repeat;
+  background-size: 100% 100%;
+}
+.about_content li.sysSet .contentWrap .remarksWrap .scrollWrap {
+  margin-top: 10px;
+  max-height: 85%;
+  overflow: hidden;
+}
+.about_content li.sysSet .contentWrap .remarksWrap .scrollWrap .scrollInner {
+  padding-bottom: 10px;
+}
+.about_content li.sysSet .contentWrap .remarksWrap .scrollWrap .scrollInner .inputWrap {
+  margin: 0px 6px 10px 0;
+  padding-top: 6px;
+  height: 38px;
+  line-height: 38px;
+  width: 460px;
+}
+.about_content li.sysSet .contentWrap .remarksWrap .scrollWrap .scrollInner .inputWrap .remarkInput {
+  width: 420px;
+  height: 36px;
+  line-height: 36px;
+  padding-left: 10px;
+  border: 1px solid #DDDDDD;
+  border-radius: 3px;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.about_content li.sysSet .contentWrap .remarksWrap .scrollWrap .scrollInner .inputWrap .remarkInput:focus {
+  border: 1px solid #555555;
+}
+.about_content li.sysSet .contentWrap .remarksWrap .scrollWrap .scrollInner .inputWrap .del-icon {
+  color: #898989;
+  height: 38px;
+  line-height: 38px;
+}
+.about_content li.sysSet .contentWrap .remarksWrap .scrollWrap .scrollInner .inputWrap .del-icon.am-clickable-active {
+  opacity: 0.6;
+}
+.about_content li.sysSet .contentWrap .remarksWrap .btnsWrap {
+  margin-top: 10px;
+  height: 40px;
+  text-align: left;
+  font-size: 0;
+}
+.about_content li.sysSet .contentWrap .remarksWrap .btnsWrap span {
+  display: inline-block;
+  width: 90px;
+  height: 36px;
+  line-height: 36px;
+  font-size: 14px;
+  background: #fff;
+  text-align: center;
+  border-radius: 3px;
+}
+.about_content li.sysSet .contentWrap .remarksWrap .btnsWrap span.am-clickable-active {
+  opacity: 0.6;
+}
+.about_content li.sysSet .contentWrap .remarksWrap .btnsWrap span.addBtn {
+  color: #fff;
+  border: 1px solid #555555;
+  background: #555555;
+  margin-right: 20px;
+}
+.about_content li.sysSet .contentWrap .remarksWrap .btnsWrap span.saveBtn {
+  color: #222222;
+  border: 1px solid #DDDDDD;
+}
+.about_content li.sysSet .contentWrap .empSortWrap {
+  height: 100%;
+}
+.about_content li.sysSet .contentWrap .empSortWrap .empSort {
+  margin: 20px;
+  margin-left: 0;
+  height: 100%;
+}
+.about_content li.sysSet .contentWrap .empSortWrap .empSort .tip {
   font-size: 12px;
   color: #999;
 }
-.about_content li.empSort .tip .iconfont {
+.about_content li.sysSet .contentWrap .empSortWrap .empSort .tip .iconfont {
   vertical-align: -2px;
   margin-right: 3px;
 }
-.about_content li.empSort .container {
-  height: calc(100% - 120px);
+.about_content li.sysSet .contentWrap .empSortWrap .empSort .container {
+  height: calc(100% - 60px);
   margin-top: 18px;
   display: flex;
 }
-.about_content li.empSort .container .item {
+.about_content li.sysSet .contentWrap .empSortWrap .empSort .container .item {
   height: 100%;
   margin-right: 3%;
   flex: 1;
   display: inline-block;
   border: 1px solid #ECECEC;
 }
-.about_content li.empSort .container .item:last-child {
+.about_content li.sysSet .contentWrap .empSortWrap .empSort .container .item:last-child {
   margin-right: 0;
 }
-.about_content li.empSort .container .item .title {
+.about_content li.sysSet .contentWrap .empSortWrap .empSort .container .item .title {
   height: 35px;
   color: #999;
   line-height: 35px;
   font-size: 12px;
 }
-.about_content li.empSort .container .item .title .name {
+.about_content li.sysSet .contentWrap .empSortWrap .empSort .container .item .title .name {
   width: calc(45% - 16px);
   float: left;
   padding-left: 15px;
   border-right: 1px solid #ECECEC;
 }
-.about_content li.empSort .container .item .title .opearte {
+.about_content li.sysSet .contentWrap .empSortWrap .empSort .container .item .title .opearte {
   width: 55%;
   float: left;
   text-align: center;
 }
-.about_content li.empSort .container .item .warp {
+.about_content li.sysSet .contentWrap .empSortWrap .empSort .container .item .warp {
   width: 100%;
-  height: calc(100% - 35px);
+  height: calc(100% - 65px);
   overflow: hidden;
 }
-.about_content li.empSort .container .item .warp ul {
+.about_content li.sysSet .contentWrap .empSortWrap .empSort .container .item .warp ul {
   width: 100%;
 }
-.about_content li.empSort .container .item .warp ul li {
+.about_content li.sysSet .contentWrap .empSortWrap .empSort .container .item .warp ul li {
   height: 44px;
   line-height: 44px;
   display: block;
   font-size: 12px;
 }
-.about_content li.empSort .container .item .warp ul li:nth-child(2n + 1) {
+.about_content li.sysSet .contentWrap .empSortWrap .empSort .container .item .warp ul li:nth-child(2n + 1) {
   background-color: #f7f7f7;
 }
-.about_content li.empSort .container .item .warp ul li .left {
+.about_content li.sysSet .contentWrap .empSortWrap .empSort .container .item .warp ul li .left {
   width: calc(45% - 16px);
   float: left;
   height: 44px;
@@ -1262,7 +1556,7 @@
   color: #222;
   border-right: 1px solid #ECECEC;
 }
-.about_content li.empSort .container .item .warp ul li .left .code {
+.about_content li.sysSet .contentWrap .empSortWrap .empSort .container .item .warp ul li .left .code {
   width: 30%;
   margin-right: 5px;
   text-align: left;
@@ -1271,14 +1565,14 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.about_content li.empSort .container .item .warp ul li .left .name {
+.about_content li.sysSet .contentWrap .empSortWrap .empSort .container .item .warp ul li .left .name {
   width: calc(70% - 18px);
   display: inline-block;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.about_content li.empSort .container .item .warp ul li .right {
+.about_content li.sysSet .contentWrap .empSortWrap .empSort .container .item .warp ul li .right {
   width: 55%;
   height: 44px;
   float: left;
@@ -1286,32 +1580,32 @@
   color: #999;
   display: flex;
 }
-.about_content li.empSort .container .item .warp ul li .right span {
+.about_content li.sysSet .contentWrap .empSortWrap .empSort .container .item .warp ul li .right span {
   flex: 1;
   display: inline-block;
 }
-.about_content li.empSort .container .item .warp ul li .right span.am-clickable-active {
+.about_content li.sysSet .contentWrap .empSortWrap .empSort .container .item .warp ul li .right span.am-clickable-active {
   color: #333;
 }
-.about_content li.empSort .container .item .warp ul li .right span:first-child {
+.about_content li.sysSet .contentWrap .empSortWrap .empSort .container .item .warp ul li .right span:first-child {
   margin-left: 15px;
 }
-.about_content li.empSort .container .item .warp ul li .right span:last-child {
+.about_content li.sysSet .contentWrap .empSortWrap .empSort .container .item .warp ul li .right span:last-child {
   margin-right: 15px;
 }
-.about_content li.empSort .container .item .warp ul li .right .iconfont {
+.about_content li.sysSet .contentWrap .empSortWrap .empSort .container .item .warp ul li .right .iconfont {
   font-size: 10px;
   color: #4DC9F0;
   margin-right: 2px;
 }
-.about_content li.empSort .container .item .warp ul li:first-child .up,
-.about_content li.empSort .container .item .warp ul li:first-child .top {
+.about_content li.sysSet .contentWrap .empSortWrap .empSort .container .item .warp ul li:first-child .up,
+.about_content li.sysSet .contentWrap .empSortWrap .empSort .container .item .warp ul li:first-child .top {
   visibility: hidden;
 }
-.about_content li.empSort .container .item .warp ul li:last-child .down {
+.about_content li.sysSet .contentWrap .empSortWrap .empSort .container .item .warp ul li:last-child .down {
   visibility: hidden;
 }
-.about_content li.empSort .footer {
+.about_content li.sysSet .contentWrap .empSortWrap .empSort .footer {
   text-align: center;
   position: absolute;
   left: 50%;
@@ -1320,7 +1614,7 @@
   height: 100px;
   transform: translate(-50%);
 }
-.about_content li.empSort .footer .btn {
+.about_content li.sysSet .contentWrap .empSortWrap .empSort .footer .btn {
   padding: 10px 60px;
   border: 0;
   margin-left: 10px;
@@ -1333,7 +1627,7 @@
   text-align: center;
   display: inline-block;
 }
-.about_content li.empSort .footer .btn.cancel {
+.about_content li.sysSet .contentWrap .empSortWrap .empSort .footer .btn.cancel {
   border: 1px solid #ddd;
   color: #555;
   background: #fff;
@@ -1341,13 +1635,15 @@
 .about_content .account div.clickSound,
 .about_content .account div.btScanner,
 .about_content .account div.paySound,
-.about_content .account div.attendanceSound {
+.about_content .account div.attendanceSound,
+.about_content .account div.autopay {
   position: static;
 }
 .about_content .account div.clickSound .am-radio,
 .about_content .account div.btScanner .am-radio,
 .about_content .account div.paySound .am-radio,
-.about_content .account div.attendanceSound .am-radio {
+.about_content .account div.attendanceSound .am-radio,
+.about_content .account div.autopay .am-radio {
   position: relative;
   top: 6px;
 }
@@ -1441,6 +1737,10 @@
   overflow: hidden;
 }
 .page_about .editContainer .container .wrapper {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
   padding: 20px 26px;
 }
 .page_about .editContainer .container .wrapper .title {
@@ -1499,42 +1799,46 @@
   background-size: 6px 6px;
 }
 .page_about .editContainer .container .wrapper .wrap.proof {
-  height: 138px;
+  height: unset;
   position: relative;
 }
-.page_about .editContainer .container .wrapper .wrap.proof .delProof {
+.page_about .editContainer .container .wrapper .wrap.proof .imgsWrap {
+  margin-left: 70px;
+  padding: 0;
+  position: relative;
+}
+.page_about .editContainer .container .wrapper .wrap.proof .imgsWrap .imgWrapper {
+  display: inline-block;
+  position: relative;
+  width: 62px;
+  height: 62px;
+  margin-bottom: 13px;
+}
+.page_about .editContainer .container .wrapper .wrap.proof .imgsWrap .imgWrapper img {
+  width: 62px;
+  height: 62px;
+  border-radius: 4px;
+}
+.page_about .editContainer .container .wrapper .wrap.proof .imgsWrap .imgWrapper .delImg {
   position: absolute;
-  width: 30px;
-  height: 30px;
+  width: 16px;
+  height: 16px;
   top: -5px;
   right: -5px;
   background: url(../images/error.png) no-repeat 0px 0px;
   background-size: 100% 100%;
 }
-.page_about .editContainer .container .wrapper .wrap.proof .select {
-  height: 138px;
-  padding: 0;
+.page_about .editContainer .container .wrapper .wrap.proof .imgsWrap .imgWrapper:nth-child(2n+1) {
+  margin-right: 13px;
+}
+.page_about .editContainer .container .wrapper .wrap.proof .imgsWrap .addImg {
+  display: inline-block;
+  height: 60px;
+  width: 60px;
   border: 1px dashed #ddd;
-  border-radius: 5px;
+  border-radius: 4px;
   background: url(../images/payout-upload-bg.png) no-repeat center center;
   background-size: 27px 27px;
-  position: relative;
-  overflow: hidden;
-}
-.page_about .editContainer .container .wrapper .wrap.proof .select.hasprofile::after {
-  content: '';
-  position: absolute;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.35) url(../images/storage/storage-edit-barcode.png) no-repeat center center;
-  background-size: 12px 15px;
-  right: 5px;
-  bottom: 5px;
-}
-.page_about .editContainer .container .wrapper .wrap.proof .select img {
-  width: 100%;
-  height: 100%;
 }
 .page_about .editContainer .container .wrapper .wrap.des {
   height: 82px;
@@ -1573,6 +1877,9 @@
   background-color: #fff;
   color: #555;
   border-top: 1px solid #555;
+}
+.page_about .editContainer .btns div.am-disabled {
+  background-color: #999;
 }
 .page_attendance {
   height: 100%;

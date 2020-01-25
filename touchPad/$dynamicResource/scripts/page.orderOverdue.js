@@ -86,7 +86,7 @@
                     
     
                     $('#addMoreRemark .c-more-box').hide();
-                    $('#addMoreRemark .c-content').css({'minHeight' : '300px'});
+                    // $('#addMoreRemark .c-content').css({'minHeight' : '300px'});
     
                     am.hangupRemark.show({
                         value:data.instorecomment || "",
@@ -102,7 +102,8 @@
                                 instorecomment:remark,
                                 parentShopId:am.metadata.userInfo.parentShopId,
                                 shopId:am.metadata.userInfo.shopId,
-                                serviceNO:data.serviceNO
+                                serviceNO:data.serviceNO,
+                                version: data.version
                             }, function(ret){
                                 am.loading.hide();
                                 if(ret && ret.code===0){
@@ -117,6 +118,9 @@
                                         $this.text('');
                                         $this.parent().removeClass('has');
                                     }  
+                                }else if(ret && ret.code==11008){
+                                    am.msg('由于其它终端的操作，此单状态已改变！');
+                                    self.autoGetData();
                                 } else {
                                     am.msg("保存失败！");
                                 }
@@ -285,6 +289,10 @@
                             '<div class="remarkWrap am-clickable">' +(item.instorecomment ? item.instorecomment : '') + '</div>'+
                         '</td>'+
                     '</tr>');
+                    if(self.tabIndex !== '1'){
+                        // 已删除服务不显示编辑备注图标
+                        $tfoot.find('.remarkWrap').css("background","none");
+                    }
                     
                     self.rendBillRemark(item,$tfoot);
                    
@@ -617,11 +625,17 @@
 		},
 		delete: function(data) {
             var self = this;
-            var reason = JSON.parse(am.metadata.configs.cancleBilling);
+            var reason = JSON.parse(am.metadata.configs.delBillRemarks || []);// 门店删单理由
+            var hqReason= [];
+            if(!(reason && reason.length)){
+                // 如果门店未配置删单理由则再取总部的配置
+                hqReason = JSON.parse(am.metadata.configs.cancleBilling);
+            }
+            var cancelReasons = (reason && reason.length ? reason : hqReason)||[];
             am.selectCancleReason.show({
                 title: '请选择删单理由',
                 warn: '警告:请选择或输入明确的删单理由，以便财务和管理层审核',
-                reason: reason,
+                reason: cancelReasons,
                 callback: function(str){
                     am.api.hangupDelete.exec({
                         "ids": [data.id],
@@ -644,6 +658,35 @@
                             self.startGetDate(self.overParams);
                         } else {
                             am.msg(ret.message || "删除服务单失败，请重试！");
+                        }
+                    });
+                },
+                saveToRemarkList:function(val){
+                    if(!am.isNull(reason) && reason.indexOf(val)>-1){
+                        // 常用已包含
+                        am.msg(val+'已存在，请修改后再保存');
+					    return;
+                    }else if(!am.isNull(reason) && reason.indexOf(val)==-1){
+                        // 常用未包含
+                        saveReason = reason.concat([val]);
+                    }else if(am.isNull(reason)){
+                        // 没有常用
+                        saveReason = [val];
+                    }
+                    am.loading.show();
+                    am.api.saveNormalConfig.exec({
+                        parentshopid: am.metadata.userInfo.parentShopId+'', 
+                        configkey: 'delBillRemarks',
+                        configvalue: JSON.stringify(saveReason),
+                        shopid: am.metadata.userInfo.shopId+'',
+                        setModuleid: 15
+                    },function(ret){
+                        am.loading.hide();
+                        if(ret && ret.code==0){
+                           am.metadata.configs.delBillRemarks=JSON.stringify(saveReason);
+                           am.msg('【'+val+'】'+'已保存为常用删单理由')
+                        }else {
+                            am.msg('保存失败');
                         }
                     });
                 }

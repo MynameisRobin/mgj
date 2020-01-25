@@ -261,7 +261,7 @@ var computingPerformance=(function(win,cashierTab){
 		paytypeClass:function(ret,emppernum){
 			var res={cardfee:0,cashfee:0,otherfee:0};
 			var payclass={
-				cardfee:["cardfee","presentfee","dividefee"],
+				cardfee:["cardfee","presentfee","dividefee","treatcardfee","treatpresentfee"],
 				cashfee:["cash","cashfee","unionpay","pay","weixin","dianpin","cooperation","mall"],
 				otherfee:["luckymoney","coupon","debtfee","voucherfee","mdfee","onlineCredit","onlineCreditPay","offlineCredit","offlineCreditPay","mallOrderFee"]
 			}
@@ -332,7 +332,10 @@ var computingPerformance=(function(win,cashierTab){
 				for(var i=0;i<itemList.length;i++){
 					var item=itemList[i];
 					res[i]={};
-					res[i].shopper= convertPrice(basePerformance[i].shopper) || 0;
+					res[i].shopper= convertPrice(basePerformance[i].shopper);
+					res[i].unshopper= convertPrice(basePerformance[i].unshopper);
+					var s = am.metadata.userInfo&&am.metadata.userInfo.fixedNum;
+					if(s==3){res[i].unshopper -= 1};
 					if(item.payDetail){
 						res[i].total = item.payDetail;
 					}else {
@@ -358,6 +361,18 @@ var computingPerformance=(function(win,cashierTab){
 			return res;
 
 		},
+		getshopPerfPct: function (itemId) {
+			// 获取项目所配的店内业绩
+			if (itemId) {
+				var serviceCodeMap = am.metadata.serviceCodeMap,
+					stopServiceCodeMap = am.metadata.stopServiceCodeMap,
+					serviceItemInfo = serviceCodeMap[itemId] || stopServiceCodeMap[itemId],
+					thirdCommissionPct = (serviceItemInfo && typeof (serviceItemInfo.thirdCommissionPct) === 'number') ? serviceItemInfo.thirdCommissionPct : 0;
+				return 1-thirdCommissionPct;
+			}else{
+				return 0;
+			}
+		},
 		computingBase:function(config){//计算基准业绩
 			var debtFlag = amGloble.metadata.configs.debtFlag*1;
 			var perRule=this.getpreruleBykey(config);
@@ -366,26 +381,29 @@ var computingPerformance=(function(win,cashierTab){
 			var  c={};
 			var treatcardfee=config["card"]?Number(config["card"]["treatcardfee"] || 0):0,
 				treatpresentfee=config["card"]?Number(config["card"]["treatpresentfee"] || 0):0;
-
+			var serviceCodeMap = am.metadata.serviceCodeMap;
+			var stopServiceCodeMap = am.metadata.stopServiceCodeMap;
 			for(var m=0;m<config.itemList.length;m++){//先分套餐项目
 				if(config.itemList[m].consumemode==1 || config.itemList[m].consumemode==4){//套餐和年卡项目消费
 					c[m]={};
 					var itemj = coursetotal.list[m];
 					//计算比例
-					var _cardfee = (Number(itemj.cashFee)||0) + (Number(itemj.cardFee)||0);
-					var _presentfee = (Number(itemj.otherFee)||0);
-					var _total = _cardfee + _presentfee;
+					var _treatcardfee = (Number(itemj.cashFee)||0) + (Number(itemj.cardFee)||0);
+					var _treatpresentfee = (Number(itemj.otherFee)||0);
+					var _total = _treatcardfee + _treatpresentfee;
 					var factor = 1;
 					if((itemj.consumemode==4 && !itemj.unlimited) || (itemj.consumemode==1 && _total==0)){
 						// //不限次还是分开，年卡项目全部算卡金
-						c[m].cardfee = itemj.price;
-						c[m].presentfee = 0;
+						c[m].treatcardfee = itemj.price;
+						c[m].treatpresentfee = 0;
 					}else{
-						c[m].cardfee = itemj.price*_cardfee/_total;
-						c[m].presentfee=itemj.price*_presentfee/_total;
+						c[m].treatcardfee = itemj.price*_treatcardfee/_total;
+						c[m].treatpresentfee=itemj.price*_treatpresentfee/_total;
 					}
-					c[m].shopper = Number(c[m].cardfee*(perRule["cardfee"].shopper/100)) + Number(c[m].presentfee*(perRule["presentfee"].shopper/100));
-					c[m].empper  = Number(c[m].cardfee*(perRule["cardfee"].empper/100)) + Number(c[m].presentfee*(perRule["presentfee"].empper/100));
+					c[m].shopper = Number(c[m].treatcardfee*(perRule["treatcardfee"].shopper/100)) + Number(c[m].treatpresentfee*(perRule["treatpresentfee"].shopper/100));
+					c[m].empper  = Number(c[m].treatcardfee*(perRule["treatcardfee"].empper/100)) + Number(c[m].treatpresentfee*(perRule["treatpresentfee"].empper/100));
+					var shopPerfPct = this.getshopPerfPct(config.itemList[m].itemid);
+					c[m].shopper = c[m].shopper*shopPerfPct // 店内业绩折扣比例
 				}
 			}
 
@@ -394,7 +412,7 @@ var computingPerformance=(function(win,cashierTab){
 				if(i=='debtfee' && debtFlag){
 					continue;
 				}
-				var result=0,outresult=[],outempres=[],outtotal=[],
+				var result=0,outresult=[],outempres=[],outtotal=[],outunresult=[]
 					num=parseFloat(config.paid[i]);
 				for(var j=0;j<config.itemList.length;j++){//计算总售价
 					var item=config.itemList[j];
@@ -403,54 +421,72 @@ var computingPerformance=(function(win,cashierTab){
 				}
 				for(var l=0;l<config.itemList.length;l++){//遍历项目列表 单项目计算业绩
 					var iteml=config.itemList[l];
+					var shopPerfPct = this.getshopPerfPct(iteml.itemid);
 					if(iteml.payDetail){
-						outresult.push((iteml.payDetail[i]/num || 0)*num*(perRule[i].shopper/100));
+						outresult.push((iteml.payDetail[i]/num || 0)*num*(perRule[i].shopper/100)*shopPerfPct);
+						outunresult.push((iteml.payDetail[i]/num || 0)*num*(perRule[i].shopper/100)*(1-shopPerfPct));
 						outempres.push((iteml.payDetail[i]/num || 0)*num*(perRule[i].empper/100));
 						outtotal.push((iteml.payDetail[i]/num || 0)*num);
 					}else {
 						if(c.hasOwnProperty(l)){
-							if(i=="cardfee" || i=="presentfee"){
+							if(i=="treatcardfee" || i=="treatpresentfee"){
 								outtotal.push(c[l][i] || 0);
-								outresult.push(((c[l][i]|| 0)*(perRule[i].shopper/100)));
+								outresult.push(((c[l][i]|| 0)*(perRule[i].shopper/100))*shopPerfPct);
+								outunresult.push(((c[l][i]|| 0)*(perRule[i].shopper/100))*(1-shopPerfPct));
 								outempres.push(((c[l][i]|| 0)*(perRule[i].empper/100)));
 							}else{
 								outresult.push(0);
 								outempres.push(0);
 								outtotal.push(0);
+								outunresult.push(0);
 							}
 						}else{
 							//Math.floor(/100)*100
-							outresult.push((parseFloat(iteml.price)/result || 0)*num*(perRule[i].shopper/100));
-							outempres.push((parseFloat(iteml.price)/result || 0)*num*(perRule[i].empper/100));
-							outtotal.push((parseFloat(iteml.price)/result || 0)*num);
+							if(i=="treatcardfee" || i=="treatpresentfee"){
+								outresult.push(0);
+								outempres.push(0);
+								outtotal.push(0);
+								outunresult.push(0);
+							}else {
+								outresult.push((parseFloat(iteml.price)/result || 0)*num*(perRule[i].shopper/100)*shopPerfPct);
+								outunresult.push((parseFloat(iteml.price)/result || 0)*num*(perRule[i].shopper/100)*(1-shopPerfPct));
+								outempres.push((parseFloat(iteml.price)/result || 0)*num*(perRule[i].empper/100));
+								outtotal.push((parseFloat(iteml.price)/result || 0)*num);
+							}
 						}
 					}
 					// total[i]=(parseFloat(iteml.price)/result)*num;
 				}
-				res[i]={shopper:outresult || 100,empper:outempres || 100};
+				res[i]={shopper:outresult || 100,empper:outempres || 100,unshopper:outunresult || 0};
 				rek[i]=outtotal;
 			}
 			console.log(res);
 			for(var k=0;k<config.itemList.length;k++){//把每种支付方式的业绩加起来  输出数组
-				var a=0,b=0;
+				var a=0,b=0;c=0
 				for(var n in res){
 					var shopper = res[n]["shopper"][k];
+					var unshopper = res[n]["unshopper"][k];
 					var empper = res[n]["empper"][k];
 					a += shopper;
 					b += empper;
+					c += unshopper;
 				}
 				var iteml = config.itemList[k];
-				if(iteml.payDetail){
+				if(iteml.payDetail){// 高级结算
 					var _shopper = 0;
 					var _empper = 0;
+					var _unshopper = 0;
+					var shopPerfPct = this.getshopPerfPct(iteml.itemid);
 					for(var pkey in iteml.payDetail){
-						_shopper += (iteml.payDetail[pkey] || 0)*(perRule[pkey].shopper/100);
+						_shopper += (iteml.payDetail[pkey] || 0)*(perRule[pkey].shopper/100)*shopPerfPct;
+						_unshopper += (iteml.payDetail[pkey] || 0)*(perRule[pkey].shopper/100)*(1-shopPerfPct);
 						_empper += (iteml.payDetail[pkey] || 0)*(perRule[pkey].empper/100);
 					}
 					a = _shopper;
 					b = _empper;
+					c = _unshopper;
 				}
-				finalres.push({shopper:a,empper:b});
+				finalres.push({shopper:a,empper:b,unshopper:c});
 			}
 			console.log(rek);
 			output.paycent=res;
@@ -650,9 +686,11 @@ var computingPerformance=(function(win,cashierTab){
 		getpreruleBykey:function(config){//根据支付的key 获取相应的规则
 			var payConfig=this.payConfig;
 			var defreturn={shopper:100,empper:100},res={},key=config.paid,cardflag=0;
-			var cardRule={cardfee:1,presentfee:2,dividefee:3};//1 划卡 2 划赠送金 3划分期赠金
+			var cardRule={cardfee:1,presentfee:2,dividefee:3,treatcardfee:4,treatpresentfee:5};//1 划卡 2 划赠送金 3划分期赠金 4划套餐卡金 5划套餐赠金
 			config.paid.presentfee = config.paid.presentfee || 0;
 			config.paid.cardfee = config.paid.cardfee || 0;
+			config.paid.treatcardfee = config.card && config.card.treatcardfee || 0;
+			config.paid.treatpresentfee = config.card && config.card.treatpresentfee || 0;
 			for(var i in key){
 				if(i=="deductpoint"){
 					res[i]={shopper:0,empper:0};

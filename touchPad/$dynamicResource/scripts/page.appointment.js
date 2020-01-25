@@ -132,7 +132,10 @@
             this.$radioLi = this.$.find(".radio li");
 
             this.$btnGroup = this.$.find(".customerResult");
-
+            this.$videoHelpWrap = this.$.find('.videoHelpWrap').on('vclick',function(){
+                console.log('视频帮助45');
+                am.getVideoHelp(this,"45");
+            });
             //this.$inputMask = this.$.find('.input-mask');
             this.$condition = this.$.find(".condition").keyup(function(evt) {
                 if (evt.keyCode == 13) {
@@ -253,9 +256,21 @@
                     title: "输入手机号", //可不传
                     hidedot: true, //是否隐藏点
                     submit: function(value) {
+                        if (value.toString().length > 11) {
+                            value = value.substring(0, 11);
+                        };
                         var oldValue = $(self).html();
                         $(self).html(value == "" ? oldValue : value);
-                        that.checkPhone(value == "" ? oldValue : value);
+                        var newValue = $(self).html().replace(/[\s\r\n\\\/\'\"\‘\’\“\”]/g, '');
+                        if(amGloble.metadata.userInfo.operatestr.indexOf('MGJR,') == -1){
+                            if(newValue.toString().length==11){
+                                that.checkPhone(newValue);
+                            }else{
+                                am.msg("请输入11位正确手机号");
+                            }
+                        }else{
+                            that.checkPhone(newValue);
+                        }
                     },
                     cancel: function() {}
                 });
@@ -337,7 +352,6 @@
                     that.calTime(new Date());
                 }
             });
-
             this.$date = this.$content.find(".date");
             this.$date.mobiscroll().calendar({
                 theme: "mobiscroll",
@@ -424,7 +438,8 @@
 						var times = 0;
 						var temTimes = 0;
 						var items = that.serviceItemDetails;
-						var itemsJson = {};
+                        var itemsJson = {};
+                        var takeUpModelPlus = amGloble.metadata.configs && amGloble.metadata.configs.takeUpModel == 1; //预约时长叠加
 						for (var i = 0; i < items.length; i++) {
 							var itemClass = items[i];
 							for (var key in itemClass) {
@@ -432,14 +447,18 @@
 								for (var j = 0; j < classItems.length; j++) {
 									if (classItems[j].flag) {
 										if (classItems[j].time) {
-											temTimes = classItems[j].time;
-											if (times > 0) {
-												if (temTimes > times) {
-													times = temTimes;
-												}
-											} else {
-												times = classItems[j].time;
-											}
+											if(takeUpModelPlus){
+                                                times += classItems[j].time;
+                                            }else {
+                                                temTimes = classItems[j].time;
+                                                if (times > 0) {
+                                                    if (temTimes > times) {
+                                                        times = temTimes;
+                                                    }
+                                                } else {
+                                                    times = classItems[j].time;
+                                                }
+                                            }
 										}
 										var itemKey = classItems[j].id;
 										itemsJson[itemKey] = classItems[j];
@@ -538,6 +557,14 @@
                     am.msg("此会员卡不允许跨店消费！");
                     return;
                 }
+                if (item.status == 1) {
+                    am.msg('会员卡退卡中，无法进行此操作');
+                    return false;
+                }
+				// 是否过期
+				if ( am.cashierTab.isOverdue(item) ) {
+					return;
+				}
 				that.onSelect(item);
             }). on('vclick','.list-left,.list-title-warp',function(){
 				var index = $(this).parent().index();
@@ -611,10 +638,17 @@
                         am.msg("请输入姓名");
                         return;
                     }
-                    if (!tel || tel.length < 4) {
-                        am.msg("手机号码必须大于4位！");
-                        return;
-                    }
+                    if(amGloble.metadata.userInfo.operatestr.indexOf('MGJR,') == -1){
+                        if (!tel || tel.length != 11) {
+                            am.msg("手机号码必须为11位！");
+                            return;
+                        }
+                    }else{
+                        if (!tel || tel.length < 4) {
+                            am.msg("手机号码必须大于4位！");
+                            return;
+                        }
+                    };
                     if (sex < 0) {
                         am.msg("请选择性别");
                         return;
@@ -817,6 +851,13 @@
             if(params=='back') return;
             this.shiftList=params.shifts;
             this.shiftDate=params.date;
+            if(params&&params.selectTime&&params.selectShift){
+                this.selectDate = params.selectTime.format("yyyy-mm-dd");
+                this.selectMoment = params.selectTime.format("HH:MM");
+                this.selectShift = params.selectShift;
+            }else{
+                this.selectDate = this.selectMoment = this.selectShift = null;
+            }
             this.arr2Obj(this.shiftList,this.shiftDate);
 
             this.clearContent();
@@ -943,7 +984,8 @@
                 };
             }
 
-			this.$date.html(new Date().format("yyyy-mm-dd"));
+			this.$date.html(this.selectDate||new Date().format("yyyy-mm-dd"));
+            this.$date.mobiscroll('setVal', new Date(this.selectTime?this.selectTime.format("yyyy/mm/dd"):new Date()));
             this.$project
                 .html(this.serviceItem[0].name)
                 .attr("data-id", this.serviceItem[0].id)
@@ -961,11 +1003,11 @@
 
 			this.$number.html(this.serviceNumber[0].name);
             this.$member
-                .html(this.member[0].name)
-                .attr("data-id", this.member[0].id)
-                .attr("data-name", this.member[0].name2)
-                .attr("data-dutyid", this.member[0].dutyid)
-                .attr("data-nickname", this.member[0].nickname);
+                .html(this.selectShift ? this.selectShift.no + " " + this.selectShift.name : this.member[0].name)
+                .attr("data-id", this.selectShift ? this.selectShift.id : this.member[0].id)
+                .attr("data-name", this.selectShift ? this.selectShift.name : this.member[0].name2)
+                .attr("data-dutyid", this.selectShift ? this.selectShift.dutyid : this.member[0].dutyid)
+                .attr("data-nickname", this.selectShift ? this.selectShift.nickname : this.member[0].nickname);
 
             if (!this.hideDepart) {
                 if (am.metadata.shopList.length == 1) {
@@ -1052,7 +1094,7 @@
                     }
                 }
             }
-            this.$time.html(this.timeArea[0].name);
+            this.$time.html(this.selectMoment||this.timeArea[0].name);
         },
         isJSON:function(something){
             if (typeof something == 'string') {
@@ -1104,7 +1146,9 @@
                     display:'none'
                 })
             }
-           
+            if(this.selectShift){
+                this.$new.trigger("vclick");
+            }      
         },
         beforeHide: function() {},
         afterHide: function() {

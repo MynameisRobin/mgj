@@ -1,0 +1,260 @@
+@import "var.less";
+@path: "../images/";
+@import "../images/icons_sprite.less";
+
+.bs {
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+.br(@num) {
+    border-radius: @num;
+    -webkit-border-radius: @num;
+}
+
+#lockScreen {
+    display: none;
+    position: absolute;
+	z-index: 1000;
+	width: 100%;
+	height:100%;
+    top: 0;
+    left: 100%;
+    // right: 0;
+    // bottom: 0;
+    background: url(../images/lock_bg.jpg) no-repeat center center;
+    background-size: cover;
+    text-align: center;
+    color: #fff;
+	font-size: 12px;
+	
+    .wrapper {
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+
+        .head {
+            padding-top: 15px;
+
+            .timeBox {
+                font-size: 14px;
+            }
+        }
+
+        .content {
+            color: #fff;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+
+            .header {
+                width: 85px;
+                height: 85px;
+                margin: 0 auto;
+                box-sizing: border-box;
+                -webkit-box-sizing: border-box;
+                background-color: #ececec;
+                border-radius: 50%;
+                -webkit-border-radius: 50%;
+                padding: 6px;
+
+                .crown {
+                    display: none;
+                }
+
+                &.good {
+                    position: relative;
+                    background: #f7d467;
+
+                    .crown {
+                        display: block;
+                        width: 24px;
+                        height: 20px;
+                        position: absolute;
+                        top: -18px;
+                        left: 50%;
+                        margin-left: -12px;
+                        background: url(../images/good.png) no-repeat;
+                        background-size: 24px 20px;
+                        cursor: pointer;
+                    }
+                }
+
+                &.lock {
+                    position: relative;
+
+                    &::after {
+                        content: "\e690";
+                        font-family: "iconfont" !important;
+                        font-style: normal;
+                        -webkit-font-smoothing: antialiased;
+                        position: absolute;
+                        width: 100px;
+                        height: 100px;
+                        line-height: 70px;
+                        top: 4px;
+                        left: 4px;
+                        text-align: center;
+                        font-size: 28px;
+                        color: #fff;
+                        border-radius: 50%;
+                        background: rgba(0, 0, 0, 0.5);
+                    }
+
+                    &::before {
+                        content: "点击解锁";
+                        position: absolute;
+                        z-index: 2;
+                        width: 100px;
+                        height: 100px;
+                        line-height: 130px;
+                        top: 4px;
+                        left: 4px;
+                        text-align: center;
+                        font-size: 12px;
+                        color: #fff;
+                    }
+                }
+
+                .header_box {
+                    width: 100%;
+                    height: 100%;
+                    border-radius: 50%;
+                    -webkit-border-radius: 50%;
+                    background: #e1e1e1 url(../images/icons_sprite/default_custmerIcon.png) no-repeat 0px 0px;
+                    background-size: 72px 72px;
+                }
+
+                img {
+                    border: 0;
+                    .br(50%);
+                    width: 100%;
+                    height: 100%;
+                }
+			}
+
+			.paying,.success{
+				display: none;
+			}
+			.header-default{
+				width: 106px;
+				height: 106px;
+				margin: 0 auto;
+				box-sizing: border-box;
+				background-color: #656e81;
+				border-radius: 50%;
+				position: relative;
+				.defaulImg{
+					width: 92px;
+					height: 92px;
+					border-radius: 50%;
+					position: absolute;
+					top: 7px;
+                    left: 7px;
+                    overflow: hidden;
+					img {
+                        width: 100%;
+                        height: 100%;
+                    }
+				}
+			}
+
+            .info {
+                font-size: 14px;
+
+                .tip {
+                    font-size: 18px;
+                    margin-top: 25px;
+                    margin-bottom: 12px;
+                }
+
+                .itemInfo {
+                    .itemSpan {
+                        margin-right: 20px;
+                    }
+                }
+
+                .countInfo {
+                    margin-top: 6px;
+                }
+
+                .loading {
+                    margin-top: 25px;
+
+                    .iconfont {
+                        font-size: 19px;
+                        display: inline-block;
+                    }
+                }
+            }
+        }
+
+        .footer {
+            width: 100%;
+            position: absolute;
+            bottom: 40px;
+
+            .unlock {
+                font-size: 14px;
+                margin-bottom: 30px;
+                color: rgba(255, 255, 255, .85);
+
+                .iconfont {
+                    font-size: 27px;
+                    display: inline-block;
+                }
+
+                .tip {
+                    margin-top: 8px;
+                }
+            }
+
+            .forget {
+                .setPwdBtn {
+                    display: none;
+                    color: rgba(255, 255, 255, .85);
+                }
+
+                .pwdBtn {
+                    display: none;
+                    color: rgba(255, 255, 255, .85);
+                    border-bottom: 1px solid #fff;
+                }
+            }
+        }
+
+        .fadeInUp {
+            animation: fadeInUp 2.5s infinite linear;
+        }
+
+        .rotation {
+            animation: rotation 2.5s infinite linear;
+        }
+    }
+}
+
+@keyframes fadeInUp {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}

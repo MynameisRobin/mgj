@@ -409,7 +409,7 @@
 }
 #seatDownload .wrapper .size {
   font-size: 14px;
-  color: #999 ;
+  color: #999;
   text-align: center;
   line-height: 20px;
   height: 20px;
@@ -430,7 +430,8 @@
 #seatDownload .wrapper .chooseSize li {
   height: 40px;
   overflow: hidden;
-  text-align: center;
+  text-align: left;
+  margin-left: 120px;
 }
 #seatDownload .wrapper .chooseSize li .icon {
   display: inline-block;
@@ -459,6 +460,8 @@
 }
 #seatDownload .wrapper .chooseSize li.selected .icon {
   border: none;
+  width: 24px;
+  height: 24px;
 }
 #seatDownload .wrapper .chooseSize li.selected .icon .iconfont {
   display: block;
@@ -545,7 +548,7 @@
   -moz-transform: translate(0, -64%);
 }
 #seatQrcode .swiper .am-carrousel ul {
-  margin-left: 28%;
+  margin-left: 34.8%;
   height: 539px;
 }
 #seatQrcode .swiper .am-carrousel ul li {
@@ -588,6 +591,126 @@
   color: #fff;
   text-align: center;
   line-height: 42px;
+}
+#seatQrcode .swiper .am-carrousel ul .public1 {
+  background: url("../images/server/public1.png") no-repeat center center;
+  background-size: cover;
+}
+#seatQrcode .swiper .am-carrousel ul .public1 .codeDiv {
+  bottom: 109px;
+  margin-left: -61px;
+  width: 124px;
+  height: 124px;
+}
+#seatQrcode .swiper .am-carrousel ul .public2 {
+  background: url("../images/server/public2.png") no-repeat center center;
+  background-size: cover;
+}
+#seatQrcode .swiper .am-carrousel ul .public2 .codeDiv {
+  bottom: 109px;
+  margin-left: -61px;
+  width: 124px;
+  height: 124px;
+}
+#seatQrcode .swiper .am-carrousel ul .public3 {
+  background: url("../images/server/public3.png") no-repeat center center;
+  background-size: cover;
+}
+#seatQrcode .swiper .am-carrousel ul .public3 .codeDiv {
+  bottom: 109px;
+  margin-left: -61px;
+  width: 124px;
+  height: 124px;
+}
+#seatQrcode .swiper .am-carrousel ul .public4 {
+  background: url("../images/server/public4.png") no-repeat center center;
+  background-size: cover;
+}
+#seatQrcode .swiper .am-carrousel ul .public4 .codeDiv {
+  bottom: 109px;
+  margin-left: -61px;
+  width: 124px;
+  height: 124px;
+}
+#seatQrcode .swiper .am-carrousel ul .public5 {
+  background: url("../images/server/public5.png") no-repeat center center;
+  background-size: cover;
+}
+#seatQrcode .swiper .am-carrousel ul .public5 .codeDiv {
+  bottom: 176px;
+  margin-left: -77px;
+  width: 154px;
+  height: 154px;
+}
+#seatQrcode .swiper .am-carrousel ul .public6 {
+  background: url("../images/server/public6.png") no-repeat center center;
+  background-size: cover;
+}
+#seatQrcode .swiper .am-carrousel ul .public6 .codeDiv {
+  bottom: 176px;
+  margin-left: -77px;
+  width: 154px;
+  height: 154px;
+}
+#seatQrcode .swiper .am-carrousel ul .public7 {
+  background: url("../images/server/public7.png") no-repeat center center;
+  background-size: cover;
+}
+#seatQrcode .swiper .am-carrousel ul .public7 .codeDiv {
+  bottom: 176px;
+  margin-left: -77px;
+  width: 154px;
+  height: 154px;
+}
+#seatQrcode .swiper .am-carrousel ul .public8 {
+  background: url("../images/server/public8.png") no-repeat center center;
+  background-size: cover;
+}
+#seatQrcode .swiper .am-carrousel ul .public8 .codeDiv {
+  bottom: 176px;
+  margin-left: -77px;
+  width: 154px;
+  height: 154px;
+}
+#seatQrcode .swiper .am-carrousel ul .public9 {
+  background: url("../images/server/public9.png") no-repeat center center;
+  background-size: cover;
+}
+#seatQrcode .swiper .am-carrousel ul .public9 .codeDiv {
+  bottom: 176px;
+  margin-left: -77px;
+  width: 154px;
+  height: 154px;
+}
+#seatQrcode .swiper .am-carrousel ul .public10 {
+  background: url("../images/server/public10.png") no-repeat center center;
+  background-size: cover;
+}
+#seatQrcode .swiper .am-carrousel ul .public10 .codeDiv {
+  bottom: 176px;
+  margin-left: -77px;
+  width: 154px;
+  height: 154px;
+}
+#seatQrcode .swiper .am-carrousel ul .public11 {
+  background: url("../images/server/public11.png") no-repeat center center;
+  background-size: cover;
+}
+#seatQrcode .swiper .am-carrousel ul .public11 .codeDiv {
+  bottom: 176px;
+  margin-left: -77px;
+  width: 154px;
+  height: 154px;
+}
+#seatQrcode .swiper .am-carrousel ul .public12 {
+  background: url("../images/server/public12.png") no-repeat center center;
+  background-size: cover;
+}
+#seatQrcode .swiper .am-carrousel ul .public12 .codeDiv {
+  bottom: 176px;
+  margin-left: -77px;
+  width: 154px;
+  height: 154px;
 }
 #seatQrcode .swiper .am-carrousel ul .d {
   background: url("../images/server/d.png") no-repeat center center;

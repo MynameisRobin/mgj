@@ -24,7 +24,7 @@
                     $children.filter(".billNo").text(data.billno);
                     $children.filter(".date").text(new Date(data.intodate).format("yyyy-mm-dd"));
                     $children.filter(".type").text(this.getIntoType(data.inwaretype));
-                    $children.filter(".oprator").text(this.getAdminNameById(data.operatid));
+                    $children.filter(".oprator").text(data.operatName || this.getAdminNameById(data.operatid));
                     $children.filter(".status").text(data.status==0?'未审核':'已审核');
                     if(data.status==0){
                         $children.filter(".status").css('color','#e82b45');
@@ -59,7 +59,7 @@
                     $children.filter(".billNo").text(data.billno);
                     $children.filter(".date").text(new Date(data.outdate).format("yyyy-mm-dd"));
                     $children.filter(".type").text(this.getOutType(data.outwaretype));
-                    $children.filter(".oprator").text(this.getAdminNameById(data.operatid));
+                    $children.filter(".oprator").text(data.operatName || this.getAdminNameById(data.operatid));
                     $children.filter(".status").text(data.status==0?'未审核':'已审核');
                     if(data.status==0){
                         $children.filter(".status").css('color','#e82b45');
@@ -339,6 +339,10 @@
                     title:"请输入数字",//可不传
                     hidedot:false,//是否隐藏点
                     submit:function(value){
+                        var index = self.$.find('.nav .item.active').index();
+                        if(value==0 && index!=5){
+                            return am.msg('数量不能为0');
+                        }
                         if(value*1){
                             value = Math.round(value*10)/10;
                         }
@@ -366,6 +370,9 @@
 
                     }
                 });
+            }).on('vclick','.videoHelpWrap',function(){
+                console.log('视频帮助26');
+                am.getVideoHelp(this,"26");
             });
 
             this.$.find('.right .container').on('vclick','.actPrice',function(){

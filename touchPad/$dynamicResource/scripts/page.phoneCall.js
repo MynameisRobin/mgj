@@ -257,7 +257,7 @@
             li += "<li>";
             li += '<div class="left">';
             li += '<span class="key">';
-            if (d.treattype == 1) {
+            if (d.treattype == 1 || d.treattype == 2) {
                 li += '<strong class="highlight">[赠] </strong>';
             }
             li += '<span class="combo_tit">' + (d.itemname || "") + "</span>（" + (sumtimes || 0) + "次）</span>";

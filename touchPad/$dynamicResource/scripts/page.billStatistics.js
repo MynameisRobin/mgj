@@ -79,7 +79,19 @@
 				.on('vclick', '.dateInput .pre', function() {
 					//当输入框中的值是三个月前的今天，pre按钮失效
 					var val = self.$billStatisticsInput.val();
-					if (new Date(val).getTime() < new Date(new Date().setMonth(new Date().getMonth() - 3)).getTime()) return;
+					var ts = amGloble.now();
+					var user = amGloble.metadata.userInfo;
+					if(user.userType==0 && user.role==3){
+						//老板看一年
+						ts.setYear(ts.getFullYear()-1);
+					}else if(user.userType==0 && user.role==2){
+						//管理员看6个月
+						ts.setMonth(ts.getMonth()-6);
+					}else {
+						//操作员看2天
+						ts.setDate(ts.getDate()-1);
+					}
+					if (new Date(val).getTime() < new Date(ts).getTime()) return;
 					self.$billStatisticsInput.val(self.changeTime(false));
 					self.changeSelected();
 					self.getData();
@@ -109,7 +121,7 @@
 			this.$.find('.billStatistics_content').on('vclick', '.billStatistics_networkerror .retry', function() {
 				self.getData();
 			});
-			self.mobiscroll();
+			
 			self.categroyScroll = new $.am.ScrollView({
 				$wrap: this.$.find('.categroywrapper'),
 				$inner: this.$.find('.categroywrapper .inner'),
@@ -166,6 +178,8 @@
 				.removeClass('selected');
 			self.categroyScroll.refresh();
 			self.incomeScroll.refresh();
+
+			self.mobiscroll();
 		},
 		afterShow: function(paras) {
 			this.getData();
@@ -578,7 +592,23 @@
 			return n;
 		},
 		mobiscroll: function() {
-			var min = new Date(new Date().setMonth(new Date().getMonth() - 3));
+			if(this.mobiscrollInited){
+				return;
+			}
+			this.mobiscrollInited = 1;
+			
+			var ts = amGloble.now();
+			var user = amGloble.metadata.userInfo;
+			if(user.userType==0 && user.role==3){
+				//老板看一年
+				ts.setYear(ts.getFullYear()-1);
+			}else if(user.userType==0 && user.role==2){
+				//管理员看6个月
+				ts.setMonth(ts.getMonth()-6);
+			}else {
+				//操作员看2天
+				ts.setDate(ts.getDate()-1);
+			}
 			var max = new Date();
 			$('#billStatisticsInput')
 				.mobiscroll()
@@ -589,7 +619,7 @@
 					months: 'auto',
 					setOnDayTap: true,
 					max: max,
-					min: min,
+					min: ts,
 					buttons: [],
 					endYear: amGloble.now().getFullYear()+50,
 					onSet: function(valueText, inst) {

@@ -129,6 +129,9 @@
 							pw.cb(1);
 							localStorage.setItem("memPwd_" + member.id,'true');
 							localStorage.setItem("togglePhoneCode_"+am.metadata.userInfo.userId,'0');
+							if (member.popupAgain) {
+								return true;
+							}
 						}else{
 							am.msg("密码输入有误！");
 							return true;
@@ -139,9 +142,13 @@
 					}
 				},
 				cancel:function(){
+					pw.cache[member.id] = new Date().getTime();
 					localStorage.setItem("memPwd_" + member.id,'true');
 					localStorage.setItem("togglePhoneCode_"+am.metadata.userInfo.userId,'0');
 					cb(1);
+					if (member.popupAgain) {
+						return true;
+					}
 				},
 			};
 
@@ -152,7 +159,7 @@
                 }
             }
 
-            if(member.passwd && !this.cache[member.id] && localStorage.getItem('memPwd'+'_'+member.id)!='true'){
+            if(member.passwd && !this.cache[member.id]){
 				if(am.isNull(option) || am.isNull(option.billingInfo)){
 					data.togglePhoneCode = 0;
 					return am.keyboard.show(data);
@@ -168,7 +175,7 @@
 					am.keyboard.show(data);
 				}
 			}else{
-				if(this.cache[member.id] || localStorage.getItem('memPwd'+'_'+member.id) == "true"){
+				if(this.cache[member.id]){
 					return cb(1);
 				}
 				if(!member.passwd && option && option.billingInfo && validation === 1){

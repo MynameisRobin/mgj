@@ -9,6 +9,12 @@
   box-sizing: border-box;
   padding-top: 51px;
 }
+.page_hangup .keypadWrap .keypadBtnDiv {
+  bottom: 173px;
+}
+.page_hangup .keypadWrap .keypadInner {
+  bottom: 153px;
+}
 .page_hangup .keypadWrap .keypadInner .keyUl li:nth-of-type(1) span::before {
   content: "+";
 }
@@ -45,6 +51,30 @@
   left: 340px;
   right: auto;
   display: none;
+}
+.page_hangup.half_page .am-header .operate_wrap .swipe_btn {
+  position: absolute;
+  display: block;
+  font-size: 14px;
+  color: #eeeeee;
+  padding: 0px 8px;
+  height: 34px;
+  line-height: 34px;
+  left: 340px;
+  width: 58px;
+  background-color: #555555;
+  border-radius: 3px;
+}
+.page_hangup.half_page .am-header .operate_wrap .swipe_btn.am-clickable-active {
+  background-color: #6c6c6c;
+}
+.page_hangup.half_page .am-header .operate_wrap .swipe_btn.active {
+  padding: 0px 22px;
+  width: 30px;
+  background-color: #e82742;
+}
+.page_hangup.half_page .am-header .operate_wrap .swipe_btn.active.am-clickable-active {
+  background-color: #C90E28;
 }
 .page_hangup.half_page .hangup_wrap .warn {
   display: block;
@@ -84,6 +114,91 @@
 }
 .page_hangup.half_page .left_operate_btn .openbill.am-clickable-active {
   background-color: #6c6c6c;
+}
+.page_hangup.half_page .left_operate_btn .merge_type {
+  display: none;
+  position: absolute;
+  z-index: 99;
+  top: 50px;
+  width: 140px;
+  line-height: 45px;
+  text-align: left;
+  box-shadow: 0px 2px 13px 0px rgba(0, 0, 0, 0.15);
+  background-color: #ffffff;
+}
+.page_hangup.half_page .left_operate_btn .merge_type::before {
+  content: "";
+  display: block;
+  left: 16px;
+  width: 0;
+  height: 0;
+  border-bottom: 6px solid #fff;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  position: absolute;
+  top: -6px;
+  transform: translateX(50%);
+  -webkit-transform: translateX(50%);
+}
+.page_hangup.half_page .left_operate_btn .merge_type .merge_common {
+  position: relative;
+}
+.page_hangup.half_page .left_operate_btn .merge_type .merge_common:hover {
+  background: #f7f7f7;
+}
+.page_hangup.half_page .left_operate_btn .merge_type .merge_common span {
+  display: block;
+  height: 45px;
+  width: 80px;
+  padding-left: 22px;
+}
+.page_hangup.half_page .left_operate_btn .merge_type .merge_common .showTip {
+  position: absolute;
+  background: url(../images/hangup/wenhao.png) no-repeat center center;
+  background-size: 100% 100%;
+  width: 17px;
+  height: 17px;
+  right: 13px;
+  top: 13px;
+  z-index: 100;
+}
+.page_hangup.half_page .left_operate_btn .merge_type .merge_common .showTip:hover {
+  background: url(../images/hangup/wenhao_hover.png) no-repeat center center;
+  background-size: 100% 100%;
+}
+.page_hangup.half_page .left_operate_btn .noticeTip {
+  position: absolute;
+  width: 246px;
+  height: 40px;
+  display: none;
+  left: 140px;
+  line-height: 20px;
+  padding: 13px 12px 12px 22px;
+  box-shadow: 0px 2px 13px 0px rgba(0, 0, 0, 0.15);
+  background-color: #ffffff;
+  z-index: 101;
+}
+.page_hangup.half_page .left_operate_btn .noticeTip::before {
+  content: "";
+  display: block;
+  left: -9px;
+  width: 0;
+  height: 0;
+  border-bottom: 6px solid transparent;
+  border-right: 6px solid #fff;
+  border-top: 6px solid transparent;
+  position: absolute;
+  top: 15px;
+  transform: translateX(50%);
+  -webkit-transform: translateX(50%);
+}
+.page_hangup.half_page .left_operate_btn .noticeTip.toOne {
+  display: block;
+  top: 50px;
+}
+.page_hangup.half_page .left_operate_btn .noticeTip.account {
+  display: block;
+  top: 95px;
 }
 .page_hangup.half_page .left_operate_btn .c_left_btn {
   float: left;
@@ -219,6 +334,9 @@
   border-radius: 5px;
   background-color: #e82742;
 }
+.page_hangup .am-header .operate_wrap .swipe_btn {
+  display: none;
+}
 .page_hangup .am-header .operate_wrap .merge_btn {
   position: absolute;
   right: 340px;
@@ -279,7 +397,8 @@
   padding-left: 14px;
   font-size: 12px;
 }
-.page_hangup .am-header .operate_wrap .search_wrap .search_icon {
+.page_hangup .am-header .operate_wrap .search_wrap .search_icon,
+.page_hangup .am-header .operate_wrap .search_wrap .swipe_icon {
   display: inline-block;
   vertical-align: middle;
   width: 28px;
@@ -688,6 +807,11 @@
   text-align: center;
   line-height: 223px;
   background: rgba(255, 255, 255, 0.8);
+}
+.page_hangup .hangup_container #content_wrap .hangup_block .settle .settleModel.payed,
+.page_hangup .hangup_container .seatMoreBillContent .hangup_block .settle .settleModel.payed {
+  height: 196px;
+  line-height: 196px;
 }
 .page_hangup .hangup_container #content_wrap .hangup_block .settle .settleModel .settleImg,
 .page_hangup .hangup_container .seatMoreBillContent .hangup_block .settle .settleModel .settleImg {
@@ -2104,6 +2228,10 @@
   padding-right: 5px;
 }
 .page_hangup .am-header .operate_wrap .search_wrap .search_icon svg {
+  width: 26px;
+  height: 26px;
+}
+.page_hangup .am-header .operate_wrap .search_wrap .swipe_icon svg {
   width: 26px;
   height: 26px;
 }

@@ -37,13 +37,20 @@
             if($('#maskBoard').is(":visible")){
                 am.keyboard.hide();
             }
-            var baseCode = amGloble.metadata.shopPropertyField.authorizationCard;
-            if(code.substring(code.length-5,code.length)==baseCode.substring(baseCode.length-5,baseCode.length)){
+            var baseCode = amGloble.metadata.shopPropertyField.authorizationCard,
+                baseArr = baseCode.split(','),
+                resArr = [];
+            $.each(baseArr, function (i, v) {
+                if (v) {
+                    resArr.push(v.substring(v.length - 5, v.length));
+                }
+            });
+            if (resArr.indexOf(code.substring(code.length - 5, code.length)) > -1) {
+                am.msg('授权修改成功');
                 this.hide();
                 this.anthSuccess && this.anthSuccess();
-                am.msg('授权修改成功');
-            }else {
-                this.authFail &&  this.authFail();
+            } else {
+                this.authFail && this.authFail();
                 am.msg('授权卡号错误，请重试');
             }
         },

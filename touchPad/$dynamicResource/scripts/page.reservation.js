@@ -14,6 +14,27 @@
                     date:timeBar.currentDate.format("yyyy-mm-dd")
                 });
             });
+            this.$toggleMode = this.$.find('.toggleMode .am-radio').vclick(function(){
+                var $this = $(this);
+                var checked = $this.hasClass('checked');
+                self.toggleMode(checked,function(){
+                    if(checked){
+                        $this.removeClass('checked');
+                        self.$.removeClass('simple');
+                    }else {
+                        $this.addClass('checked');
+                        self.$.addClass('simple');
+                    }
+                    reservation.createFrame();
+                    reservation.renderData(reservation.data);
+                    reservation.renderHeader();
+                    reservation.scroll();
+                    reservation.scroll('current');
+                });
+            });
+            this.$backCurrentTime = this.$.find('.backCurrentTime').vclick(function(){
+                reservation.scroll('current');
+            });
         },
         beforeShow:function(paras){
             am.tab.main.show();
@@ -23,21 +44,69 @@
             } else {
                 this.$.removeClass("am-full");
             }
-        },
-        afterShow: function (paras) {
+            var simple = reservation.getSimpleReservationMode();
+            if(simple){
+                this.$.addClass('simple');
+                this.$toggleMode.addClass('checked');
+            }else {
+                this.$.removeClass('simple');
+                this.$toggleMode.removeClass('checked');
+            }
+
             this.paras = paras;
             if (!this.initialized) {
                 timeBar.init(this.$);
                 reservationDetail.init();
                 reservation.init(this.$);
-                this.initialized = 1;
-                reservation.createFrame();
+				reservation.createFrame();
+				if ($(".page_reservation .rv_table").css('tableLayout') !== 'fixed') {
+					setTimeout(function(){
+						$(".page_reservation .rv_table").css({
+							tableLayout: 'fixed'
+						});
+					}, 50);
+				}
             }
-            timeBar.startPolling();
+            if(this.toggleShopInitialized && this.initialized){
+                reservation.createFrame();
+				if ($(".page_reservation .rv_table").css('tableLayout') !== 'fixed') {
+					setTimeout(function(){
+						$(".page_reservation .rv_table").css({
+							tableLayout: 'fixed'
+						});
+					}, 50);
+                }
+                
+            
+            }
+            this.initialized = 1;
+            this.toggleShopInitialized = 0;
+
+			timeBar.startPolling();
+        },
+        afterShow: function (paras) {
+            
         },
         beforeHide: function () {
             timeBar.stopPolling();
             reservation.endToggleBarber();
+        },
+        toggleMode: function(checked,callback){
+            am.loading.show();
+			am.api.saveUserConfig.exec({
+                "shopId": am.metadata.userInfo.shopId+'', 
+                "userId": am.metadata.userInfo.userId+'', 
+                "configKey": 'reservationSimpleMode',
+                "configValue": checked?0:1,
+			}, function (ret) {
+                am.loading.hide();
+                if(ret && ret.code==0){
+                    am.metadata.userConfigs.reservationSimpleMode = checked?0:1;
+                    callback && callback();
+                }else {
+                    am.msg('显示模式切换失败');
+                }
+			});
         },
         refreshData: function (disableTip, disableScroll) {
             timeBar.refresh(disableTip, disableScroll)
@@ -175,6 +244,7 @@
             this.$tuser = this.$tr.find("td.user").remove();
             this.$td = this.$tr.find("td:first").remove();
             this.$holder = this.$td.find(".rv_holder").remove();
+            this.$reservation = this.$td.find(".rv_reservation").remove();
             this.$remark = this.$td.find(".rv_remark").remove();
             this.$rest = this.$td.find(".rv_rest").remove();
             this.$rvshow = this.$td.find(".rv_show").remove();
@@ -182,6 +252,11 @@
             this.$toggleBarber = this.$.find('.toggleBarber').on('vclick','.cancel',function(){
                 self.endToggleBarber();
             });
+
+            this.$EmpScrollTipLeft = this.$.find('.EmpScrollTipLeft');
+            this.$EmpScrollTipRight = this.$.find('.EmpScrollTipRight');
+            this.$toggleMode = this.$.find('.toggleMode');
+
             this.$.on('vclick', ".user .iconfont", function () {
                 var $this = $(this); // 所点击的icon按钮
                 if ($(this).hasClass('icon-xiujia')) {
@@ -244,6 +319,54 @@
                 }
             });
             // 设置休假end
+            if (device2.windows() || navigator.platform.indexOf("Mac") == 0) {
+                this.$tb.on("mouseenter", "td", function () {
+                    var $this = $(this);
+                    if ($this.find('.rv_item').length ||$this.find('.rv_holder').length||$this.find('.rv_remark').length) {
+                        return false;
+                    }
+                    if ($this.hasClass("passed") || $this.parent().hasClass("rest")||$this.hasClass("hidden")) {
+                        return false;
+                    }
+                    if(self.togglingData){
+                        return false;
+                    }
+                    var $reservation = self.$reservation.clone(true, true);
+                    $this.append($reservation);
+                }).on("mouseleave", "td", function () {
+                    var $this = $(this);
+                    $this.find(".rv_reservation").remove();
+                });
+                this.$tb.on("vclick", "td", function () {
+                    var $this = $(this);
+                    if(self.togglingData){
+                        self.togglingBarber($this);
+                        return false;
+                    }
+                });
+            }else{
+                this.$tb.on("vclick", "td", function () {
+                    var $this = $(this);
+                    if ($this.find('.rv_item').length) {
+                        return false;
+                    }
+                    if ($this.hasClass("passed") || $this.parent().hasClass("rest")) {
+                        return false;
+                    }
+                    if(self.togglingData){
+                        self.togglingBarber($this);
+                        return false;
+                    }
+                    // self.createHolder($this);
+                    var $reservation = self.$reservation.clone(true, true);
+                    if($this.find(".rv_reservation").length){
+                        return false;
+                    }else{
+                        self.$.find(".rv_reservation").remove();
+                        $this.append($reservation);
+                    }
+                })
+            }
             this.$tb.on("vclick", ".rv_item", function () {
                 if(self.togglingData) {
                     am.msg('请选择空闲的方格');
@@ -263,6 +386,7 @@
                 }
                 return false;
             }).on('vhold','.rv_item',function(){
+                self.$.find(".rv_reservation").remove();
                 var data = $(this).data('item');
                 if(data.status==3){
                     am.msg('已结算预约无法修改');
@@ -272,7 +396,12 @@
                 return false;
             }).on("vclick", ".rv_holder", function () {
                 if(self.togglingData) {
-                    am.msg('请选择空闲的方格');
+                    var holderData = $(this).data('item');
+                    if(holderData.reservId==self.togglingData.id){
+                        self.togglingBarber($(this));
+                    }else {
+                        am.msg('请选择空闲的方格');
+                    }
                     return false;
                 } 
                 var data = $(this).data('item');
@@ -282,8 +411,18 @@
                             reservationDetail.cancel(data);
                         });
                     }else if(res.name == "添加备注"){
-                        $("#common_addremark").show().find(".save_btn").data(data);
-                        $("#common_addremark").find(".addremark_title").text("添加备注").end().find("textarea").val(data.comment || "");
+						am.addRemark.show({
+							title: '添加备注',
+							value: data.comment || "",
+							maxlength: 100,
+							cb: function (val) {
+								var remark = val || '';
+								self.updateComment({
+									val: remark,
+									id: data.id
+								});
+							}
+						});
                     }
                 });
                 return false;
@@ -300,24 +439,53 @@
                             reservationDetail.cancel(data);
                         });
                     }else if(res.name == "编辑备注"){
-                        $("#common_addremark").show().find(".save_btn").data(data);
-                        $("#common_addremark").find(".addremark_title").text("编辑").end().find("textarea").val(data.comment || "");
+						am.addRemark.show({
+							title: '编辑备注',
+							value: data.comment || "",
+							maxlength: 100,
+							cb: function (val) {
+								var remark = val || '';
+								self.updateComment({
+									val: remark,
+									id: data.id
+								});
+							}
+						});
                     }
                 });
                 return false;
-            }).on("vclick", "td", function () {
+            }).on("vclick", ".to_holded", function (e) {
+                e.stopPropagation()
                 var $this = $(this);
-                if ($this.find('.rv_item').length) {
+                var $reservation = $this.parent();
+                var $td = $reservation.parent();
+                if(self.togglingData) {
+                    am.msg('请选择空闲的方格');
                     return false;
                 }
-                if ($this.hasClass("passed") || $this.parent().hasClass("rest")) {
+                $reservation.remove();
+                $td.addClass("hidden");
+                self.createHolder($td);
+            }).on("vclick", ".to_appointment", function (e) {
+                e.stopPropagation()
+                var $this = $(this);
+                var $appointment = $this.parent();
+                var $td = $appointment.parent();
+                var $tr = $td.parent();
+                var time = $td.data("ts");
+                time = new Date(timeBar.currentDate.format("yyyy/mm/dd") + time.format(" HH:MM"));
+                var barber = $tr.data("item");
+                if(self.togglingData) {
+                    am.msg('请选择空闲的方格');
                     return false;
-                }
-                if(self.togglingData){
-                    self.togglingBarber($this);
-                    return false;
-                }
-                self.createHolder($this);
+                };
+                $appointment.remove();
+                $.am.changePage(am.page.appointment, 'slideup',{
+                    shifts:am.page.reservation.shifts,
+                    date:timeBar.currentDate.format("yyyy-mm-dd"),
+                    selectShift:barber,
+                    selectTime:time
+                });
             }).on('vclick', '.toggleItem', function () {
                 if(self.togglingData) {
                     am.msg('请选择空闲的方格');
@@ -335,24 +503,6 @@
                 $(this).parent().find('.rv_item').eq(itemLength - 1).insertBefore($(this).parent().find('.rv_item').eq(0));
             })
 
-            //编辑备注保存
-            $("#common_addremark").on("vclick",".save_btn",function(){
-                var remark = $("#common_addremark").find("textarea").val();
-                var data = $(this).data();
-                if(data.id){
-                    self.updateComment({
-                        val: remark,
-                        id: data.id
-                    });
-                }else{
-                    self.updateComment({
-                        val: remark
-                    },data);
-                }
-            }).on("vclick",".cancel_btn,.right_btn",function(){
-                $("#common_addremark").hide();
-            });
-
             this.$timeline = $(".rv_timeline");
             this.sc_table = new $.am.ScrollView({
                 $wrap: this.$scroll,
@@ -366,8 +516,64 @@
                 this.$inner.setTransformPos(pos, "xy", this.hasInput);
                 var x1 = x > 0 ? x : 0;
                 var y1 = y > 0 ? y : 0;
-                self.$tbx.setTransformPos([x, y1], "xy", this.hasInput);
-                self.$tby.setTransformPos([x1, y], "xy", this.hasInput);
+                var simple = self.getSimpleReservationMode();
+                if(simple){
+                    self.$tby.setTransformPos([x, y1], "xy", this.hasInput);
+                    self.$tbx.setTransformPos([x1, y], "xy", this.hasInput);
+                    var min = this._min[0];
+                    var top = self.$.hasClass('am-full')?51:53;
+                    if(pos[1]>0){
+                        self.$EmpScrollTipLeft.css('top',top+pos[1]+'px');
+                        self.$EmpScrollTipRight.css('top',top+pos[1]+'px');
+                    }else {
+                        self.$EmpScrollTipLeft.css('top',top+'px');
+                        self.$EmpScrollTipRight.css('top',top+'px');
+                    }
+                    if(pos[0]>0){
+                        self.$EmpScrollTipLeft.css('left',pos[0]+'px');
+                    }else {
+                        self.$EmpScrollTipLeft.css('left',0);
+                    }
+                    if(pos[0]<min){
+                        self.$EmpScrollTipRight.css('right',min-pos[0]+'px');
+                    }else {
+                        self.$EmpScrollTipRight.css('right',0);
+                    }
+                    if(pos[0]-min<96){
+                        self.$EmpScrollTipRight.hide();
+                    }else {
+                        self.$EmpScrollTipRight.show();
+                    }
+                    self.$toggleMode.css('top',0);
+                    var top = self.$timeline.offset().top;
+                    if(top && (top<96 || top>$('body').outerHeight(true))){
+                        self.$.find('.backCurrentTime').show();
+                    }else {
+                        self.$.find('.backCurrentTime').hide();
+                    }
+                }else {
+                    self.$tbx.setTransformPos([x, y1], "xy", this.hasInput);
+                    self.$tby.setTransformPos([x1, y], "xy", this.hasInput);
+                    self.$EmpScrollTipRight.hide();
+                    self.$toggleMode.css('top','1px');
+                    if(pos[1]>0){
+                        self.$toggleMode.css('top',1 + pos[1]+'px');
+                    }else {
+                        self.$toggleMode.css('top','1px');
+                    }
+                    if(pos[0]>0){
+                        self.$toggleMode.css('left',pos[0]+'px');
+                    }else {
+                        self.$toggleMode.css('left',0);
+                    }
+                    var left = self.$timeline.offset().left;
+                    if(left && (left<171 || left>$('body').outerWidth(true))){
+                        self.$.find('.backCurrentTime').show();
+                    }else {
+                        self.$.find('.backCurrentTime').hide();
+                    }
+                }
+                
             };
             this.$.find("#reservationBack").vclick(function () {
                 page.show("enterCode");
@@ -375,6 +581,9 @@
             this.$.find('.delAfterBoxWrap .icon-close').vclick(function () {
                 self.$.find('.delAfterBoxWrap').hide();
             })
+        },
+        getSimpleReservationMode:function(){
+            return am.metadata.userConfigs && am.metadata.userConfigs.reservationSimpleMode==1;
         },
         startToggleBarber: function($this){
             this.$toggleBarber.addClass('fadeIn');
@@ -390,7 +599,7 @@
         togglingBarber: function($this){
             var data = this.togglingData;
 
-            var autoHolders = this.$.find('.hilight').parents('td').nextAll();
+            var autoHolders = this.$.find('.hilight').parents('td').nextAll(':visible');
             var autoHolderNum = 0;
             for(var i=0;i<autoHolders.length;i++){
                 var $autoHolder = $(autoHolders[i]);
@@ -401,11 +610,16 @@
                     break;
                 }
             }
-            var targetAfters =$this.nextAll();
+            if($this.hasClass('rv_holder')){
+                var targetAfters =$this.parents('td').nextAll(':visible');
+            }else {
+                var targetAfters =$this.nextAll(':visible');
+            }
             var targetAftersEmptyNum = 0;
             for(var i=0;i<targetAfters.length;i++){
                 var $targetAfters = $(targetAfters[i]);
-                if(!$targetAfters.find('.rv_show').children().length && !$targetAfters.find('.rv_holder').length){
+                var afterData = $targetAfters.find('.rv_item').data('item') || $targetAfters.find('.rv_holder').data('item');
+                if((!$targetAfters.find('.rv_show').children().length && !$targetAfters.find('.rv_holder').length) || (afterData && (afterData.id==data.id || afterData.reservId==data.id))){
                     targetAftersEmptyNum ++;
                 }else {
                     break;
@@ -415,24 +629,20 @@
                 am.msg('没有足够的空闲时间');
                 return;
             }
-            var index = $this.parent('tr').index(),
+            var index = $this.parents('tr').index(),
                 newBarberId = this.$tby.find('tbody .user').eq(index).data('empItem').id,
                 currentY = timeBar.currentDate.getFullYear(),
                 currentM = timeBar.currentDate.getMonth(),
                 currentD = timeBar.currentDate.getDate(),
-                newTime = $this.data('ts');
+                newTime = $this.data('ts') || $this.parents('td').data('ts');
             newTime.setFullYear(currentY);
             newTime.setMonth(currentM);
             newTime.setDate(currentD);
             reservationDetail.changeTime(data,newTime.getTime(),newBarberId);        
         },
         //更新备注
-        updateComment: function (data,$this) {
+        updateComment: function (data) {
             var self = this;
-            if($this){
-                self.createHolder($this,data.val);
-                return;
-            }
             am.loading.show();
             am.api.reservationUpdateComment.exec({
                 "comment": data.val,
@@ -441,9 +651,9 @@
                 am.loading.hide();
                 if (ret.code == 0) {
                     am.msg("保存成功");
-                    $("#common_addremark").hide().find(".save_btn").data(null).end().find("textarea").val("");
                     self.getData(timeBar.currentDate.getTime(), 1, 1);
                 } else {
+                    $("#common_addremark").hide();
                     am.msg(ret.message || "保存失败，请稍后再试！", true);
                 }
             });
@@ -458,7 +668,7 @@
             var endHour = this.endHour;
             var startTs = this.startTs.getTime();
             var endTs = this.endTs.getTime();
-            var employees = am.metadata.employeeList;
+            var employees = am.metadata.employeeListBackup;
             var $theader = this.$theader.find("tr").empty().append("<th></th>");
             var $theaderx = this.$theaderx.find("tr").empty().append("<th></th>");
             var $tbody = this.$tbody.empty();
@@ -482,13 +692,10 @@
             };
 
             if (strategy == "1") {
-                var twidth = 110 * (Math.floor(blocks / 2) + 1);
+                var twidth = 96 * (Math.floor(blocks / 2) + 1);
             } else {
-                var twidth = 110 * (blocks + 1);
+                var twidth = 96 * (blocks + 1);
             }
-            this.$tb.parent().width(twidth);
-            this.$tb.width(twidth);
-            this.$tbx.width(twidth);
 
             //过滤不可预约的员工 mgjshowinmyk 0 为不可预约
             var employeesFilted = [];
@@ -500,9 +707,14 @@
                 var $tuser = self.$tuser.clone(true, true);
                 $tuser.find(".name").html(item.name);
                 //头像 三块table会有重叠部分 找到上面的.header
-                $tuser.find(".header").html(am.photoManager.createImage("artisan", {
-                    parentShopId: am.metadata.userInfo.parentShopId
-                }, item.id + ".jpg", "s"));
+                // var updateTs = '';
+                // if(item.mgjUpdateTime){
+                //     updateTs = new Date(item.mgjUpdateTime).getTime();
+                // }
+                // $tuser.find(".header").html(am.photoManager.createImage("artisan", {
+                //     parentShopId: am.metadata.userInfo.parentShopId,
+                //     updateTs: updateTs
+                // }, item.id + ".jpg", "s"));
                 //添加员工职位名称——dutyName
                 $tuser.find(".level").html(item.dutyName);
                 $tr.append($tuser);
@@ -522,6 +734,27 @@
                 $tuser.data('empItem',item);
                 $tbody.append($tr);
             });
+
+            var simple = self.getSimpleReservationMode();
+            if(simple){
+                this.$tb.parent().width(96 * (employeesFilted.length+1));
+                this.$tb.width(96 * (employeesFilted.length+1));
+                this.$tbx.width(96);
+                this.$tby.width(96 * (employeesFilted.length+1));
+                this.$tby.find('tbody').width(96 * (employeesFilted.length+1));
+                var tbyBodyWidth = this.$tby.find('tbody').outerWidth(true)
+                var $width = $('body').outerWidth(true) - 75;
+                if(tbyBodyWidth>$width){
+                    this.$.addClass('EmpScrollTip');
+                }
+            }else {
+                this.$tb.parent().width(twidth);
+                this.$tb.width(twidth);
+                this.$tbx.width(twidth);
+                this.$tby.width(96);
+                this.$tby.find('tbody').width(96);
+            }
+
             this.sc_table.refresh();
         },
         //清空框架
@@ -558,6 +791,21 @@
             this.$.find('.delAfterBoxWrap').hide();
             console.log("renderData");
             console.log(data);
+            if(!timeBar.isToday()){
+                this.$.find('.backCurrentTime').hide();
+            }
+            var filterData = {};
+            for(var i = 0;i<data.reservations.length;i++){
+                var filterDataKey = data.reservations[i].barberId+'_'+data.reservations[i].reservationTime;
+                if(!filterData[filterDataKey] || data.reservations[i].createtime > filterData[filterDataKey].createtime){
+                    filterData[filterDataKey] = data.reservations[i];
+                }
+            }
+            var _reservations = [];
+            for(var key in filterData){
+                _reservations.push(filterData[key]);
+            }
+            data.reservations = _reservations;
             //当天的预约数据按员工暂存
             var reservations = {},self=this;
             var strategy = am.metadata.configs.strategy;
@@ -573,55 +821,46 @@
                 var barberId = data.reservations[i].barberId;
                 if(!reservations[barberId]){
                     //此员工没有暂存对象，创建
-                    reservations[barberId] = [];
+                    reservations[barberId] = {};
                 }
-                reservations[barberId].push(data.reservations[i]);
+                var thour = reservationTime.getHours();
+                var tminute = reservationTime.getMinutes();
+                reservations[barberId][thour+'_'+tminute] = data.reservations[i];
             }
-            this.$tbody.children("tr").removeClass("rest").each(function (j, itemj) {
-                var $tr = $(itemj);
-                //取到员工信息
-                var itemData = $tr.data("item");
-                $tr.children("td:not(.user)").each(function (k, itemk) {
-                    var $this = $(itemk);
-                    //此单元格的时间
-                    var ts = $this.data("ts");
-                    //取到员工今天所有的预约数据
-                    var arrRes = reservations[itemData.id];
-                    var hasContent = false;
-                    if(arrRes && arrRes.length){
-                        for(var i=0;i<arrRes.length;i++){
-                            //单个预约数据
-                            var item = arrRes[i];
-                            var reservationTime = new Date(item.reservationTime);
-                            var hour = ts.getHours();
-                            var thour = reservationTime.getHours();
-                            var minute = ts.getMinutes();
-                            var tminute = reservationTime.getMinutes();
-
-                            if (hour == thour && (strategy=="1" || tminute == minute) && item.status != 2) {
-                                //如果
-                                //此单元格有预约
-                                hasContent = true;
-                                //清空并重置
-                                $this.empty().append(self.$rvshow.clone(true, true)).removeClass("hasContent");
-                                //渲染预约
-                                self.renderTdForReservation(item,arrRes,$this);
-                                break;
-                            }
-                        }
-                    }
-                    if(hasContent===false){
-                        //如果这次渲染没有内容，但DOM里面有内容,重置
-                        $this.empty().append(self.$rvshow.clone(true, true)).removeClass("hasContent");
-                    }
-                });
-            });
             var $thUsers = this.$.find('#page-tableHeaderY td.user');
             var vacationsMap = {};
             for(var i in data.vacations){
                 vacationsMap[data.vacations[i].empId] = data.vacations[i];
             }
             this.$tbody.children("tr").removeClass("rest").each(function (j, itemj) {
+                var $tr = $(itemj);
+                //取到员工信息
+                var itemData = $tr.data("item");
+                var arrObj = reservations[itemData.id];
+                if(!arrObj){
+                    $tr.children("td:not(.user)").empty().append(self.$rvshow.clone(true, true)).removeClass("hasContent");
+                }else {
+                    $tr.children("td:not(.user)").each(function (k, itemk) {
+                        var $this = $(itemk);
+                        //此单元格的时间
+                        var ts = $this.data("ts");
+                        var hour = ts.getHours();
+                        var minute = ts.getMinutes();
+                        var item = null;
+                        if(strategy=="1"){
+                            item = arrObj[hour+'_0'] || arrObj[hour+'_30'];
+                        }else {
+                            item = arrObj[hour+'_'+minute];
+                        }
+                        if(item && item.status!=2){
+                            $this.empty().append(self.$rvshow.clone(true, true)).removeClass("hasContent");
+                            //渲染预约
+                            self.renderTdForReservation(item,arrObj,$this);
+                        }else {
+                            $this.empty().append(self.$rvshow.clone(true, true)).removeClass("hasContent");
+                        }
+                    });
+                }
                 
                 var $this = $(itemj);
                 var $restUsertd = $thUsers.eq(j);
@@ -634,16 +873,38 @@
                     $this.find('.rv_holder').css('background-color', '#f6f6f6'); //休假状态下的占用背景置灰
                     $this.find('td').removeClass('am-clickable'); //休假状态下不可点击
                     $this.addClass("rest");
-                    $this.children("td:nth-child(2)").append(self.$rest.clone(true, true));
+                    $this.find('td:not(.user):visible:first').append(self.$rest.clone(true, true));
                 }else{
                     $this.find('td').addClass('am-clickable');
                     $restUsertd.children('span').addClass('icon-dian').removeClass('icon-xiujia');
                     $restUsertd.children('div').removeClass('rest_bg');
                 }
             });
+
             //时间线
             this.renderTimeline();
             this.renderShiftInfo(data); // 渲染员工的排班信息
+        },
+        renderHeader: function(){
+            var simple = this.getSimpleReservationMode();
+            if(simple){
+                return;
+            }
+            this.headerRendered = 1;
+            var users = this.$tby.find('td.user');
+            for(var i=0;i<users.length;i++){
+                var $tuser = $(users[i]);
+                var item = $tuser.data('empItem');
+                console.log(item)
+                var updateTs = '';
+                if(item.mgjUpdateTime){
+                    updateTs = new Date(item.mgjUpdateTime).getTime();
+                }
+                $tuser.find(".header").html(am.photoManager.createImage("artisan", {
+                    parentShopId: am.metadata.userInfo.parentShopId,
+                    updateTs: updateTs
+                }, item.id + ".jpg", "s"));
+            }
         },
         /**
          *  渲染一个单元格
@@ -665,8 +926,7 @@
                             $holder.addClass("green");
                         }else if (item.status == 3) {
                             //已结算
-                            $rvitem.addClass("green payed");
-                            $rvitem.find('.seeItems').hide();
+                            $holder.addClass("green payed");
                         }  else {
                             var newD = new Date(preData.reservationTime);
                             var strategy = am.metadata.configs.strategy;
@@ -685,8 +945,8 @@
                                 $holder.addClass("black");
                             }
                         }
-                        for(var i=0;i<reservations.length;i++){
-                            if(item.reservId==reservations[i].id && reservations[i].status==3){
+                        for(var key in reservations){
+                            if(item.reservId==reservations[key].id && reservations[key].status==3){
                                 $holder.addClass('green').removeClass('red black');
                                 break;
                             }
@@ -703,11 +963,9 @@
                     $holder.show();
                     $remark.hide().html('');
                     $this.append($holder);
+                    $this.removeClass('hidden')
                     if(comment){
-                        if(item.comment.length > 20){
-                            comment = item.comment.substring(0,20)+"...";
-                        }
-                        $remark.show().html('<span class="iconfont icon-shijianbiao"></span><span>' + comment + "</span>");
+                        $remark.show().html('<svg class="icon" aria-hidden="true"><use xlink:href="#icon-shijianbiao"></use></svg><span class="comment">' + comment + "</span>");
                         $holder.hide();
                         $this.append($remark);
                     }
@@ -737,10 +995,11 @@
                 // $rvitem.find(".item").html(item.categoryName.substr(0, 1));
                 $rvitem.find(".item").html(self.getCategoryNameById(item.categoryId).substr(0, 1));
                 $rvitem.find(".comment").html(!item.comment ? '无备注~' : item.comment);
-                if($rvitem.find(".item").is(':visible')){//如果没有item则多人居右显示
+                var simple = self.getSimpleReservationMode();
+                if(self.getCategoryNameById(item.categoryId).substr(0, 1) && !simple){//如果没有item则多人居右显示
                     $rvitem.find(".badge").css("right", "22px");
                 }else{
-                    $rvitem.find(".badge").css("right", "0");
+                    $rvitem.find(".badge").css("right", "2px");
                 }
                 if (item.number > 1) {
                     var numbertext = item.number + "人";
@@ -755,7 +1014,7 @@
                     $rvitem.find(".badge").hide();
                 }
                 if (item.mgjIsHighQualityCust == 1) {
-                    $rvitem.find(".rvname").html(item.custName + "<span class='good am-clickable'></span>");
+                    $rvitem.find(".rvname").html(item.custName + "<span class='good am-clickable'></span>").addClass('good');
                 } else {
                     $rvitem.find(".rvname").html(item.custName);
                 }
@@ -805,14 +1064,15 @@
         },
         //高级预约占用找到根节点
         findPreData: function (reservId, reservations, cb) {
-            for (var k = 0; k < reservations.length; k++) {
-                if (reservId == reservations[k].id) {
-                    cb(reservations[k]);
+            for (key in reservations) {
+                if (reservId == reservations[key].id) {
+                    cb(reservations[key]);
                     break;
                 }
             }
         },
         renderTimeline: function () {
+            var self = this;
             var strategy = am.metadata.configs.strategy;
             var now = am.now();
             var nowTs = now.getTime();
@@ -829,7 +1089,12 @@
                 }
                 var percent = ((nowTs - startTs + addDuration) / (endTs - startTs + addDuration));
                 // console.log(startTs, nowTs, endTs, (endTs - startTs), (nowTs - startTs), percent);
-                this.$timeline.show().css("left", percent * 100 + "%");
+                var simple = self.getSimpleReservationMode();
+                if(simple){
+                    this.$timeline.show().css("top", percent * 100 + "%").css("left", 0);
+                }else {
+                    this.$timeline.show().css("left", percent * 100 + "%").css("top", 0);
+                }
             } else {
                 this.$timeline.hide();
             }
@@ -858,21 +1123,27 @@
         getData: function (ts, disableTip, disableScroll) {
             var self = this;
             if (!disableTip) {
-                am.loading.show("正在下载数据，请稍候...");
+                am.partLoading.show("正在下载数据，请稍候...");
             }
+            var reservationGetDataTs = new Date().getTime();
             am.api.reservationList.exec({
                 parentShopId: am.metadata.userInfo.parentShopId,
                 shopId: am.metadata.userInfo.shopId,
                 reservationTime: ts,
                 period:new Date(ts).format('yyyy-mm-dd')  // 2019-01 月  / 2019-01-02   /"employeeIds":[92807] 查询具体员工的排班信息
             }, function (ret) {
+                $.am.debug.log('预约数据获取耗时：'+(new Date().getTime()-reservationGetDataTs));
                 console.log(ret)
                 if (!disableTip) {
-                    am.loading.hide();
+                    am.partLoading.hide();
                 }
                 if (ret.code == 0) {
                     self.data = ret.content;
                     self.renderData(self.data);
+                    var simple = self.getSimpleReservationMode();
+                    if(!simple && !self.headerRendered){
+                        self.renderHeader();
+                    }
                     if (!disableScroll) {
                         self.scroll("current");
                     }
@@ -888,13 +1159,24 @@
             var $timeline = this.$timeline;
             if (direction == "current") {
                 if ($timeline.is(":visible")) {
-                    var left = $timeline.position().left;
+                    var simple = self.getSimpleReservationMode();
+                    if(simple){
+                        var left = $timeline.position().top;
+                    }else {
+                        var left = $timeline.position().left;
+                    }
                     console.log("scrollLeft", left);
                     setTimeout(function () {
-                        self.sc_table.scrollTo([-(left - self.$scroll.width() / 2), 0]);
+                        if(simple){
+                            self.sc_table.scrollTo([0, -(left - 50*2)]);
+                        }else {
+                            self.sc_table.scrollTo([-(left - 96*2), 0]);
+                        }
                     }, 200)
                 }
-            } else {}
+            } else {
+                self.sc_table.scrollTo([0, 0]);
+            }
         },
         createHolder: function ($td,val) {
             var self = this;
@@ -925,10 +1207,8 @@
                 if (ret.code == 0) {
                     am.msg("预约已经登记！");
                     self.getData(timeBar.currentDate.getTime(), 1, 1);
-                    if(val){
-                        $("#common_addremark").hide().find(".save_btn").data(null).end().find("textarea").val("");
-                    }
                 } else {
+                    $td.removeClass('hidden')
                     am.msg(ret.message || "提交失败，请重试！", true);
                 }
             });
@@ -996,12 +1276,14 @@
                             data.itemProp=JSON.stringify(obj);
                             $.am.changePage(am.page.openbill, "slidedown", {
                                 reservation: data,
-                                src: 'reservation'
+                                src: 'reservation',
+                                tableId: am.page.reservation.paras?am.page.reservation.paras.tableId:''
                             });
                         }else{
                             $.am.changePage(am.page.openbill, "slidedown", {
                                 reservation: data,
-                                src: 'reservation'
+                                src: 'reservation',
+                                tableId: am.page.reservation.paras?am.page.reservation.paras.tableId:''
                             });
                         }
                     };
@@ -1027,6 +1309,29 @@
                 self.hide();
             });
             this.$content = this.$.children(".content");
+            this.$.find('.commentWrap').on('vclick',function(event){
+                event.stopPropagation();
+                var $txt = $(this).find('textarea');
+                var oldValue= $txt.val().trim();
+                var data = $(this).parents('.popup_reservationDetail').data('item');
+                am.addRemark.show({
+                    title: '修改预约备注',
+                    maxlength: 30,
+                    value: oldValue,
+                    cb: function (val) {
+                        if (oldValue == val) {
+                            // 备注未更改
+                            return;
+                        } else {
+                            var opt = {
+                                id: data.id,
+                                comment: val
+                            }
+                            self.updateReservationComment(opt, $txt);
+                        }
+                    }
+                });
+            })
             this.$gotoCashier = this.$.find(".gotoCashier").vclick(function () {
 				var $this = $(this);
 				var item = $(this).parents('.popup_reservationDetail').data('item');
@@ -1120,10 +1425,36 @@
             this.$itemline2 = this.$.find(".itemline2");
             this.$items = this.$.find(".items");
             this.sc = new $.am.ScrollView({
-                $wrap: this.$itemline2,
-                $inner: this.$items,
+                $wrap: this.$.find('.resScrollWrap'),
+                $inner: this.$.find('.resScrollWrapper'),
                 direction: [false, true],
                 hasInput: false
+            });
+        },
+        updateReservationComment:function(opt,$txt){
+            // am.loading.show("修改中,请稍候...");
+            var self=this;
+            am.api.updateReservationComment.exec(opt, function (res) {
+                // am.loading.hide();
+                console.log(res);
+                if (res.code == 0) {
+                    $txt.val(opt.comment);
+                    var arr= reservation.data.reservations;
+                    $.each(arr,function(index,item){
+                        if(item.id && item.id==opt.id){
+                            item.comment = opt.comment;
+                            return false;
+                        }
+                    });
+                    reservation.renderData(reservation.data);
+                    am.msg('预约备注修改成功');
+                    // setTimeout(function(){
+                    //     self.sc.refresh();
+                    //     self.sc.scrollTo("top");
+                    // },500)
+                } else {
+                    am.msg(res.message || "数据获取失败,请检查网络!");
+                }
             });
         },
         open: function (item) {
@@ -1144,7 +1475,7 @@
             $dom.find(".itemP").remove();
             $dom.find(".category").remove();
             if (!item.itemProp) {
-                $dom.find(".comment").html(item.comment);
+                $dom.find(".comment").val(item.comment ||'');// render comment
                 $dom.find(".infoarea").removeClass("newInfoarea");
                 var itemSpan = $('<span class="category">洗剪吹</span>');
                 $dom.find(".itemarea").hide();
@@ -1152,8 +1483,8 @@
                 $dom.find(".category").html(reservation.getCategoryNameById(item.categoryId));
             } else {
                 $dom.find(".infoarea").addClass("newInfoarea");
-                $dom.find(".comment").html("");
-                $dom.find(".itemComment").html(item.comment);
+                $dom.find(".comment").val(item.comment ||'');
+                // $dom.find(".itemComment").html(item.comment);
                 //预约项目显示
                 var items = JSON.parse(item.itemProp).items;
                 var html = ''
@@ -1167,11 +1498,11 @@
                 }
                 this.$items.html(html)
                 $dom.find(".itemarea").show();
-                var _this = this;
-                setTimeout(function () {
-                    _this.sc.refresh();
-                    _this.sc.scrollTo("top");
-                }, 500)
+                // var _this = this;
+                // setTimeout(function () {
+                //     _this.sc.refresh();
+                //     _this.sc.scrollTo("top");
+                // }, 500)
                 // $dom.find(".category").html(name);
             }
             $dom.find(".time").html(new Date(item.reservationTime).format("mm月dd日 HH:MM"))
@@ -1236,7 +1567,17 @@
                     }
                 }
             }
+            if (item.status == 3){
+                this.$modifyBtn.hide();
+            }else {
+                this.$modifyBtn.show();
+            }
             $dom.data("item", item);
+            var _this = this;
+            setTimeout(function () {
+                _this.sc.refresh();
+                // _this.sc.scrollTo("top");
+            }, 2000)
         },
         changeTime: function (item, newTime, newBarberId) {
             console.log(item, newTime);
@@ -1324,7 +1665,6 @@
                     reservation.renderData(reservation.data);
                     am.socketPush.getReservationNum();
                     self.hide();
-                    $("#common_addremark").hide().find(".save_btn").data(null).end().find("textarea").val("");
                 } else {
                     am.msg(ret.message || "提交失败，请刷新页面！", true);
                 }

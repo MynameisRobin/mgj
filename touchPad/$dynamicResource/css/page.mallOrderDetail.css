@@ -1,0 +1,145 @@
+/* 文字颜色 ***********************/
+/* c0* 为黑白灰色系 */
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.bs {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+.page_mallOrderDetail .container-wrap {
+  position: absolute;
+  top: 50px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  background: url(../images/suggest_bg.png) no-repeat center center;
+  background-size: 175px 240px;
+}
+.page_mallOrderDetail .container-wrap .detailMode {
+  border-top: 1px solid #ececec;
+  height: 100%;
+  width: 100%;
+  background-color: #ffffff;
+}
+.page_mallOrderDetail .container-wrap .detailMode .detailLf {
+  position: absolute;
+  width: 220px;
+  height: 100%;
+  border-right: 1px solid #ececec;
+}
+.page_mallOrderDetail .container-wrap .detailMode .detailLf .leftCon {
+  margin: 0 auto;
+  padding-top: 30%;
+  width: 140px;
+  height: 140px;
+}
+.page_mallOrderDetail .container-wrap .detailMode .detailLf .leftCon .conImg {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  background: #e1e1e1 url(../images/icons_sprite/default_custmerIcon.png) no-repeat 0px 0px;
+  background-size: 80px 80px;
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
+  overflow: hidden;
+  margin-bottom: 15px;
+}
+.page_mallOrderDetail .container-wrap .detailMode .detailLf .leftCon .conImg img {
+  width: 80px;
+}
+.page_mallOrderDetail .container-wrap .detailMode .detailLf .leftCon .conName {
+  text-align: center;
+  font-size: 16px;
+  line-height: 30px;
+  color: #222222;
+}
+.page_mallOrderDetail .container-wrap .detailMode .detailLf .leftCon .conTel {
+  font-size: 12px;
+  color: #999;
+  text-align: center;
+}
+.page_mallOrderDetail .container-wrap .detailMode .detailRt {
+  padding-left: 220px;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+.page_mallOrderDetail .container-wrap .detailMode .detailRt .productImg {
+  padding-top: 60px;
+  width: 250px;
+  height: 100%;
+}
+.page_mallOrderDetail .container-wrap .detailMode .detailRt .productImg .imgCenter {
+  margin: 8px auto;
+  width: 170px;
+  height: 170px;
+}
+.page_mallOrderDetail .container-wrap .detailMode .detailRt .productImg .imgCenter img {
+  height: 170px;
+}
+.page_mallOrderDetail .container-wrap .detailMode .detailRt .productDetail {
+  position: absolute;
+  left: 471px;
+  right: 0px;
+  top: 0px;
+  bottom: 0px;
+}
+.page_mallOrderDetail .container-wrap .detailMode .detailRt .productDetail .detailUp {
+  line-height: 30px;
+}
+.page_mallOrderDetail .container-wrap .detailMode .detailRt .productDetail .detailDown {
+  margin-top: 30px;
+  line-height: 40px;
+}
+.page_mallOrderDetail .container-wrap .detailMode .detailRt .productDetail .verifyBtn {
+  margin-top: 80px;
+  width: 280px;
+  height: 44px;
+  line-height: 44px;
+  text-align: center;
+  font-size: 16px;
+  border-radius: 3px;
+  background-color: #e5dbd1;
+  color: #000;
+}
+.page_mallOrderDetail .container-wrap .detailMode .detailRt .productDetail .verifyBtn.am-clickable {
+  background-color: #e82742;
+  color: #fff;
+}
+.page_mallOrderDetail .container-wrap .detailMode .detailRt .productDetail .verifyShop {
+  margin-top: 30px;
+}
+.page_mallOrderDetail .container-wrap .detailMode .detailRt .productDetail .itemTit {
+  font-size: 16px;
+  color: #222222;
+  margin-top: 60px;
+}
+.page_mallOrderDetail .container-wrap .detailMode .detailRt .productDetail .itemRemark {
+  font-size: 12px;
+  color: #aaaaaa;
+}
+.page_mallOrderDetail .container-wrap .detailMode .detailRt .productDetail .item_name,
+.page_mallOrderDetail .container-wrap .detailMode .detailRt .productDetail .item_value {
+  display: inline-block;
+  vertical-align: middle;
+}
+.page_mallOrderDetail .container-wrap .detailMode .detailRt .productDetail .item_name {
+  width: 90px;
+  font-size: 14px;
+  color: #999;
+}
+.page_mallOrderDetail .container-wrap .detailMode .detailRt .productDetail .item_value {
+  font-size: 14px;
+  color: #222;
+}
+.page_mallOrderDetail .container-wrap .detailMode .detailRt .productDetail .itemStatus .item_value {
+  color: #309030;
+}
+.page_mallOrderDetail .container-wrap .detailMode.show {
+  display: block;
+}

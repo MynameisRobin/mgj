@@ -55,7 +55,7 @@
 			// if($.isPlainObject(message)){
 			// 	message = JSON.stringify(message);
 			// }
-			var url = "http://common.reeli.cn/component/genqr?message="+ encodeURIComponent(JSON.stringify(message)) + '&width=300&height=300';
+			var url = "http://common.meiguanjia.net/component/genqr?message="+ encodeURIComponent(JSON.stringify(message)) + '&width=300&height=300';
 			var src = jrQrcode.getQrBase64(JSON.stringify(message), {
 				padding: 0,
 				width: 300,
@@ -229,9 +229,14 @@
 							
 				var userInfo = amGloble.metadata.userInfo;
 				var type = item.roleType == 1 ? "artisan" : "manager";
+				var emp = amGloble.metadata.empMap[item.employeeId];
+				var updateTs = '';
+				if(emp && emp.mgjUpdateTime){
+					updateTs = new Date(emp.mgjUpdateTime).getTime();
+				}
 				$item.find(".logo").html(amGloble.photoManager.createImage(type, {
 					parentShopId: userInfo.parentShopId,
-					updateTs: userInfo.lastphotoupdatetime
+					updateTs: updateTs
 				}, item.employeeId + ".jpg", "s"));
 				$item.find(".p1").html(item.name);
 				$item.find(".c-right").find(".c-type").html(item.msName);
@@ -257,7 +262,18 @@
 			compareTime = function(time1, time2) {
 				return time2 / 1000 - time1 / 1000;
 			};
-            
+			this.$remarksWrap = this.$.find('.remarksWrap').hide(); // 系统设置的备注wrap
+			this.$empSortWrap = this.$.find('.empSortWrap').hide(); // 系统设置员工排序
+			this.$remarksTitle = this.$remarksWrap.find('.remarksTitle');
+			this.$remarksTip = this.$remarksWrap.find('.remarksTip');
+			this.$remarkScrollInner = this.$remarksWrap.find('.scrollInner');
+			this.$inputWrap = this.$remarksWrap.find('.inputWrap').remove();
+			this.remarksScrollView = new $.am.ScrollView({
+				$wrap: self.$remarksWrap.find(".scrollWrap"),
+				$inner: self.$remarksWrap.find(".scrollInner"),
+				direction: [false, true],
+				hasInput: false,
+			});
 			$("#about_tab").on("vclick","li",function(){
 				$(this).addClass('selected').siblings('li').removeClass("selected");
 				var index=$(this).index();
@@ -289,10 +305,15 @@
 						$inner: self.$.find(".account .tabdiv"),
 						direction: [false, true],
 						hasInput: false,
-						// bubble:true
+						bubble: true
 					});
 					self.ScrollView_zh.refresh();
-
+					// 锁屏配置
+					if(!self.lockConfig){
+						self.lockConfig = new $.am.lockConfig({
+							$: self.$.find(".account")
+						});
+					}
 				}
 				if(index==3){
 					if(!self.payOutList){
@@ -332,36 +353,10 @@
 						}else {}
 					}else {}
 				}
-
-				//员工排序
 				if(index == 11){
-					self.renderEmps();
-					var $empSort = self.$.find(".empSort");
-					//员工列表滚动123工位
-					self.pos1ScrollView = new $.am.ScrollView({
-						$wrap: $empSort.find(".item1"),
-						$inner: $empSort.find(".pos1"),
-						direction: [false, true],
-						hasInput: false,
-					});
-					self.pos2ScrollView = new $.am.ScrollView({
-						$wrap: $empSort.find(".item2"),
-						$inner: $empSort.find(".pos2"),
-						direction: [false, true],
-						hasInput: false,
-					});
-					self.pos3ScrollView = new $.am.ScrollView({
-						$wrap: $empSort.find(".item3"),
-						$inner: $empSort.find(".pos3"),
-						direction: [false, true],
-						hasInput: false,
-					});
-					self.pos1ScrollView.refresh();
-					self.pos1ScrollView.scrollTo("top");
-					self.pos2ScrollView.refresh();
-					self.pos2ScrollView.scrollTo("top");
-					self.pos3ScrollView.refresh();		
-					self.pos3ScrollView.scrollTo("top");		
+					// 系统设置
+					console.log('系统设置');
+					self.$secTabsWrap.find('span').removeClass('selected').eq(0).trigger('vclick');
 				}
 			});
 			this.$tickeNum = $('#about_content').find('.condition');
@@ -430,7 +425,32 @@
 				$.am.changePage(am.page.verifyRecord, "slideup");
 			});
 	        // this.aboutScroll.refresh();
-	
+			
+			this.$.find('div.autopay .am-radio').vclick(function () {
+				if($(this).hasClass('checked')){
+					$(this).removeClass('checked');
+					localStorage.setItem('mgjAutoPayFirstDisabled',1);
+				}else{
+					$(this).addClass('checked');
+					localStorage.removeItem('mgjAutoPayFirstDisabled');
+				}
+			});
+			if(localStorage.getItem('mgjAutoPayFirstDisabled') !== "1"){
+				this.$.find('div.autopay .am-radio').addClass("checked");
+			}
+			this.$.find('div.multiCardPayFlag .am-radio').vclick(function () {
+				if($(this).hasClass('checked')){
+					$(this).removeClass('checked');
+					localStorage.removeItem('mgjMultiCardPayDisabled');
+				}else{
+					$(this).addClass('checked');
+					localStorage.setItem('mgjMultiCardPayDisabled',1);
+				}
+			});
+			if(localStorage.getItem('mgjMultiCardPayDisabled') == "1"){
+				this.$.find('div.multiCardPayFlag .am-radio').addClass("checked");
+			}
+
 			this.$.find('div.clickSound .am-radio').vclick(function () {
 				if($(this).hasClass('checked')){
 					$(this).removeClass('checked');
@@ -513,7 +533,58 @@
 			$("#about_content .minPro .minClose").on('vclick','.open',function(){
 				window.open('http://cn.mikecrm.com/pKDAmFu');
 			});
+			this.$sysSet=this.$.find('.sysSet');// 系统设置
+			this.$secTabsWrap=this.$sysSet.find('.secTabsWrap').on('vclick','span',function(){
+				$(this).addClass('selected').siblings().removeClass('selected');
+				var index=$(this).index();
+				if (index === 0) {
+					// 员工排序
+					self.$remarksWrap.hide();
+					self.$empSortWrap.show();
+					self.renderEmps();
+					var $empSort = self.$.find(".empSort");
+					//员工列表滚动123工位
+					if(!self.pos1ScrollView){
+						self.pos1ScrollView = new $.am.ScrollView({
+							$wrap: $empSort.find(".item1"),
+							$inner: $empSort.find(".pos1"),
+							direction: [false, true],
+							hasInput: false,
+						});
+						self.pos2ScrollView = new $.am.ScrollView({
+							$wrap: $empSort.find(".item2"),
+							$inner: $empSort.find(".pos2"),
+							direction: [false, true],
+							hasInput: false,
+						});
+						self.pos3ScrollView = new $.am.ScrollView({
+							$wrap: $empSort.find(".item3"),
+							$inner: $empSort.find(".pos3"),
+							direction: [false, true],
+							hasInput: false,
+						});
+					}
+					self.pos1ScrollView.refresh();
+					self.pos1ScrollView.scrollTo("top");
+					self.pos2ScrollView.refresh();
+					self.pos2ScrollView.scrollTo("top");
+					self.pos3ScrollView.refresh();
+					self.pos3ScrollView.scrollTo("top");
 
+				} else {
+					self.$remarksWrap.show();
+					self.$empSortWrap.hide();
+					self.renderRemarks(index-1);
+				}
+			});
+			this.$sysSet.find('.btnsWrap').on('vclick','.addBtn',function(){
+				self.addRemarkInput();
+				self.$remarksWrap.find('.noReamrks').remove();
+			}).on('vclick','.saveBtn',function(){
+				self.saveRemarks();
+			}).end().on('vclick','.del-icon',function(){
+				$(this).parent('.inputWrap').remove();
+			});
 			//员工排序点击
 			self.$.find(".empSort").on("vclick",".up",function(){
 				var $li = $(this).parents('li.list');
@@ -533,6 +604,13 @@
 				$("#about_tab li.selected").trigger("vclick");
 			});
 
+			// 判断是否有考勤权限
+			if(am.operateArr.indexOf('a45') === -1){
+				this.$.find(".attendanceAccess").hide().remove();
+			}else{
+				this.$.find('.attendanceAccess').show();
+			}
+
 			if(window.device && window.device.platform && window.device.platform.toUpperCase() === 'IOS'){
 				this.$.find('div.btScanner').parent().show();
 				if(localStorage.getItem('mgjBtScanner') == "1"){
@@ -541,7 +619,7 @@
 					this.$.find('div.btScanner .am-radio').removeClass("checked");
 				}
 			}else{
-				this.$.find('div.btScanner').parent().hide();
+				this.$.find('div.btScanner').parent().hide().remove();
 			}
 
 			this.$.on('vclick','.attendanceInterval .item',function(){
@@ -552,6 +630,55 @@
 				}
 				localStorage.setItem(amGloble.metadata.userInfo.userId+'_attendanceCodeSetting',JSON.stringify(setting));
 				$(this).addClass('selected').siblings().removeClass('selected');
+			});
+
+			//套餐消费打印项目原价
+			this.$.find('div.treatPrintOriginalPrice .am-radio').vclick(function () {
+				var key = 'TREAT_PRINT_ORIGINALPRICE';
+				var $this = $(this);
+				if($(this).hasClass('checked')){
+					$(this).removeClass('checked');
+					self.saveNormalConfig(key,0,function(){
+						amGloble.msg('设置成功');
+						amGloble.metadata.configs[key] = 0;
+					},function(){
+						amGloble.msg('设置失败');
+						$this.addClass('checked');
+					});
+				}else{
+					$(this).addClass('checked');
+					self.saveNormalConfig(key,1,function(){
+						amGloble.msg('设置成功');
+						amGloble.metadata.configs[key] = 1;
+					},function(){
+						amGloble.msg('设置失败');
+						$this.removeClass('checked');
+					});
+				}
+			});
+			//套餐消费打印单次金额
+			this.$.find('div.treatPrintOnceMoney .am-radio').vclick(function () {
+				var key = 'TREAT_PRINT_ONCEMONEY';
+				var $this = $(this);
+				if($(this).hasClass('checked')){
+					$(this).removeClass('checked');
+					self.saveNormalConfig(key,0,function(){
+						amGloble.msg('设置成功');
+						amGloble.metadata.configs[key] = 0;
+					},function(){
+						amGloble.msg('设置失败');
+						$this.addClass('checked');
+					});
+				}else{
+					$(this).addClass('checked');
+					self.saveNormalConfig(key,1,function(){
+						amGloble.msg('设置成功');
+						amGloble.metadata.configs[key] = 1;
+					},function(){
+						amGloble.msg('设置失败');
+						$this.removeClass('checked');
+					});
+				}
 			});
 		},
 		beforeShow : function(paras) {
@@ -569,6 +696,10 @@
 			}
 			if($("#about_tab .selected").index()==9){
 				this.ScrollView_zh.refresh();
+			}
+
+			if($("#about_tab .selected").index()==11){
+				this.$secTabsWrap.find('span:first-child').trigger('vclick');
 			}
 
 			var attendanceCodeSetting = localStorage.getItem(amGloble.metadata.userInfo.userId+'_attendanceCodeSetting');
@@ -594,6 +725,114 @@
 				self.inComeList.$search.trigger('vclick');
 				return;
 			}
+
+			if(amGloble.metadata.configs.TREAT_PRINT_ORIGINALPRICE == 0){
+				this.$.find('div.treatPrintOriginalPrice .am-radio').removeClass("checked");
+			}else {
+				this.$.find('div.treatPrintOriginalPrice .am-radio').addClass("checked");
+			}
+			if(amGloble.metadata.configs.TREAT_PRINT_ONCEMONEY == 1){
+				this.$.find('div.treatPrintOnceMoney .am-radio').addClass("checked");
+			}else {
+				this.$.find('div.treatPrintOnceMoney .am-radio').removeClass("checked");
+			}
+		},
+		renderRemarks:function(index){
+			var titleData = [{
+				title: '删单理由',
+				tip: '(进行中的单据)'
+			}, {
+				title: '撤单理由',
+				tip: '(已结算的单据)'
+			}, {
+				title: '收银备注',
+				tip: ''
+			}];
+			var titleObj=titleData[index];
+			this.$remarksTitle.text(titleObj.title);
+			this.$remarksTip.text(titleObj.tip);
+			var arr=[];
+			if(index==0){
+				arr=JSON.parse(am.metadata.configs.delBillRemarks || '[]');
+			}else if(index==1){
+				arr=JSON.parse(am.metadata.configs.revokeBillRemarks || '[]');
+			}else if(index==2){
+				arr=JSON.parse(am.metadata.configs.submitBillRemarks || '[]');
+			}
+			this.$remarksWrap.find('.noReamrks').remove();
+			self.$remarkScrollInner.empty();
+			if(arr && arr.length){
+				for (var i = 0, len = arr.length; i < len; i++) {
+					var $inputWrap=this.$inputWrap.clone(true,true);
+					$inputWrap.find('input').val(arr[i]);
+					this.$remarkScrollInner.append($inputWrap);
+				}
+			}else{
+				this.$remarksWrap.append('<div class="noReamrks"></div>');
+			}
+			this.remarksScrollView.refresh();
+			this.remarksScrollView.scrollTo("top");
+		},
+		addRemarkInput:function(){
+			this.$remarkScrollInner.find('.noReamrks').remove();
+			var $dom='<div class="inputWrap"><input type="text" class="remarkInput"> <span class="icon iconfont icon-shanchu del-icon am-clickable"></span></div>';
+			this.$remarkScrollInner.append($dom);
+			
+			var parentHeight = this.$remarksWrap.outerHeight();
+			var height = 40 * this.$remarkScrollInner.find('.inputWrap').length;
+			if (height / parentHeight > 0.8) {
+				this.remarksScrollView.refresh();
+				this.remarksScrollView.scrollTo('bottom');
+			} else {
+				// 不足一屏，不需要refresh
+			}
+		},
+		saveRemarks:function(){
+			var reasons=[],$inputs=this.$remarkScrollInner.find('.remarkInput'),repeated=0,empty=0;
+			$.each($inputs,function(i,v){
+				var inputText=$(this).val().trim();
+				if(inputText){
+					if(reasons.indexOf(inputText)==-1){
+						reasons.push(inputText);
+					}else{
+						$(this).focus();
+						repeated=1;
+						return false;
+					}
+				}else{
+					$(this).focus();
+					empty=1;
+					return false;
+				}
+				
+			});
+			if(empty){
+				am.msg('内容不能为空');
+				return;
+			}
+			if(repeated){
+				am.msg('备注已存在，请修改后再保存');
+				return;
+			}
+			console.log('saveRemark',reasons);
+			// 
+			var keysArr=['delBillRemarks','revokeBillRemarks','submitBillRemarks'];
+			var index=this.$secTabsWrap.find('.selected').index();
+			am.api.saveNormalConfig.exec({
+				parentshopid: am.metadata.userInfo.parentShopId+'', 
+				configkey: keysArr[index-1],
+				configvalue: JSON.stringify(reasons),
+				shopid: am.metadata.userInfo.shopId+'',
+				setModuleid: 15
+			},function(ret){
+				am.loading.hide();
+				if(ret && ret.code==0){
+				   am.metadata.configs[keysArr[index-1]]=JSON.stringify(reasons);
+				   am.msg('保存成功');
+				}else {
+					am.msg('保存失败');
+				}
+			});
 		},
 		refreshData:function(){
 			attendanceList.getData(function(list){
@@ -717,6 +956,7 @@
 			images=images?images.split(",")[0]:'';
 			var bugTime=(data.createTime?(new Date(Number(data.createTime)).format("yyyy.mm.dd")):'');
 			var remark=(data.mallItem.quickDescription?data.mallItem.quickDescription:'');
+			var attributeNickName=(data.attributeNickName?data.attributeNickName:'--');
 	        var payType = "未知";
 	        if (data.payType == 0) {
 	            payType = "微信支付";
@@ -747,6 +987,7 @@
 			this.$rightBox.find(".imgCenter").html(am.photoManager.createImage("mall", {
 				parentShopId: am.metadata.userInfo.parentShopId,
 			}, images, "s")).end().find(".itemTit").text(data.mallItemName).end()
+				.find(".attributeNickName .item_value").text(attributeNickName).end()
 				.find(".itemRemark").text(remark).end()
 				.find(".itemStatus .item_value").text(status).end()
 				.find(".itemPrice .item_value").text((data.price?('￥ '+data.price.toFixed(2)):'')).end()
@@ -770,10 +1011,6 @@
 		//员工排序列表
 		renderEmps: function(){
 			var employeeList = am.metadata.employeeList || [];
-			if(am.metadata.configs && am.metadata.configs['EMP_SORT']){
-				employeeList = JSON.parse(am.metadata.configs['EMP_SORT']);
-				employeeList = am.getConfigEmpSort(employeeList);
-			}
 			if(am.isNull(employeeList)) return console.log("员工列表异常!");
 			var $empSort = this.$.find(".empSort");
 			var $pos1 = $empSort.find(".pos1").empty();
@@ -846,10 +1083,32 @@
 				if (ret && ret.code === 0) {
 					am.msg("保存成功");
 					am.metadata.configs['EMP_SORT'] = dataArr;
+					am.metadata.employeeList = am.getConfigEmpSort(JSON.parse(dataArr),am.metadata.employeeList);
+					am.page.service && am.page.service.billServerSelector && delete am.page.service.billServerSelector.data;
+					am.page.product && am.page.product.billServerSelector && delete am.page.product.billServerSelector.data;
+					am.page.memberCard && am.page.memberCard.billServerSelector && delete am.page.memberCard.billServerSelector.data;
+					am.page.comboCard && am.page.comboCard.billServerSelector && delete am.page.comboCard.billServerSelector.data;
 				} else {
 					am.msg(ret.message || '员工排序失败!');
 				}
 			});
 		},
+		saveNormalConfig: function(configkey,configvalue,scb,fcb){
+			am.loading.show();
+			am.api.saveNormalConfig.exec({
+				"parentshopid": am.metadata.userInfo.parentShopId + '',
+				"configkey": configkey,
+				"configvalue": configvalue,
+				"shopid": am.metadata.userInfo.shopId + '',
+				"setModuleid": "9"
+			}, function (ret) {
+				am.loading.hide();
+				if (ret && ret.code === 0) {
+					scb && scb();
+				} else {
+					fcb && fcb();
+				}
+			});
+		}
 	});
 })();

@@ -23,12 +23,13 @@ window.cashierTools.BillMain = function(opt) {
 	this.mainScroll = new $.am.ScrollView({
 		$wrap: this.$.find(".body"),
 		$inner: this.$.find(".body").children(),
-		direction: [false, true],
-		hasInput: false
+		direction: [true, true],
+		hasInput: false,
+		bubble: true
 	});
 	this.changekbtab=opt.changekbtab;
 	var th = opt.th;
-	var $th = this.mainScroll.$inner.find("thead:first tr").html($('<th></th>').css({"width":"40px"}));
+	var $th = this.mainScroll.$inner.find("thead:first tr").html($('<th></th>').css({"width":"30px"}));
 	for(var i = 0;i< th.length;i++){
 		$th.append($('<th></th>').css({"width":(th[i].width||"auto")}).text(th[i].name).addClass(th[i].className));
 	}
@@ -45,7 +46,25 @@ window.cashierTools.BillMain.prototype = {
 				}
 			});
 		});
-
+		this.$.find(".scanToCost .toggle").vclick(function() {
+			if($(this).parent().hasClass('on')){
+				$(this).parent().removeClass('on');
+				localStorage.setItem('scanToCostFlag',0);
+				_this.$.find(".comboitem .costFlagOpen").hide();
+				_this.$.find(".comboitem .costFlagClose").show();
+				_this.$.find(".productCostTd,.oncePerformanceTd").each(function(){
+					$(this).hide();
+				});
+			}else {
+				$(this).parent().addClass('on');
+				localStorage.setItem('scanToCostFlag',1);
+				_this.$.find(".comboitem .costFlagOpen").show();
+				_this.$.find(".comboitem .costFlagClose").hide();
+				_this.$.find(".productCostTd,.oncePerformanceTd").each(function(){
+					$(this).show();
+				});
+			}
+		});
 		this.$.find(".submit").vclick(function() {
 			var $tr = _this.$list.find("tr");
 			// if($tr.length){
@@ -59,7 +78,12 @@ window.cashierTools.BillMain.prototype = {
 			if($(this).hasClass("selected")){
 				_this.onSelect($(this),wait||0,1);
 			}else{
-				$(this).addClass("selected").siblings().removeClass("selected");
+				// $(this).addClass("selected").siblings().removeClass("selected");
+				if($(this).parents('.bodyinner').length>0){
+					$(this).addClass("selected").parents('.bodyinner').find('tr').not(this).removeClass("selected");
+				}else{
+					$(this).addClass("selected").siblings().removeClass("selected");
+				}
 				_this.onSelect($(this),wait||0,0);
 			}
 		}).on("vclick","div.delete",function(){
@@ -103,6 +127,38 @@ window.cashierTools.BillMain.prototype = {
 			$val.text(Math.round(num*10)/10);
 			_this.onPriceChange && _this.onPriceChange($(this).parents("tr"));
 			return false;
+		}).on("vclick",".numberSelect",function(){
+			var $this = $(this);
+			var timesList = []
+			var data = $this.parents('tr').data('data');
+			if(data.costConfig){
+				var costConfig = JSON.parse(data.costConfig);
+			}
+			$.each(costConfig,function(i,item){
+				if(item.times==0){
+					return true;
+				}else if (item.times==-99){
+					timesList.push({
+						name:'不限次',
+						data:item.times
+					})
+				}else{
+					timesList.push({
+						name:item.times,
+						data:item.times
+					})
+				}
+			})
+			am.popupMenu("请选择项目次数",timesList, function (times) {
+				if(times.data==-99){
+					$this.text('不限次');
+					$this.parent().parent().addClass('unlimit');
+				}else{
+					$this.text(times.data);
+					$this.parent().parent().removeClass('unlimit');
+				}
+				_this.onPriceChange && _this.onPriceChange($this.parents("tr"));
+			});
 		}).on("vclick",".value",function(){
 			var $this=$(this);
 			console.log($this);
@@ -137,42 +193,254 @@ window.cashierTools.BillMain.prototype = {
 				}
 			});
 			return false;
-		}).on("vclick",".price",function(){
-			if((!_this.checkPromise ||  (_this.checkPromise && !_this.checkPromise("a34,"))) || amGloble.metadata.shopPropertyField.mgjBillingType==0){
-				var $this=$(this).removeClass("error");
-				/*console.log($this.html());
-				 console.log(typeof(parseInt($this.html())));*/
-				var offset = $this.offset();
-				var price = parseFloat($this.html());
-				if($this.hasClass("noDiscount")){
-					price = 0;
-				}
-				var opt={
-					"title":"修改价格",
-					"submit":function(value){
-						value = toFloat(value);
-						if(value>=0){
-							var autoPrice = $this.data("autoPrice");
-							if(autoPrice!=value){
-								$this.addClass("modifyed");
-								$this.parents("tr").data('data').modifyed = 1;
-							}else{
-								$this.removeClass("modifyed");
-								$this.parents("tr").data('data').modifyed = 0;
-							}
-							$this.text(value);
-							if(_this.onPriceChange) _this.onPriceChange($this.parents("tr"),$this);
-						}else{
-							am.msg('价格输入有误');
-						}
-					},
-					"price":price
-				};
-				_this.changekbtab && (opt.changekbtab=true);//defaultTab:'price'//会员卡和套餐 有价格的时候 默认显示价格tab
-
-				am.keyboard.show(opt);
+		}).on("vclick", ".price", function () {
+			var $this = $(this).removeClass("error");
+			var data = $this.parents("tr").data('data')
+			var opt;
+			/*console.log($this.html());
+			 console.log(typeof(parseInt($this.html())));*/
+			var offset = $this.offset();
+			var price = parseFloat($this.html());
+			if ($this.hasClass("noDiscount")) {
+				price = 0;
 			}
-			
+			opt = {
+				"title": "修改价格",
+				"submit": function (value) {
+					value = toFloat(value);
+					if (value >= 0) {
+						if ($this.hasClass("cost")) {
+							if (am.metadata.userInfo.operatestr.indexOf("a49") == -1) {
+								if (data.costFlag) {
+									if (data.groupModifyEnable == 1) {
+										var costConfig = JSON.parse(data.costConfig);
+										if (costConfig && data.groupSaleFlag == 1) {
+											var $times = $this.parent().parent().find(".numberSelect");
+										} else {
+											var $times = $this.parent().parent().find("div.number .value");
+										}
+										if (!$times.parent().parent().hasClass("unlimit")) {
+											if (costConfig) {
+												$.each(costConfig, function (i, item) {
+													if (item.times == ($times.text())) {
+														if (value < Math.round(item.minPrice / item.times*100)/100) {
+															am.msg('亲，已经是最低总价了');
+															value = Math.round(item.minPrice / item.times*100)/100
+															return false;
+														}
+													}
+												})
+											}
+										}
+									} else {
+										am.msg('不允许修改价格');
+										return false;
+									}
+								}
+							}
+						}
+						if ($this.hasClass("totalPrice") && !$this.hasClass("oncePerformance")) {
+							var productCost = $this.parents("tr").find(".productCost").text();
+							if (am.metadata.userInfo.operatestr.indexOf("a49") == -1) {
+								if (data.costFlag) {
+									if (data.groupModifyEnable == 1) {
+										var costConfig = JSON.parse(data.costConfig);
+										if (costConfig && data.groupSaleFlag == 1) {
+											var $times = $this.parent().parent().find(".numberSelect");
+										} else {
+											var $times = $this.parent().parent().find("div.number .value");
+										}
+										if (!$times.parent().parent().hasClass("unlimit")) {
+											if (costConfig) {
+												$.each(costConfig, function (i, item) {
+													if (item.times == ($times.text())) {
+														if (value < item.minPrice) {
+															am.msg('亲，已经是最低总价了');
+															value = item.minPrice
+															return false;
+														}
+													}
+												})
+											}
+										} else {
+											if (costConfig) {
+												var lastConfig = costConfig[costConfig.length - 1]
+												if (lastConfig.times == -99) {
+													if (value < lastConfig.minPrice) {
+														am.msg('亲，已经是最低总价了');
+														value = lastConfig.minPrice
+													}
+												} else {
+													if (value < productCost) {
+														am.msg('总价不能低于产品成本');
+														return false;
+													}
+												}
+											}
+										}
+									}else{
+										am.msg('不允许修改价格');
+										return false;
+									}
+									
+								}
+							}
+						}
+						if ($this.hasClass("productCost")) {
+							var totalPrice = $this.parents("tr").find(".totalPrice").text();
+							if (value > totalPrice) {
+								am.msg('产品成本不能高于总价');
+								return false;
+							}
+						}
+						if ($this.hasClass("oncePerformance") && !$this.hasClass("totalPrice")) {
+							var $numberScroller = $this.parents("tr").find(".numberScroller")
+							var oncemoney = $this.parents("tr").find(".cost").text();
+							if (!$numberScroller.hasClass("unlimit")) {
+								if (value > oncemoney) {
+									am.msg('单次业绩不能高于单价');
+									return false;
+								}
+							}
+						}
+						if ($this.hasClass("oncePerformance totalPrice")) {
+							var member = am.page.comboCard.member;
+							var nowData = am.clone(data);
+							if(am.operateArr.indexOf("H2") ==-1 && am.metadata.userInfo.operatestr.indexOf("a49") == -1){
+								if (data.modifyEnable==1){
+									if(member){
+										nowData = am.page.comboCard.changePrice(nowData,member);
+										var autoShowPrice = nowData.nowPrice;
+										if(autoShowPrice==undefined){
+											if(value<data.minPrice){
+												am.msg('亲，价格已经不能再低了' );
+												value = data.minPrice;
+											}
+										}else{
+											if(autoShowPrice<=data.minPrice){
+												var minPrice = autoShowPrice;
+											}else{
+												var minPrice = data.minPrice;
+											}
+											if(value<minPrice){
+												am.msg('亲，价格已经不能再低了' );
+												value = minPrice;
+											}
+										}
+									}else{
+										if(value<data.minPrice){
+											am.msg('亲，价格已经不能再低了' );
+											value = data.minPrice;
+										}
+									}
+								}else{
+									am.msg('不允许修改价格');
+									return false;
+								}
+							}
+						 }
+						if ($this.hasClass("productPrice")) {
+							var member = am.page.product.member;
+							var productObj = am.page.product.getProductPrice(data,data.price);
+							if(productObj.isMemberPrice){
+								var autoShowPrice = productObj.price;
+							}else if(member && member.buydiscount){
+								var autoShowPrice = data.price*member.buydiscount*0.1;
+							}else{
+								var autoShowPrice = data.price;
+							}
+							autoShowPrice = Number(autoShowPrice).toFloat();
+							if(autoShowPrice<=data.minPrice){
+								minPrice = autoShowPrice;
+							}else{
+								minPrice = data.minPrice;
+							}
+							if(am.metadata.userInfo.operatestr.indexOf("a49") == -1){
+								// 修改区间
+								if (data.modifyEnable==1){
+									if(value<minPrice){
+										am.msg('亲，价格已经不能再低了' );
+										value = minPrice;
+									}
+								}else{
+									am.msg('不允许修改价格');
+									return false;
+								}
+							}
+						}
+						if ($this.hasClass("servicePrice")) {
+							var member = am.page.service.member;
+							if(data.hasOwnProperty('oPrice')){
+								if(data.oPrice == null){
+									var autoShowPrice = null;
+								}else{
+									var autoShowPrice = am.page.service.timeDiscount(data.oPrice,member,data);
+								}
+							}else{
+								if(data.price == null){
+									var autoShowPrice = null;
+								}else{
+									var autoShowPrice = am.page.service.timeDiscount(data.price,member,data);
+								}
+							}
+							
+							if(am.metadata.userInfo.operatestr.indexOf("a49") == -1){
+								// 修改区间
+								if(data.mgjAdjust){
+									if(data.modifyEnable==1){
+										autoShowPrice = am.page.service.timeDiscount(data.mgjAdjust.price,member,data);
+										if(autoShowPrice<=data.mgjAdjust.minPrice){
+											var minPrice = autoShowPrice;
+										}else{
+											var minPrice = data.mgjAdjust.minPrice
+										}
+										if(value<minPrice){
+											am.msg('亲，价格已经不能再低了' );
+											value = minPrice;
+										}
+									}else{
+										am.msg('不允许修改价格');
+										return false;
+									}
+								}else{
+									if (data.modifyEnable==1){
+										if(autoShowPrice!=null && autoShowPrice<=data.minPrice){
+											var minPrice = autoShowPrice
+										}else{
+											var minPrice = data.minPrice
+										}
+										if(value<minPrice){
+											am.msg('亲，价格已经不能再低了' );
+											value = minPrice;
+										}
+									}else{
+										am.msg('不允许修改价格');
+										return false;
+									}
+								}
+							}
+						}
+						var autoPrice = $this.data("autoPrice");
+						if (autoPrice != value) {
+							$this.addClass("modifyed");
+							$this.parents("tr").data('data').modifyed = 1;
+						} else {
+							$this.removeClass("modifyed");
+							$this.parents("tr").data('data').modifyed = 0;
+						}
+						value = toFloat(value);
+						$this.text(value);
+						if (_this.onPriceChange) _this.onPriceChange($this.parents("tr"), $this);
+					} else {
+						am.msg('价格输入有误');
+					}
+				},
+				"price": price
+			};
+			_this.changekbtab && (opt.changekbtab = true);//defaultTab:'price'//会员卡和套餐 有价格的时候 默认显示价格tab
+
+			am.keyboard.show(opt);
+
 			return false;
 		}).on("webkitAnimationEnd","tr",function(evt){
 			console.log(evt);
@@ -184,7 +452,7 @@ window.cashierTools.BillMain.prototype = {
 				var data = $(this).data('data');
 				if(data){
 					//$(this).toggleClass("checked");
-					_this.onServerClick(data);
+					_this.onServerClick && _this.onServerClick(data);// 修复js报错
 				}
 			}
 			
@@ -330,10 +598,31 @@ window.cashierTools.BillMain.prototype = {
 		console.log(w);
 		this.$.css("width",w+"px");
 	},
-	addItem: function(data,isAutoFill,comboItem) {
-		var $tr = this.onAddItem(data,this.$list,isAutoFill,comboItem);
+	setEmpsByFirst:function($tr){
+		var $firstTr = this.$list.children('tr').eq(0);
+		if($firstTr){
+			var emps = $firstTr.find('.server').data('data');
+			if(emps && emps.length){
+				var empsNext = am.clone(emps);
+				$.each(empsNext,function(index,emp){
+					if(emp.perf>0){
+						// 只复制比例 不复制值
+						emp.perf=0;
+					}
+				});
+				if(empsNext && empsNext.length){
+					this.setEmps(empsNext,$tr,"isSeller");
+				}
+			}
+		}
+	},
+	addItem: function(data,isAutoFill,comboItem,isNewAdded) {
+		var $tr = this.onAddItem(data,this.$list,isAutoFill,comboItem,isNewAdded);
 		this.onPriceChange && this.onPriceChange($tr);
 		this.rise();
+		if(isNewAdded){
+			this.setEmpsByFirst($tr)
+		}
 		return $tr;
 	},
 	rise:function(down){
@@ -364,42 +653,57 @@ window.cashierTools.BillMain.prototype = {
 			_this.mainScroll.refresh();
 		},320);
 	},
-	setEmps:function(emps,$tr){
+	setEmps:function(emps,$tr,showSeller){
 		if(!$tr) $tr = this.$list.find("tr.selected");
 		var $server = $tr.find(".server");
-		var pos = [];
-		for(var i=0;i<emps.length;i++){
-			var idx = emps[i].station;
-			if(!pos[idx]){
-				pos[idx] = [];
-			}
-			pos[idx].push(emps[i]);
-		}
-		for(var i=0;i<$server.length;i++){
-			if(pos[i] && pos[i].length){
-				/*emps.push({
-				 "empId": emp.id,
-				 "empName": emp.name,
-				 "empNo": emp.no,
-				 "station":emp.pos,
-				 "pointFlag": 1,
-				 "dutyid": emp.dutyType,
-				 "perf":toFloat(totalPerf*$this.find('.perfNum').text()/100 || 0),
-				 "per":$this.find('.perfNum').text()
-				 });*/
-				$server.eq(i).text(pos[i][0].empName).data("data",pos[i]).addClass("show");
-				if(pos[i].length>1){
-					$server.eq(i).append('<span class="after">'+pos[i].length+'</span>').addClass('muti');
+		if(showSeller){
+			console.log('emps------',emps);
+			if(emps && emps.length){
+				$server.text(emps[0].empName).data("data",emps);
+				if (emps.length > 1) {
+					$server.append('<span class="after">'+emps.length+'</span>').addClass('muti');
 				}else{
-					$server.eq(i).removeClass('muti');
-				}
-				if(pos[i][0].pointFlag){
-					$server.eq(i).addClass('checked');
-				}else{
-					$server.eq(i).removeClass('checked');
+					$server.removeClass('muti');
 				}
 			}else{
-				$server.eq(i).text('').removeData("data").removeClass('checked').removeClass('muti');
+				$server.text('').removeData("data").removeClass('muti');
+			}
+			console.log($server.data("data"));
+		}else{
+			var pos = [];
+			for(var i=0;i<emps.length;i++){
+				var idx = emps[i].station;
+				if(!pos[idx]){
+					pos[idx] = [];
+				}
+				pos[idx].push(emps[i]);
+			}
+			for(var i=0;i<$server.length;i++){
+				if(pos[i] && pos[i].length){
+					/*emps.push({
+					 "empId": emp.id,
+					 "empName": emp.name,
+					 "empNo": emp.no,
+					 "station":emp.pos,
+					 "pointFlag": 1,
+					 "dutyid": emp.dutyType,
+					 "perf":toFloat(totalPerf*$this.find('.perfNum').text()/100 || 0),
+					 "per":$this.find('.perfNum').text()
+					 });*/
+					$server.eq(i).text(pos[i][0].empName).data("data",pos[i]).addClass("show");
+					if(pos[i].length>1){
+						$server.eq(i).append('<span class="after">'+pos[i].length+'</span>').addClass('muti');
+					}else{
+						$server.eq(i).removeClass('muti');
+					}
+					if(pos[i][0].pointFlag){
+						$server.eq(i).addClass('checked');
+					}else{
+						$server.eq(i).removeClass('checked');
+					}
+				}else{
+					$server.eq(i).text('').removeData("data").removeClass('checked').removeClass('muti');
+				}
 			}
 		}
 	},
@@ -446,9 +750,12 @@ window.cashierTools.BillMain.prototype = {
 			return 1;
 		// }
 	},
+	clear: function(){
+		this.$list.empty();
+	},
 	reset: function(keepList) {
 		if(!keepList){
-			this.$list.empty();
+			this.clear();
 			this.dispatchSetting && this.dispatchSetting(this.getSetting());
 		}
 		this.dispatchSettingSelf();
@@ -615,6 +922,12 @@ window.cashierTools.BillMain.prototype = {
 		}else{
 			this.$memberInfo.find('.recharge').hide();
 		}
+		// 退卡中不显示充值
+		if (member.status == 1) {
+			this.$memberInfo.find('.recharge').hide();
+		} else {
+			this.$memberInfo.find('.recharge').show();
+		}
 		if(member.comboitems && member.comboitems.length){
 			var $ul = this.$memberInfo.find('.items').show().find('ul').empty();
 			for (var i = 0; i < member.comboitems.length; i++) {
@@ -628,7 +941,7 @@ window.cashierTools.BillMain.prototype = {
 				if(item.isNewTreatment && item.timesItemNOs){
 					item.itemname = am.page.comboCard.getItemNamesByNos(item.timesItemNOs).join(",");
 				}
-				$li.append('<div class="itemName">'+ (item.treattype==1?'<span class="highlight">[赠] </span>':'')+item.itemname+'</div>');
+				$li.append('<div class="itemName">'+ (item.treattype==1 || item.treattype == 2?'<span class="highlight">[赠] </span>':'')+item.itemname+'</div>');
 				var $date = $('<div class="invalidDate"></div>');
 				if(item.validdate){
 					var ts = am.now();

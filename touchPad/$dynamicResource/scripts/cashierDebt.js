@@ -195,7 +195,7 @@ var cashierDebt = {
 	popupMenu: function(arr,data){
 		var self = this;
 		am.popupMenu("请选择会员卡进行还款充值",arr, function (memberdata) {
-			if(!memberdata) return;
+            if(!memberdata) return;
 			var member = memberdata.data || {};
 			if (!(member.allowkd-0) && member.shopId != am.metadata.userInfo.shopId) {
 				am.msg('此会员卡不允许跨店消费！');

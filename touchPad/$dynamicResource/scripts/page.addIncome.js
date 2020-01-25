@@ -148,7 +148,13 @@
 					return;
 				}
 				var _this = $(this);
-				am.popupMenu("请选择收入类型", self.dayExpendTypeList , function (ret) {
+				var dayExpendTypeListVisible = []
+				$.each(self.dayExpendTypeList,function(index,item){
+					if(item.visible == 1){
+						dayExpendTypeListVisible.push(item)
+					}
+				})
+				am.popupMenu("请选择收入类型", dayExpendTypeListVisible , function (ret) {
 					_this.find('.val').html('<span>'+ret.name+'</span>').removeClass('add').addClass('edit');
 					_this.data('dayExpendType',ret.id);
 				});
@@ -308,7 +314,7 @@
 							return;
 						}
 						var sum = 0;
-						var payName = ["微信","支付宝","大众点评","银联支付","京东钱包"];//支付类型
+						var payName = ["微信","支付宝","大众点评","银联支付","京东支付"];//支付类型
 						var payType=["美管加代收","自收","收钱吧","京东聚合支付"];//收款类型
 						$li.data('data', data);
 						console.log(data)
@@ -349,7 +355,7 @@
 						return $li;
 					},
 					complete: function(data) {//回渲染的样式
-						var payName = ["微信","支付宝","大众点评","银联支付","京东钱包"];//支付类型
+						var payName = ["微信","支付宝","大众点评","银联支付","京东支付"];//支付类型
 						var payType=["美管加代收","自收","收钱吧","京东聚合支付"];//收款类型
 						if(data){
 							var sum = 0;
@@ -582,12 +588,17 @@
 						return;
 					}
 				}else {
-					// if(index==2 || index==3){
-					// 	if(!this.onlineData){
-					// 		am.msg('请支付');
-					// 		return;
-					// 	}
-					// }
+					if(!this.onlineData){
+						if(index==1 && am.operateArr.indexOf("a61") > -1){
+							return am.msg("不允许银联支付仅记账不收款");
+						}
+						if(index==2 && am.operateArr.indexOf("a62") > -1){
+							return am.msg("微信未支付完成");
+						}
+						if(index==3 && am.operateArr.indexOf("a63") > -1){
+							return am.msg("支付宝未支付完成");
+						}
+					}
 				}
 				data.payWay = index;
 				if(index==-1){
@@ -604,10 +615,6 @@
 					if(this.onlineData){
 						data.orderId = this.onlineData.id;
 						console.log("银联pos支付成功")
-					}else{
-						if(am.operateArr.indexOf("a61") > -1){
-							return am.msg("不允许银联支付仅记账不收款");
-						}
 					}
 				}
 
@@ -620,12 +627,15 @@
 						return;
 					}
 				}else {
-					if(index==2 || index==3){
-						if(amGloble.operateArr.indexOf('a6')!=-1){
-							if(!this.onlineData){
-								am.msg('请支付');
-								return;
-							}
+					if(!this.onlineData){
+						if(index==1 && am.operateArr.indexOf("a61") > -1){
+							return am.msg("不允许银联支付仅记账不收款");
+						}
+						if(index==2 && am.operateArr.indexOf("a62") > -1){
+							return am.msg("微信未支付完成");
+						}
+						if(index==3 && am.operateArr.indexOf("a63") > -1){
+							return am.msg("支付宝未支付完成");
 						}
 					}
 				}
@@ -756,7 +766,7 @@
 			init:function(){
 				var _this = this;
 				this.$ = $('#page_addIncome .remain');
-				this.$.find('.colse,.mask,.right').vclick(function(){
+				this.$.find('.close,.mask,.right').vclick(function(){
 					_this.hide();
 					_this.cancel && _this.cancel();
 				});
@@ -884,7 +894,13 @@
                     var k = am.page.pay.payTypeMap[j];
                     items[i].payDetail[j] = payDetail[k] || 0;
                 }
-				var servers = items[i].empfee;
+				var servers = [];
+				for(var j=0;j<items[i].empfee.length;j++){
+					var emp = amGloble.metadata.empMap[items[i].empfee[j].empId];
+					if(emp){
+						servers.push(items[i].empfee[j]);
+					}
+				}
 				// 判断是否开启新业绩模式，若开启走新逻辑
 				if (amGloble.metadata.enabledNewPerfModel == 1) {
 					for(var k = 0; k < servers.length; k++) {
@@ -913,38 +929,234 @@
                     // 虚业绩
 					perfDetail.voidFee = items[i].price*opt.rate;
                     servers[k].perfDetail = perfDetail;
-                }
+				}
+				items[i].empfee = servers;
 			}
 			this.data.bill.eafee = toFloat(eaFee);
 		},
-		calOtherPerformance:function(){
-			var item = this.data.billDetails[0];
-			var servers = item.empfee;
-			if(servers && servers.length){
-				var t = this.data.repayFee;
-				var payDetail = {};
-				payDetail[this.payTypes[this.data.payWay]] = t;
-				item.payDetail = {};
-				for (var j in am.page.pay.payTypeMap) {
-                    var k = am.page.pay.payTypeMap[j];
-                    item.payDetail[j] = payDetail[k] || 0;
-                }
-				var payMoneyCategoryPctObj = am.page.pay.getPayMoneyCategoryPctObj({total: t, payDetail: item.payDetail});
-				var payFeePctObj = am.page.pay.getPayFeePctObj({total: t, payDetail: item.payDetail, isNotProject: true});
-				for (var i = 0; i < servers.length; i++){
-					servers[i].automaticPerformance = 1;
-					fee = servers[i].fee = toFloat(t/servers.length);
-					servers[i].cardfee = fee * payMoneyCategoryPctObj['card'];
-					servers[i].cashfee = fee * payMoneyCategoryPctObj['cash'];
-					servers[i].otherfee = fee * payMoneyCategoryPctObj['other'];
-					// 按每一种支付方式换算业绩
-					var perfDetail = {};
-					for (var payName in payFeePctObj) {
-						var pct = payFeePctObj[payName];
-						perfDetail[payName] = servers[i].fee * pct;
+		keyToLower:function(obj){
+			for(var key in obj){
+				obj[key.toLocaleLowerCase()]=obj[key];
+			}
+			return obj;
+		},
+		getCostAndTotalForBill: function () {
+			var self=this;
+			// 计算原始单的成本 在还欠款的时候使用
+			var cards = this.data.cards || [],
+				cashs = this.data.cashs || [];
+			var payMap = am.page.pay.payTypeMap;
+			var cardsCost = 0,
+				cashCost = 0,
+				cardsTotal = 0,
+				cashTotal = 0;
+			$.each(cards, function (i, v) {
+				var tempV=self.keyToLower(am.clone(v));
+				if (tempV.depcode == '-1') {
+					if (tempV.type == 16) {
+						for (var p in payMap) {
+							cardsCost += tempV[payMap[p]] ? tempV[payMap[p]] * 1 : 0
+						}
 					}
-					servers[i].perfDetail = perfDetail;
+					for (var k in payMap) {
+						cardsTotal += tempV[payMap[k]] ? tempV[payMap[k]] * 1 : 0
+					}
 				}
+			});
+			$.each(cashs, function (i, v) {
+				var tempV=self.keyToLower(am.clone(v));
+				if (tempV.depcode == '-1') {
+					if (tempV.type == 3 && tempV.consumetype == 3) {
+						for (var p in payMap) {
+							cashCost += tempV[payMap[p]] ? tempV[payMap[p]] * 1 : 0
+						}
+					}
+					for (var k in payMap) {
+						cashTotal += tempV[payMap[k]] ? tempV[payMap[k]] * 1 : 0
+					}
+				}
+			})
+			if (!this.data.bill.cost) {
+				this.data.bill.cost = cardsCost + cashCost
+			}
+			if (!this.data.bill.total) {
+				this.data.bill.total = cardsTotal + cashTotal + this.data.debtFee;// 原单需支付总金额 total 后面没再用 == this.data.bill.consumeFee
+			}
+		},
+		distpachPayDetailToItem: function (billDetails) {
+			// 卖品
+			var billDetails = this.data.billDetails;
+			var debtFeeRate = this.data.repayFee/this.data.remainFee;// 本次还的占总欠款的比例
+			var debtFee = this.data.debtFee;// 本单实际欠款
+			// var total = this.data.bill.total;// 原单需支付总金额
+			var total = this.data.bill.consumeFee;// 原单需支付总金额
+			var t = this.data.repayFee;
+			var payDetail = {};
+			payDetail[this.payTypes[this.data.payWay]] = t;
+			var tempPayDetail = {};
+			for (var j in am.page.pay.payTypeMap) {
+				var k = am.page.pay.payTypeMap[j];
+				tempPayDetail[j] = payDetail[k] || 0;
+			}
+			if(this.data.type==3){
+				// 卖品
+				$.each(billDetails, function (i, v) {
+					var rate = v.money/total;// 该卖品占总单的金额
+					var payed = (total - debtFee) *rate// 已支付金额
+					v.total = (v.money -payed )/debtFee * t;// 本单打算要还的
+					v.payDetail={};
+					for(var key in tempPayDetail){
+						v.payDetail[key] = tempPayDetail[key]*(v.money -payed )/debtFee;
+					}
+				})
+			}else if(this.data.type==4){
+				// 套餐
+				// if(am.metadata.configs.combNotCalIntoAchiev!='true'){
+				// 	fee = rate * (item.money+item.itemPrice);// 套餐项目算成本
+				// }else{
+				// 	fee = rate * item.money;// 套餐项目不算成本
+				// }
+				// 将成本细分到套餐包
+				var hasZeroPrice=0;
+				var packageCount = billDetails.length;
+				$.each(billDetails,function(i,v){
+					if(!v.money){
+						hasZeroPrice ++;
+						return false;
+					}
+				});
+				var billCost=this.data.bill.cost || 0;
+				$.each(billDetails,function(i,v){
+					if(hasZeroPrice){
+						v.cost =  billCost/packageCount;
+					}else{
+						v.cost  = v.money/(total-billCost)*billCost;
+					}
+				});
+
+				var isIn = am.metadata.configs.combNotCalIntoAchiev=="false";// true 套餐成本计入员工业绩，false 不计入
+				$.each(billDetails, function (i, v) {
+					if(isIn){
+						var rate = (v.money + (v.productCost || 0)+v.cost)/total;// 该卖品占总单的金额
+						var payed = (total - debtFee) *rate// 已支付金额
+						v.total = ((v.money+v.cost) -payed )/debtFee * t;// 本单打算要还的
+						v.payDetail={};
+						for(var key in tempPayDetail){
+							v.payDetail[key] = tempPayDetail[key]*((v.money+v.cost) -payed )/debtFee;
+						}
+					}else{
+						var rate = (v.money-v.cost-(v.productCost || 0))/total;// 该卖品占总单的金额
+						var payed = (total - debtFee) *rate// 已支付金额
+						v.total = (v.money -payed )/debtFee * t;// 本单打算要还的
+						v.payDetail={};
+						for(var key in tempPayDetail){
+							v.payDetail[key] = tempPayDetail[key]*(v.money -payed )/debtFee;
+						}
+					}
+				})
+			}
+		},
+		calOtherContent: function (item, isNew) {
+			if (isNew) {
+				var servers = item.empfee;
+				if (servers && servers.length) {
+					var t = item.total;
+					var payMoneyCategoryPctObj = am.page.pay.getPayMoneyCategoryPctObj({
+						total: t,
+						payDetail: item.payDetail
+					});
+					var payFeePctObj = am.page.pay.getPayFeePctObj({
+						total: t,
+						payDetail: item.payDetail,
+						isNotProject: true
+					});
+					for (var i = 0; i < servers.length; i++) {
+						servers[i].automaticPerformance = 1;
+						// fee = servers[i].fee = toFloat(t / servers.length);
+						// 还款按照结算时的比例给业绩
+						fee = servers[i].fee = t*(servers[i].percent/ 100);
+						servers[i].cardfee = fee * payMoneyCategoryPctObj['card'];
+						servers[i].cashfee = fee * payMoneyCategoryPctObj['cash'];
+						servers[i].otherfee = fee * payMoneyCategoryPctObj['other'];
+						// 按每一种支付方式换算业绩
+						var perfDetail = {};
+						for (var payName in payFeePctObj) {
+							var pct = payFeePctObj[payName];
+							perfDetail[payName] = servers[i].fee * pct;
+						}
+						servers[i].perfDetail = perfDetail;
+					}
+				}
+			} else {
+				var item = this.data.billDetails[0];
+				var servers = item.empfee;
+				if (servers && servers.length) {
+					var t = this.data.repayFee;
+					var payDetail = {};
+					payDetail[this.payTypes[this.data.payWay]] = t;
+					item.payDetail = {};
+					for (var j in am.page.pay.payTypeMap) {
+						var k = am.page.pay.payTypeMap[j];
+						item.payDetail[j] = payDetail[k] || 0;
+					}
+					var payMoneyCategoryPctObj = am.page.pay.getPayMoneyCategoryPctObj({
+						total: t,
+						payDetail: item.payDetail
+					});
+					var payFeePctObj = am.page.pay.getPayFeePctObj({
+						total: t,
+						payDetail: item.payDetail,
+						isNotProject: true
+					});
+					for (var i = 0; i < servers.length; i++) {
+						servers[i].automaticPerformance = 1;
+						fee = servers[i].fee = toFloat(t / servers.length);
+						servers[i].cardfee = fee * payMoneyCategoryPctObj['card'];
+						servers[i].cashfee = fee * payMoneyCategoryPctObj['cash'];
+						servers[i].otherfee = fee * payMoneyCategoryPctObj['other'];
+						// 按每一种支付方式换算业绩
+						var perfDetail = {};
+						for (var payName in payFeePctObj) {
+							var pct = payFeePctObj[payName];
+							perfDetail[payName] = servers[i].fee * pct;
+						}
+						servers[i].perfDetail = perfDetail;
+					}
+				}
+			}
+		},
+		matchEmpFeeWithBill: function (billDetails) {
+			// 算对应的员工欠业绩
+			// mapping
+			$.each(billDetails, function (key, billInfo) {
+				if (billInfo.id && billInfo.empfee && billInfo.empfee.length) {
+					var empFees = billInfo.empfee;
+					var matchedEmpFees = [];
+					$.each(empFees, function (k, emp) {
+						if (emp.detailId && emp.detailId == billInfo.id) {
+							matchedEmpFees.push(emp);
+						}
+					});
+					billInfo.empfee = matchedEmpFees;
+				}
+			});
+		},
+		calOtherPerformance:function(){
+			var billDetails = this.data.billDetails;
+			var item = billDetails[0];
+			var servers = item.empfee;
+			if (servers && servers.length && !servers[0].detailId || (this.data.type!=3 && this.data.type!=4)) {
+				// 老数据 或则还买卡 充值
+				this.calOtherContent(item);
+			} else if (servers && servers.length && servers[0].detailId) {
+				// 新数据
+				this.getCostAndTotalForBill();// 算原始单成本 和总需支付金额
+				this.matchEmpFeeWithBill(billDetails);
+				this.distpachPayDetailToItem(billDetails);// 套餐 卖品
+				var _this = this;
+				$.each(billDetails, function (key, billInfo) {
+					_this.calOtherContent(billInfo,"isNew")
+				});
 			}
 			this.getDeptData();
 			this.data.bill.eafee = toFloat(this.data.repayFee);
@@ -998,11 +1210,15 @@
 				}
 			}
 		},
-		getCalacAjax:function(params,url,sc){
-			am.page.pay.getCalacAjax.call(this,params,url,sc);
+		getCalacAjax:function(params,url,sc, item){
+			am.page.pay.getCalacAjax.call(this,params,url,sc, item);
 		},
+		recalcRoyalty:function(params, url, sc, item){
+            am.page.pay.recalcRoyalty.call(this,params, url, sc, item);
+        },
 		getGainAndVoidFee:function(){
-			am.page.pay.getGainAndVoidFee.call(this);
+			var type = (this.data && this.data.type == 1) ? 0 : 1;
+			am.page.pay.getGainAndVoidFee.call(this, type);
 		},
 		calNewPerformance:function(id){
 			this.billId = id;

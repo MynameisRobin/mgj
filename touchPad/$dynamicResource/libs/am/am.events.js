@@ -237,6 +237,22 @@
 						_holdTimer = null;
 					}
 					if (_enableVclick && !_$clickableTarget.hasClass("am-disabled")) {
+						if($.am && $.am.debug && $.am.debug.enable){
+							try {
+								var nodeName = _$clickableTarget[0].tagName.toLowerCase();
+								var id = ' #'+_$clickableTarget.attr("id");
+								var className = ' .'+_$clickableTarget.attr("class").split(' ').join('.');
+								$.am.debug.log("_$clickableTarget==>"+nodeName + id + className);
+	
+								var nodeName = _$clickableTarget.parent()[0].tagName.toLowerCase();
+								var id = ' #'+_$clickableTarget.parent().attr("id");
+								var className = ' .'+_$clickableTarget.parent().attr("class").split(' ').join('.');
+								$.am.debug.log("_$clickableTargetParent==>"+nodeName + id + className);
+							}catch(e){
+	
+							}
+						}
+						
 						_$clickableTarget.trigger("vclick");
 						if(window.amClickAudio) {
 							amClickAudio.currentTime = 0;
@@ -254,6 +270,21 @@
 					setTimeout(function() {
 						$target.trigger("vblur");
 						if (!$target.hasClass("am-disabled")) {
+							if($.am && $.am.debug && $.am.debug.enable){
+								try {
+									var nodeName = $target[0].tagName.toLowerCase();
+									var id = ' #'+$target.attr("id");
+									var className = ' .'+$target.attr("class").split(' ').join('.');
+									$.am.debug.log("$target==>"+nodeName + id + className);
+		
+									var nodeName = $target.parent()[0].tagName.toLowerCase();
+									var id = ' #'+$target.parent().attr("id");
+									var className = ' .'+$target.parent().attr("class").split(' ').join('.');
+									$.am.debug.log("$targetParent==>"+nodeName + id + className);
+								}catch(e){
+		
+								}
+							}
 							$target.trigger("vclick");
 							if(window.amClickAudio) {
 								amClickAudio.currentTime = 0;

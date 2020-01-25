@@ -115,11 +115,11 @@
         },
         spellServers: function(servers) {
             var self = this,info=[],str='';
-            if (servers.length) {
+            if (servers && servers.length) {
                 str="服 务 者 : ";
                 for (var i = 0; i < servers.length; i++) {
                     var server = servers[i];
-                    if (servers[i].empName) {
+                    if (server && servers[i].empName) {
                         var serverNo = server.empNo;
                         var serverName = server.empName;
                         str += (serverNo + "-" + (serverName.substr(0,4) || "") +(server.pointFlag==1?'-指定':'')+' ');
@@ -157,7 +157,7 @@
         mergeSameItems: function(serviceItems){
             var service = [];
             var serviceArr = [];
-            var combcardMap = {};
+			var combcardMap = {};
             if(serviceItems.length){
                 for(var i=0;i<serviceItems.length;i++){
                     var item = serviceItems[i];
@@ -189,7 +189,9 @@
             for(var key in combcardMap){
                 for(var key2 in combcardMap[key]){
                     combcardMap[key][key2][0].times = combcardMap[key][key2].length;
-                    combcardMap[key][key2][0].leaveTimes =  combcardMap[key][key2][0].totalTimes - this.getLeaveTimes(combcardMap[key]);
+                    if(combcardMap[key][key2][0].totalTimes != -99){
+                        combcardMap[key][key2][0].leaveTimes =  combcardMap[key][key2][0].totalTimes - this.getLeaveTimes(combcardMap[key]);
+                    }
                     for(var i=1;i<combcardMap[key][key2].length;i++){
                         combcardMap[key][key2][0].servers = combcardMap[key][key2][0].servers.concat(combcardMap[key][key2][i].servers);
                     }
@@ -214,7 +216,7 @@
                 if(!serviceArr[i].repeat){
                     service.push(serviceArr[i]);
                 }
-            }
+			}
             return service;
         },
         getLeaveTimes:function(comb){
@@ -249,6 +251,34 @@
             }else {
                 callback && callback(qrcode)
             }
+        },
+        getNewServersForTreat:function(arr){
+            var servers = [];
+            $.each(arr,function(i,v){
+                if(v.packageId && v.packageId==-1){
+                    // 单个项目
+                    var serviceItems=v.serviceItems||[];
+                    $.each(serviceItems,function(index,value){
+                        if(value.servers){
+                            servers = servers.concat(value.servers);
+                        }
+                    })
+                }else{
+                    if(v.servers){
+                        servers = servers.concat(v.servers);
+                    }
+                }
+            });
+            return servers;
+        },
+        getNewServers:function(arr){
+            var servers = [];
+            $.each(arr,function(i,v){
+                if(v.servers){
+                    servers = servers.concat(v.servers);
+                }
+            });
+            return servers;
         },
         print: function(serviceData, scb, fcb) {
             var serviceData = JSON.parse(JSON.stringify(serviceData));
@@ -327,7 +357,7 @@
             var consumeTime = data[1].consumeTime ? new Date(data[1].consumeTime - 0).format("yyyy-mm-dd HH:MM") : new Date().format("yyyy-mm-dd HH:MM");
             //初始化值
             //服务项目
-            var serviceItem = data[1].serviceItems || [];
+			var serviceItem = data[1].serviceItems || [];
             //卖品
             var products = data[1].products;
             //卡类
@@ -349,7 +379,11 @@
 		        ];
                 this.$prodTitle = ['卖品','数量','价格'];
                 this.$prodItem = [];
-		        var productServers = products.servers;
+                var productServers = products.servers;
+                if(!productServers.length){
+                    // 新数据
+                    productServers  =this.getNewServers(products.depots);
+                }
                 productServersTotal = productServersTotal.concat(productServers);
 		        //卖品数据
 		        for (var j = 0; j < products.depots.length; j++) {
@@ -377,7 +411,8 @@
                 if(!serviceItem.length){
                     servantNameArray=this.spellServers( productServersTotal || [] );
                 }
-	        }
+            }
+            var treatTotalMoney = 0;
             if (expenseCategory == 0) { //项目
                 printDataTitle = [
                     this.formatString("项目", "left", 13) + this.formatString("数量/次数", "left", 10) + "价格/次数",
@@ -401,20 +436,32 @@
                 //         }
                 //     }
                 // }
-                // console.log(comboItemMap);
+				// console.log(comboItemMap);
                 for (var i = 0; i < serviceItem.length; i++) {
                     var item = serviceItem[i];//分两种消费 普通项目消费和套餐消费
                     var itemServers = item.servers;
                     itemServersTotal = itemServersTotal.concat(itemServers);
                     // servantNameArray=this.spellServers(itemServersTotal.concat( productServersTotal || [] ));
                     var originPrice = 0;
-                    var _item = amGloble.metadata.serviceCodeMap[item.itemId || item.itemNo];
-                    if(_item && _item.price*1){
-                        originPrice = _item.price;
+                    if(item.hasOwnProperty('originalPrice') && !item.consumeId && !item.isComboConsume){
+                        originPrice = item.originalPrice;
                     }else {
-                        originPrice = item.salePrice;
+                        var _item = amGloble.metadata.serviceCodeMap[item.itemId || item.itemNo];
+                        if(_item && _item.price*1){
+                            originPrice = item.oPrice?item.oPrice:_item.price;
+                        }else {
+                            originPrice = item.salePrice;
+                        }
                     }
-                    var itemName = item.itemName+'(￥'+originPrice+')';//项目名称，打印小票用
+                    if(item.consumeId || item.isComboConsume){
+                        if(amGloble.metadata.configs.TREAT_PRINT_ORIGINALPRICE == 0){
+                            var itemName = item.itemName;//项目名称，打印小票用
+                        }else {
+                            var itemName = item.itemName+'(￥'+originPrice+')';//项目名称，打印小票用
+                        }
+                    }else {
+                        var itemName = item.itemName+'(￥'+originPrice+')';//项目名称，打印小票用
+                    }
                     var lineString = this.splitString(itemName, 16);
                     if(item.consumeId || item.isComboConsume){//套餐消费 显示剩余次数
                         var itemTimes = '';
@@ -427,14 +474,23 @@
                         //     }   
                             
                         // }
-                        if(item.leaveTimes){
+						if(item.leaveTimes){
                             itemTimes=item.leaveTimes;
                         }
                         if(item.totalTimes==-99){
                             itemTimes =  item.totalTimes;
                         }
-                        printItems.push(this.formatString(lineString[0], "left", 16) + this.formatString((item.times || 1), "left", 7) + (itemTimes?(itemTimes==-99?'不限次':("余" +itemTimes+"次")):''));
-                        this.$serverItem.push([itemName,(item.times || 1),(itemTimes?(itemTimes==-99?'不限次':("余" +itemTimes+"次")):'')]);
+                        var timesStr = (itemTimes?(itemTimes==-99?'不限次':("余" +itemTimes+"次")):'');
+                        var _length = 7;
+                        var _length2 = 0;
+                        if(amGloble.metadata.configs.TREAT_PRINT_ONCEMONEY == 1 && timesStr){
+                            timesStr = '￥'+ (Math.round(item.salePrice*item.times*100)/100) +' '+ timesStr;
+                            treatTotalMoney += item.salePrice*item.times;
+                            _length = 2;
+                            _length2 = 13;
+                        }
+                        printItems.push(this.formatString(lineString[0], "left", 16) + this.formatString((item.times || 1), "left", _length) + this.formatString(timesStr, "right", _length2));
+                        this.$serverItem.push([itemName,(item.times || 1),timesStr]);
                         if (lineString[1] && lineString[1].length > 0) {
                             printItems.push(lineString[1]);
                         }
@@ -528,6 +584,16 @@
                 this.$treatTitle = ['套餐','次数',''];
                 this.$treatItem = [];
                 var comboServers = comboCard.servers;
+                if(!comboServers.length){
+                    // 新数据
+                    var arr = [];
+                    if(comboCard.serviceItems){
+                        arr = arr.concat(comboCard.serviceItems,comboCard.treatments);
+                    }else{
+                        arr = arr.concat(comboCard.treatments);
+                    }
+                    comboServers  =this.getNewServersForTreat(arr);
+                }
                 servantNameArray=this.spellServers(comboServers);
                 for (var k = 0; k < comboCard.treatments.length; k++) {
                     var comboTreatments = comboCard.treatments[k];
@@ -546,12 +612,29 @@
                         //total += comboCardItemPrice;
                     }
                 }
+                if(comboCard.serviceItems && comboCard.serviceItems.length){
+                    var serviceItemsOuter = comboCard.serviceItems;
+                    for(var s= 0;s<serviceItemsOuter.length;s++){
+                        var comboCardItem = serviceItemsOuter[s];
+                        console.log(comboCardItem);
+                        var comboCardItemName = comboCardItem.name;
+                        // var comboCardItemPrice = Math.round(comboCardItem.money*100)/100;
+                        var comboTimes = Math.round(comboCardItem.times*100)/100;
+                        var lineString = this.splitString(comboCardItemName, 16);
+                        printItems.push(this.formatString(lineString[0], "left", 18) + (comboTimes==-99?'不限次':comboTimes));
+                        this.$treatItem.push([comboCardItemName,(comboTimes==-99?'不限次':comboTimes),'']);
+                        if (lineString[1] && lineString[1].length > 0) {
+                            printItems.push(lineString[1]);
+                        }
+                    }
+                }
                 total = data[1].billingInfo.total-(data[1].billingInfo.treatfee || 0)-(data[1].billingInfo.treatpresentfee||0);
                 costNum = data[1].cost;
                 if(costNum){//处理工本费要加 总计
                     total += costNum;
                 }
             }
+            total += treatTotalMoney;
             //支付方式打印——循环所有支付方式，有值的push进去，没有就不push
             var payType = data[1].billingInfo;
             console.log(payType);
@@ -598,7 +681,7 @@
             };
             var printDataPayType = [],printDataCostPayType=[];
             var printFeeType = ['工本费'];
-            var printCostType = ['开卡成本'];
+            var printCostType = ['套餐总成本'];
             $.each(payType, function(i, item) {
                 if (item != 0 && item != null && i != "luckyMoneyId" && i!= "kBOrderid" && i!= "luckMoneys" && i != "weixinId" && i != "payId" && i != "dpId" && i != "eaFee" && i != "total" && i != "mallId" && i != "mallNo" && i != "dpCouponId" && i != "jdOrderId"  && i != "totalfeeanddebtfee" && i != "treatfee" && i != "treatpresentfee") {
                     if (expenseCategory == 2 || expenseCategory == 3) {
@@ -682,7 +765,7 @@
             if(expenseCategory == 4 || expenseCategory == 2){//套餐
                 if(costNum){
                     var costFeeObj = expenseCategory == 4 ? data[1].comboCard.costDetail : data[1].card.cost;
-                    printDataCostPayType = [this.formatString("开卡成本 : ","left",15)].concat(printDataCostPayType);
+                    printDataCostPayType = [this.formatString("套餐总成本 : ","left",15)].concat(printDataCostPayType);
                     $.each(costFeeObj,function(i,item){
                         if(item!=0&&i.indexOf('Id') == -1&&i!="total"){
                             if (i.indexOf('otherfee') != -1) {//是自定义支付方式

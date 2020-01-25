@@ -24,9 +24,13 @@
             }else {
                 this.$.removeClass('onlyCover');
             }
-            this.show(billNo);
+            this.show(billNo, submit);
         },
-        show: function (billNo) {
+        show: function (billNo, submit) {
+			if(am.isNull(billNo)){
+				submit && submit();
+				return false;
+			}
             this.$.show();
             this.$.find(".tip").text("在历史单据中发现单号" + billNo + "已经存在，本单提交后为保证单号唯一，将修改之前的单据号为" + billNo + "-1");
         },
@@ -34,7 +38,7 @@
             this.$.hide();
         }
     }
-    am.page.pay = new $.am.Page({
+	am.page.pay = new $.am.Page({
         id: "page_pay",
         backButtonOnclick: function () {
             var _this = this;
@@ -91,6 +95,11 @@
 			});
 
             this.$list.find('.rechargePriceItem').vclick(function () {//充值卡金
+                var $payed = _this.$payTypes.filter(".payed");
+                var $input = _this.paytool.mix.$.find('.mixval.payed');
+                if ($payed.length || $input.length) {
+                    return am.msg('用户已在线支付成功,修改金额将导致支付订单关联异常，请先退款');
+                }
                 var $this = $(this);
                 if (!_this.opt.renewal) {
                     am.keyboard.show({
@@ -124,6 +133,7 @@
 							_this.cardUpId = _this.matchCardTypeUpRule(value,_this.opt.member)['rid'];
                             //副屏支付结算详情
                             _this.setMediaShow(_this.opt, "cz");
+                            _this.setRechargePerf();
                         }
                     });
                 } else {
@@ -199,63 +209,17 @@
                 });
             });
             this.$list.find('.rechargeSales').vclick(function () {
-				var $this = $(this);
-				var emps = am.metadata.employeeList || [];
-				if(am.metadata.configs && am.metadata.configs['EMP_SORT']){
-					emps = JSON.parse(am.metadata.configs['EMP_SORT']);
-					emps = am.getConfigEmpSort(emps);
-				}
-				
-                var sales = [];
-                var setting = localStorage.getItem("setting_seller_" + am.metadata.userInfo.parentShopId), map = {};
-                if (setting) {
-                    try {
-                        setting = JSON.parse(setting);
-                    } catch (e) {
-                        setting = null;
-                    }
-
-                    for (var j = 0; j < setting.length; j++) {
-                        map[setting[j].key] = setting[j].flag;
-                    }
+                if(!_this.opt.option.card.servers){
+                    _this.opt.option.card.servers = [];
                 }
-                for (var i = 0; i < emps.length; i++) {
-                    if (map["emps_" + emps[i].id] != 0) {
-						emps[i]['keyName'] = emps[i]['no'] + '　' + emps[i]['name'];
-                        sales.push(emps[i]);
-                    }
-                }
-                am.popupMenu("请选择销售", sales, function (ret) {
-                    if (ret && ret.length) {
-                        _this.opt.option.card.servers = [];
-                        var name = [];
-                        for (var i = 0; i < ret.length; i++) {
-                            _this.opt.option.card.servers.push({
-                                "empId": ret[i].id,
-                                "empName": ret[i].name,
-                                "empNo": ret[i].no,
-                                "station": ret[i].pos,
-                                "pointFlag": 1, // 是否指定 0指定 1非指定
-                                "dutyid": ret[i].dutyType
-                            });
-                        }
+                am.serversModal.show({
+                    needPay: _this.needPay || 0,
+                    emps: _this.opt.option.card.servers,
+                    serverSave: function (data) {
+                        _this.opt.option.card.servers = data;
                         _this.setRechargePerf();
-                        /*}
-                        if(ret && ret.id){
-                            _this.opt.option.card.servers = [{
-                                "empId": ret.id,
-                                "empName": ret.name,
-                                "empNo": ret.no,
-                                "station":ret.pos,
-                                "pointFlag": 1, // 是否指定 0指定 1非指定
-                                "dutyid": ret.dutyType
-                            }];
-                            $this.find(".val").text(ret.name);*/
-                    } else {
-                        _this.opt.option.card.servers = [];
-                        $this.find(".val").text("");
                     }
-                }, 'keyName', 1);
+                })
             });
             this.$list.find('dd.luckymoney').vclick(function () {
                 if (_this.needPay > 0 || $(this).data('data')) {
@@ -278,11 +242,11 @@
             
         
             this.$list.find('dd.mallOrder').vclick(function () {
-                if (_this.needPay > 0) {
+                // if (_this.needPay > 0) {
                     _this.paytool.mallOrder.show(_this.opt.member, _this.opt.option.expenseCategory);
-                } else {
-                    am.msg('不需要支付更多金额了！');
-                }
+                // } else {
+                    // am.msg('不需要支付更多金额了！');
+                // }
             });
             this.$list.find('dd.prePay').vclick(function () {
                 if (_this.needPay > 0) {
@@ -306,7 +270,7 @@
                         if(value > $("#prePayDetail").find(".mallOrderList li.selected .price").html()-0){
                             return am.msg("不能超过可用金额");
                         }
-                        if(_this.opt.option.billingInfo.eaFee < value){
+                        if((_this.needPay || 0) < value){
                             return am.msg("不能超过总金额");
                         }
                         console.info(d)
@@ -336,6 +300,9 @@
             });
             this.$payTypes = this.$.find(".payTypes li").vclick(function () {
                 var $this = $(this);
+                if($this.hasClass('noJdSetting')){
+                    return am.msg('没有配置京东支付的支付方式，请前往 基础系统>基础设置>自定义配置>自定义付款方式 进行配置');
+                }
                 if ($this.hasClass("selected")) {
                     //return;
                 } else {
@@ -352,7 +319,7 @@
                         if (payed) {
                             atMobile.nativeUIWidget.showMessageBox({
                                 title: "用户已完支付",
-                                content: '用户已在线支付成功,修改支付方式请导致支付订单无关联异常，请先退款'
+                                content: '用户已在线支付成功,修改支付方式将导致支付订单关联异常，请先退款'
                             });
                             return;
                         }
@@ -519,7 +486,8 @@
             });
             this.paytool.init();
 
-            this.$confirm = $('#payConfirm').vclick(function () {
+			this.$confirm = $('#payConfirm');
+            $('#payConfirm .goBack').vclick(function () {
                 _this.paySuccess();
             });
 
@@ -581,26 +549,86 @@
 
             this.$comment = this.$.find('.comment').vclick(function () {
                 var $this = $(this);
-                am.addRemark.show({
-                    value: _this.opt.option.comment,
-                    cb: function (val) {
-                        _this.opt.option.comment = val;
-                        $this.text(val || "");
-                    },
-                    maxlength: 100
-                });
+                // am.addRemark.show({
+                //     value: _this.opt.option.comment,
+                //     cb: function (val) {
+                //         _this.opt.option.comment = val;
+                //         $this.text(val || "");
+                //     },
+                //     maxlength: 100
+                // });
+                var reason = JSON.parse(am.metadata.configs.submitBillRemarks || "[]");// 门店配置
+				var hqReason = [];
+				if(!(reason && reason.length)){
+					// 如果门店未配置删单理由则再取总部的配置
+					hqReason = JSON.parse(am.metadata.configs.submitBill || "[]");// 总部配置
+				}
+				var submitBillRemarks = (reason && reason.length ? reason : hqReason) || [];
+				am.selectCancleReason.show({
+					title: '请选择收银理由',
+					// warn: '警告:请选择或输入明确的撤单理由，以便财务和管理层审核',
+                    reason: submitBillRemarks,
+                    currentValue:_this.opt.option.comment,
+                    warn: '警告:请选择或输入明确的收银理由，以便财务和管理层审核',
+					type:3,// 收银
+					callback: function(str){
+                        _this.opt.option.comment = str || "";
+                        $this.text(str || "");
+					},
+					saveToRemarkList:function(val){
+						var saveReason=[];
+						if(!am.isNull(reason) && reason.indexOf(val)>-1){
+							// 常用已包含
+							am.msg(val+'已存在，请修改后再保存');
+							return;
+						}else if(!am.isNull(reason) && reason.indexOf(val)==-1){
+							// 常用未包含
+							saveReason = reason.concat([val]);
+						}else if(am.isNull(reason)){
+							// 没有常用
+							saveReason = [val];
+						}
+						am.loading.show();
+						am.api.saveNormalConfig.exec({
+							parentshopid: am.metadata.userInfo.parentShopId+'', 
+							configkey: 'submitBillRemarks',
+							configvalue: JSON.stringify(saveReason),
+							shopid: am.metadata.userInfo.shopId+'',
+							setModuleid: 15
+						},function(ret){
+							am.loading.hide();
+							if(ret && ret.code==0){
+							   am.metadata.configs.submitBillRemarks=JSON.stringify(saveReason);
+							   am.msg('【'+val+'】'+'已保存为常用收银理由')
+							}else {
+								am.msg('保存失败');
+							}
+						});
+					}
+				});
             });
+            this.$customerSource = this.$.find('.customerSource').vclick(function(){
+                var $this = $(this);
+                var mgjsourceid = _this.opt.option.mgjsourceid
+				am.sourceModal.show({
+					mgjsourceid: mgjsourceid,
+					sourceSave: function (data) {                       
+                        $this.text(data.mgjsourcename)
+                        if(_this.opt.servOption && _this.opt.prodOption){
+                            _this.opt.servOption.mgjsourceid = data.mgjsourceid;
+                        }else{
+                            _this.opt.option.mgjsourceid = data.mgjsourceid;
+                        }                        
+					}
+				})
+            })
 
             this.$billNo = this.$header.find(".billno input").on("vclick",function(){
-                if($(this).prop("readonly")){
-                    am.msg("开单模式下单号自动生成！");
-                    return;
-                }
-                if(am.metadata.shopPropertyField.mgjBillingType==1 && am.operateArr.indexOf('a37')==-1){
+                if(am.metadata.shopPropertyField.manualInputBillno != 1 && am.metadata.shopPropertyField.mgjBillingType==1 && am.operateArr.indexOf('a37')==-1){
                     am.msg("没有权限修改单号！");
                     return;
                 }
-                var $this = $(this);
+				var $this = $(this);
                 am.keyboard.show({
 					title:"请输入单号",//可不传
 					hidedot:true,
@@ -608,15 +636,14 @@
                         if(isNaN(value)){
                             am.msg('请输入正确的数值！');
                             return;
-                        }
-                        $this.val(value.substring(0,20));
-                        if(value.length>20){
-                            am.msg('单号长度超过20位数字已自动截取');
-                        }
-                        if(_this.opt.option.expenseCategory==0){
-                            _this.checkBillNo($this.val());
-                        }
-				    }
+						}
+						// 只有项目才校验单号重复
+						if (_this.opt.option.expenseCategory == 0) {
+							_this.checkBillNo(value);
+							return false;
+						}
+						$this.val(value.substring(0, 20));
+					}
 				});
             });
 
@@ -671,6 +698,15 @@
 				direction: [false, true],
 				hasInput: false,
             });
+
+            $.am.on('instoreServiceHasBeenChanged',function(data){
+				if($.am.getActivePage() == _this){
+                    if(_this.opt && _this.opt.option && _this.opt.option.instoreServiceId == data.instoreServiceId){
+                        am.billChangeToHangup();
+                        am.autoPayCheck.reset();
+                    }
+				}
+			});
         },
         toLowerCaseKey:function(obj){
             var res={};
@@ -757,22 +793,46 @@
 			    }
 			});
         },
-        checkBillNo:function(billNo){
-            var _this = this;
+        checkBillNo:function(billNo, cb){
+			var _this = this;
+			if(billNo.length > 20){
+				am.msg('单号长度超过20位数字已自动截取');
+			}
+			_this.$header.find(".billno input").val(billNo.substring(0,20));
+			
+			var _check = function(){
+				// 单号不重复	
+				_this.opt.option.billNo = billNo;
+				if (_this.opt.servOption) {
+					_this.opt.servOption.billNo = billNo;
+				}
+				if (_this.opt.prodOption) {
+					_this.opt.prodOption.billNo = billNo;
+				}
+				cb && cb();
+			};
+
+			// 只有项目才校验重复单号
+			if (_this.opt.option.expenseCategory != 0) {
+				_check();
+				return false;
+			}
+
             am.api.checkBillNo.exec({
                 billNo: billNo,
                 shopId: amGloble.metadata.userInfo.shopId
             },function(ret){
-                console.log(ret);
                 if(ret.code==0){
-                    _this.checkBillNoSuccess = true;
+					_this.checkBillNoSuccess = true;
                 }else if(ret.code==11009){
                     am.msg('单号重复');
-                    _this.checkBillNoSuccess = false;
+					_this.checkBillNoSuccess = false;
+					return false;
                 }else {
-                    _this.checkBillNoSuccess = true
-                }
-            })
+                    _this.checkBillNoSuccess = true;
+				}
+				_check();
+            });
         },
         getPrintType: function () {
             var type = "bt",
@@ -795,13 +855,16 @@
             if(!this.checkedSubmitPermission){
                 this.checkSubmitPermission();
             }
+            this.$comment.removeClass("showleft");
             this.checkBillNoSuccess = true;
             this.usedDpCoupon = false;
             this.usedKbCoupon = false;
 			this.upgradeCardSuccess = false;
-			this.upgradeCardSuccessAuto = false;
+            this.upgradeCardSuccessAuto = false;
             if(paras.member){
                 var member = paras.member;
+                this.$customerSource.hide();
+                this.$comment.addClass("showleft");
                 if(member.presentfeepayLimit===null){
                     member.presentfeepayLimit = 100;
                 }
@@ -817,7 +880,20 @@
                 if(member.discount==0){
                     member.discount = 10;
                 }
-            }
+            }else{
+                if(paras.option&&paras.option.mgjsourceid){
+                    this.$customerSource.text(paras.option.mgjsourcename)
+                    delete paras.option.mgjsourcename;
+                }else if(paras.option&&!paras.option.mgjsourceid){
+                    this.$customerSource.text("");
+                };
+                this.$customerSource.show();
+                if (paras.servOption&&paras.prodOption){
+                    delete paras.prodOption.mgjsourceid;
+                    delete paras.prodOption.mgjsourcename;
+                    delete paras.servOption.mgjsourcename;
+                };
+            };
             var printType = this.getPrintType();
             if (printType == "bt") {
                 this.$.find(".userPrintType li").removeClass("selected").eq(0).addClass("selected");
@@ -828,17 +904,6 @@
                 this.$.find(".userPrintType").addClass('web').find('.printType').hide();
             }else {
                 this.$.find(".userPrintType").removeClass('web').find('.printType').show();
-            }
-            this.$billNo.val('');
-            if(paras && paras.option){
-                this.$billNo.val(paras.option.billNo || "");
-                // if(amGloble.metadata.shopPropertyField && amGloble.metadata.shopPropertyField.mgjBillingType == 1){
-                //     this.$billNo.prop("readonly","readonly");
-                // }else{
-                //     this.$billNo.prop("readonly",false);
-                // }
-            }else if(paras && paras.billRemark){
-                this.$billNo.val(paras.billRemark.serviceNO || "");
             }
             
 			if(paras.action == "recharge"){
@@ -854,14 +919,16 @@
                 //this.render();
                 this.paytool.hide();
             } else {
-                this.opt = paras;
+				this.opt = paras;
                 this.render();
                 //副屏支付结算详情
                 if (this.opt.action == "recharge") {
+					this.renderBillNo(paras);
                     return;
                 }
                 this.setMediaShow(paras);
-            }
+			}
+			this.renderBillNo(paras);
             var configs = am.metadata.configs;
             if (configs && configs['mobileRepeat']) {
                 this.mbRepeatConfig = JSON.parse(configs['mobileRepeat']);
@@ -875,7 +942,23 @@
             }
             
 			this.paytool.luckyMoney.redPackageArr = [];
-        },
+		},
+		// 渲染单号
+		renderBillNo: function(paras){
+			if (am.metadata.shopPropertyField.manualInputBillno == 1 && !this.opt.settlementPayDetail) {
+				this.$billNo.val('');
+				if(this.opt.option) {
+					this.opt.option.billNo = '';
+				}
+			}else{
+				// 是否启动结单强制覆盖单号	
+				if(paras && paras.option){
+					this.$billNo.val(paras.option.billNo || "");
+				}else if(paras && paras.billRemark){
+					this.$billNo.val(paras.billRemark.serviceNO || "");
+				}
+			}
+		},
         checkSubmitPermission: function () {
             // 判断当前员工是否有结算权限
             var config = am.metadata.userInfo.operatestr.indexOf('a39') > -1 ? 1 : 0;
@@ -947,6 +1030,9 @@
                 //自动结算
                 console.log('pay settlementPayDetail', paras.settlementPayDetail)
                 setTimeout(function(){
+                    if(paras.option.expenseCategory==3){
+                        self.autoRecharge(paras);
+                    }
                     self.autoSettleFun(paras.settlementPayDetail);
                 },1000)
             }else {}
@@ -954,7 +1040,8 @@
             this.checkCardAboutCurrentDay();
         },
         beforeHide: function (paras) {
-            this.getGainAndVoidFee();// 页面隐藏前调用虚业绩和提成接口 如果this.billId不存在则不调用
+            var type = this.opt && this.opt.option && this.opt.option.expenseCategory
+            this.getGainAndVoidFee(type);// 页面隐藏前调用虚业绩和提成接口 如果this.billId不存在则不调用
         },
         afterHide: function () {
             $('.transparentMask').hide();
@@ -1196,29 +1283,18 @@
             console.log(params)
             am.mediaShow(3, params);
         },
-        setRechargePerf: function (cb) {
-            var _this = this;
-            am.setPerf.show({
-                total: this.needPay || 0,
-                emps: this.opt.option.card.servers,
-                submit: function (pers,perfs,gains) {
-                    var html = [];
-                    for (var i = 0; i < _this.opt.option.card.servers.length; i++) {
-                        var emp = _this.opt.option.card.servers[i];
-                        emp.per = pers[i];
-                        emp.perf = perfs[i];
-                        emp.gain = gains[i];
-                        // html.push('<span per="' + emp.per + '">' + emp.empName + '(业绩' + emp.perf +',提成'+emp.gain+')' + '</span>');
-                        if(am.operateArr.indexOf('a9')==-1){
-                            html.push('<span per="' + emp.per + '">' + emp.empName + '(业绩' + emp.perf +')' + '</span>');
-                        }else {
-                            var $gain = emp.gain?',提成'+emp.gain:'';
-                            html.push('<span per="' + emp.per + '">' + emp.empName + '(业绩' + emp.perf +$gain+')' + '</span>');
-                        }
-                    }
-                    _this.$list.find('.rechargeSales .val').html(html.join(","));
+        setRechargePerf: function () {
+            var html = [];
+            for (var i = 0; i < this.opt.option.card.servers.length; i++) {
+                var emp = this.opt.option.card.servers[i];
+                if (am.operateArr.indexOf('a9') == -1) {
+                    html.push('<span per="' + emp.per + '">' + emp.empName + '(业绩' + toFloat(this.needPay * emp.per / 100) + ')' + '</span>');
+                } else {
+                    var $gain = emp.gain ? ',提成' + emp.gain : '';
+                    html.push('<span per="' + emp.per + '">' + emp.empName + '(业绩' + toFloat(this.needPay * emp.per / 100) + $gain + ')' + '</span>');
                 }
-            });
+            }
+            this.$list.find('.rechargeSales .val').html(html.join(","));
         },
         getOriginalPay: function(){
             //优惠价
@@ -1564,10 +1640,10 @@
                 }
             }
             if(this.jdSetting){
-                this.$payTypes.filter('.pay_jd').show();
+                this.$payTypes.filter('.pay_jd').show().removeClass('noJdSetting');
                 this.payTypeNameMap.jd = this.jdSetting.field.toLocaleLowerCase();
             }else {
-                this.$payTypes.filter('.pay_jd').hide();
+                this.$payTypes.filter('.pay_jd').show().addClass('noJdSetting');
             }
         },
         redPackageDiscount:function(){
@@ -1583,16 +1659,29 @@
                     }
                 }
                 var needPay = 0;
+                var serviceNeedPay = 0,
+                    depotNeedPay = 0,
+                    treatNeedPay = 0;
                 if(hasOld){
                     needPay = this.opt.option.billingInfo.total - this.comboDeduct + (this.opt.option.cost || 0);
                 }
                 if(hasNew){
                     if(this.opt.option.serviceItems){
-                        needPay = this.getAppointServiceItemsTotal(this.opt.option.serviceItems);
+                        serviceNeedPay = this.getAppointServiceItemsTotal(this.opt.option.serviceItems);
+                    }
+                    // 卖品
+                    var depots = this.getDepotsInBill(this.opt);
+                    if(depots && depots.length){
+                        depotNeedPay = this.getAppointServiceItemsTotal(depots);
+                    }
+                    if(this.opt.option.comboCard && this.opt.option.comboCard.treatments){
+                        treatNeedPay = this.getAppointTreatmentsTotal(this.opt.option.comboCard.treatments);
                     }
                 }
                 var discountDetail = [];
                 var serviceDiscountTotal = 0;
+                var treatPackageDiscoutTotal = 0;
+                var depotsDiscoutTotal = 0;
                 console.log(needPay)
                 for(var i=0;i<redPackages.length;i++){
                     var package = redPackages[i];
@@ -1622,25 +1711,31 @@
                             //新型模板红包仅项目抵扣
                             if(package.rule && JSON.parse(package.rule).content){
                                 var rule = JSON.parse(JSON.parse(JSON.parse(package.rule).content).rule);
-                                if(rule.luckyMoneyRule.enableCashierPay){
+                                if(rule.luckyMoneyRule.enableCashierPay && rule.luckyMoneyRule.allowCashierPay.enableDepots!==true){
                                     //允许店内消费抵扣
-                                    if(!rule.luckyMoneyRule.allowCashierPay.memCard || (this.opt.member && this.opt.member.cardNum==1 && this.opt.member.cardTypeId == '20151212')){
+                                    var isTempMember = 1; // 1 散客,0 会员
+                                    var memberStage = this.opt.member && (this.opt.member.memberstage || this.opt.member.memberStage);
+                                    if (memberStage > 2) {
+                                        // memberstage :   1-新客 2-潜在会员 3-会员 4临界会员,默认1, 1 2都是散客
+                                        isTempMember = 0;
+                                    }
+                                    if(!rule.luckyMoneyRule.allowCashierPay.memCard || isTempMember){
                                         //没有禁止同时使用会员卡 ||  禁止同时使用会员卡时使用散客卡
                                         if(!rule.luckyMoneyRule.allowCashierPay.otherRedPackage || !discountDetail.length){
                                             //没有禁止使用其他红包 || 禁止使用其他红包抵扣时之前没有抵扣过红包
                                             if(!rule.luckyMoneyRule.allowCashierPay.enableItems){
                                                 //没有指定项目使用
-                                                if(!rule.luckyMoneyRule.allowCashierPay.consumptionAmountFlag || needPay - serviceDiscountTotal >= rule.luckyMoneyRule.allowCashierPay.consumptionAmount){
+                                                if(!rule.luckyMoneyRule.allowCashierPay.consumptionAmountFlag || serviceNeedPay - serviceDiscountTotal >= rule.luckyMoneyRule.allowCashierPay.consumptionAmount){
                                                     //没有指定满减 || 消费金额达到满减金额
                                                     if(rule.extraRule.type==2){
                                                         //折扣
-                                                        var billMoney = toFloat((needPay-serviceDiscountTotal)*((100-rule.extraRule.discount*10)/100));
+                                                        var billMoney = toFloat((serviceNeedPay-serviceDiscountTotal)*((100-rule.extraRule.discount*10)/100));
                                                     }else {
                                                         //金额
                                                         var billMoney = package.money;
                                                     }
-                                                    if(needPay<billMoney){
-                                                        billMoney = needPay - serviceDiscountTotal;
+                                                    if(serviceNeedPay<billMoney){
+                                                        billMoney = serviceNeedPay - serviceDiscountTotal;
                                                     }
                                                     discountDetail.push({
                                                         id: package.id,
@@ -1672,8 +1767,8 @@
                                                                 billMoney = sum;
                                                             }
                                                         }
-                                                        if(needPay<billMoney){
-                                                            billMoney = needPay - serviceDiscountTotal;
+                                                        if(serviceNeedPay<billMoney){
+                                                            billMoney = serviceNeedPay - serviceDiscountTotal;
                                                         }
                                                         discountDetail.push({
                                                             id: package.id,
@@ -1691,10 +1786,187 @@
                                 }
                             }
                         }
+                        if(depots && depots.length){
+                            if(package.rule && JSON.parse(package.rule).content){
+                                var rule = JSON.parse(JSON.parse(JSON.parse(package.rule).content).rule);
+                                if(rule.luckyMoneyRule.enableCashierPay && rule.luckyMoneyRule.allowCashierPay.enableItems!==true){
+                                    //允许店内消费抵扣
+                                    var isTempMember = 1; // 1 散客,0 会员
+                                    var memberStage = this.opt.member && (this.opt.member.memberstage || this.opt.member.memberStage);
+                                    if (memberStage > 2) {
+                                        // memberstage :   1-新客 2-潜在会员 3-会员 4临界会员,默认1, 1 2都是散客
+                                        isTempMember = 0;
+                                    }
+                                    if(!rule.luckyMoneyRule.allowCashierPay.memCard || isTempMember){
+                                        //没有禁止同时使用会员卡 ||  禁止同时使用会员卡时使用散客卡
+                                        if(!rule.luckyMoneyRule.allowCashierPay.otherRedPackage || !discountDetail.length){
+                                            //没有禁止使用其他红包 || 禁止使用其他红包抵扣时之前没有抵扣过红包
+                                            if(!rule.luckyMoneyRule.allowCashierPay.enableDepots){
+                                                //没有指定项目使用
+                                                if(!rule.luckyMoneyRule.allowCashierPay.consumptionAmountFlag || depotNeedPay - depotsDiscoutTotal >= rule.luckyMoneyRule.allowCashierPay.consumptionAmount){
+                                                    //没有指定满减 || 消费金额达到满减金额
+                                                    if(rule.extraRule.type==2){
+                                                        //折扣
+                                                        var billMoney = toFloat((depotNeedPay-depotsDiscoutTotal)*((100-rule.extraRule.discount*10)/100));
+                                                    }else {
+                                                        //金额
+                                                        var billMoney = package.money;
+                                                    }
+                                                    if(depotNeedPay<billMoney){
+                                                        billMoney = depotNeedPay - depotsDiscoutTotal;
+                                                    }
+                                                    discountDetail.push({
+                                                        id: package.id,
+                                                        realMoney: billMoney,
+                                                        money: package.money,
+                                                        discount: rule.extraRule.discount,
+                                                        activityTitle: JSON.parse(JSON.parse(package.rule).content).title
+                                                    });
+                                                    depotsDiscoutTotal += billMoney;
+                                                }
+                                            }else{
+                                                var appointDepots = this.getUseableDepots(depots,rule.luckyMoneyRule.allowCashierPay.depots);
+                                                if(appointDepots.length){
+                                                    // 指定项目使用 消费项目包含指定项目
+                                                    var sum = this.getAppointServiceItemsTotal(appointDepots);
+                                                    sum = sum - depotsDiscoutTotal;
+                                                    if(sum<0){
+                                                        sum = 0;
+                                                    }
+                                                    if(!rule.luckyMoneyRule.allowCashierPay.consumptionAmountFlag || sum >= rule.luckyMoneyRule.allowCashierPay.consumptionAmount){
+                                                        //没有指定满减 || 指定项目消费金额达到满减金额
+                                                        if(rule.extraRule.type==2){
+                                                            //折扣
+                                                            var billMoney = toFloat(sum*((100-rule.extraRule.discount*10)/100));
+                                                        }else {
+                                                            //金额
+                                                            var billMoney = package.money;
+                                                            if(billMoney>sum){
+                                                                billMoney = sum;
+                                                            }
+                                                        }
+                                                        if(depotNeedPay<billMoney){
+                                                            billMoney = depotNeedPay - depotsDiscoutTotal;
+                                                        }
+                                                        discountDetail.push({
+                                                            id: package.id,
+                                                            realMoney: billMoney,
+                                                            money: package.money,
+                                                            discount: rule.extraRule.discount,
+                                                            activityTitle: JSON.parse(JSON.parse(package.rule).content).title
+                                                        });
+                                                        depotsDiscoutTotal += billMoney;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if(this.opt.option && this.opt.option.comboCard && this.opt.option.comboCard.treatments){
+                            // 新型红包套餐抵扣
+                            if(package.rule && JSON.parse(package.rule).content){
+                                var rule = JSON.parse(JSON.parse(JSON.parse(package.rule).content).rule);
+                                if(rule.luckyMoneyRule.enableCashierPay){
+                                    var isTempMember = 1; // 1 散客,0 会员
+                                    var memberStage = this.opt.member && (this.opt.member.memberstage || this.opt.member.memberStage);
+                                    if (memberStage > 2) {
+                                        // memberstage :   1-新客 2-潜在会员 3-会员 4临界会员,默认1, 1 2都是散客
+                                        isTempMember = 0;
+                                    }
+                                    if(!rule.luckyMoneyRule.allowCashierPay.memCard || isTempMember){
+                                        if(!rule.luckyMoneyRule.allowCashierPay.otherRedPackage || !discountDetail.length){
+                                            if(!rule.luckyMoneyRule.allowCashierPay.enableTreats){
+                                                    //没有指定套餐包
+                                                if (!rule.luckyMoneyRule.allowCashierPay.consumptionAmountFlag || treatNeedPay - treatPackageDiscoutTotal >= rule.luckyMoneyRule.allowCashierPay.consumptionAmount) {
+                                                    //没有指定满减 || 消费金额达到满减金额
+                                                    if (rule.extraRule.type == 2) {
+                                                        //折扣
+                                                        var billMoney = toFloat((treatNeedPay - treatPackageDiscoutTotal) * ((100 - rule.extraRule.discount * 10) / 100));
+                                                    } else {
+                                                        //金额
+                                                        var billMoney = package.money;
+                                                    }
+                                                    if (treatNeedPay < billMoney) {
+                                                        billMoney = treatNeedPay - treatPackageDiscoutTotal;
+                                                    }
+                                                    discountDetail.push({
+                                                        id: package.id,
+                                                        realMoney: billMoney,
+                                                        money: package.money,
+                                                        discount: rule.extraRule.discount,
+                                                        activityTitle: JSON.parse(JSON.parse(package.rule).content).title
+                                                    });
+                                                    treatPackageDiscoutTotal += billMoney;
+                                                }
+                                            }else{
+                                                // 套餐包抵扣
+                                                var useableTreatments = this.getUseableTreatments(this.opt.option.comboCard.treatments,rule.luckyMoneyRule.allowCashierPay.treats);
+                                                    if(useableTreatments.length){
+                                                        // 指定项目使用 消费项目包含指定项目
+                                                        var sum = this.getAppointTreatmentsTotal(useableTreatments);
+                                                        sum = sum - treatPackageDiscoutTotal;
+                                                        if(sum<0){
+                                                            sum = 0;
+                                                        }
+                                                        if(!rule.luckyMoneyRule.allowCashierPay.consumptionAmountFlag || sum >= rule.luckyMoneyRule.allowCashierPay.consumptionAmount){
+                                                            //没有指定满减 || 指定项目消费金额达到满减金额
+                                                            if(rule.extraRule.type==2){
+                                                                //折扣
+                                                                var billMoney = toFloat(sum*((100-rule.extraRule.discount*10)/100));
+                                                            }else {
+                                                                //金额
+                                                                var billMoney = package.money;
+                                                                if(billMoney>sum){
+                                                                    billMoney = sum;
+                                                                }
+                                                            }
+                                                            if(treatNeedPay<billMoney){
+                                                                billMoney = treatNeedPay - treatPackageDiscoutTotal;
+                                                            }
+                                                            discountDetail.push({
+                                                                id: package.id,
+                                                                realMoney: billMoney,
+                                                                money: package.money,
+                                                                discount: rule.extraRule.discount,
+                                                                activityTitle: JSON.parse(JSON.parse(package.rule).content).title
+                                                            });
+                                                            treatPackageDiscoutTotal += billMoney;
+                                                        }
+                                                    }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
                 return discountDetail;
             }
+        },
+        checkShopAvailable: function(appShopInfo){
+            var avaliable = 1,// 0 不可用 1 可用
+                shopType = amGloble.metadata.userInfo.shopType,
+                currentShopId=amGloble.metadata.userInfo.shopId;
+            var checkedDirectShops = appShopInfo.checkedDirectShops,
+                checkedIndirectShops = appShopInfo.checkedIndirectShops;
+            if (shopType == 2 && appShopInfo.chosenShop==2) {
+                // 指定 直属 
+                avaliable = am.checkShopAvailable({
+                    shopIdsStr: checkedDirectShops.toString(),
+                    targetShopId: currentShopId
+                });
+            } else if (shopType == 3 && appShopInfo.chosenShop==2) {
+                //  指定 附属
+                avaliable = am.checkShopAvailable({
+                    shopIdsStr: checkedIndirectShops.toString(),
+                    targetShopId: currentShopId
+                })
+            }
+            // 仅销售和全部门店可用已在渲染时做了判断 此处不需要再判断
+            return avaliable;
         },
         changeRedPackageStatus:function(data,lis){ //选择红包后判断其他是否还满足使用条件
             if(!data || !data.length){
@@ -1727,12 +1999,25 @@
                     }
                 }
             }
+            var needPay=0;
             if(this.opt.option.serviceItems){
-                var needPay = this.getAppointServiceItemsTotal(this.opt.option.serviceItems);
-            }else {
-                var needPay = 0;
+                needPay = needPay + this.getAppointServiceItemsTotal(this.opt.option.serviceItems);
             }
+            var depotsInBill = this.getDepotsInBill(this.opt);
+            if(depotsInBill && depotsInBill.length){
+                needPay = needPay + this.getAppointServiceItemsTotal(this.opt.option.serviceItems);
+            }
+            if(this.containedTreatmenntPackage(this.opt)){
+                needPay = needPay + this.getAppointTreatmentsTotal(this.opt.option.comboCard.treatments);
+            }
+            // if(this.opt.option.serviceItems){
+            //     var needPay = this.getAppointServiceItemsTotal(this.opt.option.serviceItems);
+            // }else {
+            //     var needPay = 0;
+            // }
             var serviceDiscountTotal = 0;
+            var treatPackageDiscoutTotal = 0;
+            var depotsDiscoutTotal = 0;
             for(var i=0;i<selectedReds.length;i++){
                 var sRed = selectedReds[i];
                 var sOther = false;
@@ -1748,7 +2033,9 @@
                 }else {
                     if(sRed.rule && JSON.parse(sRed.rule).content){
                         var sRule = JSON.parse(JSON.parse(JSON.parse(sRed.rule).content).rule);
-                        if(!sRule.luckyMoneyRule.allowCashierPay.enableItems){
+                        // 套餐和项目可以同时使用 
+                        if(!sRule.luckyMoneyRule.allowCashierPay.enableItems && !sRule.luckyMoneyRule.allowCashierPay.enableTreats && sRule.luckyMoneyRule.allowCashierPay.enableDepots!==true){
+                            // 指定项目
                             if(sRule.extraRule.type==2){
                                 //折扣
                                 var billMoney = toFloat((needPay-serviceDiscountTotal)*((100-sRule.extraRule.discount*10)/100));
@@ -1757,7 +2044,57 @@
                                 var billMoney = sRed.money;
                             }
                             serviceDiscountTotal += billMoney;
-                        }else {
+                        }
+                        // 套餐包
+                        if(sRule.luckyMoneyRule.enableCashierPay && sRule.luckyMoneyRule.allowCashierPay && sRule.luckyMoneyRule.allowCashierPay.enableTreats){
+                            // 选择的红包可抵扣套餐包
+                            // 单中有套餐包
+                            if(this.containedTreatmenntPackage(this.opt)){
+                                var useableTreatments = this.getUseableTreatments(this.opt.option.comboCard.treatments,sRule.luckyMoneyRule.allowCashierPay.treats);
+                                if(useableTreatments.length){
+                                    var sum = this.getAppointTreatmentsTotal(useableTreatments);
+                                    sum = sum -treatPackageDiscoutTotal;
+                                    if(sum<0){
+                                        sum = 0;
+                                    }
+                                    if(sRule.extraRule.type==2){
+                                        //折扣
+                                        var billMoney = toFloat(sum*((100-sRule.extraRule.discount*10)/100));
+                                    }else {
+                                        //金额
+                                        var billMoney = sRed.money;
+                                        if(billMoney>sum){
+                                            billMoney = sum;
+                                        }
+                                    }
+                                    treatPackageDiscoutTotal += billMoney;
+                                }
+                            }
+                        }
+                        // 卖品
+                        if(sRule.luckyMoneyRule.allowCashierPay.enableDepots && sRule.luckyMoneyRule.allowCashierPay.enableItems!==true && depotsInBill && depotsInBill.length){
+                            var appointServiceItems = this.getAppointServiceItems(depotsInBill,sRule.luckyMoneyRule.allowCashierPay.depots);
+                            if(appointServiceItems.length){
+                                var sum = this.getAppointServiceItemsTotal(appointServiceItems);
+                                sum = sum -depotsDiscoutTotal;
+                                if(sum<0){
+                                    sum = 0;
+                                }
+                                if(sRule.extraRule.type==2){
+                                    //折扣
+                                    var billMoney = toFloat(sum*((100-sRule.extraRule.discount*10)/100));
+                                }else {
+                                    //金额
+                                    var billMoney = sRed.money;
+                                    if(billMoney>sum){
+                                        billMoney = sum;
+                                    }
+                                }
+                                depotsDiscoutTotal += billMoney;
+                            }
+                        }
+                        // 项目
+                        if(sRule.luckyMoneyRule.allowCashierPay.enableItems && sRule.luckyMoneyRule.allowCashierPay.enableDepots!==true){
                             var appointServiceItems = this.getAppointServiceItems(this.opt.option.serviceItems,sRule.luckyMoneyRule.allowCashierPay.items);
                             if(appointServiceItems.length){
                                 var sum = this.getAppointServiceItemsTotal(appointServiceItems);
@@ -1778,6 +2115,7 @@
                                 serviceDiscountTotal += billMoney;
                             }
                         }
+                        
                         if(sRule.luckyMoneyRule.allowCashierPay.otherRedPackage){
                             sOther = true;
                         }
@@ -1788,6 +2126,12 @@
                         $(lis[j]).addClass('notUseThisBill am-disabled');
                     }else {
                         var red = $(lis[j]).data('data');
+                        if(red && red.appShopInfo){
+                            var shopAvailable=this.checkShopAvailable(JSON.parse(red.appShopInfo));// 0 门店不能用  1 可用
+                            if(shopAvailable==0){
+                                continue;
+                            }
+                        }
                         if(!red.templateId){
                             //旧红包只能同时使用一个
                             if(hasOld){
@@ -1820,9 +2164,26 @@
                                                     $(lis[j]).addClass('notUseThisBill am-disabled'); //抵扣未达到满减条件
                                                 }
                                             }
-                                        }else {
-                                            // 未指定项目
-                                            if(rule.luckyMoneyRule.allowCashierPay.consumptionAmount<= needPay - serviceDiscountTotal){
+                                        }
+                                        if(rule.luckyMoneyRule.allowCashierPay.enableTreats && this.opt.option.comboCard && this.opt.option.comboCard.treatments){
+                                            // 指定套餐包
+                                            var useableTreatments = this.getUseableTreatments(this.opt.option.comboCard.treatments,sRule.luckyMoneyRule.allowCashierPay.treats);
+                                            if(useableTreatments.length){
+                                                var sum = this.getAppointTreatmentsTotal(useableTreatments);
+                                                sum = sum -treatPackageDiscoutTotal;
+                                                if(sum<0){
+                                                    sum = 0;
+                                                }
+                                                if(rule.luckyMoneyRule.allowCashierPay.consumptionAmount<sum){
+                                                    $(lis[j]).removeClass('notUseThisBill am-disabled');
+                                                }else {
+                                                    $(lis[j]).addClass('notUseThisBill am-disabled'); //抵扣未达到满减条件
+                                                }
+                                            }
+                                        }
+                                        if(!rule.luckyMoneyRule.allowCashierPay.enableTreats && !rule.luckyMoneyRule.allowCashierPay.enableItems){
+                                            // 未指定项目和套餐包
+                                            if(rule.luckyMoneyRule.allowCashierPay.consumptionAmount<= needPay - serviceDiscountTotal-treatPackageDiscoutTotal){
                                                 $(lis[j]).removeClass('notUseThisBill am-disabled');
                                             }else {
                                                 $(lis[j]).addClass('notUseThisBill am-disabled'); //抵扣未达到满减条件
@@ -1840,77 +2201,336 @@
                 }
             }
         },
+        getDepotsInBill:function(opt){
+            var products = opt.option.products || (opt.prodOption && opt.prodOption.products);
+            var depotsInBill = (products && products.depots) || [];
+            console.log('depotsInBill',depotsInBill);
+            return depotsInBill
+        },
+        // 是否散客
         checkSingleUse:function(){ //单个红包是否可用，不可用的禁用
             var lis = this.$.find('.luckyMoneyList .canUse');
+            var treatsSum = this.getAppointTreatmentsTotal((this.opt.option.comboCard && this.opt.option.comboCard.treatments) || []);
+            var checkIsTempMember=function(member){
+                // 1 散客,0 会员
+                var isTempMember = 1; // 1 散客,0 会员
+                var memberStage = member && (member.memberstage || member.memberStage);
+                if (memberStage > 2) {
+                    // memberstage :   1-新客 2-潜在会员 3-会员 4临界会员,默认1, 1 2都是散客
+                    isTempMember = 0;
+                }
+                return isTempMember;
+            }
+            var getAllowCashierPay=function (redPackage) {
+                var outerRule = redPackage.rule && JSON.parse(redPackage.rule).content;
+                if (outerRule) {
+                    var rule = JSON.parse(JSON.parse(outerRule).rule);
+                    if (rule.luckyMoneyRule.enableCashierPay) {
+                        return rule.luckyMoneyRule.allowCashierPay
+                    }
+                }
+            }
             if(lis && lis.length){
                 for(var i=0;i<lis.length;i++){
                     var red = $(lis[i]).data('data');
                     if(red.templateId){
+                        var isTempMember = checkIsTempMember(this.opt.member);
+                        var allowCashierPay = getAllowCashierPay(red);
+                        // 项目
                         if(this.opt.option && this.opt.option.serviceItems && this.opt.option.serviceItems.length){
                             if(red.rule && JSON.parse(red.rule).content){
                                 var rule = JSON.parse(JSON.parse(JSON.parse(red.rule).content).rule);
-                                if(rule.luckyMoneyRule.enableCashierPay){
-                                    if(!rule.luckyMoneyRule.allowCashierPay.memCard || (this.opt.member && this.opt.member.cardNum==1 && this.opt.member.cardTypeId == '20151212')){
-                                        if(rule.luckyMoneyRule.allowCashierPay.enableItems){
-                                            //指定项目
-                                            var appointServiceItems = this.getAppointServiceItems(this.opt.option.serviceItems,rule.luckyMoneyRule.allowCashierPay.items);
+                                if(rule.luckyMoneyRule.enableCashierPay && allowCashierPay.enableDepots!==true){
+                                    var isTempMember = 1; // 1 散客,0 会员
+                                    var memberStage = this.opt.member && (this.opt.member.memberstage || this.opt.member.memberStage);
+                                    if (memberStage > 2) {
+                                        // memberstage :   1-新客 2-潜在会员 3-会员 4临界会员,默认1, 1 2都是散客
+                                        isTempMember = 0;
+                                    }
+                                    if(!rule.luckyMoneyRule.allowCashierPay.memCard || isTempMember){
+                                        var allowCashierPay = rule.luckyMoneyRule.allowCashierPay;
+                                        if((allowCashierPay.enableItems && allowCashierPay.items && allowCashierPay.items.length===0)||(!allowCashierPay.enableItems && allowCashierPay.enableTreats===undefined)){
+                                            //[]全部项目可用 指定全部项目可用 或者只勾选了店内消费可用的历史红包也默认全部项目可用
+                                            if(this.opt.option.serviceItems){
+                                                var sum = this.getAppointServiceItemsTotal(this.opt.option.serviceItems);
+                                            }else {
+                                                var sum = 0;
+                                            }
+                                            if(!allowCashierPay.consumptionAmountFlag || sum >= allowCashierPay.consumptionAmount){
+
+                                            }else {
+                                                $(lis[i]).addClass('notUseThisBill am-disabled').removeClass('canUse'); // 项目总和未达到满减额
+                                            }
+                                        }else if(allowCashierPay.enableItems && allowCashierPay.items && allowCashierPay.items.length){
+                                            //指定部分项目可用 
+                                            var appointServiceItems = this.getAppointServiceItems(this.opt.option.serviceItems,allowCashierPay.items);
                                             if(!appointServiceItems.length){
                                                 $(lis[i]).addClass('notUseThisBill am-disabled').removeClass('canUse'); // 不包含指定项目
                                             }else {
                                                 var sum = this.getAppointServiceItemsTotal(appointServiceItems);
-                                                if(!rule.luckyMoneyRule.allowCashierPay.consumptionAmountFlag || sum >= rule.luckyMoneyRule.allowCashierPay.consumptionAmount){
+                                                if(!allowCashierPay.consumptionAmountFlag || sum >= allowCashierPay.consumptionAmount){
                                                     
                                                 }else {
                                                     $(lis[i]).addClass('notUseThisBill am-disabled').removeClass('canUse'); // 包含指定项目 指定项目总和未达到满减额
                                                 }
                                             }
                                         }else {
+                                            // 全部项目不可用
+                                            $(lis[i]).addClass('notUseThisBill am-disabled').removeClass('canUse');
                                             //未指定项目
-                                            if(this.opt.option.serviceItems){
-                                                var sum = this.getAppointServiceItemsTotal(this.opt.option.serviceItems);
-                                            }else {
-                                                var sum = 0;
-                                            }
-                                            if(!rule.luckyMoneyRule.allowCashierPay.consumptionAmountFlag || sum >= rule.luckyMoneyRule.allowCashierPay.consumptionAmount){
+                                            // if(this.opt.option.serviceItems){
+                                            //     var sum = this.getAppointServiceItemsTotal(this.opt.option.serviceItems);
+                                            // }else {
+                                            //     var sum = 0;
+                                            // }
+                                            // if(!rule.luckyMoneyRule.allowCashierPay.consumptionAmountFlag || sum >= rule.luckyMoneyRule.allowCashierPay.consumptionAmount){
 
-                                            }else {
-                                                $(lis[i]).addClass('notUseThisBill am-disabled').removeClass('canUse'); // 项目总和未达到满减额
-                                            }
+                                            // }else {
+                                            //     $(lis[i]).addClass('notUseThisBill am-disabled').removeClass('canUse'); // 项目总和未达到满减额
+                                            // }
                                         }
 
                                     }else {
                                         $(lis[i]).addClass('notUseThisBill am-disabled').removeClass('canUse');  //禁止使用其他会员卡
                                     }
+                                }
+                                // else {
+                                //     $(lis[i]).addClass('notUseThisBill am-disabled').removeClass('canUse'); // 不可店内消费
+                                // }
+                            }
+                        } 
+                        // 卖品
+                        var depotsInBill = this.getDepotsInBill(this.opt);
+                        if(depotsInBill && depotsInBill.length){
+                            if(allowCashierPay && allowCashierPay.enableItems!==true){
+                                if(!allowCashierPay.memCard || isTempMember){
+                                    if(allowCashierPay.enableDepots && allowCashierPay.depots && allowCashierPay.depots =='a'){
+                                        //指定卖品可用 'a' 全部卖品可用 
+                                        var sum = this.getAppointServiceItemsTotal(depotsInBill);
+                                        if(allowCashierPay.consumptionAmountFlag && sum < allowCashierPay.consumptionAmount){
+                                            $(lis[i]).addClass('notUseThisBill am-disabled').removeClass('canUse'); // 卖品总和未达到满减额
+                                        }
+                                    }else if(allowCashierPay.enableDepots && allowCashierPay.depots && allowCashierPay.depots.length){
+                                        //指定部分项目可用 
+                                        var appointDepots = this.getUseableDepots(depotsInBill,allowCashierPay.depots);
+                                        if(!appointDepots.length){
+                                            $(lis[i]).addClass('notUseThisBill am-disabled').removeClass('canUse'); // 不包含指定卖品
+                                        }else {
+                                            var sum = this.getAppointServiceItemsTotal(appointDepots);
+                                            if(allowCashierPay.consumptionAmountFlag && sum <= allowCashierPay.consumptionAmount){
+                                                $(lis[i]).addClass('notUseThisBill am-disabled').removeClass('canUse'); // 卖品总和未达到满减额
+                                            }
+                                        }
+                                    }else {
+                                        // 全部项目不可用
+                                        $(lis[i]).addClass('notUseThisBill am-disabled').removeClass('canUse');
+                                    }
                                 }else {
-                                    $(lis[i]).addClass('notUseThisBill am-disabled').removeClass('canUse'); // 不可店内消费
+                                    $(lis[i]).addClass('notUseThisBill am-disabled').removeClass('canUse');  //禁止使用其他会员卡
                                 }
                             }
-                        }else {
-                            $(lis[i]).addClass('notUseThisBill am-disabled').removeClass('canUse'); //没有项目
+                            // else{
+                            //     $(lis[i]).addClass('notUseThisBill am-disabled').removeClass('canUse'); // 不可店内消费
+                            // }
+                        }
+                        var serviceItemsInBill = this.opt.option && this.opt.option.serviceItems;
+                        if(!allowCashierPay || 
+                        (!(depotsInBill && depotsInBill.length) && allowCashierPay.enableDepots) || 
+                        (!(serviceItemsInBill && serviceItemsInBill.length) && allowCashierPay.enableItems)){
+                            // 未勾选店内消费 或者勾选了卖品但是没买卖品 或者勾选了项目 但是没买项目
+                            $(lis[i]).addClass('notUseThisBill am-disabled').removeClass('canUse'); // 不可店内消费
+                        }
+                        if (this.containedTreatmenntPackage && this.containedTreatmenntPackage(this.opt)) {
+                            // 购买套餐包也可使用红包结算
+                            // 判断当前红包是否可用使用
+                            $(lis[i]).addClass('notUseThisBill am-disabled').removeClass('canUse');
+                            if (red.rule && JSON.parse(red.rule).content) {
+                                var rule = JSON.parse(JSON.parse(JSON.parse(red.rule).content).rule);
+                                if (rule.luckyMoneyRule.enableCashierPay) {
+                                    var isTempMember = 1; // 1 散客,0 会员
+                                    var memberStage = this.opt.member && (this.opt.member.memberstage || this.opt.member.memberStage);
+                                    if (memberStage > 2) {
+                                        // memberstage :   1-新客 2-潜在会员 3-会员 4临界会员,默认1, 1 2都是散客
+                                        isTempMember = 0;
+                                    }
+                                    if(!rule.luckyMoneyRule.allowCashierPay.memCard || isTempMember){
+                                        var allowCashierPay = rule.luckyMoneyRule.allowCashierPay;
+                                        if (allowCashierPay.enableTreats) {
+                                            
+                                            if(am.metadata.userInfo.shopType==3){
+                                                // 附属店全部套餐包可用
+                                                if(!allowCashierPay.consumptionAmountFlag || treatsSum >= allowCashierPay.consumptionAmount){
+                                                    // 满足满减
+                                                    $(lis[i]).removeClass('notUseThisBill am-disabled').addClass('canUse');
+                                                }else{
+                                                    // 不满足满减
+                                                }
+                                            }else if (rule.luckyMoneyRule.allowCashierPay.treats && rule.luckyMoneyRule.allowCashierPay.treats.length) {
+                                                // 指定了具体的套餐包
+                                                var treats = rule.luckyMoneyRule.allowCashierPay.treats;
+                                                var treatsArr = treats.split(',');
+                                                if (treatsArr[0] === 'r') {
+                                                    // 反向
+                                                    var treatmentsInBill = this.opt.option.comboCard.treatments;
+                                                    for (var o = 0, olen = treatmentsInBill.length; o < olen; o++) {
+                                                        // 反向 只有单中含有反向中没有的才可以使用
+                                                        if (treatsArr.indexOf(treatmentsInBill[o].packageId+'') == -1) {
+                                                            if(!allowCashierPay.consumptionAmountFlag || treatsSum >= allowCashierPay.consumptionAmount){
+                                                                $(lis[i]).removeClass('notUseThisBill am-disabled').addClass('canUse');
+                                                            }else{
+                                                                // 不满足满减
+                                                            }
+                                                        }
+                                                    }
+                                                } else if (treatsArr[0] === 'a') {
+                                                    if(!allowCashierPay.consumptionAmountFlag || treatsSum >= allowCashierPay.consumptionAmount){
+                                                        $(lis[i]).removeClass('notUseThisBill am-disabled').addClass('canUse');
+                                                    }else{
+                                                    // 全部套餐包可用
+                                                    }
+                                                } else {
+                                                    var treatmentsInBill = this.opt.option.comboCard.treatments;
+                                                    for (var o = 0, olen = treatmentsInBill.length; o < olen; o++) {
+                                                        if (treatsArr.indexOf(treatmentsInBill[o].packageId+'') > -1) {
+                                                            // 购买的套餐包可以使用当前的红包
+                                                            if(!allowCashierPay.consumptionAmountFlag || treatsSum >= allowCashierPay.consumptionAmount){
+                                                                $(lis[i]).removeClass('notUseThisBill am-disabled').addClass('canUse');
+                                                            }else{
+                                                            }
+                                                        }
+                                                    }
+    
+                                                }
+                                            } else {
+                                                // 全部套餐包可用
+                                                $(lis[i]).removeClass('notUseThisBill am-disabled').addClass('canUse');
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        } 
+                        if(this.containedTreatmenntPackage && !this.containedTreatmenntPackage(this.opt) && 
+                        !(this.opt.option && this.opt.option.serviceItems && this.opt.option.serviceItems.length) && 
+                        !(depotsInBill && depotsInBill.length)
+                        ){
+                            $(lis[i]).addClass('notUseThisBill am-disabled').removeClass('canUse'); //没有套餐包 没有项目 没有卖品
+                        }
+                    }else{
+                        // 老红包 不能买套餐包
+                        if (this.containedTreatmenntPackage && this.containedTreatmenntPackage(this.opt)){
+                            $(lis[i]).addClass('notUseThisBill am-disabled').removeClass('canUse');
                         }
                     }
                 }
             }
         },
-        getAppointServiceItems:function(serviceItems,appointServiceItems){
-            var arr = [];
-            if(serviceItems.length && appointServiceItems.length){
-                for(var i=0;i<appointServiceItems.length;i++){
-                    for(var j=0;j<serviceItems.length;j++){
-                        if(appointServiceItems[i].itemId==serviceItems[j].itemId){
-                            arr.push(serviceItems[j]);
+        getUseableDepots:function(depotsInBill,depotsInRule){
+            var arr= [];
+            if(depotsInBill.length){
+                if(depotsInRule.length){
+                    var depotsArr=depotsInRule.split(',');
+                    if(depotsArr[0]=='a'){
+                        // 全部卖品可用
+                        arr=depotsInBill;
+                    }else if(depotsArr[0]=='r'){
+                        // 指定卖品不能用
+                        for(var j=0,jlen=depotsInBill.length;j<jlen;j++){
+                            if(depotsArr.indexOf(depotsInBill[j].no+'')==-1){
+                                arr.push(depotsInBill[j])
+                            }
+                        }
+                    }else{
+                        // 指定卖品能用
+                        for(var i=0,len=depotsArr.length;i<len;i++){
+                            for(var j=0,jlen=depotsInBill.length;j<jlen;j++){
+                                if(depotsArr[i]==depotsInBill[j].no){
+                                    arr.push(depotsInBill[j])
+                                }
+                            }
                         }
                     }
+                }else{
+                    arr=depotsInBill;
                 }
             }
             return arr;
         },
+        getUseableTreatments:function(treatmentsInBill,treatmentsInRule){
+            var arr= [];
+            if(treatmentsInBill.length){
+                if(treatmentsInRule.length){
+                    var treatsArr=treatmentsInRule.split(',');
+                    if(treatsArr[0]=='a'){
+                        // 全部套餐包可用
+                        arr=treatmentsInBill;
+                    }else if(treatsArr[0]=='r'){
+                        // 指定套餐包不能用
+                        for(var j=0,jlen=treatmentsInBill.length;j<jlen;j++){
+                            if(treatsArr.indexOf(treatmentsInBill[j].packageId+'')==-1){
+                                arr.push(treatmentsInBill[j])
+                            }
+                        }
+                    }else{
+                        // 指定套餐包能用
+                        for(var i=0,len=treatsArr.length;i<len;i++){
+                            for(var j=0,jlen=treatmentsInBill.length;j<jlen;j++){
+                                if(treatsArr[i]==treatmentsInBill[j].packageId){
+                                    arr.push(treatmentsInBill[j])
+                                }
+                            }
+                        }
+                    }
+                    if (am.metadata.userInfo.shopType == 3) {
+                        // 附属店全部套餐包可用
+                        arr = treatmentsInBill;
+                    }
+                }else{
+                    arr=treatmentsInBill;
+                }
+            }
+            return arr;
+        },
+        getAppointServiceItems:function(serviceItems,appointServiceItems){
+            var arr = [];
+            if(serviceItems){
+                if(serviceItems.length && appointServiceItems.length){
+                    for(var i=0;i<appointServiceItems.length;i++){
+                        for(var j=0;j<serviceItems.length;j++){
+                            if(appointServiceItems[i].itemId==serviceItems[j].itemId){
+                                arr.push(serviceItems[j]);
+                            }
+                        }
+                    }
+                }else if(serviceItems.length && appointServiceItems.length==0){
+                    // 红包内的item空为全部可用
+                    arr=serviceItems;
+                }
+            }
+            
+            return arr;
+        },
+        // 项目 卖品
         getAppointServiceItemsTotal:function(appointServiceItems){
             var sum = 0;
             if(appointServiceItems.length){
                 for(var i=0;i<appointServiceItems.length;i++){
                     if(!appointServiceItems[i].consumeId){
-                        sum += appointServiceItems[i].salePrice;
+                        sum += appointServiceItems[i].salePrice * (appointServiceItems[i].number || 1);
+                        // 卖品乘以数量
+                    }
+                }
+            }
+            return sum;
+        },
+        getAppointTreatmentsTotal: function (treatmentsInBill) {
+            // 要购买的套餐总价
+            var sum = 0;
+            if (treatmentsInBill.length) {
+                for (var i = 0, len = treatmentsInBill.length; i < len; i++) {
+                    var treatInfo=treatmentsInBill[i];
+                    if (treatInfo && treatInfo.packageId && treatInfo.packageId !== -1) {
+                        sum += treatmentsInBill[i].price + (treatmentsInBill[i].treatsCost || 0);
                     }
                 }
             }
@@ -1970,6 +2590,21 @@
                 this.opt.option.smsflag = '1';
             }
         },
+        containedTreatmenntPackage:function(opt){
+            // 会员购买是否包含套餐包
+            var contained=0;
+            if(opt.member && opt.option.comboCard && opt.option.comboCard.treatments && opt.option.comboCard.treatments.length){
+                var treatments=opt.option.comboCard.treatments;
+                for(var i=0,len=treatments.length;i<len;i++){
+                    if(treatments[i].packageId>-1){
+                        // 套餐包
+                        contained=1;
+                        break;
+                    }
+                }
+            }
+            return contained;
+        },
         render: function () {
             if (this.opt.member && this.opt.member.memberInfo && this.opt.member.card) {
                 //用户详情的数据格式与收银台的数据格式不一致，做转换
@@ -2022,12 +2657,12 @@
                         //拿卡列表
                         this.getCardTypePopMenuData();
                     }
-
+                    var forbidUpgradeCard = am.operateArr.indexOf("a46") > -1; //禁止手动卡升级
                     $rechargeCardType.find('.val').text('').removeData('data');
                     if (this.cardTypeList && this.cardTypeList.length) {
                         if (this.opt.member.shopId == am.metadata.userInfo.shopId) {
                             //本门店
-                            if (this.opt.renewal) {
+                            if (this.opt.renewal || forbidUpgradeCard) {
                                 $rechargeCardType.hide();
                             } else {
                                 $rechargeCardType.show();
@@ -2037,7 +2672,7 @@
                             for (var i = 0; i < am.metadata.shopList.length; i++) {
                                 if (this.opt.member.shopId == am.metadata.shopList[i].shopId && am.metadata.shopList[i].softgenre == 2) {
                                     //顾客的开卡门店也是直营店
-                                    if (this.opt.renewal) {
+                                    if (this.opt.renewal || forbidUpgradeCard) {
                                         $rechargeCardType.hide();
                                     } else {
                                         $rechargeCardType.show();
@@ -2093,6 +2728,11 @@
                 } else {
                     this.$list.find('dd.mallOrder').hide().find('.val').addClass("add").removeClass("edit").text("");
                     this.$list.find('dd.mallOrder,dd.luckymoney').addClass('am-disabled');
+                    // 购买套餐包
+                    if(this.containedTreatmenntPackage(this.opt)){
+                        this.$list.find('dd.luckymoney').removeClass('am-disabled');
+                    }
+
                 }
             }
             var $costItem = this.$list.find('dt.comboitemItem');
@@ -2100,7 +2740,7 @@
                 $costItem.show().find(".combocost").text("￥" + Math.round(this.opt.option.cost * 100) / 100);
                 var costLabel = "开卡成本：";
                 if (this.opt.option.expenseCategory == 4) {
-                    costLabel = "套餐成本：";
+                    costLabel = "套餐总成本：";
                 }
                 $costItem.find(".label").text(costLabel);
             } else {
@@ -2422,7 +3062,7 @@
                 "card": {
                     "isJc": 0,			// 是否计次充值 （null || 0：否 1：是）
                     "costFee": 0,		// 会员卡工本费
-                    "costmoney": 0,		// 套餐成本金额
+                    "costmoney": 0,		// 产品成本金额
                     "costunionfee": 0,	// 会员卡成本银联费
                     "servers": []
                 },
@@ -2431,7 +3071,8 @@
                     "eaFee": 0, //入账金额
                     "treatfee": 0,
                     "treatpresentfee": 0,
-                }
+                },
+                "jsonstr": this.opt.jsonstr || '' 
             };
             if (this.opt.billRemark) {
                 this.opt.option.billNo = this.opt.billRemark.serviceNO;
@@ -2546,7 +3187,7 @@
                                 ,"orderType":1
                                 ,"billType":1
                             });
-                        } else if (this.checkOnlinePayAuth()) {
+                        } else if (this.checkOnlinePayAuth('wechat')) {
                             return 1;
                         }
                     } else if ($type.hasClass("pay_alipay")) {
@@ -2560,7 +3201,7 @@
                                 ,"orderType":2
                                 ,"billType":1
                             });
-                        } else if (this.checkOnlinePayAuth()) {
+                        } else if (this.checkOnlinePayAuth('alipay')) {
                             return 1;
                         }
                     } else if ($type.hasClass("pay_dp")) {
@@ -2569,7 +3210,7 @@
                             bill.dpFee = (paydata.userpayamount * 1 || 0) + (paydata.dpactivityamount * 1 || 0);
                             bill.voucherFee = this.needPay - bill.mall;
                             bill.dpId = paydata.id;
-                        } else if (this.checkOnlinePayAuth()) {
+                        } else if (this.checkOnlinePayAuth('dp')) {
                             return 1;
                         } else {
                             bill.dpFee = this.needPay;
@@ -2585,11 +3226,14 @@
                                 ,"orderType":7
                                 ,"billType":1
                             });
-                        } else if (this.checkOnlinePayAuth()) {
+                        } else if (this.checkOnlinePayAuth('jd')) {
                             return 1;
                         }
                     } else if ($type.hasClass("pay_kb")) {
                         bill[this.kbSetting.field.toLocaleLowerCase()] = this.needPay;
+                        if (this.checkOnlinePayAuth('kb')) {
+                            return 1;
+                        }
                     }else if ($type.hasClass("pay_mix")) {
                         if (typeof (this.paytool.mix.checkTotalPrice()) == "undefined") {
                             var $input = this.paytool.mix.$input;
@@ -2634,7 +3278,7 @@
                                                 ,"orderType":1
                                                 ,"billType":1
                                             });
-                                        } else if (this.checkOnlinePayAuth()) {
+                                        } else if (this.checkOnlinePayAuth('wechat')) {
                                             return 1;
                                         }
                                     }
@@ -2648,7 +3292,7 @@
                                                 ,"orderType":2
                                                 ,"billType":1
                                             });
-                                        } else if (this.checkOnlinePayAuth()) {
+                                        } else if (this.checkOnlinePayAuth('alipay')) {
                                             return 1;
                                         }
                                     }
@@ -2659,7 +3303,7 @@
                                             bill.voucherFee = bill.dpFee - dpt;
                                             bill.dpFee = dpt;
                                             bill.dpId = paydata.id;
-                                        } else if (this.checkOnlinePayAuth()) {
+                                        } else if (this.checkOnlinePayAuth('dp')) {
                                             return 1;
                                         }
                                     }
@@ -2673,7 +3317,12 @@
                                                 ,"orderType":7
                                                 ,"billType":1
                                             });
-                                        } else if (this.checkOnlinePayAuth()) {
+                                        } else if (this.checkOnlinePayAuth('jd')) {
+                                            return 1;
+                                        }
+                                    }
+                                    if (payTypeName == "kb") {
+                                        if(this.checkOnlinePayAuth('kb')) {
                                             return 1;
                                         }
                                     }
@@ -2739,7 +3388,8 @@
                     luckymoneyTotal += luckymoney[i].realMoney;
                 }
                 var realLuckyMoney = luckymoneyTotal;
-                if (bill.total < realLuckyMoney) {
+                // fix bug 0024990  红包够买套餐包也抵扣成本
+                if (bill.total + (this.opt.option.cost || 0)  < realLuckyMoney) {
                     realLuckyMoney = bill.total;
                 }
                 bill.luckymoney += realLuckyMoney;
@@ -2759,7 +3409,7 @@
                 this.opt.option.orderDetail.push({
                     "payOrderId":prepay.id//收款流水id
                     ,"amount":prepay.price //关联金额
-                    ,"orderType":orderType //收款流水类型 支付方式1微信 2支付宝 3点评 4口碑 5闪惠 6POS银联 7京东钱包
+                    ,"orderType":orderType //收款流水类型 支付方式1微信 2支付宝 3点评 4口碑 5闪惠 6POS银联 7京东支付
                     ,"billType":1//明细类型  1水单2开支
                 })
                 if (prepay.type == 1) {
@@ -2786,7 +3436,7 @@
                     //微信收款数据
                     var wechatOrder = JSON.parse(payMoney.wechatOrder);
                     console.log('微信收款', wechatOrder);
-
+                    bill.weixinId = wechatOrder.id;
                     this.opt.option.orderDetail = [
                         {
                             "payOrderId": wechatOrder.id,
@@ -2940,7 +3590,14 @@
                     }
                     console.log(deptPerfs);
                 }
-			}
+            }
+            if(this.opt.option.expenseCategory==3){
+                // 充值
+                if(!this.opt.settlementPayDetail && am.checkContainedServers(this.opt)===0){
+                    am.msg('请选择服务员工!');
+                    return;
+                }
+            }
             this.submitToServer(isPrint,pw);
 		},
         getCardFeeAndPresentFee:function(total,member){
@@ -2960,6 +3617,10 @@
             var cardPer = member.balance/(member.balance+member.gift),
                 cardFee = Math.ceil(cardPer*total*factor)/factor,
                 presentFee = Math.round((total-cardFee)*100)/100;
+            if (total==member.balance+member.gift){
+                cardFee = member.balance
+                presentFee = member.gift
+            }
             return {
                 cardFee: cardFee,
                 presentFee: presentFee
@@ -2995,8 +3656,12 @@
                             }
                         }
                     }
+                    // 新欠款模式不减欠款
+                    var debtFlag = am.metadata.configs && am.metadata.configs.debtFlag;
                     if(this.opt.option.expenseCategory == 3 || this.opt.option.expenseCategory == 4){
-                        opt.cardBalance = Math.round((opt.cardBalance - this.opt.option.billingInfo.debtFee)*100)/100;
+                        if (!(debtFlag*1)) {
+                            opt.cardBalance = Math.round((opt.cardBalance - this.opt.option.billingInfo.debtFee)*100)/100;
+                        }
                     } 
                 }
 			}
@@ -3042,9 +3707,31 @@
                 }
             );
         },
-        checkOnlinePayAuth: function () {
-            if (am.operateArr.indexOf("a6") != -1 && sessionStorage._autoPay1214 != 'autoPay') {
-                am.msg("收款未支付完成");
+        checkOnlinePayAuth: function (type) {
+            var operateMap = {
+                'jd': {
+                    value: 'a6',
+                    des: '京东钱包未支付完成'
+                },
+                'wechat': {
+                    value: 'a62',
+                    des: '微信未支付完成'
+                },
+                'alipay': {
+                    value: 'a63',
+                    des: '支付宝未支付完成'
+                },
+                'dp': {
+                    value: 'a64',
+                    des: '点评支付未关联点评券'
+                },
+                'kb': {
+                    value: 'a65',
+                    des: '口碑支付未关联口碑券'
+                }
+            }
+            if (operateMap[type] && am.operateArr.indexOf(operateMap[type].value) != -1 && sessionStorage._autoPay1214 != 'autoPay') {
+                am.msg(operateMap[type].des);
                 return 1;
             }
         },
@@ -3074,10 +3761,17 @@
                 return 1;
 			}
 			if(pw){
-				this.opt.option = this.paramsEdit();
+				// this.opt.option = this.paramsEdit();
+				var popupAgain = 0;
+				if(this.opt.settlementPayDetail || am.metadata.shopPropertyField.manualInputBillno != 1 || _this.$header.find(".billno input").val().trim()){
+					popupAgain = 0;
+				} else {
+					popupAgain = 1;
+				}
+				this.opt.member.popupAgain = popupAgain;
 				am.pw.check(this.opt.member,function(verifyed){
 					if(verifyed){
-						_this.submit();
+						_this.submit(); 
 					}
 				},this.opt.option);
 				return false;
@@ -3129,8 +3823,8 @@
                             var orderDetail = option.orderDetail[i];
                             var servAmount = 0,prodAmount = 0;
                             if(orderDetail.orderType == 1){
-                                servAmount = servOption.billingInfo.weixin;
-                                prodAmount = prodOption.billingInfo.weixin;
+                                servAmount = Math.round(servOption.billingInfo.weixin*100)/100;
+                                prodAmount = Math.round(prodOption.billingInfo.weixin*100)/100;
                             }else if(orderDetail.orderType == 2){
                                 servAmount = servOption.billingInfo.pay;//项目,支付宝
                                 prodAmount = prodOption.billingInfo.pay;//卖品,支付宝
@@ -3167,7 +3861,8 @@
                 //计算卖品支付明细
                 this.computeProductPayDetail();
             }
-
+            //给套餐项目分，现金，卡结，其它
+            this.setTreatItemPerf();
             //计算非项目业绩
             this.computePerSetPerf();
 
@@ -3176,9 +3871,6 @@
             } else {
                 this.opt.option.clientflag = 0;
             }
-            //给套餐项目分，现金，卡结，其它
-            this.setTreatItemPerf();
-
             if(this.opt.member){
 				if (this.opt.option.expenseCategory == 3) {
 					var $val = this.$list.find('.rechargeCardType').find('.val');
@@ -3242,7 +3934,7 @@
                 this.opt.option.billNo = _billNo;
             }    
             _this.opt.option.lastDpTicketCode && delete _this.opt.option.lastDpTicketCode;
-            _this.opt.option.lastKbTicketCode && delete _this.opt.option.lastKbTicketCode;        
+            _this.opt.option.lastKbTicketCode && delete _this.opt.option.lastKbTicketCode;
             var toPay = function(){
                 if (_this.paying) {
                     return;
@@ -3305,12 +3997,15 @@
                             localStorage.removeItem('memPwd'+'_'+_this.opt.member.id);
                         }
                         _this.checkIfNeedUpgradeCardType(ret.content.billId);
-                        if (_this.opt.billRemark) {//如果是挂单备注 需将原单状态修改为已买单
-                            _this.opt.remarkCallback && _this.opt.remarkCallback(_this.opt.member,ret.content);
-                        }
+                        // if (_this.opt.billRemark) {//如果是挂单备注 需将原单状态修改为已买单
+                        //     _this.opt.remarkCallback && _this.opt.remarkCallback(_this.opt.member,ret.content);
+                        // }
                         am.page.hangup.lastCheckedBillId = _this.opt.option.instoreServiceId;
                         if(_this.opt.member && ret.content.memCardId){
                             _this.opt.member.cid = ret.content.memCardId;
+                        }
+                        if(_this.opt.member && ret.content.treatmentItmes){
+                            _this.opt.member.buyTreatmentItmes = ret.content.treatmentItmes;
                         }
                     } else if (ret.code == 100002) {//单号已存在
                         if (amGloble.metadata.shopPropertyField.aotomodifybillno == 1) {
@@ -3338,6 +4033,8 @@
                     }else if(ret.code == 1000){
                         am.msg('token失效');
                         $.am.changePage(am.page.login, "");
+                    }else if(ret.code == 1002034){
+                        am.billChangeToHangup();
                     } else {
                         _this.$submit.removeClass("am-disabled");
                         am.msg(ret.message || "结算失败！");
@@ -3363,6 +4060,9 @@
                     if(_this.opt.servOption.instoreServiceId && _this.opt.prodOption.instoreServiceId){
                         delete _this.opt.servOption.instoreServiceId;
                     }
+                    if(_this.opt.instoreServiceVersion){
+                        _this.opt.servOption.instoreServiceVersion = _this.opt.prodOption.instoreServiceVersion = _this.opt.instoreServiceVersion;
+                    }
                     am.api.mutiBillCheck.exec([_this.opt.servOption, _this.opt.prodOption], callback);
                 } else {
                     // 性能监控点
@@ -3374,9 +4074,16 @@
                     if(_this.opt.option.expenseCategory==1 && isNaN(_this.opt.option.billNo)){
                         delete _this.opt.option.billNo;
                     }
+                    if (_this.opt.billRemark && _this.opt.remarkCallback) {//如果是挂单备注 需将原单状态修改为已买单
+                        _this.opt.option.instoreServiceId = _this.opt.billRemark.id;
+                        _this.opt.option.instoreServiceData = _this.opt.remarkCallback(_this.opt.member);
+                    }
+                    if(_this.opt.instoreServiceVersion){
+                        _this.opt.option.instoreServiceVersion = _this.opt.instoreServiceVersion;
+                    }
                     am.api.billCheck.exec(_this.opt.option, callback);
                 }
-            }
+			}
 
             if(!this.checkBillNoSuccess){
                 if(amGloble.metadata.shopPropertyField.aotomodifybillno == 1){
@@ -3387,7 +4094,7 @@
                         } else {
                             _this.opt.option.autoModifyBillNo = 1;
                         }
-                        toPay();
+						_this.getBillNo(toPay);
                     }, function () {
                         am.msg("单号重复！");
                         return;
@@ -3397,10 +4104,50 @@
                     return;
                 }
             }else {
-                toPay();
+				_this.getBillNo(toPay);
             }
 		},
-        getCalacAjax: function (params, url, sc) {
+		getBillNo: function(cb){
+            var _this = this;
+            if(this.opt.settlementPayDetail){
+                cb && cb();
+				return false;
+            }
+			if (am.metadata.shopPropertyField.manualInputBillno != 1) {
+				cb && cb();
+				return false;
+			}
+			if (_this.$header.find(".billno input").val().trim()) {
+				cb && cb();
+				return false;
+			}
+			am.keyboard.show({
+				title:"请输入单号",//可不传
+				hidedot:true,
+				submit:function(value){
+					if(!value){
+						am.msg('请输入单号！');
+						return;
+					}
+					if(isNaN(value)){
+						am.msg('请输入正确的单号！');
+						return;
+					}
+					_this.checkBillNo(value, cb);
+				}
+			});	
+		},
+        recalcRoyalty: function(params, url, sc, item) {
+            var _this = this;
+            var gotoBillRecord = function () {
+                $.am.changePage(am.page.billRecord, "");
+            };
+            am.confirm('','该单提成计算失败，是否立即重算？','返回流水','立即重算',gotoBillRecord,function(){
+                _this.getCalacAjax(params, url, sc, item);
+            }); 
+        },
+        getCalacAjax: function (params, url, sc, item) {
+            var _this = this;
                 $.ajax({
                     type: 'POST',
                     url: url,
@@ -3408,22 +4155,33 @@
                     dataType: 'json',
                     contentType: 'application/json',
                     success: function (res) {
+                        monitor.stopTimer('M16')
                         if (res) {
                             sc && sc();
                         }
                         if (res.code == 0) {
-                            // am.msg(res.message);
                             console.log('getGainAndVoidFee success')
                         } else {
+                            if (item == 0) {
+                                _this.recalcRoyalty(params, url, sc, item)
+                            }
                             // am.msg(res.message || "数据获取失败,请检查网络!");
                         }
                     },
                     error: function (res) {
                         console.log('计算提成及业绩出错', res)
+                        monitor.stopTimer('M16', 1)
+                        _this.recalcRoyalty(params, url, sc, item)
                     }
                 });
         },
-        getGainAndVoidFee: function () {
+        getGainAndVoidFee: function (type,cb) {
+            var monitorData = {
+                billIds: this.billIds,
+                billId: this.billId,
+                shopId: am.metadata.userInfo.shopId,
+            }
+            monitor.startTimer('M16', monitorData);
             var enabledNewPerfModel = amGloble.metadata.enabledNewPerfModel,
                 enabledNewBonusModel = amGloble.metadata.enabledNewBonusModel;
             if (this.billId && (enabledNewPerfModel == 1 || enabledNewBonusModel == 1)) {
@@ -3441,31 +4199,40 @@
 						billid: this.billId,
 						billdIds: billdIds,
                         shopid: shopid,
-                        parentShopId: parentShopId
+                        parentShopId: parentShopId,
+                        parentId: userInfo.realParentShopId
                     },
                     urlGain = urlPrefix + '/empGain/multipleBillCalc' + "?" + $.param({
                         shopId: shopid,
                         parentShopId: parentShopId,
-                        token: userToken ? userToken.mgjtouchtoken : null
+                        token: userToken ? userToken.mgjtouchtoken : null,
+                        parentId: userInfo.realParentShopId
                     }),
                     paramsAchievement = {
 						billId: this.billId,
 						billdIds: billdIds,
                         shopId: enabledNewPerfModel ? shopid : userInfo.realParentShopId, //算业绩时取门店id，算虚业绩时取总部id
                         parentShopId: parentShopId, //租户ID
+                        parentId: userInfo.realParentShopId
                     },
                     urlAchievement = urlPrefix + calcFeeUri + "?" + $.param({
                         shopId: userInfo.realParentShopId,
                         parentShopId: parentShopId,
-                        token: userToken ? userToken.mgjtouchtoken : null
+                        token: userToken ? userToken.mgjtouchtoken : null,
+                        parentId: userInfo.realParentShopId
                     }),
                     _this = this;
+                // 非项目的时候不计算业绩
                 this.getCalacAjax(paramsAchievement, urlAchievement,
                     function () {
                         if (amGloble.metadata.enabledNewBonusModel == 1) {
-                            _this.getCalacAjax(paramsGain, urlGain)
+                            monitor.startTimer('M16', monitorData);
+                            _this.getCalacAjax(paramsGain, urlGain,cb)
+                            
+                        }else {
+                            cb && cb();
                         }
-                    }
+                    }, type
                 );
             }
         },
@@ -3637,23 +4404,46 @@
             setTimeout(function () {
                 _this.$confirm.hide();
             }, 300);
+            if(amGloble.metadata.shopPropertyField && amGloble.metadata.shopPropertyField.mgjBillingType==1){
+                if(am.autoPay.json && _this.opt.member){
+                    if(am.autoPay.billRemark){
+                        if(this.opt.option.expenseCategory==2){
+                            var cid = this.opt.member.cid;
+                            am.autoPay.json.cid = cid;
+                            am.autoPay.data.data = am.autoPay.json;
+                            am.autoPay.billRemark.opencard.isbuy = true;
+                            am.autoPay.data.version ++;
+                            am.autoPay.service();
+                            return;
+                        }
+                        if(this.opt.option.expenseCategory==3){
+                            am.autoPay.billRemark.recharge.isbuy = true;
+                            am.autoPay.data.version ++;
+                            am.autoPay.service();
+                            return;
+                        }
+                        if(this.opt.option.expenseCategory==4){
+                            var buyTreatmentItmes = this.opt.member.buyTreatmentItmes && this.opt.member.buyTreatmentItmes[0];
+                            if(buyTreatmentItmes){
+                                var serviceItems = am.autoPay.json.serviceItems;
+                                for(var i=0;i<serviceItems.length;i++){
+                                    if(serviceItems[i].itemId==buyTreatmentItmes.itemid && serviceItems[i].consumeType && !serviceItems[i].consumeId){
+                                        serviceItems[i].consumeId = buyTreatmentItmes.id;
+                                    }
+                                }
+                            }
+                            am.autoPay.billRemark.buypackage.isbuy = true;
+                            am.autoPay.data.version ++;
+                            am.autoPay.service();
+                            return;
+                        }
+                    }
+                    if(this.opt.option.expenseCategory==0 || this.opt.option.expenseCategory==1){
+                        am.autoPay.reset();
+                    }
+                }
+            }     
             if(this.opt.from=='recharge'){
-                // var opt = {
-                //     cardFee: this.$list.find("div.rechargePrice").text().replace("￥", "") * 1,
-                //     presentFee: this.$list.find("div.rechargeBonus").text().replace("￥", "") * 1
-				// }
-				// //手动升级
-                // if(this.upgradeCardSuccess){
-                //     var upgradeCard = this.$list.find('.rechargeCardType').find('.val').data('data').data;
-                //     opt.upgradeCard = {
-                //         discount: upgradeCard.discount*1,
-                //         buydiscount: upgradeCard.buydiscount*1,
-                //         cardName: upgradeCard.cardtypename
-                //     }
-				// }
-				// //自动升级
-				// if(!this.upgradeCardSuccess && this.upgradeCardSuccessAuto){
-				// }
 				var opt = this.cardUpgradeObj;
 				$.am.page.back('slidedown', {afterRecharge: opt});
 				return;
@@ -3696,8 +4486,11 @@
                             // if((!billRemark.opencard || billRemark.opencard.isbuy) && (!billRemark.recharge || billRemark.recharge.isbuy) && (!billRemark.buypackage || billRemark.buypackage.isbuy)){
                                 var data = JSON.parse(arr[0].data);
                                 data.billRemark = billRemark;
+                                data.cid = this.opt.member.cid;
                                 arr[0].data = JSON.stringify(data);
-                                arr[0].data.cid = this.opt.member.cid;
+                                if(this.opt.billRemark && this.opt.remarkCallback){
+                                    arr[0].version ++;
+                                }
                                 am.cashierTab.feedBill(arr[0],1);
                             // }else {
                                 // am.goBackToInitPage();
@@ -3759,6 +4552,8 @@
         payTypeMap: {
             "cardFee": "cardfee",
             "presentFee": "presentfee",
+            "treatcardFee": "treatcardfee",
+            "treatpresentFee": "treatpresentfee",
             "cashFee": "cash",
             "unionPay": "unionpay",
             "cooperation": "cooperation",
@@ -3826,7 +4621,7 @@
 
                     cashFee: items[i].cashFee,
                     cardFee: items[i].cardFee,
-                    otherFee: items[i].otherFee
+                    otherFee: items[i].otherFee,
                 };
                 if (items[i].totalTimes === -99) {//不限次参考年卡
                     itemdata.consumemode = 4;
@@ -3851,7 +4646,7 @@
                     cardtypeid: this.opt.member.cardTypeId,
                     discount: this.opt.member.discount || 10,//折扣
                     treatcardfee: (billingInfo.treatfee || 0) + (this.unlimitTreatfee || 0),//(this.opt.member.treatcardfee ||0)+this.unlimitTreatfee,
-                    treatpresentfee: 0//this.opt.member.treatpresentfee||0
+                    treatpresentfee: billingInfo.treatpresentfee || 0
                 };
             }
             var _total = billingInfo.total-billingInfo.treatfee-billingInfo.treatpresentfee;
@@ -3868,15 +4663,16 @@
                 var empper = ret[i].empper;
                 //店内业绩
                 items[i].storePerf = ret[i].shopper;
+                items[i].thirdCommission = ret[i].unshopper;
                 eaFee += ret[i].shopper;
                 //项目的支付方式拆分
                 items[i].payDetail = {};
                 for (var j in this.payTypeMap) {
                     var k = this.payTypeMap[j];
-                    if (items[i].consumeType === 1 && k === 'cardfee') {
+                    if (items[i].consumeType === 1 && k === 'treatcardfee') {
                         //套餐项目
                         items[i].payDetail.treatfee = payDetail[k] || 0;
-                    } else if (items[i].consumeType === 1 && k === 'presentfee') {
+                    } else if (items[i].consumeType === 1 && k === 'treatpresentfee') {
                         //套餐项目
                         items[i].payDetail.treatpresentfee = payDetail[k] || 0;
                     } else {
@@ -3965,101 +4761,238 @@
                 }
             }
         },
+        processTreatsBillParams:function(){
+            // 处理组合套餐包数据格式 将组合套餐项目放到外层
+            var comboCard = this.opt.option.comboCard;
+            var treatments = comboCard.treatments;
+            for(var i =0,len=treatments.length;i<len;i++){
+                var treatInfo=treatments[i];
+                if(treatInfo.packageId < 0){
+                    comboCard.serviceItems = treatInfo.serviceItems;
+                    treatments.splice(i,1);// 去掉组合套餐
+                }
+            }
+        },
+        distpachPayDetailToServiceItem: function (payDetail, treats,isCostDetail) {
+            var total = this.opt.option.billingInfo.total;
+            var combNotCalIntoAchiev = am.metadata.configs.combNotCalIntoAchiev == 'true'?1:0;// 1成本不算业绩 0 成本算业绩
+            if(combNotCalIntoAchiev===0){
+                total += this.opt.option.cost||0;
+            }
+            if (treats && treats.length) {
+                $.each(treats, function (i, v) {
+                    if (v.packageId && v.packageId > -1) {
+                        // var rate =  v.price / total ;
+                        if (combNotCalIntoAchiev) {
+                            var rate = v.price / total;
+                        } else {
+                            var rate = (v.price + v.treatsCost) / total;
+                        }
+                        v.payDetail = {};
+                        if(isCostDetail){
+                            v.costDetail={};
+                        }
+                        for (var key in payDetail) {
+                            v.payDetail[key] = Math.round(payDetail[key] * rate*100)/100;
+                            if(isCostDetail){
+                                v.costDetail[key] = Math.round(payDetail[key] * rate*100)/100;
+                            }
+                        }
+                        
+                    } else {
+                        var serviceItems = v.serviceItems;
+                        $.each(serviceItems, function (index, value) {
+                            if(combNotCalIntoAchiev){
+                                var innerRate = value.money / total ;
+                            }else{
+                                var innerRate = value.allPrice / total ;
+                            }
+                            value.payDetail = {};
+                            if(isCostDetail){
+                                value.costDetail = {};
+                            }
+                            for (var k in payDetail) {
+                                value.payDetail[k] = Math.round(payDetail[k] * innerRate*100)/100;
+                                if(isCostDetail){
+                                    value.costDetail[k] =  Math.round(payDetail[k] * innerRate*100)/100;
+                                }
+                            }
+                        })
+                    }
+                })
+            }
+        },
         computePerSetPerf: function (type) {
-            //项目不算
+            console.log('this.opt.option------start',this.opt.option)
+            var _this=this;
+            var combNotCalIntoAchiev = am.metadata.configs.combNotCalIntoAchiev == 'true'?1:0;// 1成本不算业绩 0 成本算业绩
             var isRepeat = this.opt.prodOption && this.opt.option;
             var expenseCategory = isRepeat?this.opt.prodOption.expenseCategory:this.opt.option.expenseCategory;
             if (expenseCategory) {
                 var billingInfo = isRepeat?this.opt.prodOption.billingInfo:this.opt.option.billingInfo;
                 var t = billingInfo.total - billingInfo.debtFee;
                 if(expenseCategory === 4){
-                    if(am.metadata.configs.combNotCalIntoAchiev!='true'){
+                    // 套餐加上成本
+                    if(!combNotCalIntoAchiev){
                         t += this.opt.option.cost || 0;
                     }
                 }
-                var servers;
+                var sellingItems = [];
+                var payDetail = JSON.parse(JSON.stringify(billingInfo));
                 if (expenseCategory === 1) {
-                    var currentOption = isRepeat?this.opt.prodOption.products:this.opt.option.products;
-                    servers = currentOption.servers;
-                } else if (expenseCategory === 2) {
-                    servers = this.opt.option.card.servers;
-                } else if (expenseCategory === 3) {
-                    servers = this.opt.option.card.servers;
+                    // 卖品
+                    sellingItems = sellingItems.concat(isRepeat ? this.opt.prodOption.products.depots : this.opt.option.products.depots);
+                    console.log('卖品sellingItems======', sellingItems)
                 } else if (expenseCategory === 4) {
-                    servers = this.opt.option.comboCard.servers;
+                    // 套餐
+                    var treatments = this.opt.option.comboCard.treatments;
+                    $.each(treatments, function (key, treatInfo) {
+                        // 待组合套餐
+                        if (treatInfo.packageId > 0) {
+                            sellingItems.push(treatInfo);
+                        }else{
+                            sellingItems = sellingItems.concat(treatInfo.serviceItems);
+                        }
+                    });
+                } else if (expenseCategory === 2 || expenseCategory === 3) {
+                    // 开卡 充值时card是对象 转为数组以备遍历
+                    sellingItems = [this.opt.option.card];
                 }
-                if (servers && servers.length) {
-                    var payDetail = JSON.parse(JSON.stringify(billingInfo));
-                    if(this.opt.member && !this.opt.member.allowPresentfeeDiscount && this.opt.member.discount && expenseCategory!=4){
-                        if(payDetail.presentFee){
-                            if(this.$payTypes.filter(".selected").hasClass("pay_bonus")){
-                                payDetail.presentFee = billingInfo.total-billingInfo.treatfee-billingInfo.treatpresentfee-billingInfo.luckymoney-billingInfo.mallOrderFee-billingInfo.weixin-billingInfo.pay;
-                            }else {
-                                payDetail.presentFee = payDetail.presentFee*(this.opt.member.discount/10);
+                    if (this.opt.member && !this.opt.member.allowPresentfeeDiscount && this.opt.member.discount && expenseCategory != 4) {
+                        if (payDetail.presentFee) {
+                            if (this.$payTypes.filter(".selected").hasClass("pay_bonus")) {
+                                payDetail.presentFee = billingInfo.total - billingInfo.treatfee - billingInfo.treatpresentfee - billingInfo.luckymoney - billingInfo.mallOrderFee - billingInfo.weixin - billingInfo.pay;
+                            } else {
+                                payDetail.presentFee = payDetail.presentFee * (this.opt.member.discount / 10);
                             }
                         }
                     }
-                    if(expenseCategory==4 && this.opt.option.comboCard.costDetail){
-                        for(var key in payDetail){
-                            for(key2 in this.opt.option.comboCard.costDetail){
-                                if(key==key2){
-                                    if(am.metadata.configs.combNotCalIntoAchiev!='true'){
+                    
+
+                    if (expenseCategory == 4 && this.opt.option.comboCard.costDetail) {
+                        // 分套餐包的costDetail
+                        this.distpachPayDetailToServiceItem(this.opt.option.comboCard.costDetail,this.opt.option.comboCard.treatments,1);
+                        for (var key in payDetail) {
+                            for (key2 in this.opt.option.comboCard.costDetail) {
+                                if (key == key2) {
+                                    if (am.metadata.configs.combNotCalIntoAchiev != 'true') {
                                         payDetail[key] = payDetail[key] + this.opt.option.comboCard.costDetail[key];
                                     }
                                 }
                             }
                         }
-					}
-					// 判断是否开启新业绩模式，若开启走新逻辑
-					// if (amGloble.metadata.enabledNewPerfModel == 1) {
-					// 	for(var i = 0; i < servers.length; i++) {
-					// 		servers[i].automaticPerformance = servers[i].perf > 0 ? 0 : 1;
-					// 	}
-					// 	return;
-					// }
-                    var payMoneyCategoryPctObj = this.getPayMoneyCategoryPctObj({total: t, payDetail: payDetail});
-                    var payFeePctObj = this.getPayFeePctObj({total: t, payDetail: payDetail, isNotProject: true});
-                    var rate = amGloble.metadata.configs.debtFlag*1?(1 - billingInfo.debtFee/billingInfo.total):1;
-                    for (var i = 0; i < servers.length; i++) {
-						// 判断是否手动修改业绩
-						servers[i].automaticPerformance = servers[i].perf > 0 ? 0 : 1;
-                        if(!servers[i].perf){
-                            var perf;
-                            perf = servers[i].perf = toFloat(t * servers[i].per / 100);
-                            if ([1, 4].indexOf(expenseCategory) >= 0) {
-                                servers[i].cardfee = perf * payMoneyCategoryPctObj['card'];
-                                servers[i].cashfee = perf * payMoneyCategoryPctObj['cash'];
-                                servers[i].otherfee = perf * payMoneyCategoryPctObj['other'];
+                        this.distpachPayDetailToServiceItem(payDetail,this.opt.option.comboCard.treatments);
+                    } 
+                    var rate = amGloble.metadata.configs.debtFlag * 1 ? (1 - billingInfo.debtFee / (billingInfo.total + (this.opt.option.cost || 0))) :1; 
+                    // 遍历每一个卖品       
+                    for(var d=0,len=sellingItems.length;d<len;d++){
+                        var selledItem=sellingItems[d];
+                        var servers=selledItem.servers;
+                        var t2=0;
+                        if(servers){
+                            if (expenseCategory === 1) {
+                                t = selledItem.salePrice * selledItem.number - (selledItem.payDetail && selledItem.payDetail.debtFee || 0); // 每个卖品的实际售价
+                                t2=selledItem.salePrice * selledItem.number;
+                            } else if (expenseCategory === 4) {
+                                if(combNotCalIntoAchiev){
+                                    // 成本不算业绩
+                                    if(selledItem.serviceItems){
+                                        // 套餐包
+                                        t = selledItem.price - (selledItem.payDetail && selledItem.payDetail.debtFee ||0); 
+                                    }else{
+                                        // 单个项目
+                                        t = selledItem.money- (selledItem.payDetail && selledItem.payDetail.debtFee ||0);
+                                    }
+                                }else{
+                                    // 成本算业绩
+                                    if(selledItem.serviceItems){
+                                        // 套餐包
+                                        // t = selledItem.price + selledItem.treatsCost // 服务项目加成本的总价
+                                        t = selledItem.price + selledItem.treatsCost- (selledItem.payDetail && selledItem.payDetail.debtFee ||0); // 服务项目加成本的总价
+                                        t2 = selledItem.price + selledItem.treatsCost;
+                                    }else{
+                                        // 单个项目
+                                        t = selledItem.allPrice - (selledItem.payDetail && selledItem.payDetail.debtFee ||0);
+                                        t2 = selledItem.allPrice;
+                                    }
+                                }
+                            }else if(expenseCategory === 2 || expenseCategory === 3){
+                                t = billingInfo.total - billingInfo.debtFee;
+                                t2 = billingInfo.total;
                             }
-                        }else{
-                            // if(expenseCategory === 4 && am.metadata.configs.combNotCalIntoAchiev!='true'){
-                            //     servers[i].perf *= t / (billingInfo.total+(this.opt.option.cost || 0));
-                            // }else {
-                            //     servers[i].perf *= (t-(this.opt.option.cost || 0)) / billingInfo.total;
-                            // }
-                            var per = Math.round(10000/servers.length)/100;
-                            var perf = toFloat((this.needPay || 0)*per/100);
-                            if(servers[i].perf==perf){
-                                servers[i].perf *= rate;
+                            // 待 t可能有问题 内外
+                            var payMoneyCategoryPctObj = this.getPayMoneyCategoryPctObj({
+                                total: t,
+                                payDetail: selledItem.payDetail || payDetail
+                            });
+                            var payFeePctObj = this.getPayFeePctObj({
+                                total: t,
+                                payDetail: selledItem.payDetail || payDetail,
+                                isNotProject: true
+                            });
+                            
+                            for (var i = 0; i < servers.length; i++) {
+                                // 判断是否手动修改业绩
+                                servers[i].automaticPerformance = servers[i].perf > 0 ? 0 : 1;
+                                if (!servers[i].perf) {
+                                    var perf;
+                                    perf = servers[i].perf = toFloat(t * servers[i].per / 100);
+                                    if ([1, 4].indexOf(expenseCategory) >= 0) {
+                                        servers[i].cardfee = perf * payMoneyCategoryPctObj['card'];
+                                        servers[i].cashfee = perf * payMoneyCategoryPctObj['cash'];
+                                        servers[i].otherfee = perf * payMoneyCategoryPctObj['other'];
+                                    }
+                                } else {
+                                    var servsersCount = servers.length;
+                                    if(_this.getPerfMode()===0){
+                                        servsersCount = _this.getCorrectEmpsLength(servers[i].station,servers);
+                                    }
+                                    var per = Math.round(10000 / servsersCount) / 100;
+                                    var perf = toFloat((t2 || 0) * per / 100);
+                                    if (servers[i].perf == perf) {
+                                        servers[i].perf *= rate;
+                                    }
+                                    servers[i].cardfee = servers[i].perf * payMoneyCategoryPctObj['card'];
+                                    servers[i].cashfee = servers[i].perf * payMoneyCategoryPctObj['cash'];
+                                    servers[i].otherfee = servers[i].perf * payMoneyCategoryPctObj['other'];
+                                }
+                                // 按每一种支付方式换算业绩
+                                var perfDetail = {};
+                                for (var payName in payFeePctObj) {
+                                    var pct = payFeePctObj[payName];
+                                    perfDetail[payName] = servers[i].perf * pct;
+                                }
+                                servers[i].perfDetail = perfDetail;
                             }
-                            servers[i].cardfee = servers[i].perf * payMoneyCategoryPctObj['card'];
-                            servers[i].cashfee = servers[i].perf * payMoneyCategoryPctObj['cash'];
-                            servers[i].otherfee = servers[i].perf * payMoneyCategoryPctObj['other'];
                         }
-                        // 按每一种支付方式换算业绩
-                        var perfDetail = {};
-                        for (var payName in payFeePctObj) {
-                            var pct = payFeePctObj[payName];
-                            perfDetail[payName] = servers[i].perf * pct;
-                        }
-                        servers[i].perfDetail = perfDetail;
                     }
-                }
                 var debtFlag = amGloble.metadata.configs.debtFlag*1;
                 if(debtFlag){
                     billingInfo.eaFee = billingInfo.total - billingInfo.debtFee;
                 }
+                if(expenseCategory==4){
+                    // 套餐购买 将组合套餐数据提到外层与treatments同级
+                    this.processTreatsBillParams();
+                }
             }
+        },
+        // 计算当前工位有多少员工
+        getPerfMode:function(){
+            if(this.$.selector.indexOf('#page_service')==-1){
+                //默认为2 员工共享100%业绩 bug 0027015 后端觉得数据库设置默认值影响较大 不同意加 所以前端设置默认值 造成基础系统配置必须点击保存才真正数据库有值
+                return (amGloble.metadata.shopPropertyField && amGloble.metadata.shopPropertyField.notSharedPerformance || 0) * 1;
+            }else{
+                return 0;
+            }
+        },
+        getCorrectEmpsLength:function(stationNo,servers){
+            var count=0;
+            $.each(servers,function(index,server){
+                if(server.station===stationNo){
+                    count++;
+                }
+            })
+            return count;
         },
         // 获取每种支付方式的金额占比，以及相应业绩字段
         getPayFeePctObj: function(params) {
@@ -4311,7 +5244,8 @@
             }else{
                 if($('.payDetail').is(':visible') || $('#common_addremark').is(':visible') 
                     || $('#maskBoard').is(':visible') || $('.nativeUIWidget-showPopupMenu').is(':visible') 
-                    || $('#setMutiPerf').is(':visible') || $("#phoneCodeModal").is(':visible') ){
+                    || $('#setMutiPerf').is(':visible') || $("#phoneCodeModal").is(':visible') 
+                    || $('#selectCancleReason').is(':visible')){
                     return;
                 }
                 var num = ctrl.getNum(keyCode);
@@ -4339,7 +5273,7 @@
                         return;
                     }else if($('#payConfirm').is(':visible') ) {
                         //点击评价成功后,点击回车键让评价成功后的弹窗消失
-                        $('#payConfirm').trigger('vclick');
+                        $('#payConfirm .goBack').trigger('vclick');
                         sessionStorage.cardPreventKeyB = 'prevent';
                         return;
                     }
@@ -4373,8 +5307,35 @@
                 }
             }
         },
+        autoRecharge: function(params){
+            am.autoPayCheck.setStep('fill rechargeData');
+            if(params.isXCX && params.autoRechargeData){
+                var cardfee = params.autoRechargeData.cardfee;
+                var presentfee = params.autoRechargeData.presentfee || 0;
+                this.$list.find('.rechargePriceItem').find('.val').text("￥" + cardfee);
+                this.opt.option.billingInfo.total = cardfee * 1 || 0;
+                this.opt.option.billingInfo.eaFee = this.opt.option.billingInfo.total;
+                this.setNeedPay(cardfee);
+                this.$list.find('.val.rechargeBonus').text(("￥" + presentfee) || "");
+                if(params.server){
+                    var server = {
+                        "empId": params.server.empId,
+                        "empName": params.server.empName,
+                        "empNo": params.server.empNo,
+                        "station": params.server.station,
+                        "pointFlag": 1, // 是否指定 0指定 1非指定
+                        "dutyid": params.server.dutyid,
+                        "per": 100,
+                        "perf": 0,
+                        "gain": 0
+                    }
+                    this.opt.option.card.servers = [server];
+                    this.$list.find('.rechargeSales .val').html('<span per="' + server.per + '">' + server.empName + '(业绩' + cardfee +')' + '</span>');
+                }
+            }
+        },
         autoSettleFun : function(params) {
-
+            am.autoPayCheck.setStep('select payType');
             if(navigator.connection && navigator.connection.type == 'none') {
                 //断网提示
                 var gotoHangup = function () {
@@ -4408,7 +5369,7 @@
             }else {}
             
             if(payType) {
-                $('li.'+payType).trigger('vclick');
+                this.$.find('li.'+payType).trigger('vclick');
                
                 if(payType == 'pay_mix') {
                     //混合支付
@@ -4417,6 +5378,26 @@
                         $('.payDetail:visible input[name=' + i + ']').val(payMoney[i]);
                     }
 
+                }else if (payType == 'pay_dp'){
+                    var time6 = setTimeout(function(){
+                        clearInterval(time6);
+                        var hasSerialnumber = 0;
+                        $('#dpPayDetail').find('.dp-ul li').each(function(){
+                            var dpdata = $(this).data('data');
+                            var serialnumber = payMoney&&payMoney.dianpingOrder&&payMoney.dianpingOrder.serialnumber
+                            if(dpdata.serialnumber==serialnumber){
+                                hasSerialnumber = 1;
+                                $(this).trigger('vclick');
+                                $('li.'+payType).addClass('selected');
+                                return false;
+                            }
+                        })
+                        if(hasSerialnumber==0){
+                            am.msg('大众点评券未找到！');
+                            clearInterval(time2);
+                            return;
+                        }
+                    },1000);
                 }else {
 
                     if(params.billNo){
@@ -4454,6 +5435,7 @@
             // 结算
             var time2 = setTimeout(function(){
                 clearInterval(time2);
+                am.autoPayCheck.setStep('trigger vclick to submit');
                 $('#page_pay .submit.keypadPC').trigger('vclick');
 
                 var time3 = setTimeout(function(){
@@ -4512,15 +5494,17 @@
                         }else {
                             $('.cancel_comment').trigger('vclick');
                         }
-                        
-                        var time5 = setTimeout(function(){
-                            clearInterval(time5);
-                            $('#payConfirm').trigger('vclick');
-                        }, 2000);
-
+                        // 项目 卖品 自助结算
+                        if(_this.opt.option.expenseCategory==0 || _this.opt.option.expenseCategory==1){
+                            var time5 = setTimeout(function(){
+                                clearInterval(time5);
+                                $('#payConfirm .goBack').trigger('vclick');
+                                $('#autoWrap').hide();
+                            }, 2000);
+                        }
                     }, 2000);
 
-                }, 2000);
+                }, 3000);
 
             },1500);
 

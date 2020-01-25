@@ -20,7 +20,7 @@
 				priceFilter: true,
 				groupKey: 'PRODUCT_ITEM_GROUP',
                 onSelect: function(data) {
-					return self.billMain.addItem(data);
+					return self.billMain.addItem(data,null,null,'isNewAdd');
                 },
                 onTouch: function(isVclick) {
 					self.billMain.hideMemberInfo(1);
@@ -48,20 +48,26 @@
 					className:"center"
                 }, {
                     name: "数量",
-                    width: "150px",
+                    width: "100px",
 					className:"center"
                 }, {
                     name: "价格",
                     width: "100px",
 					className:"center"
+                }, {
+                    name: "销售",
+                    width: "70px",
+					// className:"center"
                 }],
 	            outerHeight:43,
                 onSelect: function($item,t) {
+					console.log($item,t)
+					self.billServerSelector.reset($item);
 					//选销售跟卖品条目没有关系，整单都是一样的
 					//self.billServerSelector.reset($item);
-					self.billServerSelector.rise(0,t);
+					// self.billServerSelector.rise(0,t);
                 },
-                onAddItem: function(data, $container) {
+                onAddItem: function(data, $container,isAutoFill,comboItem,isNewAdded) {
 					var $children = $container.find("tr");
 					for (var i = 0; i < $children.length; i++) {
 						var $etr = $children.eq(i);
@@ -83,6 +89,7 @@
 	                	price   = mprice;
 						data.memberprice = mprice;
 						data.cardDiscount = 1;
+						data.timeDiscount = 1;
 	                }else if(self.member && self.member.buydiscount){
                         price = price*self.member.buydiscount*0.1;
                     }
@@ -90,16 +97,17 @@
 
 
                     var $tr = $('<tr class="am-clickable show" data-showdel="'+showDel+'"></tr>');
-					$tr.append('<td><div class="am-clickable delete"></div><span class="server" style="display:none"></span></td>');
+					$tr.append('<td><div class="am-clickable delete"></div><span class="server_" style="display:none"></span></td>');
 					$tr.append('<td>'+data.name+'</td>');
 					var spanClass='';
-					if(am.operateArr.indexOf("J2")!=-1){
+					if(am.operateArr.indexOf("J2")!=-1 && am.metadata.userInfo.operatestr.indexOf("a49") == -1){
 						spanClass = 'am-disabled';
 					}
-					$tr.append('<td class="center"><span class="price am-clickable '+spanClass+'">'+price+'</span></td>');
+					$tr.append('<td class="center"><span class="price productPrice am-clickable '+spanClass+'">'+price+'</span></td>');
 					// floatNum
 					$tr.append('<td class="center"><div class="number"><span class="reduce am-clickable am-disabled"></span><span class="value am-clickable floatNum">1</span><span class="plus am-clickable"></span></div></td>');
 					$tr.append('<td class="center"><span class="sum">'+price+'</span></td>');
+					$tr.append('<td class=""><div class="server am-clickable"></div></td>');
 					$tr.append('<td class="empty-td"><div class="empty-div"><svg class="icon svg-icon" aria-hidden="true"><use xlink:href="#icon-yduigantanhaokongxin"></use></svg><span class="empty-text">库存 '+'<span class="num">'+(self.numObj && self.numObj[data.id])+'</span>'+'</span></div></td>');
 					$container.append($tr.data("data",data));
 					//校验是否库存为0 
@@ -131,7 +139,7 @@
                 settingKey: "setting_seller",
                 defaultSetting: null,
                 dispatchSetting: function(settings) {
-					self.billServerSelector.dispatchSetting(settings);
+					self.billServerSelector.dispatchSetting(settings,0,1);//bill头 工位  是否销售
                 },
                 onSubmit:function(){
                     self.submit();
@@ -175,70 +183,77 @@
             this.billServerSelector = new cashierTools.BillServerSelector({
                 $: this.$,
                 onSelect: function(data) {
-					self.selectedServer = data;
-					//不往项目里面加了，自己记住
-                    //self.billMain.addServer(data);
-	                if(this.$body.find('li.selected').length>0){
-		                am.tips.perfSetting(self.billServerSelector.$.find('li[serverid='+data.id+']'));
-	                }
+					// 选择员工
+					var _this = this;
+					setTimeout(function () {
+						var emps = _this.getEmps();
+						self.billMain.setEmps(emps,null,"isSeller");// 员工 卖品行 是否销售
+					}, 50);
+					return false;
+					// self.selectedServer = data;
+					// //不往项目里面加了，自己记住
+                    // //self.billMain.addServer(data);
+	                // if(this.$body.find('li.selected').length>0){
+		            //     am.tips.perfSetting(self.billServerSelector.$.find('li[serverid='+data.id+']'));
+	                // }
                 },
                 onRemove: function(){
+					// 删除员工
+					var _this = this;
+					setTimeout(function () {
+						var emps = _this.getEmps();
+						self.billMain.setEmps(emps,null,"isSeller");// 员工 卖品行 是否销售
+					}, 50);
+					return false;
                 	self.selectedServer = null;
                 },
-	            muti:true,
+				muti:true,
+				// notSharedPerformance:amGloble.metadata.shopPropertyField.notSharedPerformance,// 0/undefined  原来的  1 独享100%，2共享100%
 	            getTotalPerf:function () {
-		            return self.billMain.totalPrice;
+					// 获取总业绩
+					// 获取当前卖品的总价
+					return self.billMain.$.find('tr.selected') && self.billMain.$.find('tr.selected').find('.sum').text().trim()*1;
+					// return -1;
+		            // return self.billMain.totalPrice;
 				},
 				onSetEmpPer: function(emp, per,perf,gain) {
-                    var $server = self.billMain.$list.find("tr.selected .server").eq(emp.pos);
-                    var data = $server.data("data");
-                    if (data) {
-                        setTimeout(function() {
-                            for (var i = 0; i < data.length; i++) {
-                                if (data[i] && data[i].empId === emp.id) {
-                                    data[i].per = per;
-                                    data[i].perf = perf;
-                                    data[i].gain = gain;
-                                    break;
-                                }
-                            }
-                        }, 51);
-                    }
+					// 拖动或者手动计算业绩的回调
+					var $server = self.billMain.$list.find("tr.selected .server");//销售dom
+					var $service = self.billMain.$list.find("tr.selected");// 卖品dom
+					var data = $server.data("data");// 卖品员工
+					var serviceData = $service.data('data');// 卖品信息
+					if (serviceData) {
+						serviceData.manual = 1;
+					}
+					if (data) {
+						setTimeout(function () {
+							for (var i = 0; i < data.length; i++) {
+								if (data[i] && data[i].empId === emp.id) {
+									data[i].per = per;
+									data[i].perf = perf;
+									data[i].gain = gain;
+									break;
+								}
+							}
+						}, 51);
+					}
+					// return;
+                    // var $server = self.billMain.$list.find("tr.selected .server").eq(emp.pos);
+                    // var data = $server.data("data");
+                    // if (data) {
+                    //     setTimeout(function() {
+                    //         for (var i = 0; i < data.length; i++) {
+                    //             if (data[i] && data[i].empId === emp.id) {
+                    //                 data[i].per = per;
+                    //                 data[i].perf = perf;
+                    //                 data[i].gain = gain;
+                    //                 break;
+                    //             }
+                    //         }
+                    //     }, 51);
+                    // }
                 },
             });
-
-			/* document.addEventListener('scanningGunResult',function(result){
-				$.am.debug.log(JSON.stringify(result));
-				if(result && result.result){
-					self.scanningResultSearch(result.result);
-				}else{
-					am.msg('扫描枪连接异常！');
-				}
-			}, false);
-			document.addEventListener('scanningGunCancelled',function(result){
-				//$.am.debug.log(JSON.stringify(result));
-				if(self.scanningGunCancelledTimer){
-					clearTimeout(self.scanningGunCancelledTimer);
-				}
-				if(self.autoStartScanTimer){
-					clearTimeout(self.autoStartScanTimer);
-				}
-				self.scanningGunCancelledTimer = setTimeout(function(){
-					if(self.scanner && self == $.am.getActivePage()){
-						var ts = new Date().getTime();
-						if(self.autoStartScanTS && ts-self.autoStartScanTS<100){
-							//如果两次自动开始之间小于100ms,等一秒再重新开始
-							self.autoStartScanTimer = setTimeout(function(){
-								self.startScanningGun();
-								self.autoStartScanTS = new Date().getTime();
-							},1000);
-						}else{
-							self.startScanningGun();
-							self.autoStartScanTS = ts;
-						}
-					}
-				},10);
-			}, false); */
 
 			this.$scanner = this.$.find('.scanCheckbox').vclick(function(){
 				var $this = $(this);
@@ -263,7 +278,36 @@
 
 			this.member = null;
             this.$member.html('<span class="tag">顾客:</span>散客').prev().hide();
-            this.$scanner.hide().next().css({'margin-right':0})//隐藏蓝牙扫码枪
+			this.$scanner.hide().next().css({'margin-right':0})//隐藏蓝牙扫码枪
+			
+			$.am.on('instoreServiceHasBeenChanged',function(data){
+				if($.am.getActivePage() == self){
+					self.onBillStatusChange(data);
+				}
+			});
+
+			//由于项目卖品合并买单，卖品/cashierTab重置需要同步；
+			$.am.on('page.serivce.reseted',function(){
+				//由于需要计算位置和大小，无法在隐藏时Reset，因此需要在显示时重置，并在重置完成后将needReset设置为false;
+				self.needReset = true;
+				self.billMain.clear();
+			});
+		},
+		/**
+		 * 
+		 * @param {*} price 原价
+		 * @param {*} member 会员信息
+		 * @param {*} data 选择的项目信息
+		 */
+		timeDiscount: function(price, member, data){
+			if (member) {
+				var timeDiscount = am.timeDiscount.discountPrice(price, member, data, 'depot');
+				// 确实打折了discountFlag = true
+				if(timeDiscount && timeDiscount.discountFlag){
+					return toFloat(timeDiscount.price);
+				}
+			}
+			return false;
 		},
 		getProductPrice:function(data,price){//获取卖品会员价
 				var item = amGloble.metadata.categoryItemMap[data.id];
@@ -271,6 +315,13 @@
 					price:price,
 					isMemberPrice:false
 				}
+				res.price = self.timeDiscount(price, self.member, data);
+				// 如果没有高级折扣就显示老折扣
+				if(res.price){
+					res.isMemberPrice = true;
+					return res;
+				}
+
 				if(item){
 					if(item.mgj_memberpricecfg){//存在卖品会员价
 						
@@ -287,6 +338,7 @@
 										if(itemj.cardtypeid == self.member.cardTypeId){
 											res.price = itemj.price;
 											res.isMemberPrice = true;
+											break; // 性能优化以前的坑
 										}
 									}
 								}
@@ -364,17 +416,13 @@
                 //客户详情，重新选卡
                 this.setMember(am.convertMemberDetailToSearch(paras.cardData),paras.cardData.card);
                 this.billMain.reset(1);
-            } else if(paras == 'freezing' && !this.needReset){
+            } else if(paras == 'freezing'){
+				if(this.needReset) this.reset('freezing');
             	//this.checkIsOpen(paras);
 	            this.billMain.reset(1);
 	            this.billServerSelector.reset(false,false,1);
 	            this.billItemSelector.reset();
             }else if (am.metadata) {
-            	//this.checkIsOpen(paras);
-	            if(!this.needReset){
-		            am.cashierTab.reset(0);
-	            }
-	            this.needReset = 0;
 				this.reset(paras);
             } else {
                 //throw "metadata should be ready";
@@ -382,13 +430,13 @@
 		},
 		reset:function (paras) {
 			var employeeList = am.metadata.employeeList || [];
-			if(am.metadata.configs && am.metadata.configs['EMP_SORT']){
-				employeeList = JSON.parse(am.metadata.configs['EMP_SORT']);
-				employeeList = am.getConfigEmpSort(employeeList);
+			if(!this.billItemSelector.data){
+				this.billItemSelector.dataBind(this.processData(am.metadata.category));
+				this.billItemSelector.setGroup(am.page.service.getGroupData.call(this));
 			}
-			this.billItemSelector.dataBind(this.processData(am.metadata.category));
-			this.billItemSelector.setGroup(am.page.service.getGroupData.call(this));
-			this.billServerSelector.dataBind(employeeList,["销售"]);//多个工位传true, 不分工位传false;
+			if(!this.billServerSelector.data){
+				this.billServerSelector.dataBind(employeeList,["第一工位","第二工位","第三工位"]);//多个工位传true, 不分工位传false;
+			}
 
 			this.billItemSelector.reset();
 			this.billServerSelector.reset();
@@ -410,8 +458,12 @@
 				}else{
 					this.billData = null;
 				}
+			}else if(paras == 'freezing' && amGloble.metadata.shopPropertyField.mgjBillingType == 0){
+				this.billData = null;
 			}
 			this.selectedServer = null;
+
+			this.needReset = false;
 		},
 		fillNum: function () {
 			console.log(this.numObj);
@@ -476,7 +528,11 @@
 
 			}
 		},
-		getGoodsNum: function (cb) {
+		getGoodsNum: function (cb,refresh) {
+			var need = refresh || (this.billData && this.billData.data && this.billData.data.products && this.billData.data.products.depots && this.billData.data.products.depots.length);
+			if(!need){
+				return;
+			}
 			var opt = {
 				parentShopId: am.metadata.userInfo.parentShopId,
 				shopId: am.metadata.userInfo.shopId,
@@ -505,7 +561,7 @@
 			}
 			this.getGoodsNum(function(){
 				self.fillNum();
-			});
+			},'refresh');
 			/* if(this.scanner || 1){
 				if(this.scannerTimer) clearTimeout(this.scannerTimer);
 				this.scannerTimer = setTimeout(function(){
@@ -525,20 +581,6 @@
 			if(this.member){
 				this.checkComboMatch();
 			}
-
-			/*var cardName = this.member.cardName;
-            var balanceFee = this.member.balance-this.member.treatcardfee;
-            if(this.member.cardtype == 1 && this.member.timeflag==0 && balanceFee){
-                cardName+='(￥'+balanceFee.toFixed(0)+')';
-            }
-            this.$member.html('<div class="img"></div><div class="name">'+this.member.name+'</div><div class="cardname">'+cardName+'</div>').prev().show();
-
-			//this.$member.html('<div class="img"></div><div class="name">'+this.member.name+'</div>').prev().show();
-            this.$member.find('.img').html(am.photoManager.createImage("customer", {
-                parentShopId: am.metadata.userInfo.parentShopId,
-                updateTs: member.lastphotoupdatetime || ""
-            }, member.id + ".jpg", "s"));*/
-
 		},
 		checkComboMatch : function(){
 			this.billMain.$list.find("tr").each(function () {
@@ -630,6 +672,8 @@
 							name:list[j].name,
 							price:list[j].saleprice*1,
 							pinyin:list[j].pinyin,
+							modifyEnable:list[j].modifyEnable,
+							minPrice:list[j].minPrice,
 							mgjdepotlogo:list[j].mgjdepotlogo,
 							itemid:list[j].no
 						};
@@ -666,6 +710,7 @@
 					"depots":[],
 					"servers":[],
 				},
+				"jsonstr": '',
                 "billingInfo": {
                     "total": 0,
                     "eaFee": 0, //入账金额
@@ -711,7 +756,10 @@
 
 			// if(this.billData && amGloble.metadata.shopPropertyField.mgjBillingType==1){
             if(this.billData){
-                opt.instoreServiceId = this.billData.id;
+				opt.instoreServiceId = this.billData.id;
+				if (this.billData.jsonstr) {
+					opt.jsonstr = this.billData.jsonstr;
+				}
             }
 
             if(this.member){
@@ -732,13 +780,16 @@
                     return;
                 }
                 var item = {
+					"no": data.itemid,// 卖品编号
                     "productid": data.id*1,
 					"productName":data.name,
-                    "price": data.price || 0,
+					"price": data.price || 0,
+					"oPrice": data.price || 0, // 为高级结算使用红包
                     "salePrice": price,
                     "depcode": this.getDepCode(data.id),
 					"number":num,
-					"cardDiscount": data.cardDiscount
+					"cardDiscount": data.cardDiscount,
+					"servers": $tr.find('.server').data('data')||[],// 销售
 				};
 	            if($price.hasClass("modifyed")){
 		            item.modifyed=1;
@@ -766,7 +817,7 @@
 					"dutyid": this.selectedServer.dutyType
 				});
 			}*/
-			opt.products.servers = this.billServerSelector.getEmps();
+			// opt.products.servers = this.billServerSelector.getEmps();// 员工分到卖品的servers中
 
             opt.billingInfo.eaFee = opt.billingInfo.total;
             /*$.am.changePage(am.page.pay, "slideup", {
@@ -774,7 +825,11 @@
                 option: opt,
                 member: this.member
             });*/
-            return {
+			if (this.billData && this.billData.data && JSON.parse(this.billData.data).sourcedata){
+				opt.mgjsourceid = JSON.parse(this.billData.data).sourcedata.mgjsourceid;
+				opt.mgjsourcename = JSON.parse(this.billData.data).sourcedata.mgjsourcename;
+			}
+			return {
 	            comboitem: [],
 	            option: opt,
 	            member: this.member
@@ -824,6 +879,7 @@
 			if(data && data.products && data.products.depots){
 				var items = data.products.depots;
 				var $tr;
+				var oldServers=data.products.servers;// 更新前卖品的挂单servers 做兼容
 				if(items && items.length){
 					for (var i = 0; i < items.length; i++) {
 						var metaItem = am.metadata.categoryItemMap[items[i].productid];
@@ -833,39 +889,69 @@
 								name:metaItem.name,
 								price:metaItem.saleprice*1,
 								pinyin:metaItem.pinyin,
-								mgjdepotlogo:metaItem.mgjdepotlogo
+								modifyEnable:metaItem.modifyEnable,
+								minPrice:metaItem.minPrice,
+								mgjdepotlogo:metaItem.mgjdepotlogo,
+								itemid:metaItem.no // 卖品编号
 							});
 							$tr.find('.number .value').text(items[i].number);
 							if(items[i].modifyed && items[i].salePrice !== items[i].price){
 								$tr.find('.price').text(items[i].salePrice).addClass("modifyed");
 							}
 						}
+						// 更新前卖品的挂单servers 做兼容
+						if(!items[i].servers){
+							items[i].servers=oldServers;
+						}
+						// 渲染员工
+						if (items[i].servers && items[i].servers.length) {
+							var servers = [];
+							for (var j = 0; j < items[i].servers.length; j++) {
+								if (!items[i].servers[j]) {
+									continue;
+								}
+								var server = am.metadata.empMap[items[i].servers[j].id || items[i].servers[j].empId];
+								if (server) {
+									//this.billMain.addServer(server,$tr,items[i].servers[j].specified==1);
+									servers.push({
+										dutyid: server.dutyid,
+										dutytypecode: server.dutyType,
+										empId: server.id,
+										empName: server.name,
+										empNo: server.no,
+										per: items[i].servers[j].hasOwnProperty('per') ? items[i].servers[j].per : 0,
+										// per: !!items[i].servers[j].perf ? 0 : (items[i].servers[j].hasOwnProperty('per') ? items[i].servers[j].per : 100),
+										perf: items[i].servers[j].perf || 0,
+										gain: items[i].servers[j].gain || 0,
+										pointFlag: items[i].servers[j].specified,
+										station: server.pos
+									});
+								}
+							}
+							this.billMain.setEmps(servers, $tr,"showSeller");
+						}
+
 					}
 				}
-				var servers = data.products.servers;
-				if(servers && servers.length){
-					for(var i=0;i<servers.length;i++){
-						this.billServerSelector.$body.find('li[serverid='+servers[i].empId+']').addClass('selected').find('.perfVal').css({
-							width:(servers[i].per>100?100:servers[i].per)+'%'
-						}).find('.perfNum').text(servers[i].per);
-						this.billServerSelector.$body.find('li[serverid='+servers[i].empId+']').data('gain',servers[i].gain);
-					}
-				}
+				// var servers = data.products.servers;
+				// if(servers && servers.length){
+				// 	for(var i=0;i<servers.length;i++){
+				// 		this.billServerSelector.$body.find('li[serverid='+servers[i].empId+']').addClass('selected').find('.perfVal').css({
+				// 			width:(servers[i].per>100?100:servers[i].per)+'%'
+				// 		}).find('.perfNum').text(servers[i].per);
+				// 		this.billServerSelector.$body.find('li[serverid='+servers[i].empId+']').data('gain',servers[i].gain);
+				// 	}
+				// }
 
 				if($tr){
 					$tr.trigger('vclick');
 					this.billMain.onPriceChange();
-					this.needReset = 0;
 				}
 			}
 		},
 		onBillStatusChange:function(data){
-            if(data.id && data.id === this.billData.id){
-                atMobile.nativeUIWidget.showMessageBox({
-                    title: "单据已修改",
-                    content: '由于其它终端的操作，此单状态已改变！'
-                });
-                $.am.changePage(am.page.hangup);
+            if(data.instoreServiceId && data.instoreServiceId === this.billData.id){
+                am.billChangeToHangup();
             }
         },
 		keyboardCtrl:function(keyCode){

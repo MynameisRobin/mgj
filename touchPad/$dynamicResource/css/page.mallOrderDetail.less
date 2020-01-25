@@ -1,0 +1,171 @@
+@import "var.less";
+@path: "../images/";
+@import "../images/icons_sprite.less";
+
+.bs {
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+.br(@num) {
+    border-radius: @num;
+    -webkit-border-radius: @num;
+}
+
+.page_mallOrderDetail {
+    .container-wrap {
+        position: absolute;
+        top: 50px;
+        left: 0px;
+        right: 0px;
+        bottom: 0px;
+        background: url(../images/suggest_bg.png) no-repeat center center;
+        background-size: 175px 240px;
+
+        .detailMode {
+            border-top: 1px solid #ececec;
+            height: 100%;
+            width: 100%;
+            background-color: #ffffff;
+
+            .detailLf {
+                position: absolute;
+                width: 220px;
+                height: 100%;
+                border-right: 1px solid #ececec;
+
+                .leftCon {
+                    margin: 0 auto;
+                    padding-top: 30%;
+                    width: 140px;
+                    height: 140px;
+
+                    .conImg {
+                        width: 80px;
+                        height: 80px;
+                        margin: 0 auto;
+                        .bs;
+                        background: #e1e1e1 url(../images/icons_sprite/default_custmerIcon.png) no-repeat 0px 0px;
+                        background-size: 80px 80px;
+                        .br(50%);
+                        overflow: hidden;
+                        margin-bottom: 15px;
+
+                        img {
+                            width: 80px;
+                        }
+                    }
+
+                    .conName {
+                        text-align: center;
+                        font-size: 16px;
+                        line-height: 30px;
+                        color: #222222;
+                    }
+
+                    .conTel {
+                        font-size: 12px;
+                        color: #999;
+                        text-align: center;
+                    }
+                }
+            }
+
+            .detailRt {
+                padding-left: 220px;
+                position: absolute;
+                width: 100%;
+                height: 100%;
+
+                .productImg {
+                    padding-top: 60px;
+                    width: 250px;
+                    height: 100%;
+
+                    .imgCenter {
+                        margin: 8px auto;
+                        width: 170px;
+                        height: 170px;
+
+                        img {
+                            height: 170px;
+                        }
+                    }
+                }
+
+                .productDetail {
+                    position: absolute;
+                    left: 471px;
+                    right: 0px;
+                    top: 0px;
+                    bottom: 0px;
+
+                    .detailUp {
+                        line-height: 30px;
+                    }
+
+                    .detailDown {
+                        margin-top: 30px;
+                        line-height: 40px;
+                    }
+
+                    .verifyBtn {
+                        margin-top: 80px;
+                        width: 280px;
+                        height: 44px;
+                        line-height: 44px;
+                        text-align: center;
+                        font-size: 16px;
+                        border-radius: 3px;
+                        background-color: #e5dbd1;
+                        color: #000;
+
+                        &.am-clickable {
+                            background-color: #e82742;
+                            color: #fff;
+                        }
+                    }
+                    .verifyShop {
+                        margin-top: 30px;
+                    }
+
+                    .itemTit {
+                        font-size: 16px;
+                        color: #222222;
+                        margin-top: 60px;
+                    }
+
+                    .itemRemark {
+                        font-size: 12px;
+                        color: #aaaaaa;
+                    }
+
+                    .item_name,
+                    .item_value {
+                        display: inline-block;
+                        vertical-align: middle;
+                    }
+
+                    .item_name {
+                        width: 90px;
+                        font-size: 14px;
+                        color: #999;
+                    }
+
+                    .item_value {
+                        font-size: 14px;
+                        color: #222;
+                    }
+
+                    .itemStatus .item_value {
+                        color: #309030;
+                    }
+                }
+            }
+
+            &.show {
+                display: block;
+            }
+        }
+    }
+}

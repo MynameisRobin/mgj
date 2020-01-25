@@ -63,6 +63,58 @@
 				}
 			}
 		}
+		.viewModeWrap{
+			position: absolute;
+			height: 44px;
+			right: 24px;
+			line-height: 44px;
+			.modeLabel{
+				color:#999999;
+			}
+			.modeRadio{
+				width: 44px;
+				height: 22px;
+				vertical-align: -6px;
+				display: inline-block;
+				background-color: #555555;
+				box-shadow: rgba(0,0,0,.1) 1px 1px 3px inset;
+				border-radius: 12px;
+				position: relative;
+				transition: background-color ease-in .2s;
+				&::before{
+					position: absolute;
+					right: 0;
+					top: 0;
+					line-height: 22px;
+					width: 20px;
+					content: "小";
+					font-size: 12px;
+					color: #ddd;
+				}
+				&::after{
+					content: "";
+					position: absolute;
+					left: 2px;
+					top: 2px;
+					width: 18px;
+					height: 18px;
+					box-shadow: rgba(0,0,0,.2) 1px 0 2px;
+					border-radius: 10px;
+					background-color: #fff;
+					transition: left ease-in .2s;
+				}
+				&.checked::before{
+					left: 0;
+					right: auto;
+					content: "大";
+					text-align: right;
+					color: #fff;
+				}
+				&.checked::after{
+					left: 24px;
+				}
+			}
+		}
 	}
 	.tip {
 		position: absolute;
@@ -273,7 +325,37 @@
 					height: 100%;
 				}
 			}
+			// .smallViewMode{
+			// 	display: none;
+			// }
+			.time {
+				// float: left;
+				z-index: 1;
+				position: absolute;
+				bottom: 0px;
+				left: 1px;
+				width: 50px;
+				font-size: 10px;
+				padding-left: 2px;
+				height: 14px;
+				line-height: 14px;
+				color:#fff;
+			}
+			.status {
+				// float: right;
+				z-index: 1;
+				position: absolute;
+				bottom: 0px;
+				right: 1px;
+				padding:0 2px;
+				width: 28px;
+				height: 14px;
+				font-size: 10px;
+				line-height: 14px;
+				color:#fff;
+			}
 			.footer{
+				display: block;
 				position: absolute;
 				left: 0;
 				right: 0;
@@ -284,44 +366,279 @@
 				background: rgba(0, 0, 0, 0.5);
 				border-radius: 4px 4px 4px 4px;
 				color: #fff;
-				.time {
-					float: left;
-					width: 50px;
-					font-size: 10px;
-					padding-left: 2px;
-					// margin: 2px 0 0 0;
-					height: 14px;
-					line-height: 14px;
-					// text-align: right;
-					// margin-top: 2px;
-					// margin-left: 2px;
-				}
-				.status {
-					float: right;
-					padding:0 2px;
-					width: 28px;
-					height: 14px;
-					font-size: 10px;
-					line-height: 14px;
-					// text-align: left;
-					// margin-left: 54px;
+				// .time {
+				// 	float: left;
+				// 	width: 50px;
+				// 	font-size: 10px;
+				// 	padding-left: 2px;
+				// 	// margin: 2px 0 0 0;
+				// 	height: 14px;
+				// 	line-height: 14px;
+				// 	// text-align: right;
+				// 	// margin-top: 2px;
+				// 	// margin-left: 2px;
+				// }
+				// .status {
+				// 	float: right;
+				// 	padding:0 2px;
+				// 	width: 28px;
+				// 	height: 14px;
+				// 	font-size: 10px;
+				// 	line-height: 14px;
+				// 	// text-align: left;
+				// 	// margin-left: 54px;
 
-					/* &::after {
-						content: '';
-						position: absolute;
-						width: 12px;
-						height: 12px;
-						top: 4px;
-						right: 2px;
-						background: url(../images/queue-arrow.png);
-						background-size: 100% 100%;
-					} */
-				}
+				// 	/* &::after {
+				// 		content: '';
+				// 		position: absolute;
+				// 		width: 12px;
+				// 		height: 12px;
+				// 		top: 4px;
+				// 		right: 2px;
+				// 		background: url(../images/queue-arrow.png);
+				// 		background-size: 100% 100%;
+				// 	} */
+				// }
 			}
 			.no,.name,.time,.status {
 			 	overflow: hidden;
 			    white-space: nowrap;
 			    text-overflow: ellipsis;
+			}
+		}
+		&.smallView {
+			position: absolute;
+			width: 100%;
+			top: 55px;
+			bottom: 0;
+			overflow: hidden;
+
+			.list {
+				padding: 6px 6px 6px 10px;
+			}
+
+			.wrapper {
+				margin-top: 14px;
+				position: relative;
+
+				.loadingWrap {
+					position: absolute;
+					display: -webkit-box;
+					-webkit-box-pack: center;
+					-webkit-box-align: center;
+					left: 0;
+					top: 0;
+					right: 0;
+					bottom: 0;
+
+					.page-modalLoading-inner {
+						position: absolute;
+						top: 50%;
+						left: 50%;
+						transform: translate(-50%, -50%);
+						-webkit-transform: translate(-50%, -50%);
+					}
+				}
+			}
+
+			.type {
+				font-size: 12px;
+				color: #999;
+				line-height: 25px;
+				height: 25px;
+				overflow: hidden;
+				padding-left: 4px;
+			}
+
+			li {
+				position: relative;
+				width: 78px;
+				height: 110px;
+				margin: 6px 6px 6px 0;
+				float: left;
+				border-radius: 4px;
+				background: #5dae72;
+
+				&.am-clickable-active {
+					.mask {
+						position: absolute;
+						top: 0;
+						left: 0;
+						width: 78px;
+						height: 110px;
+						border-radius: 4px;
+						background: rgba(34, 34, 34, 0.1);
+					}
+				}
+
+				&.status4 {
+					background-color: #e59b37;
+
+					.time {
+						background: url(../images/openbill-time.png) no-repeat 52px center;
+						background-size: 11px 12px;
+					}
+				}
+
+				&.status2 {
+					background-color: #e82742;
+				}
+
+				&.status1 {
+					background-color: #5dae72;
+				}
+
+				&.status3 {
+					background-color: #555;
+				}
+
+				&.status5 {
+					background-color: #677DC4;
+				}
+
+				&.add {
+					background: #ececec url(../images/add-queue.png) no-repeat center center;
+					background-size: 41px 41px;
+				}
+
+				.no {
+					margin-top: 9px;
+					margin-left: 6px;
+					width: 68px;
+					height: unset;
+					background: unset;
+					border-radius: 0 0 5px 5px;
+					text-align: left;
+					font-size: 21px;
+					color: #fff;
+					font-weight: bold;
+				}
+				.name-icon {
+					height: 12px;
+					line-height: 12px;
+					text-align: unset;
+					margin-top: 3px;
+					margin-left: 6px;
+
+					.name {
+						display: inline-block;
+						max-width: 60px;
+						color: #fff;
+						font-size: 12px;
+					}
+
+					.icon-xiala- {
+						display: none;
+						color: #fff;
+						margin-left: -6px;
+					}
+				}
+
+				.header {
+					position: absolute;
+					width: 26px;
+					height: 26px;
+					left: 6px;
+					top: 77px;
+					border-radius: 13px;
+					overflow: hidden;
+					background: #e2e2e2 url(../images/openbill-emp.png) no-repeat bottom center;
+					background-size: 16px 21px;
+					background-position: 5px 5px;
+					img {
+						width: 100%;
+						height: 100%;
+					}
+				}
+				// .smallViewMode{
+				// 	display: block;
+				// 	.time{
+				// 		display: inline-block;
+				// 		margin-top: 6px;
+				// 		width: 65px;
+				// 		font-size: 12px;
+				// 		padding-left: 6px;
+				// 		height: 14px;
+				// 		line-height: 14px;
+				// 		color: #fff;
+				// 	}
+				// 	.status {
+				// 		// padding: 0 2px;
+				// 		position: relative;
+				// 		width: unset;
+				// 		height: 14px;
+				// 		line-height: 14px;
+				// 		text-align: left;
+				// 		margin-left: 35px;
+				// 		margin-top: 20px;
+				// 		font-size: 10px;
+				// 		color: #fff;
+				// 		&::after {
+				// 			content: '';
+				// 			position: absolute;
+				// 			width: 12px;
+				// 			height: 12px;
+				// 			top: 1px;
+				// 			right: 4px;
+				// 			background: url(../images/queue-arrow.png);
+				// 			background-size: 100% 100%;
+				// 		}
+				// 	}
+				// }
+				.time {
+					position: absolute;
+					top: 55px;
+					left: 6px;
+					width: 65px;
+					font-size: 10px;
+					height: 14px;
+					line-height: 14px;
+					color: #fff;
+				}
+
+				.status {
+					position: absolute;
+					bottom: 6px;
+					right: 2px;
+					padding: 0 2px;
+					width: 42px;
+					height: 14px;
+					font-size: 10px;
+					line-height: 14px;
+					color: #fff;
+					 &::after {
+						content: '';
+						position: absolute;
+						width: 12px;
+						height: 12px;
+						top: 1px;
+						right: 2px;
+						background: url(../images/queue-arrow.png);
+						background-size: 100% 100%;
+					} 
+				}
+				.footer {
+					display: none;
+					position: absolute;
+					left: 0;
+					right: 0;
+					bottom: 0;
+					padding-top: 1px;
+					max-width: 78px;
+					height: 15px;
+					background: rgba(0, 0, 0, 0.5);
+					border-radius: 4px 4px 4px 4px;
+					color: #fff;
+				}
+
+				.no,
+				.name,
+				.time,
+				.status {
+					overflow: hidden;
+					white-space: nowrap;
+					text-overflow: ellipsis;
+				}
 			}
 		}
 	}

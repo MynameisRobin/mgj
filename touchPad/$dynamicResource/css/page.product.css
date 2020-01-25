@@ -254,6 +254,15 @@
 .page_comboCard span.comboItemSetting.am-clickable-active {
   color: #00b7ee;
 }
+.page_comboCard span.giftItem {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  vertical-align: sub;
+  margin-right: 5px;
+  background: url('../images/giftItem_icon.png') no-repeat center;
+  background-size: 14px 14px;
+}
 .page_comboCard .date {
   margin-top: 0;
 }
@@ -697,6 +706,9 @@
 .setMutiPerf .footer .btn .am-clickable-active {
   background: #e82742;
 }
+#combo-card-item-selector {
+  z-index: 9;
+}
 #combo-card-item-selector .title {
   line-height: 60px;
 }
@@ -715,6 +727,7 @@
   margin-top: 12px;
   padding: 0 15px;
   overflow: hidden;
+  position: relative;
 }
 #combo-card-item-selector .combo_card_item_selector-item:last-child {
   padding-bottom: 12px;
@@ -747,7 +760,7 @@
 }
 #combo-card-item-selector .combo_card_item_selector-label {
   float: left;
-  margin-left: 12px;
+  margin-left: 5px;
   width: 180px;
   line-height: 33px;
   font-size: 14px;
@@ -757,11 +770,134 @@
 }
 #combo-card-item-selector .combo_card_item_selector-times {
   float: left;
-  margin-left: 15px;
+  margin-left: 60px;
   padding: 0 20px;
   width: 35px;
   height: 33px;
   border: 1px solid #ddd;
   border-radius: 3px;
   font-size: 14px;
+}
+#combo-card-item-selector .title-span {
+  width: 20px;
+  height: 20px;
+  float: left;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  margin-top: 6px;
+}
+#combo-card-item-selector .title-span.selected {
+  background: #555555 url(../images/selectReason.png) no-repeat center center;
+  background-size: 12px 8px;
+  border: 1px solid #555555;
+}
+#combo-card-giftItem-selector {
+  z-index: 0;
+}
+#combo-card-giftItem-selector .title {
+  line-height: 60px;
+}
+#combo-card-giftItem-selector .content {
+  padding: 0 0 12px;
+  margin: 0 20px 80px;
+  max-height: 400px;
+  overflow: hidden;
+}
+#combo-card-giftItem-selector .save {
+  background: #555;
+  color: #fff;
+}
+#combo-card-giftItem-selector .serviceTitle,
+#combo-card-giftItem-selector .productTitle {
+  font-size: 12px;
+  color: #999999;
+  line-height: 16px;
+  margin-bottom: 15px;
+  display: inline-block;
+}
+#combo-card-giftItem-selector .productTitle {
+  margin-top: 15px;
+}
+#combo-card-giftItem-selector .serviceItemGiftWarp,
+#combo-card-giftItem-selector .productItemGiftWrap {
+  width: 100%;
+  max-height: 160px;
+  overflow: hidden;
+  background-color: #f7f7f7;
+}
+#combo-card-giftItem-selector ul {
+  padding: 0 10px;
+}
+#combo-card-giftItem-selector ul li {
+  height: 40px;
+  font-size: 14px;
+  color: #212121;
+  line-height: 40px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 0 20px 0 30px;
+  position: relative;
+}
+#combo-card-giftItem-selector ul li.selected .name::before {
+  background: #555555 url(../images/selectReason.png) no-repeat center center;
+  background-size: 12px 8px;
+  border: none;
+}
+#combo-card-giftItem-selector ul li .name {
+  float: left;
+  height: 40px;
+  line-height: 40px;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#combo-card-giftItem-selector ul li .name::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 10px;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+}
+#combo-card-giftItem-selector ul li .unlimit {
+  float: right;
+  height: 26px;
+  width: 58px;
+  line-height: 28px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  font-size: 14px;
+  text-align: center;
+  margin-right: 5px;
+  margin-top: 6px;
+  background-color: #eee;
+}
+#combo-card-giftItem-selector ul li .num {
+  float: right;
+  height: 40px;
+  line-height: 40px;
+  padding-right: 5px;
+}
+#combo-card-giftItem-selector ul li .num .number {
+  width: 58px;
+  height: 26px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  font-size: 14px;
+  text-align: center;
+}
+#combo-card-giftItem-selector ul li .icon-juxingkaobei {
+  font-size: 14px;
+  color: #00b7ee;
+  position: absolute;
+  right: 0;
+  width: 24px;
+  text-align: center;
+}
+#combo-card-giftItem-selector ul li .icon-juxingkaobei::before {
+  content: "\e638";
 }
