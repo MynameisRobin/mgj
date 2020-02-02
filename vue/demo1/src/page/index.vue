@@ -5,7 +5,7 @@
 </template>
 
 <script>
-    import findIndex from "lodash.findindex";
+    // import findIndex from "lodash.findindex";
     export default {
         data() {
             return {
