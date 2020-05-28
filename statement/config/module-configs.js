@@ -39,4 +39,8 @@ module.exports = {
 		moduleName: 'timeDiscount',
 		moduleShortName: 'timeDiscount'
 	},
+	tool: {
+		moduleName: 'tool',
+		moduleShortName: 'tool'
+	},
 }
